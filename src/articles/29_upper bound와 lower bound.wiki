@@ -1,0 +1,38 @@
+key: upper bound와 lower bound
+title: upper bound와 lower bound — 상한과 하한
+category: 2강 Analysis II, 용어
+---
+== 개요 ==
+L2 의 슬라이드 제목들이 곧 정의다 — "Big-O (O(…)) Means '''Upper-Bound'''"(p.9), "Big-Ω Means '''Lower-Bound'''"(p.21), "Big-Θ Means '''Upper and Lower-Bound'''"(p.24). 그리고 L2 p.37–38 은 insertion sort 에 "Upper-bound for worst-case runtime $O(n^2)$" / "Lower-bound for best-case runtime $\Omega(n)$" 을 붙인다.
+
+{def}
+* '''Upper bound''' (L2 p.9): "a mathematical notation for upper-bounding a function's rate of growth" → [[Big-O]]. T(n) 은 이것보다 빨리 자라지 않는다.
+* '''Lower bound''' (L2 p.21): "… for lower-bounding a function's rate of growth" → [[Big-Ω]]. T(n) 은 이것보다 느리게 자라지 않는다.
+{/def}
+
+{analogy}
+'''택배 도착 예정 시간 "2~5일"'''. "5일 안에는 온다"가 upper bound, "적어도 2일은 걸린다"가 lower bound. 둘이 같은 급으로 붙으면("정확히 3일 급") [[tight bound]].
+{/analogy}
+
+== 두 축을 섞지 말 것 ==
+"upper/lower" 는 '''함수를 위/아래 어느 쪽에서 누르나'''이고, "worst/best" 는 '''어떤 입력을 보나'''이다. 두 축은 독립이라 네 칸이 다 의미가 있다.
+{|
+! insertion sort || upper bound (O) || lower bound (Ω) || tight (Θ)
+|-
+| [[삽입 정렬의 worst-case|worst-case]] (역순) || $O(n^2)$ — L2 p.37 || $\Omega(n^2)$ (역순이 실제로 $n(n-1)/2$) || $\Theta(n^2)$
+|-
+| [[삽입 정렬의 best-case|best-case]] (정렬됨) || $O(n)$ (n−1 번 검사) || $\Omega(n)$ — L2 p.38 || $\Theta(n)$
+|-
+| 모든 입력에 대해 || $O(n^2)$ || $\Omega(n)$ || 없음 (입력에 따라 다름)
+|}
+[[img:L2-36.png|L2 p.37 (PDF 36) — "Upper-bound for worst-case runtime O(n²)"|small]]
+
+{tip}
+"insertion sort 의 runtime 은 $O(n^2)$ 이고 $\Omega(n)$ 이다" — 모든 입력을 통틀어 맞는 말이다. 하지만 "insertion sort 는 $\Theta(n^2)$" 는 '''worst-case 라고 붙여야''' 맞다.
+{/tip}
+{info}
+"lower bound" 는 L5 에서 더 강한 뜻으로 다시 나온다 — 특정 알고리즘이 아니라 '''모든 비교 정렬'''이 넘을 수 없는 바닥, [[Ω(n log n) 하한]].
+{/info}
+
+== 관련 문서 ==
+* [[Big-O]] · [[Big-Ω]] · [[Big-Θ]] · [[tight bound]] · [[worst-case와 best-case]]

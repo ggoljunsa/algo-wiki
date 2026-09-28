@@ -1,0 +1,34 @@
+key: linear-time sorting
+title: linear-time sorting (입력 가정을 대가로 비교 없이 O(n) 정렬)
+category: 5강 Linear Sorting, 용어
+---
+{def}
+"Is Linear-Time Sorting Nonsense? If any deterministic comparison-based sorting algorithm requires Ω(n log(n))-time, then what's this nonsense about linear-time sorting algorithms? — We can achieve O(n) worst-case runtime '''if we make assumptions about the input'''. e.g. They are integers ranging from 0 to k-1. — Beyond comparison-based sorting algorithms: Counting sort, Bucket sort, Radix sort" (L5 p.16)
+{/def}
+
+== 이름에서 개념 끌어내기 ==
+'''linear-time''' = $O(n)$ (정확히는 $O(n + k)$ 등, k 가 $O(n)$ 이면 선형). [[Ω(n log n) 하한]]은 "비교만 쓰는" 정렬에 대한 것이라, '''비교 대신 값을 직접 읽는''' 정렬은 그 벽 밖에 있다. 대가는 '''입력에 대한 가정'''.
+
+{analogy}
+'''우체국 분류.''' 편지를 주소끼리 비교해 정렬하면 $n \log n$ 번 비교가 든다. 그런데 우편번호가 5자리 숫자라는 걸 '''미리 알면''' 번호별 칸에 휙 넣으면 된다 — 편지끼리 비교하지 않는다. 우편번호가 없는 편지(임의의 실수, 무한 자릿수)에는 못 쓴다.
+{/analogy}
+
+== 세 알고리즘 비교 ==
+{|
+! 알고리즘 || 가정 || 매핑 (9/17 교수 표현) || worst-case
+|-
+| [[counting sort]] || 정수 0..k−1, 좁은 범위 || 값 → 인덱스 '''one-to-one''' || $\Theta(n + k)$
+|-
+| [[bucket sort]] || 정수 0..k−1, 넓은 범위 + (잘 되려면) 균등 분포 || 여러 값 → 한 버킷 '''many-to-one''' || $\Theta(\max\{n \log n, n + k\})$
+|-
+| [[radix sort]] || d 자리 정수, 각 자리 0..k−1 || 자리마다 bucket sort (stable) || $\Theta(d(n + k))$
+|}
+[[img:L5-14.png|p.16 — "Is Linear-Time Sorting Nonsense?" — 가정을 하면 O(n) worst-case|medium]]
+[[sim:counting_sort]]
+{exam}
+9/17 복습: "linear time 을 얻으려면 '''입력에 대한 가정'''이 필요하다." — 선형 정렬 = 입력 가정의 대가. 해설본 요약: 세 알고리즘 모두 "비교를 하나도 안 한다" 는 공통점이 있어서 하한을 우회한다.
+{/exam}
+그렇다고 늘 좋은 건 아니다 → [[비교 기반 정렬을 여전히 쓰는 이유]].
+
+== 관련 문서 ==
+* [[counting sort]] · [[bucket sort]] · [[radix sort]] · [[Ω(n log n) 하한]] · [[comparison-based sorting]] · [[비교 기반 정렬을 여전히 쓰는 이유]] · [[L5 Linear-Time Sorting]]

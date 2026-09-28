@@ -1,0 +1,39 @@
+key: iterative algorithm
+title: iterative algorithm (반복 알고리즘)
+category: 1강 Analysis I, 용어
+---
+== 개요 ==
+`for` / `while` '''루프'''로 일을 반복하는 알고리즘. L1 p.57 "Another way to think of proofs by induction '''for iterative algorithms'''…" 와 p.63 Outline "Skill: analyzing correctness of iterative algorithms" 에 등장한다. 짝이 되는 개념은 L3 의 [[recursive algorithm]].
+
+{def}
+'''Iterative algorithm''' (L1 p.57, p.63): 루프를 돌며 상태를 조금씩 갱신해 답을 만드는 알고리즘. 정확성은 '''[[loop invariant]] 를 반복 횟수에 대해 귀납'''해서 증명한다 — "analyzing correctness of iterative algorithms / Concept: loop invariant, proof by induction".
+{/def}
+
+{analogy}
+'''벽돌 한 장씩 쌓기'''(iterative) vs '''"반쪽 벽 둘을 누가 쌓아 오면 합치기"'''(recursive). 벽돌 쌓기는 "지금까지 쌓은 줄은 수평이다"를 매 장마다 확인하면 되고, 재귀 쪽은 "작은 벽은 누가 제대로 쌓아 준다고 믿고" 합치는 단계만 확인한다.
+{/analogy}
+
+== 반복 vs 재귀 — 증명이 달라지는 지점 ==
+{|
+! || iterative algorithm || [[recursive algorithm]]
+|-
+| 예 || [[insertion sort]], [[selection sort]], [[merge]], [[counting sort]] || [[mergesort]], [[select]], [[randomized quicksort]]
+|-
+| 증명 도구 || [[loop invariant]] || [[recursion invariant]]
+|-
+| 무엇에 대한 귀납 || '''반복 횟수 i''' || '''입력 크기 n''' ([[입력 크기에 대한 귀납법]])
+|-
+| Base case || 첫 반복 전 (i=0) || 가장 작은 입력 (n=1 등)
+|-
+| 수행 시간 || 루프 횟수 곱하기 (L1 p.62: $\le n \cdot n$) || [[점화식]] ([[T(n)]])
+|-
+| CLRS 이름 || [[Initialization/Maintenance/Termination]] || —
+|}
+전체 비교표는 [[반복 vs 재귀 증명 표]].
+
+{info}
+[[mergesort]] 는 재귀지만 그 안의 [[merge]] 는 while 루프를 쓰는 iterative 부분이다. 그래서 L3 에서는 merge 에 [[merge의 loop invariant|loop invariant]], mergesort 에 recursion invariant 를 따로 쓴다.
+{/info}
+
+== 관련 문서 ==
+* [[loop invariant]] · [[recursive algorithm]] · [[증명 레시피]] · [[L1 Algorithmic Analysis I]]

@@ -1,0 +1,50 @@
+key: 비둘기집 원리
+title: 비둘기집 원리 (pigeonhole principle)
+category: 용어, 7강 Hashing
+---
+'''비둘기집 원리'''(pigeonhole principle): 비둘기 $M$ 마리를 집 $n$ 개에 넣으면 '''어떤 집에는 적어도 $\lceil M/n \rceil$ 마리'''가 들어간다. 당연해 보이는 이 한 줄이 L7 의 핵심 부정 결과 — "'''You cannot escape the dark side with deterministic hash functions'''"(L7 p.31) — 의 증명 전부다. → [[결정론적 해시 함수의 한계]]
+
+{def}
+"The universe U has M items. They get hashed into n buckets. '''At least one bucket has at least M/n items''' hashed to it." (L7 p.32)
+
+$M$ 개의 물건을 $n$ 개의 상자에 나누면, 어떤 상자에는 $\lceil M/n \rceil$ 개 이상이 들어 있다. (모든 상자가 $M/n$ 개 미만이면 총합이 $M$ 미만 → 모순)
+{/def}
+
+== L7 p.32 증명, 한 줄씩 ==
+<pre class="txt">
+① [[universe U]] 에는 M 개 원소, [[hash function]] h 가 이것을 n 개 [[버킷]]으로 보낸다
+② 비둘기집 원리: 어떤 버킷에는 ≥ M/n 개가 몰린다
+③ M 은 n 보다 "WAAYYYYY bigger" → M/n > n
+④ h 가 결정론적이면 [[adversary|적(bad guy)]]은 h 를 미리 안다
+   → 그 꽉 찬 버킷에 떨어지는 원소들 중 n 개를 골라 입력으로 준다
+⑤ n 개가 전부 한 버킷의 [[chaining|체인]]에 매달림 → SEARCH 가 O(n)
+∴ 어떤 결정론적 h 도 worst-case O(1) 을 보장할 수 없다
+</pre>
+
+[[img:L7-32.png|L7 p.32 — "We really can't beat the bad guy here." 노란 영역(첫 버킷으로 가는 원소들)이 M/n 개 이상|medium]]
+
+[[anim:hash_pigeonhole|거대한 U 가 n 개 버킷으로 쏟아지고, 적이 가장 꽉 찬 버킷에서 n 개를 골라 한 체인에 매다는 장면. 보고 나서 ①~⑤ 를 소리 내어 말해 보자]]
+
+== 짧은 예제 ==
+<pre class="txt">
+M = 1000 (키 0..999), n = 10 버킷, h(x) = x 의 일의 자리
+비둘기집: 어떤 버킷에는 ≥ 1000/10 = 100 개
+실제로 h 는 버킷마다 정확히 100 개씩 보낸다 (0,10,20,…,990 → 버킷 0)
+적의 입력: {0, 10, 20, …, 90} (10 개) → 전부 버킷 0 → search O(n)
+</pre>
+L7 p.57 의 {h₀ = 최상위 자리, h₁ = 일의 자리} 같은 '''작은 해시 집합'''도 같은 방식으로 뚫린다: 적이 {11, 101, 111, 121, 131, 141} 처럼 두 함수 '''모두'''에서 같은 버킷으로 가는 입력을 고른다. → [[해싱 게임]] · [[universal hash family]]
+
+{analogy}
+🎭 '''양말 서랍.''' 서랍 3 칸에 양말 100 켤레를 넣으면 어느 칸에는 34 켤레 이상이 들어간다. 해시 테이블도 같다 — 버킷 수보다 가능한 키가 압도적으로 많으면 어떤 버킷은 반드시 "만원" 이 되고, 규칙(h)을 아는 심술궂은 사람은 그 만원 칸에 들어갈 키만 골라 넣는다. 해결책은 규칙을 '''나중에, 무작위로''' 정해서 심술쟁이가 어느 칸이 만원인지 모르게 하는 것 → [[uniformly random hash function]].
+{/analogy}
+
+{exam}
+"결정론적 해시 함수는 worst-case O(1) 이 불가능하다" 를 '''비둘기집 논증으로 서술'''할 수 있어야 한다(L7 해설 핵심 요약 3번). 키워드: $M/n > n$, 적이 $h$ 를 안다, 한 버킷에서 $n$ 개 선택.
+{/exam}
+
+{quiz}$M = 128^{140}$, $n = 10^6$ 일 때 비둘기집 원리가 보장하는 "가장 꽉 찬 버킷의 최소 크기" 는 $n$ 보다 큰가?{/quiz}
+{answer}$M/n = 128^{140}/10^6$ 은 천문학적으로 크다(≫ $10^6$). 따라서 적은 그 버킷에서 $n = 10^6$ 개를 얼마든지 골라낼 수 있다.{/answer}
+
+== 관련 문서 ==
+* [[결정론적 해시 함수의 한계]] · [[해싱 게임]] · [[adversary]]
+* [[M과 n]] · [[universe U]] · [[hash collision]] · [[귀류법]]

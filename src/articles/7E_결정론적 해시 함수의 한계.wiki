@@ -1,0 +1,37 @@
+key: 결정론적 해시 함수의 한계
+title: 결정론적 해시 함수의 한계 — "You cannot escape the dark side"
+category: 7강 Hashing, 증명
+---
+== 개요 ==
+L7 p.30–32 의 핵심 부정 결과. 고정된(결정론적) 해시 함수 h 는 무엇이든, [[adversary]] 가 h 를 알고 '''전부 같은 버킷으로 가는 n 개'''를 입력으로 줄 수 있다 → SEARCH $O(n)$. 근거는 [[비둘기집 원리]]. 교수의 입버릇 "'''You cannot escape the dark side with deterministic hash functions'''" (p.31).
+
+{def}
+L7 p.32: "We really can't beat the bad guy here. • The universe U has M items • They get hashed into n buckets • At least one bucket has at least M/n items hashed to it. • M is WAAYYYYY bigger then n, so M/n is bigger than n. • Bad guy chooses n of the items that landed in this very full bucket."
+{/def}
+[[img:L7-31.png|L7 p.31 — YOU CANNOT ESCAPE THE DARK SIDE WITH DETERMINISTIC HASH FUNCTIONS|medium]]
+
+{analogy}
+'''시험 문제 은행.''' 출제자가 쓰는 "문제 → 난이도 칸" 분류 규칙이 공개돼 있고 고정이면, 학생(적)은 가장 어려운 칸에서만 문제를 골라 낼 수 있다. 칸이 몇 개든, 문제가 칸 수보다 훨씬 많으면 어느 칸엔 반드시 잔뜩 쌓여 있으니까. 규칙을 '''시험 당일 주사위로''' 정하면 이 작전은 무너진다.
+{/analogy}
+
+[[anim:hash_pigeonhole|거대한 U(M 개 점)가 n 개 버킷으로 떨어져 한 버킷에 M/n 개 이상 쌓이고, 적이 그 버킷에서 n 개를 골라 한 chain 에 매달리는 것을 보자]]
+
+== 증명 (비둘기집 원리) ==
+<pre class="txt">
+'''주장:''' 어떤 결정론적 h: U → {1..n} 에 대해서도, 적은 search 가 O(n) 인 입력을 만들 수 있다.
+① U 의 M 개 원소를 h 가 n 개 버킷에 나눈다.
+② 비둘기집 원리: 어떤 버킷 B 에는 ⌈M/n⌉ ≥ M/n 개 이상이 해시된다.
+③ M ≫ n 이므로 M/n > n → 버킷 B 에 해시되는 원소가 n 개 이상 있다.
+④ h 가 고정이라 적은 B 를 계산할 수 있다 → B 로 가는 원소 n 개를 입력 u_1..u_n 으로 고른다.
+⑤ n 개 전부 B 의 chain 에 → SEARCH 가 chain 길이 n → O(n).  ∎
+</pre>
+[[img:L7-32.png|L7 p.32 — 첫 버킷(노랑)에 해시되는 영역이 U 의 큰 덩어리, 적은 거기서 n 개를 고름|medium]]
+{exam}
+해설본 ⭐⭐⭐, 핵심 요약 3번: "결정론적 해시 함수는 worst-case O(1) 불가능 — 비둘기집 원리로 한 버킷에 '''≥ M/n > n''' 개 → 적이 그중 n 개를 고름. '''이 논증을 서술할 수 있어야 함'''." p.90 Ideas: "Deterministic hash function — Issue: cannot achieve O(1) search (proof)".
+{/exam}
+{warn}
+이건 "모든 입력에서 나쁘다" 는 뜻이 아니다. 일의 자리 h 도 운 좋은 입력엔 잘 동작한다. "'''적이 고른 최악의 입력'''에 대해 보장할 수 없다" 는 worst-case 진술이다. 해결은 h 를 적이 입력을 고른 뒤에 랜덤으로 → [[해싱 게임]].
+{/warn}
+
+== 관련 문서 ==
+* [[비둘기집 원리]] · [[adversary]] · [[해싱 게임]] · [[uniformly random hash function]] · [[M과 n]]

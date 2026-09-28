@@ -1,0 +1,63 @@
+key: 순열과 n!
+title: 순열과 n! (permutation & factorial)
+category: 용어, 5강 Linear Sorting, 6강 Randomized I
+---
+서로 다른 원소 $n$ 개를 일렬로 늘어놓는 방법(순열, permutation)의 수는 $n! = n \cdot (n-1) \cdots 2 \cdot 1$ 이다. 정렬 문제에서 "입력이 될 수 있는 순서" 가 $n!$ 가지이고 그중 정답(정렬된 순서)은 1 가지라는 사실이 이 과목에 두 번 나온다: L5 [[decision tree]] 의 리프 수, L6 [[bogosort]] 의 성공 확률.
+
+{def}
+'''순열(permutation)''': $n$ 개의 서로 다른 원소를 한 줄로 배열한 것. 개수 $= n!$.
+"This is a binary tree with at least '''n!''' leaves." (L5 p.14) · "Pr[randomly list sorted] = '''1/n!'''" (L6 p.9)
+{/def}
+
+== 왜 n! 인가 ==
+<pre class="txt">
+자리 1 에 올 수 있는 원소: n 가지
+자리 2 : 남은 n-1 가지
+…
+자리 n : 남은 1 가지
+곱하면 n · (n-1) · … · 1 = n!
+
+n = 3, 원소 a,b,c:
+  abc  acb  bac  bca  cab  cba    → 3! = 6 가지
+</pre>
+[[distinct 가정]](모든 원소가 서로 다름)이 있어야 정확히 $n!$ 이다. 같은 값이 있으면 구별되는 순서가 줄어든다.
+
+== 이 과목에서 쓰인 곳 ==
+{|
+! 강의 || 쓰임 || 결론
+|-
+| L5 p.14 [[decision tree]] || 올바른 정렬 알고리즘은 모든 입력 순서를 구별해야 하므로 리프 $\ge n!$ || 깊이 $\ge \log_2(n!)$ = [[Ω(n log n) 하한]]
+|-
+| L6 p.9 [[bogosort]] || 무작위 셔플이 정렬된 1 가지일 확률 $\frac{1}{n!}$ || 기대 셔플 $n!$ 번, 기대 $O(n \cdot n!)$ ([[기하분포]])
+|-
+| HW1 1-d, 2-d || $\log(n!)$ vs $\log(n^n)$ || $\log(n!) = \Theta(n\log n)$ → [[log(n!)]]
+|}
+
+[[anim:decision_tree_leaves|원소 3개의 비교 트리에서 리프 3! = 6 개가 생기는 것을 세어 보자. 리프가 n! 개 이상이어야 하는 이유가 곧 이 문서의 요점]]
+
+[[img:L6-08.png|L6 p.9 — bogosort 의 expected O(n·n!): "Pr[randomly list sorted] = 1/n!"|medium]]
+
+{info}
+경우의 수 세기의 친척: L7 p.50 에서 "U → {1,…,n} 인 모든 함수의 개수 $= n^M$" 도 같은 곱의 법칙이다 — $M$ 개 원소가 각각 $n$ 가지 버킷을 고르므로 $n \cdot n \cdots n = n^M$. 순열(중복 없이 줄 세우기)과 달리 '''중복 허용''' 이라 $n^M$. → [[log(s) 비트]]
+{/info}
+
+== n! 은 얼마나 빨리 크나 ==
+<pre class="txt">
+3!  = 6
+5!  = 120
+10! = 3,628,800
+20! ≈ 2.4 × 10^18
+[[증가율 사다리]]: 상수 < log n < n < n log n < n^2 < 2^n < '''n!''' < n^n
+</pre>
+그래서 bogosort 의 기대 $O(n \cdot n!)$ 는 "끔찍한 알고리즘"(9/17 녹음)이다. $n = 20$ 이면 기대 셔플만 $2.4 \times 10^{18}$ 번.
+
+{analogy}
+🎭 '''카드 섞기.''' 카드 52 장을 섞어 나오는 순서는 $52! \approx 8 \times 10^{67}$ 가지 — 지금까지 인류가 섞은 모든 카드 순서가 겹친 적이 없을 정도로 많다. bogosort 는 "섞어서 우연히 A 부터 K 까지 정렬될 때까지" 기다리는 전략이다.
+{/analogy}
+
+{quiz}원소 4 개를 정렬하는 결정론적 비교 기반 알고리즘의 decision tree 는 리프가 최소 몇 개이고, worst-case 비교 횟수는 최소 몇 번인가?{/quiz}
+{answer}리프 $\ge 4! = 24$. 깊이 $\ge \log_2 24 \approx 4.58$ → 최소 '''5 번''' 비교.{/answer}
+
+== 관련 문서 ==
+* [[decision tree]] · [[리프와 깊이]] · [[Ω(n log n) 하한]] · [[log(n!)]] · [[Stirling 근사]]
+* [[bogosort]] · [[기하분포]] · [[distinct 가정]]

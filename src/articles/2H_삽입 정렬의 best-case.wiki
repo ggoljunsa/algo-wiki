@@ -1,0 +1,39 @@
+key: 삽입 정렬의 best-case
+title: 삽입 정렬의 best-case — 정렬된 입력, Ω(n)
+category: 2강 Analysis II, 용어
+---
+== 개요 ==
+[[insertion sort]] 가 가장 빨리 끝나는 입력은 '''이미 정렬된 입력(Sorted order)''' 이고, 그때 runtime 은 $\Omega(n)$ (실제로 $\Theta(n)$) 이다(L2 p.32–33, 34, 38).
+
+{def}
+L2 p.32: "What is the best possible input for insertion sort? … '''What if it iterated 1 time every single time?''' What input causes this pattern?" → p.33 "'''Sorted order'''" $[1, 2, 3, 4, 5, \dots, n]$
+L2 p.34: "The best-case runtime of insertion sort is '''Ω(n)'''."
+{/def}
+[[img:L2-33.png|L2 p.33 — Sorted order 입력|medium]]
+
+{analogy}
+'''이미 번호순으로 선 줄에 다음 번호가 오는 경우'''. 새 사람은 바로 앞 사람만 슬쩍 보고 "나보다 작네" 하고 맨 뒤에 선다. 한 사람당 한 번 보기 → n 명이면 n 번. 하지만 '''최소한 모두를 한 번은 봐야''' 정렬됐는지 알 수 있으므로 n 보다 빨라질 수는 없다.
+{/analogy}
+
+== 세어 보기 ==
+<pre class="txt">
+정렬된 입력에서 반복 i 의 cur_value = A[i] 는 A[i−1] 보다 크다
+→ while 조건 A[i−1] > cur_value 가 첫 검사에서 거짓 → 몸통 0 번, 검사 1 번
+총 검사 = n − 1,  총 밀기 = 0
+n = 5, [1,2,3,4,5]: 밀기 '''0''', 검사 4
+n − 1 ≥ (1/2)n  (n ≥ 2)  → Ω(n)  (c = 1/2, n₀ = 2)
+n − 1 ≤ n                 → O(n)   ⇒ best-case Θ(n)
+</pre>
+[[img:L2-37.png|L2 p.38 (PDF 37) — "Lower-bound for best-case runtime Ω(n)"|small]]
+[[sim:insertion_sort_trace]]
+(입력 옵션 "정렬됨 [1,2,3,4,5]" → shift 0.)
+
+{tip}
+best-case 가 $\Theta(n)$ 이라는 것이 insertion sort 의 실전 장점이다 — '''거의 정렬된''' 데이터에는 매우 빠르다. [[selection sort]] 는 정렬된 입력에서도 $\frac{n(n-1)}{2}$ 번 비교하므로 best-case 도 $\Theta(n^2)$.
+{/tip}
+{warn}
+"best-case 가 $\Omega(n)$" 이라고 "insertion sort 는 $\Omega(n)$ 이니 빠르다"고 결론 내리면 안 된다. 이 과목의 기본은 '''worst-case''' 이고, 그것은 $O(n^2)$ 이다.
+{/warn}
+
+== 관련 문서 ==
+* [[삽입 정렬의 worst-case]] · [[worst-case와 best-case]] · [[insertion sort]] · [[Big-Ω]] · [[L2 Algorithmic Analysis II]]

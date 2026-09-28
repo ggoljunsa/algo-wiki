@@ -1,0 +1,43 @@
+key: Ω(n log n) 하한
+title: Ω(n log n) 하한 (Any deterministic comparison-based sorting algorithm requires Ω(n log(n))-time)
+category: 5강 Linear Sorting, 증명
+---
+{def}
+'''Theorem [Lower bound of Ω(n log(n))]''': "Any deterministic comparison-based sorting algorithm requires Ω(n log(n))-time" (L5 p.9, p.15)
+[[deterministic algorithm|결정론적]] [[comparison-based sorting|비교 기반 정렬]]은 무엇이든 worst-case 시간이 [[Big-Ω]] $(n \log n)$ 이다. 특정 알고리즘이 아니라 '''문제 자체(비교만 쓰는 정렬)'''의 하한 — [[upper bound와 lower bound]].
+{/def}
+
+== 증명 전략 (p.9) ==
+"How to prove this? 1. Consider all comparison-based algorithms, one-by-one, and analyze them. 2. '''Don't do that.''' Instead, argue that all comparison-based sorting algorithms produce a decision tree. Then analyze decision trees."
+
+== 증명 (p.15) ==
+<pre class="txt">
+'''Proof:'''
+① Any deterministic comparison-based algorithm can be represented as a [[decision tree]] with n! leaves
+② The worst-case running time is the depth of the decision tree                ← 가장 긴 경로 = worst-case
+③ All decision trees with n! leaves have depth at least Ω(n log(n))           ← [[리프와 깊이]] + [[log(n!)]]
+④ So any comparison-based sorting algorithm must have worst-case running time at least Ω(n log(n))
+</pre>
+[[img:L5-13.png|p.15 — 하한 정리와 4줄 증명|medium]]
+
+{analogy}
+'''자물쇠 번호 맞히기.''' 비밀번호 후보가 n! 개인 자물쇠에 "이 번호보다 크니?" 식의 YES/NO 질문만 할 수 있다면, 어떤 전략이든 최악에는 $\log_2(n!)$ 번은 물어야 한다. 전략(알고리즘)이 똑똑해서가 아니라 '''정보량'''이 부족해서 생기는 벽이다. 벽을 넘으려면 질문 방식 자체를 바꿔야 한다 — 번호판의 숫자를 직접 읽는 것([[counting sort]]).
+{/analogy}
+[[anim:decision_tree_leaves|리프가 n! 개 생기고 가장 긴 경로가 빨개진 뒤 "깊이 ≥ log₂(n!) = Ω(n log n)" 요점이 뜨는 것을 보자]]
+
+== 결과의 의미 ==
+* [[mergesort]] $\Theta(n \log n)$ 은 '''asymptotically optimal''' — 비교 정렬로는 이보다 빠를 수 없다(9/17 교수: "mergesort is asymptotically optimal").
+* "linear-time sorting" 은 모순이 아니다: 하한은 '''비교만 쓸 때'''의 얘기. 입력 가정(정수 0..k−1)을 추가하면 [[linear-time sorting]] 이 가능하다(p.16).
+* 하한은 worst-case 에 대한 것 — 정렬된 입력에서 [[insertion sort]] 가 $\Theta(n)$ 인 것과 모순되지 않는다(best-case).
+{exam}
+해설본 ⭐⭐⭐ + 9/17 복습에서 교수가 순서대로 복창. 서술형: '''"decision tree 로 표현 → worst-case = 깊이 → 리프 ≥ n! → 깊이 ≥ log(n!) → log(n!) = Ω(n log n)"''' 다섯 고리를 빠짐없이.
+{/exam}
+{quiz}
+"어떤 비교 기반 정렬도 $O(n)$ 에 정렬할 수 없다" 는 옳은가? counting sort 는 $\Theta(n+k)$ 인데?
+{/quiz}
+{answer}
+옳다(결정론적 비교 기반에 한해, worst-case 기준). counting sort 는 원소끼리 비교하지 않고 값을 인덱스로 쓰는 '''비교 기반이 아닌''' 정렬이라 하한의 적용 대상이 아니다. 대신 "0..k−1 정수"라는 입력 가정이 필요하다.
+{/answer}
+
+== 관련 문서 ==
+* [[decision tree]] · [[리프와 깊이]] · [[log(n!)]] · [[comparison-based sorting]] · [[deterministic algorithm]] · [[linear-time sorting]] · [[Big-Ω]] · [[L5 Linear-Time Sorting]]

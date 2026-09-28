@@ -1,0 +1,59 @@
+key: Stirling 근사
+title: Stirling 근사 (Stirling's approximation) — n! ≈ √(2πn)(n/e)ⁿ
+category: 용어, 5강 Linear Sorting
+---
+'''Stirling 근사'''는 $n!$ 의 크기를 닫힌 식으로 어림하는 공식이다. 이 과목에서는 딱 한 곳 — L5 p.14 "$\log(n!)$ is about $n\log(n/e) = \Omega(n\log n)$" — 에 쓰이는데, 그 한 줄이 '''비교 기반 정렬은 $\Omega(n \log n)$ 보다 빠를 수 없다'''는 [[Ω(n log n) 하한]]의 마지막 고리다.
+
+{def}
+$$n! \approx \sqrt{2\pi n}\left(\frac{n}{e}\right)^n \quad\Longrightarrow\quad \log(n!) \approx n\log\frac{n}{e} + O(\log n) = n\log n - n\log e + O(\log n)$$
+"log(n!) is about n log(n/e) = Ω(n log(n))." (L5 p.14)
+{/def}
+
+== 어디에 쓰이나 — 결정 트리 논증 (L5 p.14) ==
+<pre class="txt">
+1. 결정론적 비교 기반 정렬 = [[decision tree]] (내부 노드 = 비교 한 번, YES/NO)
+2. 리프 = 가능한 정렬 순서 → 최소 n! 개                      ← [[순열과 n!]]
+3. n! 개 리프를 가진 가장 얕은 [[이진 트리]]의 깊이 = log2(n!)  ← [[리프와 깊이]]
+4. log(n!) ≈ n log(n/e) = Ω(n log n)                         ← '''Stirling'''
+5. worst-case = 가장 긴 경로 ≥ Ω(n log n)
+</pre>
+
+[[img:L5-12.png|L5 p.14 — 맨 아래 줄 "log(n!) is about n log(n/e) = Ω(n log(n))"|medium]]
+
+== 숫자로 확인 ==
+{|
+! n || n! || Stirling 값 || 비율 || $\log_2 n!$ || $n\log_2(n/e)$ || $n\log_2 n$
+|-
+| 3 || 6 || 5.8 || 0.973 || 2.58 || 0.43 || 4.75
+|-
+| 5 || 120 || 118.0 || 0.984 || 6.91 || 4.40 || 11.61
+|-
+| 10 || 3,628,800 || 3,598,696 || 0.992 || 21.79 || 18.79 || 33.22
+|-
+| 20 || $2.43\times10^{18}$ || $2.42\times10^{18}$ || 0.996 || 61.08 || 57.58 || 86.44
+|}
+$n = 3$ 이면 $\log_2 3! \approx 2.58$ → 비교 정렬은 3개를 정렬하는 데 최악 '''3 번'''($\lceil 2.58 \rceil$) 이상 비교해야 한다. [[decision tree]] 그림의 깊이 3 과 일치한다.
+
+== Stirling 없이 증명하기 (HW1 2-d) ==
+시험에서는 Stirling 을 모르더라도 초등적으로 $\log(n!) = \Theta(n \log n)$ 을 보일 수 있다 — HW1 2-d 가 정확히 이것이었다.
+<pre class="txt">
+O 방향 (c = 1, n0 = 1):
+  n! = n·(n-1)·…·1 ≤ n·n·…·n = n^n
+  log(n!) ≤ n log n
+Ω 방향 (c = 1/4, n0 = 4):
+  큰 쪽 절반의 인수 n, n-1, …, ⌊n/2⌋+1 (n/2 개 이상) 은 모두 ≥ n/2
+  n! ≥ (n/2)^(n/2)
+  log(n!) ≥ (n/2)(log n - 1) ≥ (n/2)(1/2) log n = (1/4) n log n     (n ≥ 4 → log n - 1 ≥ (1/2)log n)
+</pre>
+→ 자세히는 [[log(n!)]] · [[HW1 복기]].
+
+{analogy}
+🎭 '''산 높이 어림.''' $n!$ 은 1 부터 $n$ 까지 계단을 곱으로 쌓은 탑이라 정확한 높이를 재기 어렵다. Stirling 은 "대략 $(n/e)^n$ 층짜리 탑" 이라고 알려 주는 측량 공식이다. 시험에 필요한 건 정확한 높이가 아니라 "'''$n \log n$ 급 높이다'''" 라는 것뿐 — 로그를 씌우면 $\sqrt{2\pi n}$ 같은 곁가지는 $O(\log n)$ 으로 사라진다.
+{/analogy}
+
+{quiz}$\log(n!) = \Theta(n \log n)$ 을 이용해, 원소 1024 개를 비교 기반으로 정렬하는 알고리즘의 worst-case 비교 횟수 하한을 대략 구하시오.{/quiz}
+{answer}$\log_2(1024!) \approx 1024 \log_2(1024/e) = 1024(10 - 1.443) \approx 8763$ 번. ($n\log_2 n = 10240$ 보다 조금 작다 — 상수·저차항 차이.){/answer}
+
+== 관련 문서 ==
+* [[log(n!)]] · [[Ω(n log n) 하한]] · [[decision tree]] · [[리프와 깊이]]
+* [[순열과 n!]] · [[로그 계산법]] · [[이진 트리]]

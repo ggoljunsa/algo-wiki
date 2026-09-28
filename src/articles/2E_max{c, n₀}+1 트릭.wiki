@@ -1,0 +1,50 @@
+key: max{c, n₀}+1 트릭
+title: max{c, n₀}+1 트릭 — 반례 n 을 한 번에 고르기
+category: 2강 Analysis II, 증명
+---
+== 개요 ==
+L2 p.19 의 반증에서 쓰는 한 줄 — "Consider '''n = max{c, n₀} + 1'''." 가정된 c, n₀ 가 무엇이든 '''(1) 정의의 범위 n ≥ n₀ 안에 있고 (2) 부등식을 깨는''' n 을 동시에 만족시키는 장치다. 해설본은 "'''시험 단골'''"로 표시.
+
+{def}
+L2 p.19: "Suppose there exists some c and n₀ such that for all n ≥ n₀, n² ≤ c·n. Consider n = max{c, n₀} + 1. '''By construction, we have both n ≥ n₀ and n > c''', which implies that n² > c·n."
+{/def}
+
+{analogy}
+'''두 개의 문을 동시에 통과하는 열쇠'''. 문 ① "n₀ 이상이어야 입장"(정의의 ∀ 범위), 문 ② "c 보다 커야 반례"(부등식 깨기). 둘 중 큰 쪽보다 1 크게 잡으면 두 문을 모두 통과한다. +1 은 "같으면 안 되고 '''엄격히''' 커야" 하는 문 ② 때문이다.
+{/analogy}
+
+== 각 부품의 역할 ==
+{|
+! 부품 || 없으면? || 역할
+|-
+| $n_0$ 를 max 에 넣기 || n < n₀ 이면 가정이 그 n 에 대해 아무 말도 안 함 → 모순 안 남 || n ≥ n₀ 보장
+|-
+| $c$ 를 max 에 넣기 || n ≤ c 면 n² ≤ cn 이 참일 수도 → 모순 안 남 || n > c 보장
+|-
+| $+1$ || n = c 면 n² = cn, 부등식이 '''안 깨짐''' || 엄격한 부등호
+|}
+<pre class="txt">
+예: 상대가 c = 5, n₀ = 3 을 들고 왔다면
+n = max{5, 3} + 1 = 6
+6 ≥ 3 ✓ (범위 안)   6 > 5 ✓
+6² = 36  >  5 · 6 = 30   → 가정 "n² ≤ c·n" 과 모순
+</pre>
+[[sim:bigo_witness]]
+
+== 변형 ==
+부등식을 "n ≤ (식)" 꼴로 정리한 뒤, 그 식을 max 안에 넣는다.
+{|
+! 반증 || 정리된 조건 || 고르는 n
+|-
+| $n^2 \ne O(n)$ (L2 p.19) || $n \le c$ || $\max\{c, n_0\} + 1$
+|-
+| $2^n \ne O(2^{n/2})$ (HW1 1-b) || $n \le 2\log_2 c$ || $\max\{\lceil 2\log_2 c \rceil, n_0\} + 1$
+|-
+| $n^2 + 5n\sqrt n \ne \Omega(n^3)$ (HW1 2-c) || $n \le 6/c$ (단 n ≥ 1) || $\max\{n_0, 1, \lceil 6/c \rceil\} + 1$
+|}
+{exam}
+답안에 "By construction, n ≥ n₀ '''and''' n > c" 두 가지를 '''모두''' 명시하라. 하나만 쓰면 논리의 구멍이다.
+{/exam}
+
+== 관련 문서 ==
+* [[O가 아님을 증명하기]] · [[귀류법]] · [[c와 n₀]] · [[Big-O]]

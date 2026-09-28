@@ -1,0 +1,71 @@
+key: master method
+title: Master Method (마스터 정리)
+category: 3강 D&C I, 점화식
+---
+== 개요 ==
+'''모든 부분 문제의 크기가 같은''' 점화식 $T(n) = aT(n/b) + O(n^d)$ 을 공식 한 줄로 푸는 정리. L3 p.86–107. 교수가 꼽은 "기억해야 할 두 방법" 중 하나이고, L4·L6 에서 계속 쓰인다([[select의 점화식]], [[randomized quicksort]] 등).
+
+{def}
+"Suppose $T(n) = a \cdot T(n/b) + O(n^d)$. The Master method states:"
+$$T(n) = \begin{cases} O(n^d \log n) & \text{if } a = b^d \\ O(n^d) & \text{if } a < b^d \\ O(n^{\log_b a}) & \text{if } a > b^d \end{cases}$$
+"Three parameters — '''a''' : the number of subproblems / '''b''' : the factor by which the input size shrinks / '''d''' : need to do $n^d$ work to create all the subproblems and combine their solutions" (L3 p.90–91)
+"A formula that solves recurrences '''when all of the sub-problems are the same size'''." (p.89)
+{/def}
+[[img:L3-91.png|L3 p.91 — Master method 공식, 세 매개변수, mergesort 는 a = 2, b = 2, d = 1|large]]
+
+{analogy}
+'''세금 계산 공식표.''' 매번 가계부(재귀 트리)를 처음부터 그리는 대신, 소득 구간(a 와 $b^d$ 의 대소)만 확인하면 세액이 바로 나오는 표다. 단, 이 표는 "소득원이 모두 같은 크기"인 사람에게만 적용된다 — 크기가 다른 소득원이 섞이면 직접 계산([[substitution method]])해야 한다.
+{/analogy}
+
+== 사용법: 네 칸 적기 ==
+<pre class="txt">
+① a  = 부분 문제 개수                    ([[master method 매개변수]])
+② b  = 입력이 줄어드는 비율 (n → n/b)
+③ d  = 쪼개기+합치기 비용 n^d 의 지수
+④ b^d 를 계산해 a 와 비교 → 케이스 → 답   ([[master method 세 케이스]])
+</pre>
+{|
+! 점화식 || a || b || d || $b^d$ || 비교 || 답
+|-
+| mergesort $2T(n/2) + O(n)$ || 2 || 2 || 1 || 2 || $a = b^d$ || $O(n \log n)$
+|-
+| 곱셈 $4T(n/2) + O(n)$ (p.87) || 4 || 2 || 1 || 2 || $a > b^d$ || $O(n^{\log_2 4}) = O(n^2)$
+|-
+| [[Karatsuba 곱셈]] $3T(n/2) + O(n)$ || 3 || 2 || 1 || 2 || $a > b^d$ || $O(n^{\log_2 3}) \approx O(n^{1.585})$
+|-
+| $2T(n/2) + O(n^2)$ (p.87) || 2 || 2 || 2 || 4 || $a < b^d$ || $O(n^2)$
+|-
+| $T(n/2) + O(n)$ (p.95) || 1 || 2 || 1 || 2 || $a < b^d$ || $O(n)$
+|}
+[[img:L3-87.png|L3 p.87 — More examples: What's the pattern?!?! (교수 판서: 개수 a 와 크기 b)|medium]]
+[[sim:master_method]]
+
+== 왜 이렇게 되나 ==
+재귀 트리 레벨 j 의 총 일은 $a^j \cdot c(n/b^j)^d = cn^d (a/b^d)^j$ — '''공비 $a/b^d$ 인 등비수열'''이다([[등비급수]]). 공비 < 1 이면 첫 항(루트)이, = 1 이면 모든 층이 같게, > 1 이면 마지막 항(리프 $a^{\log_b n} = n^{\log_b a}$)이 합을 지배한다. p.98: "The three cases correspond to whether the recurrence is '''top heavy, balanced, or bottom heavy'''." → [[eternal struggle]].
+[[anim:master_struggle|줄다리기 세 판을 보고 "a 와 b^d 중 누가 이기면 일이 어디(루트/전 층/리프)에 몰리는지"를 연결하자]]
+
+{exam}
+9/8 수업: "Once you memorize this formula, you don't need to calculate the equations for drawing the recursion tree." 그러나 "'''You can memorize the master method, but you should understand the meaning of master method.'''" p.89 Yoda "You should know why it works." / "Important thing to remember is three cases — top heavy, balanced (, bottom heavy)." / "…powerful but '''only works when all sub-problems are the same size'''." → [[master method의 한계]].
+{/exam}
+
+{quiz}
+수업 즉석 연습(9/8): $T(n) = aT(n/2) + n$ 을 $a = 1, 2, 4$ 에 대해 풀어라.
+{/quiz}
+{answer}
+b = 2, d = 1, $b^d = 2$.
+* a = 1 < 2 → $O(n^d) = O(n)$ (tall and skinny)
+* a = 2 = 2 → $O(n \log n)$ (balanced)
+* a = 4 > 2 → $O(n^{\log_2 4}) = O(n^2)$ (bushy) — 수업에서 학생이 $n^2$ 로 정답.
+{/answer}
+
+{quiz}
+HW1 6-a: $T(1) = 1$, $T(n) = 7T(n/2) + \Theta(n^3)$ 의 가장 tight 한 $O(f(n))$ 을 구하라.
+{/quiz}
+{answer}
+부분 문제 7개가 모두 크기 n/2 로 같다 → master method. a = 7, b = 2, d = 3, $b^d = 8$. 7 < 8 → $a < b^d$ → $O(n^3)$. 근거: 레벨 k 의 일 $= cn^3 (7/8)^k$, 공비 7/8 < 1 → 합 $\le 8cn^3$ (top heavy). $\Theta(n^3)$ 항이 있으므로 $\Omega(n^3)$ 도 성립 → $\Theta(n^3)$, 즉 $O(n^3)$ 이 가장 tight. (비교: 병합 비용이 $n^2$ 이면 4 < 7 → $O(n^{\log_2 7}) \approx O(n^{2.81})$, Strassen.) 자세히는 [[master method 세 케이스]]·[[HW1 복기]].
+{/answer}
+
+== 관련 문서 ==
+* [[master method 매개변수]] · [[master method 세 케이스]] · [[eternal struggle]]
+* [[master method의 한계]] · [[substitution method]] · [[점화식 풀이 4가지]]
+* [[Karatsuba 곱셈]] · [[공식·점화식 모음]]

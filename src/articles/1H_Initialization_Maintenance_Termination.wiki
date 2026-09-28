@@ -1,0 +1,42 @@
+key: Initialization/Maintenance/Termination
+title: Initialization / Maintenance / Termination — CLRS 의 loop invariant 3단계
+category: 1강 Analysis I, 용어
+---
+== 개요 ==
+[[CLRS]] 교재(2.1절)가 loop invariant 증명을 부르는 이름. L1 p.57 에서 교수는 자신의 [[귀납법 4요소]]가 이 세 이름과 '''일대일 대응'''한다고 보여 준다. 시험에서 어느 이름으로 물어도 답할 수 있게 두 체계를 함께 외우자.
+
+{def}
+L1 p.57 (PDF 53) — "Another way to think of proofs by induction for iterative algorithms…"
+* Inductive Hypothesis — The loop invariant holds after the ith iteration.
+* Base case — The loop invariant holds before the first iteration. → "'''Initialization'''"
+* Inductive step — If the loop invariant holds after the ith iteration, then it holds after the (i+1)st iteration. → "'''Maintenance'''"
+* Conclusion — If the loop invariant holds after the last iteration, then the algorithm is correct! → "'''Termination'''"
+{/def}
+[[img:L1-53.png|L1 p.57 (PDF 53) — 파란 글씨가 CLRS 이름|medium]]
+
+{analogy}
+'''공장 품질관리 3단계'''. 라인을 켤 때 첫 제품 검사(Initialization), 매 공정이 품질을 떨어뜨리지 않는지 확인(Maintenance), 라인이 멈춘 뒤 완성품이 규격대로인지 출하 검사(Termination). 교수의 4요소는 여기에 "우리가 지키려는 품질 기준(=invariant)을 먼저 선언"하는 inductive hypothesis 를 앞에 붙인 것이다.
+{/analogy}
+
+[[anim:loop_invariant_flow|Initialization(초록 1칸) → Maintenance(초록이 한 칸씩 늘며 "invariant 유지") → Termination(전체 초록) 세 막을 보자]]
+
+== 대응표 ==
+{|
+! 교수의 4요소 (L1 p.46) || CLRS 이름 || insertion sort 에서
+|-
+| [[inductive hypothesis|Inductive hypothesis]] || (loop invariant 자체의 서술) || `A[:i+1]` is sorted
+|-
+| [[base case|Base case]] || '''Initialization''' || 첫 반복 전 `A[:1]` 원소 하나 → 정렬
+|-
+| [[inductive step|Inductive step]] || '''Maintenance''' || 올바른 삽입이 정렬을 유지
+|-
+| [[귀납법의 결론|Conclusion]] || '''Termination''' || 종료 시 `A[:n]` = 전체 정렬
+|}
+[[sim:loop_invariant_check]]
+
+{tip}
+CONTRACT 규칙: 이 위키에서 loop invariant 증명을 쓸 때마다 "(CLRS: Initialization / Maintenance / Termination)" 한 줄을 덧붙인다. HW1 풀이가이드도 "CLRS 표현을 원하면 병기"라고 권한다.
+{/tip}
+
+== 관련 문서 ==
+* [[귀납법 4요소]] · [[loop invariant]] · [[iterative algorithm]] · [[CLRS]] · [[L1 Algorithmic Analysis I]]

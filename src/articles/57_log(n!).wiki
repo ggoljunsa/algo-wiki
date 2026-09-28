@@ -1,0 +1,55 @@
+key: log(n!)
+title: log(n!) (≈ n log(n/e) = Θ(n log n))
+category: 5강 Linear Sorting, 용어
+---
+{def}
+"log(n!) is about n log(n/e) = Ω(n log(n))." (L5 p.14)
+n 개 원소의 [[decision tree]] 최소 깊이. [[Stirling 근사]] $n! \approx \sqrt{2\pi n}\,(n/e)^n$ 에 log 를 취하면 $\log(n!) \approx n\log(n/e) = n\log n - n\log e$.
+{/def}
+
+== Stirling 없이 손으로 증명하기 ==
+=== 하한 $\log(n!) = \Omega(n \log n)$ ===
+<pre class="txt">
+log(n!) = log 1 + log 2 + ... + log n                      ← [[로그 계산법]]: log(ab) = log a + log b
+        >= log(n/2) + log(n/2 + 1) + ... + log n            ← 앞 절반 버림 (전부 >= 0)
+        >= (n/2) · log(n/2)                                 ← 남은 n/2 개 항이 각각 >= log(n/2)
+        = (n/2)(log n − 1)
+        >= (1/4) n log n     (n >= 4 일 때, log n >= 2)      → Ω(n log n),  c = 1/4, n₀ = 4
+</pre>
+=== 상한 $\log(n!) = O(n \log n)$ ===
+<pre class="txt">
+log(n!) = log 1 + ... + log n <= n · log n                 → O(n log n),  c = 1, n₀ = 1
+</pre>
+따라서 $\log(n!) = \Theta(n \log n)$ ([[Big-Θ]]).
+
+{analogy}
+'''n 개 계단 높이의 합.''' 계단 높이가 $\log 1, \log 2, \dots, \log n$ 이다. 가장 높은 계단 × n 개($n \log n$)보다는 낮고, 윗쪽 절반만 세도 "절반 높이 × 절반 개수"($\frac{n}{2}\log\frac{n}{2}$)는 넘는다. 위아래로 $n \log n$ 에 끼어 있으니 결국 $n \log n$ 급이다.
+{/analogy}
+
+== 수치 감 ==
+{|
+! n || $\log_2(n!)$ || $n \log_2 n$ || $n \log_2(n/e)$
+|-
+| 3 || 2.58 || 4.75 || 0.42
+|-
+| 10 || 21.8 || 33.2 || 18.8
+|-
+| 100 || 524.8 || 664.4 || 520.1
+|-
+| 1000 || 8529.4 || 9965.8 || 8523.0
+|}
+n 이 커질수록 $n\log(n/e)$ 가 매우 정확해진다(p.14 "about").
+[[anim:decision_tree_leaves|마지막 요점 "깊이 ≥ log₂(n!) = Ω(n log n)" 이 뜨는 장면을 보자]]
+== HW1 2-d ==
+{quiz}
+'''HW1 2-d''' (12점 중): $\log(n!) = \Theta(n \log n)$ 임을 Big-O/Ω 정의로 형식 증명하라.
+{/quiz}
+{answer}
+Θ = O ∧ Ω 이므로 [[c와 n₀]] 쌍이 두 개.
+(i) O 방향, c = 1, n₀ = 1: n! 의 n 개 인수는 모두 ≤ n → $n! \le n^n$ → $\log(n!) \le n \log n$. ∎
+(ii) Ω 방향, c = 1/4, n₀ = 4: 큰 쪽 절반 인수 n, n−1, …, ⌊n/2⌋+1 (⌈n/2⌉ ≥ n/2 개)은 모두 ≥ n/2, 나머지는 ≥ 1 → $n! \ge (n/2)^{n/2}$ → $\log(n!) \ge \frac{n}{2}(\log n - 1)$. n ≥ 4 이면 $\log n \ge 2$ 라 $\log n - 1 \ge \frac12 \log n$ → $\log(n!) \ge \frac14 n \log n$. ∎
+(풀이가이드 ✍️ 답안 기준. "이 결과가 비교 정렬 Ω(n log n) 정리의 핵심 계산" — 바로 이 문서.) → [[O임을 증명하기]], [[HW1 복기]]
+{/answer}
+
+== 관련 문서 ==
+* [[리프와 깊이]] · [[Ω(n log n) 하한]] · [[Stirling 근사]] · [[순열과 n!]] · [[로그 계산법]] · [[Big-Θ]]

@@ -1,0 +1,39 @@
+key: runtime
+title: runtime (수행 시간) — Is it fast?
+category: 2강 Analysis II, 용어
+---
+== 개요 ==
+[[두 가지 질문]]의 ②. L1 p.61 "Is it fast? Well, '''what does it mean to be fast?'''" 가 L2 전체의 출발점이고, L2 p.2 는 "'''How do we measure the runtime of an algorithm?'''" 로 다시 묻는다. 답은 두 갈래 — '''어떤 입력으로'''([[worst-case와 best-case]], [[average-case]]) 와 '''어떤 단위로'''([[asymptotic analysis]]).
+
+{def}
+'''Runtime''' (L2 p.4): "Engineers probably care most about the 'real-world time' … This heavily depends on computer hardware, programming language, etc. … Instead, we want to use a '''universal measure of runtime''' that's independent of these considerations."
+이 과목의 runtime = 기본 연산(비교, 대입, 루프 반복) 횟수를 '''입력 크기 n 의 함수 T(n)''' 로 센 것. 초 단위가 아니다.
+{/def}
+
+{analogy}
+'''마라톤 기록 대신 "걸음 수"로 비교하기'''. 초 단위 기록은 선수의 신발(하드웨어)·날씨(언어·컴파일러)에 따라 달라진다. 대신 "코스 길이 n 이 두 배가 되면 걸음 수가 몇 배가 되나"를 비교하면 누가 달려도 같은 답이 나온다.
+{/analogy}
+
+== 처음 세어 본 runtime — L1 p.62 ==
+[[img:L1-58.png|L1 p.62 (PDF 58) — At most n outer iters × At most n inner iters per outer iter = at most n² iters|medium]]
+<pre class="txt">
+바깥 for: i = 1 … n−1        → 최대 n 번
+안쪽 while: j = i−1 … 0      → 바깥 한 번당 최대 n 번
+총 반복 ≤ n · n = n²         → L2 에서 "worst-case O(n²)" 로 정식화
+</pre>
+
+== runtime 을 말하는 두 축 ==
+{|
+! 축 || 선택지 || 이 과목의 기본
+|-
+| 어떤 입력? (L2 p.3) || [[worst-case와 best-case|worst-case]] / best-case / [[average-case]] || '''worst-case''' ("at least this fast for every input")
+|-
+| 어떤 단위? (L2 p.4–8) || 초·분 (real-world time) / '''증가율''' || '''[[asymptotic analysis]]''' — [[Big-O]], [[Big-Ω]], [[Big-Θ]]
+|-
+| 재귀라면? (L3) || [[T(n)]] 을 [[점화식]]으로 || [[master method]], [[substitution method]]
+|-
+| 난수를 쓰면? (L6) || [[expected running time]] / [[randomized worst-case]] || expected
+|}
+
+== 관련 문서 ==
+* [[두 가지 질문]] · [[asymptotic analysis]] · [[worst-case와 best-case]] · [[Big-O]] · [[L2 Algorithmic Analysis II]]

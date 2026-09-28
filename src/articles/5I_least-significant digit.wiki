@@ -1,0 +1,34 @@
+key: least-significant digit
+title: least-significant digit (가장 낮은 자리 — radix sort 는 여기부터)
+category: 5강 Linear Sorting, 용어
+---
+{def}
+"Inductive hypothesis: After the i'th iteration, A is sorted by the first i '''least-significant digits'''." (L5 p.59) — radix_sort 의 `for i in range(d)` 에서 i = 0 이 일의 자리("For i = 0: [23, 4, 51, 76, 8] => [(3, 23), (4, 4), (1, 51), (6, 76), (8, 8)]", p.47).
+least-significant digit(LSD) = 수의 크기에 가장 적게 기여하는 자리 = 10 진수의 일의 자리. 반대는 most-significant digit(MSD, 맨 앞자리).
+{/def}
+
+== 이름에서 개념 끌어내기 ==
+'''significant''' = 중요한. 477 에서 4 는 400 을, 7 은 7 을 뜻하니 7 이 "가장 덜 중요한" 자리다. "first i least-significant digits" = 아래에서부터 i 개 자리 (477 의 하위 2 자리 = 77).
+
+{analogy}
+'''영어 사전을 뒤에서부터 만들기.''' 단어를 먼저 마지막 글자로, 그다음 끝에서 둘째 글자로, … 마지막에 첫 글자로 (안정) 정렬하면 사전 순서가 된다. 마지막 라운드(첫 글자)가 '''최종 결정권'''을 가지고, 앞 라운드들은 "첫 글자가 같을 때의 순서"를 미리 깔아 두는 역할. 순서를 거꾸로(첫 글자부터) 하면 마지막 라운드(끝 글자)가 앞의 결과를 뒤엎어 엉망이 된다.
+{/analogy}
+
+== 왜 LSD 부터인가 ==
+<pre class="txt">
+[31,5,210,14,95,477,555,125] 를 MSD(백의 자리)부터 한다면?
+백  → [031,005,014,095 | 125 | 210 | 477 | 555]   (백의 자리 0,0,0,0,1,2,4,5)
+십  → 십의 자리로 전체를 다시 버킷 정렬하면 [005,014,210,125,031,555,477,095] 처럼
+       백의 자리 순서가 '''깨진다''' (210 이 125, 031 앞으로 옴)
+→ MSD 부터 하려면 버킷별로 따로따로 재귀해야 함 (슬라이드의 radix_sort 가 아님)
+LSD 부터:  마지막 라운드(백의 자리)가 최우선 기준, 동점일 때는 stable 덕분에 하위 자리 순서가 유지 → 정답
+</pre>
+[[img:L5-56.png|p.58 — 마지막 라운드 i=2 (백의 자리, 분홍)로 정렬 완료|medium]]
+[[anim:radix_lsd|현재 자리 숫자가 주황으로 강조되며 일의 자리 → 십의 자리 → 백의 자리 순으로 진행되는 것을 보자]]
+[[sim:radix_sort]]
+{exam}
+9/17 복습 교수: "radix sort 는 digit 단위, '''least significant digit 먼저''', 마지막 자릿수까지." LSD 순서와 stability 는 한 쌍으로 기억.
+{/exam}
+
+== 관련 문서 ==
+* [[radix sort]] · [[make_pairs]] · [[stable sort]] · [[Θ(d(n+k))]]

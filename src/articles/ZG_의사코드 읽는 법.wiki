@@ -1,0 +1,80 @@
+key: 의사코드 읽는 법
+title: 의사코드 읽는 법 (슬라이드의 Python 풍 pseudocode)
+category: 용어
+---
+이 과목의 슬라이드 코드는 '''Python 문법을 빌린 의사코드'''다(`def insertion_sort(A):`). 실제로 돌아가는 Python 과 조금 다른 곳(`n/2` 가 정수 나눗셈, `n` 이 정의 없이 `len(A)` 를 뜻함 등)이 있으니 아래 표를 한 번 보고 나면 L1–L7 코드가 다 읽힌다. 시험에서 코드 빈칸 채우기가 나오면 '''슬라이드 변수명 그대로'''(`cur_value`, `l_idx`, `num_buckets` …) 쓰는 것이 안전하다.
+
+{def}
+'''pseudocode''': 특정 언어의 세부 규칙 대신 알고리즘의 논리만 보이도록 쓴 코드. 이 과목은 Python 풍이며, 인덱스는 0 부터, 슬라이스는 끝 제외([[슬라이스 표기]]).
+{/def}
+
+== 문법 한눈에 ==
+{|
+! 표기 || 뜻 || 나오는 곳
+|-
+| `def f(A, k):` … `return x` || 함수 정의와 반환 || 전부
+|-
+| `for i in range(1, len(A)):` || $i = 1, 2, \dots, n-1$ (끝 제외) || [[insertion sort]] 바깥 루프
+|-
+| `for i in range(d):` || $i = 0, \dots, d-1$ || [[radix sort]] 자리 반복
+|-
+| `while 조건:` / `while True:` || 조건이 참인 동안 / 무한 반복(`return` 으로만 탈출) || insertion sort 안쪽, [[bogosort]], [[랜덤 majority]]
+|-
+| `n` (정의 없이) || `len(A)` || mergesort `A[0:n/2]`, majority
+|-
+| `n/2`, `value / ceil(…)` || '''정수 나눗셈'''(Python 3 의 `//`) || mergesort, [[get_bucket]]
+|-
+| `a // b`, `a % b`, `k ** i` || 몫, 나머지, 거듭제곱 || [[make_pairs]] `(a // k**i) % k` → [[modular arithmetic]]
+|-
+| `x, y = (0, 0)` || 두 변수 동시 대입 || [[merge]] `l_idx, r_idx = (0, 0)`
+|-
+| `[0] * k` || 0 이 k 개인 리스트 || [[counts 배열]]
+|-
+| `[ [] for i in range(k) ]` || 빈 리스트 k 개 (슬라이드는 붙여 씀) || [[bucket sort]] `buckets`
+|-
+| `L.append(x)` / `L.extend(M)` || 원소 하나 붙이기 / 리스트 통째로 이어 붙이기 || merge, partition, counting sort `[i] * counts[i]`
+|-
+| `random.choice(A)` || A 에서 균등 무작위로 하나 || [[randomized quicksort]], [[randomized select]]
+|-
+| `random.shuffle(A)` || A 를 균등 무작위 순열로 섞기 || bogosort
+|-
+| `continue` || 이번 반복 건너뛰기 || [[partition_about_pivot]] (피벗 자신)
+|}
+
+== 한 줄씩 읽기 예: insertion sort (L1 p.5) ==
+<pre class="c">
+def insertion_sort(A):
+  for i in range(1, len(A)):          # i = 1..n-1 : A[i] 를 끼워 넣을 차례
+    cur_value = A[i]                   # 끼울 값을 손에 든다
+    j = i - 1                          # 정렬된 부분 A[:i] 의 맨 오른쪽부터
+    while j >= 0 and A[j] > cur_value: # 왼쪽 끝을 넘지 않고, 나보다 큰 동안
+      A[j+1] = A[j]                    #   큰 원소를 오른쪽으로 한 칸
+      j -= 1                           #   한 칸 왼쪽을 본다
+    A[j+1] = cur_value                 # 빈자리에 내려놓는다
+</pre>
+{|
+! 변수 || 뜻 || [4,3,1,5,2] 에서 i=2 일 때
+|-
+| `i` || 이번에 끼울 원소의 인덱스 || 2
+|-
+| `cur_value` || 끼울 값 || 1
+|-
+| `j` || 비교 중인 정렬 구간 원소의 인덱스 || 1 → 0 → −1 (두 번 밀고 멈춤)
+|-
+| `A` || 현재 배열 || [3,4,1,5,2] → [1,3,4,5,2]
+|}
+
+[[img:L1-05.png|L1 p.5 — 이름 없이 먼저 나오는 def sort(A): — 이것이 insertion sort 다|medium]]
+
+[[anim:insertion_card|카드 놀이처럼 cur_value 를 들고 큰 카드를 오른쪽으로 미는 장면을 본 뒤, 위 코드의 while 두 줄이 그 동작임을 확인하자]]
+
+{analogy}
+🎭 '''요리 레시피.''' 의사코드는 "양파 2개를 썬다 → 기름을 두른다" 식의 레시피다. 칼을 어느 손으로 잡는지(언어 문법)는 중요하지 않고, 순서와 반복("양파가 투명해질 때까지 볶는다" = `while`)만 정확하면 된다. 그래서 `n/2` 를 정수 나눗셈으로 읽는 것 같은 작은 관례만 알면 된다.
+{/analogy}
+
+{quiz}다음 빈칸을 채우시오 (L4 select). `else: return select(right, ____, c)`{/quiz}
+{answer}`k - len(left) - 1` — 왼쪽 `len(left)` 개와 피벗 1 개의 순위가 이미 확정됐으므로 그만큼 뺀다. → [[k-len(left)-1 보정]]{/answer}
+
+== 관련 문서 ==
+* [[슬라이스 표기]] · [[floor와 ceil]] · [[modular arithmetic]]
+* [[insertion sort]] · [[merge]] · [[select]] · [[CLRS]]

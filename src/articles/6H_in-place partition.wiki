@@ -1,0 +1,41 @@
+key: in-place partition
+title: in-place partition (제자리 분할, 시험 외 참고)
+category: 6강 Randomized I, 용어
+---
+== 개요 ==
+L6 의 의사코드는 `left`, `right` 를 새 리스트로 만들어 분석은 쉽지만 메모리를 낭비한다. 실제 구현은 배열 '''안에서''' 원소를 맞바꿔 분할한다(CLRS 7.1, Lomuto partition 과 같은 아이디어). L6 p.44–45 에서 "A note on implementation" 으로 소개됐고, 교수는 Hungarian folk dance 영상을 링크했다.
+
+{def}
+L6 p.44: "This pseudocode is easy to understand and analyze, but is not a good way to implement this algorithm. Instead, implement it '''in-place''' (without separate L and R). See CLRS 7.1."
+L6 p.45: "Choose it randomly, then swap it with the last one, so it's at the end. Initialize and. Step forward. When sees something smaller than the pivot, swap the things ahead of the bars and increment both bars. Repeat till the end, then put the pivot in the right place."
+{/def}
+[[img:L6-43.png|L6 p.45 — A better way to do Partition: [8 7 1 3 5 6 4] → [1 3 4 7 5 6 8]|medium]]
+
+{analogy}
+'''책장 정리 — 칸막이 두 개.''' 책을 바닥에 내려놓지 않고(새 리스트 없이), 왼쪽 칸막이(주황 = "작은 책 구역의 끝") 와 오른쪽으로 걸어가는 손(파랑)만 쓴다. 손이 기준 책(피벗)보다 얇은 책을 만나면 작은 구역 바로 다음 책과 자리를 바꾸고 칸막이를 한 칸 민다. 끝에 기준 책을 칸막이 자리에 꽂으면 분할 완료.
+{/analogy}
+
+<pre class="txt">
+피벗 4 (무작위로 골라 맨 끝으로 보냄)
+[8 7 1 3 5 6 | 4]      주황 막대(작은 구역 끝) = 0, 파랑(훑는 손) = 0
+8 ≥ 4, 7 ≥ 4 → 파랑만 전진
+1 < 4 → 주황 앞의 8 과 swap → [1 7 8 3 5 6 4], 주황 = 1
+3 < 4 → 주황 앞의 7 과 swap → [1 3 8 7 5 6 4], 주황 = 2
+5, 6 ≥ 4 → 파랑만 전진
+끝: 피벗 4 를 주황 자리(8)와 swap → [1 3 4 7 5 6 8]   → 4 의 왼쪽 < 4 < 오른쪽
+</pre>
+{|
+! || 슬라이드 의사코드 || in-place
+|-
+| 추가 메모리 || $O(n)$ (L, R 새로 만듦) || $O(1)$ (+ 재귀 스택 $O(\log n)$ expected)
+|-
+| 시간 || $O(n)$ || $O(n)$
+|-
+| 용도 || 분석·이해 || 실제 구현
+|}
+{info}
+해설본 기준 p.44–46 은 "시험 범위 아님" 으로 표시되어 있다(p.46 표의 "(Not on exam)" 은 Used by / In-place / Stable 행). 분할이 $O(n)$ 이라는 사실만 챙기면 된다.
+{/info}
+
+== 관련 문서 ==
+* [[partition_about_pivot]] · [[in-place]] · [[QuickSort vs MergeSort]] · [[randomized quicksort]]

@@ -1,0 +1,45 @@
+key: 반복 vs 재귀 증명 표
+title: 반복 vs 재귀 증명 표 (So far…, L3 p.104)
+category: 3강 D&C I, 증명
+---
+== 개요 ==
+L3 p.104–105 "So far..." 의 2×2 표. 지금까지 배운 분석 도구를 '''알고리즘 종류(iterative / recursive) × 질문(correctness / runtime)''' 으로 정리한다. 해설본이 "시험 단골 ⭐" 으로 표시한 표이고, 9/8 수업 마무리에서 교수가 직접 이 표로 요약했다.
+
+{def}
+{|
+! || Proving correctness || Proving runtime
+|-
+| '''Iterative''' || Induction on the iteration, leveraging a loop invariant (e.g. insertion sort) || Intuition
+|-
+| '''Recursive''' || Induction on the input size (e.g. mergesort) || Defining and solving recurrence relations
+|}
+{/def}
+[[img:L3-104.png|L3 p.104 — So far...|medium]]
+
+{analogy}
+'''건강검진표.''' 세로줄은 환자 유형(걷는 사람 = 반복, 계단을 뛰어내려가는 사람 = 재귀), 가로줄은 검사 항목(정상인가 = correctness, 얼마나 빠른가 = runtime). 걷는 사람의 속도는 걸음 수를 세면 되지만(intuition), 계단을 뛰어내려가는 사람은 층마다 걸린 시간을 식으로 세워(점화식) 풀어야 한다.
+{/analogy}
+
+== 칸별 풀이 ==
+{|
+! 칸 || 무슨 뜻 || 도구 문서
+|-
+| Iterative × correctness || 반복 번호 i 에 대한 귀납, 가설 = [[loop invariant]] || [[loop invariant]], [[Initialization/Maintenance/Termination]]
+|-
+| Iterative × runtime || "Intuition" — 루프가 최대 몇 번 도는지 직접 센다(insertion sort: 바깥 n, 안쪽 최대 n → $O(n^2)$) || [[runtime]], [[삽입 정렬의 worst-case]]
+|-
+| Recursive × correctness || 입력 크기에 대한 귀납, 가설 = [[recursion invariant]] || [[입력 크기에 대한 귀납법]], [[강한 귀납법]]
+|-
+| Recursive × runtime || [[T(n)]] 로 [[점화식]]을 세우고 [[closed-form]] 으로 푼다 || [[점화식 풀이 4가지]], [[master method]], [[substitution method]]
+|}
+
+{exam}
+9/8 수업 교수 요약(녹음): "For iterative algorithms we define loop invariant and apply the mathematical induction; recursive — induction on the input size. Proving running time for iterative algorithm is intuitive, just counting the maximum number of iterations; for the recursive algorithm we define recurrence relation and translate this to the closed form." — 네 칸을 빈칸으로 두고 채우라는 문제가 나오기 좋다.
+{/exam}
+{info}
+한 알고리즘이 두 칸을 동시에 쓰기도 한다. [[mergesort]] 는 recursive 칸(입력 크기 귀납)으로 증명하지만, 그 안의 [[merge]] 는 iterative 칸([[merge의 loop invariant]])으로 증명한다.
+{/info}
+
+== 관련 문서 ==
+* [[증명 레시피]] · [[iterative algorithm]] · [[recursive algorithm]]
+* [[L3 Divide and Conquer I]]

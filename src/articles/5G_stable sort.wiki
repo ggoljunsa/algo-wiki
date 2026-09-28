@@ -1,0 +1,50 @@
+key: stable sort
+title: stable sort (안정 정렬 — 같은 값의 원래 순서를 유지)
+category: 5강 Linear Sorting, 용어
+---
+{def}
+"A '''stable sort''' keeps equal elements in the same order: [1(a), 3, 2, 1(b)] => [1(a), 1(b), 2, 3]" (L5 p.42)
+값이 같은 원소들 사이의 '''입력에서의 상대 순서'''를 출력에서도 그대로 유지하는 정렬.
+{/def}
+[[img:L5-40.png|p.42 — bucket_sort 코드 옆 말풍선: stable sort 정의와 [1(a),3,2,1(b)] 예|medium]]
+
+== 이름에서 개념 끌어내기 ==
+'''stable''' = 안정된, 흔들리지 않는. 같은 값끼리의 줄 순서가 '''흔들리지 않는다'''. 값만 보면 1(a) 와 1(b) 는 같으니 무슨 상관이냐 싶지만, 원소가 '''값 + 딸린 정보'''(레코드, radix sort 에서는 "아직 안 본 다른 자릿수")를 가지면 그 순서가 곧 정보다.
+
+{analogy}
+'''엑셀에서 두 번 정렬하기.''' 학생 명단을 먼저 "이름순"으로 정렬하고, 그다음 "반"으로 정렬하면 — 정렬이 stable 할 때만 같은 반 안에서 이름순이 유지된다. 불안정하면 반별로 묶이긴 하지만 반 안의 이름순이 뒤죽박죽이 된다. radix sort 는 이 "여러 번 정렬해서 쌓기"를 자릿수로 하는 알고리즘이라 stable 이 생명이다.
+{/analogy}
+[[anim:stable_sort|[1ᵃ, 3, 2, 1ᵇ] 에서 안정 정렬은 1ᵃ, 1ᵇ 순서를 지키고 불안정 정렬은 뒤바꿀 수 있는 장면, 그리고 radix sort 두 번째 라운드에서 순서가 깨지면 결과가 틀리는 장면을 보자]]
+
+== 어디에 쓰이나 ==
+* [[bucket sort]]: `num_buckets < k` 일 때 버킷 안을 `stable_sort` 로 — "복선" (해설본).
+* [[radix sort]] 정확성 증명의 핵심 줄: "'''Since bucket_sort is stable''', the elements in each bucket keep their original order, and by the inductive hypothesis, they are ordered by their i least-significant digits." (p.59)
+{|
+! 정렬 || stable?
+|-
+| [[insertion sort]] (A[j] > cur_value 일 때만 밀기) || O
+|-
+| [[mergesort]] (merge 에서 같으면 왼쪽 먼저) || O (구현에 따라)
+|-
+| [[bucket sort]] (append 순서 유지 + stable_sort) || O
+|-
+| [[quicksort]] (L6, 분할이 순서를 섞음) || 보통 X
+|}
+
+== radix sort 에서 stable 이 깨지면 ==
+<pre class="txt">
+반례: 입력 [12, 11]  (두 자리 정수, radix_sort(A, 2, 10))
+  일의 자리 라운드 → [11, 12]                      (1 < 2)
+  십의 자리 라운드: 둘 다 십의 자리 1 → 같은 버킷
+     stable   → [11, 12]  ✓ (일의 자리 순서 유지)
+     unstable → [12, 11]  ✗ 틀린 결과
+</pre>
+[[sim:bucket_sort]]
+[[sim:radix_sort]]
+(radix 시뮬레이터 i=1 단계에서 210 과 014(십의 자리 둘 다 1)가 [210, 014] 순서를 유지하는 것을 확인.)
+{exam}
+9/17 복습에서 교수가 '''따로 되물은 정의''': "원래 배열과 같은 순서를 유지하면 stable — radix sort 설계에 중요한 성질." 정의 → 용어 문제 1순위. 슬라이드 예 [1(a),3,2,1(b)] ⇒ [1(a),1(b),2,3] 를 그대로 쓸 것.
+{/exam}
+
+== 관련 문서 ==
+* [[radix sort]] · [[bucket sort]] · [[counting sort]] · [[least-significant digit]] · [[insertion sort]] · [[mergesort]]

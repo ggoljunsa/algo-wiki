@@ -1,0 +1,46 @@
+key: decision tree
+title: decision tree (결정 트리 — 비교 정렬의 모든 비교를 나무로)
+category: 5강 Linear Sorting, 용어
+---
+{def}
+"Represent all comparisons as a '''decision tree'''" (L5 p.10) — "All comparison-based algorithms have an associated decision tree. The leaves of this tree are all possible orderings of the items: when we reach a leaf we return it. Running the algorithm on a given input corresponds to taking a particular path through the tree." (p.11)
+내부 노드 = 비교 하나, 간선 = YES/NO, 리프 = 출력할 정렬 순서.
+{/def}
+
+== 세 원소 예 (p.10) ==
+[[img:L5-08.png|p.10 — 😀 ≤ 🚒 ? → YES → ☕ ≤ 😀 ? → YES: [☕😀🚒] / NO → ☕ ≤ 🚒 ? → [😀☕🚒] / [😀🚒☕]|medium]]
+<pre class="ascii">
+                     😀 ≤ 🚒 ?
+                  YES /      \ NO
+            ☕ ≤ 😀 ?          etc…
+          YES /    \ NO
+    [☕ 😀 🚒]    ☕ ≤ 🚒 ?
+              YES /    \ NO
+         [😀 ☕ 🚒]    [😀 🚒 ☕]
+</pre>
+
+{analogy}
+'''길 찾기 표지판 숲.''' 갈림길마다 "YES 는 왼쪽, NO 는 오른쪽" 표지판이 있고, 숲의 출구(리프)마다 정답 순서가 적혀 있다. 입력이 달라지면 표지판에 대한 답이 달라져 다른 출구로 나간다. 걷는 거리(경로 길이) = 비교 횟수 = 시간. 가장 먼 출구까지의 거리가 worst-case 다.
+{/analogy}
+
+== 트리로 읽는 runtime (p.12–13) ==
+{|
+! 질문 || 답 (슬라이드)
+|-
+| Q. What is the runtime on a particular input? || "At least the number of comparisons that are made on that input." — "If we take this path through the tree, the runtime is Ω(length of the path)."
+|-
+| Q. What is the worst-case runtime? || "At least Ω(length of the longest path)" = 트리의 깊이
+|-
+| Q. How long is the longest path? || 리프 ≥ n! 인 이진 트리 → 깊이 ≥ log(n!) → [[리프와 깊이]]
+|}
+[[img:L5-11.png|p.13 — "At least Ω(length of the longest path)". 빨간 점선이 가장 긴 경로, 적(Darth Vader)이 그 경로로 가는 입력을 고른다|medium]]
+[[anim:decision_tree_leaves|루트 "a ≤ b?" 에서 YES/NO 로 갈라져 3! = 6 개 리프가 생기고, 가장 긴 경로가 빨갛게 칠해지는 것을 보자]]
+{joke}
+p.13 오른쪽 아래의 Darth Vader 는 L6·L7 에서 본격 등장할 [[adversary]] 의 예고편. 적은 늘 가장 긴 경로로 가는 입력을 골라 준다.
+{/joke}
+{exam}
+9/17 복습: "Did you remember the concept of decision tree?" — "we abstract what comparison-based sorting algorithm does… starting from root with the first comparison… depending on yes or no answers, we keep building the decision tree. Then for a given input, the particular path will be a running time."
+{/exam}
+
+== 관련 문서 ==
+* [[comparison-based sorting]] · [[genie 비유]] · [[리프와 깊이]] · [[Ω(n log n) 하한]] · [[log(n!)]] · [[이진 트리]] · [[순열과 n!]]

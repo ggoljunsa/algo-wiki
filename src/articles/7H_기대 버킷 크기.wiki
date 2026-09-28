@@ -1,0 +1,48 @@
+key: 기대 버킷 크기
+title: 기대 버킷 크기 — E[u_i 의 버킷 크기] = 1 + (n−1)/n ≤ 2
+category: 7강 Hashing, 증명
+---
+== 개요 ==
+L7 의 핵심 계산(p.41, 해설본 ⭐⭐⭐). 적이 고른 원소 $u_i$ 의 버킷에 평균 몇 개가 들어 있나? h 가 uniformly random(또는 universal)이면 '''2 이하'''. 버킷 크기 = SEARCH 시간이므로 연산당 expected $O(1)$. 기법은 L6 quicksort 증명과 같은 [[지표 확률변수]] + [[기대값의 선형성]].
+
+{def}
+L7 p.41: "Expected number of items in $u_i$'s bucket? $E = \sum_{j=1}^{n} P\{h(u_i) = h(u_j)\} = 1 + \sum_{j \ne i} P\{h(u_i) = h(u_j)\} = 1 + \sum_{j \ne i} 1/n$ (HOW?) $= 1 + \frac{n-1}{n} \le 2$. That's what we wanted."
+{/def}
+[[img:L7-40.png|L7 p.41 — 기대 버킷 크기 계산과 COLLISION! 그림|large]]
+
+{analogy}
+'''내 자리 테이블에 앉을 사람 수.''' 파티 손님 n 명이 각자 n 개 테이블 중 하나에 무작위로 앉는다. 내 테이블 인원 = 나(1) + 다른 n−1 명 각자가 내 테이블을 고를 확률 1/n 의 합 = $1 + \frac{n-1}{n}$ < 2. 누가 누구와 친한지(독립성)는 합을 구할 때 상관없다 — 선형성 덕분.
+{/analogy}
+
+== 한 줄씩 ==
+<pre class="txt">
+X_j = 1 if h(u_j) = h(u_i) else 0         ← [[지표 확률변수]] ("u_j 가 u_i 와 같은 버킷인가")
+u_i 의 버킷 크기 = Σ_{j=1}^{n} X_j
+E[버킷 크기] = Σ_{j=1}^{n} E[X_j] = Σ_{j=1}^{n} P{h(u_i)=h(u_j)}     ← [[기대값의 선형성]]
+           = 1 + Σ_{j≠i} P{h(u_i)=h(u_j)}      ← j = i 는 자기 자신: 확률 1
+           = 1 + Σ_{j≠i} 1/n                    ← HOW? h(u_j) 는 h(u_i) 와 독립·균등 → n 칸 중 같은 칸일 확률 1/n
+           = 1 + (n-1)/n  ≤ 2                   ← 1/n 을 n-1 번
+</pre>
+{|
+! n || $1 + \frac{n-1}{n}$ || ≤ 2 ?
+|-
+| 3 || $1 + \frac23 \approx 1.67$ || ✓
+|-
+| 10 || $1 + \frac{9}{10} = 1.9$ || ✓
+|-
+| $\to \infty$ || $\to 2$ || ✓
+|}
+[[sim:universal_hash_check]]
+{exam}
+해설본 ⭐⭐⭐ (L7 의 핵심 계산), 핵심 요약 5번: $1 + \sum_{j \ne i} P\{h(u_i)=h(u_j)\} = 1 + \frac{n-1}{n} \le 2$ — '''기댓값의 선형성 + 충돌 확률 1/n'''. 그리고 p.61 의 통찰: 이 계산에서 실제로 쓴 건 "'''충돌 확률 ≤ 1/n'''" 하나뿐 → universal hash family 로도 그대로 성립(3번째 줄이 "= 1/n" 대신 "≤ 1/n").
+{/exam}
+p.38: "We could replace '2' here with any constant; it would still be good." 목표는 상수, 2 는 예시.
+{quiz}
+h 가 uniformly random 이고 n = 5 일 때, 적이 고른 $u_3$ 의 버킷에 든 원소 수의 기댓값은? universal family 에서 뽑았을 때의 상한은?
+{/quiz}
+{answer}
+uniformly random: $1 + \frac{4}{5} = 1.8$. universal: 각 충돌 확률 $\le \frac15$ 이므로 $\le 1 + 4 \cdot \frac15 = 1.8 \le 2$. 같은 상한.
+{/answer}
+
+== 관련 문서 ==
+* [[지표 확률변수]] · [[기대값의 선형성]] · [[X_{a,b}]] (L6 의 같은 기법) · [[uniformly random hash function]] · [[universal hash family]] · [[load factor]]

@@ -1,0 +1,54 @@
+key: select의 정확성 증명
+title: select 의 정확성 증명 (입력 길이에 대한 귀납법, 세 경우)
+category: 4강 D&C II, 증명
+---
+{def}
+"1. Does this actually work? We've already seen an example! Formally, similar to last time, we proceed by induction, '''inducting on the length of the input list'''." (L4 p.34)
+[[select]] 는 [[recursive algorithm]] 이므로 L3 mergesort 와 같은 [[recursion invariant]] / [[입력 크기에 대한 귀납법]]으로 증명한다. 가설은 "길이 1..i 전부에서 옳다" 형태([[강한 귀납법]]).
+{/def}
+
+{analogy}
+'''도미노를 넘어뜨릴 자격 심사.''' "길이 i 이하 입력에서는 이미 옳다"(가설)고 믿고, 길이 i+1 입력이 들어오면 select 는 '''반드시 더 짧은 리스트'''(left 또는 right)로만 넘긴다. 짧은 쪽은 이미 믿기로 한 영역이니, 넘기는 판단(어느 쪽으로, k 를 몇으로)만 맞으면 이번 것도 옳다. 첫 도미노(길이 1)는 자명하게 넘어진다.
+{/analogy}
+
+== L3 레시피 (p.35) ==
+<pre class="c">
+def proof_of_correctness_helper(algorithm):
+  ...
+  elif algorithm.type == "recursive":
+    # 1) Define the inductive hypothesis (correct for inputs of sizes 1 to i)
+    # 2) Prove the base case (i < small constant)
+    # 3) Prove the inductive step (i => i+1 OR {1,2,...,i} => i+1)
+    # 4) Prove the conclusion (i=n => correct)
+</pre>
+→ [[증명 레시피]], [[귀납법 4요소]].
+
+== 증명 (p.38–42) ==
+=== Inductive hypothesis ===
+"select(A,k) correctly finds the k^th-smallest element for inputs of length 1 to i." → [[inductive hypothesis]]
+=== Base case ===
+"select(A,k) correctly finds the smallest element for inputs of length 1; it returns the element itself which is trivially the smallest." → [[base case]]
+=== Inductive step ===
+"Suppose the algorithm works on input lists of length 1 to i. Calling select(A,k) on an input list of length i+1 selects a pivot, partitions around it, and compares the length of the left list to k. There are three cases:"
+{|
+! 경우 || 슬라이드 원문 || 왜 옳은가
+|-
+| len(left) == k || "exactly k items less than the pivot, so return the pivot." || pivot 보다 작은 원소가 정확히 k 개 → pivot 의 순위가 k
+|-
+| len(left) > k || "More than k items less than the pivot, so return the k^th-smallest element of the left half of the list." || 답은 pivot 보다 작다 → left 안. left 길이 ≤ i → 가설 적용
+|-
+| len(left) < k || "There are fewer than k items ≤ to the pivot, so return the (k − len(left) − 1)st-smallest element of the right half of the list." || 답은 pivot 보다 크다 → right 안, 순위 보정 [[k-len(left)-1 보정]]. right 길이 ≤ i → 가설 적용
+|}
+핵심: partition 이 "left 전부 < pivot < right 전부" 를 보장하므로 답의 위치가 len(left) 와 k 비교만으로 확정되고, 재귀 입력은 pivot 이 빠진 만큼 '''반드시 더 짧다'''(≤ i). → [[inductive step]]
+=== Conclusion ===
+"The inductive hypothesis holds for all i. In particular, given an input list of any length n, select(A,k) correctly finds the k^th-smallest element!" → [[귀납법의 결론]]
+[[img:L4-42.png|p.42 — 증명 완성본|medium]]
+{info}
+실제 코드의 base case 는 `len(A) <= c`(c = 100) 에서 [[naive_select]] 로 끝난다. 슬라이드의 base case(길이 1)는 증명을 단순하게 쓴 것이고, "i < small constant" 레시피에 따라 길이 ≤ c 를 base case 로 잡아도 naive_select 가 정렬 후 인덱싱이라 자명히 옳다.
+{/info}
+{exam}
+p.32–42 는 새 아이디어가 아니라 '''기존 귀납 틀에 select 의 세 분기(== / > / <)를 대입'''한 것. 서술형이면 4요소 제목 + 세 경우 표를 그대로 쓴다. 9/10 녹음: "for recursive algorithms, we use the induction with respect to the input length — do you remember this one?"
+{/exam}
+
+== 관련 문서 ==
+* [[select]] · [[recursion invariant]] · [[입력 크기에 대한 귀납법]] · [[귀납법 4요소]] · [[강한 귀납법]] · [[반복 vs 재귀 증명 표]] · [[L4 Divide and Conquer II]]

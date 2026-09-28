@@ -1,0 +1,56 @@
+key: bushy tree와 tall and skinny tree
+title: Bushy tree 와 Tall and skinny tree (그리고 just right)
+category: 3강 D&C I, 점화식
+---
+== 개요 ==
+L3 p.95–97 에서 [[master method 세 케이스]]에 붙인 재귀 트리의 '''모양 이름'''. 트리를 떠올리기만 해도 답이 어디서 나오는지 보인다.
+
+{def}
+'''Tall and skinny tree''' (p.95, $a < b^d$): "The amount of work done at the top (the biggest problem) swamps the amount of work done anywhere else." → $T(n) = O(\text{work at top})$.
+'''Bushy tree''' (p.96, $a > b^d$): "There are a HUGE number of leaves, and the total work is dominated by the time to do work at these leaves." → $T(n) = O(\text{work at bottom})$.
+'''Just right''' (p.97, $a = b^d$): "The branching just balances out the amount of work. The same amount of work is done at every level."
+p.98: 세 경우 = '''top heavy / balanced / bottom heavy'''.
+{/def}
+
+{analogy}
+'''키 큰 야자수 vs 덤불 vs 잘 다듬은 정원수.''' 야자수(tall and skinny)는 줄기 하나가 위로만 뻗어 무게가 꼭대기 잎 뭉치(루트)에 있다. 덤불(bushy)은 땅바닥 가까이 잔가지가 수없이 퍼져 무게가 바닥에 깔린다. 정원수(just right)는 층마다 잎의 양이 같게 다듬어져 있다.
+{/analogy}
+
+== 세 모양 ==
+{|
+! 모양 || 예 || 레벨별 일 (n=8, c=1) || 지배하는 곳 || 답
+|-
+| tall and skinny || $T(n) = T(n/2) + n$ (a=1, b=2, d=1) || 8, 4, 2, 1 → 합 15 ≤ 2n || 루트 || $O(n)$
+|-
+| just right || $T(n) = 2T(n/2) + n$ (a=2, b=2, d=1) || 8, 8, 8, 리프 8 → 32 || 모든 층 균등 || $O(n \log n)$
+|-
+| bushy || $T(n) = 4T(n/2) + n$ (a=4, b=2, d=1) || 8, 16, 32, 리프 64 → 120 || 리프 || $O(n^2)$
+|}
+<pre class="ascii">
+tall and skinny        just right              bushy
+     n                     n                     n
+     |                  /     \          /    /    \    \
+    n/2              n/2       n/2     n/2  n/2   n/2  n/2
+     |              /  \      /  \     (각각 또 4개씩 …)
+    n/4           n/4 n/4   n/4 n/4
+     |              …           …       리프 4^(log2 n) = n^2 개
+     1          리프 n 개
+</pre>
+[[img:L3-96.png|L3 p.96 — Third example: bushy tree, 바닥을 뒤덮은 수많은 리프 1|medium]]
+[[anim:master_struggle|세 모양이 차례로 나타나는 것을 보고, 막대가 가장 굵은 층(루트/전 층/리프)과 이름을 짝지어 외우자]]
+[[sim:recursion_tree_sum]]
+
+== bushy 에서 n² 가 나오는 계산 ==
+<pre class="txt">
+T(n) = 4T(n/2) + n
+깊이 = log2 n,  리프 수 = 4^(log2 n) = (2^2)^(log2 n) = (2^(log2 n))^2 = n^2
+리프마다 일 1 → 바닥 일 = n^2   ("O(4^(depth of tree)) = O(n^2)", p.96)
+위층 합 n + 2n + 4n + … 는 바닥보다 작은 등비급수 → 전체 O(n^2)
+</pre>
+{exam}
+9/8 수업: a < $b^d$ 는 "'''top heavy or tall and skinny tree'''", a > $b^d$ 는 "'''bush(y) tree or bottom heavy'''", a = $b^d$ 는 "'''balanced'''". 이름과 부등호, 답을 한 세트로 외우자.
+{/exam}
+
+== 관련 문서 ==
+* [[eternal struggle]] · [[master method 세 케이스]] · [[master method]]
+* [[recursion tree method]] · [[이진 트리]]

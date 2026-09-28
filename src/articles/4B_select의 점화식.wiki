@@ -1,0 +1,49 @@
+key: select의 점화식
+title: select 의 점화식 (T(len(left)) + O(n) — len 은 pivot 이 정한다)
+category: 4강 D&C II, 점화식
+---
+{def}
+"Writing a recurrence relation for select gives:" (L4 p.45)
+$$T(n) = \begin{cases} O(n) & \text{len(left)} == k \\ T(\text{len(left)}) + O(n) & \text{len(left)} > k \\ T(\text{len(right)}) + O(n) & \text{len(left)} < k \end{cases}$$
+{/def}
+
+== 식의 조각 라벨 (p.46–48) ==
+{|
+! 조각 || 슬라이드 주석 || 코드
+|-
+| $T(\text{len(left)})$, $T(\text{len(right)})$ || "The runtime for the recursive call to select" || `select(left, k, c)` / `select(right, k-len(left)-1, c)`
+|-
+| $O(n)$ || "The runtime to partition about the chosen pivot" || `partition_about_pivot(A, pivot)`
+|-
+| (결정타) || "'''len(left) and len(right) depend on how we pick the pivot!'''" || `pivot = random.choice(A)`
+|}
+[[img:L4-48.png|p.48 — 점화식과 초록 화살표 주석 세 개|medium]]
+[[T(n)]] 과 [[점화식]]의 기본은 L3. 여기서는 재귀가 '''한 번'''뿐이라(→ [[한쪽만 재귀]]) 항이 하나다.
+
+{analogy}
+'''택시 요금 = 기본요금 + 남은 거리 요금.''' 기본요금 $O(n)$(partition)은 매번 확실하지만, 남은 거리 T(len) 은 "어느 출구(pivot)로 나가느냐"에 따라 달라진다. 출구를 잘 고르면(가운데) 남은 거리가 반으로, 못 고르면(끝) 한 칸만 줄어든다.
+{/analogy}
+
+== pivot 별로 len 을 채우면 ==
+{|
+! pivot || len 의 최댓값 || 점화식 || 결과
+|-
+| 불운 (random) || n − 1 || $T(n) \le T(n-1) + O(n)$ || $O(n^2)$ ("O(n) levels of O(n)")
+|-
+| median || (n−1)/2 || $T(n) \le T(n/2) + O(n)$ || $O(n)$ (master, a=1, b=2, d=1)
+|-
+| close enough || $7n/10$ || $T(n) \le T(7n/10) + O(n)$ || $O(n)$ (master, a=1, b=10/7, d=1)
+|-
+| [[median of medians]] || $7n/10 + 3$ + pivot 찾기 $T(n/5)$ || [[T(n/5) + T(7n/10) + O(n)]] || $O(n)$ (치환법)
+|}
+→ [[피벗 시나리오 3종]]. 불운한 경우 $T(n-1) + cn$ 을 [[iteration method]] 로 펼치면 $cn + c(n-1) + \dots + c = c\,n(n+1)/2 = O(n^2)$ (교수: "we apply the iteration method then the result will be n squared").
+<pre class="txt">
+T(n) <= T(n-1) + cn
+     <= T(n-2) + c(n-1) + cn
+     <= ...
+     <= T(1) + c(2 + 3 + ... + n)
+      = O(n^2)                       ← [[합 공식]] 1+2+...+n = n(n+1)/2
+</pre>
+
+== 관련 문서 ==
+* [[select]] · [[피벗 시나리오 3종]] · [[T(n)]] · [[점화식]] · [[master method]] · [[T(n/5) + T(7n/10) + O(n)]] · [[L4 Divide and Conquer II]]

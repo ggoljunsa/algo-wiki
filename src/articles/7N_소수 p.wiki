@@ -1,0 +1,37 @@
+key: 소수 p
+title: 소수 p (h_{a,b} 의 modulus, p ≥ M)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+[[h_{a,b}]] 의 첫 단계 $f_{a,b}(x) = (ax + b) \bmod p$ 에 쓰는 소수. 조건은 '''$p \ge M$''' (M 이상인 가장 작은 소수를 고른다). p 가 소수이고 $a \ne 0$ 이어야 $x \mapsto ax + b \bmod p$ 가 {0..p−1} 위의 '''전단사'''가 되어, 첫 단계에서 충돌이 전혀 생기지 않는다.
+
+{def}
+L7 p.68: "Pick a prime $p \ge M$."
+L7 p.69: "To select an $h_{a,b}$ from this family: 1. Determine M = |U|. 2. Find the smallest prime $p \ge M$. 3. Let a be a random number in {1, …, p−1}. 3. Let b be a random number in {0, …, p−1}."
+{/def}
+[[img:L7-65.png|L7 p.69 — h_{a,b} 고르기: M → 가장 작은 소수 p ≥ M → a → b|medium]]
+
+{analogy}
+'''원형 시계 위에서 a 칸씩 건너뛰기.''' 눈금이 p 개인 원형 시계에서 0 부터 a 칸씩 뛰면, p 가 소수일 때는 모든 눈금을 한 번씩 다 밟고 돌아온다(전단사). 눈금이 6 개(합성수)이고 2 칸씩 뛰면 0, 2, 4 만 밟고 1, 3, 5 는 영영 못 밟는다 — 그러면 서로 다른 x 가 같은 눈금에 떨어진다(충돌).
+{/analogy}
+
+{|
+! 왜 p 가 || 이유
+|-
+| $p \ge M$ || U = {0..M−1} 의 서로 다른 키가 mod p 로 이미 겹치면 안 됨 (x ≠ y 이고 둘 다 < p)
+|-
+| 소수 || $a \ne 0$ 이면 a 가 mod p 에서 역원을 가져 $ax + b$ 가 전단사 ([[modular arithmetic]])
+|-
+| 가장 작은 소수 || |H| = p(p−1) 과 저장 비트를 작게 (베르트랑 공준: M 과 2M 사이에 소수가 있으니 p < 2M)
+|}
+<pre class="txt">
+p = 6 (소수 아님), a = 2, b = 0: x = 0,1,2,3,4,5 → 0,2,4,0,2,4    ← x=0 과 x=3 충돌!
+p = 5 (소수),     a = 2, b = 1: x = 0,1,2,3,4   → 1,3,0,2,4      ← 전단사, 충돌 없음 (p.70)
+</pre>
+{exam}
+해설본 ⭐⭐⭐: "첫 단계(mod p)는 '''p 가 소수이고 a ≠ 0 이라 전단사''' → 충돌이 절대 안 생김. 충돌은 두 번째 단계(mod n)에서만." p.70 예제 M = p = 5.
+{/exam}
+[[anim:universal_hash_pick|mod 5 원 위에서 U={0..4} 가 1,3,0,2,4 로 한 칸도 겹치지 않고 옮겨지는 장면 — p 가 소수라서 가능한 전단사를 보자]]
+
+== 관련 문서 ==
+* [[h_{a,b}]] · [[modular arithmetic]] · [[H의 크기]] · [[universe U]]

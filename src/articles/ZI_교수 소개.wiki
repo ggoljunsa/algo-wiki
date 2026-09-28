@@ -1,0 +1,50 @@
+key: 교수 소개
+title: 교수 소개 — Hoon Sung Chwa (CSE301 담당)
+category: 용어, 안내
+---
+CSE301 Introduction to Algorithms (DGIST, 2026 Fall) 담당 교수는 '''Hoon Sung Chwa''' 다(슬라이드 표지 "Instructor : Hoon Sung Chwa"). 이 문서에는 '''강의에서 직접 확인된 사실만''' 적는다 — 경력·연구 분야 등 수업 자료에 없는 정보는 쓰지 않는다.
+
+{def}
+"CSE301 Introduction to Algorithms · Fall 2026 · Instructor : Hoon Sung Chwa" (L1 p.1)
+{/def}
+
+[[img:L1-01.png|L1 p.1 — 표지: CSE301 Introduction to Algorithms, Fall 2026, Instructor : Hoon Sung Chwa|small]]
+
+== 수업 방식 (녹음본·진도표 기준) ==
+{|
+! 항목 || 내용 || 출처
+|-
+| 강의 언어 || '''영어'''. 슬라이드도 영어. 9/10 은 appendix 부근에서 "이후는 한국어로" 넘어감 || 녹음 0910
+|-
+| 교재 || [[CLRS]]. 매 강의 Outline 에 "Reading: CLRS …" || 슬라이드
+|-
+| 수업 횟수 || 주 2 회, 1 차시는 영상 대체 || [[시험 정보|진도표]]
+|-
+| 출석 || 9/3 에 "다음 주부터 출석 체크" 예고 → 9/8 수업 후반에 첫 출석 체크 || 녹음 0903, 0908
+|-
+| 질문식 진행 || 학생에게 되묻고 답을 받아 정리 (partition 방식, master method 연습 a=1·2·4, 6 과 10 의 비교 확률, majority 의 divide/combine) || 녹음 0908–0922
+|-
+| 과제 || HW1: 개인 과제, LMS 게시(9/11), 마감 9/18 || 녹음 0910
+|-
+| 팀 발표 || HW1 문제 3~6, 4 개 팀, 팀당 5 분, 팀 무작위 배정, 9/22 || 녹음 0910, 진도표
+|}
+
+== 교수의 반복 프레임과 입버릇 ==
+* '''[[두 가지 질문]]''': 모든 알고리즘에 "① Does it (actually) work? ② Is it fast?" (L1 p.8–9 부터 L7 까지).
+* "'''Find things that don't change'''" — invariant 의 출발점 (L1 p.26). → [[invariant]]
+* "'''Pretend like we knew it all along'''" — 치환법 Step 3: profit (L3 p.115). → [[substitution method]]
+* "'''You cannot escape the dark side with deterministic hash functions'''" (L7 p.31). → [[결정론적 해시 함수의 한계]]
+* "재귀 트리와 반복법은 이해용, '''master method 와 substitution method 만 기억하면 충분'''" (9/3·9/8 녹음). → [[점화식 풀이 4가지]]
+* "구분할 수 있어야 한다": Las Vegas vs Monte Carlo, expected vs worst-case (9/17 녹음). → [[Las Vegas와 Monte Carlo]] · [[두 시나리오]]
+* L4 p.109–110 여담: "from absorbing knowledge to creating knowledge" (Lui Sha, UIUC) — 대학원 이야기.
+
+{analogy}
+🎭 '''같은 질문을 계속 던지는 코치.''' 이 교수의 수업은 새 알고리즘이 나올 때마다 "되나? 빠르나?" 두 질문으로 검문한다. 그래서 수업 노트를 정리할 때도 알고리즘마다 "정확성 증명 방법 / 수행 시간 결과" 두 칸을 채우면 교수의 머릿속 표와 같아진다.
+{/analogy}
+
+{exam}
+교수가 녹음에서 "remember / important / 구분할 수 있어야" 라고 한 항목의 모음은 [[시험 정보]]의 "교수가 강조한 것" 절과 [[자주 틀리는 함정 모음]]에 있다.
+{/exam}
+
+== 관련 문서 ==
+* [[CLRS]] · [[시험 정보]] · [[HW1 복기]] · [[두 가지 질문]]

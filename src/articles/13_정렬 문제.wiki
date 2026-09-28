@@ -1,0 +1,39 @@
+key: 정렬 문제
+title: 정렬 문제 (Sorting)
+category: 1강 Analysis I, 용어
+---
+== 개요 ==
+L1–L6 에 걸쳐 가장 많이 쓰이는 예제 문제. L1 p.4 에서 정의되고, L1 Outline 에서는 "Problems: '''Comparison-sorting'''" 으로 불린다 — 원소끼리 '''비교'''만 해서 순서를 정하는 정렬([[comparison-based sorting]]).
+
+{def}
+'''Sorting''' (L1 p.4): "Sorting algorithms order sequences of values." — "For the sake of clarity, we'll pretend all elements are distinct."
+값의 수열을 받아 오름차순으로 재배열한 수열을 출력하는 문제. 원소는 서로 다르다고 가정([[distinct 가정]]).
+{/def}
+[[img:L1-04.png|L1 p.4 — [4,7,1,5,2,8,3,6] → [1,2,3,4,5,6,7,8]|medium]]
+
+{analogy}
+'''카드 정리'''나 '''출석부 번호순 정렬'''. 입력은 뒤섞인 카드 한 벌, 출력은 같은 카드들이 작은 수부터 늘어선 것 — 카드가 빠지거나 새로 생기면 안 된다(출력은 입력의 '''순열''').
+{/analogy}
+
+== 형식적으로 ==
+* 입력: 수열 $A = \langle a_0, a_1, \dots, a_{n-1} \rangle$ ($n$ = 입력 크기)
+* 출력: $A$ 의 순열(permutation) $\langle a'_0, \dots, a'_{n-1} \rangle$ 로서 $a'_0 \le a'_1 \le \dots \le a'_{n-1}$
+* 정확성 증명에는 두 조건이 다 필요하다: '''정렬돼 있다''' + '''원래 원소들의 순열이다'''. HW1 3번 풀이는 순열 조건을 invariant 에 명시한다([[selection sort]]).
+
+== 이 과목의 정렬 알고리즘 ==
+{|
+! 알고리즘 || 강의 || worst-case || 비고
+|-
+| [[insertion sort]] || L1–L2 || $O(n^2)$ || best $\Omega(n)$, [[in-place]]
+|-
+| [[selection sort]] || HW1 3번 || $\Theta(n^2)$ || 항상 $n(n-1)/2$ 비교
+|-
+| [[mergesort]] || L3 || $O(n \log n)$ || [[divide and conquer]]
+|-
+| [[counting sort]] / [[radix sort]] || L5 || $\Theta(n+k)$ / $\Theta(d(n+k))$ || 비교 안 함 → [[Ω(n log n) 하한]] 회피
+|-
+| [[randomized quicksort]] || L6 || expected $O(n \log n)$ || worst $O(n^2)$
+|}
+
+== 관련 문서 ==
+* [[distinct 가정]] · [[comparison-based sorting]] · [[insertion sort]] · [[L1 Algorithmic Analysis I]]

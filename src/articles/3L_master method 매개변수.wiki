@@ -1,0 +1,46 @@
+key: master method 매개변수
+title: master method 매개변수 a, b, d
+category: 3강 D&C I, 기호
+---
+== 개요 ==
+[[master method]] 의 입력 세 개. 점화식 $T(n) = a \cdot T(n/b) + O(n^d)$ 에서 '''a''' 는 부분 문제 수, '''b''' 는 크기가 줄어드는 비율, '''d''' 는 쪼개고 합치는 일의 차수다. 이 셋을 정확히 읽어 내는 것이 master method 문제의 절반이다.
+
+{def}
+"Three parameters:
+'''a''' : the number of subproblems
+'''b''' : the factor by which the input size shrinks
+'''d''' : need to do $n^d$ work to create all the subproblems and combine their solutions" (L3 p.90–92)
+{/def}
+[[img:L3-92.png|L3 p.92 — 공식과 a(초록)·b(파랑)·d(보라) 색 구분, 교수 판서|medium]]
+
+{analogy}
+'''프랜차이즈 확장.''' 본점 하나가 매장 '''a''' 개를 새로 연다(부분 문제 수). 새 매장의 규모는 본점의 '''1/b''' 이다(크기 축소). 본점이 매장들을 세우고 매출을 합산하는 데 드는 관리비가 $n^{\mathbf d}$ (쪼개기+합치기). a 가 크면 매장 수가 폭발하고, b 가 크면 매장이 금방 작아지고, d 가 크면 관리비가 비싸진다.
+{/analogy}
+
+== 읽는 법 ==
+{|
+! 기호 || 점화식에서 위치 || mergesort 에서 || 코드에서 찾는 법
+|-
+| '''a''' || $T(\cdot)$ 앞의 계수 || 2 || 재귀 호출이 '''몇 번''' 일어나는가 (`L = mergesort(…)`, `R = mergesort(…)` → 2)
+|-
+| '''b''' || $T(n/b)$ 의 분모 || 2 || 각 재귀 호출의 입력이 원래의 '''몇 분의 1''' 인가 (절반 → 2)
+|-
+| '''d''' || $O(n^d)$ 의 지수 || 1 || 재귀 호출 밖에서 하는 일(분할·[[merge]])의 차수 ($\Theta(n)$ → 1)
+|}
+[[sim:master_method]]
+
+{warn}
+자주 하는 실수
+* '''b 를 "나누는 개수"로 착각''': $T(n) = 3T(n/2)$ 에서 부분 문제는 3 개지만 b 는 2 다. a 와 b 는 독립이다([[Karatsuba 곱셈]]).
+* '''d 를 "$O(n)$ 이니 n"이라고 적기''': d 는 지수. $O(n) \to d = 1$, $O(n^2) \to d = 2$, $O(1) \to d = 0$.
+* L6 p.20 슬라이드는 $T(n) = 2T(n/2) + \Theta(n)$ 에 "a = 1" 이라 적은 오타가 있다 — 올바른 값은 '''a = 2'''.
+* L4 의 [[select]] "합리적 피벗" 경우 $T(n) = T(7n/10) + O(n)$ 은 $b = 10/7$ — b 는 정수가 아니어도 된다(1 보다 크기만 하면).
+{/warn}
+
+{exam}
+9/8 수업: "What's the meaning of each variable in the recurrence relation? For example 4 or n over 2 …" 라며 각 기호의 의미를 물었다. 서술형에서 master method 를 쓸 때 "a = ?, b = ?, d = ?, $b^d$ = ? → 케이스" 네 칸을 반드시 적자.
+{/exam}
+
+== 관련 문서 ==
+* [[master method]] · [[master method 세 케이스]] · [[eternal struggle]]
+* [[T(n)]] · [[Karatsuba 곱셈]]

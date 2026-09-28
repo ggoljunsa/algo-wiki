@@ -1,0 +1,41 @@
+key: adversary
+title: adversary (적, bad guy)
+category: 6강 Randomized I, 용어
+---
+== 개요 ==
+수행 시간을 분석할 때 상상하는 '''심술궂은 상대'''. 슬라이드에서는 "Bad guy" 와 다스 베이더 그림으로 나온다. worst-case 분석이란 "이 적이 가장 나쁜 선택을 했을 때"를 재는 것이고, L6–L7 에서는 적이 '''무엇까지''' 고를 수 있느냐가 분석을 가른다.
+
+{def}
+L6 p.5: "Scenario 1: 1. Bad guy picks the input. … Scenario 2: 1. Bad guy picks the input. 2. Bad guy chooses the randomness (fixes the dice)."
+L7 p.34: "1. An adversary chooses any n items $u_1, …, u_n \in U$, and any sequence of INSERT/DELETE/SEARCH operations on those items."
+{/def}
+[[img:L6-05.png|L6 p.5 — Bad guy(다스 베이더)가 입력만 고르느냐, 주사위까지 고정하느냐|medium]]
+
+{analogy}
+'''시험 출제자.''' 출제자는 내 약점을 노린 문제(입력)를 낼 수 있다. 하지만 내가 시험장에서 동전을 던져 풀이 순서를 정한다면, 출제자는 '''동전 결과까지''' 조작할 수 없다(Scenario 1). 동전까지 조작할 수 있다고 가정하는 게 가장 비관적인 분석(Scenario 2 = worst-case)이다.
+{/analogy}
+
+[[anim:expected_vs_worst|적(빨강)이 입력만 고를 때와 주사위까지 고정할 때 수행 시간이 분포(기댓값)에서 한 값(worst)으로 바뀌는 것을 보자]]
+
+== 적이 할 수 있는 일 ==
+{|
+! 상황 || 적이 고르는 것 || 결과 || 어디서
+|-
+| deterministic 알고리즘 || 입력 || worst-case 입력 (예: 삽입 정렬에 역순) || L2
+|-
+| [[두 시나리오|Scenario 1]] || 입력만 || [[expected running time]] || L6 p.5
+|-
+| [[두 시나리오|Scenario 2]] || 입력 + 주사위 || [[randomized worst-case]] || L6 p.5, 9, 18, 43
+|-
+| 결정론적 [[hash function]] || h 를 알고 입력 선택 || 한 버킷에 n 개 → $O(n)$ || L7 p.32
+|-
+| [[해싱 게임]] || 입력 먼저, h 는 나중에 랜덤 || 기대 $O(1)$ || L7 p.34
+|-
+| 작은 [[hash family]] {h₀, h₁} || '''H 를 알고''' 입력 선택 || 두 함수 모두에서 충돌 || L7 p.57
+|}
+{exam}
+L6 p.9·p.18·p.43 슬라이드의 worst-case 옆 메모 "'''Think of this as the adversary chooses the randomness.'''" — randomized 알고리즘의 worst-case 는 적이 주사위까지 쥔 경우다. L7 p.57 "This adversary could have been more adversarial!" — 적은 h 는 몰라도 '''H(후보 집합)는 안다'''.
+{/exam}
+
+== 관련 문서 ==
+* [[두 시나리오]] · [[randomized worst-case]] · [[해싱 게임]] · [[결정론적 해시 함수의 한계]]

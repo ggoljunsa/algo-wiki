@@ -1,0 +1,32 @@
+key: 자료구조 비교표
+title: 자료구조 비교표 — sorted linked list / sorted array / hash table (L7 p.4–5)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+L7 첫 장의 동기 부여 표. [[INSERT/DELETE/SEARCH]] 세 연산을 각 자료구조가 얼마에 하는지 비교하고, '''hash table''' 열을 노란색으로 추가해 "평균은 $O(1)$, 최악은 $O(n)$" 이라는 L7 의 목표를 보여 준다.
+
+{def}
+L7 p.5: Search — Sorted linked lists $O(n)$ expected & worst-case / Sorted arrays $O(\log n)$ expected & worst-case / Hash tables $O(1)$ expected, $O(n)$ worst-case. Insert/Delete — $O(n)$ / $O(n)$ / $O(1)$ expected, $O(n)$ worst-case (without a pointer to the element).
+{/def}
+[[img:L7-05.png|L7 p.5 — 자료구조 비교표 (노란 열 = Hash tables)|large]]
+
+{analogy}
+'''물건 찾기 세 가지 방식.''' 줄줄이 꿴 구슬(sorted linked list)은 처음부터 하나씩 따라가야 한다. 번호 붙은 서랍장(sorted array)은 가운데부터 반씩 좁혀 찾지만(binary search), 새 물건을 끼우려면 뒤 서랍을 전부 한 칸씩 밀어야 한다. 해시 테이블은 "이 물건은 7 번 칸" 이라고 바로 계산해 가는 방식 — 보통은 한 번에 찾지만, 칸 하나에 다 몰리면 줄줄이 뒤져야 한다.
+{/analogy}
+
+{|
+! 연산 || Sorted linked list || Sorted array || Hash table
+|-
+| Search || $O(n)$ || $O(\log n)$ (binary search) || $O(1)$ expected / $O(n)$ worst
+|-
+| Insert/Delete || $O(n)$ (자리 찾기) || $O(n)$ (원소 밀기) || $O(1)$ expected / $O(n)$ worst
+|}
+{exam}
+해설본 ⭐⭐, 핵심 요약 1번: "정렬 연결리스트 O(n)/O(n), 정렬 배열 O(log n)/O(n), 해시 테이블 '''기대 O(1) / worst O(n)'''". 해시 테이블만 expected 와 worst 가 다르다 — L6 의 randomized 알고리즘과 같은 트레이드오프.
+{/exam}
+{info}
+표의 작은 글씨 "without a pointer to the element": DELETE 할 원소의 위치(포인터)를 모른다면 먼저 찾아야 하므로 그 탐색 비용이 포함된다는 뜻.
+{/info}
+
+== 관련 문서 ==
+* [[hash table]] · [[INSERT/DELETE/SEARCH]] · [[linked list]] · [[direct addressing]]

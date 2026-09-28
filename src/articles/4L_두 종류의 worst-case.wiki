@@ -1,0 +1,40 @@
+key: 두 종류의 worst-case
+title: 두 종류의 worst-case (입력이 정하는 worst-case vs 입력 + 난수가 정하는 "worst-case")
+category: 4강 D&C II, 용어
+---
+{def}
+"Note: this is different from the '''"worst-case"''' we saw for insertion sort (we'll revisit during Randomized Algs)." (L4 p.24) — "Note: back to talking about the same worst-case we saw for insertion sort (we'll revisit during Randomized Algs)." (p.108)
+{/def}
+[[img:L4-24.png|p.24 — 랜덤 피벗 select 의 따옴표 친 "Worst-case" runtime Θ(n²)|medium]]
+
+== 두 가지 ==
+{|
+! || 입력이 정하는 worst-case || 입력 + 난수가 정하는 "worst-case"
+|-
+| 예 || [[insertion sort]] $\Theta(n^2)$ (역순 입력), [[linear-time selection]] $\Theta(n)$ || random pivot [[select]] $\Theta(n^2)$
+|-
+| 무엇이 나쁜가 || 입력 (적이 고른 최악의 배열) || 입력 + '''운'''(매번 최악의 pivot 이 뽑힘)
+|-
+| 같은 입력을 다시 돌리면 || 항상 같은 시간 || 대개 빠르다 (난수가 다시 뽑힘)
+|-
+| 슬라이드 표기 || Worst-case || "Worst-case" (따옴표)
+|-
+| 이어지는 곳 || [[worst-case와 best-case]], [[삽입 정렬의 worst-case]] || L6 [[randomized worst-case]], [[expected running time]], [[두 시나리오]]
+|}
+
+{analogy}
+'''교통 체증.''' 출근길 최악 시간은 보통 "어떤 길(입력)을 받느냐"로 정해진다(삽입 정렬). 그런데 신호등이 무작위로 바뀌는 도시라면, 같은 길이라도 신호를 '''매번 전부''' 빨간불로 받는 극단적 불운이 있어야 최악이 된다(랜덤 pivot select). 두 번째 최악은 "이 길이 나쁘다"가 아니라 "운이 지독했다"는 뜻이다.
+{/analogy}
+
+== 교수의 정정 (9/10 녹음) ==
+{exam}
+"this worst case's meaning is different from the worst case [of] insertion sort… '''input determines the worst case'''. But here there are '''two factors''' to determine the worst case" — 입력과 random value. "We will revisit this when we study randomized algorithms." L6 에서 적(adversary)이 입력만 고르는지(Scenario 1 → expected running time), 난수까지 고르는지(Scenario 2 → worst-case)로 정식화된다 → [[두 시나리오]], [[adversary]].
+{/exam}
+불운한 경우의 계산: pivot 이 매번 최댓값(또는 최솟값) → $T(n) \le T(n-1) + O(n)$ → $\Theta(n^2)$. §6 시뮬레이터의 "불운" 옵션: pivot 81, 64, 49, 36, 25, 16, 9 순, partition 비용 10+9+…+4 = 49.
+<pre class="txt">
+불운(k=3, 매번 최댓값 pivot):  [10개] → 81 버림 → [9개] → 64 → [8개] → 49 → ... → 9 (len(left)=3 == k)
+partition 비용 10 + 9 + 8 + 7 + 6 + 5 + 4 = 49    (슬라이드 순서 36 → 1 → 9 는 10 + 6 + 4 = 20)
+</pre>
+
+== 관련 문서 ==
+* [[worst-case와 best-case]] · [[randomized worst-case]] · [[두 시나리오]] · [[expected running time]] · [[select]] · [[피벗 시나리오 3종]] · [[randomized select]]

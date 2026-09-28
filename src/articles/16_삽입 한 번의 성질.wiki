@@ -1,0 +1,47 @@
+key: 삽입 한 번의 성질
+title: 삽입 한 번의 성질 — 정렬된 리스트 + 올바른 삽입 = 한 칸 긴 정렬 리스트
+category: 1강 Analysis I, 용어
+---
+== 개요 ==
+L1 p.27–30 에서 교수가 [[insertion sort]] 정확성 증명의 핵심 부품으로 먼저 떼어 보여 주는 성질. 이것이 그대로 [[inductive step]] (CLRS: Maintenance) 이 된다.
+
+{def}
+L1 p.29–30: "Suppose you have a sorted list, [1 3 4 5], and another element [2]. Inserting 2 immediately to the right of the '''largest element from the original list that's smaller than 2''' (i.e. right of 1) produces another sorted list. Notice that this new list is '''longer than the original one by one element''': [1 2 3 4 5]."
+정렬된 리스트에 새 원소 x 를 "x 보다 작은 원소 중 가장 큰 것의 바로 오른쪽"에 넣으면 결과도 정렬돼 있고 길이는 1 늘어난다.
+{/def}
+[[img:L1-30.png|L1 p.30 — [1,3,4,5] 에 2 를 1 의 오른쪽에 넣어 [1,2,3,4,5]|medium]]
+
+{analogy}
+'''책장에 책 한 권 꽂기'''. 제목순으로 꽂힌 책장에 새 책을 넣을 때 "나보다 앞 제목 중 가장 뒤에 있는 책" 바로 뒤에 꽂으면 책장은 여전히 제목순이다. 이 한 번의 동작이 옳다는 것만 믿으면, 책을 백 권 꽂아도 옳다 — 그게 귀납법이다.
+{/analogy}
+
+[[anim:insertion_card|카드가 한 장 끼워질 때마다 왼손 패가 "정렬된 채로 한 장 길어지는" 것에 집중해서 보자]]
+
+== 왜 정렬이 유지되나 ==
+<pre class="txt">
+정렬된 L = [l₁ ≤ l₂ ≤ … ≤ lₖ],  새 원소 x
+p = "x 보다 작은 원소 중 가장 큰 것"의 위치 (없으면 맨 앞)
+삽입 결과: [l₁ … l_p, x, l_(p+1) … lₖ]
+  왼쪽:  l_p < x          (p 의 정의)
+  오른쪽: x < l_(p+1)      (l_(p+1) 은 x 보다 작지 않은 첫 원소, distinct 가정)
+  나머지 인접 쌍은 원래 L 에서 이미 정렬
+→ 전체 정렬, 길이 k+1
+</pre>
+코드에서는 while 루프가 `A[j] > cur_value` 인 동안 왼쪽으로 가다가 '''처음으로 cur_value 보다 작은 A[j]''' 에서 멈추므로, j 가 곧 위의 p 이고 `A[j+1] = cur_value` 가 "바로 오른쪽"에 넣는 동작이다.
+
+== 매 단계 적용 (L1 p.31–43) ==
+{|
+! 정렬된 앞부분 || our other element || 결과
+|-
+| [4] || 3 || [3, 4]
+|-
+| [3, 4] || 1 || [1, 3, 4]
+|-
+| [1, 3, 4] || 5 || [1, 3, 4, 5]
+|-
+| [1, 3, 4, 5] || 2 || [1, 2, 3, 4, 5]
+|}
+L1 p.51 은 이 표의 두 번째 줄(3 4 '''1''' 5 2 → 1 3 4 5 2)을 그대로 "Inductive step: Recall logic from the animation." 으로 다시 꺼낸다.
+
+== 관련 문서 ==
+* [[insertion sort]] · [[inductive step]] · [[loop invariant]] · [[L1 Algorithmic Analysis I]]

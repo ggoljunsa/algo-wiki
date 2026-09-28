@@ -1,0 +1,33 @@
+key: universe U
+title: universe U (키의 전체 집합)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+'''나올 수 있는 모든 키'''의 집합. 크기를 M 이라 쓴다. M 은 엄청나게 크고, 실제로 등장하는 키는 그중 최대 n 개뿐이며, 어떤 것이 나올지 미리 모른다 — 이 세 조건이 해시 테이블이 필요한 이유다.
+
+{def}
+L7 p.22: "We have a universe U, of size M. M is really big. But only a few (say at most n for today's lecture) elements of M are going to show up. M is waaaayyyyyyy bigger than n. But we don't know which ones will show up in advance."
+"Example: U is the set of all strings of at most 140 ascii characters. ($128^{140}$ of them). The only ones which I care about are those which appear as trending hashtags on twitter. #hashinghashtags"
+{/def}
+[[img:L7-22.png|L7 p.22 — Universe U (초록 blob) 안에 실제로 등장하는 13, 22 같은 특별한 키 몇 개|medium]]
+
+{analogy}
+'''세상 모든 가능한 전화번호 vs 내 연락처.''' 010-XXXX-XXXX 조합은 1 억 개(U, M)지만 내 연락처는 300 개(n). 1 억 칸짜리 표([[direct addressing]])는 낭비고, 어떤 300 개일지 미리 알면 쉽겠지만 모른다.
+{/analogy}
+
+{|
+! 기호 || 뜻 || 트위터 예
+|-
+| $U$ || 가능한 모든 키 || 140 자 이하 ASCII 문자열 전부
+|-
+| $M = \lvert U \rvert$ || universe 크기, 엄청 큼 || $128^{140}$ ("More than the number of particles in the universe", p.46)
+|-
+| n || 실제 등장 키 수 (≤ n) = 버킷 수 || 트렌딩 해시태그 몇 개
+|}
+{exam}
+해설본 ⭐⭐ "이후 전부 이 기호로 진행": U, M, n 의 관계 '''$M \gg n$''', 어떤 키가 올지 모름. 결정론적 해시의 한계 증명(p.32)은 "M/n > n" 에, $h_{a,b}$ 는 "소수 $p \ge M$" 에, 공간은 "$O(\log M)$" 에 M 을 쓴다.
+{/exam}
+L7 p.64 는 U 를 정수 $\{0, …, M-1\}$ 로 본다(문자열도 정수로 인코딩하면 된다).
+
+== 관련 문서 ==
+* [[M과 n]] · [[hash function]] · [[direct addressing]] · [[결정론적 해시 함수의 한계]]

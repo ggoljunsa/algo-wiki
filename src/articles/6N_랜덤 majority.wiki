@@ -1,0 +1,64 @@
+key: 랜덤 majority
+title: 랜덤 majority — 찍고 확인하기, expected O(n)
+category: 6강 Randomized I, 알고리즘
+---
+== 개요 ==
+"Think about low-hanging fruit: will an algorithm similar to [[bogosort]] work?" (L6 p.73). 원소 하나를 무작위로 찍어 전체와 [[equals]] 로 세어 보고, 과반이면 반환, 아니면 다시 찍는다. majority 는 절반 넘게 있으므로 한 번에 맞힐 확률이 1/2 이상 → 기대 시도 ≤ 2 → expected $O(n)$. worst 는 $O(\infty)$. [[Las Vegas와 Monte Carlo|Las Vegas]].
+
+{def}
+L6 p.77: "Provided there exists a majority element, this element must occur at least $\lfloor n/2 \rfloor + 1$ times. Each iteration (while loop) requires n equals checks. $P(\text{find the majority element}) \ge \frac12$. $E[\#\text{iterations}] \le \sum_{i=0}^{\infty} \frac{1}{2^i} = 2$ (Geometric series). $E[\#\text{check}] \le 2n$."
+{/def}
+<pre class="c">
+def majority_element(A):
+  # randomized
+  while True:
+    guess = random.choice(A)
+    count = 0
+    for a in A:
+      if equals(guess, a): count += 1
+    if count > n/2: return guess
+</pre>
+{warn}
+'''슬라이드 코드 결함 (p.75)''': p.75 판은 `if count > n/2+1: return guess` 이다. 정의는 "$\lfloor n/2 \rfloor + 1$ 번 '''이상'''" 이므로 정의대로는 '''`count > n/2`''' (= `count >= n/2 + 1`, n 짝수). `> n/2+1` 이면 정확히 $\lfloor n/2 \rfloor + 1$ 번 나오는 majority(p.57 예제의 1 은 12 개 중 정확히 7 번)를 영원히 통과시키지 못한다. 바로 다음 장 p.76 에서는 `count > n/2` 로 고쳐져 있다.
+{/warn}
+[[img:L6-73.png|L6 p.76 — randomized majority 코드 (count > n/2), Expected O(n) / Worst-case O(∞)|medium]]
+
+{analogy}
+'''과반이 빨간 공인 주머니에서 공 꺼내기.''' 눈 감고 하나 꺼내면 빨강일 확률이 절반 넘는다. 꺼낸 공이 빨강인지 확인하려면 주머니 전체를 쏟아 세어 봐야 하지만(n 번 대조), 평균 두 번 안에 빨강을 꺼내니 총 기대 비용은 2n 이하. 운이 극도로 나쁘면(누가 주머니를 조작하면) 영원히 파랑만 꺼낼 수도 있다.
+{/analogy}
+
+[[anim:majority_random_pick|화살이 빨강(실패)이면 다시, 초록(성공)이면 count 로 확인 후 반환 — 옆의 1/2 + 1/4 + … = 2 누적 막대로 기대 시도 ≤ 2 를 확인하자]]
+
+== 기대 시간 유도 ==
+<pre class="txt">
+p = P(한 번 찍어 majority) = (majority 개수)/n ≥ (⌊n/2⌋+1)/n > 1/2
+시도 횟수 N ~ [[기하분포]]: P(N = i) = (1-p)^{i-1} p
+E[N] = Σ_{i≥1} i (1-p)^{i-1} p = 1/p < 2
+   (슬라이드 p.77: E[#iterations] ≤ Σ_{i=0}^{∞} (1/2)^i = 2        ← [[등비급수|Geometric series]])
+한 시도 = equals n 번
+E[#checks] = n · E[N] ≤ 2n = O(n)
+worst: 적이 매번 non-majority 를 찍게 하면 → O(∞)
+</pre>
+[[img:L6-74.png|L6 p.77 — Expected Runtime of Majority Element: E[#iterations] ≤ 2, E[#check] ≤ 2n|medium]]
+{exam}
+교수(9/22): "정의를 다시 보라 — 절반보다 많다. 그러니 '''인덱스 하나를 랜덤으로 뽑아 majority 인지 확인'''. worst-case running time 은? '''Infinite'''. 그런데 expected 는?" 시도 횟수 N 을 [[기하분포]] $P(N=i) = (1-p)^{i-1}p$ 로 놓고 $E[N] = 1/p$, $p > 1/2$ 이므로 '''기대 시도 < 2''' → 매 시도 O(n) → '''2n'''. "The key is the probability of finding the majority element is more than 1/2." 그리고 "이 문제에서는 randomness 가 D&C 보다 훨씬 단순하고 빠르다."
+{/exam}
+[[sim:geometric_expectation]]
+"랜덤 majority p = 1/2" 옵션: $E[\#iter] \le \sum (1/2)^i = 2$, $E[\#checks] \le 2n$.
+
+{|
+! || [[bogosort]] || 랜덤 majority
+|-
+| 한 번의 시도 || 셔플 + 정렬 확인 $O(n)$ || 찍기 + count $O(n)$
+|-
+| 성공 확률 p || $1/n!$ || $> 1/2$
+|-
+| 기대 시도 $1/p$ || $n!$ || $< 2$
+|-
+| expected || $O(n \cdot n!)$ || $O(n)$
+|-
+| worst || $O(\infty)$ || $O(\infty)$
+|}
+
+== 관련 문서 ==
+* [[majority element]] · [[분할정복 majority]] · [[bogosort]] · [[기하분포]] · [[등비급수]] · [[expected running time]]

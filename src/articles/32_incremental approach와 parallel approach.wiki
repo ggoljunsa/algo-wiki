@@ -1,0 +1,43 @@
+key: incremental approach와 parallel approach
+title: Incremental approach 와 Parallel approach
+category: 3강 D&C I, 용어
+---
+== 개요 ==
+9/3 수업(L3 도입)에서 교수가 [[insertion sort]] 와 [[divide and conquer]] 를 대비시킨 두 이름. 슬라이드에는 없고 녹음본에서 반복된 표현이다(9/8 복습에서도 다시 물었다).
+
+{def}
+'''Incremental approach''': 한 번에 부분 문제 하나씩 — 이미 푼 부분에 원소를 하나 더 붙여(increment) 해를 키워 간다. (예: insertion sort — 정렬된 앞부분 `A[:i]` 에 `A[i]` 하나를 끼운다)
+'''Parallel approach''': "We split the original problem into separate, smaller sub-problems, and then those separate sub-problems can be handled in parallel." — 원래 문제를 서로 '''독립'''인 작은 부분 문제들로 쪼개 따로 푼다. (예: mergesort — 왼쪽 절반과 오른쪽 절반은 서로를 모른 채 정렬된다)
+{/def}
+
+{analogy}
+'''벽돌 쌓기 vs 조립식 주택.''' incremental 은 벽돌을 한 장씩 올려 벽을 키운다 — 매 벽돌마다 지금까지 쌓은 벽 전체를 봐야 할 수도 있다(삽입 정렬의 밀기). parallel 은 공장 여러 곳에서 벽·지붕·바닥을 '''동시에''' 만들어 현장에서 조립(merge)만 한다. 공장끼리는 서로 기다릴 필요가 없다.
+{/analogy}
+
+[[anim:divide_conquer_flow|상자가 둘, 넷으로 갈라지는 장면에서 "각 상자는 옆 상자를 모른 채 풀린다" 는 점(= parallel)에 주목하자]]
+
+== 비교 ==
+{|
+! || incremental (insertion sort) || parallel (mergesort)
+|-
+| 한 단계에서 하는 일 || 원소 1개를 정렬된 부분에 추가 || 문제를 독립된 조각으로 분할
+|-
+| 조각 사이 의존성 || 이전 단계 결과에 의존(순차적) || 조각끼리 독립
+|-
+| 구현 || 반복문([[iterative algorithm]]) || 재귀([[recursive algorithm]])
+|-
+| 정확성 증명 || [[loop invariant]], 반복 횟수 귀납 || [[recursion invariant]], 입력 크기 귀납
+|-
+| 수행 시간 || worst $O(n^2)$ || $\Theta(n \log n)$
+|}
+
+{exam}
+9/8 수업 첫머리 복습: "insertion sort 는 '''incremental approach''', mergesort 는 원래 문제를 여러 부분 문제로 나누고 '''those multiple sub-problems are independent''', so that it could be run in parallel." — "왜 분할 정복이 빠를 수 있는가"를 한 줄로 쓸 때 이 대비를 쓰면 된다.
+{/exam}
+{info}
+여기서 "parallel" 은 실제로 멀티코어에서 돌린다는 뜻이 아니라 '''부분 문제가 서로 독립'''이라는 구조적 성질을 말한다. 이 과목의 분석은 모두 순차 실행 기준이다.
+{/info}
+
+== 관련 문서 ==
+* [[divide and conquer]] · [[insertion sort]] · [[mergesort]]
+* [[반복 vs 재귀 증명 표]]

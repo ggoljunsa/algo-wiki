@@ -1,0 +1,35 @@
+key: load factor
+title: load factor α (적재율, CLRS 용어)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+버킷 하나당 평균 원소 수 $\alpha = n/m$ (CLRS 11.2: 원소 n 개, 버킷 m 개). chaining 에서 SEARCH 의 기대 시간은 $\Theta(1 + \alpha)$. '''L7 슬라이드에는 이 용어가 나오지 않는다''' — 슬라이드 설정에서는 키 n 개·버킷 n 개라 $\alpha = 1$ 이고, [[기대 버킷 크기]] $1 + \frac{n-1}{n}$ 이 곧 $1 + \alpha$ 꼴이다.
+
+{info}
+슬라이드 밖 CLRS 용어다(CLRS 11.2 "load factor α = n/m"). 교재를 읽을 때 기호를 연결하라는 용도로만 정리한다.
+{/info}
+{def}
+(CLRS 11.2) "Given a hash table T with m slots that stores n elements, we define the '''load factor''' α for T as n/m, that is, the average number of elements stored in a chain."
+{/def}
+
+{analogy}
+'''엘리베이터 한 대당 평균 탑승 인원.''' 사람 n 명, 엘리베이터 m 대면 대당 평균 n/m 명. 1 명꼴이면 쾌적, 10 명꼴이면 꽉 끼어 느리다.
+{/analogy}
+
+{|
+! 기호 || CLRS || L7 슬라이드
+|-
+| 원소 수 || n || n (등장 키 최대 개수)
+|-
+| 버킷 수 || m || n
+|-
+| load factor || $\alpha = n/m$ || $n/n = 1$
+|-
+| 기대 SEARCH || $\Theta(1 + \alpha)$ || $1 + \frac{n-1}{n} \le 2$ → $O(1)$
+|}
+{exam}
+시험은 슬라이드 기호(M, n)로 나온다. load factor 는 "버킷 수를 키 수와 같은 규모(O(n))로 두면 α = O(1) 이라 연산이 expected O(1)" 이라는 연결만 알아 두면 충분.
+{/exam}
+
+== 관련 문서 ==
+* [[기대 버킷 크기]] · [[M과 n]] · [[chaining]] · [[CLRS]]

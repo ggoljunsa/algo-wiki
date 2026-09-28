@@ -1,0 +1,175 @@
+key: 공식·점화식 모음
+title: 공식·점화식 모음 — 시험 직전 한 장 요약
+category: 시험
+---
+L1–L7 의 '''외워야 할 식'''을 표로 모았다. 알고리즘별 점화식·결과, master method, 치환법 템플릿, 확률 공식, 해시 공식 순. 각 행의 링크를 누르면 유도 과정이 있는 문서로 간다. 계산 연습은 [[계산·증명 문제 모음]].
+
+{analogy}
+🎭 '''요리사의 계량표.''' 레시피(증명)를 매번 처음부터 떠올릴 수는 없다. 냉장고 문에 붙여 둔 계량표 — "밥 1컵에 물 1.2컵" — 처럼, 이 문서는 "mergesort 는 $2T(n/2)+O(n)$ → $n\log n$" 같은 비율을 한눈에 보는 곳이다. 단, 시험 답안에는 계량표만 베끼지 말고 '''왜 그 비율인지'''(유도) 한 줄을 붙여야 점수가 된다.
+{/analogy}
+
+== 1. 정의 (L2) ==
+{|
+! 표기 || 정의 || 뜻
+|-
+| $T(n) = O(g(n))$ || $\exists\, c, n_0 > 0,\ \forall n \ge n_0:\ 0 \le T(n) \le c\,g(n)$ || 상한 → [[Big-O]]
+|-
+| $T(n) = \Omega(g(n))$ || $\exists\, c, n_0 > 0,\ \forall n \ge n_0:\ 0 \le c\,g(n) \le T(n)$ || 하한 → [[Big-Ω]]
+|-
+| $T(n) = \Theta(g(n))$ || $O$ 이면서 $\Omega$ || tight → [[Big-Θ]]
+|-
+| 반증 || $n = \max\{c, n_0\} + 1$ 로 모순 || [[max{c, n₀}+1 트릭]]
+|}
+증가율: $1 < \log n < n < n\log n < n^2 < 2^n < n! < n^n$ → [[증가율 사다리]]
+
+== 2. 알고리즘별 점화식과 결과 ==
+{|
+! 알고리즘 || 점화식 || worst-case || expected / best || 강의
+|-
+| [[insertion sort]] || (반복문) || $O(n^2)$ (역순) || best $\Omega(n)$ (정렬됨) || L1–L2
+|-
+| [[mergesort]] || $T(n) = 2T(n/2) + O(n)$ || $\Theta(n\log n)$ || best 도 $\Theta(n\log n)$ || L3
+|-
+| [[merge]] || — || $\Theta(n)$ (최대 $n$ 번 비교) || — || L3
+|-
+| [[naive_select]] || 정렬 + 인덱스 || $\Theta(n\log n)$ || — || L4
+|-
+| [[select]] 랜덤 피벗(불운) || $T(n) = T(n-1) + O(n)$ || $\Theta(n^2)$ || expected $\Theta(n)$ (CLRS 9.2) || L4, L6
+|-
+| select 정확한 median || $T(n) = T(n/2) + O(n)$ || $\Theta(n)$ (실현 불가: 닭과 달걀) || — || L4
+|-
+| select 3n/10~7n/10 보장 || $T(n) = T(7n/10) + O(n)$ || $\Theta(n)$ || — || L4
+|-
+| [[median of medians]] select || $T(n) \le T(n/5) + T(7n/10) + O(n)$ || $\Theta(n)$ (치환법, $C = \max\{7, 10d\}$) || — || L4
+|-
+| 비교 기반 정렬 하한 || 결정 트리 깊이 $\ge \log(n!)$ || $\Omega(n\log n)$ || — || L5
+|-
+| [[counting sort]] || — || $\Theta(n+k)$ || — || L5
+|-
+| [[bucket sort]] || — || $\Theta(\max\{n\log n, n+k\})$ || 균등 분포면 $\approx \Theta(n+k)$ || L5
+|-
+| [[radix sort]] || $d$ 번 × bucket sort || $\Theta(d(n+k))$ || — || L5
+|-
+| [[bogosort]] || 기하분포 $p = 1/n!$ || $O(\infty)$ || $O(n \cdot n!)$ || L6
+|-
+| [[quicksort]] (피벗 = A[0]) || $T(n) = T(n-1) + \Theta(n)$ || $\Theta(n^2)$ || — || L6
+|-
+| quicksort 매번 median || $T(n) = 2T(n/2) + \Theta(n)$ || $O(n\log n)$ || — || L6 p.20
+|-
+| [[randomized quicksort]] || — || $\Theta(n^2)$ || $\Theta(n\log n)$ || L6
+|-
+| [[randomized select]] || — || $\Theta(n^2)$ || $\Theta(n)$ || L6
+|-
+| [[분할정복 majority]] || $T(n) = 2T(n/2) + O(n)$ || $O(n\log n)$ || $O(n\log n)$ || L6
+|-
+| [[랜덤 majority]] || 기하분포 $p \ge 1/2$ || $O(\infty)$ || $O(n)$ ($\le 2n$ equals) || L6
+|-
+| [[hash table]] ([[chaining]]) || — || $O(n)$ per op || $O(1)$ per op || L7
+|}
+
+[[img:L6-76.png|L6 p.80 — randomized 알고리즘 4 개의 worst-case / expected 요약. 통째로 암기|medium]]
+[[img:L4-115.png|L4 p.116 — 피벗 고르는 세 아이디어와 점화식·worst-case|medium]]
+
+== 3. Master method ==
+$$T(n) = a\,T(n/b) + O(n^d) \implies T(n) = \begin{cases} O(n^d \log n) & a = b^d \\ O(n^d) & a < b^d \\ O(n^{\log_b a}) & a > b^d \end{cases}$$
+* $a$ = 부분 문제 개수, $b$ = 크기 축소 비율, $d$ = 분할·병합 일의 차수 → [[master method 매개변수]]
+* 전제: '''모든 부분 문제 크기가 같다'''. $n/b$ 의 floor/ceil 은 무관. → [[master method의 한계]]
+* 직관: 레벨 $k$ 의 일 $= n^d (a/b^d)^k$ — 공비 $a/b^d$ 의 [[등비급수]] → [[eternal struggle]]
+{|
+! 예 || a || b || d || $b^d$ || 케이스 || 결과
+|-
+| mergesort $2T(n/2)+O(n)$ || 2 || 2 || 1 || 2 || $a = b^d$ || $O(n\log n)$
+|-
+| 곱셈 $4T(n/2)+O(n)$ || 4 || 2 || 1 || 2 || $a > b^d$ || $O(n^2)$
+|-
+| [[Karatsuba 곱셈]] $3T(n/2)+O(n)$ || 3 || 2 || 1 || 2 || $a > b^d$ || $O(n^{\log_2 3}) \approx O(n^{1.585})$
+|-
+| $2T(n/2)+O(n^2)$ || 2 || 2 || 2 || 4 || $a < b^d$ || $O(n^2)$
+|-
+| select 이상적 $T(n/2)+O(n)$ || 1 || 2 || 1 || 2 || $a < b^d$ || $O(n)$
+|-
+| select 합리적 $T(7n/10)+O(n)$ || 1 || 10/7 || 1 || 10/7 || $a < b^d$ || $O(n)$
+|-
+| HW1 6-a $7T(n/2)+\Theta(n^3)$ || 7 || 2 || 3 || 8 || $a < b^d$ || $O(n^3)$
+|}
+{warn}L6 p.20 슬라이드의 "Master method a = 1, b = 2, d = 1" 은 오타다. $T(n) = 2T(n/2) + \Theta(n)$ 이므로 '''a = 2''' ($a = b^d$ → $O(n\log n)$).{/warn}
+
+[[sim:master_method]]
+
+== 4. 치환법 템플릿 ==
+<pre class="txt">
+1. Guess:  T(n) = O(g(n))  (그래프, 상·하한 어림, 크기 합 < n 이면 O(n))
+2. IH:     ∀ 1 ≤ k < n,  T(k) ≤ C·g(k)       ← C 는 미정 ('''O(·) 로 쓰지 말 것''')
+3. Base:   작은 n 에서 T(n) ≤ C·g(n) 이 되도록 C 의 조건 ①
+4. Step:   점화식에 IH 대입 → 부등식 → C 의 조건 ②
+5. C = max(①, ②) 로 확정 → "pretend like we knew it all along"
+</pre>
+{|
+! 점화식 || 크기 합 비율 $r$ || C
+|-
+| L3 $3n + T(n/5) + T(n/2)$, $T(n) = 10n$ ($n \le 10$) || $\frac{7}{10}$ || $10$
+|-
+| L4 $T(n/5) + T(7n/10) + dn$, $T(n) = n\log n$ ($n \le 100$) || $\frac{9}{10}$ || $\max\{7, 10d\}$
+|-
+| HW1 6-b $T(n/2) + T(n/4) + T(n/8) + n$, $T(1) = 1$ || $\frac78$ || $8$
+|}
+패턴: step 조건은 $C \ge \frac{\text{추가 비용 계수}}{1 - r}$. $r < 1$ 이면 선형, $r = 1$ 이면 $n\log n$. → [[substitution method]] · [[미정 상수 C]] · [[부분 문제 크기의 합]]
+
+재귀 트리·반복법: $T(n) \le 2T(n/2) + cn$ → $2^k T(n/2^k) + kcn$, $k = \log_2 n$ → $cn + cn\log_2 n$. → [[iteration method]]
+
+== 5. 확률 공식 (L6) ==
+{|
+! 공식 || 식 || 쓰이는 곳
+|-
+| 기댓값 정의 || $E[X] = \sum_x x\,P(X = x)$ || [[확률과 기댓값]]
+|-
+| 지표 변수 || $E[I_A] = P(A)$ || [[지표 확률변수]]
+|-
+| 선형성 || $E[\sum X_i] = \sum E[X_i]$ (독립 불필요) || [[기대값의 선형성]]
+|-
+| 비교 확률 || $P(X_{a,b} = 1) = \frac{2}{b-a+1}$ ($n$ 무관) || [[P(X_{a,b}=1)]]
+|-
+| 기대 비교 합 || $\sum_{a<b}\frac{2}{b-a+1} \le 2n\sum_{c=1}^{n-1}\frac1c = O(n\log n)$ || [[quicksort 기대 비교 횟수 증명]]
+|-
+| 조화급수 || $H_n = \sum_{c=1}^{n}\frac1c \approx \ln n$ || [[조화급수]]
+|-
+| 기하분포 || $P(N = i) = (1-p)^{i-1}p$, $E[N] = \frac1p$ || [[기하분포]]
+|-
+| 등비급수 || $\sum_{i=0}^{\infty} r^i = \frac{1}{1-r}$ ($r < 1$); $\sum (1/2)^i = 2$ || [[등비급수]]
+|-
+| 순열 수 || $n!$; 정렬된 순열 확률 $\frac{1}{n!}$ || [[순열과 n!]]
+|-
+| Stirling || $n! \approx \sqrt{2\pi n}(n/e)^n$, $\log(n!) \approx n\log(n/e)$ || [[Stirling 근사]]
+|-
+| $\log(n!)$ || $\Theta(n\log n)$: $n! \le n^n$, $n! \ge (n/2)^{n/2}$ || [[log(n!)]]
+|}
+
+== 6. 해시 공식 (L7) ==
+{|
+! 공식 || 식 || 문서
+|-
+| 기대 버킷 크기 || $E = \sum_j P\{h(u_i)=h(u_j)\} = 1 + \sum_{j\ne i}\frac1n = 1 + \frac{n-1}{n} < 2$ || [[기대 버킷 크기]]
+|-
+| universal 조건 || $\forall u_i \ne u_j:\ P_{h\in H}\{h(u_i) = h(u_j)\} \le \frac1n$ || [[universal hash family]]
+|-
+| $h_{a,b}$ || $h_{a,b}(x) = ((ax + b) \bmod p) \bmod n$, 소수 $p \ge M$, $a \in \{1..p-1\}$, $b \in \{0..p-1\}$ || [[h_{a,b}]] · [[소수 p]]
+|-
+| family 크기 || $\lvert H \rvert = p(p-1) = O(M^2)$ || [[H의 크기]]
+|-
+| 집합에서 하나 지목 || $\log s$ 비트 || [[log(s) 비트]]
+|-
+| 균등 무작위 h 저장 || 함수 $n^M$ 개 → $M\log n$ 비트 || [[uniformly random hash function]]
+|-
+| universal h 저장 || $\log(M^2) = O(\log M)$ 비트 (a, b 두 수) || [[해시 테이블 공간 복잡도]]
+|-
+| 테이블 전체 공간 || $O(n\log M)$ 비트 || [[해시 테이블 공간 복잡도]]
+|-
+| 비둘기집 || 어떤 버킷 $\ge M/n > n$ 개 → 결정론적 h 는 worst $O(n)$ || [[비둘기집 원리]]
+|}
+
+{exam}
+시험 직전 10 분 암기 목록: ① Big-O 정의 한 줄 ② master method 세 케이스 + 네 칸 ③ p.116 피벗 세 아이디어 ④ $T(n/5)+T(7n/10)+O(n)$ → 치환법 $C = \max\{7,10d\}$ ⑤ counting $\Theta(n+k)$ / bucket $\Theta(\max\{n\log n, n+k\})$ / radix $\Theta(d(n+k))$ ⑥ p.80 표 ⑦ $\frac{2}{b-a+1}$ ⑧ $1 + \frac{n-1}{n} \le 2$ ⑨ universal 정의 ⑩ $O(\log M)$ 비트.
+{/exam}
+
+== 관련 문서 ==
+* [[계산·증명 문제 모음]] · [[HW1 복기]] · [[자주 틀리는 함정 모음]] · [[시험 정보]]

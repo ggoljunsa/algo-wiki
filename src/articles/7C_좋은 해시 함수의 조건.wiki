@@ -1,0 +1,30 @@
+key: 좋은 해시 함수의 조건
+title: 좋은 해시 함수의 조건 (L7 p.29)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+"Sometimes this is a good idea / Sometimes this is a bad idea" — 같은 chaining 테이블이라도 h 에 따라 좋기도 나쁘기도 하다. 좋은 h 의 두 조건: ① 버킷이 많지 않을 것(공간) ② 아이템이 고르게 퍼질 것(시간).
+
+{def}
+L7 p.29: "How do we pick that function so that this is a good idea? 1. We want there to be not many buckets (say, n). This means we don't use too much space. 2. We want the items to be pretty spread-out in the buckets. This means it will be fast to SEARCH/INSERT/DELETE."
+{/def}
+[[img:L7-29.png|L7 p.29 — 고르게 퍼진 테이블 vs 버킷 3 에 13→43→23→3→93 이 몰린 테이블|large]]
+
+{analogy}
+'''마트 계산대.''' 계산대를 손님 수만큼 만들면(direct addressing) 공간 낭비, 1 개만 두면 줄이 끝없다. 적당히 n 개 두고 손님이 '''고르게''' 나뉘면 모두 금방 계산한다. 한 줄로 몰리게 안내하는 규칙이 나쁜 h.
+{/analogy}
+
+{|
+! 조건 || 이유 || 극단적으로 어기면
+|-
+| 버킷 수 ≈ n (많지 않게) || 공간 절약 || [[direct addressing]]: M 칸
+|-
+| 고르게 퍼짐 (버킷당 $O(1)$) || 빠른 SEARCH/INSERT/DELETE || 한 버킷에 n 개 → $O(n)$
+|}
+p.30 은 조건 ② 를 "적이 어떤 입력을 골라도" 로 강화한다: "Design a function h so that no matter what input a bad guy chooses, the buckets will be balanced (O(1) entries per bucket)." → 결정론적 h 로는 '''불가능'''([[결정론적 해시 함수의 한계]]) → 무작위 h 로 '''기대값'''에서 달성([[기대 버킷 크기]]).
+{exam}
+해설본 ⭐: 두 조건(not many buckets / pretty spread-out)과 각각이 공간·시간을 보장한다는 연결. 이어지는 p.30–32 ⭐⭐⭐ 논증의 출발점.
+{/exam}
+
+== 관련 문서 ==
+* [[hash function]] · [[결정론적 해시 함수의 한계]] · [[기대 버킷 크기]] · [[chaining]]

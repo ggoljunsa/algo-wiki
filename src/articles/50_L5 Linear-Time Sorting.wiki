@@ -1,0 +1,298 @@
+key: L5 Linear-Time Sorting
+title: L5 Linear-Time Sorting — 비교 정렬의 Ω(n log n) 벽과, 입력 가정으로 그 벽을 돌아가는 세 정렬
+category: 5강 Linear Sorting, 메인
+---
+== 개요 ==
+지금까지의 정렬([[insertion sort]] $\Theta(n^2)$, [[mergesort]] $\Theta(n \log n)$)은 전부 원소끼리 '''비교'''해서 순서를 알아냈다. p.4 의 질문: "'''Can we do better?'''" 이 강의의 답은 두 겹이다.
+# '''No''' — 비교만 쓰는 결정론적 정렬은 무엇이든 worst-case $\Omega(n \log n)$ 이다([[Ω(n log n) 하한]]). 증명 도구는 [[decision tree]].
+# '''Yes, but''' — 입력에 대한 '''가정'''("0 부터 k−1 사이의 정수")을 추가하면 비교를 아예 안 하고 $O(n)$ 에 정렬할 수 있다: [[counting sort]], [[bucket sort]], [[radix sort]] ([[linear-time sorting]]).
+[[두 가지 질문]] 프레임으로 보면: 하한 정리는 "② Is it fast?" 에 대한 '''모든 비교 정렬 공통의 한계''', radix sort 의 귀납 증명은 "① Does it work?" 이다.
+
+* 읽을거리: [[CLRS]] 8.1–8.2 (p.2)
+* 페이지 번호는 슬라이드에 '''인쇄된 번호''' p.N 이다. 교수가 숨긴 p.5, 6 이 PDF 에 없어서 '''p.7 이후는 PNG 번호 = 인쇄 번호 − 2''' 이다 (예: counting sort 예제 p.22–34 = PNG 20–32, radix sort 예제 p.53–58 = PNG 51–56).
+* 본 수업(9/15 추정) 녹음은 없고, 9/17 L6 수업 첫 10분의 '''L5 복습'''이 녹음돼 있다(아래 🎙).
+
+{analogy}
+'''시험지 100장을 점수순으로 정리하기.''' 방법 1: 두 장씩 들고 "이게 더 높나?" 비교하며 정리 — 이게 [[comparison-based sorting]] 이고, 아무리 요령 있게 해도 "비교 횟수"에 넘을 수 없는 바닥($\log_2 100!$ 번 정도)이 있다. 방법 2: 점수가 0–100 점 정수라는 걸 '''미리 안다면''' 책상에 0점 칸부터 100점 칸까지 101 개 칸을 만들고 시험지를 자기 점수 칸에 휙휙 던져 넣은 뒤 0점 칸부터 주워 모으면 끝 — 두 장을 서로 비교한 적이 한 번도 없다. 이게 [[counting sort]]/[[bucket sort]] 이고, 점수 자릿수별로 여러 번 던지는 것이 [[radix sort]] 다. 대가는 '''"점수가 0–100 정수" 라는 사전 정보'''와 '''칸을 놓을 책상 공간'''이다 → [[비교 기반 정렬을 여전히 쓰는 이유]].
+{/analogy}
+
+== ① 하한 — 비교 정렬은 Ω(n log n) 보다 빠를 수 없다 (p.7–15) ==
+=== p.7 — Comparison-Based Sorting ===
+{def}
+'''Comparison-based algorithms''': "Comparison-based algorithms use 'comparisons' to achieve their output." — insertion_sort, merge_sort 는 comparison-based sorting, '''Linear-time select''' 도 comparison-based, 나중의 '''quick_sort''' 는 randomized comparison-based sorting.
+원소끼리 "Is 3 < 4?" 같은 대소 비교만으로 결과를 만드는 알고리즘. → [[comparison-based sorting]]
+{/def}
+[[img:L5-05.png|p.7 — insertion_sort 가 하는 비교 몇 개: "Is 3 < 4?", "Is 1 < 4? Is 1 < 3?"|medium]]
+
+=== p.8 — genie ===
+정답 순서를 아는 '''genie''' 가 있고, 알고리즘은 "is [this] bigger than [that]?" 같은 YES/NO 질문만 할 수 있다. "The algorithm's job is to output a correctly sorted list of all the objects." → [[genie 비유]]
+[[img:L5-06.png|p.8 — 😀, 🚒, ☕ 세 개를 정렬: "Is 🚒 bigger than ☕?" → genie: YES|medium]]
+
+=== p.9 — Theorem ===
+{def}
+'''Theorem [Lower bound of Ω(n log(n))]''': "Any [[deterministic algorithm|deterministic]] comparison-based sorting algorithm requires Ω(n log(n))-time."
+'''How to prove this?''' "1. Consider all comparison-based algorithms, one-by-one, and analyze them. 2. '''Don't do that.''' Instead, argue that all comparison-based sorting algorithms produce a decision tree. Then analyze decision trees."
+{/def}
+알고리즘은 무한히 많으니 하나씩 분석할 수 없다 → 모두가 공유하는 '''모양'''([[decision tree]])을 분석한다.
+
+=== p.10–13 — Decision Tree ===
+* 내부 노드 = 비교 하나("😀 ≤ 🚒?"), 간선 = YES/NO, '''리프 = 가능한 정렬 순서 하나''' ("when we reach a leaf we return it").
+* "Running the algorithm on a given input corresponds to taking a particular path through the tree."
+* 한 입력의 runtime = '''Ω(length of the path)''' (p.12), '''worst-case runtime = Ω(length of the longest path)''' (p.13) = 트리의 깊이.
+[[img:L5-08.png|p.10 — 세 원소의 decision tree 일부: 😀≤🚒? YES → ☕≤😀? YES → [☕😀🚒], NO → ☕≤🚒? → [😀☕🚒] / [😀🚒☕]|medium]]
+[[img:L5-11.png|p.13 — worst-case runtime: "At least Ω(length of the longest path)" — 빨간 점선이 가장 긴 경로 (그리고 Darth Vader)|medium]]
+
+=== p.14 — 가장 긴 경로는 얼마나 긴가 ===
+<pre class="txt">
+We want a statement: in all such trees, the longest path is at least ____
+• This is a [[이진 트리|binary tree]] with at least '''n!''' leaves.          ← 가능한 순서 = n! ([[순열과 n!]])
+• The shallowest tree with n! leaves is the completely balanced one,
+  which has depth '''log(n!)'''.                                       ← 깊이 h 인 이진 트리의 리프 ≤ 2^h
+• So in all such trees, the longest path is at least log(n!).
+• log(n!) is about n log(n/e) = Ω(n log(n)).                     ← [[Stirling 근사]]
+Conclusion: the longest path has length at least Ω(n log(n)).
+</pre>
+[[img:L5-12.png|p.14 — "binary tree with at least n! leaves", "shallowest … completely balanced … depth log(n!)", "log(n!) is about n log(n/e) = Ω(n log(n))"|medium]]
+[[anim:decision_tree_leaves|a, b, c 세 원소의 비교 트리에서 리프 3! = 6 개가 생기고 가장 긴 경로가 빨갛게 칠해지는 것을 보고, "리프 ≥ n! → 깊이 ≥ log₂(n!)" 을 소리 내어 따라 읽자]]
+[[리프와 깊이]]($2^h \ge n! \Rightarrow h \ge \log_2 n!$)와 [[log(n!)]]($\log n! \ge \frac{n}{2}\log\frac{n}{2}$)이 세부.
+
+=== p.15 — 증명 정리 ===
+<pre class="txt">
+'''Proof:'''
+① Any deterministic comparison-based algorithm can be represented as a decision tree with n! leaves
+② The worst-case running time is the depth of the decision tree
+③ All decision trees with n! leaves have depth at least Ω(n log(n))
+④ So any comparison-based sorting algorithm must have worst-case running time at least Ω(n log(n))
+</pre>
+[[img:L5-13.png|p.15 — 하한 정리의 4줄 증명|medium]]
+→ [[mergesort]] 의 $\Theta(n \log n)$ 은 우연이 아니라 '''asymptotically optimal''' 이다(9/17 복습에서 교수가 직접 한 말).
+{exam}
+9/17 복습에서 교수가 학생들에게 되물으며 복창시킨 순서 그대로: comparison-based sorting 은 두 원소를 비교해 순서를 찾는다 → '''decision tree''' 로 추상화(루트 = 첫 비교, yes/no 로 분기) → 특정 입력의 실행 = 루트에서 잎까지 한 경로 → 어떤 입력에도 옳아야 하니 잎은 '''n! 개 이상''' → 가장 긴 경로(트리 깊이)가 worst-case → 깊이 ≥ '''log(n!) = Ω(n log n)'''. 서술형이면 이 순서로 쓴다.
+{/exam}
+
+== ② 그럼 linear-time sorting 은 헛소리? (p.16) ==
+"If any deterministic comparison-based sorting algorithm requires Ω(n log(n))-time, then what's this nonsense about linear-time sorting algorithms?"
+* "We can achieve O(n) worst-case runtime '''if we make assumptions about the input'''." e.g. "They are integers ranging from 0 to k−1."
+* "Beyond comparison-based sorting algorithms: Counting sort, Bucket sort, Radix sort"
+하한은 '''비교만 쓸 때'''의 얘기다. 값 자체를 배열 인덱스로 쓰면 비교가 필요 없다 → [[linear-time sorting]].
+{exam}
+9/17 복습: "linear time 을 얻으려면 '''입력에 대한 가정'''이 필요하다." counting sort = 정수 + 좁은 범위(one-to-one mapping), bucket sort = 넓은 범위 many-to-one + 균등 분포 가정, radix sort = digit 단위, least significant digit 먼저, 정확성에 '''stability''' 필요.
+{/exam}
+
+== counting sort (p.17–34) ==
+<pre class="c">
+def counting_sort(A, k):
+  # A consists of n integers ranging from 0 to k-1
+  counts = [0] * k                 # 값 0..k-1 마다 칸 하나
+  for i in range(len(A)):
+    counts[A[i]] += 1              # 값 자체를 인덱스로! (비교 없음)
+  result = []
+  for i in range(k):
+    # Extends result by counts[i] i's
+    result.extend([i] * counts[i]) # 작은 값부터 센 만큼 늘어놓기
+  return result
+</pre>
+{|
+! 변수 || 뜻 || 예제 값
+|-
+| `A` || 정렬할 정수 n 개 (0..k−1) || [0,0,3,1,1,3,1,0] (n = 8)
+|-
+| `k` || 가능한 값의 개수 = 값의 범위 || 4 (0..3)
+|-
+| `counts` || [[counts 배열]]: counts[v] = 값 v 의 등장 횟수 || [3,3,0,2]
+|-
+| `result` || 출력 리스트 || [0,0,0,1,1,1,3,3]
+|}
+[[img:L5-19.png|p.21 — counting_sort 코드, Worst-case runtime Θ(n+k)|medium]]
+[[img:L5-32.png|p.34 — 예제 완성: A=[0,0,3,1,1,3,1,0] → counts [3,3,0,2] → result [0,0,0,1,1,1,3,3]|medium]]
+<pre class="txt">
+① counts 채우기 (p.22–30):  0→[1,0,0,0] 0→[2,0,0,0] 3→[2,0,0,1] 1→[2,1,0,1]
+                           1→[2,2,0,1] 3→[2,2,0,2] 1→[2,3,0,2] 0→'''[3,3,0,2]'''
+② result 채우기 (p.31–34): i=0 → [0,0,0]  i=1 → [0,0,0,1,1,1]  i=2 → (0개)  i=3 → '''[0,0,0,1,1,1,3,3]'''
+원소끼리 비교 = 0 회,  단계 수 n + k = 8 + 4 = 12
+</pre>
+[[anim:counting_sort_flow|원소가 하나씩 counts[값] 칸으로 떨어져 막대가 3,3,0,2 로 자라고, 왼쪽부터 풀려 result 가 되는 것을 보고, 아래 시뮬레이터로 counts 가 바뀌는 순서를 확인하자]]
+[[sim:counting_sort]]
+Worst-case $\Theta(n + k)$ — 첫 루프 n 번, 둘째 루프 k 번 → [[Θ(n+k)]]. k 가 n 보다 훨씬 크면(예: $k = n^2$) 오히려 손해.
+
+== bucket sort (p.35–46) ==
+<pre class="c">
+def bucket_sort(A, k, num_buckets):
+  # A consists of n integers ranging from 0 to k-1.
+  # Pointless to have more buckets than integers.
+  num_buckets = min(num_buckets, k)
+  buckets = [ [] for i in range(num_buckets) ]
+  for i in range(len(A)):
+    b = get_bucket(A[i], k, num_buckets)     # 값 → 버킷 번호
+    buckets[b].append(A[i])
+  result = []
+  if num_buckets < k:                        # 한 버킷에 여러 값이 섞일 수 있음
+    for j in range(num_buckets):
+      result.extend(stable_sort(buckets[j])) # 버킷 안을 다시 (안정) 정렬
+  else:                                      # 버킷 하나 = 값 하나 (counting sort 와 같음)
+    for j in range(num_buckets):
+      result.extend(buckets[j])
+  return result
+
+def get_bucket(value, k, num_buckets):
+  return value / math.ceil(k / num_buckets)  # int division, Θ(1)
+</pre>
+{|
+! 변수 || 뜻 || p.45 예제 값
+|-
+| `k` || 값의 범위 0..k−1 || 30
+|-
+| `num_buckets` || 버킷 수 (k 보다 크면 k 로 잘림) || 10
+|-
+| `buckets[b]` || b 번 버킷(리스트) || buckets[5] = [17,16,15]
+|-
+| `math.ceil(k / num_buckets)` || 버킷 하나가 맡는 값의 폭 || ⌈30/10⌉ = 3
+|-
+| `b` || [[get_bucket]] 결과 = value / 폭 || 17 / 3 = 5 → "15-17" 버킷
+|}
+[[img:L5-41.png|p.43 — bucket_sort 코드, stable sort 정의 [1(a),3,2,1(b)] → [1(a),1(b),2,3], Worst-case Θ(max{n log(n), n+k}) "Happens if k > num_buckets and all of the values end up in the same bucket."|medium]]
+[[img:L5-43.png|p.45 — k=30, num_buckets=10: A=[17,13,16,12,15,1,28,0,27] → 0-2:[1,0], 12-14:[13,12], 15-17:[17,16,15], 27-29:[28,27]|medium]]
+[[img:L5-44.png|p.46 — 극단: k=3000, num_buckets=10, [380,370,340,320,410,…] 전부 300-599 한 버킷|medium]]
+<pre class="txt">
+p.45:  A = [17,13,16,12,15,1,28,0,27],  폭 = ⌈30/10⌉ = 3
+  0-2 : [1,0]      → stable_sort → [0,1]
+  12-14: [13,12]   → [12,13]
+  15-17: [17,16,15]→ [15,16,17]
+  27-29: [28,27]   → [27,28]
+  이어붙이기 → '''[0,1,12,13,15,16,17,27,28]'''
+</pre>
+[[sim:bucket_sort]]
+* 두 경우(p.45): '''k ≤ num_buckets''' → 버킷당 키 최대 1종 → 재정렬 불필요(counting sort 와 같음) / '''k > num_buckets''' → 버킷에 여러 키 → stable_sort 필요. → [[num_buckets와 k]]
+* Worst-case $\Theta(\max\{n \log n, n + k\})$: 모든 값이 한 버킷에 몰리면 그 버킷을 비교 기반 stable_sort 로 → $n \log n$. → [[bucket sort의 최악 케이스]]
+* 버킷 안 정렬은 반드시 '''[[stable sort]]''' — radix sort 정확성의 복선.
+
+== stable sort (p.42) ==
+{def}
+'''Stable sort''': "A stable sort keeps equal elements in the same order: [1(a), 3, 2, 1(b)] => [1(a), 1(b), 2, 3]"
+같은 값끼리는 '''원래 순서'''를 유지하는 정렬.
+{/def}
+[[anim:stable_sort|1ᵃ 와 1ᵇ 의 순서가 안정 정렬에서는 유지되고 불안정 정렬에서는 뒤바뀔 수 있는 장면, 그리고 radix sort 두 번째 라운드에서 순서가 깨지면 결과가 틀리는 장면을 보자]]
+{exam}
+9/17 복습에서 교수가 따로 되물은 정의: "원래 배열과 같은 순서를 유지하면 stable — radix sort 설계에 중요한 성질." 정의 → 용어 문제로 나오기 좋다. → [[stable sort]]
+{/exam}
+
+== radix sort (p.47–59) ==
+<pre class="c">
+def radix_sort(A, d, k):
+  # A consists of n d-digit integers
+  # with digits ranging from 0 to k-1.
+  for i in range(d):                           # i = 0 (일의 자리) 부터
+    # Creates list of (value's digit i, value) pairs
+    # For i = 0: [23, 4, 51, 76, 8] =>
+    # [(3, 23), (4, 4), (1, 51), (6, 76), (8, 8)]
+    A_pairs = make_pairs(A, k, i)
+
+    # Bucket sorts according to first element of
+    # pair and returns a list of values
+    A_new = bucket_sort_with_pairs(A_pairs, k, k)
+    A = A_new
+  return result                                # ← 슬라이드 그대로 (실제로는 A)
+
+def make_pairs(A, k, i):
+  result = []
+  for a in A:
+    # e.g. a=1023, k=10, i=1: (1023/(10**1))%10 = 2
+    key = (a / (k ** i)) % k                   # a 의 i 번째 자릿값 (int division)
+    result.append((key, a))
+  return result
+</pre>
+{warn}
+슬라이드 오타 두 가지: ① `radix_sort` 의 마지막 줄 `return result` 는 정의되지 않은 변수 — 의도는 '''`return A`'''. ② `make_pairs` 의 `/` 는 '''정수 나눗셈'''(Python 3 라면 `//`)이어야 1023/10 = 102 → 102 % 10 = 2 가 된다. 해설본은 `//` 로 고쳐 적었다.
+{/warn}
+{|
+! 변수 || 뜻 || 예제 값
+|-
+| `d` || 자릿수 || 3
+|-
+| `k` || 한 자리의 값 범위(기수, 0..k−1) || 10
+|-
+| `i` || 이번 라운드의 자리 (0 = 일의 자리 = [[least-significant digit]]) || 0, 1, 2
+|-
+| `A_pairs` || [[make_pairs]] 결과 (i 번째 자릿값, 값) || i=0: [(1,031),(5,005),(0,210),…]
+|-
+| `bucket_sort_with_pairs(A_pairs, k, k)` || 쌍의 첫 원소로 bucket sort, num_buckets = k → 버킷당 키 1종(재정렬 없음), 안정 || —
+|-
+| `A_new` || 이번 라운드 결과 || i=0: [210,031,014,005,095,555,125,477]
+|}
+[[img:L5-49.png|p.51 — radix_sort 코드, Worst-case runtime Θ(d(n+k))|medium]]
+[[img:L5-52.png|p.54 — i=0: 일의 자리로 → A_new [210,031,014,005,095,555,125,477]|medium]]
+[[img:L5-56.png|p.58 — i=2: 백의 자리로 → A_new [005,014,031,095,125,210,477,555] 정렬 완료|medium]]
+<pre class="txt">
+radix_sort([31,5,210,14,95,477,555,125], 3, 10)   (3자리로 보면 031, 005, 210, 014, 095, 477, 555, 125)
+i=0 (일의 자리)  → [210, 031, 014, 005, 095, 555, 125, 477]
+i=1 (십의 자리)  → [005, 210, 014, 125, 031, 555, 477, 095]    ← 210 과 014(둘 다 1) 순서 유지 = stable
+i=2 (백의 자리)  → '''[005, 014, 031, 095, 125, 210, 477, 555]'''
+비용 d(n+k) = 3 × (8 + 10) = 54
+</pre>
+[[anim:radix_lsd|일의 자리 → 십의 자리 → 백의 자리 순으로 원소가 버킷 0–9 에 떨어졌다 모이는 것을 보고, 같은 버킷 안에서 순서가 유지되는지 확인하자]]
+[[sim:radix_sort]]
+Worst-case $\Theta(d(n+k))$: 라운드마다 make_pairs $\Theta(n)$ + bucket sort $\Theta(n+k)$, 이것을 d 번 → [[Θ(d(n+k))]].
+
+=== 정확성 증명 (p.59) — stable 이 여기서 쓰인다 ===
+==== Inductive hypothesis ====
+"After the i'th iteration, A is sorted by the first i least-significant digits."
+==== Base case ====
+(i = 0) "At the start of the first iteration, A is trivially sorted by its 0 least-significant digits."
+==== Inductive step ====
+i 번째 반복 후 하위 i 자리로 정렬돼 있다고 하자. (i+1) 번째 자리로 bucket_sort 하면 그 자리 기준으로 정렬되고, '''"Since bucket_sort is stable, the elements in each bucket keep their original order"''' — 같은 버킷(같은 i+1 번째 자릿값) 안에서는 가설에 의해 하위 i 자리 순서가 그대로 → 하위 i+1 자리로 정렬.
+==== Conclusion ====
+"The loop terminates at the start of iteration d. The collection of d-digit integers in A are sorted by their d least-significant digits, which implies that A is sorted."
+(CLRS 대응: Initialization = base case, Maintenance = inductive step, Termination = conclusion — [[loop invariant]] 형태의 증명이다.)
+[[img:L5-57.png|p.59 — radix sort 정확성 증명. "Since bucket_sort is stable" 가 빨간색|medium]]
+
+== 그래서 왜 아직 비교 정렬을 쓰나 (p.60–64) ==
+"The story so far": 비교 정렬은 MUST $\Omega(n \log n)$, 값에 약간의 구조를 가정하면 $O(n)$ — "'''Why would we ever use a comparison-based sorting algorithm??'''"
+# '''It has lots of precision…''' π, 1234/9876, e, 37!, 6.0221409, $n^n$, 42 — π = 3.14159…, e = 2.718… 은 맨 앞(most significant) 자리만 봐도 비교가 끝나지만, radix_sort 는 '''모든 자리'''를 봐야 하는데 둘 다 자릿수가 무한. 정수라도 "really big" 이면($n^n$) radix_sort 는 느리다.
+# radix_sort needs '''extra memory''' for the buckets ('''not [[in-place]]''').
+# Need to know '''ordering and buckets ahead of time''' for linear-time sorting.
+[[img:L5-62.png|p.64 — 비교 정렬을 여전히 쓰는 이유 세 가지|medium]]
+(슬라이드는 e = 2.71818… 로 적었지만 실제 값은 2.71828… — 요점과는 무관한 오타.) → [[비교 기반 정렬을 여전히 쓰는 이유]]
+
+== 🎙 실제 수업 기록 (9/17 목 수업 첫 10분 복습, 녹음본 기준) ==
+L5 본 수업(9/15 추정) 녹음은 없다. `0917_08_컴알_L6_Randomized1.txt` 00:00–10:00 에서 교수가 학생들에게 되물으며 L5 를 복습했다 — 교수가 "지난 시간에 다룬 것" 으로 정리한 항목이 곧 L5 의 시험 포인트다.
+* 하한: "Did you remember the concept of decision tree?" → 루트 = 첫 비교, yes/no 로 트리를 키움 → 한 입력 = 한 경로 → 잎 ≥ n! ("any input should produce correct output") → 가장 긴 경로의 최소 깊이 = log(n!) → $\Omega(n \log n)$, 따라서 mergesort 는 asymptotically optimal.
+* counting sort: "integers… in a short range" → 값 → 인덱스 '''one-to-one mapping''', counts 배열을 스캔. "comparison-based 가 아니다."
+* bucket sort: many-to-one mapping, 균등 분포 가정 — "모든 원소가 한 bucket 에 몰리면 그게 bucket sort 의 문제."
+* radix sort: digit 단위, least significant digit 먼저, 정확성 증명에 '''stability''' 필요. stable 의 정의를 따로 되물음.
+* (녹음 ASR 오인식: "monkey sort" = bucket sort, "reading sort" = radix sort.)
+
+== 공식 모음 ==
+{|
+! 알고리즘 || worst-case || 가정 / 조건 || 비교 기반?
+|-
+| [[insertion sort]] || $\Theta(n^2)$ || — || O
+|-
+| [[mergesort]] || $\Theta(n \log n)$ || — (하한과 일치: optimal) || O
+|-
+| 모든 결정론적 비교 정렬 || $\Omega(n \log n)$ || decision tree 깊이 $\ge \log(n!)$ || O
+|-
+| [[counting sort]] || $\Theta(n + k)$ || 정수 0..k−1 || X
+|-
+| [[bucket sort]] || $\Theta(\max\{n \log n, n + k\})$ || 정수 0..k−1, 한 버킷에 몰리면 최악 || X (버킷 안 stable_sort 는 O)
+|-
+| [[get_bucket]] / [[make_pairs]] || $\Theta(1)$ / $\Theta(n)$ || — || —
+|-
+| [[radix sort]] || $\Theta(d(n + k))$ || d 자리 정수, 자릿값 0..k−1, 라운드 정렬이 stable || X
+|}
+
+== 시험 대비 핵심 요약 ==
+# '''Ω(n log n) 하한 4단계''': decision tree 로 표현(리프 n! 개) → worst-case = 트리 깊이 → n! 리프 이진 트리의 최소 깊이 log(n!) → $\log(n!) \approx n \log(n/e) = \Omega(n \log n)$.
+# 하한은 '''deterministic comparison-based''' 정렬에 대한 것. mergesort 는 asymptotically optimal.
+# linear-time sorting = '''입력 가정의 대가'''(정수, 범위 k). 세 알고리즘 모두 원소끼리 비교하지 않는다.
+# counting sort: `counts[A[i]] += 1` → `result.extend([i] * counts[i])`, $\Theta(n+k)$. 예제 [0,0,3,1,1,3,1,0] → counts [3,3,0,2].
+# bucket sort: get_bucket = value / ⌈k/num_buckets⌉, num_buckets < k 이면 버킷별 stable_sort, worst $\Theta(\max\{n \log n, n+k\})$ (한 버킷에 몰릴 때).
+# stable sort 정의: 같은 값의 원래 순서 유지, [1(a),3,2,1(b)] → [1(a),1(b),2,3].
+# radix sort: least-significant digit 부터 d 라운드, 라운드마다 stable bucket sort, $\Theta(d(n+k))$. 예제 i=0 → [210,031,014,005,095,555,125,477], 최종 [005,014,031,095,125,210,477,555].
+# radix 정확성: IH "i 번째 반복 후 하위 i 자리로 정렬", inductive step 에서 '''stable''' 이 필수.
+# 비교 정렬을 여전히 쓰는 이유: precision(무한 자릿수·큰 수), extra memory(not in-place), 순서·버킷 사전 정보 필요.
+
+== 관련 문서 ==
+* 이전 강의: [[L4 Divide and Conquer II]] · 다음 강의: [[L6 Randomized Algorithms I]] (randomized comparison-based sorting = [[quicksort]])
+* 하한: [[comparison-based sorting]] · [[genie 비유]] · [[deterministic algorithm]] · [[decision tree]] · [[리프와 깊이]] · [[Ω(n log n) 하한]] · [[log(n!)]] · [[Stirling 근사]] · [[이진 트리]]
+* 선형 정렬: [[linear-time sorting]] · [[counting sort]] · [[counts 배열]] · [[Θ(n+k)]] · [[bucket sort]] · [[get_bucket]] · [[num_buckets와 k]] · [[bucket sort의 최악 케이스]] · [[stable sort]] · [[radix sort]] · [[least-significant digit]] · [[make_pairs]] · [[Θ(d(n+k))]]
+* 정리: [[in-place]] · [[비교 기반 정렬을 여전히 쓰는 이유]] · [[공식·점화식 모음]]

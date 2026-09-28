@@ -1,0 +1,110 @@
+key: radix sort
+title: radix sort (자릿수마다 stable bucket sort, 일의 자리부터 — Θ(d(n+k)))
+category: 5강 Linear Sorting, 알고리즘
+---
+{def}
+'''Radix Sort''' — "A consists of n d-digit integers with digits ranging from 0 to k-1." Worst-case runtime $\Theta(d(n+k))$ (L5 p.47–51)
+d 자리 정수를 '''가장 낮은 자리([[least-significant digit]])부터''' 한 자리씩, 그 자릿값을 키로 [[stable sort|안정]] [[bucket sort]] 하기를 d 번 반복한다.
+{/def}
+<pre class="c">
+def radix_sort(A, d, k):
+  # A consists of n d-digit integers
+  # with digits ranging from 0 to k-1.
+  for i in range(d):
+    # Creates list of (value's digit i, value) pairs
+    # For i = 0: [23, 4, 51, 76, 8] =>
+    # [(3, 23), (4, 4), (1, 51), (6, 76), (8, 8)]
+    A_pairs = make_pairs(A, k, i)
+
+    # Bucket sorts according to first element of
+    # pair and returns a list of values
+    A_new = bucket_sort_with_pairs(A_pairs, k, k)
+    A = A_new
+  return result            # ← 슬라이드 오타: 의도는 return A
+</pre>
+{|
+! 변수 || 뜻 || 예제 radix_sort(A, 3, 10)
+|-
+| `A` || 이번 라운드 입력 = 지난 라운드 결과 || [31,5,210,14,95,477,555,125]
+|-
+| `d` || 자릿수 (라운드 수) || 3
+|-
+| `k` || 한 자리의 값 범위 0..k−1 (= 기수, radix) || 10
+|-
+| `i` || 현재 자리, 0 = 일의 자리 || 0, 1, 2
+|-
+| `A_pairs` || [[make_pairs]]: (i 번째 자릿값, 값) || i=0: [(1,031),(5,005),(0,210),(4,014),…,(5,125)]
+|-
+| `A_new` || 자릿값으로 bucket sort 한 결과 (stable) || i=0: [210,031,014,005,095,555,125,477]
+|}
+[[img:L5-49.png|p.51 — radix_sort 코드, Worst-case runtime Θ(d(n+k))|medium]]
+{warn}
+슬라이드 코드 마지막 줄 `return result` 의 result 는 정의된 적이 없다 — '''`return A`''' 가 맞다. 손코딩에서 그대로 옮겨 쓰지 말 것. 또 [[make_pairs]] 의 `/` 는 정수 나눗셈(`//`)이어야 한다.
+{/warn}
+
+{analogy}
+'''우편물 3단 분류.''' 우편번호 세 자리 편지 더미를 먼저 끝자리로 10 칸에 나눠 순서대로 다시 쌓고, 그 더미를 가운데 자리로, 마지막으로 첫자리로 나눈다. 칸에 넣을 때 '''위에서부터 순서대로''' 넣고 꺼내면(stable) 앞 라운드의 순서가 같은 칸 안에서 보존되어, 마지막 라운드가 끝나면 전체가 정렬돼 있다. 첫자리부터 하면 안 되는 이유는 뒤 라운드가 앞 라운드 결과를 덮어써 버리기 때문 → [[least-significant digit]].
+{/analogy}
+
+== 예제 (p.53–58) ==
+[[img:L5-52.png|p.54 — i=0: A_pairs (1,031),(5,005),(0,210),(4,014),…,(5,125) → A_new [210,031,014,005,095,555,125,477]|medium]]
+[[img:L5-54.png|p.56 — i=1: A_new [005,210,014,125,031,555,477,095]|medium]]
+[[img:L5-56.png|p.58 — i=2: A_new [005,014,031,095,125,210,477,555]|medium]]
+<pre class="txt">
+A = [031, 005, 210, 014, 095, 477, 555, 125]
+i=0 일의 자리 1,5,0,4,5,7,5,5  → 버킷 0:[210] 1:[031] 4:[014] 5:[005,095,555,125] 7:[477]
+    → [210, 031, 014, 005, 095, 555, 125, 477]
+i=1 십의 자리 1,3,1,0,9,5,2,7  → 0:[005] 1:[210,014] 2:[125] 3:[031] 5:[555] 7:[477] 9:[095]
+    → [005, 210, 014, 125, 031, 555, 477, 095]      ← 210, 014 순서 유지 (stable)
+i=2 백의 자리 0,2,0,1,0,5,4,0  → 0:[005,014,031,095] 1:[125] 2:[210] 4:[477] 5:[555]
+    → '''[005, 014, 031, 095, 125, 210, 477, 555]'''
+비용 d(n+k) = 3 × (8 + 10) = 54
+</pre>
+[[anim:radix_lsd|일의 자리 → 십의 자리 → 백의 자리 순으로 원소가 버킷 0–9 에 떨어졌다 모이는 것을 먼저 보고, 아래 시뮬레이터로 각 라운드 결과를 확인하자]]
+[[sim:radix_sort]]
+[[anim:stable_sort|두 번째 라운드에서 순서가 깨지면 결과가 틀리는 장면 — radix sort 가 왜 stable 을 요구하는지]]
+
+== ① Does it work? — 귀납 증명 (p.59) ==
+<pre class="txt">
+'''Inductive hypothesis:''' After the i'th iteration, A is sorted by the first i least-significant digits.
+'''Base case:''' (i = 0) At the start of the first iteration, A is trivially sorted by its 0 least-significant digits.
+'''Inductive step:''' Suppose after the i'th iteration A is sorted by the i least-significant digits.
+     bucket_sort by the (i+1)-th digit → sorted by that digit;
+     '''Since bucket_sort is stable''', elements in each bucket keep their original order,
+     and by the IH they are ordered by their i least-significant digits
+     → sorted by i+1 least-significant digits.
+'''Conclusion:''' The loop terminates at the start of iteration d → sorted by d least-significant digits → A is sorted.
+</pre>
+(CLRS 대응: Initialization / Maintenance / Termination — [[loop invariant]] 증명, [[Initialization/Maintenance/Termination]].)
+[[img:L5-57.png|p.59 — radix sort 정확성 증명|medium]]
+
+== ② Is it fast? ==
+라운드당 [[make_pairs]] $\Theta(n)$ + bucket sort(num_buckets = k, 재정렬 없음) $\Theta(n + k)$ → d 라운드 $\Theta(d(n + k))$ → [[Θ(d(n+k))]].
+{exam}
+해설본 ⭐⭐⭐. 9/17 복습: "digit 단위로 선형 정렬, '''least significant digit 먼저''', 마지막 자릿수까지. 정확성 증명에는 '''stability''' 조건이 필요하다." — 예제 세 라운드 결과, $\Theta(d(n+k))$, 증명의 "Since bucket_sort is stable" 한 줄이 핵심.
+{/exam}
+
+== 손코딩 빈칸 ==
+{quiz}
+<pre class="c">
+def radix_sort(A, d, k):
+  for i in range(____(1)____):
+    A_pairs = make_pairs(A, k, ____(2)____)
+    A_new = bucket_sort_with_pairs(A_pairs, k, ____(3)____)
+    A = A_new
+  return ____(4)____
+
+def make_pairs(A, k, i):
+  result = []
+  for a in A:
+    key = ____(5)____
+    result.append((key, a))
+  return result
+</pre>
+{/quiz}
+{answer}
+(1) `d` (2) `i` — 0 부터, 즉 일의 자리부터 (3) `k` — 버킷 수 = 자릿값 범위 → 재정렬 불필요 (4) `A` (슬라이드는 오타로 `result`) (5) `(a // (k ** i)) % k` (슬라이드 표기 `(a / (k ** i)) % k`, 정수 나눗셈)
+{/answer}
+
+== 관련 문서 ==
+* [[least-significant digit]] · [[make_pairs]] · [[Θ(d(n+k))]] · [[stable sort]] · [[bucket sort]] · [[counting sort]] · [[in-place]] · [[비교 기반 정렬을 여전히 쓰는 이유]] · [[L5 Linear-Time Sorting]]

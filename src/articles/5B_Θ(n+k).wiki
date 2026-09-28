@@ -1,0 +1,44 @@
+key: Θ(n+k)
+title: Θ(n+k) (counting sort 의 worst-case — 입력 크기 n 과 값의 범위 k)
+category: 5강 Linear Sorting, 용어
+---
+{def}
+counting_sort: "Worst-case runtime $\Theta(n+k)$" (L5 p.21). n = 원소 수, k = 값의 범위(0..k−1). 두 변수 모두 시간에 들어간다.
+{/def}
+
+== 어디서 n, 어디서 k ==
+<pre class="c">
+counts = [0] * k                      # Θ(k)
+for i in range(len(A)):               # n 번
+  counts[A[i]] += 1                   #   Θ(1)          → Θ(n)
+result = []
+for i in range(k):                    # k 번
+  result.extend([i] * counts[i])      #   counts[i] 개   → 합 Σ counts[i] = n
+                                      # 둘째 루프 합계 Θ(k + n)
+</pre>
+<pre class="txt">
+T(n, k) = Θ(k) + Θ(n) + Θ(n + k) = '''Θ(n + k)'''
+예제 A=[0,0,3,1,1,3,1,0], k=4 → n + k = 8 + 4 = 12
+</pre>
+[[img:L5-19.png|p.21 — Worst-case runtime Θ(n+k)|small]]
+
+{analogy}
+'''시험 채점 + 성적표 인쇄.''' 답안지 n 장을 읽는 시간(n)과, 점수 칸 k 개를 한 줄씩 인쇄하는 시간(k)이 따로 든다. 학생이 3 명인데 점수 칸이 0..1,000,000 이면 인쇄(k)가 전체를 지배한다.
+{/analogy}
+
+== k 의 크기에 따라 ==
+{|
+! k 의 크기 || $\Theta(n + k)$ || 판정
+|-
+| $k = O(n)$ (예: k = 4, k = n) || $\Theta(n)$ || '''선형''' — counting sort 가 빛나는 경우
+|-
+| $k = n \log n$ || $\Theta(n \log n)$ || mergesort 와 같음
+|-
+| $k = n^2$ || $\Theta(n^2)$ || 오히려 손해 (해설본: "k 가 n 보다 훨씬 크면 오히려 손해")
+|}
+[[sim:counting_sort]]
+[[anim:counting_sort_flow|위쪽 막대(counts, k 칸)와 아래 result(n 칸)가 각각 채워지는 두 단계가 곧 k 와 n 이라는 점을 보며 보자]]
+radix sort 는 이 $\Theta(n+k)$ 를 자리 수 d 번 반복 → [[Θ(d(n+k))]]. bucket sort 는 버킷이 몰리면 $n \log n$ 이 끼어든다 → [[bucket sort의 최악 케이스]].
+
+== 관련 문서 ==
+* [[counting sort]] · [[counts 배열]] · [[Θ(d(n+k))]] · [[Big-Θ]] · [[linear-time sorting]]

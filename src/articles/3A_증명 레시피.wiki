@@ -1,0 +1,57 @@
+key: 증명 레시피
+title: 증명 레시피 (proof_of_correctness_helper)
+category: 3강 D&C I, 증명
+---
+== 개요 ==
+L3 p.39–42 에서 교수가 '''의사코드 모양'''으로 정리한 정확성 증명 치트시트. 알고리즘이 iterative 이면 5단계, recursive 이면 4단계. 이 과목의 모든 correctness 문제는 이 둘 중 하나로 시작한다.
+
+{def}
+<pre class="c">
+def proof_of_correctness_helper(algorithm):
+  if algorithm.type == "iterative":
+    # 1) Find the loop invariant
+    # 2) Define the inductive hypothesis
+    #    (internal state at iteration i)
+    # 3) Prove the base case (i=0)
+    # 4) Prove the inductive step (i => i+1)
+    # 5) Prove the conclusion (i=n => correct)
+  elif algorithm.type == "recursive":
+    # 1) Define the inductive hypothesis
+    #    (correct for inputs of sizes 1 to i)
+    # 2) Prove the base case (i < small constant)
+    # 3) Prove the inductive step (i => i+1 OR
+    #      {1,2,...,i} => i+1)
+    # 4) Prove the conclusion (i=n => correct)
+</pre>
+{/def}
+[[img:L3-42.png|L3 p.42 — proof_of_correctness_helper 완성본|medium]]
+
+{analogy}
+'''요리 레시피 카드 두 장.''' "볶음(iterative)" 카드에는 "① 불 세기를 정한다(invariant 찾기)"가 맨 위에 추가로 있고, "찜(recursive)" 카드에는 그 줄이 없다 — 찜은 재료 크기(입력 크기)만 정하면 되기 때문이다. 나머지 "재료 준비(가설) → 첫 단계(base) → 반복 단계(step) → 완성 확인(conclusion)"은 두 카드가 같다.
+{/analogy}
+
+== 두 갈래 비교 ==
+{|
+! 단계 || iterative (예: [[insertion sort]], [[selection sort]]) || recursive (예: [[mergesort]], [[select]])
+|-
+| 0 || [[loop invariant]] 찾기 || (없음 — 가설 자체가 [[recursion invariant]])
+|-
+| [[inductive hypothesis]] || 반복 i 의 내부 상태 || 크기 1~i 입력에서 correct
+|-
+| [[base case]] || i = 0 || i < small constant (보통 길이 1)
+|-
+| [[inductive step]] || i ⇒ i+1 || i ⇒ i+1 또는 {1,…,i} ⇒ i+1 ([[강한 귀납법]])
+|-
+| [[귀납법의 결론|conclusion]] || i = n ⇒ correct || i = n ⇒ correct
+|}
+
+{exam}
+[[HW1 복기|HW1]] 3번(selection sort)이 iterative 갈래를 그대로 물었다(외부·내부 루프 불변식 + 4단 라벨). 시험에서는 recursive 갈래(예: mergesort, [[select의 정확성 증명|select]])를 물을 차례다. 어느 쪽이든 '''4단 라벨(Inductive hypothesis / Base case / Inductive step / Conclusion)을 눈에 보이게''' 쓰는 것이 채점 포인트.
+{/exam}
+{tip}
+iterative 의 base case 는 "i=0", recursive 는 "i < small constant" — 재귀 알고리즘은 base case 가 여러 개일 수 있다(예: p.112 의 $T(n) = 10n$, $1 \le n \le 10$ 은 base 가 10 개).
+{/tip}
+
+== 관련 문서 ==
+* [[귀납법 4요소]] · [[반복 vs 재귀 증명 표]]
+* [[loop invariant]] · [[recursion invariant]] · [[입력 크기에 대한 귀납법]]

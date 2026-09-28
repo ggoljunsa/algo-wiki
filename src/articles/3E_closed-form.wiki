@@ -1,0 +1,43 @@
+key: closed-form
+title: Closed-form expression (닫힌 형태)
+category: 3강 D&C I, 용어
+---
+== 개요 ==
+자기 자신(T)을 참조하지 않고 n 만으로 값을 바로 계산할 수 있는 식. 점화식 $T(n) \le 2T(n/2) + cn$ 은 closed-form 이 아니고, $T(n) \le cn\log_2 n + cn$ 은 closed-form 이다. L3 후반부 전체가 "점화식 → closed-form" 변환법을 배우는 시간이다.
+
+{def}
+"Our recurrence relation for the runtime of mergesort isn't very useful unless we can determine the runtime as '''closed-form expression'''. Let's learn how to translate a recurrence relation for T(n) to a closed form expression for T(n)!" (L3 p.55–56)
+closed-form expression: T 를 다시 부르지 않고 n 의 함수로 직접 쓴 식.
+{/def}
+[[img:L3-63.png|L3 p.63 — 점화식에서 closed-form expression T(n) = O(?) 로|medium]]
+
+{analogy}
+'''"다음 역까지 5분" 과 "종점까지 45분".''' 점화식은 "지금 역에서 종점까지 = 다음 역에서 종점까지 + 5분"이라는 안내다 — 맞지만 계산하려면 역을 하나씩 세야 한다. closed-form 은 "종점까지 45분"이라는 한 줄 답이다. 역 개수(n)만 알면 바로 계산된다.
+{/analogy}
+
+== 예: 같은 T(n) 의 두 얼굴 ==
+{|
+! 형태 || 식 || 쓸모
+|-
+| 점화식 || $T(1) \le c$, $T(n) \le 2T(n/2) + cn$ || 알고리즘 구조를 그대로 옮김
+|-
+| closed-form || $T(n) \le cn\log_2 n + cn$ || 바로 점근 표기 가능
+|-
+| 점근 표기 || $T(n) = O(n \log n)$ || 최종 답
+|}
+변환 과정(iteration method, p.84):
+<pre class="txt">
+T(n) ≤ 2^k·T(n/2^k) + kcn           ← 아직 T 가 남아 있음 (패턴)
+     = n·T(1) + cn·log2 n            ← k = log2 n 대입
+     ≤ cn + cn·log2 n                ← '''closed-form''' (T 가 사라짐)
+     = O(n log n)                    ← 점근 표기
+</pre>
+[[sim:recursion_tree_sum]]
+
+{tip}
+시험에서 "closed-form 을 구하라"는 보통 점근 표기($\Theta(\cdot)$ 또는 $O(\cdot)$)까지 요구한다. [[master method]] 는 closed-form 을 건너뛰고 점근 표기를 바로 주는 지름길이다.
+{/tip}
+
+== 관련 문서 ==
+* [[점화식]] · [[T(n)]] · [[점화식 풀이 4가지]]
+* [[asymptotic analysis]] · [[Big-O]]

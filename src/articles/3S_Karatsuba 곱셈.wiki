@@ -1,0 +1,48 @@
+key: Karatsuba 곱셈
+title: Karatsuba integer multiplication (카라추바 곱셈)
+category: 3강 D&C I, 알고리즘
+---
+== 개요 ==
+n 자리 정수 두 개를 곱하는 [[divide and conquer]] 알고리즘. 슬라이드에는 L3 p.87 "More examples" 에 점화식 $T(n) = 3T(n/2) + O(n)$ 과 답 $O(n^{\log_2 3} \approx n^{1.6})$ 만 나온다. 바로 위 줄의 "Needlessly recursive integer multiplication" $T(n) = 4T(n/2) + O(n) = O(n^2)$ 와 짝을 지어 '''부분 문제를 4개에서 3개로 줄이면 지수가 내려간다'''는 것을 보여 주는 [[master method]] 연습 예제다.
+
+{def}
+'''Karatsuba integer multiplication''': $T(n) = 3\,T(n/2) + O(n)$ → $T(n) = O(n^{\log_2 3}) \approx O(n^{1.6})$ (L3 p.87)
+n 자리 곱셈을 n/2 자리 곱셈 '''3번'''과 덧셈·자리 이동($O(n)$)으로 바꾼다.
+{/def}
+[[img:L3-87.png|L3 p.87 — More examples: 불필요한 재귀 곱셈 4T(n/2)+O(n), Karatsuba 3T(n/2)+O(n), MergeSort, 2T(n/2)+O(n²)|medium]]
+
+{analogy}
+'''장보기 심부름 줄이기.''' 가게 네 곳(곱셈 4번)을 돌아야 하던 심부름을, 영수증 두 장으로 세 번째 금액을 계산해 내는 요령으로 세 곳(곱셈 3번)만 돌게 바꿨다. 한 번 줄인 게 별것 아닌 것 같지만, 심부름이 재귀적으로 반복되니 전체 가게 방문 수가 $n^2$ 에서 $n^{1.585}$ 로 줄어든다.
+{/analogy}
+
+== 아이디어 (슬라이드 밖, CLRS·표준 설명) ==
+{info}
+아래 구성은 슬라이드에 없다(p.87 은 점화식만 제시). master method 의 a 가 왜 3 인지 이해하기 위한 보충이다.
+{/info}
+<pre class="txt">
+x = x1·10^(n/2) + x0,   y = y1·10^(n/2) + y0          (앞 절반·뒤 절반, 각 n/2 자리)
+x·y = x1y1·10^n + (x1y0 + x0y1)·10^(n/2) + x0y0
+
+불필요한 재귀 곱셈:  x1y1, x1y0, x0y1, x0y0  → 곱셈 4번  → T(n) = 4T(n/2) + O(n)
+Karatsuba:           A = x1y1,  B = x0y0,  C = (x1 + x0)(y1 + y0)
+                     x1y0 + x0y1 = C − A − B          → 곱셈 3번  → T(n) = 3T(n/2) + O(n)
+</pre>
+
+== master method 로 풀기 ==
+{|
+! || a || b || d || $b^d$ || 케이스 || 답
+|-
+| 불필요한 재귀 곱셈 || 4 || 2 || 1 || 2 || $a > b^d$ || $O(n^{\log_2 4}) = O(n^2)$
+|-
+| '''Karatsuba''' || 3 || 2 || 1 || 2 || $a > b^d$ || $O(n^{\log_2 3}) \approx O(n^{1.585})$
+|}
+두 경우 모두 bushy([[bushy tree와 tall and skinny tree]]) — 일이 리프에 몰리므로 '''리프 수 $a^{\log_2 n} = n^{\log_2 a}$''' 가 답이다. a 가 4 → 3 으로 줄면 리프 수가 $n^2$ → $n^{1.585}$ 로 줄어든다. 덧셈 비용 d 를 줄이는 것은 이 케이스에서 아무 효과가 없다.
+[[sim:master_method]]
+
+{tip}
+슬라이드 표기는 "≈ n^1.6", 계산값은 $\log_2 3 = 1.58496\ldots$ → $n^{1.585}$. 답안에는 $O(n^{\log_2 3})$ 로 쓰는 것이 정확하다.
+{/tip}
+
+== 관련 문서 ==
+* [[master method]] · [[master method 세 케이스]] · [[master method 매개변수]]
+* [[divide and conquer]] · [[로그 계산법]]

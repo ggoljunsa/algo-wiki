@@ -1,0 +1,51 @@
+key: 점화식
+title: 점화식 (recurrence relation)
+category: 3강 D&C I, 용어
+---
+== 개요 ==
+값이 '''더 앞의(작은) 값들로''' 정의되는 함수·수열. [[recursive algorithm]] 의 수행 시간 [[T(n)]] 을 적는 자연스러운 언어이며, L3 p.52 의 mergesort 점화식이 이 과목의 "first recurrence relation" 이다. 점화식 그 자체는 답이 아니다 — [[closed-form]] 으로 바꿔야 $O(\cdot)$ 로 말할 수 있다.
+
+{def}
+"A '''recurrence relation''' is a function or sequence whose values are defined in terms of earlier or smaller values." (L3 p.53)
+예: Fibonacci 수열 $T(n) = T(n-1) + T(n-2)$ (p.54).
+점화식은 함수·수열의 값을 그보다 앞의(작은) 값으로 정의하는 식이다.
+{/def}
+
+{analogy}
+'''"우리 집 주소 = 옆집 주소 + 1".''' 틀린 말은 아니지만 이것만으로는 우리 집을 찾아갈 수 없다. 옆집, 그 옆집… 을 끝까지 따라가 기준점(base case, "골목 첫 집 = 1번지")에서 되짚어 와야 한다. 점화식을 푸는 일은 이 따라가기를 한 번에 끝내는 공식(closed-form, "n 번째 집 = n 번지")을 찾는 일이다.
+{/analogy}
+
+== 이 과목에 나오는 점화식 ==
+{|
+! 점화식 || 어디 || 풀이 방법 || 답
+|-
+| $T(n) = T(\lceil n/2 \rceil) + T(\lfloor n/2 \rfloor) + \Theta(n)$ || L3 p.52 mergesort || [[점화식 단순화 3단계]] 후 4가지 모두 || $\Theta(n \log n)$
+|-
+| $T(n) \le 2T(n/2) + cn$, $T(1) \le c$ || L3 p.60 (단순화 결과) || [[recursion tree method]], [[iteration method]] || $O(n \log n)$
+|-
+| $T(n) = aT(n/b) + O(n^d)$ || L3 p.90 || [[master method]] || 세 케이스
+|-
+| $T(n) = 3n + T(n/5) + T(n/2)$ || L3 p.112 || [[substitution method]] || $O(n)$, C = 10
+|-
+| $T(n) \le T(n/5) + T(7n/10) + dn$ || L4 || substitution || $O(n)$ → [[T(n/5) + T(7n/10) + O(n)]]
+|-
+| $T(n) = 7T(n/2) + \Theta(n^3)$ || HW1 6-a || master || $O(n^3)$
+|-
+| $T(n) = T(n/2) + T(n/4) + T(n/8) + n$ || HW1 6-b || substitution || $O(n)$, C = 8
+|}
+
+== 재귀 알고리즘 수행 시간 분석의 3단계 ==
+<pre class="txt">
+① recursive algorithm   →  점화식으로 표현       (T(n) = 2T(n/2) + Θ(n))
+② 점화식                →  closed-form 으로 변환 ([[점화식 풀이 4가지]])
+③ closed-form           →  asymptotic analysis   (O(n log n))
+</pre>
+[[anim:recursion_tree_levels|점화식 T(n)=2T(n/2)+cn 을 트리로 펼쳐 closed-form cn log n + cn 에 이르는 과정을 보자]]
+[[img:L3-63.png|L3 p.63 — 점화식 T(1) ≤ c, T(n) ≤ 2T(n/2) + cn → T(n) = O(?) (closed-form expression)|medium]]
+{exam}
+9/3 수업에서 교수가 강조한 "whole story": "once the recursive algorithm is given, we can express this algorithm with the recurrence relation, and then if we translate this to closed-form expression, we can apply the asymptotic analysis." — 위 3단계를 그대로 말한 것이다.
+{/exam}
+
+== 관련 문서 ==
+* [[T(n)]] · [[closed-form]] · [[점화식 단순화 3단계]]
+* [[점화식 풀이 4가지]] · [[공식·점화식 모음]]

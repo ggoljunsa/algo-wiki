@@ -1,0 +1,42 @@
+key: H의 크기
+title: H 의 크기 — |H| = p(p−1) = O(M²)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+$h_{a,b}$ 족의 원소 수. a 는 p−1 가지, b 는 p 가지이므로 $|H| = p(p-1) = O(M^2)$. 하나를 저장하는 데 $\log|H| = \log(M^2) = O(\log M)$ 비트 — "Another way to see this using only the size of H" (p.72).
+
+{def}
+L7 p.72: "We have p−1 choices for a, and p choices for b. So $|H| = p(p-1) = O(M^2)$. Space needed to store an element h: $\log(M^2) = O(\log(M))$."
+"$O(M \log(n))$ bits per function (코끼리) vs $O(\log(M))$ bits per function (쥐). Compare: direct addressing was M bits! Twitter example: $\log(M) = 140 \log(128) = 980$ vs $M = 128^{140}$."
+{/def}
+[[img:L7-67.png|L7 p.72 — |H| = p(p−1) = O(M²), 코끼리 O(M log n) vs 쥐 O(log M), 트위터 980 비트|large]]
+
+{analogy}
+'''자물쇠 비밀번호 두 자리.''' 세상 모든 해시 함수(코끼리)는 번호가 $n^M$ 가지라 적는 데 공책이 우주만 하지만, $h_{a,b}$ 는 "a, b" 두 자리 번호뿐이라 포스트잇 한 장($O(\log M)$ 비트)이면 된다.
+{/analogy}
+
+<pre class="txt">
+a ∈ {1, …, p-1}  → p - 1 가지
+b ∈ {0, …, p-1}  → p 가지
+|H| = p(p-1)                          (p ≥ M 인 가장 작은 소수, p < 2M → |H| = O(M^2))
+log|H| = log(p(p-1)) ≤ log(p^2) = 2 log p = O(log M) 비트      ← [[log(s) 비트]]
+예: p = 5 → |H| = 5·4 = 20 개
+트위터: M = 128^140 → log M = 140 · log2(128) = 140 · 7 = 980 비트
+</pre>
+[[sim:universal_hash_check]]
+시뮬레이터 "$h_{a,b}$ 전수 조사" 는 p = 5 의 20 개 (a, b) 를 모두 나열한다.
+{|
+! 저장 방식 || h 하나의 크기
+|-
+| [[uniformly random hash function]] || $\log(n^M) = M \log n$ 비트
+|-
+| [[direct addressing]] (비교 기준) || M 비트
+|-
+| $h_{a,b}$ || $\log(p(p-1)) = O(\log M)$ 비트
+|}
+{exam}
+해설본 ⭐⭐ (p.72 공간 계산): '''$|H| = p(p-1) = O(M^2)$ → $O(\log M)$ 비트'''. 균등 무작위 $O(M \log n)$ 와의 대비, 트위터 예 980 비트 vs $128^{140}$.
+{/exam}
+
+== 관련 문서 ==
+* [[h_{a,b}]] · [[log(s) 비트]] · [[소수 p]] · [[해시 테이블 공간 복잡도]] · [[hash family]]

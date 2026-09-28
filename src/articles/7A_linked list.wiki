@@ -1,0 +1,30 @@
+key: linked list
+title: linked list (연결 리스트)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+각 노드가 값과 "다음 노드" 포인터를 가진 자료구조. 맨 앞에 붙이기는 $O(1)$, 특정 값 찾기는 앞에서부터 훑어야 하므로 $O(\text{length})$. L7 에서는 두 곳에 나온다: [[자료구조 비교표]] 의 '''sorted''' linked list(모든 연산 $O(n)$), 그리고 [[chaining]] 의 버킷마다 매다는 '''unsorted''' linked list.
+
+{def}
+L7 p.26: "Each bucket stores an '''unsorted linked list'''. insert in $O(1)$ since it's unsorted; search in $O(\text{length(list)})$."
+L7 p.5: Sorted linked lists — Search $O(n)$, Insert/Delete $O(n)$ (expected & worst-case).
+{/def}
+[[img:L7-27.png|L7 p.27 — "This is a 'chain'": 버킷 3 에 13 → 43 연결 리스트|medium]]
+
+{analogy}
+'''보물찾기 쪽지.''' 쪽지마다 "다음 쪽지는 소파 밑" 처럼 다음 위치만 적혀 있다. 새 쪽지를 맨 앞에 끼워 넣긴 쉽지만(첫 쪽지 위치만 바꾸면 됨), 특정 쪽지를 찾으려면 처음부터 따라가야 한다.
+{/analogy}
+
+{|
+! 종류 || INSERT || SEARCH || 어디서
+|-
+| sorted linked list || $O(n)$ (자리 찾기) || $O(n)$ || L7 p.4–5 비교표
+|-
+| unsorted linked list (chain) || $O(1)$ (앞에 붙임) || $O(\text{length})$ || L7 p.26 chaining
+|}
+{exam}
+chain 은 '''정렬하지 않기 때문에''' insert 가 $O(1)$ 이다("since it's unsorted"). 정렬된 리스트였다면 자리를 찾느라 $O(\text{length})$ 가 된다.
+{/exam}
+
+== 관련 문서 ==
+* [[chaining]] · [[자료구조 비교표]] · [[hash table]]

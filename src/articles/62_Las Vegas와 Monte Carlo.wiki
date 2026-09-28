@@ -1,0 +1,45 @@
+key: Las Vegas와 Monte Carlo
+title: Las Vegas 와 Monte Carlo — 무엇을 보장하느냐
+category: 6강 Randomized I, 용어
+---
+== 개요 ==
+[[randomized algorithm]] 의 두 종류. '''무엇을 보장하고 무엇을 운에 맡기느냐'''로 나뉜다. 둘 다 카지노 도시 이름이라 헷갈리는데, 교수는 "'''you should distinguish'''" 라고 못 박았다.
+
+{def}
+L6 p.4: "'''Las Vegas''' algorithms guarantee correctness, but not runtime. We'll focus on these algorithms today."
+"'''Monte Carlo''' algorithms guarantee runtime, but not correctness. We'll revisit this when we see Karger's algorithm."
+Las Vegas = 정답 보장, 시간은 운. Monte Carlo = 시간 보장, 정답은 운(확률적으로 틀릴 수 있음).
+{/def}
+
+{analogy}
+'''Las Vegas = 당첨될 때까지 슬롯머신을 당기는 사람''' — 반드시 잭팟(정답)을 들고 나오지만 몇 시간 걸릴지 모른다. '''Monte Carlo = 딱 1시간만 도박하고 나오는 사람''' — 퇴장 시간은 정확하지만 돈을 땄는지는 모른다. 외우는 요령: Las '''V'''egas 는 '''V'''erified answer(답 검증), Monte '''C'''arlo 는 '''C'''lock(시간 고정).
+{/analogy}
+
+{|
+! || Las Vegas || Monte Carlo
+|-
+| 보장 || '''correctness''' || '''runtime'''
+|-
+| 운에 맡김 || runtime || correctness
+|-
+| worst-case 시간 || $\infty$ 일 수 있음 ([[bogosort]], [[랜덤 majority]]) || 유한
+|-
+| 과목 예 || [[bogosort]], [[randomized quicksort]], [[randomized select]], [[랜덤 majority]] (L6 전부) || [[Karger's algorithm]] (나중)
+|-
+| 분석 대상 || [[expected running time]] vs [[randomized worst-case]] || 틀릴 확률
+|}
+[[img:L6-04.png|L6 p.4 — 하단 두 줄이 정의|medium]]
+
+{exam}
+교수(9/17): "'''important to know''' is there are two types of randomized algorithms. First one is Las Vegas, and second one is Monte Carlo. And '''you should distinguish what the difference is between'''." 여담으로 "Monte Carlo 는 논문에서 매우 자주 보게 될 것". bogosort 코드를 읽힌 뒤 "틀린 답을 낼 수 있나? 없다 → Las Vegas" 라고 판정하는 연습도 했다.
+{/exam}
+
+{quiz}
+[[랜덤 majority]] 코드(`while True: guess = random.choice(A) … if count > n/2: return guess`)는 Las Vegas 인가 Monte Carlo 인가? 반복을 최대 10 번으로 제한하고 실패하면 아무 원소나 반환하게 바꾸면?
+{/quiz}
+{answer}
+원래 코드는 확인(count)을 통과한 것만 반환하므로 답은 항상 맞고 시간이 운 → '''Las Vegas'''. 10 번 제한 버전은 시간이 $O(10n)$ 으로 보장되지만 틀린 답을 낼 수 있음(확률 ≤ $(1/2)^{10}$) → '''Monte Carlo'''.
+{/answer}
+
+== 관련 문서 ==
+* [[randomized algorithm]] · [[Karger's algorithm]] · [[expected running time]] · [[L6 Randomized Algorithms I]]

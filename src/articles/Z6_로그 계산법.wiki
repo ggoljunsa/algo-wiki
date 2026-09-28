@@ -1,0 +1,66 @@
+key: 로그 계산법
+title: 로그 계산법 (log rules) — 이 과목의 log 는 밑 2
+category: 용어
+---
+이 과목의 $\log$ 는 특별한 말이 없으면 '''밑 2'''($\log_2$, CLRS 표기 $\lg$)다. 로그는 "몇 번 반으로 나눠야 1 이 되나" 또는 "몇 비트가 필요한가" 를 세는 도구로 등장한다. 점근 표기 안에서는 밑이 상관없다 — 밑을 바꾸면 상수배만 달라지기 때문이다.
+
+{def}
+$\log_b x = y \iff b^y = x$. 이 과목에서 $\log n = \log_2 n$.
+"On board: the answer is log(s)" — 원소 s 개 중 하나를 지목하는 데 필요한 비트 수 (L7 p.49)
+{/def}
+
+== 꼭 쓰는 공식 ==
+{|
+! 공식 || 쓰이는 곳
+|-
+| $\log(xy) = \log x + \log y$ || HW1 4-b $\log(128n) = \log n + 7$; [[log(n!)]] $= \sum \log i$
+|-
+| $\log(x^k) = k \log x$ || $\log(n^n) = n\log n$ (HW1 1-d); $\log(n^M) = M \log n$ 비트 (L7 p.50)
+|-
+| $\log_a n = \frac{\log_b n}{\log_b a}$ (밑 변환) || $O(\log_2 n) = O(\ln n) = O(\log_{10} n)$ — 밑은 상수배
+|-
+| $a^{\log_b n} = n^{\log_b a}$ || master method 리프 수 $a^{\log_b n} = n^{\log_b a}$; HW1 1-c $n^{\lg c} = c^{\lg n}$
+|-
+| $2^{\log_2 n} = n$ || 반씩 쪼개기 $k$ 번 후 크기 1 → $n/2^k = 1$ → $k = \log_2 n$
+|-
+| $\log_2 n \le n$, $n \ge 2$ 면 $\log n \ge 1$ || [[O임을 증명하기|Big-O 증명]]의 부등식 체인 (L2 p.17: $c = 1, n_0 = 2$)
+|}
+
+== 이 과목에 나오는 로그 숫자 ==
+<pre class="txt">
+log2 8   = 3        mergesort [8,4,1,5,3,2,6,7] 재귀 깊이 (L3 p.25–32)
+log2 3   ≈ 1.585    Karatsuba  O(n^{log2 3})  (L3 p.87)
+log2 7   ≈ 2.81     Strassen 류 7T(n/2)+Θ(n^2) (HW1 6-a 해설 참고)
+log2 100 ≈ 6.64     L4 치환법 base case: n log n ≤ Cn (n ≤ 100) → C ≥ 7
+log2 128 = 7        HW1 4-b: log(128n) = log n + 7
+log2 1024 = 10      HW1 4: 128n = 0.125n^2 의 교차점 n = 1024 = 2^10
+2^64 ≈ 1.8×10^19    HW1 4: 128n = 2n log n → log n = 64
+140 · log2 128 = 980  L7 p.72: 트위터 해시태그 universe 의 log M 비트
+</pre>
+
+[[img:L3-73.png|L3 p.73 — 재귀 트리의 "log₂n levels": n 을 반씩 나눠 1 이 될 때까지 log₂n 번|medium]]
+
+== 짧은 예제: 왜 레벨 수가 log₂n 인가 ==
+<pre class="txt">
+크기 n → n/2 → n/4 → … → n/2^k
+n/2^k = 1 이 되는 k 를 찾는다
+2^k = n
+k = log2 n                  n = 8 이면 3 레벨 (8 → 4 → 2 → 1)
+</pre>
+[[iteration method]] 에서 $2^k T(n/2^k) + kcn$ 에 $k = \log_2 n$ 을 넣어 $nT(1) + cn\log_2 n$ 이 되는 것이 바로 이 계산이다.
+
+{analogy}
+🎭 '''스무고개.''' "예/아니오" 질문 하나로 후보를 절반으로 줄일 수 있으면, 후보 1000 개 중 정답을 찾는 데 약 10 번($\log_2 1000 \approx 10$)이면 된다. 로그는 '''"반으로 몇 번 접어야 하나"''' 의 답이다. [[decision tree]] 의 깊이 $\ge \log_2(n!)$, 이진 탐색 $O(\log n)$, $s$ 개 중 하나를 고르는 데 $\log s$ 비트 — 전부 스무고개다.
+{/analogy}
+
+{warn}
+$\log(n!)$ 과 $(\log n)!$, $\log^2 n = (\log n)^2$ 과 $\log\log n$ 은 전혀 다르다. HW1 2-a 는 $\log\log n = O(\log^2 n)$ 이었다: $\log\log n \le \log n \le \log^2 n$ ($n \ge 2$).
+{/warn}
+
+{quiz}$4^{\log_2 n}$ 을 $n$ 의 거듭제곱으로 쓰시오. (힌트: master method $a > b^d$ 의 리프 수){/quiz}
+{answer}$4^{\log_2 n} = n^{\log_2 4} = n^2$. $T(n) = 4T(n/2) + n$ 의 리프가 $n^2$ 개라 $O(n^2)$ 인 이유다.{/answer}
+
+== 관련 문서 ==
+* [[log(n!)]] · [[Stirling 근사]] · [[증가율 사다리]]
+* [[log(s) 비트]] · [[해시 테이블 공간 복잡도]] · [[이진 트리]]
+* [[master method 세 케이스]] · [[교차점 계산]]

@@ -1,0 +1,37 @@
+key: in-place
+title: in-place (제자리 정렬 — 추가 메모리를 상수만큼만)
+category: 5강 Linear Sorting, 용어
+---
+{def}
+"radix_sort needs extra memory for the buckets '''(not in-place)'''." (L5 p.64)
+'''in-place''' 알고리즘 = 입력 배열 자체를 고쳐 가며 동작하고, 그 밖에 쓰는 추가 메모리가 $O(1)$ (상수)인 알고리즘. (정확한 정의는 슬라이드에 없고, CLRS 2.1 의 "sorts the numbers in place" 가 같은 뜻이다.)
+{/def}
+
+== 이름에서 개념 끌어내기 ==
+'''in place''' = "제자리에서". 원소를 다른 그릇에 옮겨 담지 않고 원래 배열 안에서 자리만 바꾼다.
+
+{analogy}
+'''책장 정리.''' 책장 안에서 책끼리 자리만 바꿔 정리하면 in-place(바닥에 책 한 권 놓을 공간만 있으면 됨). 반면 책을 전부 꺼내 바닥에 분류별 무더기(버킷)를 만든 뒤 다시 꽂으면 바닥 공간(추가 메모리)이 책 수만큼 필요하다 — radix/bucket/counting sort 가 이쪽.
+{/analogy}
+
+== 이 과목의 알고리즘 ==
+{|
+! 알고리즘 || in-place? || 추가 메모리 || 강의
+|-
+| [[insertion sort]] (A[j+1] = A[j] 로 밀기) || O || cur_value, i, j — $O(1)$ || L1
+|-
+| [[mergesort]] (result 리스트를 새로 만듦) || X || $O(n)$ || L3
+|-
+| [[partition_about_pivot]] (left, right 새 리스트) || X || $O(n)$ || L4
+|-
+| [[counting sort]] || X || counts $k$ + result $n$ || L5
+|-
+| [[bucket sort]] / [[radix sort]] || X || 버킷 — "needs extra memory for the buckets" || L5
+|-
+| [[in-place partition]] / [[quicksort]] || O || $O(1)$ (재귀 스택 제외) || L6
+|}
+[[img:L5-62.png|p.64 — "radix_sort needs extra memory for the buckets (not in-place)."|medium]]
+L6 의 [[QuickSort vs MergeSort]] 비교에서 "quicksort 는 in-place 로 구현 가능" 이 mergesort 대비 장점으로 다시 나온다.
+
+== 관련 문서 ==
+* [[비교 기반 정렬을 여전히 쓰는 이유]] · [[in-place partition]] · [[radix sort]] · [[insertion sort]] · [[QuickSort vs MergeSort]]

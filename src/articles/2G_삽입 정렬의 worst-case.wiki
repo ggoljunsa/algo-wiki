@@ -1,0 +1,40 @@
+key: 삽입 정렬의 worst-case
+title: 삽입 정렬의 worst-case — 역순 입력, O(n²)
+category: 2강 Analysis II, 용어
+---
+== 개요 ==
+[[insertion sort]] 가 가장 오래 걸리는 입력은 '''역순(Reverse order)''' 이고, 그때 runtime 은 $O(n^2)$ (실제로 $\Theta(n^2)$) 이다(L2 p.29–30, 34, 37). 개념 설명은 [[worst-case와 best-case]].
+
+{def}
+L2 p.29: "What is the worst possible input for insertion sort? Notice it's possible for the inner while loop to iterate anywhere between 1 and i times. '''What if it iterated i times every single time?''' What input causes this pattern?" → p.30 "'''Reverse order'''" $[n, \dots, 5, 4, 3, 2, 1]$
+L2 p.34: "The worst-case runtime of insertion sort is '''O(n²)'''."
+{/def}
+[[img:L2-30.png|L2 p.30 — Reverse order 입력|medium]]
+
+{analogy}
+'''키 큰 순으로 선 줄을 키 작은 순으로 바꾸기'''. 새로 온 사람이 매번 지금까지 선 '''모든''' 사람보다 작아서, 매번 줄 맨 앞까지 걸어가며 모두를 한 칸씩 뒤로 밀어야 한다. 1명, 2명, 3명, … 을 밀다 보면 합이 $n^2/2$ 가 된다.
+{/analogy}
+
+== 세어 보기 ==
+<pre class="txt">
+역순 입력에서 반복 i 의 cur_value = A[i] 는 앞의 A[:i] 전부보다 작다
+→ while 몸통(밀기)이 정확히 i 번 실행 (j = i−1, …, 0 모두 A[j] > cur_value)
+총 밀기 = 1 + 2 + … + (n−1) = n(n−1)/2
+n = 5, [5,4,3,2,1]:  1 + 2 + 3 + 4 = '''10 = 5·4/2'''
+n(n−1)/2 = (1/2)n² − (1/2)n  ≤  (1/2)n²   → O(n²)  (c = 1/2, n₀ = 1)
+n(n−1)/2 ≥ (1/4)n²  (n ≥ 2)                  → Ω(n²)  ⇒  worst-case Θ(n²)
+</pre>
+[[img:L2-36.png|L2 p.37 (PDF 36) — "Upper-bound for worst-case runtime O(n²)"|small]]
+[[sim:insertion_sort_trace]]
+(시뮬레이터 입력 옵션을 "역순 [5,4,3,2,1]" 로 바꾸면 shift 합 10 이 나온다.)
+
+{info}
+슬라이드의 "between 1 and i times" 는 while 을 '''조건 검사 포함'''으로 느슨하게 센 표현이다. 정확히는 몸통(밀기)은 0~i 번, 조건 검사는 1~i+1 번. 어느 쪽으로 세든 합은 $\Theta(n^2)$ / $\Theta(n)$ 으로 같다.
+{/info}
+
+{exam}
+"worst-case 입력을 제시하고 runtime 을 구하라" → '''역순''', 밀기 합 $\frac{n(n-1)}{2}$, $O(n^2)$ (tight 하게 $\Theta(n^2)$). 평균적으로도 절반쯤 밀어야 해서 $\Theta(n^2)$ 이다([[average-case]]).
+{/exam}
+
+== 관련 문서 ==
+* [[삽입 정렬의 best-case]] · [[worst-case와 best-case]] · [[insertion sort]] · [[Big-O]] · [[L2 Algorithmic Analysis II]]

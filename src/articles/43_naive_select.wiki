@@ -1,0 +1,28 @@
+key: naive_select
+title: naive_select (정렬 후 인덱싱 — Not Quite Linear-Time Selection)
+category: 4강 D&C II, 알고리즘
+---
+{def}
+'''Finding the kth smallest element (naive)''': "Sort the list and return the element in index k of the sorted list." — Worst-case runtime $\Theta(n \log(n))$ (L4 p.6–7, "Not Quite Linear-Time Selection")
+{/def}
+<pre class="c">
+def naive_select(A, k):
+  A = mergesort(A)     # Θ(n log n)
+  return A[k]          # Θ(1)
+</pre>
+[[img:L4-06.png|p.6 — [1,64,9,49,16,4,0,25,36,81] 을 정렬하면 [0,1,4,9,16,25,36,49,64,81], k=3 → 9|medium]]
+
+== 이름에서 개념 끌어내기 ==
+'''naive''' = "순진한, 가장 먼저 떠오르는". [[selection 문제]]를 [[정렬 문제]]로 바꿔 풀면 [[mergesort]] 의 $\Theta(n \log n)$ 을 그대로 물려받는다. 정답은 확실하지만 '''하나의 순위'''를 알려고 '''n 개의 순위'''를 다 계산하는 낭비가 있다.
+
+{analogy}
+'''사전에서 단어 하나 찾으려고 사전 전체를 새로 알파벳순으로 제본하기.''' 결과는 맞지만, 원하는 건 한 페이지였다. [[select]] 는 "일단 가운데쯤 펼쳐서 앞/뒤 중 한쪽만 본다"에 해당한다.
+{/analogy}
+
+== 어디서 쓰이나 ==
+* L4 p.7: $\log n$ 을 떼어내는 것이 오늘의 목표라는 출발점(비교 대상).
+* [[select]] 의 '''base case''': `if len(A) <= c: return naive_select(A, k)` (c = 100). 작은 입력에서는 상수 크기라 비용이 상수.
+* 최종 점화식의 기저 $T(n) = n \log n$ ($n \le 100$) 이 바로 이것 → 치환법 base case 에서 $C \ge \log 100 \approx 6.64$ → '''C ≥ 7''' 이 나온 이유 ([[미정 상수 C]]).
+
+== 관련 문서 ==
+* [[selection 문제]] · [[select]] · [[mergesort]] · [[linear-time selection]] · [[L4 Divide and Conquer II]]

@@ -1,0 +1,48 @@
+key: 상수와 저차항 무시
+title: 상수와 저차항 무시 — "ignoring constants and non-dominant growth terms"
+category: 2강 Analysis II, 용어
+---
+== 개요 ==
+[[asymptotic analysis]] 의 비공식 규칙(L2 p.7–8). 함수의 '''가장 빨리 자라는 항'''만 남기고, 그 앞의 곱하기 상수와 나머지 작은 항들은 버린다. [[Big-O]] 정의의 c 와 n₀ 가 이 "버림"을 정당화하는 장치다.
+
+{def}
+L2 p.8: "Informally, it can be determined by '''ignoring constants and non-dominant growth terms'''." — 슬라이드 빨간 메모 "'''Ignore lower-order terms'''" — "Running times for $f_1(x)$ and $f_2(x)$ are both $n^2$."
+{/def}
+[[img:L2-08.png|L2 p.8 — f1 = x² (파랑) 과 f2 = 1.1x² + (x^1.9 + 10)sin(10x + 1.5) + 30 (빨강) 이 x = 10000 까지 거의 겹친다|medium]]
+
+{analogy}
+'''재산 비교'''. 빌딩 세 채 + 지갑 속 3만 원인 사람과 빌딩 세 채 반인 사람을 비교할 때 지갑 속 3만 원(저차항)은 아무 의미가 없다. 그리고 "빌딩 3채 vs 3.5채"(상수배)도 '''빌딩 부자라는 급'''은 같다. 급이 달라지려면 "빌딩 3채 vs 빌딩 3채짜리 도시 3개"처럼 '''곱해지는 차원'''이 달라져야 한다.
+{/analogy}
+
+== 예시 ==
+{|
+! 원래 함수 || 저차항 버림 || 상수 버림 || 결과
+|-
+| $f_2(x) = 1.1x^2 + (x^{1.9}+10)\sin(10x+1.5) + 30$ || $1.1x^2$ || $x^2$ || $\Theta(x^2)$
+|-
+| $\frac32 n^2 + \frac52 n - 3$ (L2 Claim I) || $\frac32 n^2$ || $n^2$ || $O(n^2)$
+|-
+| $\frac12 n^2 - 3n$ (L2 Claim II) || $\frac12 n^2$ || $n^2$ || $\Theta(n^2)$
+|-
+| $5n + 12$ (L2 Claim III) || $5n$ || $n$ || $O(n)$
+|-
+| $2n\log_2 n$ (HW1 4) || — || $n \log n$ || $\Theta(n \log n)$
+|}
+
+== 왜 버려도 되나 — 정의와의 연결 ==
+<pre class="txt">
+상수 c:  T(n) = 1.1 n²  ≤  c · n²   ← c = 1.1 (또는 2) 로 흡수
+저차항:  x^1.9 · sin(…) 은 |x^1.9| ≤ x² (x ≥ 1) → c 를 조금 키워 흡수
+작은 n:  n₀ 이후만 보면 되므로 처음 몇 개 n 에서 튀는 것은 무시
+</pre>
+즉 "버린다"는 말은 [[c와 n₀]] 를 적당히 골라 부등식을 만족시킬 수 있다는 뜻이다.
+
+{warn}
+'''버리면 안 되는 것''': 지수 안의 상수와 밑. $2^n$ 과 $2^{n/2}$ 는 다르고(HW1 1-b), $2^n$ 과 $3^n$ 도 다르다. 상수를 무시하는 것은 '''곱해진''' 상수뿐이다. 또 로그의 밑은 상수배($\log_a n = \log_b n / \log_b a$)라 무시해도 된다.
+{/warn}
+{info}
+슬라이드 수식은 $x^{1.9}$ 인데 같은 페이지 그래프 범례는 "x ** 1.5" 로 찍혀 있다(슬라이드 자체의 불일치). 어느 쪽이든 $x^2$ 보다 작은 차수라 결론(둘 다 $n^2$)은 같다.
+{/info}
+
+== 관련 문서 ==
+* [[asymptotic analysis]] · [[Big-O]] · [[c와 n₀]] · [[증가율 사다리]] · [[L2 Algorithmic Analysis II]]

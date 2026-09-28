@@ -1,0 +1,60 @@
+key: iteration method
+title: Iteration method (반복 대입법)
+category: 3강 D&C I, 점화식
+---
+== 개요 ==
+[[점화식 풀이 4가지]]의 두 번째. 점화식을 자기 자신에 계속 대입해 '''패턴'''을 찾고, 반복 횟수 k 를 base case 에 닿도록 정한 뒤 정리한다. L3 p.76–85 (9/8 수업). 교수 평가는 "이해용".
+
+{def}
+"'''Apply the relationship until you see a pattern.'''" (L3 p.76)
+9/8 교수: "repeatedly substitutes the recurrence into itself until a pattern appears."
+점화식을 자기 자신에 반복 대입해 규칙이 보이면 일반항(k 번 대입 후의 식)을 쓰고, k 를 base case 에 닿는 값으로 정해 closed-form 을 얻는다.
+{/def}
+
+{analogy}
+'''접은 종이 펼치기.''' 종이를 한 번 펴면 두 겹, 또 펴면 네 겹 … k 번 펴면 $2^k$ 겹이 보인다. 겹이 한 장(= T(1))이 될 때까지 펴야 하는 횟수가 $k = \log_2 n$. 펼칠 때마다 접는 선(cn)이 하나씩 늘어나 총 kcn.
+{/analogy}
+
+== 단계별 풀이 (p.76–84) ==
+$T(1) \le c$, $T(n) \le 2T(n/2) + cn$
+<pre class="txt">
+T(n) ≤ 2·T(n/2) + cn
+     ≤ 2·(2T(n/4) + cn/2) + cn          ← T(n/2) ≤ 2T(n/4) + c(n/2) 대입
+     = 4·T(n/4) + 2cn
+     ≤ 4·(2T(n/8) + cn/4) + 2cn         ← T(n/4) 대입
+     = 8·T(n/8) + 3cn
+     …
+     ≤ 2^k·T(n/2^k) + kcn               ← 패턴
+What is k?  "the number of times to divide n by 2 to get 1"  →  k = log2 n
+T(n) ≤ 2^(log2 n)·T(n/2^(log2 n)) + cn·log2 n     (Substitute k = log2 n)
+     = n·T(1) + cn·log2 n                          (Simplify)
+     ≤ cn + cn·log2 n
+     = '''O(n log n)'''
+</pre>
+[[img:L3-84.png|L3 p.84 — Iteration method 전 과정 (색은 방금 대입한 항)|medium]]
+시뮬레이터의 "iteration" 옵션으로 n = 8 에서 k = 3 까지 펼쳐 보자: $8T(1) + 3 \cdot 8 = 32$.
+[[anim:recursion_tree_levels|대입 한 번 = 트리 한 층. k 번 대입하면 k 층까지 자라고, 층 합 cn 이 k 개 쌓인다는 대응을 보자]]
+[[sim:recursion_tree_sum]]
+
+== recursion tree 와의 대응 ==
+{|
+! iteration method || recursion tree method
+|-
+| k 번째 대입 후 $2^k T(n/2^k)$ || 레벨 k 의 노드 $2^k$ 개, 각 크기 $n/2^k$
+|-
+| 누적 항 $kcn$ || 레벨 0 ~ k−1 의 합 (각 cn)
+|-
+| $k = \log_2 n$ || 트리의 깊이
+|-
+| $nT(1) \le cn$ || 리프 층의 합
+|}
+{info}
+9/8 수업에서 교수는 종료 조건 $k = \log_2 n$ 이 "재귀 트리의 깊이와 같다"고 두 방법을 명시적으로 연결했다. 계산 과정이 같은 것을 식으로 쓰느냐 그림으로 그리느냐의 차이다.
+{/info}
+{warn}
+대입할 때 비용 항도 함께 줄어든다: $T(n/2) \le 2T(n/4) + c(n/2)$ 이지 $+cn$ 이 아니다. 이걸 놓치면 $kcn$ 대신 엉뚱한 합이 나온다. 또 $2^{\log_2 n} = n$ 은 [[로그 계산법]]의 기본 항등식.
+{/warn}
+
+== 관련 문서 ==
+* [[recursion tree method]] · [[점화식 풀이 4가지]] · [[closed-form]]
+* [[로그 계산법]] · [[substitution method]] (워밍업의 추측이 이 전개와 같다)

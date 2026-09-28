@@ -1,0 +1,42 @@
+key: 피벗 시나리오 3종
+title: 피벗 시나리오 3종 (Idea #1 random / #2 median / #3 close enough — L4 p.116 요약)
+category: 4강 D&C II, 점화식
+---
+{def}
+'''How to pick the pivot?''' (L4 p.116)
+'''Idea #1: choose a random pivot''' — Unlucky case: len(left) = n − 1 and len(right) = 1 or vice versa; $T(n) \le T(n-1) + O(n)$; Worst-case runtime $\Theta(n^2)$
+'''Idea #2: choose a pivot that divides the input list in half (the median)''' — len(left) = len(right) = (n−1)/2; $T(n) \le T(n/2) + O(n)$; Worst-case runtime $\Theta(n)$; '''We do not know how to find the median in linear time'''
+'''Idea #3: find a pivot "close enough" to median''' — $3n/10 <$ len(left), len(right) $< 7n/10$; $T(n) \le T(7n/10) + O(n)$; Worst-case runtime $\Theta(n)$
+{/def}
+[[img:L4-115.png|p.116 (PNG 115) — How to pick the pivot? 세 아이디어 요약 — 시험용 요약 슬라이드|medium]]
+
+{analogy}
+'''케이크 자르기 셋.''' ① 눈 감고 자르기(random): 가끔 한 조각만 얇게 떨어져 나가서 n 번 잘라야 한다. ② 저울로 정확히 반(median): 이상적이지만 저울이 없다. ③ "적어도 3/10 은 되게" 대충 가운데(close enough): 정확하지 않아도 매번 30% 이상은 확실히 잘려 나가니 몇 번 안에 끝난다. [[median of medians]] 가 ③ 의 "대충 가운데 보장 장치" 다.
+{/analogy}
+
+== master method 로 확인 (p.49–53, p.61–65) ==
+{|
+! 시나리오 || a || b || d || $b^d$ || 케이스 || 결과
+|-
+| Ideal (median) || 1 || 2 || 1 || 2 || $a < b^d$ (Case 2) || $O(n^d) = O(n)$
+|-
+| Reasonable (close enough) || 1 || 10/7 || 1 || 10/7 ≈ 1.43 || $a < b^d$ (Case 2) || $O(n)$
+|-
+| Unlucky (random) || 1 || — || 1 || — || 크기가 '''빼기'''로 줄어 master 불가 || $O(n^2)$ (iteration)
+|}
+(슬라이드는 $a < b^d$ 를 "Case 2" 로 부른다 → [[master method 세 케이스]], [[master method 매개변수]].)
+[[img:L4-53.png|p.53 — Ideal World: a=1, b=2, d=1 (Case 2) → O(n)|medium]]
+[[img:L4-65.png|p.65 — "Ideal" 을 줄 긋고 "Reasonable": a=1, b=10/7, d=1 → O(n)|medium]]
+[[sim:master_method]]
+(옵션 "select 이상적 1,2,1", "select 합리적 1,10/7,1" 을 차례로.)
+
+== 요점 ==
+* ② → ③ 이 강의의 결정적 전환: '''정확한 median 이 필요 없다'''. 매번 일정 비율(3/10) 이상만 확실히 버리면 $b > 1$ 이 되어 선형이다.
+* b = 10/7 의 의미: 부분 문제 크기가 $n \to 7n/10$, 즉 $n / (10/7)$.
+* ③ 의 조건을 '''보장'''하는 pivot 이 [[median of medians]] — 단 실제로는 $3n/10 - 4 \le$ len $\le 7n/10 + 3$ ([[3n/10 논증]]) 이고, pivot 을 찾는 비용 $T(n/5)$ 가 더해져 최종 점화식은 [[T(n/5) + T(7n/10) + O(n)]].
+{exam}
+p.116 은 해설본이 "시험 최중요(⭐⭐)"로 표시한 요약. 세 아이디어 × (분할 크기, 점화식, worst-case, 문제점) 12 칸을 빈칸 없이 쓸 수 있어야 한다. 9/10 교수: "we use some compromise — find the pivot that is close enough to the median. So we do not need a perfect half and half split."
+{/exam}
+
+== 관련 문서 ==
+* [[pivot]] · [[select의 점화식]] · [[닭과 달걀 문제]] · [[median]] · [[median of medians]] · [[두 종류의 worst-case]] · [[master method]] · [[L4 Divide and Conquer II]]

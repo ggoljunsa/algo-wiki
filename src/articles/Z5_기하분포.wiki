@@ -1,0 +1,61 @@
+key: 기하분포
+title: 기하분포 (geometric distribution) — "성공할 때까지 반복"의 기대 횟수 1/p
+category: 용어, 6강 Randomized I
+---
+'''기하분포'''(geometric distribution)는 "성공 확률 $p$ 인 시행을 성공할 때까지 반복할 때, 처음 성공하는 시행 번호 $N$" 의 분포다. 핵심 결과는 딱 하나 — '''$E[N] = \frac1p$'''. L6 의 [[bogosort]] ($p = \frac{1}{n!}$ → $n!$ 번)와 [[랜덤 majority]] ($p \ge \frac12$ → 2 번 이하)가 둘 다 이 공식이다.
+
+{def}
+$$P(N = i) = (1-p)^{i-1}p, \qquad E[N] = \sum_{i=1}^{\infty} i(1-p)^{i-1}p = \frac1p$$
+9/22 녹음(랜덤 majority): "시도 횟수 N 이 기하분포: $P(N=i) = (1-p)^{i-1}p$, $E[N] = 1/p$ < 2."
+{/def}
+
+== 1/p 를 한 줄로 유도하기 (교수 방식) ==
+9/17 녹음(bogosort)에서 교수가 쓴 방법: "한 번 시도해서 성공하면 끝, 실패하면(확률 $1-p$) '''처음과 똑같은 상황'''이 반복된다."
+<pre class="txt">
+E = 1 + (1 - p) · E           한 번은 반드시 시도, 실패하면 처음부터 다시
+E - (1 - p)E = 1
+p · E = 1
+E = 1/p
+</pre>
+또는 [[등비급수]]로: $P(N \ge i) = (1-p)^{i-1}$ 이므로 $E[N] = \sum_{i \ge 1} P(N \ge i) = \sum_{i\ge0}(1-p)^i = \frac{1}{1-(1-p)} = \frac1p$. 슬라이드 p.77 의 "$\le \sum (1/2)^i = 2$" 가 이 형태다.
+
+== 이 과목에서 쓰인 곳 ==
+{|
+! 알고리즘 || 한 번 시도 || 성공 확률 $p$ || 기대 시도 $1/p$ || 기대 비용 || worst-case
+|-
+| [[bogosort]] (L6 p.6–9) || shuffle + 정렬 검사 $O(n)$ || $\frac{1}{n!}$ || $n!$ || $O(n \cdot n!)$ || $O(\infty)$
+|-
+| [[랜덤 majority]] (L6 p.73–77) || guess + count $n$ 번 equals || $\ge \frac12$ || $\le 2$ || $\le 2n = O(n)$ || $O(\infty)$
+|}
+두 알고리즘 모두 worst-case 가 $\infty$ 인 이유: [[두 시나리오|Scenario 2]] 에서 [[adversary]] 가 주사위를 고정하면 영원히 실패만 뽑게 할 수 있다. 기하분포는 "평균적으로는 금방 끝난다" 를 말해 줄 뿐, "반드시 끝난다" 를 보장하지 않는다.
+
+[[anim:majority_random_pick|빨강(실패)이 나오면 다시, 초록(성공)이면 count 로 확인 후 반환 — 옆 누적 막대가 2 를 넘지 않는 것을 확인]]
+
+[[sim:geometric_expectation]]
+옵션을 bogosort n=3 / 4 / 5 로 바꾸며 기대 셔플 6 / 24 / 120 이 $n!$ 인지, 랜덤 majority 에서 $E \le 2$ 인지 확인하자.
+
+[[img:L6-08.png|L6 p.9 — bogosort: Pr[randomly list sorted] = 1/n! → "We expect to permute A n! times before it's sorted"|medium]]
+
+== 짧은 예제 ==
+<pre class="txt">
+주사위를 6 이 나올 때까지 던진다.  p = 1/6
+P(N = 1) = 1/6
+P(N = 2) = (5/6)(1/6) = 5/36
+P(N = 3) = (5/6)^2 (1/6) = 25/216
+E[N] = 1/p = 6 번
+</pre>
+
+{analogy}
+🎭 '''자판기 뽑기.''' 당첨 확률이 1/10 인 뽑기는 평균 10 번 만에 당첨된다. 운이 좋으면 첫 판, 운이 나쁘면 30 판 — 하지만 이론상 영원히 꽝만 나올 수도 있다(worst-case ∞). 랜덤 majority 는 당첨 확률이 절반 넘는 뽑기라 평균 2 판이면 된다.
+{/analogy}
+
+{warn}
+L6 p.75 슬라이드 코드의 `if count > n/2+1` 은 정의(⌊n/2⌋+1 번 이상)와 한 칸 어긋난다. 정의대로는 `count > n/2` (p.76 에서 고쳐져 있음). 성공 확률 $p \ge \frac12$ 도 이 정의에서 나온다. → [[랜덤 majority]]
+{/warn}
+
+{quiz}성공 확률이 $\frac13$ 인 시행을 성공할 때까지 반복하고, 한 번 시도에 $5n$ 의 비용이 든다. 기대 총비용은?{/quiz}
+{answer}기대 시도 $= 1/p = 3$. 기대 비용 $= 3 \cdot 5n = 15n = O(n)$ (한 번 비용 × 기대 시도 — [[기대값의 선형성]]).{/answer}
+
+== 관련 문서 ==
+* [[등비급수]] · [[확률과 기댓값]] · [[expected running time]]
+* [[bogosort]] · [[랜덤 majority]] · [[majority element]] · [[Las Vegas와 Monte Carlo]]

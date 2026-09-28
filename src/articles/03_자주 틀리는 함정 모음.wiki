@@ -1,0 +1,132 @@
+key: 자주 틀리는 함정 모음
+title: 자주 틀리는 함정 모음 — 해설본 ⭐⭐⭐ 와 "주의" 36 가지
+category: 안내
+---
+해설본 7 개의 ⭐⭐⭐, "주의", 녹음본에서 교수가 "구분할 수 있어야 한다" 고 한 것, HW1 에서 감점되기 쉬운 곳, 그리고 '''슬라이드·해설본 자체의 오류'''를 한곳에 모았다. 각 항목은 "틀린 생각 ✗ → 맞는 생각 ✓ → 문서" 순. 시험 전날 이 문서만 한 번 훑어도 실수 절반은 막는다.
+
+{analogy}
+🎭 '''운전 연수의 사고 다발 지점 지도.''' 길(개념)을 다 알아도 사고는 늘 같은 교차로에서 난다. 이 문서는 그 교차로 36 곳에 빨간 표시를 해 둔 지도다. 개념은 메인 문서에서 배우고, 여기서는 "어디서 미끄러지는지" 만 기억한다.
+{/analogy}
+
+== L1–L2 — 정확성과 점근 표기 ==
+=== 1. Big-O 정의에서 c, n₀ 는 "둘 다 존재" ===
+✗ "$n \ge n_0$ 이면 $T(n) \le g(n)$" / "$c$ 만 있으면 된다". ✓ $\exists\, c, n_0 > 0$ '''둘 다''' 제시해야 한다. 증명 답안에 숫자로 적지 않으면 HW1 2 번처럼 0 점. → [[c와 n₀]] · [[O임을 증명하기]]
+
+=== 2. O 는 상한일 뿐, tight 하지 않다 ===
+✗ "$5n + 12 = O(n^2)$ 은 거짓". ✓ '''참'''이다(L2 p.27 Claim III: $O(n)$, $O(n\log n)$, $O(n^2)$, $O(2^n)$ 전부 True). 가장 유용한(tight) 답이 $O(n)$ 일 뿐. "정확히 이만큼" 은 [[Big-Θ]]. → [[upper bound와 lower bound]] · [[tight bound]]
+
+=== 3. n₀ 와 c 는 유일하지 않다 ===
+조건을 만족하는 '''아무 값 하나'''면 된다(L2 p.14). Claim I 은 슬라이드 값 $c = \frac{15}{2}$, $n_0 = 1$ 이지만 $c = 3$, $n_0 = 2$ 도 성립한다. 해설본은 "c=3, n₀=2" 만 적었다 — 답안엔 슬라이드 값을 먼저. → [[L2 연습 Claim]]
+
+=== 4. 반증은 "임의의" c, n₀ 로 ===
+✗ "$c = 5$ 라 하면 $n = 6$ 에서 깨진다" 로 끝내기. ✓ 임의의 $c, n_0$ 를 가정하고 $n = \max\{c, n_0\} + 1$ 처럼 '''c, n₀ 에 대한 식'''으로 n 을 골라야 반증이다. → [[max{c, n₀}+1 트릭]] · [[귀류법]]
+
+=== 5. worst-case 는 O, best-case 는 Ω 로 말하는 관례 ===
+삽입 정렬: worst $O(n^2)$ (역순 입력), best $\Omega(n)$ (정렬된 입력) (L2 p.37–38). "worst-case = Big-O, best-case = Big-Ω" 로 '''동일시'''하면 안 된다 — 각 경우에 O/Ω/Θ 를 모두 말할 수 있고, 관례상 그렇게 부를 뿐이다. → [[worst-case와 best-case]] · [[삽입 정렬의 worst-case]]
+
+=== 6. 점근적으로 빠름 ≠ 실제로 빠름 ===
+HW1 4: $128n$ 은 점근적으로 1 등이지만 $2n\log_2 n$ 을 이기려면 $n > 2^{64}$. 점근 분석은 "'''n 이 충분히 클 때만'''" 의미(L2 p.6 Cons). → [[교차점 계산]] · [[asymptotic analysis]]
+
+=== 7. selection sort 불변식은 "정렬됨" 만으로 부족 ===
+✗ "`A[:i]` is sorted". ✓ + "`A[:i]` 의 모든 원소 ≤ `A[i:]` 의 모든 원소" (+ 순열). 없으면 귀납 단계가 안 된다([1,9] 뒤에 5). → [[selection sort]] · [[HW1 복기]]
+
+=== 8. loop invariant 이름 대응 ===
+Base case = '''Initialization''', Inductive step = '''Maintenance''', Conclusion = '''Termination''' (L1 p.57). Inductive hypothesis 는 CLRS 에 따로 이름이 없다. → [[Initialization/Maintenance/Termination]]
+
+== L3–L4 — 점화식과 select ==
+=== 9. 반복 알고리즘은 "반복 횟수", 재귀 알고리즘은 "입력 크기" 에 귀납 ===
+L1 insertion sort 는 반복 i 에 대한 귀납, L3 mergesort·L4 select 는 '''입력 길이'''에 대한 (강한) 귀납(recursion invariant). 섞어 쓰면 틀린 증명. → [[반복 vs 재귀 증명 표]] · [[recursion invariant]]
+
+=== 10. master method 는 aT(n/b) + O(n^d) 꼴만 ===
+✗ $T(n) = T(n/5) + T(7n/10) + O(n)$ 에 master. ✓ 부분 문제 '''크기가 모두 같아야''' 한다(9/10 교수). 크기가 다르면 [[substitution method]]. HW1 6-b 도 같은 함정. → [[master method의 한계]]
+
+=== 11. master method 는 네 칸을 적는다 ===
+$a$, $b$, $d$, $b^d$ 를 적고 비교해야 부분 점수가 산다. $b$ 는 "나누는 수"(n/b 의 b), 부분 문제 수가 아니다. select 합리적 세계는 $b = \frac{10}{7}$. → [[master method 매개변수]]
+
+=== 12. 치환법 IH 는 끝까지 "≤ C·n" ===
+✗ "IH: $T(k) = O(k)$ 라 하자" → $T(n) \le O(n/5) + O(7n/10) + O(n) = O(n)$ '''(순환 논리, 틀림)'''. ✓ $T(k) \le Ck$ 로 '''같은 상수 C''' 를 유지하고 마지막에 $\le Cn$ 을 보여야 한다. → [[미정 상수 C]]
+
+=== 13. 미정 상수 C 와 Big-O 의 c 는 다르다 ===
+대문자 C = 치환법 귀납 가설의 상수(L3 C=10, L4 C=max{7,10d}, HW1 6-b C=8). 소문자 c = Big-O 정의 또는 점화식 단순화($c = \max\{c_1, c_2\}$)의 상수. → [[c와 n₀]] · [[미정 상수 C]]
+
+=== 14. 3n/10 은 median of medians "보다 작다고 보장되는" 원소의 하한 ===
+정확히는 $3(\lceil g/2 \rceil - 2) + 2 \ge \frac{3n}{10} - 4$ 개. 그래서 $\text{len(left)}, \text{len(right)} \le \frac{7n}{10} + 3$. "median of medians 가 정확히 3n/10 번째" 가 아니다. 23 개 예제에서 MoM = 15, 실제 median = 12. → [[3n/10 논증]] · [[median of medians]]
+
+=== 15. 크기 합 n/5 + 7n/10 = 9n/10 < 1 이라서 선형 ===
+합이 정확히 $n$ 이면 mergesort 처럼 $n\log n$, $n$ 보다 크면 그 이상. "재귀가 두 번이니 $n\log n$" 이라고 쓰면 틀림. → [[부분 문제 크기의 합]]
+
+=== 16. 오른쪽 재귀의 k 보정 ===
+✗ `select(right, k - len(left))`. ✓ `select(right, k - len(left) - 1, c)` — 피벗 1 개도 빼야 한다. 슬라이드 예: k = 3, left 1 개 → 오른쪽에서 k = 1. → [[k-len(left)-1 보정]]
+
+=== 17. 두 종류의 worst-case ===
+삽입 정렬의 worst-case 는 '''입력'''이 정한다. 랜덤 피벗 select 의 worst-case Θ(n²) 은 '''입력 + 난수'''(운이 나쁨)가 정한다(L4 p.24, 9/10 녹음). → [[두 종류의 worst-case]] · [[randomized worst-case]]
+
+== L5 — 선형 시간 정렬 ==
+=== 18. Ω(n log n) 하한은 "비교 기반" 에만 ===
+counting / bucket / radix sort 는 '''비교 기반이 아니다'''(원소끼리 비교 0 회). 그래서 하한과 모순이 없다. 선형 시간은 '''입력 가정'''(0..k−1 정수)의 대가. → [[comparison-based sorting]] · [[Ω(n log n) 하한]]
+
+=== 19. 하한 증명은 "결정론적" 비교 정렬 ===
+정리: "Any '''deterministic''' comparison-based sorting algorithm requires Ω(n log(n))-time" (L5 p.9). randomized quicksort 도 비교 기반이라 기대 $\Theta(n\log n)$ 이 하한과 맞아떨어진다(L6 p.43). → [[deterministic algorithm]] · [[decision tree]]
+
+=== 20. counting sort 의 k 가 크면 손해 ===
+$\Theta(n+k)$ — $k = n^2$ 이면 $\Theta(n^2)$. "counting sort 는 항상 $O(n)$" 은 틀림. → [[Θ(n+k)]] · [[counts 배열]]
+
+=== 21. bucket sort 는 균등 분포 가정 ===
+값이 한 버킷에 몰리면(p.46: [380,370,340,320,410] 이 전부 300–599) 그 버킷을 stable_sort → worst $\Theta(\max\{n\log n, n+k\})$. 9/17 교수: "bucket sort 는 '''균등 분포 가정'''". → [[bucket sort의 최악 케이스]]
+
+=== 22. radix sort 는 LSD 먼저 + stable 필수 ===
+'''least-significant digit''' 부터. 각 라운드의 정렬이 '''stable''' 해야 이전 라운드(하위 자리)의 순서가 보존된다 — 정확성 증명(p.59)의 핵심. MSD 부터 하거나 불안정 정렬을 쓰면 틀린 결과. → [[least-significant digit]] · [[stable sort]]
+[[anim:stable_sort|불안정 정렬이 radix 두 번째 라운드에서 순서를 깨면 결과가 틀리는 장면을 확인]]
+
+=== 23. in-place 가 아니다 ===
+counting/bucket/radix 는 버킷용 추가 메모리가 필요하다(L5 p.61–64). 그래서 비교 정렬을 여전히 쓴다: 무한 정밀도(π, e), 큰 k, 메모리, 사전 정보 불필요. → [[비교 기반 정렬을 여전히 쓰는 이유]] · [[in-place]]
+
+== L6 — Randomized ==
+=== 24. expected 는 "입력 고정, 난수 평균" ===
+✗ expected = average-case(입력이 랜덤). ✓ Scenario 1: 적이 입력을 고르고 '''알고리즘의 난수'''에 대해 평균. Scenario 2: 적이 주사위까지 고정 → worst-case. 교수: "구분할 수 있어야 한다". → [[두 시나리오]] · [[expected running time]] · [[average-case]]
+
+=== 25. Las Vegas vs Monte Carlo ===
+Las Vegas = '''정답 보장''', 시간 랜덤 (오늘 강의 전부: bogosort, quicksort, select, majority). Monte Carlo = '''시간 보장''', 정답이 확률적 (Karger). 거꾸로 외우기 쉬움. → [[Las Vegas와 Monte Carlo]]
+
+=== 26. bogosort 의 worst-case 는 ∞ ===
+$O(n \cdot n!)$ 은 '''expected'''. worst-case 는 $O(\infty)$ (적이 주사위를 고정). 랜덤 majority 도 worst $O(\infty)$, expected $O(n)$. → [[bogosort]] · [[기하분포]]
+
+=== 27. 비교 확률 2/(b−a+1) 은 n 과 무관 ===
+a, b 사이 값 $b-a+1$ 개 중 a 나 b 가 '''먼저''' 피벗이 될 확률. 배열 길이 n, 원소 위치와 무관(9/17 교수: "흥미로운 값"). 인접 값($b = a+1$)은 확률 1. $a, b$ 는 '''값의 순위'''다. → [[P(X_{a,b}=1)]] · [[X_{a,b}]]
+
+=== 28. 선형성은 독립을 요구하지 않는다 ===
+$X_{a,b}$ 들은 서로 독립이 아니다(같은 피벗에 의존). 그래도 $E[\sum] = \sum E$. "독립이라서" 라고 쓰면 틀린 근거. → [[기대값의 선형성]]
+
+=== 29. majority 는 strictly more than half ===
+$\lfloor n/2 \rfloor + 1$ 번 이상. 12 개면 '''7''' 개(6 개는 아님). 두 값이 동시에 majority 일 수 없다. 연산은 `equals` 뿐(대소 비교 불가 → 정렬·select 봉쇄). → [[majority element]] · [[equals]]
+
+=== 30. 슬라이드·해설본 오류 4 종 ===
+* '''L6 p.20''' "Master method a = 1, b = 2, d = 1" → $2T(n/2)+\Theta(n)$ 이므로 '''a = 2'''. → [[quicksort의 좋은 경우와 나쁜 경우]]
+* '''L6 p.14''' 해설본 "피벗 = 리스트 첫 원소 5" → 배열 `[0 11 7 4 8 3 2 9 6 10 5 1]` 의 첫 원소는 '''0'''. 5 는 '''골라진''' 피벗. → [[quicksort]]
+* '''L6 p.66''' `mid = (n-1)/2`, `A[:mid]`, `A[mid+1:]` 는 `A[mid]` 를 빠뜨린다 → 의도는 `A[:n/2]`, `A[n/2:]`. → [[분할정복 majority]] · [[슬라이스 표기]]
+* '''L6 p.75''' `count > n/2+1` → 정의대로는 `count > n/2`. → [[랜덤 majority]]
+* (참고) L6 해설본 머리말의 숨김 슬라이드 목록 "8, 10, 22, 35, 47, 54, 78" 은 부정확 — 실제 숨김은 8, 35, 47, 78.
+
+== L7 — Hashing ==
+=== 31. M 과 n 은 L1–L6 의 n 과 다르다 ===
+L7 에서 $M = \lvert U \rvert$ (universe 크기, 엄청 큼), $n$ = 등장하는 키 수 = 버킷 수. $M \gg n$. $\log M$ 은 크지 않다(트위터 예 980 비트). → [[M과 n]] · [[universe U]]
+
+=== 32. universal 은 "모든 쌍" 에 대해 충돌 확률 ≤ 1/n ===
+평균이 아니라 '''임의의''' $u_i \ne u_j$ 각각. {최상위 자리, 일의 자리} 는 11 과 101 이 두 함수 모두에서 충돌 → 확률 1 → universal 아님(적은 H 를 안다, p.57). 기대 O(1) 증명에 필요한 건 '''이 성질 하나뿐'''(p.61). → [[universal hash family]] · [[해싱 게임]]
+
+=== 33. h_{a,b} 의 p 는 M 이상인 소수 ===
+$p \ge M$ 소수, $a \in \{1, \dots, p-1\}$ ('''0 제외''' — 0 이면 모든 x 가 b 로), $b \in \{0, \dots, p-1\}$. mod p 단계는 전단사(충돌 없음), 충돌은 mod n 단계에서만. → [[h_{a,b}]] · [[소수 p]]
+
+=== 34. 해시 테이블 worst-case 는 O(n) ===
+기대 $O(1)$ 이지 worst $O(1)$ 이 아니다(p.5 표). 결정론적 h 로는 worst $O(1)$ 불가능 — 비둘기집. → [[자료구조 비교표]] · [[결정론적 해시 함수의 한계]]
+
+=== 35. 균등 무작위 h 는 저장이 문제 ===
+기대 버킷 크기는 좋지만($< 2$) 저장에 $M\log n$ 비트 — direct addressing($M$ 비트)보다 크다. universal family 는 $O(\log M)$. → [[uniformly random hash function]] · [[해시 테이블 공간 복잡도]]
+
+=== 36. load factor 는 슬라이드에 없다 ===
+CLRS 11.2 의 $\alpha = n/m$. 슬라이드 설정은 키 $n$ 개·버킷 $n$ 개라 $\alpha = 1$. 답안에 쓸 거면 "CLRS 용어" 라고 밝힐 것. → [[load factor]]
+
+[[img:L7-40.png|L7 p.41 — 기대 버킷 크기 1 + (n−1)/n ≤ 2. 함정 28(선형성)과 32(충돌 확률 1/n)가 모두 이 네 줄에 들어 있다|medium]]
+
+== 관련 문서 ==
+* [[공식·점화식 모음]] · [[계산·증명 문제 모음]] · [[HW1 복기]] · [[시험 정보]] · [[읽는 순서]]

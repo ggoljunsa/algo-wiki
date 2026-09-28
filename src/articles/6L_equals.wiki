@@ -1,0 +1,39 @@
+key: equals
+title: equals(a, b) — 같은지만 묻는 연산
+category: 6강 Randomized I, 용어
+---
+== 개요 ==
+[[majority element]] 문제의 유일한 허용 연산. 두 값이 같으면 True, 다르면 False. '''크다/작다는 모른다''' — 그래서 정렬해서 가운데를 보는 방법, [[select]] 로 median 을 찾는 방법이 전부 막힌다. 수행 시간은 equals 호출 횟수로 잰다.
+
+{def}
+L6 p.57: "suppose we can only perform the equals operation on the list, which accepts two values a and b and returns True if a equals b; otherwise returns False."
+예(p.58–60): `equals(A[0], A[2])` returns False · `equals(A[0], A[3])` returns True · `equals(A[0], 1)` returns True (A = [1 0 3 1 1 5 2 1 1 1 4 1]).
+{/def}
+[[img:L6-57.png|L6 p.60 — equals 예 세 개|medium]]
+
+{analogy}
+'''지문 대조기.''' 두 지문이 같은 사람 것인지는 알려 주지만, 지문을 "크기 순"으로 줄 세울 수는 없다. 범인(과반 원소)을 찾으려면 후보 지문을 전체와 하나씩 대조해 몇 번 일치하는지 세는 수밖에 없다.
+{/analogy}
+
+{|
+! 알고리즘 || equals 를 어디서 || 호출 수
+|-
+| [[분할정복 majority]] || 재귀 후 m1 을 전체와 대조하는 for 문 || 레벨당 n, 총 $n \log_2 n$ (n = 8 이면 24)
+|-
+| [[랜덤 majority]] || 매 시도 guess 를 전체와 대조 || 시도당 n, 기대 $\le 2n$
+|}
+{exam}
+교수(9/22): "쓸 수 있는 연산은 equals(a,b) 하나뿐." 슬라이드 p.77 의 기대 비용이 "$E[\#\text{check}] \le 2n$" 으로 적힌 것처럼, 이 문제의 비용 단위는 '''equals 호출 수'''다. (녹음 ASR 에서는 "coarse operation" 으로 깨져 있다.)
+{/exam}
+[[sim:majority_dc]]
+시뮬레이터는 equals 호출 수를 누적한다: n = 8 [2,1,2,3,2,2,4,2] 에서 24 회 $= n \log_2 n$.
+
+{quiz}
+equals 만으로 majority 를 찾는 가장 단순한 결정론적 방법(모든 원소를 후보로 전체와 대조)의 equals 호출 수는?
+{/quiz}
+{answer}
+후보 n 개 × 대조 n 번 = $n^2$ → $O(n^2)$. 분할정복은 이를 $O(n \log n)$, 랜덤은 기대 $O(n)$ 으로 줄인다.
+{/answer}
+
+== 관련 문서 ==
+* [[majority element]] · [[분할정복 majority]] · [[랜덤 majority]] · [[comparison-based sorting]]

@@ -1,0 +1,32 @@
+key: uniformly random hash function
+title: uniformly random hash function (균등 무작위 해시 함수)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+U 의 원소마다 '''독립적으로''' 1..n 중 하나를 균등하게 뽑아 버킷을 정한 함수. 모든 함수 $U \to \{1..n\}$ 중 하나를 균등 무작위로 고르는 것과 같다. 기대 버킷 크기가 ≤ 2 라 연산당 expected $O(1)$ — '''이론적으로 완벽'''하지만, 저장에 $M \log n$ 비트가 들어 '''실용적으로 불가능'''하다.
+
+{def}
+L7 p.35: "Say that h is uniformly random. That means that h(1) is a uniformly random number between 1 and n. h(2) is also a uniformly random number between 1 and n, independent of h(1). h(3) is also … independent of h(1), h(2). … h(n) is also a uniformly random number between 1 and n, independent of h(1), h(2), …, h(n-1)."
+{/def}
+[[img:L7-35.png|L7 p.35 — h(1), h(2), h(3), … 가 각각 독립적으로 1..n 균등|medium]]
+
+{analogy}
+'''키마다 따로 주사위 굴리기.''' 키가 들어올 때마다 n 면체 주사위를 새로 굴려 버킷을 정하고, 그 결과를 영원히 기억한다. 공정하지만 문제는 '''기억'''이다 — 세상의 모든 가능한 키(M 개)에 대한 주사위 결과를 미리 적어 두려면 공책이 우주만 해진다.
+{/analogy}
+
+{|
+! || 좋은 점 (p.85 "was good") || 나쁜 점 (p.86 "was bad")
+|-
+| 내용 || 모든 $u_i \ne u_j$ 에 대해 충돌 확률 $= 1/n$ → [[기대 버킷 크기]] $\le 2$ → 연산당 expected $O(1)$ || 함수 개수 $n^M$ → 저장 $\log(n^M) = M \log n$ 비트 ([[log(s) 비트]])
+|-
+| 비유 || 완벽한 공정성 || "We may as well have just initialized a bucket for every single item in U."
+|}
+[[img:L7-48.png|L7 p.50 — 모든 해시 함수(코끼리)는 n^M 개 → M log(n) 비트 ☹, direct addressing 은 M 비트|medium]]
+p.47 "필요한 값만 기억하면?" — h(13)=6, h(22)=3 … 을 기억하려면 키→값을 $O(1)$ 로 저장하는 자료구조가 필요한데, 그게 지금 만드는 해시 테이블(DOH!).
+{exam}
+해설본 ⭐⭐, 핵심 요약 6번: "균등 무작위 h 의 문제: 모든 함수 $n^M$ 개 → 저장에 '''$M \log n$ 비트'''" — direct addressing(M 비트)보다도 크다. 그래서 '''충돌 확률 ≤ 1/n 성질만 유지하는 작은 집합'''([[universal hash family]])이 필요.
+{/exam}
+p.67: uniformly random h 전체 집합도 universal hash family 의 한 예다("We just saw this. Of course, this one has other downsides…").
+
+== 관련 문서 ==
+* [[기대 버킷 크기]] · [[해싱 게임]] · [[log(s) 비트]] · [[hash family]] · [[universal hash family]]

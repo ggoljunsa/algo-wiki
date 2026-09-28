@@ -1,0 +1,44 @@
+key: 두 시나리오
+title: 두 시나리오 — Scenario 1 (expected) vs Scenario 2 (worst-case)
+category: 6강 Randomized I, 용어
+---
+== 개요 ==
+L6 p.5 "How do we measure the runtime of a randomized algorithm?" 의 답. [[randomized algorithm]] 의 수행 시간을 좌우하는 변수는 '''입력'''과 '''random choice''' 두 개이고, [[adversary]] 가 그중 무엇까지 정하느냐로 두 가지 수행 시간이 정의된다. L1 부터의 "[[두 가지 질문]]"(Does it work? / Is it fast?)과 이름이 비슷하지만 전혀 다른 개념이니 섞지 말 것.
+
+{def}
+L6 p.5: "Scenario 1 — 1. Bad guy picks the input. 2. You run your randomized algorithm. / Scenario 2 — 1. Bad guy picks the input. 2. Bad guy chooses the randomness (fixes the dice)."
+"In Scenario 1, the running time is a '''random variable'''. It makes sense to talk about '''expected running time'''."
+"In Scenario 2, the running time is '''not random'''. We call this the '''worst-case running time''' of the randomized algorithm."
+{/def}
+[[img:L6-05.png|L6 p.5 — Scenario 1 / Scenario 2|large]]
+
+{analogy}
+'''보드게임 주사위.''' Scenario 1: 상대가 판(입력)을 제일 불리하게 깔아도 '''주사위는 내가 공정하게 굴린다''' → "보통 몇 턴에 이기나" 를 평균 낼 수 있다(expected). Scenario 2: 상대가 판도 깔고 '''주사위도 원하는 눈으로 조작'''한다 → 결과는 한 가지, 최악(worst-case). 입력은 두 경우 모두 최악이라는 점이 핵심 — expected 는 "평균적인 입력"이 아니다!
+{/analogy}
+
+[[anim:expected_vs_worst|Scenario 1 에서는 수행 시간이 분포 막대로(평균선 = expected), Scenario 2 에서는 한 값(worst)으로 고정되는 것을 보고 두 정의를 구분하자]]
+
+{|
+! || Scenario 1 || Scenario 2
+|-
+| 입력 || 적이 고름 (worst-case 입력) || 적이 고름
+|-
+| 난수 || 알고리즘이 공정하게 || '''적이 고정'''
+|-
+| 수행 시간 || [[random variable]] || 한 값
+|-
+| 재는 것 || [[expected running time]] = "fixed input, average over random choices" || [[randomized worst-case]]
+|-
+| bogosort || $O(n \cdot n!)$ || $O(\infty)$
+|-
+| randomized quicksort || $\Theta(n \log n)$ || $\Theta(n^2)$
+|}
+{exam}
+교수(9/17): "There is two variables that affect the running time. First one is input, each random variable we choose. … Scenario 1 — '''fixed input, average over random choices''' → expected running time. Scenario 2 — worst-case input 에 worst-case random choices → worst-case running time. '''So now you can distinguish between expected running time and worst-case running time for a randomized algorithm''', different from deterministic algorithm." (해설본 ⭐⭐⭐, L6 전체의 뼈대)
+{/exam}
+{warn}
+흔한 착각: "expected = 평균적인 입력에 대한 시간(average-case)". 아니다. L6 의 expected 는 '''입력은 여전히 최악''', 평균은 '''알고리즘의 난수'''에 대해서만 낸다. 입력 분포에 대한 평균은 [[average-case]] (L2) 이고 [[bucket sort]] 의 균등 분포 가정 같은 것이 필요하다.
+{/warn}
+
+== 관련 문서 ==
+* [[adversary]] · [[expected running time]] · [[randomized worst-case]] · [[두 종류의 worst-case]] · [[두 가지 질문]] (이름만 비슷) · [[해싱 게임]] (L7 의 같은 구도)

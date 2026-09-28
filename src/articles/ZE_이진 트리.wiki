@@ -1,0 +1,57 @@
+key: 이진 트리
+title: 이진 트리 (binary tree) — 깊이 d 면 리프 ≤ 2ᵈ
+category: 용어, 5강 Linear Sorting, 3강 D&C I
+---
+'''이진 트리'''(binary tree)는 각 노드의 자식이 최대 2 개인 트리다. 이 과목에서 이진 트리는 자료구조로서가 아니라 '''분석 도구'''로 등장한다 — [[mergesort]] 의 [[recursion tree method|재귀 트리]](L3)와 비교 정렬의 [[decision tree]](L5). 둘 다 핵심은 한 부등식: '''깊이 $d$ 인 이진 트리의 리프는 최대 $2^d$ 개''', 거꾸로 '''리프가 $L$ 개면 깊이 $\ge \log_2 L$'''.
+
+{def}
+'''이진 트리''': 각 노드가 최대 두 개의 자식(왼쪽/오른쪽, 또는 YES/NO)을 갖는 루트 트리.
+'''깊이(depth)''': 루트에서 가장 먼 리프까지의 간선 수. '''리프(leaf)''': 자식이 없는 노드.
+"This is a binary tree with at least n! leaves. The shallowest tree with n! leaves is the completely balanced one, which has depth log(n!)." (L5 p.14)
+{/def}
+
+== 리프와 깊이의 관계 ==
+<pre class="txt">
+깊이 0: 노드 1 개 (루트 = 리프)          리프 ≤ 1  = 2^0
+깊이 1: 루트 → 자식 2                    리프 ≤ 2  = 2^1
+깊이 2: → 손자 4                         리프 ≤ 4  = 2^2
+깊이 d:                                  리프 ≤ 2^d
+∴ 리프가 L 개 필요하면  2^d ≥ L  →  d ≥ log2 L
+  (등호는 완전히 균형 잡힌 트리 = "the shallowest tree")
+</pre>
+
+== 이 과목에서 쓰인 곳 ==
+{|
+! 강의 || 트리 || 노드 || 리프 수 || 깊이
+|-
+| L3 p.25–32, 66–73 || mergesort 재귀 트리 || 재귀 호출 하나(크기 $n/2^k$) || $n$ (크기 1 짜리) || $\log_2 n$ (n=8 → 3)
+|-
+| L3 p.92–98 || $aT(n/b)$ 재귀 트리 || 부분 문제 || $a^{\log_b n} = n^{\log_b a}$ || $\log_b n$ — $a > 2$ 면 이진 트리가 아니라 $a$ 진 트리
+|-
+| L5 p.10–15 || [[decision tree]] || 비교 한 번 (YES/NO) || $\ge n!$ (순열마다 하나) || $\ge \log_2(n!) = \Omega(n\log n)$
+|}
+
+[[img:L3-70.png|L3 p.70 — T(n) ≤ 2T(n/2) + cn 의 재귀 트리: 루트 cn, 자식 cn/2 두 개, … 리프 c 가 n 개|medium]]
+
+[[anim:decision_tree_leaves|a ≤ b? 에서 시작해 YES/NO 로 갈라지며 리프 6 개가 생기고, 가장 긴 경로가 빨갛게 켜지는 것을 본다]]
+
+== 짧은 예제 ==
+<pre class="txt">
+원소 3 개 정렬의 decision tree
+  리프 ≥ 3! = 6
+  깊이 d 에서 2^d ≥ 6 → d ≥ 3 (2^2 = 4 < 6)
+  → 어떤 비교 정렬도 3 개를 정렬하는 데 최악 3 번은 비교한다
+mergesort [8,4,1,5,3,2,6,7] 재귀 트리
+  리프 8 개(크기 1), 깊이 log2 8 = 3, 레벨마다 merge 총비용 cn
+</pre>
+
+{analogy}
+🎭 '''토너먼트 대진표.''' 한 경기에서 한 명이 올라가는 토너먼트(이진 트리)에서 참가자가 $L$ 명이면 우승까지 최소 $\lceil \log_2 L \rceil$ 라운드가 필요하다. decision tree 에서 "참가자" 는 가능한 정렬 순서 $n!$ 가지이고, 한 라운드는 비교 한 번이다. 대진표를 아무리 잘 짜도 라운드 수를 $\log_2(n!)$ 아래로 줄일 수 없다 — 이것이 [[Ω(n log n) 하한]].
+{/analogy}
+
+{quiz}리프가 1000 개인 이진 트리의 깊이는 최소 얼마인가?{/quiz}
+{answer}$2^d \ge 1000$ → $d \ge \log_2 1000 \approx 9.97$ → 최소 '''10'''.{/answer}
+
+== 관련 문서 ==
+* [[decision tree]] · [[리프와 깊이]] · [[Ω(n log n) 하한]] · [[log(n!)]]
+* [[recursion tree method]] · [[bushy tree와 tall and skinny tree]] · [[로그 계산법]]

@@ -1,0 +1,34 @@
+key: hash table
+title: hash table (해시 테이블)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+키를 가진 원소를 넣고(INSERT)/빼고(DELETE)/찾는(SEARCH) 자료구조. n 개의 [[버킷]] 배열과, 키를 버킷 번호로 바꾸는 [[hash function]] h 로 이루어진다. L7 의 버전은 버킷마다 [[linked list]] 를 매다는 '''[[chaining]]''' 방식. 해시 함수를 [[universal hash family]] 에서 무작위로 고르면 연산당 '''expected $O(1)$''', 공간 '''$O(n \log M)$ 비트'''.
+
+{def}
+L7 p.9: "Hash tables: $O(1)$ expected time INSERT/DELETE/SEARCH. Worse worst-case performance, but often great in practice. eg, Python's dict, Java's HashSet/HashMap, C++'s unordered_map."
+L7 p.26: "This is a hash table (with chaining) — Array of n buckets. Each bucket stores an unsorted linked list. insert in O(1) since it's unsorted; search in O(length(list))."
+{/def}
+[[img:L7-28.png|L7 p.28 — hash table with chaining: INSERT 13, 22, 43, 9 / SEARCH 43|medium]]
+
+{analogy}
+'''아파트 우편함.''' 우편물(키)의 주소를 규칙(h)에 따라 몇 동 우편함(버킷)으로 넣는다. 한 칸에 여러 통이 들어가면 쌓아 둔다(chain). 편지 찾기는 해당 칸만 뒤지면 되니, 칸마다 몇 통 안 쌓여 있으면 순식간이다. 문제는 규칙이 나빠서 한 칸에 몰릴 때.
+{/analogy}
+
+{|
+! 연산 || 방법 || 시간 (random h from universal H)
+|-
+| INSERT x || 버킷 h(x) 의 리스트 앞에 붙임 || $O(1)$
+|-
+| SEARCH x || 버킷 h(x) 의 리스트를 훑음 || $O(\text{length(list)})$ → expected $O(1)$, worst $O(n)$
+|-
+| DELETE x || SEARCH 후 리스트에서 제거 || expected $O(1)$
+|}
+[[sim:hash_chaining]]
+{exam}
+해설본 ⭐⭐ (p.5): hash table = '''expected $O(1)$ / worst-case $O(n)$'''. "Worse worst-case performance, but often great in practice." 좋은 성능의 비밀은 h 를 무작위로 고르는 것(L7 전체의 결론).
+{/exam}
+응용(p.10): Database, 컴파일러(변수명 → 주소), 라우터(IP → wire), 가상 메모리, grep, DNA, Dropbox, 암호학 — "Perhaps, the most popular data structures in CS".
+
+== 관련 문서 ==
+* [[chaining]] · [[hash function]] · [[자료구조 비교표]] · [[INSERT/DELETE/SEARCH]] · [[universal hash family]] · [[해시 테이블 공간 복잡도]] · [[Python dict와 해시 테이블]]

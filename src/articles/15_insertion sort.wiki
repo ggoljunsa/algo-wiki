@@ -1,0 +1,99 @@
+key: insertion sort
+title: insertion sort (삽입 정렬)
+category: 1강 Analysis I, 알고리즘
+---
+== 개요 ==
+L1–L2 의 유일한 예제 알고리즘. 교수는 이 쉬운 알고리즘 하나로 [[두 가지 질문]] — ① [[correctness]] 증명([[loop invariant]] + [[귀납법 4요소]]) ② [[runtime]] 분석(worst $O(n^2)$, best $\Omega(n)$) — 을 모두 시연한다.
+
+{def}
+'''Insertion sort''' (L1 p.6): "'''Intuition''' Maintain a growing sorted list. For each element, put it into the 'right place' in this growing list."
+정렬된 앞부분을 한 칸씩 키워 가며, 다음 원소를 그 안의 올바른 자리에 끼워 넣는 정렬.
+{/def}
+
+{analogy}
+'''카드 게임에서 패 정리하기'''. 왼손에는 이미 정리된 카드, 오른손으로 새 카드를 한 장 집어 왼손 패의 오른쪽 끝부터 왼쪽으로 훑으며 "나보다 큰 카드"는 한 칸씩 오른쪽으로 밀고, 나보다 작은 카드를 만나면 그 바로 오른쪽에 꽂는다. 이미 정리된 패를 받으면(정렬 입력) 매번 한 번 보고 끝 — best-case. 거꾸로 정리된 패를 받으면(역순) 매번 맨 앞까지 밀어야 한다 — worst-case.
+{/analogy}
+
+[[anim:insertion_card|왼손의 [4] 에 3, 1, 5, 2 가 한 장씩 끼워지며 큰 카드가 오른쪽으로 밀리는 모습을 먼저 보자]]
+
+== 코드 (L1 p.5–9) ==
+<pre class="c">
+def insertion_sort(A):
+  for i in range(1, len(A)):
+    cur_value = A[i]
+    j = i - 1
+    while j >= 0 and A[j] > cur_value:
+      A[j+1] = A[j]
+      j -= 1
+    A[j+1] = cur_value
+</pre>
+{|
+! 변수 || 뜻 || 예제 [4,3,1,5,2], i=4 일 때
+|-
+| `A` || 정렬할 리스트(제자리 수정, [[in-place]]) || [1,3,4,5,2] → [1,2,3,4,5]
+|-
+| `i` || 이번에 끼워 넣을 원소의 인덱스, 1…n−1 || 4
+|-
+| `cur_value` || 손에 든 값 A[i]. 밀기가 A[i] 를 덮어쓰기 전에 보관 || 2
+|-
+| `j` || 비교 위치. i−1 에서 시작해 왼쪽으로. 멈추면 j+1 이 삽입 자리 || 3 → 2 → 1 → 0 (A[0]=1 < 2 에서 멈춤)
+|}
+[[img:L1-09.png|L1 p.9 — insertion sort 코드|medium]]
+
+== 예제 추적 [4,3,1,5,2] (L1 p.10–21, p.31–43) ==
+<pre class="txt">
+i=1  cur_value=3  4 를 밀기         → [3 4 1 5 2]   shift 1
+i=2  cur_value=1  4, 3 을 밀기      → [1 3 4 5 2]   shift 2
+i=3  cur_value=5  밀기 없음         → [1 3 4 5 2]   shift 0  ("already in the right position")
+i=4  cur_value=2  5, 4, 3 을 밀기   → [1 2 3 4 5]   shift 3
+'''총 shift 6''' — "Then we're done!"
+</pre>
+[[img:L1-43.png|L1 p.43 — 매 단계 "Correctly inserting x into the sorted list … produces another sorted list … longer by one element"|large]]
+[[sim:insertion_sort_trace]]
+
+== ① Does it work? ==
+'''Loop invariant(i): `A[:i+1]` is sorted.''' (L1 p.47)
+<pre class="txt">
+'''Inductive hypothesis:''' 반복 i 가 끝나면 A[:i+1] 정렬
+'''Base case (i=0):''' A[:1] 은 원소 하나 → 정렬
+'''Inductive step:''' 정렬된 A[:i+1] 에 A[i+1] 을 올바른 자리에 삽입 → A[:i+2] 정렬 ([[삽입 한 번의 성질]])
+'''Conclusion:''' 반복 n−1 후 A[:n] = A 전체 정렬
+</pre>
+자세한 설명: [[loop invariant]], [[귀납법 4요소]], [[Initialization/Maintenance/Termination]].
+
+== ② Is it fast? ==
+{|
+! 경우 || 입력 || while 몸통 총 횟수 || 결과 (L2 p.34)
+|-
+| [[삽입 정렬의 worst-case|worst-case]] || 역순 $[n,\dots,2,1]$ || $1+2+\dots+(n-1) = \frac{n(n-1)}{2}$ || $O(n^2)$
+|-
+| [[삽입 정렬의 best-case|best-case]] || 정렬됨 $[1,2,\dots,n]$ || 0 (조건 검사만 $n-1$ 회) || $\Omega(n)$
+|-
+| [[average-case]] || 무작위 || 약 $\frac{n(n-1)}{4}$ (CLRS) || $\Theta(n^2)$
+|}
+L1 p.62 의 대략 세기: "At most n outer iters × At most n inner iters per outer iter → Total runtime at most $n^2$ iters".
+
+{quiz}
+'''손코딩 빈칸''': 아래 두 빈칸을 채워라.
+<pre class="c">
+def insertion_sort(A):
+  for i in range(1, len(A)):
+    cur_value = A[i]
+    j = i - 1
+    while j >= 0 and ________:
+      A[j+1] = A[j]
+      j -= 1
+    A[____] = cur_value
+</pre>
+{/quiz}
+{answer}
+`A[j] > cur_value` / `A[j+1]`. while 이 멈춘 순간 j 는 "cur_value 보다 작은(또는 없는) 위치"이므로 그 바로 오른쪽 j+1 이 빈 자리다. 조건을 `>=` 로 쓰면 같은 값의 순서가 뒤바뀌어 [[stable sort]] 가 아니게 된다.
+{/answer}
+
+{info}
+특징: [[in-place]](추가 메모리 O(1)), [[stable sort]](엄격 부등호 `>` 덕분), 거의 정렬된 입력에 빠름(best $\Theta(n)$). [[selection sort]] 는 입력과 무관하게 항상 $\Theta(n^2)$ 비교라는 점이 대조적이다.
+{/info}
+
+== 관련 문서 ==
+* [[L1 Algorithmic Analysis I]] · [[L2 Algorithmic Analysis II]] · [[삽입 한 번의 성질]] · [[loop invariant]]
+* [[삽입 정렬의 worst-case]] · [[삽입 정렬의 best-case]] · [[selection sort]] · [[mergesort]]

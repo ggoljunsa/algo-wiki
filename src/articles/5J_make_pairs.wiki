@@ -1,0 +1,50 @@
+key: make_pairs
+title: make_pairs (값 → (i 번째 자릿값, 값) 쌍 — Θ(n))
+category: 5강 Linear Sorting, 알고리즘
+---
+{def}
+<pre class="c">
+def make_pairs(A, k, i):
+  result = []
+  for a in A:
+    # e.g. a=1023, k=10, i=1: (1023/(10**1))%10 = 2
+    key = (a / (k ** i)) % k
+    result.append((key, a))
+  return result
+</pre>
+Worst-case runtime $\Theta(n)$ (L5 p.52). [[radix sort]] 의 각 라운드에서 원소마다 i 번째 자릿값(key)을 뽑아 `(key, a)` 쌍을 만든다. 쌍의 첫 원소로 bucket sort 하고, 결과로는 둘째 원소(값)를 돌려준다.
+{/def}
+[[img:L5-50.png|p.52 — make_pairs 코드, Worst-case runtime Θ(n)|medium]]
+
+== 자릿값 뽑기 공식 ==
+$$\text{key} = \left\lfloor \frac{a}{k^i} \right\rfloor \bmod k$$
+<pre class="txt">
+a = 1023, k = 10, i = 1:   1023 // 10^1 = 102,   102 % 10 = '''2'''   (십의 자리)
+a = 477,  k = 10, i = 0:   477 // 1 = 477,       477 % 10 = '''7'''
+a = 477,  k = 10, i = 2:   477 // 100 = 4,       4 % 10   = '''4'''
+a = 5,    k = 10, i = 1:   5 // 10 = 0,          0 % 10   = '''0'''   (없는 자리는 0 → "005")
+</pre>
+나눗셈 $a / k^i$ 는 아래 i 자리를 잘라 내고, `% k` 는 맨 끝 한 자리만 남긴다([[modular arithmetic]], [[floor와 ceil]]).
+{warn}
+슬라이드의 `/` 는 '''정수 나눗셈'''을 뜻한다(Python 3 이면 `//`). 실수 나눗셈이면 1023/10 = 102.3 → 102.3 % 10 = 2.3 이 되어 틀린다. [[get_bucket]] 의 "rely on use of int division" 과 같은 약속.
+{/warn}
+
+{analogy}
+'''택배 송장에 "이번 분류 기준 번호" 스티커 붙이기.''' 이번 라운드가 십의 자리면 각 상자에 십의 자리 숫자 스티커를 붙이고(쌍 만들기), 분류기는 스티커만 보고 칸에 넣는다. 상자 내용물(원래 값)은 그대로 따라간다.
+{/analogy}
+
+== 예제 (p.54, p.56, p.58) ==
+{|
+! i || A_pairs (앞 4개 … 마지막)
+|-
+| 0 || (1,031) (5,005) (0,210) (4,014) … (5,125)
+|-
+| 1 || (1,210) (3,031) (1,014) (0,005) … (7,477)
+|-
+| 2 || (0,005) (2,210) (0,014) (1,125) … (0,095)
+|}
+[[anim:radix_lsd|각 라운드에서 현재 자리 숫자가 주황으로 뽑혀 나오는 것(= make_pairs 의 key)을 보자]]
+[[sim:radix_sort]]
+
+== 관련 문서 ==
+* [[radix sort]] · [[least-significant digit]] · [[Θ(d(n+k))]] · [[modular arithmetic]] · [[get_bucket]]

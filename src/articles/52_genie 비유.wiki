@@ -1,0 +1,26 @@
+key: genie 비유
+title: genie 비유 (YES/NO 질문만 받는 요정 — 비교 모델)
+category: 5강 Linear Sorting, 용어
+---
+{def}
+"Suppose we want to sort three items. … There is a '''genie''' who knows what the right order is. The genie can answer YES/NO questions of the form: '''is [this] bigger than [that]?''' The algorithm's job is to output a correctly sorted list of all the objects." (L5 p.8)
+{/def}
+[[img:L5-06.png|p.8 — 😀, 🚒, ☕ 를 정렬. 알고리즘: "Is 🚒 bigger than ☕?" genie: "YES"|medium]]
+
+== 이름에서 개념 끌어내기 ==
+genie(지니) 는 알라딘의 요정. 정답(정렬 순서)을 이미 알지만 '''YES/NO 로만''' 대답한다. 알고리즘은 이 요정에게 질문을 던지는 사람이고, 질문 한 번 = 비교 한 번 = 시간 한 단위. 이 설정이 [[comparison-based sorting]] 의 정확한 모델이다 — 알고리즘이 원소에 대해 알 수 있는 정보가 오직 비교 결과뿐.
+
+{analogy}
+'''스무고개.''' 상대가 머릿속에 3! = 6 가지 순서 중 하나를 품고 있고, 나는 "이게 저것보다 크니?" 만 물을 수 있다. 한 번 물을 때마다 후보가 최대 절반으로 준다. 6 개 후보를 1 개로 줄이려면 최소 $\lceil \log_2 6 \rceil = 3$ 번은 물어야 한다. n 개면 $\log_2(n!)$ 번 — 이것이 [[Ω(n log n) 하한]]의 직관이다.
+{/analogy}
+
+== 다음 슬라이드로 ==
+질문을 어떤 순서로 던질지 = 알고리즘. 대답에 따라 다음 질문이 갈리므로, 모든 경우를 그리면 '''나무'''가 된다 → [[decision tree]] (p.10: 😀≤🚒? → YES → ☕≤😀? …). "The algorithm's job" 은 리프(정렬 결과)에 도달하는 것.
+<pre class="txt">
+질문 1: 😀 ≤ 🚒 ?    YES
+질문 2: ☕ ≤ 😀 ?    NO
+질문 3: ☕ ≤ 🚒 ?    YES   →  출력 [😀, ☕, 🚒]     (p.10 의 가운데 리프)
+</pre>
+
+== 관련 문서 ==
+* [[comparison-based sorting]] · [[decision tree]] · [[Ω(n log n) 하한]] · [[리프와 깊이]]

@@ -1,0 +1,37 @@
+key: direct addressing
+title: direct addressing (직접 주소화)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+키 값 자체를 배열 인덱스로 쓰는 가장 단순한 $O(1)$ 자료구조. "One type of item per address." [[counting sort]] 가 값을 인덱스로 썼던 것과 같은 발상이다. 연산은 모두 $O(1)$ 이지만, 가능한 키의 범위(universe 크기 M)만큼 칸이 필요해 '''공간'''이 문제다.
+
+{def}
+L7 p.11: "How might we get $O(1)$-time? Try direct addressing! One type of item per address."
+L7 p.17: "Similar to counting_sort and bucket_sort (for k ≤ num_buckets), if the set of items being inserted/deleted (e.g. {0, 1, 2, …, 999, 1000, …, $10^6$, …}) is large, then the '''space''' required to maintain this data structure becomes an issue."
+{/def}
+[[img:L7-15.png|L7 p.15 — insert(7), insert(5), insert(0), insert(8) 후 search(7), search(2)|medium]]
+
+{analogy}
+'''학번 = 사물함 번호.''' 학번 2026001 번 학생은 2026001 번 사물함을 쓴다. 찾기는 즉시지만, 학번 체계가 7 자리면 사물함 천만 개를 지어야 한다 — 실제 학생은 몇 천 명뿐인데.
+{/analogy}
+
+<pre class="txt">
+insert(7), insert(5), insert(0), insert(8)
+인덱스:  0   1   2   3   4   5   6   7   8   9
+        [0] [ ] [ ] [ ] [ ] [5] [ ] [7] [8] [ ]
+search(7) → 칸 7 확인 → 있음   O(1)
+search(2) → 칸 2 확인 → 없음   O(1)
+공간 = 가능한 키 개수 M (= |U|) 칸 → M 비트 (있다/없다 한 비트씩)
+</pre>
+{|
+! 장점 || 문제 (p.90 Ideas)
+|-
+| $O(1)$ INSERT/DELETE/SEARCH || large space required — M 이 크면 불가능
+|}
+p.18–20: 여러 값을 한 칸에 묶으면([[버킷]]) 공간은 줄지만 한 칸에 몰릴 수 있다 → 이게 이미 "basic bucketing scheme" 의 [[hash table]].
+{exam}
+L7 p.72 비교 기준: "Compare: direct addressing was '''M bits'''!" — uniformly random h 저장($M \log n$ 비트)은 이보다도 크고, $h_{a,b}$ ($O(\log M)$ 비트)는 훨씬 작다. 공간 비교표에서 direct addressing 을 기준선으로 쓸 수 있어야 한다.
+{/exam}
+
+== 관련 문서 ==
+* [[counting sort]] · [[버킷]] · [[hash table]] · [[universe U]] · [[M과 n]] · [[해시 테이블 공간 복잡도]]

@@ -1,0 +1,58 @@
+key: divide and conquer
+title: Divide and Conquer (분할 정복)
+category: 3강 D&C I, 용어
+---
+== 개요 ==
+문제를 더 작은 부분 문제로 쪼개(Divide) 풀고, 그 결과를 모아(Conquer/Combine) 원래 문제를 푸는 알고리즘 설계 패러다임. [[L3 Divide and Conquer I]] p.7–8 에서 정의되고, L3–L4 와 L6 의 대부분이 이 틀 위에 있다([[mergesort]], [[select]], [[median of medians]], [[quicksort]], [[분할정복 majority]], [[Karatsuba 곱셈]]).
+
+{def}
+'''Divide''': "Break the current problem into smaller (easier) sub-problems."
+'''Conquer''': "Solve the smaller problems and collect the results to solve the current problem." (L3 p.8)
+Divide — 현재 문제를 더 작은(쉬운) 부분 문제로 쪼갠다. Conquer — 작은 문제를 풀고 결과를 모아 현재 문제를 푼다. 교과서([[CLRS]])는 이 '모으기'를 따로 '''Combine''' 단계로 떼어 3단계(Divide / Conquer / Combine)로 부른다.
+{/def}
+[[img:L3-08.png|L3 p.8 — Big → Not as big ×2 → Even smaller ×4|medium]]
+
+{analogy}
+'''피라미드식 업무 분담'''이다. 사장(Big)이 일을 두 팀장(Not as big)에게 반씩, 팀장은 다시 두 사원(Even smaller)에게 반씩 나눈다. 사원 한 명이 맡은 일은 너무 작아 바로 끝난다(base case). 그다음 사원 → 팀장 → 사장 순으로 보고서를 '''합쳐 올린다'''(combine). 핵심은 '''합치는 비용이 싸야''' 전체가 빨라진다는 것 — mergesort 에서는 그 비용이 [[merge]] 의 $\Theta(n)$ 이다.
+{/analogy}
+
+[[anim:divide_conquer_flow|Divide(쪼개기) → Conquer(가장 작은 상자 풀기) → Combine(아래서부터 합치기) 3막을 보고, mergesort 의 세 줄(쪼개기·재귀·merge)과 짝지어 보자]]
+
+== 이름에서 개념 끌어내기 ==
+"Divide and rule(분할 통치)" 에서 온 이름. 적을 '''나누어''' 각개격파하듯, 큰 입력을 나누어 각각 처리한다. 나눈 조각들이 '''서로 독립'''이라 따로(병렬로) 풀 수 있다는 점이 핵심이다 → [[incremental approach와 parallel approach]].
+
+== 구현 = 재귀 ==
+분할 정복을 코드로 옮기는 가장 자연스러운 방법이 [[recursive algorithm]] 이다(9/3 수업 "natural way to implement divide and conquer algorithm is recursive algorithm"). 그래서 분석 도구도 바뀐다.
+{|
+! 질문 || 도구 || 문서
+|-
+| Does it work? || 입력 크기에 대한 (강한) 귀납법 || [[입력 크기에 대한 귀납법]], [[recursion invariant]]
+|-
+| Is it fast? || 점화식 → closed-form → 점근 표기 || [[점화식]], [[점화식 풀이 4가지]], [[master method]]
+|}
+mergesort 의 호출 트리를 직접 따라가 보자.
+[[sim:mergesort_tree]]
+
+== 이 과목에서 만나는 분할 정복 ==
+{|
+! 알고리즘 || 부분 문제 || 점화식 || 결과
+|-
+| [[mergesort]] (L3) || 반씩 2개 || $2T(n/2) + O(n)$ || $O(n \log n)$
+|-
+| [[Karatsuba 곱셈]] (L3 p.87) || 반 크기 3개 || $3T(n/2) + O(n)$ || $O(n^{\log_2 3})$
+|-
+| [[select]] (L4) || 한쪽만 1개 || 이상적 $T(n/2) + O(n)$ || $O(n)$
+|-
+| [[median of medians]] (L4) || 크기 다른 2개 || [[T(n/5) + T(7n/10) + O(n)]] || $O(n)$
+|-
+| [[분할정복 majority]] (L6) || 반씩 2개 || $2T(n/2) + O(n)$ || $O(n \log n)$
+|}
+
+{exam}
+L3 p.8 의 Divide/Conquer 정의 두 문장은 "정의 → 용어" 문제로 그대로 나올 수 있다. 9/3·9/8 수업에서 교수는 매번 "insertion sort 는 incremental, divide and conquer 는 sub-problems 가 independent 라 parallel" 을 대비시켰다.
+{/exam}
+
+== 관련 문서 ==
+* [[L3 Divide and Conquer I]] · [[mergesort]] · [[merge]]
+* [[incremental approach와 parallel approach]] · [[recursive algorithm]]
+* [[점화식]] · [[master method]]

@@ -1,0 +1,59 @@
+key: 확률과 기댓값
+title: 확률과 기댓값 (probability & expectation 기초)
+category: 용어, 6강 Randomized I
+---
+L6–L7 의 [[randomized algorithm]] 분석에 필요한 확률 기초를 한 곳에 모은 문서. 이 과목에서 확률은 '''입력이 아니라 알고리즘이 굴리는 주사위'''에서 나온다는 점을 먼저 기억하자(9/17 녹음: "입력이 랜덤인 게 아니다"). 그래서 [[expected running time]] 은 "입력 고정, 난수에 대한 평균" 이다.
+
+{def}
+'''확률''' $P(A)$: 사건 $A$ 가 일어날 가능성, $0 \le P(A) \le 1$. 경우의 수가 모두 같은 확률이면 $P(A) = \frac{\text{A 에 해당하는 경우 수}}{\text{전체 경우 수}}$.
+'''기댓값''' $E[X] = \sum_x x \cdot P(X = x)$ — 값 × 그 값이 나올 확률의 합("probability-weighted average").
+"$E[X_{a,b}] = P(X_{a,b}=1)\cdot1 + P(X_{a,b}=0)\cdot0$ — By definition of expectation" (L6 p.31)
+{/def}
+
+== 이 과목에 나오는 확률 계산 전부 ==
+{|
+! 어디 || 사건 || 확률 || 근거
+|-
+| L6 p.9 [[bogosort]] || 무작위로 섞은 리스트가 정렬돼 있음 || $\frac{1}{n!}$ || [[순열과 n!|n! 개 순열]] 중 정답 1개
+|-
+| L6 p.32–42 [[P(X_{a,b}=1)]] || a, b 가 비교됨 || $\frac{2}{b-a+1}$ || 구간 $b-a+1$ 개 중 a 나 b 가 먼저 피벗
+|-
+| L6 p.77 [[랜덤 majority]] || 무작위 원소가 majority || $\ge \frac12$ || majority 는 $\lfloor n/2 \rfloor + 1$ 번 이상 등장
+|-
+| L7 p.41 [[기대 버킷 크기]] || $h(u_i) = h(u_j)$ ($i \ne j$) || $\frac1n$ || [[uniformly random hash function|균등 무작위]] + 독립
+|-
+| L7 p.62 [[universal hash family]] || 임의의 $u_i \ne u_j$ 충돌 || $\le \frac1n$ || 정의
+|-
+| L7 p.70 [[h_{a,b}]] (p=5, n=3) || 특정 쌍 충돌 || $\frac{4}{20} = \frac15$ || 20 개 (a,b) 전수 조사
+|}
+
+== 기댓값 계산 세 가지 도구 ==
+# '''정의 그대로''': $E[X] = \sum x P(X=x)$. 값이 몇 개 안 될 때.
+# '''[[지표 확률변수]] + [[기대값의 선형성]]''': 세고 싶은 게 "개수" 일 때. quicksort, 해시.
+# '''[[기하분포]]''': "성공할 때까지 반복" 일 때 기대 시행 $\frac1p$. bogosort, 랜덤 majority.
+
+== 짧은 예제 ==
+<pre class="txt">
+bogosort, n = 3 → 순열 3! = 6 개, 정렬된 것 1 개
+한 번 섞어 성공할 확률      p = 1/6
+기대 셔플 횟수              E[N] = 1/p = 6           ← [[기하분포]]
+한 번 셔플 + 검사 비용      n = 3
+기대 비용                   3 · 6 = 18 = n · n!
+</pre>
+
+[[img:L6-30.png|L6 p.31 — E[X_{a,b}] 를 기댓값의 정의로 풀면 P(X_{a,b}=1) 만 남는다|medium]]
+
+{analogy}
+🎭 '''복권의 기대 상금.''' 1등 1000원 확률 1/10, 꽝 0원 확률 9/10 이면 기대 상금은 $1000 \cdot \frac1{10} + 0 \cdot \frac{9}{10} = 100$ 원. 복권 한 장을 사서 100원을 받는 일은 없다 — 기댓값은 "수없이 반복했을 때의 평균" 이다. [[expected running time]] 도 한 번 돌린 시간이 아니라 '''같은 입력으로 주사위만 바꿔 무한히 돌렸을 때의 평균'''이다.
+{/analogy}
+
+{warn}
+'''expected ≠ average-case.''' [[average-case]](L2 p.3)는 '''입력'''이 랜덤이라고 가정한 평균이다. [[expected running time]](L6 p.5)은 입력은 적([[adversary]])이 골라 고정하고 '''알고리즘의 난수'''에 대해 평균낸다. 이 과목의 randomized 분석은 전부 후자다. → [[두 시나리오]]
+{/warn}
+
+{quiz}공정한 동전을 던져 앞면이면 1, 뒷면이면 3 을 받는다. 기댓값은?{/quiz}
+{answer}$E = 1 \cdot \frac12 + 3 \cdot \frac12 = 2$.{/answer}
+
+== 관련 문서 ==
+* [[지표 확률변수]] · [[기대값의 선형성]] · [[기하분포]] · [[random variable]]
+* [[expected running time]] · [[두 시나리오]] · [[randomized worst-case]]

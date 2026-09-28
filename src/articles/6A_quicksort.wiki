@@ -1,0 +1,48 @@
+key: quicksort
+title: quicksort (퀵정렬, 결정론적 버전)
+category: 6강 Randomized I, 알고리즘
+---
+== 개요 ==
+[[pivot]] 을 하나 고르고, 그보다 작은 것/큰 것으로 나눈 뒤([[partition_about_pivot]]), '''양쪽'''에 재귀하는 [[divide and conquer]] 정렬. L4 의 [[select]] 가 한쪽만 재귀했던 것과 대비된다. combine 단계는 아무 일도 안 한다 — 나누기만 계속하면 자연히 정렬된다. L6 p.17 의 버전은 '''항상 첫 원소'''를 피벗으로 하는 결정론적 quicksort 다.
+
+{def}
+L6 p.11: "If the list has 0 or 1 elements it's sorted. Otherwise, choose a pivot and partition around it. Recursively apply quicksort to the sublists to the left and right of the pivot."
+{/def}
+<pre class="c">
+def quicksort(A):
+  if len(A) <= 1:
+    return
+  pivot = A[0]                                   # 항상 첫 원소
+  left, right = partition_about_pivot(A, pivot)  # 작은 것 / 큰 것
+  quicksort(left)
+  quicksort(right)
+</pre>
+[[img:L6-15.png|L6 p.16 — [0 11 7 4 8 3 2 9 6 10 5 1] → 피벗 5 로 분할 → 피벗 2, 7 로 분할 …|medium]]
+{warn}
+L6 p.12–16 예제의 첫 피벗 5 는 배열의 첫 원소가 아니다(첫 원소는 0). 5 는 그림에서 골라진(chosen) 피벗이다 — 해설본의 "피벗 = 리스트 첫 원소 5" 는 오류. p.17 코드(`pivot = A[0]`)를 이 배열에 그대로 돌리면 첫 피벗은 0 이고, left = [], right = 나머지 11 개가 된다.
+{/warn}
+
+{analogy}
+'''키 순서로 줄 세우기 — 반장 기준.''' 아무나 한 명(피벗)을 세우고 "너보다 작은 사람은 왼쪽, 큰 사람은 오른쪽" 이라 외친다. 그러면 반장은 '''이미 최종 자리'''에 선 것이다. 왼쪽 무리, 오른쪽 무리에서 또 반장을 뽑아 반복. 반장을 항상 "맨 앞 사람"으로 뽑으면, 이미 키 순으로 서 있던 줄에서는 매번 한 명씩만 떨어져 나가 오래 걸린다.
+{/analogy}
+
+{|
+! || [[select]] (L4) || quicksort (L6)
+|-
+| 재귀 || 피벗의 '''한쪽'''만 || '''양쪽''' 모두
+|-
+| 목표 || k 번째 원소 하나 || 전체 정렬
+|-
+| 좋은 피벗일 때 || $T(n) = T(n/2) + O(n) = O(n)$ || $T(n) = 2T(n/2) + O(n) = O(n \log n)$
+|-
+| 나쁜 피벗일 때 || $O(n^2)$ || $O(n^2)$
+|}
+결정론적 quicksort 의 worst-case $\Theta(n^2)$ (L6 p.17): 이미 정렬된(또는 역순) 입력이면 `A[0]` 이 매번 최솟값(최댓값)이라 한쪽이 텅 빈다 → [[quicksort의 좋은 경우와 나쁜 경우]].
+{exam}
+교수(9/17): "select 는 한쪽만 재귀, quicksort 는 '''양쪽 모두 재귀'''. combine 단계는? — '''아무 것도 안 한다'''." deterministic quicksort 의 worst-case 입력은 역순(또는 정렬된) 리스트: n + (n−1) + … = $\Theta(n^2)$.
+{/exam}
+[[sim:randomized_quicksort]]
+시뮬레이터의 "항상 첫 원소" 옵션은 슬라이드 배열에서 비교 42 회, "정렬 입력 + 첫 원소" 는 66 회 $= \frac{12 \cdot 11}{2}$ (worst).
+
+== 관련 문서 ==
+* [[randomized quicksort]] · [[quicksort의 좋은 경우와 나쁜 경우]] · [[in-place partition]] · [[QuickSort vs MergeSort]] · [[select]] · [[mergesort]]

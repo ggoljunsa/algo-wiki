@@ -1,0 +1,47 @@
+key: quicksort의 좋은 경우와 나쁜 경우
+title: quicksort 의 좋은 경우와 나쁜 경우 (L6 p.19–22)
+category: 6강 Randomized I, 용어
+---
+== 개요 ==
+"Initial Observations" — [[quicksort]] 의 수행 시간은 피벗이 얼마나 가운데에 떨어지느냐에 달렸다. 양 극단을 점화식으로 풀어 두 경계를 잡는다: 매번 [[median]] 이면 $O(n \log n)$, 매번 최솟값/최댓값이면 $O(n^2)$. [[randomized quicksort]] 의 기대값은 이 사이 어디일까? → 좋은 쪽($n \log n$)이라는 게 L6 의 증명.
+
+{def}
+L6 p.20: "There's a really good case, in which partition always picks the median element as the pivot. $T(0) = T(1) = \Theta(1)$, $T(n) = 2T(\lfloor n/2 \rfloor) + \Theta(n)$ (Runtime of partition) $= O(n \log n)$."
+L6 p.22: "There's a really bad case, in which partition always picks the smallest or largest element as the pivot. $T(n) = T(n-1) + \Theta(n) = O(n^2)$ (Iteration method)."
+{/def}
+[[img:L6-20.png|L6 p.21 — 좋은 경우와 나쁜 경우의 점화식|medium]]
+
+{analogy}
+'''케이크 나누기.''' 매번 정확히 반으로 자르면 몇 번(log n 단계) 만에 한 입 크기가 된다. 매번 가장자리 한 조각만 떼어 내면 n 번 잘라야 하고, 자를 때마다 남은 케이크 전체를 들고 있어야(partition 비용) 한다.
+{/analogy}
+
+<pre class="txt">
+'''좋은 경우 — 매번 median 이 피벗'''
+T(n) = 2T(⌊n/2⌋) + Θ(n)
+[[master method 매개변수|a]] = 2, b = 2, d = 1, b^d = 2  → a = b^d (균형) → O(n^d log n) = O(n log n)
+
+'''나쁜 경우 — 매번 최솟값/최댓값이 피벗'''
+T(n) = T(n-1) + Θ(n)
+     = T(n-2) + Θ(n-1) + Θ(n)
+     = …                                      ← [[iteration method]]
+     = Θ(1) + Θ(2) + … + Θ(n) = Θ(n(n+1)/2) = O(n^2)
+</pre>
+{warn}
+'''슬라이드 오타 (p.20–22)''': 세 장 모두 "Master method a = 1, b = 2, d = 1" 이라 적혀 있다. 점화식 $2T(n/2)$ 는 부분 문제 '''2개''' → '''a = 2''' 가 맞다. a = 1 이면 $1 < 2^1$ 이라 master method 결과가 $O(n)$ 이 되어 결론 $O(n \log n)$ 과 모순. 시험에서는 a = 2 로 쓸 것.
+{/warn}
+{|
+! 경우 || 피벗 || 분할 || 점화식 || 결과 || L4 의 대응
+|-
+| 좋음 || median || n/2 : n/2 || $2T(n/2) + \Theta(n)$ || $O(n \log n)$ || select 이상적 $T(n/2) + O(n) = O(n)$
+|-
+| 나쁨 || 최소/최대 || 0 : n−1 || $T(n-1) + \Theta(n)$ || $O(n^2)$ || select 불운 $O(n^2)$
+|}
+{quiz}
+매번 피벗이 정확히 1:9 로 나눈다면 $T(n) = T(n/10) + T(9n/10) + \Theta(n)$. 결과는 좋은 쪽인가 나쁜 쪽인가?
+{/quiz}
+{answer}
+재귀 트리의 각 레벨 합이 $\le cn$ 이고 깊이가 $\log_{10/9} n = O(\log n)$ 이므로 $O(n \log n)$ — 좋은 쪽. "정확히 반" 이 아니어도 '''일정 비율'''로만 쪼개지면 $n \log n$ 이다. 이것이 랜덤 피벗이 평균적으로 잘 되는 직관.
+{/answer}
+
+== 관련 문서 ==
+* [[quicksort]] · [[randomized quicksort]] · [[master method 세 케이스]] · [[iteration method]] · [[피벗 시나리오 3종]]

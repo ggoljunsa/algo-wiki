@@ -1,0 +1,48 @@
+key: counts 배열
+title: counts 배열 (counts[v] = 값 v 의 등장 횟수)
+category: 5강 Linear Sorting, 용어
+---
+{def}
+`counts = [0] * k` / `counts[A[i]] += 1` — [[counting sort]] 의 보조 배열. 길이 k, '''인덱스 = 값''', 칸의 내용 = 그 값이 A 에 몇 번 나왔는지. (L5 p.17, p.22–30)
+{/def}
+
+== 이름에서 개념 끌어내기 ==
+"counts" = 개수들. 핵심은 '''값을 인덱스로 쓴다'''는 것: A[i] = 3 이면 counts[3] 칸을 +1. 그래서 A 의 값이 0..k−1 정수여야 한다(음수·실수·너무 큰 수는 인덱스가 안 됨). 교수 표현(9/17): "one-to-one mapping from each value to the specific index of new data structure."
+
+{analogy}
+'''신발장.''' 신발 사이즈가 230, 235, … 처럼 정해진 칸 번호라면, 신발끼리 비교할 필요 없이 사이즈 칸에 넣고 칸마다 켤레 수만 적으면 된다. 칸 번호 = 값, 칸에 적힌 수 = counts.
+{/analogy}
+
+== 예제 — 칸이 차오르는 순서 (p.22–30) ==
+{|
+! 읽은 원소 || counts[0] || counts[1] || counts[2] || counts[3]
+|-
+| (시작) || 0 || 0 || 0 || 0
+|-
+| A[0]=0 || 1 || 0 || 0 || 0
+|-
+| A[1]=0 || 2 || 0 || 0 || 0
+|-
+| A[2]=3 || 2 || 0 || 0 || 1
+|-
+| A[3]=1 || 2 || 1 || 0 || 1
+|-
+| A[4]=1 || 2 || 2 || 0 || 1
+|-
+| A[5]=3 || 2 || 2 || 0 || 2
+|-
+| A[6]=1 || 2 || 3 || 0 || 2
+|-
+| A[7]=0 || '''3''' || '''3''' || '''0''' || '''2'''
+|}
+[[img:L5-28.png|p.30 — counts = [3,3,0,2] 완성|medium]]
+counts 의 합 = 3+3+0+2 = 8 = n (모든 원소가 정확히 한 번 세어짐).
+[[anim:counting_sort_flow|원소가 하나씩 counts[값] 칸으로 떨어져 막대가 3,3,0,2 로 자라는 앞부분을 보자]]
+[[sim:counting_sort]]
+
+== 비용 ==
+만들기 `[0] * k` → $\Theta(k)$, 채우기 → $\Theta(n)$, 풀기(둘째 루프) → $\Theta(k)$ 번 반복 + 총 n 개 extend → $\Theta(n + k)$ → [[Θ(n+k)]]. 공간 $\Theta(k)$ — k 가 크면 메모리 낭비([[비교 기반 정렬을 여전히 쓰는 이유]]).
+bucket sort 는 이 "값 하나 = 칸 하나"를 "값 여러 개 = 버킷 하나"로 느슨하게 한 것 → [[bucket sort]], [[num_buckets와 k]].
+
+== 관련 문서 ==
+* [[counting sort]] · [[Θ(n+k)]] · [[bucket sort]] · [[get_bucket]]

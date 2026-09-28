@@ -1,0 +1,39 @@
+key: comparison-based sorting
+title: comparison-based sorting (비교 기반 정렬)
+category: 5강 Linear Sorting, 용어
+---
+{def}
+"'''Comparison-based algorithms''' use 'comparisons' to achieve their output." — "insertion_sort and merge_sort are comparison-based sorting algorithms. Linear-time select is a comparison-based algorithm. Later, we'll see a randomized comparison-based sorting algorithm called quick_sort." (L5 p.7)
+원소에 대해 알 수 있는 것이 '''두 원소의 대소 비교 결과(YES/NO)뿐'''인 정렬. 값 자체를 인덱스로 쓰거나 자릿수를 뜯어보지 않는다.
+{/def}
+[[img:L5-05.png|p.7 — insertion_sort 가 하는 비교: "Is 3 < 4?", "Is 1 < 4? Is 1 < 3?"|medium]]
+
+== 이름에서 개념 끌어내기 ==
+'''comparison-based''' = "비교에 기반한". 알고리즘이 입력에 접근하는 창구가 "a < b ?" 질문 하나뿐이라는 뜻이다. 이 제약 덕분에 모든 비교 정렬을 하나의 모형([[decision tree]])으로 묶어 분석할 수 있고, 그 결과가 [[Ω(n log n) 하한]]이다.
+
+{analogy}
+'''눈 가리고 저울만 쓰는 정렬.''' 추의 무게를 직접 읽을 수 없고, 양팔 저울에 두 개씩 올려 "어느 쪽이 무겁나"만 볼 수 있다. 몇 번 저울질해야 전부 줄 세울 수 있을까? 이것이 하한 질문이다. 반면 [[counting sort]] 는 추에 무게가 '''숫자로 적혀''' 있다고 가정하고 그 숫자 칸에 바로 넣는다 — 저울을 쓰지 않는다.
+{/analogy}
+
+== 분류 ==
+{|
+! 알고리즘 || 비교 기반? || worst-case || 강의
+|-
+| [[insertion sort]] || O || $\Theta(n^2)$ || L1
+|-
+| [[mergesort]] || O || $\Theta(n \log n)$ (optimal) || L3
+|-
+| [[linear-time selection]] || O (정렬은 아님) || $\Theta(n)$ || L4
+|-
+| [[quicksort]] / [[randomized quicksort]] || O (randomized) || expected $O(n \log n)$ || L6
+|-
+| [[counting sort]], [[bucket sort]], [[radix sort]] || '''X''' || $\Theta(n+k)$ 등 || L5
+|}
+(bucket sort 는 버킷 '''안'''을 stable_sort 로 정렬할 때 비교를 쓸 수 있다 → [[bucket sort의 최악 케이스]].)
+[[anim:decision_tree_leaves|비교 한 번 = 트리의 갈림길 하나. a, b, c 세 원소의 비교가 6 개 리프로 갈라지는 것을 보자]]
+{exam}
+정의 → 용어 문제 대비: 9/17 복습의 첫 문장 "comparison-based sorting 은 두 원소를 비교해서 순서를 찾는다". 그리고 counting sort 에 대해 "'''comparison-based 가 아니다'''".
+{/exam}
+
+== 관련 문서 ==
+* [[decision tree]] · [[Ω(n log n) 하한]] · [[genie 비유]] · [[deterministic algorithm]] · [[linear-time sorting]] · [[비교 기반 정렬을 여전히 쓰는 이유]] · [[정렬 문제]] · [[L5 Linear-Time Sorting]]

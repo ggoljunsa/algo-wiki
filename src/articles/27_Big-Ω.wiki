@@ -1,0 +1,52 @@
+key: Big-Ω
+title: Big-Ω (Ω 표기) — lower bound
+category: 2강 Analysis II, 용어
+---
+== 개요 ==
+[[Big-O]] 의 거울상. $T(n) = \Omega(g(n))$ 은 "충분히 큰 n 에서 T(n) 이 g(n) 의 상수배 '''이상'''" — 증가율의 '''하한'''이다. 슬라이드의 한마디: "'''Switched these!'''"
+
+{def}
+L2 p.21–22: "Big-Ω notation is a mathematical notation for '''lower-bounding''' a function's rate of growth." "We say 'T(n) is Ω(g(n))' if g(n) grows '''at most''' as fast as T(n) as n gets large." Formally,
+$$T(n) = \Omega(g(n)) \iff \exists\, c, n_0 > 0 \text{ s.t. } \forall n \ge n_0,\ 0 \le c \cdot g(n) \le T(n)$$
+— "Switched these!" (Big-O 정의에서 T(n) 과 c·g(n) 의 자리를 바꿈)
+{/def}
+[[img:L2-23.png|L2 p.23 — "the pink line given by c·g(n) is below the yellow line for all values to the right of n₀"|medium]]
+
+{analogy}
+'''최저임금'''. "시급은 최소 c·g(n) 이상" — 사장(T(n))이 얼마를 주든 n₀ 이후로는 그 선 '''밑으로 내려가면 안 된다'''. Big-O 가 "넘으면 안 되는 천장"이라면 Big-Ω 는 "뚫으면 안 되는 바닥"이다.
+{/analogy}
+
+[[anim:bigo_graph|앞부분의 Big-O 장면 뒤, 부등호가 뒤집히며 c·g(n) 이 T(n) 아래로 내려가는 Big-Ω 장면에 주목하자]]
+
+== Big-O 와 나란히 ==
+{|
+! || [[Big-O]] || Big-Ω
+|-
+| 뜻 || upper bound (천장) || lower bound (바닥)
+|-
+| 정의 부등식 || $0 \le T(n) \le c\,g(n)$ || $0 \le c\,g(n) \le T(n)$
+|-
+| 그래프 || c·g(n) 이 T(n) 위 || c·g(n) 이 T(n) 아래
+|-
+| 증명에서 c || 보통 '''큰''' c (위에서 누르기) || 보통 '''작은''' c (아래에서 받치기)
+|-
+| 대표 예 || insertion sort worst-case $O(n^2)$ || insertion sort best-case $\Omega(n)$ (L2 p.34)
+|-
+| 과목 안 다른 예 || — || 비교 정렬의 [[Ω(n log n) 하한]] (L5)
+|}
+
+== 증명 예 — HW1 2-b ==
+<pre class="txt">
+'''명제:''' n² = Ω(6n√n + 4n)
+c = 1/10, n₀ = 1 로 잡는다.
+n ≥ 1 이면 √n ≥ 1 → n ≤ n√n → 6n√n + 4n ≤ 10n√n
+양변 × 1/10:  (1/10)(6n√n + 4n) ≤ n√n
+n ≥ 1 이면 √n ≤ n → n√n ≤ n²
+∴ ∀ n ≥ 1: 0 ≤ (1/10)(6n√n + 4n) ≤ n²   ∎
+</pre>
+{tip}
+$T(n) = \Omega(g(n))$ 과 $g(n) = O(T(n))$ 은 같은 말이다(c 를 1/c 로 바꾸면 됨). 헷갈리면 O 로 바꿔 생각하자.
+{/tip}
+
+== 관련 문서 ==
+* [[Big-O]] · [[Big-Θ]] · [[c와 n₀]] · [[upper bound와 lower bound]] · [[삽입 정렬의 best-case]] · [[L2 Algorithmic Analysis II]]

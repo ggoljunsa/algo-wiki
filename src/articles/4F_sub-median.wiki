@@ -1,0 +1,40 @@
+key: sub-median
+title: sub-median (그룹 median — 5개짜리 작은 그룹의 가운데 값)
+category: 4강 D&C II, 용어
+---
+{def}
+"Find the '''sub-median''' of each small group." (L4 p.74) — "Find the sub-median of each of the groups (yellow) and recursively call select to find the median of these sub-medians (pink)." (p.79)
+[[5개씩 그룹]]으로 나눈 각 그룹의 [[median]]. 그룹이 5개면 3 번째(0-index 2), 자투리 그룹이 3개면 2 번째.
+{/def}
+
+== 이름에서 개념 끌어내기 ==
+'''sub-''' = 부분. 전체 리스트의 median 이 아니라 '''부분(그룹)의 median'''. 이 sub-median 들을 모아 다시 median 을 구한 것이 [[median of medians]] 다. 슬라이드 그림에서 sub-median 은 '''노란색''', median of medians 는 '''분홍색'''.
+
+{analogy}
+'''반장 선거 → 전교 회장 선거.''' 5명씩 반을 짜서 반마다 "가운데 성적" 학생(sub-median, 반장)을 뽑고, 반장들 중 가운데를 회장(median of medians)으로 뽑는다. 반장은 자기 반의 2명보다 확실히 성적이 높고 2명보다 확실히 낮다 — 이 "확실히"가 [[3n/10 논증]]의 재료다.
+{/analogy}
+
+== 예제 (p.79) ==
+{|
+! 그룹 || 원소 || 정렬 || sub-median
+|-
+| 1 || [2,11,9,3,13] || [2,3,'''9''',11,13] || 9
+|-
+| 2 || [5,16,4,6,12] || [4,5,'''6''',12,16] || 6
+|-
+| 3 || [17,23,10,7,21] || [7,10,'''17''',21,23] || 17
+|-
+| 4 || [8,18,15,1,20] || [1,8,'''15''',18,20] || 15
+|-
+| 5 (자투리) || [22,19,14] || [14,'''19''',22] || 19
+|}
+sub-medians = [9,6,17,15,19] → median = '''15''' (median of medians).
+[[img:L4-79.png|p.79 — 노란 칸이 sub-median, 분홍 칸(15)이 median of medians|medium]]
+[[anim:mom_grid|각 열이 세로로 정렬되며 가운데 칸(sub-median)에 동그라미가 쳐지는 부분을 보고, 아래 시뮬레이터에서 sub-median 목록을 확인하자]]
+[[sim:median_of_medians]]
+
+== 비용 ==
+그룹 크기가 5 이하 상수이므로 한 그룹의 median 을 어떤 방법(예: 삽입 정렬)으로 찾든 $O(1)$. 그룹이 $\lceil n/5 \rceil$ 개 → 전체 $O(n)$. 최종 점화식의 $O(n)$ 항에 포함된다.
+
+== 관련 문서 ==
+* [[median of medians]] · [[5개씩 그룹]] · [[3n/10 논증]] · [[median]] · [[닭과 달걀 문제]]

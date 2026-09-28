@@ -1,0 +1,55 @@
+key: O임을 증명하기
+title: O임을 증명하기 — c 와 n₀ 를 내밀어라
+category: 2강 Analysis II, 증명
+---
+== 개요 ==
+$T(n) = O(g(n))$ 을 형식적으로 증명하는 방법(L2 p.16–17). 정의가 "∃ c, n₀" 이므로 '''구체적인 c, n₀ 를 하나 제시하고 부등식을 보이면''' 끝난다. Ω 도 똑같이 한다. HW1 2번의 기본기.
+
+{def}
+L2 p.16: "To prove T(n) = O(g(n)), '''show that there exists a c and n₀ that satisfies the definition'''."
+L2 p.17 예: "Suppose T(n) = n and g(n) = n log(n). We prove that T(n) = O(g(n)). Consider the values c = 1 and n₀ = 2. We have n ≤ c·n log(n) for n ≥ n₀ since n is positive and 1 ≤ log n for n ≥ 2."
+{/def}
+[[img:L2-20.png|L2 p.20 — 위쪽 절반이 O 증명 예(c = 1, n₀ = 2), 아래쪽이 반증 예|medium]]
+
+{analogy}
+'''"이 방에 들어갈 수 있는 열쇠가 있다"를 증명하기'''. 가장 확실한 방법은 '''열쇠를 실제로 꺼내서 문을 여는 것'''이다. ∃ 명제의 증명은 증거물(witness) c, n₀ 를 손에 쥐여 주는 것 — "아마 있을 것이다"는 증명이 아니다.
+{/analogy}
+
+== 답안 템플릿 ==
+<pre class="txt">
+'''Claim:''' T(n) = O(g(n)).
+'''Proof.''' c = □, n₀ = □ 로 잡는다.
+n ≥ n₀ 이면
+   T(n) ≤ (부풀리기 1) ≤ (부풀리기 2) ≤ … ≤ c · g(n)
+또한 T(n) ≥ 0.
+∴ ∀ n ≥ n₀: 0 ≤ T(n) ≤ c · g(n). 정의에 의해 T(n) = O(g(n)).  ∎
+</pre>
+
+== 예제들 ==
+<pre class="txt">
+'''(L2 p.17)''' n = O(n log n):  c = 1, n₀ = 2.  n ≥ 2 → log n ≥ 1 → n ≤ n log n.  ∎
+'''(L2 p.25 Claim I)''' (3/2)n² + (5/2)n − 3 = O(n²):
+   (3/2)n² + (5/2)n − 3 < (3/2)n² + 5n² + n² = (15/2)n²,  ∀ n ≥ 1
+   → c = 15/2, n₀ = 1.  ∎
+'''(HW1 2-a)''' log log n = O(log² n):  c = 1, n₀ = 2.
+   n ≥ 2 → x = log n ≥ 1 → log log n = log x ≤ x = log n ≤ log² n.  ∎
+</pre>
+[[sim:bigo_witness]]
+
+{quiz}
+'''HW1 2번 (a)(b)(d) — O/Ω 방향 증명''' (정의를 써서 형식적으로):
+(a) $\log\log n = O(\log^2 n)$ (b) $n^2 = \Omega(6n\sqrt n + 4n)$ (d) $\log(n!) = \Theta(n\log n)$
+{/quiz}
+{answer}
+(a) c = 1, n₀ = 2. n ≥ 2 이면 x := log n ≥ 1, 모든 x ≥ 1 에서 log x ≤ x 이므로 log log n ≤ log n, 그리고 log n ≥ 1 이면 log n ≤ log² n. ∴ 0 ≤ log log n ≤ 1·log² n. ∎
+(b) c = 1/10, n₀ = 1. n ≥ 1 이면 n ≤ n√n 이므로 6n√n + 4n ≤ 10n√n → (1/10)(6n√n + 4n) ≤ n√n ≤ n². ∎ (검산 n=1: 1 ≤ 1)
+(d) '''O 방향''' c = 1, n₀ = 1: n! 의 n 개 인수가 모두 ≤ n → n! ≤ nⁿ → log(n!) ≤ n log n.
+'''Ω 방향''' c = 1/4, n₀ = 4: 큰 절반 인수 n, n−1, …, ⌊n/2⌋+1 (≥ n/2 개)이 모두 ≥ n/2 → n! ≥ (n/2)^(n/2) → log(n!) ≥ (n/2)(log n − 1). n ≥ 4 면 log n ≥ 2 라 log n − 1 ≥ (1/2)log n → log(n!) ≥ (1/4) n log n. ∎ 자세히는 [[log(n!)]].
+{/answer}
+
+{warn}
+흔한 감점: ① c, n₀ 를 숫자로 안 적음 ② "n 이 크면" 같은 말로 부등식 체인을 건너뜀 ③ n₀ 이전 값을 확인 안 해 n₀ 에서 부등식이 깨짐 (예: log log n 은 n = 1 에서 정의 안 됨 → n₀ = 2).
+{/warn}
+
+== 관련 문서 ==
+* [[O가 아님을 증명하기]] · [[c와 n₀]] · [[Big-O]] · [[L2 연습 Claim]] · [[HW1 복기]] · [[로그 계산법]]

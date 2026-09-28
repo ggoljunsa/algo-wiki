@@ -1,0 +1,32 @@
+key: INSERT/DELETE/SEARCH
+title: INSERT / DELETE / SEARCH — 사전(dictionary) 연산 세 가지
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+L7 이 목표로 하는 세 연산. "We are interested in putting nodes with keys into a data structure that supports fast INSERT/DELETE/SEARCH." 이 세 연산을 지원하는 자료구조를 사전(dictionary)이라 부르고, L7 은 셋 다 expected $O(1)$ 인 [[hash table]] 을 만든다.
+
+{def}
+L7 p.8: "We are interesting in putting nodes with keys into a data structure that supports fast INSERT/DELETE/SEARCH. • INSERT 5 • DELETE 4 • SEARCH 52 — HERE IT IS"
+{/def}
+[[img:L7-08.png|L7 p.8 — Goal: 키 2, 5, 4, 52 가 든 구름(data structure)에 INSERT 5, DELETE 4, SEARCH 52|medium]]
+
+{analogy}
+'''전화번호부 앱.''' 연락처 추가(INSERT), 삭제(DELETE), 이름으로 검색(SEARCH). 연락처가 수천 개여도 검색창에 치는 순간 바로 떠야 한다 — 그게 $O(1)$ 목표.
+{/analogy}
+
+{|
+! 연산 || 뜻 || direct addressing || chaining + random h
+|-
+| INSERT x || 키 x 를 넣는다 || $O(1)$ (칸 x 에) || $O(1)$ (리스트 앞)
+|-
+| DELETE x || 키 x 를 뺀다 || $O(1)$ || expected $O(1)$
+|-
+| SEARCH x || 키 x 가 있나 찾는다 || $O(1)$ || expected $O(1)$, worst $O(n)$
+|}
+L7 의 [[해싱 게임]] 에서 [[adversary]] 는 n 개 원소와 함께 '''이 세 연산의 순서'''(예: "INSERT 13, INSERT 22, INSERT 43, INSERT 92, INSERT 7, SEARCH 43, DELETE 92, SEARCH 7, INSERT 92")를 고른다.
+{exam}
+L7 결론(p.88): "We can build a hash table that supports INSERT/DELETE/SEARCH in '''$O(1)$ expected time''', if we know that only n items are ever going to show up, where n is waaaayyyyyy less than the size M of the universe."
+{/exam}
+
+== 관련 문서 ==
+* [[hash table]] · [[자료구조 비교표]] · [[해싱 게임]] · [[direct addressing]]

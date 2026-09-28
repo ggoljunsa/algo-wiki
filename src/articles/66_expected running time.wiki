@@ -1,0 +1,37 @@
+key: expected running time
+title: expected running time (기대 수행 시간)
+category: 6강 Randomized I, 용어
+---
+== 개요 ==
+[[두 시나리오|Scenario 1]] 에서 정의되는 수행 시간. 입력은 [[adversary]] 가 최악으로 고정하고, 알고리즘이 굴리는 주사위에 대해서만 평균(기댓값)을 낸다. L6 의 "Expected" 칸, L7 의 "$O(1)$ expected" 가 모두 이것이다.
+
+{def}
+L6 p.5: "In Scenario 1, the running time is a random variable. It makes sense to talk about '''expected running time'''."
+교수(9/17): "expected running time has a '''fixed input, but average over random choices'''."
+$$E[T(\text{input})] = \sum_{\text{난수열 } r} P(r) \cdot T(\text{input}, r), \quad \text{input = worst-case}$$
+{/def}
+
+{analogy}
+'''출근 시간.''' 집(입력)은 정해져 있고, 매일 신호등 운(난수)에 따라 출근 시간이 달라진다. "평균 35분 걸린다" 가 expected running time, "모든 신호에 다 걸리면 60분" 이 [[randomized worst-case]]. 집이 가장 먼 사람(worst 입력)을 기준으로 평균을 낸다는 게 포인트.
+{/analogy}
+
+[[anim:expected_vs_worst|Scenario 1 막대 분포의 평균선이 expected running time 이다 — 적이 입력을 바꿔도 이 평균은 보장된다는 것을 확인하자]]
+
+== 계산하는 두 가지 패턴 ==
+{|
+! 패턴 || 어떻게 || 예
+|-
+| 기대 시도 × 시도당 비용 || 성공 확률 p 인 시도를 반복 → 기대 시도 $1/p$ ([[기하분포]]) || [[bogosort]]: $n! \times O(n)$ · [[랜덤 majority]]: $\le 2 \times n$
+|-
+| 지표변수 + 선형성 || 비용을 0/1 사건의 합으로 쪼개고 [[기대값의 선형성]] || [[randomized quicksort]]: $\sum \frac{2}{b-a+1}$ · L7 [[기대 버킷 크기]]: $1 + \frac{n-1}{n}$
+|}
+[[sim:geometric_expectation]]
+{exam}
+L6 p.80 요약표의 Expected 열 — bogosort $O(n \cdot n!)$, randomized quicksort $\Theta(n \log n)$, randomized select $\Theta(n)$, randomized majority-element $O(n)$ — 을 통째로 암기(해설본 ⭐⭐⭐).
+{/exam}
+{warn}
+expected running time ≠ [[average-case]]. average-case 는 '''입력'''에 확률분포를 가정하고, expected 는 '''알고리즘의 난수'''에만 확률을 쓴다. 그래서 expected 보장은 적이 어떤 입력을 줘도 유효하다.
+{/warn}
+
+== 관련 문서 ==
+* [[두 시나리오]] · [[randomized worst-case]] · [[random variable]] · [[확률과 기댓값]] · [[기하분포]] · [[기대값의 선형성]]

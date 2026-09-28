@@ -1,0 +1,39 @@
+key: tight bound
+title: tight bound (딱 맞는 한계)
+category: 2강 Analysis II, 용어
+---
+== 개요 ==
+L2 Claim III(p.27)의 답 "f(n) = O(n) — True ('''tight upper bound''')" 에 나오는 표현. 여러 개의 참인 상한 중 '''가장 정보가 많은''' — 더 줄일 수 없는 — 상한. 위아래가 같은 급으로 맞물리면 [[Big-Θ]] 다.
+
+{def}
+L2 p.27 (Claim III): "Let f(n) = 5n + 12. Which of the following statements are true? 1. f(n) = O(n) '''True (tight upper bound)''' 2. f(n) = O(n log n) True 3. f(n) = O(n²) True 4. f(n) = O(2ⁿ) True"
+tight upper bound = 그 함수의 실제 증가율과 같은 급인 상한. 즉 $T(n) = O(g(n))$ 이면서 $T(n) = \Omega(g(n))$ 도 성립하는 g.
+{/def}
+[[img:L2-27.png|L2 p.27 — Claim III 문제 (답 True×4 는 애니메이션이라 캡처에 안 보임)|small]]
+
+{analogy}
+'''옷 사이즈'''. 키 170 인 사람에게 "2m 이하"(O(n²))도, "3m 이하"(O(2ⁿ))도 틀린 말은 아니지만 아무 쓸모가 없다. "'''170 급'''"(O(n))이라고 말해 줘야 옷을 살 수 있다. tight bound 는 '''몸에 딱 맞는 사이즈'''다.
+{/analogy}
+
+== Claim III 을 사다리로 ==
+{|
+! 명제 || 참? || tight? || 이유
+|-
+| $5n+12 = O(n)$ || True || '''tight''' || $5n+12 = \Theta(n)$ ($c_1 = 5$, $c_2 = 17$, $n_0 = 1$)
+|-
+| $5n+12 = O(n\log n)$ || True || 느슨 || $n\log n$ 이 한 칸 위
+|-
+| $5n+12 = O(n^2)$ || True || 느슨 || 두 칸 위
+|-
+| $5n+12 = O(2^n)$ || True || 매우 느슨 || 지수
+|-
+| $5n+12 = O(\log n)$ || '''False''' || — || $n$ 이 $\log n$ 보다 빨리 자람
+|}
+사다리 순서는 [[증가율 사다리]].
+
+{exam}
+"가장 tight 한 상한을 구하라"(HW1 6번 "tightest")라는 요구가 나오면, O 뿐 아니라 '''같은 g 로 Ω 도 성립함'''을 한 줄 보여야 한다. 예: HW1 6-a $T(n) = 7T(n/2) + \Theta(n^3)$ → $O(n^3)$, 그리고 점화식에 $\Theta(n^3)$ 항이 있으니 $\Omega(n^3)$ → tight.
+{/exam}
+
+== 관련 문서 ==
+* [[Big-Θ]] · [[Big-O]] · [[upper bound와 lower bound]] · [[L2 연습 Claim]] · [[증가율 사다리]]

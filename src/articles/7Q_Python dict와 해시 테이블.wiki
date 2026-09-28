@@ -1,0 +1,40 @@
+key: Python dict와 해시 테이블
+title: Python dict 와 해시 테이블 — "#evensweeterinpractice"
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+L7 p.9 가 해시 테이블의 실전 예로 든 것: Python 의 `dict`, Java 의 `HashSet`/`HashMap`, C++ 의 `unordered_map`. 모두 평균 $O(1)$ INSERT/DELETE/SEARCH 를 제공한다. "Worse worst-case performance, but often great in practice."
+
+{def}
+L7 p.9: "Hash tables: $O(1)$ expected time INSERT/DELETE/SEARCH. Worse worst-case performance, but often great in practice. #evensweeterinpractice — eg, Python's dict, Java's HashSet/HashMap, C++'s unordered_map. Hash tables are used for databases, caching, object representation, …"
+{/def}
+
+{analogy}
+'''매일 쓰는 사전.''' 파이썬에서 `d["apple"]` 를 쓸 때마다 뒤에서 해시 함수가 "apple" 을 버킷 번호로 바꾸고 그 버킷만 들여다본다. 사전이 백만 단어여도 한 번에 찾는 느낌이 드는 이유.
+{/analogy}
+
+<pre class="c">
+d = {}                 # 빈 해시 테이블
+d[13] = "a"            # INSERT  — 평균 O(1)
+d[22] = "b"
+43 in d                # SEARCH  — 평균 O(1)  (False)
+del d[13]              # DELETE  — 평균 O(1)
+</pre>
+{|
+! 언어 || 해시 테이블 || 연산
+|-
+| Python || `dict`, `set` || `d[k] = v`, `k in d`, `del d[k]`
+|-
+| Java || `HashMap`, `HashSet` || `put`, `containsKey`, `remove`
+|-
+| C++ || `unordered_map` || `insert`, `find`, `erase`
+|}
+{info}
+(슬라이드 밖) 실제 Python `dict` 는 chaining 이 아니라 [[open addressing]] 을 쓰고, 해시 함수도 universal family 에서 매번 무작위로 뽑는 방식은 아니다(문자열 해시에는 실행마다 바뀌는 무작위 seed 가 들어간다 — 적의 충돌 공격 방지 목적으로, L7 의 [[해싱 게임]] 과 같은 발상). 시험은 슬라이드의 chaining + $h_{a,b}$ 모델로 나온다.
+{/info}
+{exam}
+[[자료구조 비교표]] 의 결론 한 줄: 해시 테이블은 '''expected $O(1)$ / worst-case $O(n)$''' 이지만 실전에서는 매우 빠르다("often great in practice").
+{/exam}
+
+== 관련 문서 ==
+* [[hash table]] · [[자료구조 비교표]] · [[INSERT/DELETE/SEARCH]] · [[open addressing]]

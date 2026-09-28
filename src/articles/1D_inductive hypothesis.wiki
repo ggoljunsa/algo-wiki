@@ -1,0 +1,36 @@
+key: inductive hypothesis
+title: inductive hypothesis (귀납 가설)
+category: 1강 Analysis I, 용어
+---
+== 개요 ==
+[[귀납법 4요소]]의 첫 번째. "무엇을 증명할지"를 '''i 에 대한 명제'''로 선언하는 줄이다. inductive step 에서 "가정"으로 쓰인다.
+
+{def}
+L1 p.46: "'''Inductive Hypothesis''' The loop invariant holds after the ith iteration."
+L1 p.49 (insertion sort): "The loop invariant(i) holds at the end of iteration i of the outer loop i.e. `A[:i+1]` is sorted."
+귀납 가설 = 반복 i 후에 loop invariant 가 성립한다는 명제 P(i).
+{/def}
+
+{analogy}
+'''"만약 내가 여기까지 무사히 왔다면"'''이라는 가정문. 등산 계획을 세울 때 "3번 대피소까지 왔다고 치자, 그러면 4번까지는 이렇게 간다"고 말하는 그 '''"왔다고 치자"'''가 inductive hypothesis 다. 진짜로 왔는지는 base case 와 step 이 함께 보장한다.
+{/analogy}
+
+== 과목 안의 inductive hypothesis 모음 ==
+{|
+! 증명 || Inductive hypothesis || 무엇에 대한
+|-
+| [[insertion sort]] (L1) || 반복 i 끝에 `A[:i+1]` 정렬 || 반복 i
+|-
+| [[selection sort]] (HW1 3) || 반복 i 시작 시 `A[:i]` 정렬 ∧ `A[:i]` ≤ `A[i:]` ∧ 순열 || 반복 i
+|-
+| [[mergesort]] (L3) || 크기 < n 인 모든 입력을 올바르게 정렬 || 입력 크기 ([[강한 귀납법]])
+|-
+| [[substitution method]] (L3) || 모든 $k < n$ 에 대해 $T(k) \le Ck$ || 입력 크기, [[미정 상수 C]]
+|}
+
+{warn}
+가설은 '''"P(i) 가 성립한다"'''이지 "P(i+1) 이 성립한다"가 아니다. 증명하려는 것을 가정해 버리면 순환논증이다. 또 무엇에 대해(반복 횟수? 입력 크기?) 귀납하는지 명시하자.
+{/warn}
+
+== 관련 문서 ==
+* [[귀납법 4요소]] · [[base case]] · [[inductive step]] · [[귀납법의 결론]] · [[loop invariant]]

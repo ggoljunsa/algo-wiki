@@ -1,0 +1,37 @@
+key: 해시 테이블 공간 복잡도
+title: 해시 테이블 공간 복잡도 — O(n log M) 비트
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+L7 결론(p.88): universal hash family 를 쓰는 chaining 해시 테이블 전체의 공간은 '''$O(n \log M)$ 비트'''. 버킷 O(n) 개 + 원소 O(n) 개 × 원소당 $\log M$ 비트 + 해시 함수 $O(\log M)$ 비트. "M is waaayyyyy bigger than n, but log(M) probably isn't."
+
+{def}
+L7 p.88: "We can build a hash table that supports INSERT/DELETE/SEARCH in O(1) expected time, if we know that only n items are every going to show up, where n is waaaayyyyyy less than the size M of the universe. The space to implement this hash table is $O(n \log(M))$ bits. • O(n) buckets • O(n) items with log(M) bits per item • O(log(M)) to store the hash fn. • M is waaayyyyy bigger than n, but log(M) probably isn't."
+{/def}
+[[img:L7-76.png|L7 p.88 — Conclusion: O(1) expected, O(n log(M)) bits|medium]]
+
+{analogy}
+'''이사 짐 부피.''' 우주에 존재할 수 있는 모든 물건(M) 수만큼 선반을 짓는 대신, 실제 짐(n 개)만큼 선반을 짓고 각 짐에 주소표(log M 비트)를 붙인다. 짐 정리 규칙(해시 함수)은 메모지 한 장(log M 비트). 총 부피 ≈ 짐 개수 × 주소표 크기.
+{/analogy}
+
+<pre class="txt">
+O(n)         버킷 (포인터)
++ O(n)       원소 × log(M) 비트 (키 하나를 적는 데 log M 비트 — [[log(s) 비트]])
++ O(log M)   해시 함수 h_{a,b} (a, b)                    — [[H의 크기]]
+= O(n log M) 비트
+</pre>
+{|
+! 방식 || 공간 || SEARCH
+|-
+| [[direct addressing]] || M 비트 || $O(1)$
+|-
+| chaining + uniformly random h || $O(n \log M)$ + '''$M \log n$''' (h 저장) || expected $O(1)$
+|-
+| chaining + $h_{a,b}$ || '''$O(n \log M)$''' || expected $O(1)$
+|}
+{exam}
+해설본 핵심 요약 10번: 전체 해시 테이블 공간 '''$O(n \log M)$ 비트''' — 세 항(버킷, 원소, 해시 함수)으로 분해해 설명할 수 있어야 한다.
+{/exam}
+
+== 관련 문서 ==
+* [[M과 n]] · [[H의 크기]] · [[log(s) 비트]] · [[hash table]] · [[direct addressing]]

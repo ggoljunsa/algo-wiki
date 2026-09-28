@@ -1,0 +1,46 @@
+key: 귀납법
+title: 귀납법 (proof by induction)
+category: 1강 Analysis I, 용어
+---
+== 개요 ==
+"자연수 하나하나에 대해 참"을 한 번에 증명하는 수학적 도구. 이 과목의 '''모든 correctness 증명'''(loop invariant, recursion invariant)과 '''치환법'''([[substitution method]])이 이것 위에 서 있다. L1 p.46 "Recall, there are four components in a proof by induction." — 교수는 이미 아는 것으로 보고 '''4요소'''로 정리해 준다 → [[귀납법 4요소]].
+
+{def}
+'''Proof by induction''': 명제 $P(i)$ 가 모든 $i \ge i_0$ 에 대해 참임을 보이려면
+# '''Base case''': $P(i_0)$ 가 참
+# '''Inductive step''': $P(i)$ 가 참이면($\leftarrow$ '''inductive hypothesis''') $P(i+1)$ 도 참
+을 보이면 된다. 그러면 '''Conclusion''': 모든 $i \ge i_0$ 에 대해 $P(i)$.
+{/def}
+
+{analogy}
+'''도미노'''. ① 첫 도미노를 넘어뜨린다(base case). ② 어느 도미노든 넘어지면 다음 도미노를 넘어뜨리도록 간격을 맞춘다(inductive step). 그러면 도미노가 백만 개여도 전부 넘어진다(conclusion). 백만 개를 하나씩 확인하지 않는다 — "무한히 많은 입력을 일일이 확인하지 않고"(L1 p.25) 와 같은 말이다.
+{/analogy}
+
+[[anim:loop_invariant_flow|초록 구간이 한 칸씩 늘어나는 것이 곧 도미노가 하나씩 넘어가는 것 — 4요소 라벨이 어느 순간 켜지는지 보자]]
+
+== 이 과목에서 귀납하는 대상 ==
+{|
+! 종류 || 명제 P(·) || 무엇에 대해 || 쓰는 곳
+|-
+| [[loop invariant]] || "반복 i 후 invariant 성립" || 반복 횟수 i || L1 [[insertion sort]], HW1 [[selection sort]], L3 [[merge]]
+|-
+| [[recursion invariant]] || "크기 n 입력에 올바른 답" || 입력 크기 n ([[강한 귀납법]]: 모든 k < n 가정) || L3 [[mergesort]], L4 [[select]]
+|-
+| [[substitution method]] || $T(n) \le Cn$ 같은 상한 || 입력 크기 n || L3 p.108–116, L4 p.101–104, HW1 6-b
+|}
+
+<pre class="txt">
+'''틀 (답안에 그대로):'''
+'''Inductive hypothesis:''' P(i) 가 성립한다고 하자.
+'''Base case:''' P(i₀) 성립 — (직접 확인)
+'''Inductive step:''' P(i) ⇒ P(i+1) — (알고리즘 한 단계가 성질을 보존함을 보임)
+'''Conclusion:''' 마지막 i 에서 P 가 성립 ⇒ 원하는 결론 (정확성 / 상한)
+</pre>
+
+{tip}
+[[강한 귀납법]](strong induction)은 가설을 "P(i)" 가 아니라 "'''모든''' $k < n$ 에 대해 P(k)" 로 잡는다. 재귀 알고리즘은 부분 문제 크기가 n/2, n/5, 7n/10 처럼 n−1 이 아니므로 강한 귀납법이 필요하다(L3).
+{/tip}
+
+== 관련 문서 ==
+* [[귀납법 4요소]] · [[inductive hypothesis]] · [[base case]] · [[inductive step]] · [[귀납법의 결론]]
+* [[loop invariant]] · [[recursion invariant]] · [[강한 귀납법]] · [[귀류법]]

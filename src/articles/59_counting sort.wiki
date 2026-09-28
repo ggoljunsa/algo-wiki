@@ -1,0 +1,82 @@
+key: counting sort
+title: counting sort (값을 인덱스로 세어서 정렬 — Θ(n+k))
+category: 5강 Linear Sorting, 알고리즘
+---
+{def}
+'''Counting Sort''' — "A consists of n integers ranging from 0 to k-1" / Worst-case runtime $\Theta(n+k)$ (L5 p.17–21)
+0..k−1 범위 정수 n 개를, 원소끼리 '''비교하지 않고''' 각 값의 등장 횟수를 세어([[counts 배열]]) 작은 값부터 그 횟수만큼 늘어놓아 정렬한다.
+{/def}
+<pre class="c">
+def counting_sort(A, k):
+  # A consists of n integers ranging from 0 to k-1
+  counts = [0] * k
+  for i in range(len(A)):
+    counts[A[i]] += 1                 # ① 세기: 값 A[i] 를 인덱스로
+  result = []
+  for i in range(k):
+    # Extends result by counts[i] i's
+    result.extend([i] * counts[i])    # ② 풀기: i 를 counts[i] 개
+  return result
+</pre>
+{|
+! 변수 || 뜻 || 예제 값
+|-
+| `A` || 입력, 0..k−1 정수 n 개 || [0,0,3,1,1,3,1,0] (n=8)
+|-
+| `k` || 값의 범위 크기 || 4
+|-
+| `counts` || counts[v] = v 의 개수 ([[counts 배열]]) || [0,0,0,0] → [3,3,0,2]
+|-
+| 첫 루프 `i` || A 의 인덱스 0..n−1 || 8 번 반복
+|-
+| 둘째 루프 `i` || 값 0..k−1 || 4 번 반복
+|-
+| `result` || 출력 || [0,0,0,1,1,1,3,3]
+|}
+[[img:L5-19.png|p.21 — counting_sort 코드, Worst-case runtime Θ(n+k)|medium]]
+
+{analogy}
+'''투표 개표.''' 후보가 0..3 번 네 명이면 칠판에 4 칸을 그리고 표를 한 장씩 읽으며 해당 칸에 바를 정(正) 표시만 한다(①). 표끼리 비교하지 않는다. 다 세면 0 번 후보 표 3 장, 1 번 3 장, … 을 순서대로 쌓으면 정렬 끝(②). 후보 수 k 가 표 수 n 보다 엄청 많으면(예: 주민번호로 투표) 칠판 칸 그리는 데만 시간이 다 간다.
+{/analogy}
+
+== 예제 (p.22–34) ==
+[[img:L5-28.png|p.30 — counts 채우기 완료: [3,3,0,2]|medium]]
+[[img:L5-32.png|p.34 — result = [0,0,0,1,1,1,3,3]|medium]]
+<pre class="txt">
+A = [0, 0, 3, 1, 1, 3, 1, 0],  k = 4
+① A[0]=0 → [1,0,0,0]   A[1]=0 → [2,0,0,0]   A[2]=3 → [2,0,0,1]   A[3]=1 → [2,1,0,1]
+  A[4]=1 → [2,2,0,1]   A[5]=3 → [2,2,0,2]   A[6]=1 → [2,3,0,2]   A[7]=0 → '''[3,3,0,2]'''
+② i=0: +[0,0,0]  i=1: +[1,1,1]  i=2: +[]  i=3: +[3,3]   →  '''[0,0,0,1,1,1,3,3]'''
+비교 0 회, 기본 단계 n + k = 12
+</pre>
+[[anim:counting_sort_flow|원소가 counts[값] 칸으로 떨어져 막대가 자라고, 왼쪽부터 풀려 result 가 되는 흐름을 먼저 보고, 아래 시뮬레이터로 counts 값을 한 줄씩 확인하자]]
+[[sim:counting_sort]]
+
+== 성질 ==
+* 시간 $\Theta(n + k)$ → [[Θ(n+k)]]. k = O(n) 이면 선형.
+* [[comparison-based sorting]] 이 아니므로 [[Ω(n log n) 하한]]과 무관.
+* 공간: counts k 칸 + result n 칸 → not [[in-place]].
+* 이 슬라이드 버전은 값만 다시 만들어 내므로(원소를 옮기지 않음) "안정성"을 따질 대상이 없다. 원소에 딸린 정보(레코드)를 정렬하려면 누적 합을 쓰는 CLRS 8.2 버전이 필요하고 그것은 [[stable sort]] 다(슬라이드 밖).
+{exam}
+9/17 복습: counting sort = "integers… in a short range", 값 → 인덱스 '''one-to-one mapping''', counts 배열을 스캔. "'''comparison-based 가 아니다'''". 해설본 요약: `counts[A[i]] += 1` 세고 순서대로 풀기, $\Theta(n+k)$, k 가 작을 때 유리.
+{/exam}
+
+== 손코딩 빈칸 ==
+{quiz}
+<pre class="c">
+def counting_sort(A, k):
+  counts = [0] * ____(1)____
+  for i in range(len(A)):
+    counts[____(2)____] += 1
+  result = []
+  for i in range(____(3)____):
+    result.extend(____(4)____)
+  return result
+</pre>
+{/quiz}
+{answer}
+(1) `k` (2) `A[i]` — 값 자체가 인덱스 (3) `k` (4) `[i] * counts[i]`
+{/answer}
+
+== 관련 문서 ==
+* [[counts 배열]] · [[Θ(n+k)]] · [[bucket sort]] · [[radix sort]] · [[stable sort]] · [[linear-time sorting]] · [[L5 Linear-Time Sorting]]

@@ -1,0 +1,96 @@
+key: selection sort
+title: selection sort (선택 정렬) — HW1 3번
+category: 1강 Analysis I, 알고리즘, HW1
+---
+== 개요 ==
+슬라이드에는 없고 '''HW1 3번(15점)'''에 나온 알고리즘. 반복 i 마다 아직 정렬 안 된 구간 `A[i:]` 에서 '''최솟값을 찾아(select) 위치 i 로 가져온다'''. L1 의 [[loop invariant]] + [[귀납법 4요소]] 를 [[insertion sort]] 가 아닌 알고리즘에 스스로 적용해 보라는 문제다.
+
+{def}
+'''Selection sort''' (HW1 3번 코드): 바깥 루프 i = 0 … n−2 마다 안쪽 루프가 `A[i:]` 의 최솟값 위치 `min_idx` 를 찾고, `swap(min_idx, i)` 로 A[i] 에 놓는다. 결과적으로 앞부분은 "작은 것부터 확정된 구간"이 된다.
+{/def}
+<pre class="c">
+def selection_sort(A):            # n = len(A)
+    for i in range(len(A)-1):     # i = 0, 1, ..., n-2
+        min_idx = i
+        for j in range(i+1, len(A)):   # j = i+1, ..., n-1
+            if A[j] < A[min_idx]:
+                min_idx = j
+        swap(min_idx, i)
+</pre>
+{|
+! 변수 || 뜻 || 예제 [4,3,1,5,2], i=1 일 때
+|-
+| `i` || 이번에 확정할 자리 || 1
+|-
+| `j` || 안쪽 루프가 훑는 위치 (i+1 … n−1) || 2, 3, 4
+|-
+| `min_idx` || 지금까지 본 `A[i..j−1]` 의 최솟값 위치 || 1 → 4 (A[4]=2)
+|-
+| `A[:i]` || 이미 확정된 앞부분 (전체에서 가장 작은 i 개) || [1]
+|}
+
+{analogy}
+'''키 순서로 줄 세우기 — "가장 작은 사람 나와!"'''. 남은 사람들 중 가장 작은 사람을 찾아 맨 앞 빈자리로 불러내는 일을 반복한다. 이미 불려 나온 사람들은 (1) 서로 키 순서이고 (2) '''남은 누구보다도 작다'''. [[insertion sort]] 는 새 사람을 이미 선 줄 속 알맞은 자리에 끼워 넣는 방식이라, (2) 같은 조건이 필요 없었다.
+{/analogy}
+
+== 예제 추적 [4,3,1,5,2] ==
+<pre class="txt">
+i=0  A[0:] 최솟값 1 (idx 2) → swap(2,0) → [1 | 3 4 5 2]
+i=1  A[1:] 최솟값 2 (idx 4) → swap(4,1) → [1 2 | 4 5 3]
+i=2  A[2:] 최솟값 3 (idx 4) → swap(4,2) → [1 2 3 | 5 4]
+i=3  A[3:] 최솟값 4 (idx 4) → swap(4,3) → [1 2 3 4 | 5]
+바깥 루프 종료 (n−1 = 4 번). 마지막 5 는 자동으로 제자리.
+비교 횟수 = 4 + 3 + 2 + 1 = 10 = n(n−1)/2  (입력과 무관하게 항상)
+</pre>
+[[sim:loop_invariant_check]]
+(시뮬레이터에서 알고리즘 옵션을 selection sort 로 바꾸면 위 네 줄이 나온다.)
+
+== HW1 3번 ==
+{quiz}
+'''HW1 3번 (15점)''': 위 selection_sort 에 대해 (a) 바깥 for 루프의 loop invariant (b) 안쪽 for 루프의 loop invariant 를 쓰고, (c) 바깥 (d) 안쪽 루프의 invariant 를 귀납법(i) Inductive hypothesis ii) Base case iii) Inductive step iv) Conclusion)으로 증명하라.
+{/quiz}
+{answer}
+'''(a) Inv_outer(i)''' — 반복 i 가 '''시작될 때''' (i = 0 … n−1):
+① `A[:i]` 는 정렬돼 있다. ② `A[:i]` 의 모든 원소 ≤ `A[i:]` 의 모든 원소 (= A 전체에서 가장 작은 i 개). ③ A 는 원래 입력의 순열.
+'''(b) Inv_inner(j)''' — 반복 j 가 시작될 때 (j = i+1 … n): i ≤ min_idx < j 이고 `A[min_idx] = min(A[i:j])`.
+
+'''(d) 안쪽 (먼저 증명 — 바깥 증명이 결론을 씀)'''
+* Inductive hypothesis: Inv_inner(j).
+* Base case (j = i+1): `min_idx = i`, 구간 {A[i]} 하나 → 자명.
+* Inductive step: A[j] < A[min_idx] 면 min_idx := j, 가설로 A[j] < A[min_idx] ≤ A[i:j] 의 모든 원소 → min(A[i:j+1]). 아니면 유지, A[min_idx] ≤ A[j] 이므로 여전히 min(A[i:j+1]). 안쪽 루프는 A 를 안 바꿈.
+* Conclusion: j = n 에서 '''A[min_idx] = min(A[i:])'''.
+
+'''(c) 바깥'''
+* Inductive hypothesis: Inv_outer(i).
+* Base case (i = 0): `A[:0]` 은 빈 리스트 → 정렬, ② 공허하게 참, A 는 입력 그대로.
+* Inductive step: (d) 결론으로 A[min_idx] = min(A[i:]). swap 의 두 인덱스는 모두 ≥ i → `A[:i]` 불변, 순열 유지. 새 A[i] 는 원래 `A[i:]` 의 원소이므로 ② 에 의해 `A[:i]` ≤ A[i] → `A[:i+1]` 정렬. 새 A[i] 는 `A[i:]` 의 최솟값이므로 A[i] ≤ `A[i+1:]` → `A[:i+1]` ≤ `A[i+1:]`. ⟹ Inv_outer(i+1).
+* Conclusion: i = n−1 에서 종료. `A[:n−1]` 정렬 ∧ `A[:n−1]` ≤ A[n−1] → '''A 전체 정렬''', 입력의 순열. ∎
+(CLRS: Base case = Initialization, Inductive step = Maintenance, Conclusion = Termination.)
+{/answer}
+
+{exam}
+'''이 문제의 핵심 = invariant ②'''. "`A[:i]` 가 정렬돼 있다"만 쓰면 inductive step 이 막힌다 — A[:i]=[1,9] 가 정렬돼 있어도 남은 원소에 5 가 있으면 [1,9,5]. "앞부분 ≤ 뒷부분"이 있어야 (i) 새 A[i] 가 앞보다 크거나 같고 (ii) 루프가 n−1 번만 돌아도 마지막 원소가 자동으로 제자리라는 conclusion 이 나온다.
+{/exam}
+
+{quiz}
+'''손코딩 빈칸''': `if A[j] < A[________]: min_idx = j` 그리고 루프 끝의 `swap(________, i)`.
+{/quiz}
+{answer}
+`min_idx` / `min_idx`. 비교 대상은 "지금까지의 최솟값" A[min_idx] 이지 A[i] 가 아니다(A[i] 와 비교하면 최솟값이 아니라 "A[i] 보다 작은 마지막 원소"가 뽑힌다).
+{/answer}
+
+== 수행 시간 ==
+{|
+! || selection sort || [[insertion sort]]
+|-
+| 비교 횟수 || 항상 $\frac{n(n-1)}{2}$ || worst $\frac{n(n-1)}{2}$, best $n-1$
+|-
+| worst-case || $\Theta(n^2)$ || $O(n^2)$
+|-
+| best-case || $\Theta(n^2)$ (정렬된 입력도 전부 훑음) || $\Omega(n)$
+|-
+| swap 횟수 || ≤ n−1 || shift 최대 $\frac{n(n-1)}{2}$
+|}
+
+== 관련 문서 ==
+* [[loop invariant]] · [[귀납법 4요소]] · [[insertion sort]] · [[HW1 복기]] · [[L1 Algorithmic Analysis I]]

@@ -1,0 +1,43 @@
+key: linear-time selection
+title: linear-time selection (median-of-medians select — worst-case Θ(n))
+category: 4강 D&C II, 알고리즘
+---
+{def}
+'''Linear-Time Selection''' — "Task: Find the k^th smallest element in an unsorted list in O(n)-time." 최종 알고리즘은 [[select]] 에서 `pivot = random.choice(A)` 를 `pivot = median_of_medians(A)` 로 바꾼 것. "Worst-case runtime $\Theta(n)$" (L4 p.5, p.82, p.107)
+{/def}
+[[img:L4-82.png|p.82 — random.choice(A) 에 줄을 긋고 median_of_medians(A) 로 교체|medium]]
+[[img:L4-108.png|p.108 — Worst-case runtime Θ(n). "Note: back to talking about the same worst-case we saw for insertion sort"|medium]]
+
+== 한 장 요약 ==
+<pre class="c">
+def select(A, k, c=100):
+  if len(A) <= c:
+    return naive_select(A, k)
+  pivot = median_of_medians(A)        # ← 이 한 줄이 "linear-time" 을 만든다
+  left, right = partition_about_pivot(A, pivot)
+  if len(left) == k: return pivot
+  elif len(left) > k: return select(left, k, c)
+  else: return select(right, k-len(left)-1, c)
+</pre>
+{|
+! 질문 || 답 || 문서
+|-
+| ① Does it work? || 입력 길이 귀납법 (pivot 선택법과 무관하게 성립) || [[select의 정확성 증명]]
+|-
+| pivot 은 얼마나 좋은가? || $3n/10 - 4 \le$ len $\le 7n/10 + 3$ || [[3n/10 논증]]
+|-
+| ② Is it fast? || $T(n) \le T(n/5) + T(7n/10) + O(n)$ → 치환법 C = max{7, 10d} → $O(n)$ || [[T(n/5) + T(7n/10) + O(n)]]
+|}
+
+{analogy}
+'''보험 든 여행.''' random pivot 은 "대개 싸게 가지만 가끔 폭탄 요금"인 여행이고, median of medians 는 매번 소액의 보험료(피벗 찾기 $T(n/5)$)를 내는 대신 '''어떤 경우에도''' 요금 상한($\Theta(n)$)이 보장되는 여행이다. 보험료 때문에 상수는 커져서, 실전에서는 L6 의 [[randomized select]] 가 더 흔히 쓰인다.
+{/analogy}
+
+== 의미 ==
+* [[median]] 도 $\Theta(n)$ 에 찾는다 — [[닭과 달걀 문제]]의 해소.
+* 정확성 증명은 pivot 이 무엇이든 성립하므로(세 경우 논리는 pivot 선택과 무관) 그대로 재사용.
+* 난수가 없으므로 이 $\Theta(n)$ 은 '''입력만으로 정해지는''' 보통의 worst-case → [[두 종류의 worst-case]].
+* 모든 [[comparison-based sorting]] 이 $\Omega(n \log n)$ 인 것과 대비: selection 은 정렬보다 '''진짜로''' 쉬운 문제다 ([[L5 Linear-Time Sorting]]; linear-time select 도 comparison-based algorithm 이라고 L5 p.7 이 짚는다).
+
+== 관련 문서 ==
+* [[select]] · [[median of medians]] · [[selection 문제]] · [[3n/10 논증]] · [[T(n/5) + T(7n/10) + O(n)]] · [[randomized select]] · [[L4 Divide and Conquer II]]

@@ -1,0 +1,47 @@
+key: recursion tree method
+title: Recursion tree method (재귀 트리 방법)
+category: 3강 D&C I, 점화식
+---
+== 개요 ==
+[[점화식 풀이 4가지]]의 첫 번째. 재귀 호출을 트리로 그리고, 각 노드에 그 호출이 '''자기 몫으로''' 하는 일을 적은 다음, 레벨별로 더하고 레벨 수를 곱한다. L3 p.66–74. 교수 평가는 "이해용" 이지만, [[master method]] 의 증명 아이디어(p.98)와 [[substitution method]] 의 추측이 모두 여기서 나온다.
+
+{def}
+'''Recursion tree method''': Draw the tree of recursive calls; label each node with the non-recursive work done at that call; sum the work per level; sum across all levels. (L3 p.66–73; 요약은 p.98 "Draw out the tree / Determine the work per level / Sum across all levels")
+재귀 호출 트리를 그리고, 각 노드에 그 호출의 (재귀 제외) 비용을 적고, 레벨별 합을 구해 모든 레벨을 더한다.
+{/def}
+
+{analogy}
+'''회사 조직도로 인건비 계산.''' 사장 1명(cn), 팀장 2명(각 cn/2), 대리 4명(각 cn/4) … 사원 n명(각 c). 한 명씩 더하면 복잡하지만, '''직급(레벨)별로 묶으면''' 모든 직급의 인건비 합이 cn 으로 같다. 직급 수가 $\log_2 n$ 이니 총 인건비는 $cn \log_2 n$ (+ 사원 층 cn).
+{/analogy}
+
+== mergesort 점화식 풀기 (p.66–73) ==
+$T(1) \le c$, $T(n) \le 2T(n/2) + cn$
+[[img:L3-72.png|L3 p.72 — 레벨마다 cn, log₂n levels, Runtime cn log₂n + cn = O(n log(n))|large]]
+<pre class="txt">
+레벨 0   노드 1 개  × 비용 cn          = cn        ("Runtime of merge is c * input size")
+레벨 1   노드 2 개  × 비용 cn/2        = cn
+레벨 2   노드 4 개  × 비용 cn/4        = cn
+  …
+레벨 j   노드 2^j 개 × 비용 cn/2^j     = cn
+  …
+리프     노드 n 개  × 비용 c           = cn
+레벨 수(리프 제외) = log2 n
+'''합 = cn·log2 n + cn = O(n log n)'''        p.73 "Use same reasoning for Ω" → Θ(n log n)
+</pre>
+[[anim:recursion_tree_levels|트리가 한 층씩 자라며 오른쪽에 층 합 cn 이 하나씩 채워지는 것을 보고, 아래 시뮬레이터에서 세 점화식의 층 합 패턴(같음 / 커짐 / 작아짐)을 비교하자]]
+[[sim:recursion_tree_sum]]
+시뮬레이터(n = 8, c = 1, T(1) = 1)의 기대값: $2T(n/2)+n$ → 8, 8, 8 + 리프 8 = 32 · $4T(n/2)+n$ → 8, 16, 32 + 리프 64 = 120 · $T(n/2)+n$ → 8, 4, 2, 1 = 15.
+
+== 일반형으로 보면 master method 가 나온다 ==
+$T(n) = aT(n/b) + cn^d$ 이면 레벨 j 에는 노드 $a^j$ 개, 각 크기 $n/b^j$, 각 비용 $c(n/b^j)^d$ → 레벨 합 $cn^d (a/b^d)^j$. 공비 $a/b^d$ 가 1 보다 작으냐/같으냐/크냐가 곧 [[master method 세 케이스]]다 → [[eternal struggle]].
+
+{tip}
+노드에 적는 것은 T(크기) 가 아니라 '''그 호출이 재귀를 빼고 직접 하는 일'''(mergesort 는 merge 비용 c × 크기)이다. p.66–69 는 크기(n, n/2, …)를 적은 트리, p.70 부터 비용(cn, cn/2, …)으로 바꿔 적는다.
+{/tip}
+{info}
+9/8 수업: iteration method 의 종료 조건 $k = \log_2 n$ 은 "재귀 트리의 깊이와 같다"고 두 방법을 연결했다 → [[iteration method]].
+{/info}
+
+== 관련 문서 ==
+* [[점화식 풀이 4가지]] · [[iteration method]] · [[master method]]
+* [[eternal struggle]] · [[bushy tree와 tall and skinny tree]] · [[이진 트리]]

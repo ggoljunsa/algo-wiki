@@ -1,0 +1,44 @@
+key: correctness
+title: correctness (정확성) — Does it work?
+category: 1강 Analysis I, 용어
+---
+== 개요 ==
+[[두 가지 질문]]의 ①. "알고리즘이 '''모든''' 입력에 대해 올바른 출력을 내는가?" L1 전체가 이 질문에 답하는 방법(귀납법)을 가르친다. L1 p.3 Outline: "Proving correctness with induction — Today!"
+
+{def}
+'''Correctness''' (L1 p.7, p.24–25): "Does this actually work?" — "Is there a way to prove the algorithm works, '''without checking it for all (infinitely many) input lists'''?"
+알고리즘이 가능한 모든 입력에 대해 원하는 출력(정렬 문제라면 입력의 정렬된 순열)을 내고 멈춘다는 성질.
+{/def}
+
+{analogy}
+'''다리 안전 검사'''. 트럭 몇 대 지나가 봤더니 안 무너졌다(예제 테스트)고 안전하다고 할 수 없다. 설계도에서 "하중이 어떻게 들어와도 각 부재가 버틴다"를 계산으로 보여야 한다. 알고리즘도 [4,3,1,5,2] 한 번 돌려 본 것(L1 p.10–21)은 증명이 아니다 — 무한히 많은 입력 전부를 한 번에 덮는 논증이 필요하다.
+{/analogy}
+
+== "obviously it works" 는 왜 부족한가 ==
+L1 p.23: "Ok, obviously it works." → p.24: "'''But it won't be so obvious later''', so let's take some time now to see how to prove that it works rigorously."
+{|
+! 방법 || 무엇을 보이나 || 한계
+|-
+| 예제 실행 (L1 p.10–21) || 입력 하나에서 맞음 || 입력은 무한 → 증명 아님
+|-
+| 직관 ("growing sorted list") || 왜 될 것 같은지 || 나중 알고리즘([[select]], [[median of medians]])은 직관이 안 통함
+|-
+| '''[[invariant]] + [[귀납법]]''' || 모든 입력, 모든 반복에서 성립 || 이 과목의 표준 답안
+|}
+
+== 이 과목의 correctness 증명 레시피 ==
+{|
+! 알고리즘 종류 || 도구 || 무엇에 대한 귀납 || 예
+|-
+| [[iterative algorithm]] || [[loop invariant]] || 반복 횟수 i || [[insertion sort]], [[selection sort]], [[merge]]
+|-
+| [[recursive algorithm]] || [[recursion invariant]] || 입력 크기 n ([[강한 귀납법]]) || [[mergesort]], [[select]]
+|}
+공통 뼈대는 [[귀납법 4요소]] (inductive hypothesis / base case / inductive step / conclusion). 전체 정리는 [[증명 레시피]].
+
+{exam}
+L1 p.59: "Yes, and I promise to write a proof by induction '''if asked to prove correctness formally'''..." — 시험에서 "prove correctness" 라고 나오면 4요소 라벨을 붙인 귀납 증명을 기대한다는 뜻이다.
+{/exam}
+
+== 관련 문서 ==
+* [[두 가지 질문]] · [[runtime]] · [[invariant]] · [[loop invariant]] · [[귀납법 4요소]] · [[L1 Algorithmic Analysis I]]

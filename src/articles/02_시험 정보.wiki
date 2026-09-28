@@ -1,0 +1,113 @@
+key: 시험 정보
+title: 시험 정보 — 일정·범위·과제·교수 강조 (2026-09-28 기준)
+category: 안내
+---
+CSE301 중간고사에 관해 '''지금까지 확인된 사실만''' 적는다. 시험 날짜·범위·형식은 아직 공지되지 않았다 — 추측해서 채우지 않고 "미정" 으로 둔다. 공지가 나오면 이 문서와 과목 폴더의 `_시험정보.md` 를 함께 갱신한다.
+
+== 과목 ==
+{|
+! 항목 || 내용
+|-
+| 과목 || CSE301 Introduction to Algorithms (DGIST, 2026 Fall, 3학년 2학기)
+|-
+| 교수 || Hoon Sung Chwa → [[교수 소개]]
+|-
+| 교재 || [[CLRS]] ''Introduction to Algorithms''
+|-
+| 강의 언어 || 영어 (슬라이드 영어, 이 위키는 한국어 산문 + 영어 용어)
+|-
+| 수업 || 주 2 회, 1 차시는 영상 대체
+|-
+| 출석 || 9/8 수업부터 출석 체크 (9/3 에 "다음 주부터" 예고)
+|}
+
+== 중간고사 ==
+{warn}
+'''날짜: 미정 — 공지되면 갱신.''' '''범위: 미정 — 공지되면 갱신.''' '''형식(서술/객관식, 오픈북 여부, 계산기): 미정 — 공지되면 갱신.''' 성적 비중도 이 위키 자료에서는 확인되지 않았다.
+{/warn}
+참고로 지금까지 나간 진도는 '''L1–L7''' 이고(아래 진도표), 이 위키는 그 7 개 강의를 다룬다. 족보·실제 시험지는 아직 없다.
+
+== 진도표 (_진도.md 기준) ==
+{|
+! 차시 || 날짜 || 범위 || 비고
+|-
+| 1 || - || (영상 대체) || 코스 소개
+|-
+| 2 || ~8/27 || L1 Algorithmic Analysis I || 삽입 정렬, 루프 불변식, 귀납법 → [[L1 Algorithmic Analysis I]]
+|-
+| 3 || ~9/1 || L2 Algorithmic Analysis II || Big-O/Ω/Θ, worst/best case → [[L2 Algorithmic Analysis II]]
+|-
+| 4 || 9/3 (목) || L3 p.1–74 || 머지소트, recursion invariant, 점화식, 재귀 트리까지 (녹음 `0903_04_컴알_L3_DivideConquer1.txt`) → [[L3 Divide and Conquer I]]
+|-
+| 5 || 9/8 (월) || L3 p.75–117 완료 → L4 시작 || 반복법·마스터 정리·치환법 완주, 출석 체크 시작 (녹음 `0908_05_컴알.txt`)
+|-
+| 6 || 9/10 (목) || L4 전체 완료 || median of medians, 치환법으로 O(n) 증명, HW1 공지 (녹음 `0910_06_컴알.txt`) → [[L4 Divide and Conquer II]]
+|-
+| 7 || 9/15 (화) || L5 Linear-Time Sorting 전체 || 녹음 없음, 9/17 복습에서 확인 → [[L5 Linear-Time Sorting]]
+|-
+| 8 || 9/17 (목) || L5 복습 10분 → L6 p.1–약 p.42 || 녹음 `0917_08_컴알_L6_Randomized1.txt`, Reading CLRS 5, 7, 9.2 → [[L6 Randomized Algorithms I]]
+|-
+| 9 || 9/22 (화) || HW1 팀 발표 → L6 p.51–80 완료 || randomized select 는 CLRS 9.2 자습 (녹음 `0922_09_컴알_L6_Randomized1_후반.txt`)
+|-
+| 10 || 9/24 (목) || L7 Randomized Algorithms II — Hash tables (추정) || 녹음 없음 → 진도 미확인 → [[L7 Randomized Algorithms II]]
+|-
+| 11 || 9/29 (화) || L7 마무리 또는 L8 (예상) ||
+|}
+
+== 과제 ==
+=== HW1 ===
+{|
+! 항목 || 내용
+|-
+| 게시 || 9/11 LMS (9/10 수업에서 공지)
+|-
+| 형식 || 개인 과제, 6 문제 100 점, 손글씨(종이/태블릿) PDF `HW1_학번_이름.pdf`, 풀이 과정 채점
+|-
+| 마감 || '''9/18(금) 23:59''', 지각 마감 9/20(일) 23:59
+|-
+| 팀 발표 || 9/22(화), 문제 3~6, 4 개 팀, 팀당 5 분, 슬라이드 영어, 팀 무작위 배정
+|-
+| 문제 || 1 O/Ω/Θ 표(8) · 2 형식 증명/반증(12) · 3 selection sort loop invariant(15) · 4 세 알고리즘 비교·교차점(25) · 5 inversion O(n log n)(25) · 6 점화식 두 개(15)
+|}
+풀이와 해설 → [[HW1 복기]].
+
+== 교수가 녹음에서 강조한 것 ==
+{exam}
+'''"구분할 수 있어야 한다" (9/17, 9/22 녹음)'''
+* [[Las Vegas와 Monte Carlo]]: Las Vegas = 정답 보장·시간 랜덤 / Monte Carlo = 시간 보장·정답 확률적. "둘의 차이를 구분할 수 있어야 한다."
+* [[expected running time]] vs [[randomized worst-case|worst-case running time]]: Scenario 1(적이 입력만, 난수 평균) vs Scenario 2(적이 주사위까지). → [[두 시나리오]]
+* 입력이 정하는 worst-case(삽입 정렬) vs 입력 + 난수가 정하는 worst-case(랜덤 피벗 select) (9/10). → [[두 종류의 worst-case]]
+{/exam}
+{exam}
+'''"이것만 기억하면 된다" / 반복 강조 (9/3, 9/8, 9/10)'''
+* 점화식 풀이 4 가지 중 "'''master method 와 substitution method 만 기억하면 충분'''" — 재귀 트리·반복법은 이해용. → [[점화식 풀이 4가지]]
+* master method 는 공식을 외우기 전에 '''왜 세 케이스가 나오는지'''(eternal struggle) 이해해야 한다. → [[eternal struggle]]
+* master method 의 '''전제: 모든 부분 문제 크기가 같다'''. 다르면 치환법. → [[master method의 한계]]
+* 치환법: "C 를 아직 모르지만 증명 과정에서 찾아낸다". → [[미정 상수 C]]
+* 재귀 알고리즘 분석 3 단계: 점화식으로 표현 → closed-form → 점근 분석. → [[점화식]]
+* 반복 알고리즘은 iteration 에, 재귀 알고리즘은 input size 에 귀납. → [[반복 vs 재귀 증명 표]]
+* median of medians 설계 동기: "linear time median 은 못 찾으니 '''close enough''' 한 피벗으로 타협". → [[median of medians]]
+{/exam}
+{exam}
+'''L5 복습(9/17) 에서 교수가 되물은 것 = L5 시험 포인트'''
+* 하한 논리 한 문장: decision tree → 리프 ≥ n! → 깊이 ≥ log(n!) = Ω(n log n) → mergesort 는 asymptotically optimal. → [[Ω(n log n) 하한]]
+* 선형 시간 정렬 = 입력 가정의 대가: counting(좁은 범위, one-to-one) / bucket(균등 분포, many-to-one) / radix(LSD 먼저, '''stability''' 필요). → [[linear-time sorting]]
+{/exam}
+{exam}
+'''L6 의 가장 긴 설명(9/17, 약 25분)''': randomized quicksort 기대 비교 횟수 — 비교 횟수 세기 → 모든 쌍은 0/1 회 → $X_{a,b}$ → 선형성 → $\frac{2}{b-a+1}$ (6 과 10, 사이의 7,8,9) → 조화급수 → $O(n\log n)$. → [[quicksort 기대 비교 횟수 증명]]
+{/exam}
+
+== 다음 수업 전 체크리스트 (진도표) ==
+# L7 이 9/24 에 어디까지 나갔는지 확인 (녹음 없음). [[L7 Randomized Algorithms II]] 의 p.30–41 과 p.59–72 를 훑어 둘 것.
+# L6 의 두 쌍 구분: Las Vegas / Monte Carlo, expected / worst-case.
+# Randomized quicksort 기대 시간 증명을 백지에 재현.
+# Randomized select 기대 시간은 CLRS 9.2 자습 — 한 줄 답: 랜덤 피벗이 중앙 절반 범위에 떨어질 확률 ≥ 1/2. → [[randomized select]]
+# Majority element: 정의(⌊n/2⌋+1 이상, 12 개면 7 개), D&C $T(n) = 2T(n/2) + O(n)$, 랜덤 기대 시도 $1/p < 2$ → $2n$.
+# 읽기: CLRS 5, 7, 9.2 (L6) · CLRS 11 (L7) · CLRS 8.1–8.2 (L5) · CLRS 9 (L4) · CLRS 2.3.1 (L3).
+
+{analogy}
+🎭 '''일기예보 게시판.''' 이 문서는 확정된 것(과제 마감, 진도)만 적고, 아직 모르는 것(시험 날짜)은 "미정" 으로 비워 두는 게시판이다. 추측으로 채운 예보는 우산을 두고 나가게 만든다.
+{/analogy}
+
+== 관련 문서 ==
+* [[읽는 순서]] · [[HW1 복기]] · [[공식·점화식 모음]] · [[자주 틀리는 함정 모음]] · [[교수 소개]] · [[CLRS]]

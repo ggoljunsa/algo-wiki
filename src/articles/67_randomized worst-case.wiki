@@ -1,0 +1,39 @@
+key: randomized worst-case
+title: randomized worst-case (랜덤 알고리즘의 worst-case running time)
+category: 6강 Randomized I, 용어
+---
+== 개요 ==
+[[두 시나리오|Scenario 2]] 에서 정의되는 수행 시간: [[adversary]] 가 입력을 고르고 '''주사위까지 고정'''했을 때의 시간. 더 이상 랜덤이 아니므로 한 값이다. 결정론적 알고리즘의 worst-case(입력만 최악)와 이름은 같지만 정하는 요소가 하나 더 많다 → [[두 종류의 worst-case]].
+
+{def}
+L6 p.5: "In Scenario 2, the running time is not random. We call this the '''worst-case running time''' of the randomized algorithm."
+슬라이드 메모(p.9, 18, 43): "'''Think of this as the adversary chooses the randomness.'''"
+{/def}
+[[img:L6-17.png|L6 p.18 — Randomized Quicksort 의 Worst-case Θ(n²) 옆 메모 "Think of this as the adversary chooses the randomness."|medium]]
+
+{analogy}
+'''조작된 윷놀이.''' 윷가락이 공정하면 평균 몇 번 만에 끝나는지 말할 수 있지만(expected), 상대가 윷가락을 조작해 매번 "도"만 나오게 하면 게임이 가장 길어진다. 그 가장 긴 길이가 randomized worst-case. bogosort 처럼 "계속 실패"가 가능한 알고리즘은 이게 $\infty$ 다.
+{/analogy}
+
+[[anim:expected_vs_worst|Scenario 2 장면에서 적이 주사위 눈까지 고정해 수행 시간이 한 값(최악)으로 굳는 것을 보자]]
+
+{|
+! 알고리즘 || 적이 고정하는 주사위 || worst-case
+|-
+| [[bogosort]] || 셔플이 영원히 정렬 안 됨 || $O(\infty)$
+|-
+| [[randomized quicksort]] || 매번 최솟값/최댓값이 피벗 || $\Theta(n^2)$
+|-
+| [[randomized select]] || 매번 가장 나쁜 피벗 || $\Theta(n^2)$
+|-
+| [[랜덤 majority]] || 매번 majority 가 아닌 원소를 찍음 || $O(\infty)$
+|-
+| [[hash table]] (random h) || h 가 n 개를 한 버킷에 || 연산당 $O(n)$
+|}
+{exam}
+교수(9/17): "피벗을 랜덤으로 바꿔도 '''worst-case 는 여전히 $n^2$''' — 적이 주사위를 고정하면 항상 최악 피벗. 하지만 expected 는 $n \log n$ 으로 내려간다." 한 알고리즘에 worst 와 expected 두 값을 '''따로''' 적을 수 있어야 한다(p.80 요약표).
+{/exam}
+L6 p.48–49 "Better Quicksort?": randomized quicksort 도 여전히 worst $O(n^2)$ → [[median of medians]] 로 피벗을 고르면 worst 도 $O(n \log n)$.
+
+== 관련 문서 ==
+* [[두 시나리오]] · [[expected running time]] · [[두 종류의 worst-case]] · [[worst-case와 best-case]] · [[adversary]]

@@ -1,0 +1,38 @@
+key: M과 n
+title: M 과 n (L7 의 두 크기)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+'''주의: L7 의 n 은 L1–L6 의 n(입력 크기)과 다르다.''' L7 에서 $M = |U|$ 는 가능한 키 전체의 개수(universe 크기, 엄청 큼), n 은 '''실제로 등장하는 키의 최대 개수이자 버킷 수'''다. 둘 다 크기지만 규모가 완전히 달라서 $M \gg n$ 이 모든 논증의 전제다.
+
+{def}
+L7 p.25: "We have a universe U, of size M — at most n of which will show up. M is waaaayyyyyy bigger than n. We will put items of U into n buckets."
+{/def}
+[[img:L7-25.png|L7 p.25 — U (size M) 의 원소를 n 개 버킷으로, h(x) = least significant digit|medium]]
+
+{analogy}
+'''M = 도서관이 살 수 있는 세상 모든 책, n = 이번 학기 수업 교재 수(= 책꽂이 칸 수).''' 세상의 책은 헤아릴 수 없지만(M), 이번 학기 필요한 건 몇십 권(n)이고, 칸도 그만큼만 만든다.
+{/analogy}
+
+{|
+! 기호 || L7 에서의 뜻 || 규모 || 어디에 쓰이나
+|-
+| M || $\lvert U \rvert$, 가능한 키 개수 || 엄청 큼 ($128^{140}$) || 비둘기집 $M/n > n$, 소수 $p \ge M$, 공간 $\log M$
+|-
+| n || 등장 키 최대 개수 = 버킷 수 || 작음 || 충돌 확률 $\le 1/n$, 버킷 크기 $1 + \frac{n-1}{n}$
+|-
+| (L1–L6 의 n) || 입력 리스트 길이 || — || $T(n)$, $O(n \log n)$ …
+|}
+<pre class="txt">
+공간 비교 (M, n 으로)
+direct addressing       : M 비트
+uniformly random h 저장 : log(n^M) = M log n 비트
+h_{a,b} 저장            : log(p(p-1)) = O(log M) 비트
+해시 테이블 전체        : O(n log M) 비트      ← "M is waaayyyyy bigger than n, but log(M) probably isn't."
+</pre>
+{exam}
+해설본 ⭐⭐ 용어 정리: "U 크기 M, 등장 최대 n, M ≫ n, 미리 모름". 공간 식에서 M 과 n 이 어디에 들어가는지(M log n vs log M vs n log M)를 헷갈리지 말 것.
+{/exam}
+
+== 관련 문서 ==
+* [[universe U]] · [[버킷]] · [[load factor]] · [[해시 테이블 공간 복잡도]] · [[H의 크기]]

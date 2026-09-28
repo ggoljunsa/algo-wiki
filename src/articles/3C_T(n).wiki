@@ -1,0 +1,39 @@
+key: T(n)
+title: T(n) — 입력 크기 n 에서의 수행 시간
+category: 3강 D&C I, 기호
+---
+== 개요 ==
+'''T(n)''' 은 "길이 n 인 입력에서 알고리즘이 걸리는 시간"을 나타내는 함수 기호다. L3 p.47 에서 [[mergesort]] 에 대해 처음 정의되고, 이후 모든 [[점화식]]의 주인공이 된다. L2 의 [[Big-O]] 정의 "$T(n) = O(g(n))$" 에 나오던 그 T(n) 이기도 하다.
+
+{def}
+"Let '''T(n)''' represent the runtime of mergesort on a list of length n. Extending this notation, T(n/2) is the runtime of mergesort on a list of length n/2 and T(1000) is the runtime of mergesort on a list of length 1000." (L3 p.47)
+T(n) 은 길이 n 리스트에서 mergesort 의 수행 시간. 같은 표기로 T(n/2) 는 길이 n/2, T(1000) 은 길이 1000 에서의 수행 시간.
+{/def}
+
+{analogy}
+'''택시 요금표 f(거리).''' 요금표는 "3km 면 얼마, 10km 면 얼마"를 알려 주는 함수다. T 도 "크기 n 이면 몇 걸음"을 알려 주는 요금표다. 재귀 알고리즘은 "n km 요금 = n/2 km 요금 두 번 + 기본료 n" 처럼 '''자기 요금표를 참조해서''' 요금을 정한다 — 이것이 [[점화식]]이다.
+{/analogy}
+
+== T(n) 으로 mergesort 읽기 (p.47–52) ==
+<pre class="txt">
+mergesort(A)  (길이 n)
+  L = mergesort(A[0:n/2])    → T(⌈n/2⌉)   ([[floor와 ceil]])
+  R = mergesort(A[n/2:n])    → T(⌊n/2⌋)
+  return merge(L, R)         → Θ(n)       (while 최대 n 회)
+────────────────────────────────────────
+T(n) = T(⌈n/2⌉) + T(⌊n/2⌋) + Θ(n),   T(0) = T(1) = Θ(1)
+</pre>
+[[img:L3-52.png|L3 p.52 — "Here's our first recurrence relation!"|medium]]
+
+== T(n) 의 값을 트리로 보기 ==
+T(n) 을 한 번 펼치면 T(n/2) 두 개와 비용 cn, 다시 펼치면 T(n/4) 네 개와 비용 2·(cn/2) … 결국 T(n) = 트리의 모든 노드 비용의 합.
+[[anim:recursion_tree_levels|T(n) 하나가 T(n/2) 둘, T(n/4) 넷으로 펼쳐지며 층 합 cn 이 쌓이는 것을 보자 — T(n) 은 이 트리 전체 비용이다]]
+[[sim:recursion_tree_sum]]
+
+{warn}
+대문자 '''T(n)''' 은 수행 시간 함수, 소문자 '''n''' 은 입력 크기, '''c''' 는 [[점화식 단순화 3단계]]에서 만든 상수, '''C''' 는 [[substitution method]] 의 [[미정 상수 C]] 다. 세 기호를 섞지 말 것. L7 의 n(키 수 = 버킷 수)은 또 다른 뜻이다([[M과 n]]).
+{/warn}
+
+== 관련 문서 ==
+* [[점화식]] · [[closed-form]] · [[runtime]]
+* [[recursion tree method]] · [[iteration method]] · [[master method]]

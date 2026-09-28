@@ -1,0 +1,68 @@
+key: T(n/5) + T(7n/10) + O(n)
+title: T(n) ≤ T(n/5) + T(7n/10) + O(n) (linear-time select 의 최종 점화식 — 치환법으로 O(n))
+category: 4강 D&C II, 점화식
+---
+{def}
+"What's the recurrence relation? $T(n) = n\log(n)$ when $n \le 100$; $T(n) \le T(n/5) + T(7n/10) + O(n)$. '''We can't use Master Theorem! We use substitution method!'''" (L4 p.95–101)
+{/def}
+
+== 각 항은 코드의 어디 (p.96–98) ==
+<pre class="c">
+def select(A, k, c=100):
+  if len(A) <= c:
+    return naive_select(A, k)              # T(n) = n log n  (n <= 100)
+  pivot = median_of_medians(A)             # T(n/5)  : sub-median 리스트에 SELECT 재귀 (+ 그룹 median O(n))
+  left, right = partition_about_pivot(A, pivot)   # O(n)
+  if len(left) == k: return pivot
+  elif len(left) > k: return select(left, k, c)             # T(7n/10)
+  else: return select(right, k-len(left)-1, c)              # T(7n/10)
+</pre>
+{|
+! 항 || 출처 || 크기의 근거
+|-
+| $T(n/5)$ || `median_of_medians(A)` 안의 SELECT || sub-median 이 $\lceil n/5 \rceil$ 개 ([[5개씩 그룹]])
+|-
+| $T(7n/10)$ || 본체의 [[한쪽만 재귀]] || [[3n/10 논증]]: len ≤ $7n/10 + 3$
+|-
+| $O(n)$ || 그룹별 median + [[partition_about_pivot]] || 둘 다 한 번 훑기
+|}
+[[img:L4-97.png|p.97 — T(7n/10) 이 select(left,…)/select(right,…) 에 대응 (노랑)|medium]]
+[[img:L4-98.png|p.98 — O(n) 이 partition_about_pivot 에 대응 (노랑)|small]]
+
+{analogy}
+'''월급의 두 갈래 지출.''' 매달 수입 n 중 n/5 는 적금(피벗 찾기 재귀), 7n/10 은 생활비(본 재귀)로 다음 달에 넘어가고, 나머지 n/10 은 확실히 '''사라진다'''. 넘어가는 돈이 매달 9/10 로 줄어드니 평생 쓰는 총액은 $n(1 + 0.9 + 0.81 + \dots) = 10n$ — 유한한 상수 배. 만약 넘어가는 몫이 정확히 n 이면(mergesort) 매달 같은 금액이 레벨 수만큼 쌓여 $n \log n$ 이 된다.
+{/analogy}
+
+== 왜 master method 가 안 되나 ==
+master method 는 $T(n) = a\,T(n/b) + O(n^d)$ — 부분 문제가 '''모두 같은 크기''' $n/b$ 여야 한다. 여기는 $n/5$ 와 $7n/10$ 두 크기 → b 를 하나로 정할 수 없다 → [[master method의 한계]]. (L3 p.108–116 의 $T(n) = 3n + T(n/5) + T(n/2)$ 와 똑같은 상황 — 그래서 L3 에서 치환법을 배웠다.)
+
+== 치환법 풀이 (p.102–104) ==
+'''Step 1. Guess''': "Linear-time select. Comparing to mergesort recurrence, less than n log(n)" → $O(n)$.
+'''Step 2. Formally prove''':
+<pre class="txt">
+'''Inductive hypothesis:''' T(k) <= C·k for all 1 <= k < n                ("C is some constant we'll have to fill in later!")
+'''Base case:'''          T(k) = k log k <= C·k for all k <= 100
+                     ⇔ C >= log k,  log 100 ≈ 6.64  →  '''C >= 7'''        ("C must be >= log(n) for n <= 100, so C >= 7")
+'''Inductive step:'''     T(n) = T(n/5) + T(7n/10) + dn                     (O(n) 을 상수 d 로)
+                         <= C(n/5) + C(7n/10) + dn                      ← 가설 (n/5, 7n/10 < n)
+                          = (C/5)n + (7C/10)n + dn
+                          = (9C/10)n + dn
+                         <= Cn   ⇔   d <= C/10   ⇔   '''C >= 10d'''         ("C >= 10d works")
+'''Conclusion:'''         C = max{7, 10d} 이면 모든 n > 1 에서 T(n) <= Cn  →  '''T(n) = O(n)'''
+</pre>
+'''Step 3.''' p.104 는 C 자리에 처음부터 max{7, 10d} 를 넣어 다시 쓴다 — "Pretend like we knew it all along" ([[미정 상수 C]]).
+[[img:L4-103.png|p.103 — 치환법: IH T(k) ≤ Ck, base C ≥ 7, step C ≥ 10d, Conclusion C = max{7, 10d}|medium]]
+[[sim:substitution_method]]
+(옵션 "L4 T(n/5)+T(7n/10)+dn" 선택 — base C ≥ 7, step C ≥ 10d → C = max{7, 10d}.)
+{exam}
+해설본 ⭐⭐ + 9/10 수업 마무리 구간 전체. '''세 줄 요약''': ① 크기가 달라 master 불가 ② 가설 $T(k) \le Ck$ ③ $\frac{9C}{10}n + dn \le Cn$ → $C \ge 10d$, base $C \ge 7$ → C = max{7, 10d}. (해설본 🎙 의 "max{7,10}" 은 d 가 빠진 오타.)
+{/exam}
+{quiz}
+만약 그룹을 3개씩 만들어 점화식이 $T(n) \le T(n/3) + T(2n/3) + dn$ 이 되면 위 치환법은 어디서 막히나?
+{/quiz}
+{answer}
+Inductive step: $C(n/3) + C(2n/3) + dn = Cn + dn \le Cn$ 이 되려면 $d \le 0$ — 불가능. 크기 합이 $n$ 이라 선형 가설이 성립하지 않는다(실제로는 $\Theta(n \log n)$). → [[부분 문제 크기의 합]]
+{/answer}
+
+== 관련 문서 ==
+* [[substitution method]] · [[미정 상수 C]] · [[master method의 한계]] · [[부분 문제 크기의 합]] · [[3n/10 논증]] · [[median of medians]] · [[linear-time selection]] · [[공식·점화식 모음]]

@@ -1,0 +1,34 @@
+key: log(s) 비트
+title: log(s) 비트 — s 개 중 하나를 적는 데 필요한 비트 수
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+원소가 s 개인 집합에서 '''하나를 지목'''하려면 $\log_2 s$ 비트면 된다 — 각 원소에 0 부터 s−1 까지 이진수 이름표를 붙이면 되니까. L7 은 이 한 줄로 해시 함수 저장 공간을 잰다: "해시 함수 모음 H 에서 하나를 골라 저장 = $\log|H|$ 비트".
+
+{def}
+L7 p.49: "How much space does it take to store h? Say I have a set S with s things in it. I get to write down the elements of S however I like (in binary). How many bits do I need? — On board: the answer is log(s)."
+그림: "I'll call this one 'Fido' — Or, 01101011" / "This one is named 'Hercules' — Or, 101".
+{/def}
+[[img:L7-47.png|L7 p.49 — 집합 S 의 원소에 이진 이름표 붙이기 (Fido = 01101011, Hercules = 101)|medium]]
+
+{analogy}
+'''스무고개.''' s 개 후보 중 정답 하나를 예/아니오 질문으로 맞히려면 매번 반씩 줄여 $\log_2 s$ 번이면 된다. 그 예/아니오 답을 순서대로 적은 것이 곧 $\log_2 s$ 비트 이름표다.
+{/analogy}
+
+{|
+! 집합 || 크기 s || 하나 저장하는 비트 $\log s$
+|-
+| 모든 해시 함수 $U \to \{1..n\}$ || $n^M$ || $M \log n$
+|-
+| H = {h₀, h₁} (p.55) || 2 || 1
+|-
+| $H = \{h_{a,b}\}$ || $p(p-1) = O(M^2)$ || $O(\log M)$
+|-
+| U 의 원소(키 하나) || M || $\log M$
+|}
+{exam}
+L7 공간 계산 전부가 이 공식 하나에서 나온다: '''$\log(n^M) = M \log n$''' (p.50, ☹) vs '''$\log(M^2) = O(\log M)$''' (p.72, ☺). "We need only log|H| bits to store an element of H." (p.52)
+{/exam}
+
+== 관련 문서 ==
+* [[H의 크기]] · [[uniformly random hash function]] · [[hash family]] · [[해시 테이블 공간 복잡도]] · [[로그 계산법]]

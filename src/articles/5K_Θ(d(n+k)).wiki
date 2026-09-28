@@ -1,0 +1,45 @@
+key: Θ(d(n+k))
+title: Θ(d(n+k)) (radix sort 의 worst-case — 자릿수 d × 라운드 비용 n+k)
+category: 5강 Linear Sorting, 용어
+---
+{def}
+radix_sort: "Worst-case runtime $\Theta(d(n+k))$" (L5 p.51). d = 자릿수(라운드 수), n = 원소 수, k = 한 자리 값의 범위(기수).
+{/def}
+[[img:L5-49.png|p.51 — radix_sort 와 Worst-case runtime Θ(d(n+k))|medium]]
+
+== 유도 ==
+<pre class="txt">
+한 라운드:
+  make_pairs(A, k, i)                    Θ(n)        ← [[make_pairs]] p.52
+  bucket_sort_with_pairs(A_pairs, k, k)  Θ(n + k)    ← num_buckets = k → 재정렬 없음 = [[counting sort]] 와 같음 ([[Θ(n+k)]])
+  한 라운드 합                            Θ(n + k)
+라운드 d 번  →  '''Θ(d(n + k))'''
+예제: d = 3, n = 8, k = 10  →  3 × 18 = 54
+</pre>
+
+{analogy}
+'''자릿수만큼 도는 분류기.''' 편지 n 통을 k 칸 분류기에 한 번 돌리는 데 n + k(편지 넣기 + 칸 비우기)가 들고, 우편번호가 d 자리면 d 번 돌린다. 편지가 많아져도(n) 시간은 비례해서만 늘지만, 우편번호가 길어지면(d) 그만큼 곱해진다.
+{/analogy}
+
+== 언제 선형인가 ==
+{|
+! 조건 || $\Theta(d(n+k))$ || 판정
+|-
+| d, k 가 상수 (예: 3자리 10진수) || $\Theta(n)$ || 선형
+|-
+| $k = O(n)$, d 상수 || $\Theta(n)$ || 선형
+|-
+| 값이 $0..n^c$ 인 정수, k = n 진법 → d = c || $\Theta(cn)$ || 선형 (슬라이드 밖 CLRS 8.3 요령)
+|-
+| 값이 "really big" (예: $n^n$, d ≈ n) || $\Theta(n^2)$ 이상 || 느림 → [[비교 기반 정렬을 여전히 쓰는 이유]]
+|-
+| 무한 자릿수 (π, e) || 끝나지 않음 || 불가
+|}
+[[sim:radix_sort]]
+(시뮬레이터 마지막 단계에서 비용 d(n+k) = 54 확인.)
+{exam}
+해설본 요약: "Radix sort: 자릿수마다(하위 자리부터) bucket sort 반복. $\Theta(d(n+k))$." 유도(라운드당 $n + k$ × d)를 한 줄로 쓸 수 있어야 한다.
+{/exam}
+
+== 관련 문서 ==
+* [[radix sort]] · [[make_pairs]] · [[Θ(n+k)]] · [[counting sort]] · [[비교 기반 정렬을 여전히 쓰는 이유]]

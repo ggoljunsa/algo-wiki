@@ -1,0 +1,39 @@
+key: 한쪽만 재귀
+title: 한쪽만 재귀 (recurse on the left or right sublists, but not both)
+category: 4강 D&C II, 용어
+---
+{def}
+'''Intuition''': "Partition the list about a pivot selected at random, either return the pivot itself or recurse on the left or right sublists '''(but not both)'''." (L4 p.32)
+[[select]] 는 분할 후 답이 있는 '''한쪽 부분 리스트에만''' 재귀하고 다른 쪽은 버린다. [[mergesort]] 가 양쪽 모두 재귀하는 것과 결정적으로 다르다.
+{/def}
+
+== 그림으로 ==
+<pre class="ascii">
+mergesort:  양쪽 다 재귀                select:  한쪽만 재귀 (나머지는 버림!)
+      [........]                           [........]
+      /        \                           /        ×
+  [....]      [....]                   [....]     (버림)
+  /   \       /   \                    /    ×
+ ..   ..     ..   ..                 [..]  (버림)
+점화식 2T(n/2) + O(n) = Θ(n log n)     점화식 T(n/2) + O(n) = Θ(n)
+</pre>
+[[img:L4-13.png|p.13 — 1회차에서 오른쪽 [36,64,49,81] 은 회색(버림), 2회차는 [9,16,4,25] 쪽으로만|medium]]
+
+{analogy}
+'''책에서 쪽 번호로 찾기.''' 가운데를 펼쳐 찾는 쪽이 앞이면 뒤쪽 절반은 '''다시는 안 본다'''. 책 전체를 정리하는(mergesort) 게 아니라 한 쪽만 찾는(select) 거니까. 다음 강의의 [[quicksort]] 는 반대로 "양쪽 다" 정렬해야 해서 같은 분할을 쓰고도 $n \log n$ 이 된다.
+{/analogy}
+
+== 왜 선형이 되나 ==
+* 이상적(반반)이면 $T(n) = T(n/2) + O(n)$ → [[master method]] a = '''1''' (재귀 한 번!), b = 2, d = 1 → $a < b^d$ → $O(n)$. mergesort 는 a = 2 라서 $a = b^d$ → $O(n \log n)$. '''a 가 1 인 것'''이 "한쪽만 재귀"의 수학적 표현이다.
+* 일의 합: $n + n/2 + n/4 + \dots \le 2n$ ([[등비급수]]).
+{info}
+9/8 수업 교수 표현: "Merge sort we need to solve every subproblem, right? But in the selection problem, we don't need to solve every sub-problem. We choose one specific problem at a time."
+{/info}
+[[anim:pivot_partition|버려진 쪽이 회색으로 바뀌는 순간을 주목해서 보고, 아래 시뮬레이터에서 partition 비용 10+6+4 = 20 이 쌓이는 것을 확인하자]]
+[[sim:select_partition]]
+{warn}
+median of medians 를 붙인 최종 select 에는 재귀가 '''두 번'''(median_of_medians 안의 SELECT + 본체의 한쪽 재귀) 있다. 그래도 크기 합이 $n/5 + 7n/10 = 9n/10 < n$ 이라 선형 → [[부분 문제 크기의 합]].
+{/warn}
+
+== 관련 문서 ==
+* [[select]] · [[pivot]] · [[partition_about_pivot]] · [[k-len(left)-1 보정]] · [[mergesort]] · [[master method 매개변수]] · [[부분 문제 크기의 합]]

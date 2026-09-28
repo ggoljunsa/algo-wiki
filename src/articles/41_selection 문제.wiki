@@ -1,0 +1,59 @@
+key: selection 문제
+title: selection 문제 (Selection problem, k 번째로 작은 원소 찾기)
+category: 4강 D&C II, 용어
+---
+{def}
+'''Task''': "Find the k^th smallest element in an unsorted list in O(n)-time." — "SELECT(A,k): return the k'th smallest element in A" (L4 p.5)
+입력은 '''정렬 안 된''' 리스트 A 와 정수 k ($0 \le k \le n-1$), 출력은 A 에서 '''k 번째로 작은 원소'''. k 는 '''0 부터''' 센다(0-index).
+{/def}
+
+== 이름에서 개념 끌어내기 ==
+'''selection''' = "골라내기". 전체를 줄 세우는([[정렬 문제|sorting]]) 대신 '''순위 k 인 원소 하나만''' 골라낸다. 그래서 정렬보다 쉬울 수 있다는 기대가 생긴다 — 정렬은 n 개의 순위를 전부 확정해야 하지만 selection 은 하나만 확정하면 된다.
+
+{analogy}
+'''올림픽 동메달리스트 찾기.''' 결승 기록표를 1위부터 꼴찌까지 전부 정렬할 필요는 없다. "3위(0-index 로 k=2)가 누구냐" 만 알면 된다. 정렬은 "전원의 순위표", selection 은 "특정 순위 한 명 호출".
+{/analogy}
+
+== 슬라이드 예제 (p.5) ==
+[[img:L4-05.png|p.5 — A = [1,64,9,49,16,4,0,25,36,81] 과 SELECT 값들|medium]]
+{|
+! 호출 || 결과 || 특수한 이름
+|-
+| SELECT(A, 0) || 0 || [[MIN과 MAX|MIN(A)]]
+|-
+| SELECT(A, 1) || 1 ||
+|-
+| SELECT(A, 2) || 4 ||
+|-
+| SELECT(A, 3) || 9 || (p.8–15 예제의 답)
+|-
+| SELECT(A, 4) || 16 || = SELECT(A, ⌈10/2⌉−1) = [[median]]
+|-
+| SELECT(A, 9) || 81 || MAX(A) (k = n−1)
+|}
+정렬하면 [0,1,4,9,16,25,36,49,64,81] 이고 SELECT(A,k) 는 그 k 번 칸이다. 이 관찰이 곧 [[naive_select]] 다.
+
+== 왜 중요한가 ==
+* k = 0, n−1 이면 [[MIN과 MAX]] — 한 번 훑기로 $O(n)$.
+* $k = \lceil n/2 \rceil - 1$ 이면 [[median]] — 이것을 $O(n)$ 에 찾을 수 있으면 [[quicksort]] 같은 알고리즘의 [[pivot]] 을 이상적으로 고를 수 있다. 그런데 median 을 찾는 것 자체가 selection 이라서 [[닭과 달걀 문제]]가 생긴다.
+* 결론: [[select]] + [[median of medians]] 로 '''어떤 k 든 worst-case $\Theta(n)$''' ([[linear-time selection]]).
+
+{|
+! 방법 || worst-case
+|-
+| [[naive_select]] (정렬 후 인덱싱) || $\Theta(n \log n)$
+|-
+| [[select]] + random pivot || $\Theta(n^2)$ (불운) — 보통은 빠름 ([[randomized select]])
+|-
+| [[select]] + [[median of medians]] || $\Theta(n)$
+|}
+
+{quiz}
+A = [1,64,9,49,16,4,0,25,36,81] 에서 SELECT(A, 6) 과 SELECT(A, ⌈n/2⌉−1) 은?
+{/quiz}
+{answer}
+정렬 [0,1,4,9,16,25,36,49,64,81] → SELECT(A,6) = '''36''', n=10 이므로 ⌈10/2⌉−1 = 4 → '''16''' (median).
+{/answer}
+
+== 관련 문서 ==
+* [[L4 Divide and Conquer II]] · [[select]] · [[naive_select]] · [[median]] · [[MIN과 MAX]] · [[linear-time selection]] · [[정렬 문제]]

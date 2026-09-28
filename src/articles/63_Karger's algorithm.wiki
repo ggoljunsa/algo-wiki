@@ -1,0 +1,31 @@
+key: Karger's algorithm
+title: Karger's algorithm (예고만)
+category: 6강 Randomized I, 용어
+---
+== 개요 ==
+L6 p.4 에서 [[Las Vegas와 Monte Carlo|Monte Carlo]] 알고리즘의 예로 '''이름만''' 나온 알고리즘. "We'll revisit this when we see Karger's algorithm." — 중간고사 범위(L1–L7)에서는 내용을 다루지 않는다.
+
+{def}
+L6 p.4: "Monte Carlo algorithms guarantee runtime, but not correctness. We'll revisit this when we see Karger's algorithm."
+→ 수행 시간은 보장하지만 답이 틀릴 수 있는 Monte Carlo 알고리즘의 대표 예.
+{/def}
+
+{analogy}
+'''영화 예고편.''' 제목과 장르(Monte Carlo)만 보여 주고 내용은 개봉(후반부 graph algorithms) 때 공개한다. 지금 기억할 건 "Karger = Monte Carlo 의 예" 한 줄이다.
+{/analogy}
+
+{|
+! 알아둘 것 || 내용
+|-
+| 어디서 || L6 p.4 한 줄
+|-
+| 분류 || Monte Carlo (runtime 보장, correctness 확률적)
+|-
+| 대비 || 오늘(L6) 알고리즘은 전부 Las Vegas
+|}
+{info}
+(슬라이드 밖 CLRS/일반 지식) Karger's algorithm 은 그래프의 minimum cut 을 무작위 edge contraction 으로 찾는 알고리즘이다. 한 번 돌리면 정해진 시간 안에 끝나지만 최소 컷을 못 찾을 수 있어 여러 번 반복해 성공 확률을 높인다. 시험 범위는 아니다.
+{/info}
+
+== 관련 문서 ==
+* [[Las Vegas와 Monte Carlo]] · [[randomized algorithm]]

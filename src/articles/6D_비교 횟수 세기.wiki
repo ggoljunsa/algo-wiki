@@ -1,0 +1,36 @@
+key: 비교 횟수 세기
+title: 비교 횟수 세기 — 수행 시간 대신 "두 원소가 비교되는 횟수"를 센다
+category: 6강 Randomized I, 용어
+---
+== 개요 ==
+[[randomized quicksort]] 의 기대 시간 증명(L6 p.23–42)의 출발 아이디어. 재귀 호출이 몇 번, 크기가 얼마인지를 따라가는 대신 '''어떤 두 원소가 서로 비교되었는가'''만 센다. quicksort 가 하는 일은 결국 partition, 즉 피벗과 다른 원소의 비교이므로 총 비교 횟수 = 수행 시간(상수배).
+
+{def}
+L6 p.23: "How do we know the expected runtime of quicksort is $O(n \log n)$? To answer this question, let's '''count the number of times two elements get compared'''! This might not seem intuitive at first, but it's an approach you can use to analyze runtime of randomized algorithms."
+L6 p.26: "Each pair of elements a and b is compared 0 or 1 times."
+{/def}
+[[img:L6-24.png|L6 p.25 — 5 는 top 호출에서 모두와 비교되고 다시는 안 됨; 2 는 왼쪽 원소하고만, 7 은 오른쪽 원소하고만 비교|large]]
+
+{analogy}
+'''리그전 대진표.''' 대회 전체 시간을 재는 대신 "몇 경기가 열렸나"를 센다. 각 경기(비교)는 두 선수(원소) 사이에 '''많아야 한 번'''만 열린다 — 한 번 맞붙은 선수 중 하나(피벗)는 그 조에서 빠지고, 다른 조로 갈라진 선수들은 다시는 못 만난다. 그러니 경기 수 = "맞붙은 쌍의 수" 이고, 각 쌍이 맞붙을 확률만 알면 된다.
+{/analogy}
+
+== 관찰 두 가지 (p.24–26) ==
+# 피벗은 자기 부분 리스트의 '''모든''' 원소와 한 번씩 비교되고, 이후 재귀에서 빠진다 → 같은 쌍이 두 번 비교될 일이 없다.
+# 피벗 기준으로 서로 다른 쪽으로 간 두 원소는 '''영원히''' 비교되지 않는다.
+→ "Each pair of elements a and b is compared 0 or 1 times." → 0/1 [[지표 확률변수]] [[X_{a,b}]] 로 표현.
+<pre class="txt">
+[0 11 7 4 8 3 2 9 6 10 5 1], 피벗 5  → 5 는 나머지 11 개와 비교 (11 회)
+[0 4 3 2 1] 5 [11 7 8 9 6 10]
+  피벗 2 → 0,4,3,1 과 비교 (4 회)       피벗 7 → 11,8,9,6,10 과 비교 (5 회)
+  2 와 11 은? 5 에서 갈라졌으므로 영원히 비교 안 됨 → X_{2,11} = 0
+</pre>
+{exam}
+교수(9/17): "quicksort 가 결국 하는 일은 partition, 즉 '''두 원소를 비교하는 것'''. 그러니 재귀 호출 수가 아니라 '''비교 횟수'''를 세자." "Remember, when the two elements are compared, when and with whom?" — 피벗이 될 때, 같은 sub-array 안의 원소와. 이 증명 흐름 자체가 시험에 나올 수 있다(해설본 ⭐⭐⭐).
+{/exam}
+[[anim:quicksort_random_pivot|어떤 쌍이 비교되고 어떤 쌍이 갈라지는지 — 6 과 10 사이 원소 중 누가 먼저 피벗이 되느냐가 결정한다는 것을 보자]]
+[[sim:randomized_quicksort]]
+시뮬레이터는 매 partition 마다 비교 횟수를 누적하고 $X_{a,b} = 1$ 인 쌍을 기록한다(슬라이드 피벗열 총 33 회).
+
+== 관련 문서 ==
+* [[X_{a,b}]] · [[P(X_{a,b}=1)]] · [[quicksort 기대 비교 횟수 증명]] · [[randomized quicksort]]

@@ -1,0 +1,31 @@
+key: open addressing
+title: open addressing (개방 주소법, Aside)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+충돌이 나면 리스트를 만드는 대신 '''다른 빈 버킷으로 튕겨서(bounce)''' 저장하는 해시 테이블 방식. L7 p.27 의 "Aside" 로만 소개되고 "Read in CLRS 11.4 if you are interested!" — 본 강의 분석은 [[chaining]] 기준이다.
+
+{def}
+L7 p.27: "The previous slide is about hash tables with chaining. There's also something called 'open addressing'. Read in CLRS 11.4 if you are interested!"
+{/def}
+[[img:L7-27.png|L7 p.27 — 왼쪽 chaining (13 → 43 chain) / 오른쪽 open addressing (43 이 bounce! 해서 다음 칸으로)|medium]]
+
+{analogy}
+'''영화관 지정석이 차 있으면 옆자리로.''' 내 표의 좌석(h(x))에 누가 앉아 있으면 바로 옆 빈자리로 간다. 줄 서서 한 좌석에 여러 명 겹쳐 앉는(chain) 대신 빈자리를 찾아 이동한다. 찾을 때도 원래 자리부터 옆으로 훑는다.
+{/analogy}
+
+{|
+! || [[chaining]] || open addressing
+|-
+| 충돌 처리 || 같은 버킷 리스트에 매닮 || 다른 빈 버킷으로 bounce
+|-
+| 예 (h = 일의 자리) || 버킷 3: 13 → 43 || 버킷 3: 13, 버킷 4: 43
+|-
+| 범위 || L7 본 내용 || Aside (CLRS 11.4)
+|}
+{info}
+(CLRS 11.4, 슬라이드 밖) 다음 칸을 고르는 규칙으로 linear probing, quadratic probing, double hashing 이 있다. 모든 원소가 테이블 안에 있으므로 [[load factor]] $\alpha \le 1$ 이어야 한다. 시험 범위 외.
+{/info}
+
+== 관련 문서 ==
+* [[chaining]] · [[hash collision]] · [[hash table]]

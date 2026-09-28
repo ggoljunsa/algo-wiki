@@ -1,0 +1,42 @@
+key: 알고리즘
+title: 알고리즘 (algorithm)
+category: 1강 Analysis I, 용어
+---
+== 개요 ==
+이 과목 전체의 대상. L1 p.2 "Last time" 은 첫 시간(오리엔테이션)을 "What is an algorithm? / Why we study algorithms? — '''Fundamental, useful, fun''' / Goal: '''design and analysis''' of algorithms / Algorithm designer's questions" 로 요약한다. 그 "designer's questions" 가 바로 [[두 가지 질문]]이다.
+
+{def}
+'''Algorithm''' (CLRS 1.1 — 슬라이드에는 문장 정의가 없어 교재 원문): "any well-defined computational procedure that takes some value, or set of values, as '''input''' and produces some value, or set of values, as '''output''' in a finite amount of time."
+알고리즘 = 입력을 받아 유한한 시간 안에 출력을 내는, 잘 정의된 계산 절차. 즉 "입력 → 출력" 변환의 '''레시피'''.
+{/def}
+
+{analogy}
+알고리즘은 '''요리 레시피'''다. 재료(입력)가 무엇이든 순서대로 따라 하면 요리(출력)가 나와야 하고(= [[correctness]]), 너무 오래 걸리면 안 된다(= [[runtime]]). 이 과목은 레시피를 '''만드는 법'''(design: [[divide and conquer]], [[randomized algorithm]] …)과 '''검증하는 법'''(analysis: [[loop invariant]], [[Big-O]], [[점화식]] …)을 배운다.
+{/analogy}
+
+<pre class="ascii">
+   입력(input)                    알고리즘                      출력(output)
+ [4, 3, 1, 5, 2]  ──▶  def insertion_sort(A): …  ──▶  [1, 2, 3, 4, 5]
+                        ① Does it work?  → '''[[correctness]]''' 증명
+                        ② Is it fast?    → '''[[runtime]]''' 분석
+</pre>
+
+== 이 과목에서 만나는 알고리즘 ==
+{|
+! 강의 || 문제 || 알고리즘
+|-
+| L1–L2 || [[정렬 문제|sorting]] || [[insertion sort]] (HW1: [[selection sort]])
+|-
+| L3 || sorting, 곱셈 || [[mergesort]], [[Karatsuba 곱셈]]
+|-
+| L4 || [[selection 문제|selection]] || [[select]], [[median of medians]]
+|-
+| L5 || sorting (비교 없이) || [[counting sort]], [[bucket sort]], [[radix sort]]
+|-
+| L6 || sorting, majority || [[randomized quicksort]], [[분할정복 majority]], [[랜덤 majority]]
+|-
+| L7 || 사전(dictionary) || [[hash table]], [[universal hash family]]
+|}
+
+== 관련 문서 ==
+* [[두 가지 질문]] · [[L1 Algorithmic Analysis I]] · [[의사코드 읽는 법]] · [[CLRS]]

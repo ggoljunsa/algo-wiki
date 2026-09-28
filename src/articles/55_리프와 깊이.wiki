@@ -1,0 +1,30 @@
+key: 리프와 깊이
+title: 리프와 깊이 (n! 개 리프 → 깊이 ≥ log₂(n!))
+category: 5강 Linear Sorting, 용어
+---
+{def}
+"This is a binary tree with at least '''n!''' leaves. The shallowest tree with n! leaves is the completely balanced one, which has depth '''log(n!)'''. So in all such trees, the longest path is at least log(n!)." (L5 p.14)
+{/def}
+[[img:L5-12.png|p.14 — 빈칸 채우기 슬라이드: "at least n! leaves", "depth log(n!)"|medium]]
+
+== 두 사실 ==
+=== ① 리프는 최소 n! 개 ===
+입력 n 개의 가능한 순서는 $n!$ 가지([[순열과 n!]]). 알고리즘은 '''어떤 입력에도''' 옳아야 하므로 각 순서마다 그에 맞는 출력 리프가 있어야 한다 → 리프 ≥ $n!$. (9/17 교수: "any input should produce correct output, then we [need] n factorial possible order[s].")
+=== ② 깊이 h 인 이진 트리의 리프는 최대 2^h 개 ===
+각 레벨에서 노드 수가 많아야 2 배 → 깊이 h 면 리프 ≤ $2^h$ ([[이진 트리]]). 따라서
+$$2^h \ge \text{리프 수} \ge n! \quad\Rightarrow\quad h \ge \log_2(n!)$$
+균형 잡힌 트리가 등호에 가장 가깝다("the shallowest tree … is the completely balanced one").
+<pre class="txt">
+n = 3:  리프 ≥ 3! = 6,   2^h ≥ 6  →  h ≥ log2 6 ≈ 2.58  →  h ≥ 3  (세 원소 정렬엔 비교 3 번이 필요한 입력이 반드시 있다)
+n = 4:  리프 ≥ 24,       h ≥ log2 24 ≈ 4.58  →  5
+n = 10: 리프 ≥ 3628800,  h ≥ log2 3628800 ≈ 21.8  →  22    (n log2 n ≈ 33)
+</pre>
+
+{analogy}
+'''토너먼트 대진표.''' 한 경기(비교)마다 두 갈래로 나뉘는 대진표에서 결승까지 h 라운드면 최대 $2^h$ 팀만 수용할 수 있다. n! 가지 "정답 순서"라는 팀을 전부 넣으려면 라운드가 최소 $\log_2(n!)$ 은 필요하다. 대진표를 아무리 영리하게(균형 있게) 짜도 이보다 적게는 안 된다.
+{/analogy}
+[[anim:decision_tree_leaves|3 원소 트리에서 리프 6 개가 깊이 3 에 걸쳐 생기는 것을 보고 "리프 ≥ n! 이면 깊이 ≥ log₂(n!)" 을 확인하자]]
+다음 단계는 $\log(n!) = \Omega(n \log n)$ → [[log(n!)]].
+
+== 관련 문서 ==
+* [[decision tree]] · [[이진 트리]] · [[순열과 n!]] · [[log(n!)]] · [[Ω(n log n) 하한]] · [[로그 계산법]]

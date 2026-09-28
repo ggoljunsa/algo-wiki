@@ -1,0 +1,33 @@
+key: bucket sort의 최악 케이스
+title: bucket sort 의 최악 케이스 (모든 값이 한 버킷에 → Θ(n log n))
+category: 5강 Linear Sorting, 용어
+---
+{def}
+"Worst-case runtime $\Theta(\max\{n\log(n), n+k\})$ — Happens if k > num_buckets and all of the values end up in the same bucket." (L5 p.43) — "In an extreme case, a bucket might receive all of the inserted keys. Suppose k = 3000 and num_buckets = 10. A = [380, 370, 340, 320, 410, …] would need to stable_sort all of the elements in the original list since they all fall in the same bucket." (p.46)
+{/def}
+[[img:L5-44.png|p.46 — k=3000, 10 버킷(폭 300): 380, 370, 340, 320, 410, … 전부 "300-599" 버킷 하나|medium]]
+
+== 왜 n log n ==
+<pre class="txt">
+조건 ① k > num_buckets  →  `if num_buckets < k:` 분기 → 버킷마다 stable_sort
+조건 ② 모든 값이 한 버킷  →  그 버킷 크기 = n
+stable_sort 는 비교 기반 (예: mergesort)  →  Θ(n log n)          ← [[Ω(n log n) 하한]]이 다시 적용됨
+나머지 (분배 Θ(n), 빈 버킷 훑기 Θ(num_buckets) <= Θ(k))
+합계: Θ(n log n) + Θ(n + k)  =  '''Θ(max{n log n, n + k})'''
+</pre>
+고르게 퍼진 경우는 버킷당 상수 개 → 정렬 비용이 버킷당 $O(1)$ → 전체 $\Theta(n + k)$. 즉 bucket sort 의 선형성은 '''값이 고르게 퍼진다는 가정'''에 기대고 있다.
+
+{analogy}
+'''콘서트 입장 게이트 10 개.''' 좌석 구역별로 게이트를 나눴는데 관객 전원이 같은 구역 티켓을 들고 왔다 — 게이트 하나에 줄이 전부 몰려 나머지 9 개는 놀고, 그 한 줄을 일일이 정리해야 한다. 게이트를 늘려도(num_buckets) 구역이 겹치면 소용없다.
+{/analogy}
+[[sim:bucket_sort]]
+(옵션 "p.46 극단 k=3000, 10 버킷" — 전부 한 버킷이라 사실상 전체를 stable_sort.)
+{exam}
+9/17 복습 교수: "모든 원소가 한 bucket 에 몰리면 그게 bucket sort 의 문제." 해설본 ⭐: p.46 이 "Θ(n log n) worst-case 가 나오는 실제 상황". 시험에서 "bucket sort 의 worst-case 와 그 조건"을 물으면 '''k > num_buckets + 전부 한 버킷''' 두 조건을 모두 쓴다.
+{/exam}
+{info}
+L7 해시 테이블에서 "적이 모든 키를 한 [[버킷]]에 몰아넣어 search 가 O(n)" 이 되는 장면([[결정론적 해시 함수의 한계]])과 같은 모양의 약점이다. 거기서는 [[universal hash family]] 의 난수로 막는다.
+{/info}
+
+== 관련 문서 ==
+* [[bucket sort]] · [[num_buckets와 k]] · [[get_bucket]] · [[stable sort]] · [[Ω(n log n) 하한]] · [[결정론적 해시 함수의 한계]]

@@ -1,0 +1,43 @@
+key: k-len(left)-1 보정
+title: k − len(left) − 1 보정 (오른쪽으로 재귀할 때 순위 다시 세기)
+category: 4강 D&C II, 용어
+---
+{def}
+"len(left) < k: There are fewer than k items ≤ to the pivot, so return the '''(k - len(left) - 1)st-smallest''' element of the right half of the list." (L4 p.41) — 코드: `return select(right, k-len(left)-1, c)`
+{/def}
+
+== 이름에서 개념 끌어내기 ==
+오른쪽 부분 리스트 right 로 가면, 원래 리스트에서 그보다 작은 원소 '''len(left) 개 + pivot 1 개'''는 이미 순위가 확정돼 빠졌다. right 안에서는 순위를 0 부터 다시 세므로, 원래 순위 k 에서 그만큼 뺀다.
+$$k_{\text{new}} = k - \text{len(left)} - 1$$
+왼쪽으로 갈 때는 left 앞에 빠진 원소가 없으므로 k 그대로.
+
+{analogy}
+'''줄 선 30명 중 12번째 사람 찾기.''' 앞에서 5명(left) + 기준인 1명(pivot)을 떼어 냈다면, 남은 뒷줄에서는 "12 − 5 − 1 = 6 번째"를 찾으면 된다. 0-index 로 세는 것도 같다.
+{/analogy}
+
+== 슬라이드 예제 (p.13) ==
+<pre class="txt">
+A = [1,9,16,4,0,25], k = 3, pivot = 1
+left = [0]  (len 1),  pivot 1,  right = [9,16,4,25]
+1 은 index 1, k = 3 > 1  →  오른쪽으로
+새 k = 3 − (1 + 1) = '''1'''          ← 슬라이드 표기 "k=3-(1+1)"
+right = [9,16,4,25] 에서 1 번째로 작은 원소 = 9  (정렬 [4, '''9''', 16, 25])
+확인: 원래 A 의 정렬 [0,1,4,'''9''',16,25] 에서 index 3 = 9  ✓
+</pre>
+[[img:L4-13.png|p.13 — "Find element k=3-(1+1) in this half since 1 occupies index 1 and k=3 > 1."|medium]]
+[[anim:pivot_partition|피벗 1 에서 오른쪽으로 넘어가며 k 가 3 → 1 로 바뀌는 순간을 보고, 아래 시뮬레이터 vars 에서 k 값의 변화를 확인하자]]
+[[sim:select_partition]]
+
+{warn}
+자주 틀리는 것: '''−1 을 빼먹기'''(pivot 자신도 순위 하나를 차지한다). −1 을 빼먹으면 예제에서 k = 2 → right 의 정렬 [4,9,16,25] 에서 16 을 반환해 틀린다.
+{/warn}
+
+{quiz}
+select(A, 7) 을 A = [1,64,9,49,16,4,0,25,36,81] 에 호출, 첫 pivot 이 25 라면 다음 호출은?
+{/quiz}
+{answer}
+left = [1,9,16,4,0] (5개), right = [64,49,36,81]. len(left) = 5 < 7 → `select(right, 7 − 5 − 1 = 1)`. right 정렬 [36,'''49''',64,81] → 49. 확인: 전체 정렬 index 7 = 49 ✓.
+{/answer}
+
+== 관련 문서 ==
+* [[select]] · [[한쪽만 재귀]] · [[select의 정확성 증명]] · [[pivot]] · [[partition_about_pivot]]

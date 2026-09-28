@@ -1,0 +1,45 @@
+key: eternal struggle
+title: The Eternal Struggle (영원한 줄다리기)
+category: 3강 D&C I, 점화식
+---
+== 개요 ==
+L3 p.92–98. [[master method 세 케이스]]가 '''왜''' 그렇게 나오는지를 줄다리기 그림 한 장으로 설명한 교수의 직관. 한쪽은 '''branching'''(가지치기 a — 문제 수 폭발), 다른 쪽은 '''shrinking'''(크기 축소 $b^d$ — 아래로 갈수록 일이 작아짐). 누가 이기느냐가 케이스를 정한다.
+
+{def}
+"'''Branching causes the number of problems to explode! The most work is at the bottom of the tree!'''" vs "'''The problems lower in the tree are smaller! The most work is at the top of the tree!'''" (L3 p.93)
+가지치기가 이기면 일의 대부분이 트리 바닥(리프)에, 크기 축소가 이기면 트리 꼭대기(루트)에 몰린다. 비기면 모든 층이 같은 일을 한다.
+{/def}
+[[img:L3-93.png|L3 p.93 — The Eternal Struggle (교수 판서: 개수가 늘어나 / 크기 감소)|medium]]
+
+{analogy}
+'''다단계 피라미드 vs 수수료 삭감.''' 한 사람이 a 명을 모집하면(가지치기) 아래로 갈수록 사람이 폭발적으로 는다. 그런데 한 층 내려갈 때마다 1인당 매출은 $b^d$ 분의 1 로 줄어든다(축소). 층별 총매출은 $(a/b^d)$ 배씩 변한다 — 모집이 이기면 말단 회원들의 총매출이, 삭감이 이기면 꼭대기 한 사람의 매출이 전체를 좌우한다. 딱 비기면 층마다 매출이 같아 "층 수 × 층 매출".
+{/analogy}
+
+== 세 판의 결과 (p.94–97) ==
+{|
+! 판 || 점화식 || a vs $b^d$ || 승자 || 트리 모양 || 결과
+|-
+| 1 || $T(n) = T(n/2) + n$ || 1 < 2 || 크기 축소 (WINNER: Most work at the top) || tall and skinny || $O(\text{work at top}) = O(n)$
+|-
+| 2 || $T(n) = 2T(n/2) + n$ || 2 = 2 || TIE! || just right || $\log n \times O(n) = O(n \log n)$
+|-
+| 3 || $T(n) = 4T(n/2) + n$ || 4 > 2 || 가지치기 (WINNER: Most work at the bottom) || bushy || $O(4^{\text{depth}}) = O(n^2)$
+|}
+[[img:L3-95.png|L3 p.95 — First example: tall and skinny tree, T(n) = O(work at top) = O(n) (판서: n + n/2 + … ≤ 2n)|medium]]
+[[anim:master_struggle|세 판의 줄다리기를 보고, 각 판에서 굵어지는 막대(리프/전 층/루트)가 곧 답의 주인이라는 것을 확인하자]]
+세 점화식을 n = 8 로 직접 더해 보면 층 합의 추세가 보인다: 8,8,8+8 = 32 / 8,16,32+64 = 120 / 8,4,2,1 = 15.
+[[sim:recursion_tree_sum]]
+
+== 식으로 쓰면 ==
+레벨 j: 노드 $a^j$ 개 × 노드당 일 $c(n/b^j)^d$ = $cn^d \cdot (a/b^d)^j$.
+* $a/b^d < 1$: 층마다 줄어듦 → 첫 층(루트 $cn^d$)이 지배 → $O(n^d)$
+* $a/b^d = 1$: 층마다 같음 → $cn^d \times (\log_b n + 1)$ 층 → $O(n^d \log n)$
+* $a/b^d > 1$: 층마다 늘어남 → 마지막 층(리프 $a^{\log_b n} = n^{\log_b a}$ 개)이 지배 → $O(n^{\log_b a})$
+
+{exam}
+9/8 수업(녹음): "'''branching creates more sub-problems … most work is at the bottom'''" (bushy) / "'''the problems lower in the tree become smaller … most work is at the top'''" (top heavy) / balanced. "You can memorize the master method, but you should understand the meaning." — "master method 의 세 케이스가 의미하는 바를 설명하라" 는 서술형에 이 줄다리기 문장과 위 식을 쓰면 된다.
+{/exam}
+
+== 관련 문서 ==
+* [[master method 세 케이스]] · [[bushy tree와 tall and skinny tree]] · [[master method]]
+* [[recursion tree method]] · [[등비급수]]

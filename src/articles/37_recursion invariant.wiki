@@ -1,0 +1,40 @@
+key: recursion invariant
+title: Recursion invariant (재귀 불변식)
+category: 3강 D&C I, 증명
+---
+== 개요 ==
+[[loop invariant]] 의 재귀 버전. 슬라이드에는 이 이름이 없고, 9/3·9/8 수업에서 교수가 붙인 이름이다 — "'''Recursion invariant instead of loop invariant.''' While recursively calling the same function, what is the condition that does not change over this recursion?" [[recursive algorithm]] 의 정확성을 [[입력 크기에 대한 귀납법]]으로 증명할 때 그 '''귀납 가설'''이 곧 recursion invariant 다.
+
+{def}
+'''Recursion invariant''' (9/3 수업): "the condition that does not change over the recursive calls" — 재귀 호출 전체에서 변하지 않는 조건. mergesort 의 경우 "'''In every recursive call, mergesort returns a sorted list.'''" (L3 p.37) — 어떤 크기의 호출이든 정렬된 리스트를 돌려준다.
+{/def}
+
+{analogy}
+'''릴레이 계주의 규칙.''' 누가 바통을 받든(어떤 크기의 호출이든) "받은 구간을 규칙대로 뛰고 넘긴다"는 규칙은 같다. 주자(입력 크기)만 바뀐다. 규칙이 모든 주자에게 지켜지면 전체 레이스가 규칙대로 끝난다. L1 의 loop invariant 가 '''같은 주자가 트랙을 도는 바퀴마다''' 지켜지는 규칙이라면, recursion invariant 는 '''크기가 다른 주자마다''' 지켜지는 규칙이다.
+{/analogy}
+
+== loop invariant 와 비교 ==
+{|
+! || [[loop invariant]] (L1) || recursion invariant (L3)
+|-
+| 무엇에 대해 불변? || 반복(iteration) 번호 i || 재귀 호출의 '''입력 크기'''
+|-
+| 귀납 대상 || 반복 횟수 || 입력 길이 ([[입력 크기에 대한 귀납법]])
+|-
+| 예 || insertion sort: "A[:i+1] is sorted" || mergesort: "길이 1~i 입력을 올바르게 정렬한다"
+|-
+| base case || i = 0 (첫 반복 전) || 길이 1 (또는 작은 상수)
+|-
+| 증명 형태 || [[귀납법 4요소]] || [[귀납법 4요소]] — "the process is almost same"
+|}
+
+[[anim:mergesort_split_merge|어느 층의 상자든 "정렬된 리스트를 돌려준다"는 약속이 같다는 것을 확인하자 — 층(입력 크기)만 바뀐다]]
+[[sim:mergesort_tree]]
+
+{exam}
+9/3 수업: "So what changes over the recursion? '''Only input size''', right? Recursion invariant focusing on the input size rather than the number of iterations." / 9/8 요약: "for iterative algorithm we define loop invariant and apply mathematical induction; for recursive, '''we define recursion invariant with respect to the input size''' and then apply the mathematical induction to prove the correctness." — 이 대비 한 쌍이 서술형 답안의 첫 문장이다.
+{/exam}
+
+== 관련 문서 ==
+* [[loop invariant]] · [[invariant]] · [[입력 크기에 대한 귀납법]]
+* [[mergesort]] · [[증명 레시피]] · [[반복 vs 재귀 증명 표]]

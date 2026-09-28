@@ -1,0 +1,54 @@
+key: 점화식 단순화 3단계
+title: 점화식 단순화 3단계 (Simplification 1·2·3)
+category: 3강 D&C I, 점화식
+---
+== 개요 ==
+L3 p.57–62. mergesort 의 원래 점화식 $T(n) = T(\lceil n/2 \rceil) + T(\lfloor n/2 \rfloor) + \Theta(n)$ 은 Θ 기호와 floor/ceil 때문에 계산하기 불편하다. 세 번의 단순화로 $T(1) \le c$, $T(n) \le 2T(n/2) + cn$ 이라는 깔끔한 형태로 만든 뒤 푼다.
+
+{def}
+'''Simplification 1''': Using the definition of Big-Θ, rewrite Θ(1) and Θ(n) terms.
+'''Simplification 2''': n is a power of 2.
+'''Simplification 3''': c = max{c1, c2}. (L3 p.58–60)
+{/def}
+
+{analogy}
+'''영수증 정리.''' ① "대략 몇 천 원"(Θ)을 "최대 c₂ 원"으로 확정하고, ② 반올림 때문에 생기는 1원 차이(⌈ ⌉, ⌊ ⌋)를 무시하려고 금액을 딱 떨어지는 단위(2의 거듭제곱)로 맞추고, ③ 여러 단가(c₁, c₂)를 가장 비싼 단가 하나(c)로 통일한다. 계산은 쉬워지고, 나온 합계는 여전히 '''상한'''이다.
+{/analogy}
+
+== 단계별 ==
+<pre class="txt">
+원래 (p.57)        T(0) = Θ(1),  T(1) = Θ(1),  T(n) = T(⌈n/2⌉) + T(⌊n/2⌋) + Θ(n)
+
+Simplification 1   Θ 의 정의 → 상수로 위에서 누르기                             ([[Big-Θ]], [[c와 n₀]])
+                   T(1) ≤ c1
+                   T(n) ≤ T(⌈n/2⌉) + T(⌊n/2⌋) + c2·n
+
+Simplification 2   n 은 2 의 거듭제곱 → ⌈n/2⌉ = ⌊n/2⌋ = n/2                     ([[2의 거듭제곱 가정]])
+                   T(n) ≤ 2T(n/2) + c2·n
+
+Simplification 3   c = max{c1, c2} → 상수 하나로
+                   '''T(1) ≤ c'''
+                   '''T(n) ≤ 2T(n/2) + cn'''                (T(0) 은 지워짐 — p.60 에서 줄이 그어져 있다)
+</pre>
+[[img:L3-60.png|L3 p.60 — 세 단순화를 모두 적용한 최종형 (T(0) = Θ(1) 은 취소선)|medium]]
+이 최종형이 [[recursion tree method]] · [[iteration method]] 의 출발점이다(p.66, 76 오른쪽 위에 계속 붙어 있다).
+[[sim:recursion_tree_sum]]
+
+== 각 단계가 정당한 이유 ==
+{|
+! 단계 || 왜 괜찮나
+|-
+| 1 (Θ → c) || $\Theta(n)$ 이면 정의상 어떤 상수 $c_2$ 에 대해 (충분히 큰 n 에서) $\le c_2 n$. 상한을 구하는 중이므로 $\le$ 로 바꿔도 된다(Ω 쪽은 같은 논리로 $\ge$, p.73 "Use same reasoning for Ω").
+|-
+| 2 (n = 2^k) || floor/ceil 은 1 차이 이하라 점근 결과를 바꾸지 않는다. [[master method]] 도 p.91 에서 "n/b 를 ⌊n/b⌋ 또는 ⌈n/b⌉ 로 읽어도 정리 성립"이라 명시.
+|-
+| 3 (c = max) || $c_1 \le c$, $c_2 \le c$ 이므로 부등식이 더 느슨해질 뿐 여전히 참.
+|}
+
+{warn}
+Simplification 3 의 '''c''' (소문자, 점화식 상수)와 [[substitution method]] 의 '''C''' (대문자, 증명 중 결정하는 [[미정 상수 C]]), L2 의 [[c와 n₀]] 의 c 는 역할이 다르다. 여기 c 는 "알고리즘이 한 원소당 하는 일의 상한"이다.
+{/warn}
+
+== 관련 문서 ==
+* [[점화식]] · [[2의 거듭제곱 가정]] · [[floor와 ceil]]
+* [[Big-Θ]] · [[recursion tree method]]

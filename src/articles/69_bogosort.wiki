@@ -1,0 +1,55 @@
+key: bogosort
+title: bogosort — 정렬될 때까지 섞기
+category: 6강 Randomized I, 알고리즘
+---
+== 개요 ==
+"Randomly permutes A until it's sorted." 리스트를 무작위로 섞고, 정렬됐으면 끝, 아니면 다시 섞는다. 실제로 쓰는 알고리즘이 아니라 [[expected running time]] 과 [[randomized worst-case]] 의 '''차이'''를 가장 극단적으로 보여 주는 예열용 예제(L6 p.6–9).
+
+{def}
+L6 p.9: "Worst-case $O(\infty)$ — Think of this as the adversary chooses the randomness. / Expected $O(n \cdot n!)$ — Pr[randomly list sorted] = 1/n!. We expect to permute A n! times before it's sorted. Each permutation requires O(n)-time."
+{/def}
+<pre class="c">
+def bogosort(A):
+  # Randomly permutes A until it's sorted
+  while True:
+    random.shuffle(A)
+    sorted = True
+    for i in range(len(A)-1):
+      if A[i] > A[i+1]:
+        sorted = False
+    if sorted:
+      return A
+</pre>
+{|
+! 변수 || 뜻 || n = 3 예
+|-
+| `A` || 섞을 리스트 || [3, 1, 2]
+|-
+| `sorted` || 이번 셔플이 정렬됐는지 플래그 || 6 가지 순열 중 [1,2,3] 일 때만 True
+|-
+| `i` || 이웃 쌍 검사 인덱스, 0..n−2 || 0, 1
+|}
+[[img:L6-08.png|L6 p.9 — Bogosort: Worst-case O(∞) / Expected O(n·n!)|medium]]
+
+{analogy}
+'''카드 한 벌을 공중에 던져 떨어진 순서가 우연히 정렬돼 있을 때까지 반복하기.''' 반드시 언젠가는 성공하고(정답 보장 → [[Las Vegas와 Monte Carlo|Las Vegas]]), 틀린 순서를 "정렬됐다" 고 내놓는 일은 없다. 하지만 52 장이면 $52!$ ≈ $8 \times 10^{67}$ 번 던져야 할 것으로 기대된다.
+{/analogy}
+
+== 기대 시간 유도 ==
+<pre class="txt">
+p = P(한 번 섞어 정렬됨) = 1 / n!                   ← [[순열과 n!|n! 개 순열]] 중 정렬된 것 1 개
+E = 기대 셔플 횟수
+  한 번 섞고, 실패(확률 1-p)하면 처음과 같은 상황 → E = 1 + (1-p)·E
+  → p·E = 1 → E = 1/p = n!                         ← [[기하분포]]의 기댓값
+한 번 = shuffle O(n) + 검사 O(n) = O(n)
+Expected = n! · O(n) = O(n · n!)
+Worst: 적이 주사위를 쥐면 매번 실패 → O(∞)
+</pre>
+{exam}
+교수(9/17): "틀린 답을 낼 수 있나? 없다 → '''Las Vegas'''." 기대 셔플은 "성공 확률 $p = 1/n!$, 실패하면 같은 상황 반복 → '''$E = 1 + (1-p)E$ → $E = 1/p = n!$'''". "끔찍한 알고리즘이지만 worst 와 expected 의 차이가 randomness 의 힘을 보여준다." 이 계산 구조(성공 확률 → 기대 시도 1/p → × 시도당 비용)는 [[랜덤 majority]] 에 그대로 재사용된다.
+{/exam}
+[[sim:geometric_expectation]]
+시뮬레이터에서 n = 3, 4, 5 의 기대 셔플 6 / 24 / 120, 기대 비용 $n \cdot n!$ = 18 / 96 / 600 을 확인할 수 있다.
+
+== 관련 문서 ==
+* [[랜덤 majority]] (같은 구조, p ≥ 1/2) · [[기하분포]] · [[expected running time]] · [[randomized worst-case]] · [[Las Vegas와 Monte Carlo]]

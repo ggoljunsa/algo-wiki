@@ -1,0 +1,48 @@
+key: 두 가지 질문
+title: 두 가지 질문 — Does it work? / Is it fast?
+category: 1강 Analysis I, 용어
+---
+== 개요 ==
+교수가 L1 p.6–9 에서 처음 던지고 이후 '''모든 강의'''에서 반복하는 분석 프레임. "You might have two questions at this point…"
+# '''Does this actually work?''' — [[correctness]]
+# '''Is it fast?''' — [[runtime]]
+이 위키의 모든 메인 문서는 이 두 질문 순서로 짜여 있다.
+
+{def}
+'''Two questions''' (L1 p.7–8): "1. Does this actually work? 2. Is it fast?"
+정확성(correctness)과 효율(runtime). 알고리즘을 만나면 제일 먼저 물어야 할 두 가지.
+{/def}
+[[img:L1-09.png|L1 p.9 — insertion sort 코드 옆에 처음 등장한 두 질문|medium]]
+
+{analogy}
+새 '''중고차'''를 볼 때 묻는 두 가지와 같다 — "① 굴러가긴 하나?"(안 굴러가면 빠르고 뭐고 의미 없다) "② 연비(속도)는 어떤가?". 순서가 중요하다: 틀린 답을 빨리 내는 알고리즘은 쓸모가 없으므로 ① 먼저.
+{/analogy}
+
+[[anim:two_questions|알고리즘 상자에 ① Does it work? 카드와 ② Is it fast? 카드가 차례로 붙고, 각 카드에 증명 도구가 달리는 모습을 보자. 끝에서 L1~L7 알고리즘이 두 칸에 채워진다]]
+
+== 강의별로 두 질문에 쓰는 도구 ==
+{|
+! 강의 || 알고리즘 || ① Does it work? || ② Is it fast?
+|-
+| L1–L2 || [[insertion sort]] || [[loop invariant]] + [[귀납법 4요소]] || [[asymptotic analysis]], worst $O(n^2)$ / best $\Omega(n)$
+|-
+| L3 || [[mergesort]] || [[recursion invariant]] ([[입력 크기에 대한 귀납법]]) || [[점화식]] → [[master method]] → $O(n \log n)$
+|-
+| L4 || [[select]] || recursion invariant ([[select의 정확성 증명]]) || [[select의 점화식]] → [[substitution method]] → $O(n)$
+|-
+| L5 || [[counting sort]], [[radix sort]] || 버킷·[[stable sort]] 논증 || $\Theta(n+k)$, $\Theta(d(n+k))$
+|-
+| L6 || [[randomized quicksort]] || 귀납법 || [[expected running time]] $O(n \log n)$
+|-
+| L7 || [[hash table]] || [[INSERT/DELETE/SEARCH]] 가 정의대로 동작 || [[기대 버킷 크기]] $O(1)$
+|}
+
+{info}
+L1 p.23–24 의 흐름: "Ok, obviously it works." → "But it won't be so obvious later, so let's take some time now to see how to prove that it works rigorously." → p.59 "Yes, and I promise to write a proof by induction if asked to prove correctness formally..." → p.61 "Is it fast? Well, what does it mean to be fast?" (→ [[L2 Algorithmic Analysis II]])
+{/info}
+{warn}
+L6 의 '''[[두 시나리오]]'''(Scenario 1/2, 적이 무엇을 고르는가)와 이름이 비슷하지만 전혀 다른 개념이다.
+{/warn}
+
+== 관련 문서 ==
+* [[L1 Algorithmic Analysis I]] · [[correctness]] · [[runtime]] · [[알고리즘]] · [[증명 레시피]]

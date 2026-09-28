@@ -1,0 +1,32 @@
+key: random variable
+title: random variable (확률변수)
+category: 6강 Randomized I, 용어
+---
+== 개요 ==
+실험(주사위 굴리기)의 결과마다 '''숫자 하나'''를 대응시키는 것. L6 에서 두 번 등장한다: ① Scenario 1 의 수행 시간 자체가 random variable (p.5) ② 비교 여부를 0/1 로 나타내는 [[X_{a,b}]] (p.27).
+
+{def}
+L6 p.5: "In Scenario 1, the running time is a '''random variable'''."
+L6 p.27: "Let $X_{a,b}$ be random variable that depends on choice of pivots, such that $X_{a,b} = 1$ if a and b are compared, 0 otherwise."
+{/def}
+
+{analogy}
+'''복권 한 장.''' 추첨(난수) 전에는 당첨금이 얼마일지 모른다 — 그 "아직 모르는 금액"이 random variable. 추첨이 끝나면 한 숫자로 확정된다. 기댓값 $E[\cdot]$ 은 "복권을 무한히 많이 샀을 때 장당 평균 당첨금".
+{/analogy}
+
+{|
+! random variable || 무엇이 랜덤을 만드나 || 값 || 어디서
+|-
+| 수행 시간 $T$ || 알고리즘의 random choice || 양의 실수 || L6 p.5
+|-
+| [[X_{a,b}]] || 피벗 선택 순서 || 0 또는 1 ([[지표 확률변수]]) || L6 p.27
+|-
+| 시도 횟수 N || 매 시도의 성공/실패 || 1, 2, 3, … ([[기하분포]]) || L6 p.77 (녹음 9/22)
+|-
+| $u_i$ 버킷 크기 || 해시 함수 h 선택 || 1 … n || L7 p.41
+|}
+[[img:L6-27.png|L6 p.28 — X_{a,b} 정의와 X_{3,5} = 1, X_{4,6} = 0 예|medium]]
+기댓값: $E[X] = \sum_x x \cdot P(X = x)$. 0/1 변수면 $E[X] = P(X = 1)$ (L6 p.31) → [[확률과 기댓값]].
+
+== 관련 문서 ==
+* [[지표 확률변수]] · [[확률과 기댓값]] · [[기대값의 선형성]] · [[expected running time]] · [[X_{a,b}]]

@@ -1,0 +1,47 @@
+key: 점화식 풀이 4가지
+title: 점화식 풀이 4가지 (Solving Recurrences)
+category: 3강 D&C I, 점화식
+---
+== 개요 ==
+L3 p.64 "There are a few different methods to translate a recurrence relation for T(n) to a closed form expression for T(n)." — 네 가지가 있다. 슬라이드는 같은 mergesort 점화식을 차례로 풀며 목록 옆에 "Θ(n log(n))" 을 하나씩 채워 간다(p.74 → 85 → 99).
+
+{def}
+"○ '''Recursion tree method''' ○ '''Iteration method''' ○ '''Master method''' ○ '''Substitution Method'''" (L3 p.64)
+{/def}
+
+{analogy}
+'''산 정상까지 가는 네 가지 길.''' 지도를 펴고 층층이 그려 보기(recursion tree), 한 걸음씩 걸어 올라가며 규칙 찾기(iteration), 케이블카 타기(master — 공식에 a, b, d 만 넣으면 끝, 단 케이블카 노선이 있는 산만), 그리고 "정상은 저기일 것"이라 찍고 증명하며 올라가기(substitution — 어떤 산이든 가능). 교수는 "앞의 둘은 지도 읽는 연습, 시험에는 케이블카와 찍고-증명하기" 라고 했다.
+{/analogy}
+
+== 네 방법 한눈에 ==
+{|
+! 방법 || 어떻게 || 장점 / 한계 || 교수 평가 || 슬라이드
+|-
+| [[recursion tree method]] || 트리를 그려 레벨별 비용 합 × 레벨 수 || 직관적 / 엄밀 증명은 아님 || 이해용 || p.66–74
+|-
+| [[iteration method]] || 점화식을 자기에 반복 대입해 $2^k T(n/2^k) + kcn$ 패턴 → $k = \log_2 n$ || 대수적 / 패턴이 안 보이면 막힘 || 이해용 || p.76–85
+|-
+| '''[[master method]]''' || $T(n) = aT(n/b) + O(n^d)$ 에서 a 와 $b^d$ 비교 || 공식 한 방 / 부분 문제 크기가 모두 같아야 || '''기억''' || p.89–99, 107
+|-
+| '''[[substitution method]]''' || 추측 → 귀납법으로 증명 (상수 C 는 나중에) || 어떤 점화식에도 / 추측이 필요 || '''기억''' || p.108–116
+|}
+
+== 같은 점화식, 네 번 풀기 ($T(1) \le c$, $T(n) \le 2T(n/2) + cn$) ==
+<pre class="txt">
+recursion tree   레벨 합 cn × (log2 n 레벨) + 리프 cn        = cn log2 n + cn = O(n log n)
+iteration        2^k T(n/2^k) + kcn, k = log2 n             = nT(1) + cn log2 n ≤ cn + cn log2 n
+master           a = 2, b = 2, d = 1, b^d = 2 → a = b^d     → O(n^d log n) = O(n log n)
+substitution     guess n(log n + 1) → 강한 귀납법으로 증명   (p.109–111, T(1) ≤ 1 버전)
+</pre>
+[[sim:recursion_tree_sum]]
+
+{exam}
+9/3 수업(녹음): "The two — recursion tree and iteration methods — help you to understand the process of translation, but '''the important thing to remember is master method and substitution method''' because it's useful." 9/8 마무리에서도 "4가지 해법 중 master method·substitution method 만 기억하면 충분" 이라고 반복했다.
+{/exam}
+{tip}
+시험 전략: ① 부분 문제 크기가 모두 같으면 [[master method]] (a, b, d, $b^d$ 네 칸 적기) ② 다르면 [[substitution method]] (추측은 [[recursion tree method|재귀 트리]]로, 증명은 [[미정 상수 C]] 로). → [[master method의 한계]]
+{/tip}
+
+== 관련 문서 ==
+* [[점화식]] · [[closed-form]] · [[점화식 단순화 3단계]]
+* [[master method의 한계]] · [[공식·점화식 모음]]

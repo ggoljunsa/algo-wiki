@@ -1,0 +1,36 @@
+key: hash function
+title: hash function (해시 함수)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+universe U 의 원소를 버킷 번호로 보내는 함수 $h: U \to \{1, …, n\}$. 해시 테이블의 성능은 전적으로 h 가 등장한 키들을 얼마나 '''고르게''' 퍼뜨리느냐에 달렸다. L7 의 줄거리는 "좋은 h 를 어떻게 고르나" 다: 결정론적 h → 불가능, uniformly random h → 저장 불가, universal family 의 $h_{a,b}$ → 해결.
+
+{def}
+L7 p.25: "There is a '''hash function''' $h: U \to \{1, …, n\}$ which says what element goes in what bucket."
+L7 p.26: "$h: U \to \{1,…,n\}$ can be any function: but for concreteness, let's stick with h(x) = least significant digit of x. — For demonstration purposes only! This is a terrible hash function! Don't use this!"
+{/def}
+[[img:L7-25.png|L7 p.25 — h(22) = 2, h(13) = 3 (h(x) = 일의 자리)|medium]]
+
+{analogy}
+'''주소 → 우편 집중국 배정 규칙.''' 편지 주소(키)를 보고 어느 집중국(버킷)으로 보낼지 정하는 규칙. "우편번호 끝자리" 같은 단순 규칙은 특정 동네 편지가 한 곳에 몰리기 쉽다. 좋은 규칙은 어떤 편지 묶음이 와도 고르게 나눈다.
+{/analogy}
+
+{|
+! h || 예 || 평가 || 문서
+|-
+| 일의 자리 || h(13) = 3, h(43) = 3 || terrible (설명용) || [[chaining]]
+|-
+| 결정론적 h 아무거나 || — || 적이 한 버킷에 n 개를 몰 수 있음 || [[결정론적 해시 함수의 한계]]
+|-
+| uniformly random || h(1), …, h(M) 각각 독립 균등 || 기대 버킷 ≤ 2, 하지만 $M \log n$ 비트 || [[uniformly random hash function]]
+|-
+| $h_{a,b}(x) = ((ax+b) \bmod p) \bmod n$ || $h_{2,1}$ || universal, $O(\log M)$ 비트 || [[h_{a,b}]]
+|}
+[[sim:hash_chaining]]
+{exam}
+해설본 ⭐⭐⭐: "'''You cannot escape the dark side with deterministic hash functions'''" (p.31) → h 는 '''무작위로''', 그리고 저장 가능한 작은 [[universal hash family]] 에서 골라야 한다.
+{/exam}
+[[좋은 해시 함수의 조건]](p.29): 버킷이 많지 않을 것(n) + 고르게 퍼질 것.
+
+== 관련 문서 ==
+* [[hash table]] · [[hash collision]] · [[좋은 해시 함수의 조건]] · [[hash family]] · [[h_{a,b}]]

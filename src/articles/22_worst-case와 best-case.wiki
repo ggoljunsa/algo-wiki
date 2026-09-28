@@ -1,0 +1,43 @@
+key: worst-case와 best-case
+title: worst-case와 best-case — 어떤 입력으로 runtime 을 재나
+category: 2강 Analysis II, 용어
+---
+== 개요 ==
+L2 p.3 의 "Runtime Analysis" — runtime 을 따질 때 '''어느 입력을 기준으로''' 할지의 세 가지 선택지 중 두 개. 이 문서는 '''개념'''이고, 삽입 정렬의 구체적 입력(역순/정렬됨)은 [[삽입 정렬의 worst-case]], [[삽입 정렬의 best-case]] 에 있다.
+
+{def}
+L2 p.3:
+* '''Worst-case analysis''': "What is the runtime of the algorithm on the '''worst possible input'''?" — "We'll focus on this type of analysis since it tells us that an algorithm performs '''at least this fast for every input'''."
+* '''Best-case analysis''': "What is the runtime of the algorithm on the '''best possible input'''?"
+* (Average-case analysis: "… on the average input?" → [[average-case]])
+{/def}
+
+{analogy}
+'''출근 시간 약속'''. 상사에게 "보통 30분 걸려요"(average)나 "길 뻥 뚫리면 15분"(best)이라고 하면 지각할 수 있다. "'''아무리 막혀도 50분 안엔 도착'''"(worst)이 약속으로서 의미가 있다. 그래서 알고리즘도 worst-case 가 기본 — 어떤 입력이 와도 지키는 보장이다.
+{/analogy}
+
+== 세 가지 비교 ==
+{|
+! || worst-case || best-case || [[average-case]]
+|-
+| 질문 || 가장 나쁜 입력에서? || 가장 좋은 입력에서? || 평균 입력에서?
+|-
+| 보장 || 모든 입력에 대한 '''상한''' || 모든 입력에 대한 '''하한''' || 입력 분포에 대한 평균
+|-
+| 보통 쓰는 표기 (L2 p.34) || $O(\cdot)$ || $\Omega(\cdot)$ || —
+|-
+| insertion sort || $O(n^2)$ (역순) || $\Omega(n)$ (정렬됨) || "Randomized Algorithms 때 배움" (L2 p.36)
+|-
+| 이 과목 || '''기본 초점''' || 참고 || L6 에서 expected 로
+|}
+[[img:L2-30.png|L2 p.30 — worst-case 입력을 찾는 질문: "What if it iterated i times every single time?" → Reverse order|medium]]
+
+{warn}
+'''worst-case ≠ Big-O, best-case ≠ Big-Ω'''. worst/best 는 "어떤 입력을 볼지", O/Ω 는 "위/아래 어느 쪽으로 누를지"다. 관례상 worst 는 O, best 는 Ω 로 말하지만(L2 p.37–38), "insertion sort 의 worst-case 는 $\Theta(n^2)$" 처럼 둘을 섞어 말해도 된다 — 서로 다른 축이기 때문이다. → [[upper bound와 lower bound]]
+{/warn}
+{info}
+L4 에서는 '''[[두 종류의 worst-case]]'''(입력만 정하는 worst-case vs 입력+난수가 정하는 worst-case)를 구분하고, L6 에서 [[randomized worst-case]] 와 [[expected running time]] 으로 이어진다.
+{/info}
+
+== 관련 문서 ==
+* [[삽입 정렬의 worst-case]] · [[삽입 정렬의 best-case]] · [[average-case]] · [[runtime]] · [[upper bound와 lower bound]]

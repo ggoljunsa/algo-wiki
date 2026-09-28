@@ -1,0 +1,42 @@
+key: majority element
+title: majority element (과반 원소) 문제
+category: 6강 Randomized I, 용어
+---
+== 개요 ==
+리스트에서 '''절반보다 엄격히 많이'''($\lfloor n/2 \rfloor + 1$ 번 이상) 나오는 원소를 찾는 문제(L6 p.55–80). 특이한 제약: 원소끼리 '''같은지'''만 물어볼 수 있다([[equals]]). 같은 문제를 [[분할정복 majority]] ($O(n \log n)$) 와 [[랜덤 majority]] (expected $O(n)$) 두 방식으로 풀어 비교한다.
+
+{def}
+L6 p.55: "The majority element problem is the following: Given an input list A, find the element that occurs at least $\lfloor n/2 \rfloor + 1$ times, provided one exists. Input accepts a list A and its length n."
+L6 p.57: "Additionally, suppose we can only perform the '''equals''' operation on the list, which accepts two values a and b and returns True if a equals b; otherwise returns False."
+{/def}
+[[img:L6-54.png|L6 p.57 — 정의, n 은 2 의 거듭제곱 가정, equals 제약, 예제 [1 0 3 1 1 5 2 1 1 1 4 1]|medium]]
+
+{analogy}
+'''학급 회장 선거 — 과반 득표자.''' 12 명이 투표했으면 7 표 이상이어야 과반. 6 표는 "절반" 일 뿐 과반이 아니다. 개표원은 두 표를 나란히 놓고 "같은 이름인가?" 만 확인할 수 있다(이름의 가나다 순 비교 불가 → 정렬 불가).
+{/analogy}
+
+== 예제 (p.57) ==
+{|
+! 인덱스 || 0 || 1 || 2 || 3 || 4 || 5 || 6 || 7 || 8 || 9 || 10 || 11
+|-
+| A || 1 || 0 || 3 || 1 || 1 || 5 || 2 || 1 || 1 || 1 || 4 || 1
+|}
+n = 12, $\lfloor 12/2 \rfloor + 1 = 7$. 값 1 이 인덱스 0, 3, 4, 7, 8, 9, 11 — '''정확히 7 번''' → majority element = 1. `equals(A[0], A[2])` = False, `equals(A[0], A[3])` = True, `equals(A[0], 1)` = True (p.58–60).
+{exam}
+교수(9/22): "majority element appears '''strictly more than half''' … '''exactly half is not enough'''. 예: 12 개짜리 리스트면 '''7 개 이상'''." "서로 다른 두 값이 동시에 majority 일 수 있나? '''없다''' — 하나 있거나 없거나 두 경우뿐." 증명 편의상 n = 2^i 가정, 쓸 수 있는 연산은 equals 하나(대소 비교 불가 → 정렬·select 접근 봉쇄).
+{/exam}
+
+== 두 풀이 비교 (p.79) ==
+[[img:L6-75.png|L6 p.79 — Divide and Conquer: Expected & Worst O(n log n) / Randomized: Expected O(n), Worst O(∞)|medium]]
+{|
+! 방식 || expected || worst || 핵심
+|-
+| [[분할정복 majority]] || $O(n \log n)$ || $O(n \log n)$ || 전체 majority 는 한 절반의 majority, $T(n) = 2T(n/2) + O(n)$
+|-
+| [[랜덤 majority]] || $O(n)$ || $O(\infty)$ || 한 번 찍어 맞힐 확률 ≥ 1/2 → 기대 시도 ≤ 2
+|}
+[[anim:majority_random_pick|절반 넘게 초록(majority)인 배열에 무작위 화살 — 과반이라서 한 번에 맞힐 확률이 1/2 을 넘는다는 것을 보자]]
+[[sim:majority_dc]]
+
+== 관련 문서 ==
+* [[equals]] · [[분할정복 majority]] · [[랜덤 majority]] · [[floor와 ceil]] · [[L6 Randomized Algorithms I]]

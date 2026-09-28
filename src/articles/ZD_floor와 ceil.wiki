@@ -1,0 +1,56 @@
+key: floor와 ceil
+title: floor와 ceil (⌊x⌋ 내림, ⌈x⌉ 올림)
+category: 용어
+---
+$\lfloor x \rfloor$ (floor, 내림)는 $x$ 이하의 가장 큰 정수, $\lceil x \rceil$ (ceil, 올림)는 $x$ 이상의 가장 작은 정수다. 리스트를 반으로 나눌 때 $n$ 이 홀수면 정확히 반이 안 되므로 슬라이드는 $\lceil n/2 \rceil$ 과 $\lfloor n/2 \rfloor$ 로 쓴다. 그리고 곧바로 "'''n 은 2 의 거듭제곱이라 가정'''"([[2의 거듭제곱 가정]])해서 이 기호들을 지워 버린다 — 점근 결과가 바뀌지 않기 때문이다.
+
+{def}
+$\lfloor x \rfloor = \max\{m \in \mathbb{Z} : m \le x\}$, $\lceil x \rceil = \min\{m \in \mathbb{Z} : m \ge x\}$.
+"Calling mergesort on a list of length n calls mergesort once for each half, a total runtime of $T(\lceil n/2 \rceil) + T(\lfloor n/2 \rfloor)$." (L3 p.52)
+{/def}
+
+== 이 과목에 나오는 floor/ceil 전부 ==
+{|
+! 어디 || 식 || 뜻
+|-
+| L3 p.52 [[mergesort]] || $T(n) = T(\lceil n/2 \rceil) + T(\lfloor n/2 \rfloor) + \Theta(n)$ || 홀수 길이를 두 쪽으로. 합은 항상 $n$
+|-
+| L3 p.59 [[점화식 단순화 3단계]] || Simplification 2: n is a power of 2 || floor/ceil 제거 → $2T(n/2)$
+|-
+| L3 p.86 [[master method]] || "$n/b$ 는 floor 든 ceil 이든 상관없이 성립" || 정리가 반올림에 둔감
+|-
+| L4 p.5 [[median]] || $\text{SELECT}(A, \lceil n/2 \rceil - 1)$ || 0-index 중앙값 (n=10 → index 4)
+|-
+| L4 p.80–93 [[median of medians]] || $g = \lceil n/5 \rceil$ 그룹, 보장 개수 $3(\lceil g/2 \rceil - 2) + 2$ || 마지막 그룹은 5 개 미만일 수 있음
+|-
+| L5 p.44 [[get_bucket]] || `value / math.ceil(k / num_buckets)` || 버킷 폭 = 올림 (정수 나눗셈)
+|-
+| L6 p.55 [[majority element]] || $\lfloor n/2 \rfloor + 1$ 번 이상 || strictly more than half
+|}
+
+== 짧은 예제 ==
+<pre class="txt">
+⌊3.7⌋ = 3    ⌈3.7⌉ = 4    ⌊4⌋ = ⌈4⌉ = 4
+n = 7:  ⌈7/2⌉ = 4, ⌊7/2⌋ = 3   → 4 + 3 = 7 (항상 ⌈n/2⌉ + ⌊n/2⌋ = n)
+n = 23: g = ⌈23/5⌉ = 5 그룹 (5,5,5,5,3개)
+n = 12: majority 는 ⌊12/2⌋ + 1 = 7 번 이상
+get_bucket, k = 30, num_buckets = 10:  폭 = ⌈30/10⌉ = 3
+  17 → 17 // 3 = 5 → 버킷 5 ("15-17")        13 → 4 ("12-14")
+</pre>
+
+[[img:L3-57.png|L3 p.57 — 첫 점화식 T(n) = T(⌈n/2⌉) + T(⌊n/2⌋) + Θ(n). 다음 장에서 "n is a power of 2" 로 floor/ceil 이 사라진다|medium]]
+
+{analogy}
+🎭 '''피자 박스 나누기.''' 피자 7 조각을 두 사람이 나누면 한 사람은 4 조각($\lceil 7/2 \rceil$), 다른 사람은 3 조각($\lfloor 7/2 \rfloor$). 반씩 정확히 안 나뉘어도 '''둘을 합치면 언제나 7''' 이고, 1 조각 차이는 점근 분석에서 상수라 무시된다. 그래서 교수는 "그냥 짝수만 생각하자" 고 한다.
+{/analogy}
+
+{warn}
+[[majority element]] 정의는 "$\lfloor n/2 \rfloor + 1$ 번 '''이상'''" = "절반 '''초과'''" 다. 12 개면 6 개로는 부족하고 7 개여야 한다(9/22 녹음: "exactly half 는 안 된다"). 코드로는 `count > n/2`. L6 p.75 의 `count > n/2+1` 은 한 칸 어긋난 오타다.
+{/warn}
+
+{quiz}$n = 10$ 인 리스트의 중앙값을 `select` 로 찾을 때 k 는? $n = 11$ 이면?{/quiz}
+{answer}$k = \lceil n/2 \rceil - 1$: $n = 10$ → $5 - 1 = 4$, $n = 11$ → $6 - 1 = 5$ (0-index). L4 의 A 는 정렬하면 [0,1,4,9,16,25,36,49,64,81] 이라 index 4 = 16.{/answer}
+
+== 관련 문서 ==
+* [[2의 거듭제곱 가정]] · [[점화식 단순화 3단계]] · [[median]]
+* [[5개씩 그룹]] · [[get_bucket]] · [[majority element]] · [[modular arithmetic]]

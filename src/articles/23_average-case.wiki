@@ -1,0 +1,43 @@
+key: average-case
+title: average-case (평균 경우 분석)
+category: 2강 Analysis II, 용어
+---
+== 개요 ==
+L2 p.3 의 세 번째 분석. L2 에서는 '''이름만''' 나오고 "We will learn this type of analysis when we cover Randomized Algorithms!" (p.36, PDF 35) 로 미뤄진다.
+
+{def}
+'''Average-case analysis''' (L2 p.3): "What is the runtime of the algorithm on the '''average input'''?"
+입력이 어떤 확률분포를 따른다고 보고, 그 분포에 대한 runtime 의 기댓값을 구하는 분석.
+{/def}
+
+{analogy}
+'''식당 평균 대기 시간'''. "평균 10분"은 손님이 고르게 온다는 가정 위의 숫자다. 누군가 일부러 점심시간에만 단체로 몰려오면(적대적 입력) 평균은 아무 의미가 없다. 그래서 이 과목은 입력 평균 대신 '''알고리즘이 스스로 주사위를 굴려'''(randomized) 기댓값을 보장하는 쪽으로 간다.
+{/analogy}
+
+== L2 슬라이드의 흐름 ==
+{|
+! 페이지 || 내용
+|-
+| p.3, p.28, p.31 || Worst / Best / Average 세 가지 목록
+|-
+| p.34 || Worst → $O(n^2)$, Best → $\Omega(n)$ 채워짐, Average 는 빈칸
+|-
+| p.36 (PDF 35) || "We will learn this type of analysis when we cover '''Randomized Algorithms'''!"
+|}
+
+== 입력 평균 vs 알고리즘 난수 (L6 로 가는 다리) ==
+{|
+! || average-case (입력이 무작위라고 가정) || [[expected running time]] (L6)
+|-
+| 무작위성은 어디에? || '''입력''' 분포 || '''알고리즘'''의 동전 던지기
+|-
+| 적([[adversary]])이 나쁜 입력을 고르면? || 가정이 깨짐 || 여전히 기댓값 보장 ([[두 시나리오]]의 Scenario 1)
+|-
+| 예 || 무작위 입력의 insertion sort: 약 $n^2/4$ shift (CLRS 2.2) || [[randomized quicksort]]: 기대 $O(n \log n)$
+|}
+{info}
+CLRS 2.2 는 insertion sort 의 average-case 도 $\Theta(n^2)$ 라고 설명한다(평균적으로 절반 정도만 밀면 되지만 여전히 $n^2$ 급). 슬라이드 밖 내용.
+{/info}
+
+== 관련 문서 ==
+* [[worst-case와 best-case]] · [[expected running time]] · [[randomized algorithm]] · [[L6 Randomized Algorithms I]]

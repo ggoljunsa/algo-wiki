@@ -1,0 +1,40 @@
+key: 비교 기반 정렬을 여전히 쓰는 이유
+title: 비교 기반 정렬을 여전히 쓰는 이유 (precision, extra memory, 사전 정보)
+category: 5강 Linear Sorting, 용어
+---
+{def}
+"'''Why would we ever use a comparison-based sorting algorithm?'''
+○ It has lots of precision… [π, 1234/9876, e, 37!, 6.0221409, n^n, 42] — We can compare these pretty quickly (just look at their most significant digit): π = 3.14159…, e = 2.71818… But radix_sort requires us to look at all digits, which is problematic—both have infinitely many! / Even with integers, if it's really big, radix_sort is slow.
+○ radix_sort needs extra memory for the buckets (not in-place).
+○ Need to know ordering and buckets ahead of time for linear-time sorting." (L5 p.61–64)
+{/def}
+[[img:L5-62.png|p.64 — 세 가지 이유가 모두 나온 완성 슬라이드|medium]]
+
+== 출발점 — The story so far (p.60) ==
+* 비교 기반 정렬은 MUST $\Omega(n \log n)$ ([[Ω(n log n) 하한]]).
+* 값에 약간의 구조("small integers or other reasonable data")를 가정하면 $O(n)$ ([[linear-time sorting]]).
+* 그런데 왜 실무·라이브러리 정렬은 대부분 비교 기반인가?
+
+== 세 가지 이유 ==
+{|
+! 이유 || 슬라이드 예 || 선형 정렬의 문제
+|-
+| ① '''precision''' || π, e, 1234/9876, 6.0221409 || 비교는 맨 앞(most significant) 자리만 봐도 끝나지만 radix_sort 는 '''모든 자리'''를 봐야 함 — π, e 는 자릿수가 무한
+|-
+| ① (정수라도) || 37!, $n^n$ || "really big" → 자릿수 d 가 커서 $\Theta(d(n+k))$ 가 느림 ([[Θ(d(n+k))]])
+|-
+| ② '''memory''' || — || 버킷용 추가 메모리 필요, not [[in-place]]
+|-
+| ③ '''사전 정보''' || — || 값의 순서 체계와 버킷(범위 k)을 '''미리''' 알아야 함. 비교 정렬은 "a < b 를 판정하는 함수"만 있으면 됨
+|}
+(슬라이드의 e = 2.71818… 는 오타, 실제 e = 2.71828…)
+
+{analogy}
+'''만능 저울 vs 전용 선별기.''' 비교 정렬은 두 물건을 올려 "어느 쪽이 무겁나"만 알려 주는 저울 — 과일이든 금괴든 무게를 비교할 수 있으면 무엇이든 정렬한다. 선형 정렬은 "사과 크기 S/M/L 전용 선별기" — 사과에는 번개처럼 빠르지만, 선별기를 미리 만들어 둬야 하고(사전 정보), 공장 공간을 차지하고(메모리), 크기가 소수점 무한 자리까지 정밀한 물건은 칸을 만들 수 없다(precision).
+{/analogy}
+{exam}
+해설본 요약 6번: "비교 기반 정렬을 여전히 쓰는 이유: 무한 정밀도/큰 범위 값 처리, 추가 메모리 불필요, 버킷 사전 정보 불필요." 서술형 "선형 정렬이 있는데 왜 mergesort/quicksort 를 쓰나?" 의 모범 답이 이 세 줄.
+{/exam}
+
+== 관련 문서 ==
+* [[comparison-based sorting]] · [[linear-time sorting]] · [[radix sort]] · [[in-place]] · [[Θ(d(n+k))]] · [[QuickSort vs MergeSort]] · [[L5 Linear-Time Sorting]]

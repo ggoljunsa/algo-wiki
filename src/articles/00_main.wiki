@@ -1,0 +1,174 @@
+key: main
+title: 알고위키 — DGIST CSE301 Introduction to Algorithms 중간고사
+category: 안내
+---
+'''알고위키'''는 DGIST [CSE301] Introduction to Algorithms (Prof. Hoon Sung Chwa, 2026 Fall) 중간고사 범위 — '''L1 Algorithmic Analysis I · L2 Algorithmic Analysis II · L3 Divide and Conquer I · L4 Divide and Conquer II · L5 Linear-Time Sorting · L6 Randomized Algorithms I · L7 Randomized Algorithms II''' — 를 나무위키 스타일로 정리한 학습 위키다. 교재는 [[CLRS]]. 강의는 영어, 문서는 한국어 산문 + 영어 용어 그대로.
+
+해설본(`정리본/L#_해설.md`)이 "그림이 없고, 변수를 그때마다 까먹어서" 안 읽히던 문제를 풀려고 만들었다. 그래서 이 위키는 세 가지를 약속한다.
+# '''기호·용어를 까먹으면 클릭한다.''' $T(n)$, $c$, $n_0$, $a, b, d$, $C$, $k$, $X_{a,b}$, $M$, $p$ … 모든 기호와 용어에 사전 문서가 있고 본문 첫 등장 시 링크돼 있다.
+# '''계산이 나오면 옆에서 값이 바뀌는 걸 본다.''' 삽입 정렬, merge, select, median of medians, counting/bucket/radix sort, quicksort, 해시 … 슬라이드 예제를 한 단계씩 밟는 '''시뮬레이터 18 종'''(◀ ▶).
+# '''보고만 있어도 흐름이 들어온다.''' 두 질문, 카드 끼우기, 줄다리기(master method), 피벗 분할, 결정 트리, 적과 주사위 … '''움직이는 그림 20 종'''과 실제 슬라이드 캡처.
+
+[[anim:two_questions|이 과목의 지도. 모든 알고리즘에 ① Does it work? ② Is it fast? 두 카드가 붙는다. L1~L7 은 이 두 카드에 붙일 도구를 하나씩 늘려 가는 과정이다]]
+
+== 어디서부터 읽나 ==
+* 처음이면 → [[읽는 순서]] (강의 순서대로, 한 강의 = 메인 문서 1 편 + 사전 문서들)
+* 시험이 코앞이면 → [[공식·점화식 모음]] → [[계산·증명 문제 모음]] → [[자주 틀리는 함정 모음]]
+* 과제 복습 → [[HW1 복기]] (6 문제 100 점, 개념으로 다시)
+* 시험 날짜·범위·과제 일정 → [[시험 정보]] (시험 일정은 '''미정 — 공지되면 갱신''')
+
+== 이 위키를 읽는 법 ==
+문서 하나는 대개 '''비유 → 움직이는 그림 → 슬라이드 캡처 → 본문 → 시뮬레이터''' 순서로 되어 있다. 비유로 감을 잡고, 10 초짜리 그림으로 흐름을 보고, 슬라이드 원본을 확인하고, 본문의 증명·계산을 읽고, 마지막에 시뮬레이터로 값을 직접 밟아 본다.
+{tip}
+* 📖 '''정의 박스'''는 슬라이드 영어 원문이 먼저 온다. 영어 문장 그대로 외운다.
+* 🎯 '''출제 포인트 박스'''는 교수가 녹음본에서 강조한 것, 해설본 ⭐⭐⭐, HW1 에 나온 것이다.
+* 🎭 '''비유 박스'''는 이해가 안 될 때 먼저 읽는다.
+* ❓ '''예상문제'''는 정답이 접혀 있다. 먼저 백지에 쓰고 펼친다.
+* 시뮬레이터는 ◀ ▶ (키보드 ← →) 로 한 단계씩, 옵션을 바꾸면 다른 슬라이드 예제로 바뀐다.
+* 움직이는 그림은 자동 재생되며 슬라이더로 멈춰 놓고 자막을 읽을 수 있다.
+* 본문의 p.N 은 슬라이드에 '''인쇄된''' 페이지 번호다(숨김 슬라이드 때문에 PDF 페이지와 다를 수 있다).
+{/tip}
+
+== 강의별 메인 문서 ==
+{|
+! 강 || 메인 문서 || 한 줄 요약 || 핵심 시뮬레이터 / 그림
+|-
+| L1 || [[L1 Algorithmic Analysis I]] || [[두 가지 질문]] 의 ① — [[insertion sort]] 의 [[loop invariant]] "`A[:i+1]` is sorted" 를 [[귀납법 4요소]]로 증명 || `insertion_sort_trace` · `loop_invariant_check` · `anim:insertion_card`
+|-
+| L2 || [[L2 Algorithmic Analysis II]] || ② Is it fast? — [[Big-O]]/[[Big-Ω]]/[[Big-Θ]] 정의, [[c와 n₀]] 제시 증명, [[max{c, n₀}+1 트릭]] 반증, 삽입 정렬 worst $O(n^2)$ / best $\Omega(n)$ || `bigo_witness` · `anim:bigo_graph`
+|-
+| L3 || [[L3 Divide and Conquer I]] || [[mergesort]] 와 [[recursion invariant]], 점화식 $2T(n/2)+O(n)$, 풀이 4 가지 중 '''[[master method]]''' 와 '''[[substitution method]]''' || `mergesort_tree` · `merge_step` · `master_method` · `anim:master_struggle`
+|-
+| L4 || [[L4 Divide and Conquer II]] || [[select]] 로 k 번째 원소를 $O(n)$ 에 — [[피벗 시나리오 3종]], [[median of medians]], [[3n/10 논증]], [[T(n/5) + T(7n/10) + O(n)]] 을 치환법으로 || `select_partition` · `median_of_medians` · `anim:mom_grid`
+|-
+| L5 || [[L5 Linear-Time Sorting]] || [[decision tree]] 로 [[Ω(n log n) 하한]], 그 벽을 입력 가정으로 넘는 [[counting sort]] / [[bucket sort]] / [[radix sort]], [[stable sort]] || `counting_sort` · `radix_sort` · `anim:decision_tree_leaves`
+|-
+| L6 || [[L6 Randomized Algorithms I]] || [[두 시나리오]]: expected vs worst-case, [[bogosort]], [[randomized quicksort]] 기대 $O(n\log n)$ 증명, [[randomized select]], [[majority element]] || `randomized_quicksort` · `majority_dc` · `anim:quicksort_random_pivot`
+|-
+| L7 || [[L7 Randomized Algorithms II]] || [[hash table]] 과 [[chaining]], [[비둘기집 원리|결정론적 해시의 한계]], [[기대 버킷 크기]] ≤ 2, [[universal hash family]] 와 [[h_{a,b}]], $O(\log M)$ 비트 || `hash_chaining` · `universal_hash_check` · `anim:universal_hash_pick`
+|}
+
+== 시험 대비 ==
+{|
+! 문서 || 내용
+|-
+| [[시험 정보]] || 과목·교수·교재, 진도표, 시험 일정(미정), HW1, 출석, 교수가 "구분할 수 있어야 한다" 고 한 것
+|-
+| [[HW1 복기]] || HW1 6 문제를 개념 → 풀이 핵심 → 배울 점으로
+|-
+| [[계산·증명 문제 모음]] || 점화식·Big-O·loop invariant·select·선형 정렬·확률·해시 예상 문제 24 제
+|-
+| [[공식·점화식 모음]] || 알고리즘별 점화식과 결과, master method, 치환법 템플릿, 확률·해시 공식
+|-
+| [[자주 틀리는 함정 모음]] || 해설본 ⭐⭐⭐·주의·슬라이드 오류 36 가지
+|}
+
+== 수학 도구 (기타 용어) ==
+L6–L7 의 확률 증명과 L3–L5 의 점화식·하한 증명에 쓰이는 수학을 따로 모았다. 강의 문서에서 막히면 여기로.
+* 확률: [[확률과 기댓값]] · [[지표 확률변수]] · [[기대값의 선형성]] · [[기하분포]]
+* 급수·합: [[조화급수]] · [[등비급수]] · [[합 공식]]
+* 로그·계승: [[로그 계산법]] · [[Stirling 근사]] · [[순열과 n!]]
+* 증명: [[귀류법]] · [[비둘기집 원리]]
+* 표기: [[modular arithmetic]] · [[floor와 ceil]] · [[이진 트리]] · [[슬라이스 표기]] · [[의사코드 읽는 법]]
+* 과목: [[CLRS]] · [[교수 소개]]
+
+== 시뮬레이터 색인 (18) ==
+{|
+! 시뮬레이터 || 내용 || 들어 있는 문서
+|-
+| `insertion_sort_trace` || 삽입 정렬 한 줄씩 (슬라이드 / 역순 / 정렬됨) || [[insertion sort]] · [[L1 Algorithmic Analysis I]] · [[삽입 정렬의 worst-case]] · [[삽입 정렬의 best-case]]
+|-
+| `loop_invariant_check` || 반복마다 invariant 검사 (insertion / selection) || [[loop invariant]] · [[귀납법 4요소]] · [[Initialization/Maintenance/Termination]] · [[selection sort]]
+|-
+| `bigo_witness` || c, n₀ 고르고 부등식 확인 / max{c,n₀}+1 반증 || [[Big-O]] · [[Big-Θ]] · [[c와 n₀]] · [[O임을 증명하기]] · [[O가 아님을 증명하기]] · [[L2 연습 Claim]]
+|-
+| `mergesort_tree` || mergesort 재귀 호출 트리 || [[mergesort]] · [[divide and conquer]] · [[L3 Divide and Conquer I]] · [[recursion invariant]]
+|-
+| `merge_step` || merge 포인터 l_idx, r_idx (+ inversion 카운트) || [[merge]] · [[merge의 loop invariant]] · [[inversion]] · [[HW1 복기]]
+|-
+| `recursion_tree_sum` || 재귀 트리 레벨 합 (2T / 4T / T(n/2)) || [[recursion tree method]] · [[iteration method]] · [[T(n)]] · [[eternal struggle]]
+|-
+| `master_method` || a, b, d → $b^d$ → 케이스 → 결과 || [[master method]] · [[master method 세 케이스]] · [[master method 매개변수]] · [[Karatsuba 곱셈]] · [[공식·점화식 모음]]
+|-
+| `substitution_method` || guess → IH → C 조건 → C 확정 || [[substitution method]] · [[미정 상수 C]] · [[T(n/5) + T(7n/10) + O(n)]] · [[부분 문제 크기의 합]]
+|-
+| `select_partition` || select 재귀 (피벗 36→1→9 / 불운) || [[select]] · [[pivot]] · [[partition_about_pivot]] · [[한쪽만 재귀]] · [[k-len(left)-1 보정]] · [[L4 Divide and Conquer II]]
+|-
+| `median_of_medians` || 5 개씩 그룹 → sub-median → MoM = 15 || [[median of medians]] · [[sub-median]] · [[5개씩 그룹]] · [[3n/10 논증]]
+|-
+| `counting_sort` || counts 채우고 풀기 || [[counting sort]] · [[counts 배열]] · [[Θ(n+k)]] · [[linear-time sorting]]
+|-
+| `bucket_sort` || get_bucket 으로 담고 버킷별 stable_sort || [[bucket sort]] · [[get_bucket]] · [[num_buckets와 k]] · [[bucket sort의 최악 케이스]] · [[stable sort]]
+|-
+| `radix_sort` || 자리마다 make_pairs → 안정 bucket sort || [[radix sort]] · [[least-significant digit]] · [[make_pairs]] · [[Θ(d(n+k))]]
+|-
+| `randomized_quicksort` || 피벗·분할·비교 횟수, $X_{a,b}$ 기록 || [[randomized quicksort]] · [[quicksort]] · [[X_{a,b}]] · [[P(X_{a,b}=1)]] · [[비교 횟수 세기]] · [[quicksort 기대 비교 횟수 증명]]
+|-
+| `geometric_expectation` || 성공할 때까지 반복, 기대 1/p || [[bogosort]] · [[랜덤 majority]] · [[기하분포]] · [[등비급수]] · [[expected running time]]
+|-
+| `majority_dc` || 분할정복 majority, equals 횟수 || [[분할정복 majority]] · [[majority element]] · [[equals]]
+|-
+| `hash_chaining` || 버킷 + 체인, INSERT/SEARCH/DELETE || [[chaining]] · [[hash table]] · [[hash function]] · [[hash collision]] · [[h_{a,b}]] · [[해싱 게임]]
+|-
+| `universal_hash_check` || 기대 버킷 크기, $h_{a,b}$ 전수 충돌 조사 || [[기대 버킷 크기]] · [[universal hash family]] · [[h_{a,b}]] · [[H의 크기]] · [[지표 확률변수]] · [[기대값의 선형성]]
+|}
+
+== 움직이는 그림 색인 (20) ==
+{|
+! 그림 || 내용 || 들어 있는 문서
+|-
+| `two_questions` || 알고리즘 상자에 두 질문 카드와 도구 || [[main]] · [[읽는 순서]] · [[두 가지 질문]] · [[L1 Algorithmic Analysis I]]
+|-
+| `insertion_card` || 카드 놀이로 삽입 정렬 || [[insertion sort]] · [[L1 Algorithmic Analysis I]] · [[삽입 한 번의 성질]]
+|-
+| `loop_invariant_flow` || Initialization → Maintenance → Termination || [[loop invariant]] · [[귀납법 4요소]] · [[Initialization/Maintenance/Termination]] · [[귀납법]]
+|-
+| `bigo_graph` || T(n) 과 c·g(n), n₀ 이후 초록 → Ω → Θ || [[Big-O]] · [[Big-Ω]] · [[Big-Θ]] · [[c와 n₀]] · [[L2 Algorithmic Analysis II]]
+|-
+| `divide_conquer_flow` || Divide → Conquer → Combine || [[divide and conquer]] · [[L3 Divide and Conquer I]] · [[incremental approach와 parallel approach]]
+|-
+| `mergesort_split_merge` || 쪼개고(Recurse!) 합치고(Merge!) || [[mergesort]] · [[merge]] · [[recursion invariant]]
+|-
+| `recursion_tree_levels` || 레벨마다 합 cn, log₂n 레벨 || [[recursion tree method]] · [[iteration method]] · [[T(n)]] · [[점화식]]
+|-
+| `master_struggle` || 줄다리기 3 판 (bushy / 균등 / tall and skinny) || [[master method 세 케이스]] · [[eternal struggle]] · [[bushy tree와 tall and skinny tree]] · [[master method]]
+|-
+| `pivot_partition` || 피벗 36 → 1 → 9, 버려지는 쪽 회색 || [[select]] · [[pivot]] · [[partition_about_pivot]] · [[한쪽만 재귀]] · [[k-len(left)-1 보정]]
+|-
+| `mom_grid` || 5 열 격자, sub-median, 15 에 별, 3n/10 영역 || [[median of medians]] · [[3n/10 논증]] · [[sub-median]] · [[5개씩 그룹]]
+|-
+| `decision_tree_leaves` || 3 원소 비교 트리, 리프 3! = 6 || [[decision tree]] · [[Ω(n log n) 하한]] · [[log(n!)]] · [[리프와 깊이]] · [[comparison-based sorting]]
+|-
+| `counting_sort_flow` || 원소가 counts 칸으로 떨어짐 || [[counting sort]] · [[counts 배열]] · [[Θ(n+k)]]
+|-
+| `radix_lsd` || 일의 자리 → 십의 자리 → 백의 자리 || [[radix sort]] · [[least-significant digit]] · [[make_pairs]]
+|-
+| `stable_sort` || 1ᵃ, 1ᵇ 순서 유지 / 깨지면 radix 실패 || [[stable sort]] · [[radix sort]] · [[bucket sort]]
+|-
+| `expected_vs_worst` || Scenario 1 vs Scenario 2 || [[두 시나리오]] · [[adversary]] · [[expected running time]] · [[randomized worst-case]] · [[L6 Randomized Algorithms I]]
+|-
+| `quicksort_random_pivot` || 6 과 10 사이 값이 먼저 뽑히면 영원히 비교 안 됨 || [[randomized quicksort]] · [[X_{a,b}]] · [[P(X_{a,b}=1)]] · [[비교 횟수 세기]]
+|-
+| `harmonic_sum` || 막대 1/c 와 곡선 1/x, 넓이 ≈ ln n || [[조화급수]] · [[quicksort 기대 비교 횟수 증명]]
+|-
+| `majority_random_pick` || 무작위 화살, 1/2 + 1/4 + … = 2 || [[랜덤 majority]] · [[majority element]] · [[기하분포]] · [[등비급수]]
+|-
+| `hash_pigeonhole` || U 를 n 버킷으로, 적이 꽉 찬 버킷 공략 || [[결정론적 해시 함수의 한계]] · [[비둘기집 원리]] · [[해싱 게임]]
+|-
+| `universal_hash_pick` || $h_{2,1}$: mod 5 원 → mod 3 버킷 || [[universal hash family]] · [[h_{a,b}]] · [[hash family]] · [[소수 p]] · [[L7 Randomized Algorithms II]]
+|}
+
+{analogy}
+🎭 이 위키는 '''지하철 노선도'''다. 메인 문서 7 편이 노선이고, 사전 문서 180 여 편이 역이다. 어느 역(용어)에서 내려도 그 역이 어느 노선(강의)에 있고 옆 역이 무엇인지(관련 문서) 바로 보인다. 처음엔 [[읽는 순서]]대로 노선을 끝까지 타 보고, 시험 전엔 환승역([[자주 틀리는 함정 모음]], [[공식·점화식 모음]])만 다시 본다.
+{/analogy}
+
+{joke}
+교수님의 입버릇 세 개. "'''Find things that don't change'''" (L1 p.26, invariant 의 출발점) · "'''Pretend like we knew it all along'''" (L3 p.115, 치환법 Step 3: profit) · "'''You cannot escape the dark side with deterministic hash functions'''" (L7 p.31). 세 문장이 각각 L1, L3–L4, L7 의 핵심 아이디어를 한 줄로 요약한다.
+{/joke}
+
+== 관련 문서 ==
+* [[읽는 순서]] · [[시험 정보]] · [[HW1 복기]] · [[계산·증명 문제 모음]] · [[공식·점화식 모음]] · [[자주 틀리는 함정 모음]]
+* [[교수 소개]] · [[CLRS]]
+
+----
+마지막 갱신: 2026-09-28 (L1–L7 전 문서, 시뮬레이터 18 · 움직이는 그림 20)

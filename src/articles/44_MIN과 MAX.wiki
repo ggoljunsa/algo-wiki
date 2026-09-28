@@ -1,0 +1,33 @@
+key: MIN과 MAX
+title: MIN 과 MAX (selection 의 쉬운 특수 경우, k = 0 과 k = n−1)
+category: 4강 D&C II, 용어
+---
+{def}
+'''Finding the min and max''': "Iterate through the list and keep track of the smallest and largest elements. Runtime O(n)." (L4 p.6) — "SELECT(A,0)=MIN(A)", "SELECT(A,n-1)=MAX(A)" (p.5)
+{/def}
+
+== 이름에서 개념 끌어내기 ==
+[[selection 문제]]의 양 끝. k = 0 이면 최솟값(MIN), k = n−1 이면 최댓값(MAX). 이 둘은 한 번 훑으면서 "지금까지 본 것 중 가장 작은/큰 값"만 기억하면 되므로 $O(n)$ — 비교 $n-1$ 번.
+<pre class="c">
+def find_min(A):            # (슬라이드 설명을 코드로 옮긴 것)
+  cur_min = A[0]
+  for x in A[1:]:
+    if x < cur_min:
+      cur_min = x
+  return cur_min
+</pre>
+A = [1,64,9,49,16,4,0,25,36,81] → MIN = 0, MAX = 81.
+[[img:L4-06.png|p.6 — "Finding the min and max: … Runtime O(n)."|small]]
+
+{analogy}
+'''반에서 가장 키 작은 학생 찾기'''는 줄을 한 번 훑으며 "지금까지 최단신" 한 명만 기억하면 된다. 하지만 "'''정확히 가운데 키'''인 학생"은 한 명만 기억해서는 안 된다 — 그래서 [[median]] 은 어렵고, 일반 k 에는 [[select]] 가 필요하다.
+{/analogy}
+
+== 왜 강의에 나오나 ==
+교수의 논리: "MIN, MAX 는 선형으로 쉽다 → 그럼 일반적인 k, 특히 [[median]] ($k = \lceil n/2 \rceil - 1$) 도 선형으로 할 수 있을까?" 9/10 녹음: "we can find the minimum value or maximum value in linear time. Can you do that for the median?" — 이 질문이 [[닭과 달걀 문제]]와 [[median of medians]] 로 이어진다.
+{warn}
+[[select]] 의 불운 시나리오("pivot 이 매번 최댓값")에서 MAX 가 다시 나온다: k=0 인데 pivot 이 매번 최대 → 한 개씩만 줄어 $\Theta(n^2)$.
+{/warn}
+
+== 관련 문서 ==
+* [[selection 문제]] · [[median]] · [[select]] · [[naive_select]]

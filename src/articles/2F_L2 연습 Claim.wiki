@@ -1,0 +1,71 @@
+key: L2 연습 Claim
+title: L2 연습 Claim I·II·III — More examples (p.25–27)
+category: 2강 Analysis II, 증명
+---
+== 개요 ==
+L2 p.25–27 "More examples" 의 세 연습 문제. Claim I = O 증명(c, n₀ 찾기), Claim II = Θ 증명(c₁, c₂, n₀ 찾기), Claim III = O 는 상한일 뿐임을 확인. 시험에서 '''숫자만 바꿔 그대로''' 나오기 좋은 형태다.
+{info}
+PDF 캡처에는 문제만 찍혀 있고 풀이(✓ 줄)는 애니메이션이라 보이지 않는다. 아래 풀이 수치는 슬라이드 텍스트 레이어에서 확인한 '''슬라이드 원본 값'''이다.
+{/info}
+
+{def}
+* '''Claim I''' (p.25): "Prove that $\frac32 n^2 + \frac52 n - 3 = O(n^2)$ — Equivalent: find c and n₀ such that $\frac32 n^2 + \frac52 n - 3 \le cn^2$"
+* '''Claim II''' (p.26): "Prove that $\frac12 n^2 - 3n = \Theta(n^2)$ — Equivalent: find c₁, c₂ and n₀ such that $c_1 n^2 \le \frac12 n^2 - 3n \le c_2 n^2$"
+* '''Claim III''' (p.27): "Let $f(n) = 5n + 12$. Which of the following statements are true?"
+{/def}
+
+{analogy}
+'''운전면허 기능시험 코스 세 개'''. Claim I 은 "앞으로 주차"(천장 하나 맞추기), Claim II 는 "평행 주차"(앞뒤 두 선 사이에 맞추기), Claim III 은 "표지판 읽기"(O 는 '이하'라는 뜻이니 큰 수 표지판도 다 맞다). 코스 모양만 익히면 숫자가 바뀌어도 똑같이 통과한다.
+{/analogy}
+
+== Claim I ==
+[[img:L2-25.png|L2 p.25 — Claim I 문제|small]]
+<pre class="txt">
+목표: (3/2)n² + (5/2)n − 3 ≤ c·n²
+n ≥ 1 이면  (5/2)n ≤ 5n²,  −3 < n²
+(3/2)n² + (5/2)n − 3 < (3/2)n² + 5n² + n² = (15/2)n²,  ∀ n ≥ 1
+✓ '''c = 15/2, n₀ = 1''' satisfy the problem.  ∎
+</pre>
+{warn}
+해설본은 "c=3, n₀=2 등"이라 적었다. c=3, n₀=2 도 성립은 하지만(n=2: 8 ≤ 12, 이후 (5/2)n − 3 ≤ (3/2)n² 이 계속 성립) '''슬라이드 풀이 값은 c = 15/2, n₀ = 1''' 이다. 답안에는 슬라이드 값을 쓰자.
+{/warn}
+
+== Claim II ==
+[[img:L2-26.png|L2 p.26 — Claim II 문제|small]]
+<pre class="txt">
+목표: c₁n² ≤ (1/2)n² − 3n ≤ c₂n²
+양변을 n² 으로 나눔:  c₁ ≤ 1/2 − 3/n ≤ c₂
+(오른쪽) 1/2 − 3/n ≤ c₂  →  n ≥ 1 에서 1/2 − 3/n < 1/2 이므로  c₂ ≥ 1/2
+(왼쪽)   c₁ ≤ 1/2 − 3/n   →  1/2 − 3/n 은 n 이 커질수록 증가. n = 7 에서 1/2 − 3/7 = 1/14
+                              → n ≥ 7 이면 c₁ ≤ 1/14 로 충분
+✓ '''c₁ = 1/14, c₂ = 1/2, n₀ = 7''' satisfy the problem.  ∎
+</pre>
+{tip}
+왜 n₀ = 7 인가? n ≤ 6 이면 $\frac12 - \frac3n \le 0$ 이라 양수 c₁ 을 아래에 받칠 수 없다(n = 6 에서 정확히 0). n = 7 이 1/2 − 3/n 이 처음으로 양수가 되는 정수다.
+{/tip}
+
+== Claim III ==
+[[img:L2-27.png|L2 p.27 — Claim III 문제|small]]
+{|
+! 명제 || 슬라이드 답
+|-
+| 1. $f(n) = O(n)$ || '''True (tight upper bound)'''
+|-
+| 2. $f(n) = O(n\log n)$ || True
+|-
+| 3. $f(n) = O(n^2)$ || True
+|-
+| 4. $f(n) = O(2^n)$ || True
+|}
+O 는 상한일 뿐이라 더 큰 함수로도 전부 참. 가장 쓸모 있는 답은 [[tight bound]] 인 O(n).
+[[sim:bigo_witness]]
+
+{quiz}
+연습: $2n^2 + 7n + 4 = O(n^2)$ 을 Claim I 방식으로 증명하라(c, n₀ 제시).
+{/quiz}
+{answer}
+n ≥ 1 이면 7n ≤ 7n², 4 ≤ 4n² → $2n^2 + 7n + 4 \le 13n^2$. c = 13, n₀ = 1. ∎ (다른 답도 가능: c = 3 이면 n² ≥ 7n + 4 가 필요 → n ≥ 8, 즉 c = 3, n₀ = 8.)
+{/answer}
+
+== 관련 문서 ==
+* [[O임을 증명하기]] · [[Big-Θ]] · [[c와 n₀]] · [[tight bound]] · [[L2 Algorithmic Analysis II]]

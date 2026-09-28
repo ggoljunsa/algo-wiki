@@ -1,0 +1,42 @@
+key: P(X_{a,b}=1)
+title: P(X_{a,b}=1) = 2/(b−a+1) — a 와 b 가 비교될 확률
+category: 6강 Randomized I, 용어
+---
+== 개요 ==
+[[randomized quicksort]] 에서 값 a, b ($a < b$) 가 비교될 확률. '''a 와 b 사이에 있는 값들 {a, a+1, …, b} (총 b−a+1 개) 중에서 a 또는 b 가 가장 먼저 피벗으로 뽑혀야''' 비교된다. 그래서 $\frac{2}{b-a+1}$. 교수가 "the most important" 라고 한 L6 의 핵심 확률.
+
+{def}
+L6 p.33–36: "$P(X_{6,10} = 1)$ is the probability that 6 and 10 are compared. This is the probability that either 6 or 10 is selected a pivot before 7, 8, or 9. If we selected 7 as a pivot before either 6 or 10, then 6 and 10 would be partitioned and not be compared. $= 2/5$. So, we can see that $P(X_{a,b} = 1) = 2/(b - a + 1)$."
+{/def}
+[[img:L6-34.png|L6 p.36 — [0 6 8 11 1 10 2 7 3 9 4 5] 에서 6·10(주황), 7·8·9(초록) → 2/5 → 2/(b−a+1)|large]]
+
+{analogy}
+'''줄다리기 양 끝의 두 사람.''' 6 과 10 은 밧줄 양 끝, 7·8·9 는 가운데. 누군가 "심판"(피벗)으로 불려 나가면, 가운데 사람이 먼저 불리는 순간 밧줄이 끊겨 양 끝은 영영 못 만난다. 양 끝 중 한 명이 먼저 불려야 그가 반대편 끝과 직접 맞선다(비교). 5 명 중 누가 먼저 불릴지는 공평하니, 양 끝 두 명 중 하나일 확률 = 2/5.
+{/analogy}
+
+[[anim:quicksort_random_pivot|{6,7,8,9,10} 이 강조되고, 7 이 먼저 뽑히면 6 과 10 이 갈라지고 6 이나 10 이 먼저면 비교되는 장면 → P = 2/(10−6+1) = 2/5]]
+
+== 유도 ==
+<pre class="txt">
+구간 I = {a, a+1, …, b}, 크기 b - a + 1
+① I 밖의 값(< a 또는 > b)이 피벗이 되면? → a, b 는 같은 쪽으로 가서 여전히 함께 → 아직 결정 안 됨
+② I 안의 값이 '''처음으로''' 피벗이 되는 순간 결정된다:
+   - 그게 a 또는 b → 피벗이 같은 부분 리스트의 상대와 비교 → X_{a,b} = 1
+   - 그게 a 와 b 사이 값 → a 는 왼쪽, b 는 오른쪽 → 영원히 비교 안 됨 → X_{a,b} = 0
+③ 랜덤 피벗이므로 I 의 원소 각각이 "처음" 일 확률이 같다 = 1/(b-a+1)
+④ P(X_{a,b}=1) = 2/(b-a+1)
+예: a=6, b=10 → 2/5 · a=3, b=5 → 2/3 · 이웃 a, b=a+1 → 2/2 = 1 (이웃 값은 반드시 비교됨)
+</pre>
+{exam}
+교수(9/17): "6 과 10 이 비교될 확률은? … '''Please, this is the most important.'''" 학생들과 조건 두 개 — ① '''6 또는 10 이 피벗'''으로 뽑혀야 하고 ② '''그 전에 7, 8, 9 가 피벗이 되면 안 된다''' — 를 찾아 2/5. "'''n 에 무관'''하게 a, b 의 거리만으로 결정된다 — 흥미로운 값." (해설본 ⭐⭐)
+{/exam}
+{quiz}
+n = 12 인 randomized quicksort 에서 값 0 과 11 이 비교될 확률은? 값 4 와 5 는?
+{/quiz}
+{answer}
+0 과 11: $\frac{2}{11-0+1} = \frac{2}{12} = \frac16$ (0..11 전부 중 0 또는 11 이 첫 피벗이어야). 4 와 5: $\frac{2}{5-4+1} = 1$ — 사이에 끼어들 값이 없어 반드시 비교된다.
+{/answer}
+[[sim:randomized_quicksort]]
+
+== 관련 문서 ==
+* [[X_{a,b}]] · [[quicksort 기대 비교 횟수 증명]] · [[비교 횟수 세기]] · [[randomized quicksort]] · [[확률과 기댓값]]

@@ -1,0 +1,40 @@
+key: num_buckets와 k
+title: num_buckets 와 k (버킷 수 vs 값의 범위 — 두 경우)
+category: 5강 Linear Sorting, 용어
+---
+{def}
+"Two cases for num_buckets and k:
+○ '''k ≤ num_buckets''' — At most one key per bucket, so buckets don't need another stable_sort to be sorted (similar to counting_sort).
+○ '''k > num_buckets''' — Might be multiple keys per bucket, so buckets need another stable_sort to be sorted." (L5 p.45)
+{/def}
+[[img:L5-43.png|p.45 — 두 경우 설명과 k=30, num_buckets=10 예제|medium]]
+
+== 두 변수 ==
+{|
+! 기호 || 뜻 || 예
+|-
+| `k` || 값의 범위: 모든 값이 0..k−1 정수 (counting/bucket/radix 공통) || p.45: 30, p.46: 3000, radix 한 자리: 10
+|-
+| `num_buckets` || 버킷 개수. `min(num_buckets, k)` 로 k 이하로 자름 — "Pointless to have more buckets than integers." || 10
+|-
+| n (참고) || 원소 수 — k 와 별개! || p.45: 9
+|}
+
+== 두 경우 ==
+{|
+! 경우 || 버킷 하나에 든 서로 다른 값 || 버킷 안 재정렬 || 코드 분기 || 비용
+|-
+| $k \le$ num_buckets (실제로는 `min` 때문에 =) || 최대 1 종 || 불필요 || `else: result.extend(buckets[j])` || $\Theta(n + k)$ — [[counting sort]] 와 같음
+|-
+| $k >$ num_buckets || 여러 종 가능 || [[stable sort]] 필요 || `if num_buckets < k:` … `stable_sort(buckets[j])` || 몰리면 $\Theta(n \log n)$
+|}
+[[radix sort]] 가 `bucket_sort_with_pairs(A_pairs, k, k)` 로 num_buckets = k 를 주는 이유: 첫 번째 경우로 만들어 '''재정렬 없이''' $\Theta(n + k)$ 를 보장하기 위해서다.
+
+{analogy}
+'''주차장 칸.''' 차 번호가 0..k−1 이고 칸이 k 개 이상이면 번호마다 전용 칸이 있어 줄 세울 필요가 없다. 칸이 k 보다 적으면 한 칸에 여러 번호 차가 겹쳐 서니, 그 칸 안에서 다시 번호순으로 세워야 한다.
+{/analogy}
+[[sim:bucket_sort]]
+(옵션 p.45: num_buckets 10 < k 30 → stable_sort 분기, p.46: 한 버킷에 몰림.)
+
+== 관련 문서 ==
+* [[bucket sort]] · [[get_bucket]] · [[bucket sort의 최악 케이스]] · [[counting sort]] · [[radix sort]] · [[Θ(n+k)]]

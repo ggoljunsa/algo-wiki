@@ -1,0 +1,37 @@
+key: hash collision
+title: hash collision (해시 충돌)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+서로 다른 두 키 $u_i \ne u_j$ 가 같은 버킷으로 가는 것: $h(u_i) = h(u_j)$. M 개를 n 개 버킷에 넣으니 충돌 자체는 피할 수 없다([[비둘기집 원리]]). 목표는 충돌을 없애는 게 아니라 '''충돌 확률을 $1/n$ 이하로''' 만드는 것 — 그게 [[universal hash family]] 의 정의다.
+
+{def}
+L7 p.41 그림: "COLLISION!" — $u_i$ 와 $u_j$ 가 같은 버킷에. 기대 버킷 크기 식의 각 항 $P\{h(u_i) = h(u_j)\}$ 가 충돌 확률.
+L7 p.62: universal ⇔ "for all $u_i, u_j \in U$ with $u_i \ne u_j$, $P_{h \in H}\{h(u_i) = h(u_j)\} \le \frac1n$."
+{/def}
+[[img:L7-40.png|L7 p.41 — u_i 와 u_j 가 같은 버킷으로: COLLISION!|medium]]
+
+{analogy}
+'''생일이 같은 친구.''' 반 친구 두 명의 생일이 같을 확률은 대략 1/365 — 충돌은 가끔 일어난다. 문제는 누군가 '''일부러''' 생일이 같은 사람들만 모아 올 때(적이 고른 입력). 생일(h)을 입장 후에 주사위로 새로 정하면 그 작전은 통하지 않는다.
+{/analogy}
+
+{|
+! 상황 || 충돌 || 예
+|-
+| h = 일의 자리 || 13, 43 → 버킷 3 || L7 p.28
+|-
+| 결정론적 h + 적 || 적이 n 개 전부 충돌시킴 || p.32
+|-
+| H = {h₀, h₁} || 11, 101, 111, … 이 두 함수 모두에서 충돌 (확률 1) || p.57
+|-
+| uniformly random h || $P = 1/n$ || p.41
+|-
+| $h_{2,1}$ (p=5, n=3) || x=1,2 → 0 / x=0,4 → 1 (mod 3 단계에서만) || p.70
+|}
+[[sim:hash_chaining]]
+{exam}
+해설본 ⭐⭐⭐: $h_{a,b}$ 에서 '''mod p 단계는 전단사라 충돌이 없고, 충돌은 mod n 단계에서만''' 생긴다(p.70 "No collisions here!" / "This step is the one where two different elements might collide.").
+{/exam}
+
+== 관련 문서 ==
+* [[universal hash family]] · [[기대 버킷 크기]] · [[비둘기집 원리]] · [[chaining]] · [[h_{a,b}]]

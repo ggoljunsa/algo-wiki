@@ -1,0 +1,71 @@
+key: randomized quicksort
+title: randomized quicksort (랜덤 피벗 퀵정렬)
+category: 6강 Randomized I, 알고리즘
+---
+== 개요 ==
+[[quicksort]] 에서 피벗을 `A[0]` 대신 `random.choice(A)` 로 고르는 것 — '''바뀐 건 한 줄뿐'''. 그 한 줄로 worst-case 는 여전히 $\Theta(n^2)$ 지만 [[expected running time]] 이 $\Theta(n \log n)$ 으로 내려간다. [[Las Vegas와 Monte Carlo|Las Vegas]] 알고리즘(항상 정렬 성공, 시간이 운).
+
+{def}
+L6 p.18 / p.43: "Worst-case $\Theta(n^2)$ — Think of this as the adversary chooses the randomness. / Expected $\Theta(n \log(n))$ — We can lower-bound it with the sorting lower bound!"
+{/def}
+<pre class="c">
+def randomized_quicksort(A):
+  if len(A) <= 1:
+    return
+  pivot = random.choice(A)                       # ← 유일한 변경점
+  left, right = partition_about_pivot(A, pivot)
+  quicksort(left)
+  quicksort(right)
+</pre>
+{info}
+슬라이드 코드의 재귀 호출은 `quicksort(left)` 로 적혀 있지만 의도는 `randomized_quicksort(left)` 다(재귀에서도 랜덤 피벗). p.52 randomized_select 가 `select(...)` 를 부르는 것도 같은 표기 습관.
+{/info}
+{|
+! 변수 || 뜻 || 슬라이드 예 [0 11 7 4 8 3 2 9 6 10 5 1]
+|-
+| `A` || 정렬할 리스트 || n = 12
+|-
+| `pivot` || 균등 무작위로 뽑은 원소 (각 원소 확률 1/len(A)) || 5
+|-
+| `left` / `right` || pivot 보다 작은 / 큰 원소 || [0 4 3 2 1] / [11 7 8 9 6 10]
+|}
+[[img:L6-41.png|L6 p.43 — Randomized Quicksort: Worst-case Θ(n²) / Expected Θ(n log n)|medium]]
+
+{analogy}
+'''제비뽑기로 반장 뽑기.''' 반장을 "맨 앞 사람"으로 정하면, 심술궂은 선생님이 키 순으로 줄 세워 두는 것만으로 매번 최악이 된다. 제비뽑기로 뽑으면 선생님이 어떻게 줄을 세워도 '''대체로''' 중간쯤 사람이 뽑힌다. 선생님이 제비까지 조작하면(Scenario 2) 여전히 최악이지만, 그건 제비를 조작할 수 있을 때 얘기다.
+{/analogy}
+
+[[anim:quicksort_random_pivot|{6,7,8,9,10} 중 누가 먼저 피벗으로 뽑히느냐에 따라 6 과 10 이 비교되거나(6·10 먼저) 영원히 갈라지는(7·8·9 먼저) 장면을 보고, 기대 비교 횟수 증명의 핵심 확률 2/5 를 잡자]]
+
+== 왜 expected 가 $n \log n$ 인가 (요약) ==
+<pre class="txt">
+총 비교 횟수 = Σ_{a<b} X_{a,b}                 ← [[비교 횟수 세기]], [[X_{a,b}]]
+E[총 비교] = Σ_{a<b} P(X_{a,b}=1)               ← [[기대값의 선형성]]
+           = Σ_{a<b} 2/(b-a+1)                  ← [[P(X_{a,b}=1)]]
+           ≤ 2n · Σ_{c=1}^{n-1} 1/c = O(n log n) ← [[조화급수]]
+</pre>
+자세한 유도: [[quicksort 기대 비교 횟수 증명]]. $\Theta$ 인 이유: 비교 기반 정렬이므로 [[Ω(n log n) 하한]] 이 걸린다(p.43 "We can lower-bound it with the sorting lower bound!").
+{exam}
+교수(9/17): "바꾼 건 random choice 하나뿐인데 average 가 $n^2$ 에서 $n \log n$ 으로 — '''that's the power of randomness'''. quicksort 는 mergesort 보다 훨씬 널리 쓰인다." worst $\Theta(n^2)$ / expected $\Theta(n \log n)$ 두 값 모두 p.80 요약표 암기 대상(해설본 ⭐⭐⭐).
+{/exam}
+[[sim:randomized_quicksort]]
+n = 12 에서 기대 비교 $\sum 2/(b-a+1) \approx 32.68$, 슬라이드 피벗열 33 회, median 피벗 25 회, 정렬 입력 + 첫 원소 66 회.
+
+{quiz}
+빈칸을 채워라.
+<pre class="c">
+def randomized_quicksort(A):
+  if len(A) <= 1:
+    return
+  pivot = ________
+  left, right = partition_about_pivot(A, pivot)
+  randomized_quicksort(____)
+  randomized_quicksort(____)
+</pre>
+{/quiz}
+{answer}
+`pivot = random.choice(A)`, `randomized_quicksort(left)`, `randomized_quicksort(right)`. 결정론적 버전과의 유일한 차이가 첫 빈칸이다(`A[0]` → `random.choice(A)`). select 와 달리 '''양쪽 모두''' 재귀한다.
+{/answer}
+
+== 관련 문서 ==
+* [[quicksort]] · [[quicksort 기대 비교 횟수 증명]] · [[randomized select]] · [[in-place partition]] · [[QuickSort vs MergeSort]] · [[두 시나리오]]

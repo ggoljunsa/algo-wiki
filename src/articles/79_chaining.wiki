@@ -1,0 +1,40 @@
+key: chaining
+title: chaining (체이닝, 연결 리스트로 충돌 처리)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+같은 버킷에 해시된 키들을 그 버킷의 [[linked list]] 에 줄줄이 매다는 방식. 매달린 리스트를 "chain" 이라 부른다. INSERT 는 리스트 앞에 붙이므로 $O(1)$, SEARCH 는 리스트 길이만큼 $O(\text{length(list)})$. 충돌을 다른 칸으로 튕겨 보내는 [[open addressing]] 과 대비된다.
+
+{def}
+L7 p.26/28: "This is a hash table (with chaining) — Array of n buckets. Each bucket stores an unsorted linked list. insert in $O(1)$ since it's unsorted; search in $O(\text{length(list)})$."
+L7 p.27: "This is a 'chain'."
+{/def}
+[[img:L7-28.png|L7 p.28 — INSERT 13, 22, 43, 9 → 버킷 3 에 13→43 chain; SEARCH 43: Scan through all the elements in bucket h(43) = 3|large]]
+
+{analogy}
+'''옷걸이 고리에 줄줄이 거는 코트.''' 고리(버킷)가 9 개뿐이라 같은 고리에 코트가 여러 벌 걸린다. 새 코트는 맨 앞에 걸면 끝(INSERT $O(1)$). 내 코트를 찾을 땐 그 고리의 코트를 하나씩 넘겨 봐야 한다(SEARCH = 걸린 벌 수).
+{/analogy}
+
+<pre class="txt">
+h(x) = 일의 자리, n = 9 버킷 (p.28)
+INSERT 13 → 3: [13]
+INSERT 22 → 2: [22]
+INSERT 43 → 3: [13 → 43]         (슬라이드 그림은 뒤에 붙인 모양, 앞에 붙여도 O(1))
+INSERT 9  → 9: [9]
+SEARCH 43 → 버킷 3 을 처음부터: 13 ≠ 43, 43 = 43 → 2 칸
+</pre>
+[[sim:hash_chaining]]
+시뮬레이터 옵션: p.28 기본 / p.34 게임 순서(INSERT 13,22,43,92,7, SEARCH 43, DELETE 92, SEARCH 7, INSERT 92) / p.57 적의 입력 {11,101,111,121,131,141} 이 h₀ 든 h₁ 이든 전부 버킷 1 → search $O(n)$ / p.70 $h_{2,1}$.
+{exam}
+해설본 핵심 요약 2번: "Chaining: insert O(1), search O(리스트 길이). 성능은 전적으로 '''버킷이 얼마나 고르게 차느냐'''에 달림." → 그래서 [[기대 버킷 크기]] 가 $O(1)$ 이면 연산당 expected $O(1)$.
+{/exam}
+{|
+! || chaining || [[open addressing]]
+|-
+| 충돌 시 || 같은 버킷의 리스트에 추가 || 다른 빈 버킷으로 "bounce"
+|-
+| 시험 || L7 본 내용 || Aside (CLRS 11.4, 관심 있으면)
+|}
+
+== 관련 문서 ==
+* [[hash table]] · [[linked list]] · [[open addressing]] · [[hash collision]] · [[기대 버킷 크기]]

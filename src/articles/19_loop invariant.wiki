@@ -1,0 +1,68 @@
+key: loop invariant
+title: loop invariant (루프 불변식)
+category: 1강 Analysis I, 용어
+---
+== 개요 ==
+[[iterative algorithm]] 의 [[correctness]] 를 증명하는 이 과목의 표준 도구. 루프의 '''매 반복 전후에 참인 조건'''을 하나 잡고, 그것이 성립함을 '''반복 횟수에 대한 [[귀납법]]'''으로 보인다. 재귀 버전은 L3 의 [[recursion invariant]].
+
+{def}
+'''Loop invariant''' (L1 p.44): "There's a name for a condition that is '''true before and after each iteration of a loop''': a loop invariant."
+(p.45) "To prove the correctness of insertion sort, we will use our loop invariant to proceed by induction."
+루프의 각 반복 전과 후에 항상 참인 조건. 이것을 귀납법의 명제로 삼아 정확성을 증명한다.
+{/def}
+
+{analogy}
+'''계단 오르기에서 "지금까지 밟은 계단은 전부 안전하다"'''. 첫 계단은 확인했고(base case), 안전한 계단에서 다음 계단 하나를 확인하며 오르면 여전히 "밟은 계단은 전부 안전"(inductive step). 꼭대기에 닿았을 때 이 말은 곧 "계단 전체가 안전"(conclusion). loop invariant 는 이 "지금까지 ~는 전부 …" 문장이다.
+{/analogy}
+
+[[anim:loop_invariant_flow|Initialization(초록 1칸) → Maintenance(초록이 한 칸씩 늘며 체크) → Termination(전체 초록) 흐름과, 옆에 귀납법 4요소 라벨이 대응해 켜지는 것을 보자]]
+
+== 삽입 정렬의 loop invariant (L1 p.45–52) ==
+'''Loop invariant(i): `A[:i+1]` is sorted.'''
+[[img:L1-52.png|L1 p.52 — insertion sort 의 형식 증명 전체|large]]
+<pre class="txt">
+'''Inductive hypothesis:''' 바깥 루프 반복 i 가 끝났을 때 A[:i+1] 이 정렬돼 있다.
+'''Base case (i = 0):''' 시작 전 A[:1] 은 원소 하나 → 정렬.                 (CLRS: Initialization)
+'''Inductive step:''' A[:i+1] 정렬 + A[i+1] 을 올바른 자리에 삽입 → A[:i+2] 정렬. (CLRS: Maintenance)
+'''Conclusion:''' 반복 n−1 이 끝나면 A[:n] 정렬 = A 전체 → 정확.             (CLRS: Termination)
+</pre>
+[[sim:loop_invariant_check]]
+
+{warn}
+p.45 는 "at the beginning of iteration i (… insert A[i+1]) … A[:i+1] is sorted", p.49 는 "holds at the '''end''' of iteration i" 라고 써서 시점이 한 칸 어긋나 보인다. 코드 기준으로는 반복 i 가 `A[i]` 를 넣으므로 '''"반복 i 가 끝나면 A[:i+1] 정렬"'''(= "반복 i+1 이 시작할 때 A[:i+1] 정렬") 로 쓰는 것이 정확하다. 답안에는 시점(시작/끝)을 명시하자.
+{/warn}
+
+== 좋은 loop invariant 의 세 조건 ==
+{|
+! 조건 || 확인할 질문 || 삽입 정렬
+|-
+| 처음에 참 || 루프에 들어가기 전에 자명한가? || A[:1] 은 한 칸 → 정렬
+|-
+| 한 번 돌아도 유지 || 루프 몸통 한 번이 보존하나? || [[삽입 한 번의 성질]]
+|-
+| 끝에서 쓸모 || 종료 시점의 invariant 가 원하는 결론인가? || A[:n] = 전체 → 정렬 완료
+|}
+
+{quiz}
+'''HW1 3번 (15점)''': 아래 [[selection sort]] 에 대해 (a) 바깥 for 루프의 loop invariant, (b) 안쪽 for 루프의 loop invariant 를 쓰고, (c)(d) 각각을 귀납법 4요소로 증명하라.
+<pre class="c">
+def selection_sort(A):
+    for i in range(len(A)-1):
+        min_idx = i
+        for j in range(i+1, len(A)):
+            if A[j] < A[min_idx]:
+                min_idx = j
+        swap(min_idx, i)
+</pre>
+{/quiz}
+{answer}
+'''(a) Inv_outer(i)''': 반복 i 가 시작될 때 ① `A[:i]` 는 정렬돼 있다 ② `A[:i]` 의 모든 원소 ≤ `A[i:]` 의 모든 원소 ③ A 는 원래 입력의 순열.
+'''(b) Inv_inner(j)''': 내부 반복 j 가 시작될 때 i ≤ min_idx < j 이고 `A[min_idx] = min(A[i:j])`.
+'''(d) 안쪽''' Base j=i+1: min_idx=i, 구간 {A[i]} 하나 → 자명. Step: A[j] < A[min_idx] 면 min_idx=j 로 갱신, 아니면 유지 → 두 경우 모두 min(A[i:j+1]). Conclusion: j=n 에서 A[min_idx] = min(A[i:]).
+'''(c) 바깥''' Base i=0: A[:0] 은 빈 리스트 → 정렬, ② 는 공허하게 참. Step: 안쪽 결론으로 A[min_idx] = min(A[i:]); swap 은 인덱스 ≥ i 만 건드려 A[:i] 불변; 새 A[i] ≥ A[:i] (②) 이고 새 A[i] ≤ A[i+1:] → Inv_outer(i+1). Conclusion: i=n−1 에서 A[:n−1] 정렬 ∧ A[:n−1] ≤ A[n−1] → A 전체 정렬.
+핵심: ② 가 없으면 inductive step 이 안 된다(A[:i]=[1,9], 남은 5 → [1,9,5]). 자세히는 [[selection sort]].
+{/answer}
+
+== 관련 문서 ==
+* [[invariant]] · [[귀납법 4요소]] · [[Initialization/Maintenance/Termination]] · [[iterative algorithm]]
+* [[insertion sort]] · [[selection sort]] · [[merge의 loop invariant]] · [[recursion invariant]] · [[반복 vs 재귀 증명 표]]

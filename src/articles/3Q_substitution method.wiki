@@ -1,0 +1,93 @@
+key: substitution method
+title: Substitution Method (치환법)
+category: 3강 D&C I, 점화식
+---
+== 개요 ==
+'''답을 추측하고, 그 추측을 귀납법으로 증명하는''' 점화식 풀이법. [[master method]] 가 안 되는 경우(부분 문제 크기가 다를 때)에도 쓸 수 있다. 교수가 꼽은 "기억해야 할 두 방법" 중 하나. L3 p.108–116 (9/8 수업), L4 의 median of medians 분석과 HW1 6-b 에 그대로 재등장한다.
+
+{def}
+"'''1. Guess what the answer is. 2. Formally prove that's what the answer is.'''" (L3 p.109)
+p.116 "What have we learned?" — The substitution method can work when the master theorem doesn't (e.g. with different-sized sub-problems).
+'''Step 1''': generate a guess
+'''Step 2''': try to prove that your guess is correct — might need to leave some constants unspecified until the end, then see what they need to be for the proof to work
+'''Step 3''': profit — Pretend you didn't do Steps 1 and 2 and write down a nice proof
+{/def}
+
+{analogy}
+'''탐정의 추리.''' 먼저 "범인은 집사다"라고 찍는다(guess — 그래프, 재귀 트리, 상·하한으로 감을 잡고). 그다음 증거로 빈틈없이 입증한다(귀납법). 입증 도중 "공범이 몇 명이어야 앞뒤가 맞나"(상수 C)를 거꾸로 알아낸다. 마지막 법정 진술에서는 처음부터 다 알았던 것처럼 말끔하게 진술한다 — "'''Pretend like we knew it all along.'''"
+{/analogy}
+
+== 예제 1 — 워밍업 (p.109–111): $T(1) \le 1$, $T(n) \le 2T(n/2) + n$ ==
+'''Step 1 (guess)''': "Try solving it…" — [[iteration method]] 처럼 펼치면 $T(n) = nT(1) + n\log n = n(\log n + 1)$.
+<pre class="txt">
+'''Inductive hypothesis:''' T(k) ≤ k(log k + 1)   for all 1 ≤ k < n          ([[강한 귀납법]])
+'''Base case:'''           T(1) = 1 = 1·(log 1 + 1)
+'''Inductive step:'''      T(n) = 2T(n/2) + n
+                          ≤ 2·(n/2)(log(n/2) + 1) + n      ← n/2 를 가설에 대입
+                          = 2·(n/2)(log n − 1 + 1) + n
+                          = 2·(n/2)·log n + n
+                          = n(log n + 1)
+'''Conclusion:'''          By induction, T(n) ≤ n(log n + 1) for all n > 0
+</pre>
+[[img:L3-111.png|L3 p.111 — 워밍업 증명 (결론 문장의 '=' 는 '≤' 의 뜻)|medium]]
+p.112: "So far, just seems like a different way of doing the same thing. But, let's try it out with a new recurrence."
+
+== 예제 2 — 크기가 다른 부분 문제 (p.112–115) ⭐⭐ ==
+$T(n) = 10n$ ($1 \le n \le 10$), $T(n) = 3n + T(n/5) + T(n/2)$ (otherwise) — n/5 와 n/2 로 크기가 달라 [[master method의 한계|master method 불가]].
+=== Step 1: Guess (p.113) ===
+<pre class="txt">
+Try solving it   → [Whiteboard] "Gets gross fast"
+Try plotting it  → "Looks pretty linear"  → Guess O(n)
+What else do we know?
+   T(n) ≤ 3n + T(n/5) + T(n/2) ≤ 3n + 2·T(n/2) = O(n log n)    (T(n/5) ≤ T(n/2) 로 키움 → mergesort 꼴)
+   T(n) ≥ 3n
+   → 답은 O(n) 과 O(n log n) 사이 → '''Let's guess O(n)'''
+</pre>
+[[img:L3-113.png|L3 p.113 — Guess: 그래프가 "Looks pretty linear", 3n ≤ T(n) ≤ O(n log n)|medium]]
+=== Step 2: Prove, C 는 미정으로 (p.114) ===
+<pre class="txt">
+'''Inductive hypothesis:''' T(k) ≤ C·k  for all 1 ≤ k < n          ("C is some constant we'll have to fill in later!")
+'''Base case:'''           T(k) ≤ C·k  for all k ≤ 10
+                          T(k) = 10k 이므로  →  '''C ≥ 10'''          ("C must be ≥ 10")
+'''Inductive step:'''      T(n) = 3n + T(n/5) + T(n/2)
+                          ≤ 3n + C(n/5) + C(n/2)
+                          = 3n + (C/5)n + (C/2)n
+                          ≤ C·n  이 되려면  3 ≤ C − C/5 − C/2 = 3C/10  →  '''C ≥ 10'''
+                          → "Solve for C to satisfy the inequality. C = 10 works."
+'''Conclusion:'''          There exists some C such that for all n > 1, T(n) ≤ Cn. Therefore, T(n) = O(n).
+</pre>
+[[img:L3-114.png|L3 p.114 — C 를 비워 두고 증명, 판서: 3 ≤ C − C/5 − C/2 = 3C/10, C ≥ 10|medium]]
+=== Step 3: Profit (p.115) ===
+<pre class="txt">
+'''Inductive hypothesis:''' T(k) ≤ 10k for all 1 ≤ k < n
+'''Base case:'''           T(k) ≤ 10k for all k ≤ 10
+'''Inductive step:'''      T(n) = 3n + T(n/5) + T(n/2) ≤ 3n + 10(n/5) + 10(n/2) = 3n + 2n + 5n = 10n
+'''Conclusion:'''          For all n > 1, T(n) ≤ 10n. Therefore, T(n) = O(n).        ← "Pretend we knew C = 10 all along."
+</pre>
+[[img:L3-115.png|L3 p.115 — Pretend like we knew it|medium]]
+[[sim:substitution_method]]
+
+{exam}
+9/8 수업(녹음): "It's simple, it has only two steps." / "'''There might be some constant value unspecified yet. But in the process of proving, you will know the constant value.'''" — C 조건을 '''base case 와 inductive step 에서 각각''' 뽑아 둘 다 만족하는 값을 고르는 절차가 채점 포인트. 같은 틀이 L4 [[T(n/5) + T(7n/10) + O(n)]] (C = max{7, 10d}) 와 HW1 6-b (C = 8) 에 나왔다.
+{/exam}
+
+{quiz}
+HW1 6-b: $T(1) = 1$, $T(n) = T(n/2) + T(n/4) + T(n/8) + n$ 에 대해 가장 tight 한 $O(f(n))$ 을 구하고 증명하라.
+{/quiz}
+{answer}
+부분 문제 크기가 n/2, n/4, n/8 로 서로 다르므로 master method 를 쓸 수 없다 → substitution method. (n 은 8 의 거듭제곱으로 가정)
+'''Guess''': 크기 합 $n/2 + n/4 + n/8 = 7n/8 < n$ → 레벨마다 일이 7/8 배로 줄어드는 등비급수, 합 ≈ 8n → $O(n)$.
+<pre class="txt">
+C 결정:  T(n) ≤ C(n/2) + C(n/4) + C(n/8) + n = (7C/8)·n + n ≤ Cn  ⇔  n ≤ Cn/8  ⇔  C ≥ 8
+         base: T(1) = 1 ≤ C·1  → C ≥ 1       ⇒  '''C = 8'''
+'''Inductive hypothesis:''' ∀ 1 ≤ k < n, T(k) ≤ 8k
+'''Base case:'''           T(1) = 1 ≤ 8
+'''Inductive step:'''      T(n) ≤ 8(n/2) + 8(n/4) + 8(n/8) + n = 4n + 2n + n + n = 8n
+'''Conclusion:'''          ∀ n ≥ 1, T(n) ≤ 8n → T(n) = O(n)
+</pre>
+tight: 마지막 항 때문에 $T(n) \ge n$ → $\Omega(n)$ → $\Theta(n)$. 패턴: C = (추가 비용 계수) / (1 − 크기 합의 비율) = 1/(1 − 7/8) = 8. → [[미정 상수 C]], [[HW1 복기]]
+{/answer}
+
+== 관련 문서 ==
+* [[미정 상수 C]] · [[master method의 한계]] · [[강한 귀납법]]
+* [[점화식 풀이 4가지]] · [[T(n/5) + T(7n/10) + O(n)]] · [[부분 문제 크기의 합]]

@@ -1,0 +1,39 @@
+key: asymptotic analysis
+title: asymptotic analysis (점근적 분석)
+category: 2강 Analysis II, 용어
+---
+== 개요 ==
+L2 p.4–8 에서 도입한 runtime 측정법. 초 단위가 아니라 '''입력 크기 n 이 커질 때 runtime 이 어떻게 scale 하는가'''만 본다. 그 언어가 [[Big-O]] / [[Big-Ω]] / [[Big-Θ]] 다. L1 Outline 의 "Proving runtime with asymptotic analysis — Next time" 이 바로 이것.
+
+{def}
+'''Key insight''' (L2 p.5): "Focus on '''how the runtime scales with n''' (the input size)."
+"One algorithm is '''faster''' than another if its runtime '''scales better with the size of the input'''."
+(p.6) Pros — "Abstracts away from hardware- and language- specific issues", "Make algorithm analysis much more tractable". Cons — "'''Only makes sense if n is large''' (compared to the constant factors)."
+{/def}
+[[img:L2-06.png|L2 p.6 — 핵심 문장, Pros/Cons, "9,999,999,999,999 n is 'better' than n² ?!?!"|medium]]
+
+{analogy}
+'''비행기 vs 자전거'''. 집 앞 편의점(작은 n)까지는 자전거가 훨씬 빠르다 — 비행기는 공항 가고 수속하는 '''상수 비용'''이 크니까. 하지만 서울→부산(큰 n)이면 비행기가 이긴다. asymptotic analysis 는 "'''충분히 먼 거리'''에서는 누가 이기나"만 묻는다. 그래서 편리하지만(Pros), 실제로 가까운 거리만 다닌다면 틀린 조언일 수 있다(Cons).
+{/analogy}
+
+== 규칙 두 개 ==
+# '''상수 무시''': $128n$ 과 $n$ 은 같은 급. → [[상수와 저차항 무시]]
+# '''저차항 무시''': $1.1x^2 + (x^{1.9}+10)\sin(10x+1.5)+30$ 은 결국 $x^2$ 급 (L2 p.8).
+그리고 급끼리는 [[증가율 사다리]] 로 비교한다: $1 < \log n < n < n\log n < n^2 < 2^n < n!$.
+
+{exam}
+p.6 의 '''Cons''' 를 꼭 기억하라. "$9{,}999{,}999{,}999{,}999\,n$ is 'better' than $n^2$ ?!?!" — 점근적으로는 선형이 이기지만, n 이 약 $10^{13}$ 보다 작으면 $n^2$ 이 더 빠르다. HW1 4번이 이 한계를 숫자로 묻는다.
+{/exam}
+
+{quiz}
+'''HW1 4번 (25점)''': 세 알고리즘의 worst-case 가 $W_1(n) = 128n$, $W_2(n) = 2n\log_2 n$, $W_3(n) = 0.125n^2$ 이다.
+(a) 점근적으로 빠른 순서는? (b) 입력을 n → 128n 으로 늘리면 각 runtime 은 몇 배? (c) 실제로 어느 n 범위에서 어느 알고리즘이 가장 빠른가? 각 소문항에 가정·한계를 적어라.
+{/quiz}
+{answer}
+(a) A1 $\Theta(n)$ < A2 $\Theta(n\log n)$ < A3 $\Theta(n^2)$. 한계: n 이 충분히 클 때만 의미.
+(b) A1: 128배 · A2: $W_2(128n) = 128 \cdot W_2(n)\,(1 + 7/\log_2 n)$ → 128배보다 조금 더 (n=128 이면 256배, n→∞ 면 128배) · A3: $128^2 = 16384$ 배. 한계: 두 입력 모두 worst-case 라는 가정.
+(c) 교차점 n = 1024 (A1=A3), $n = 2^{64}$ (A1=A2), n ≈ 108.1 (A2=A3) → $2 \le n \le 108$: A3 / $109 \le n \le 2^{64}$: A2 / $n > 2^{64}$: A1. 점근적 1등 A1 이 현실에서는 최선인 적이 없다. 계산은 [[교차점 계산]].
+{/answer}
+
+== 관련 문서 ==
+* [[상수와 저차항 무시]] · [[Big-O]] · [[Big-Ω]] · [[Big-Θ]] · [[증가율 사다리]] · [[교차점 계산]] · [[runtime]] · [[L2 Algorithmic Analysis II]]

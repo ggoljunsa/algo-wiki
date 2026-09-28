@@ -1,0 +1,53 @@
+key: 입력 크기에 대한 귀납법
+title: 입력 크기에 대한 귀납법 (induction on the input size)
+category: 3강 D&C I, 증명
+---
+== 개요 ==
+[[recursive algorithm]] 의 정확성을 증명하는 방법. L1 은 반복 번호에 대해 귀납했지만, L3 은 '''입력 리스트의 길이'''에 대해 귀납한다(p.35). 형식은 똑같은 [[귀납법 4요소]]다.
+
+{def}
+p.35: "Formally, similar to last time, we proceed by induction. However, '''rather than inducting on the loop iteration, we induct on the length of the input list.'''"
+p.36 일반형 — '''Inductive Hypothesis''': The algorithm works on input lists of length 1 to i. / '''Base case''': The algorithm works on input lists of length 1. / '''Inductive step''': If the algorithm works on input lists of length 1 to i, then it works on input lists of length i+1. / '''Conclusion''': If the algorithm works on input lists of length n, then it works on the entire list.
+{/def}
+
+{analogy}
+'''도미노 대신 크기순 인형.''' L1 의 귀납은 도미노 한 줄 — 1번이 넘어지면 2번, 2번이면 3번. 입력 크기 귀납은 "크기 1~i 인형이 전부 제대로 조립된다면, 크기 i+1 인형도 그 안의 '''더 작은 인형들'''을 써서 조립된다"는 것이다. 안에 들어가는 인형이 바로 아래 크기(i)가 아니라 훨씬 작은 크기(약 i/2)라서, 가설에 "1 부터 i 까지 전부"가 필요하다.
+{/analogy}
+
+== mergesort 에 적용 (p.37–38) ==
+=== Inductive hypothesis ===
+mergesort 는 길이 1 부터 i 까지의 입력 리스트를 올바르게 정렬한다. ("In every recursive call, mergesort returns a sorted list.")
+=== Base case (i = 1) ===
+길이 1 입력은 `if len(A) <= 1: return A` 로 그대로 반환 — 1-element list 는 trivially sorted.
+=== Inductive step ===
+길이 i+1 입력에서 mergesort 는 왼쪽·오른쪽 절반에 재귀한다. 두 절반의 길이는 ⌊(i+1)/2⌋, ⌈(i+1)/2⌉ 로 '''1 과 i 사이''' → 가설에 의해 `left`, `right` 는 원래 원소를 담은 정렬된 리스트. 정렬된 두 리스트를 받으면 [[merge]] 는 모든 원소를 담은 정렬된 리스트를 돌려준다([[merge의 loop invariant]]) → 길이 i+1 도 올바르다.
+=== Conclusion ===
+가설은 모든 i 에서 성립 → 어떤 길이 n 이든 mergesort 는 정렬된 리스트를 돌려준다.
+[[img:L3-37.png|L3 p.37 — mergesort 정확성 증명 4단|medium]]
+{warn}
+p.37 의 Inductive Hypothesis 문장은 "correctly sorts input lists of '''length i'''" 로 짧게 적혀 있지만, 바로 아래 Inductive step 은 "Suppose the algorithm works on input lists of '''length 1 to i'''" 를 쓴다. 답안에는 p.36 일반형처럼 "1 to i" 로 쓰자 — 이것이 [[강한 귀납법]]이다.
+{/warn}
+
+== L1 과 비교 ==
+{|
+! || L1 (insertion sort) || L3 (mergesort)
+|-
+| 귀납 변수 || 반복 번호 i || 입력 길이 i
+|-
+| 가설 || 반복 i 가 끝나면 A[:i+1] 정렬 || 길이 1~i 입력을 올바르게 정렬
+|-
+| base || i = 0 || 길이 1
+|-
+| step || i → i+1 (한 반복) || {1,…,i} → i+1 (한 재귀 호출)
+|-
+| 결론 || 반복 n−1 후 전체 정렬 || 길이 n 도 정렬
+|}
+[[sim:mergesort_tree]]
+
+{exam}
+9/3 수업: "It has four components — inductive hypothesis, base case, inductive step, conclusion — it's the same mathematical induction, but the inductive hypothesis is for the recursive algorithm. We assume that the algorithm works on input lists of length 1 to i instead of iteration i." 또 "input size may differ by 1 when n is odd" 라며 절반 크기가 딱 떨어지지 않는 경우도 가설이 덮는다고 설명했다.
+{/exam}
+
+== 관련 문서 ==
+* [[귀납법]] · [[귀납법 4요소]] · [[강한 귀납법]]
+* [[recursion invariant]] · [[증명 레시피]] · [[mergesort]]

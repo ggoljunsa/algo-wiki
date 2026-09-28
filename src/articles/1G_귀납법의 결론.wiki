@@ -1,0 +1,33 @@
+key: 귀납법의 결론
+title: 귀납법의 결론 (Conclusion)
+category: 1강 Analysis I, 용어
+---
+== 개요 ==
+[[귀납법 4요소]]의 네 번째. 루프가 '''끝났을 때''' invariant 가 무엇을 뜻하는지 읽어 내어 "그러므로 알고리즘이 올바르다"로 연결한다. CLRS 이름은 '''Termination'''(L1 p.57).
+
+{def}
+L1 p.46: "'''Conclusion''' If the loop invariant holds after the last iteration, then the algorithm is correct!"
+L1 p.52 (insertion sort): "At the end of the n-1'st iteration (at the end of the algorithm) `A[:n]` is sorted. Since `A[:n]` is the whole list A, so we're done!"
+{/def}
+
+{analogy}
+'''퍼즐의 마지막 조각'''. "지금까지 맞춘 부분은 전부 맞다"(invariant)를 계속 지켜 왔다면, 마지막 조각을 끼운 순간 그 말은 곧 "'''퍼즐 전체'''가 맞다"가 된다. Conclusion 은 이 "그 순간 invariant 가 전체를 가리킨다"를 확인하는 한 줄이다.
+{/analogy}
+
+== 세 가지를 꼭 적는다 ==
+{|
+! 적을 것 || insertion sort || selection sort (HW1 3)
+|-
+| 루프가 '''언제''' 끝나는가 || 반복 i = n−1 후 || i = n−1 에서 종료 (n−1 번 반복)
+|-
+| 그때의 invariant || `A[:n]` 정렬 || `A[:n−1]` 정렬 ∧ `A[:n−1]` ≤ `A[n−1]`
+|-
+| 그것이 곧 정답인 이유 || `A[:n]` = A 전체 || 앞 n−1 개가 가장 작은 n−1 개 → 마지막 하나는 자동으로 최댓값 → A 전체 정렬
+|}
+
+{warn}
+"invariant 가 마지막에도 성립한다"에서 멈추면 반쪽짜리다. '''종료 시점의 i 값을 invariant 에 대입'''해서 원하는 결론(전체 정렬)이 나옴을 보여야 한다. 또 루프가 실제로 '''끝난다'''(for 루프는 유한 번)는 것도 한 마디 해 두면 좋다.
+{/warn}
+
+== 관련 문서 ==
+* [[귀납법 4요소]] · [[inductive step]] · [[Initialization/Maintenance/Termination]] · [[loop invariant]]

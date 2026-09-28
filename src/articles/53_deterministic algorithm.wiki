@@ -1,0 +1,32 @@
+key: deterministic algorithm
+title: deterministic algorithm (결정론적 알고리즘)
+category: 5강 Linear Sorting, 용어
+---
+{def}
+"Theorem [Lower bound of Ω(n log(n))]: Any '''deterministic''' comparison-based sorting algorithm requires Ω(n log(n))-time" / "Any deterministic comparison-based algorithm can be represented as a decision tree with n! leaves" (L5 p.9, p.15)
+결정론적 알고리즘 = 난수를 쓰지 않아서 '''같은 입력이면 항상 같은 동작'''(같은 비교, 같은 순서, 같은 시간)을 하는 알고리즘.
+{/def}
+
+== 이름에서 개념 끌어내기 ==
+'''deterministic''' = "결정된". 입력이 정해지면 실행 경로가 하나로 결정된다. 반대말은 L6 의 [[randomized algorithm]] — 같은 입력에도 난수에 따라 경로가 달라진다.
+
+{analogy}
+'''자판기 vs 가챠.''' 자판기(deterministic)는 같은 버튼을 누르면 항상 같은 음료가 나온다. 가챠(randomized)는 같은 동전을 넣어도 매번 다른 것이 나온다. 하한 정리는 "자판기형" 정렬에 대한 것이다.
+{/analogy}
+
+== 왜 하한 정리에 "deterministic" 이 붙나 ==
+* 결정론적이면 입력마다 경로가 '''하나''' → 알고리즘 전체를 '''하나의''' [[decision tree]] 로 그릴 수 있다. 증명의 첫 줄이 이것에 의존한다.
+* 난수를 쓰는 비교 정렬([[randomized quicksort]])은 난수 결과마다 다른 트리가 된다. (그래도 기대 비교 횟수 역시 $\Omega(n \log n)$ 이라는 것이 알려져 있지만 슬라이드 범위 밖이다.)
+{|
+! || deterministic || randomized
+|-
+| 예 || [[insertion sort]], [[mergesort]], [[linear-time selection]], [[counting sort]] || random pivot [[select]], [[randomized quicksort]], [[bogosort]]
+|-
+| 같은 입력 반복 || 항상 같은 시간 || 매번 다를 수 있음
+|-
+| worst-case 를 정하는 것 || 입력 || 입력 + 난수 ([[두 종류의 worst-case]])
+|}
+[[img:L5-07.png|p.9 — Theorem: Any deterministic comparison-based sorting algorithm requires Ω(n log(n))-time|medium]]
+
+== 관련 문서 ==
+* [[Ω(n log n) 하한]] · [[decision tree]] · [[randomized algorithm]] · [[두 종류의 worst-case]] · [[comparison-based sorting]]

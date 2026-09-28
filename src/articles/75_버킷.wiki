@@ -1,0 +1,34 @@
+key: 버킷
+title: 버킷 (bucket)
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+해시 테이블 배열의 한 칸. 여러 키가 같은 칸으로 올 수 있으므로 칸마다 [[linked list]](chain)를 둔다. L7 에서 버킷 수는 '''n''' (= 등장할 키의 최대 개수)으로 잡는다. L5 [[bucket sort]] 의 버킷과 같은 말이다 — L7 p.18–20 이 바로 bucket sort 식 버킷팅으로 시작한다.
+
+{def}
+L7 p.25: "We will put items of U into '''n buckets'''. There is a hash function $h: U \to \{1, …, n\}$ which says what element goes in what bucket."
+L7 p.18: "Can we fix this issue by assigning multiple types of item per address, like the case of bucket_sort?"
+{/def}
+[[img:L7-18.png|L7 p.18 — 0-2, 3-5, … 구간 버킷: 값이 퍼지면 search(12) 가 빠르다|medium]]
+
+{analogy}
+'''분리수거함.''' 쓰레기(키)를 종류(h 값)별 통(버킷)에 나눠 넣는다. 통이 n 개뿐이니 공간은 작지만, 한 종류만 잔뜩 나오면 한 통이 넘친다(search 가 느려짐).
+{/analogy}
+
+{|
+! 버킷팅 || 예 || 결과
+|-
+| 구간별 (p.18) || 0-2, 3-5, …, 27-29 에 [1,0], [3], [7], [13,12], … || 고르게 퍼짐 → search(12) 빠름
+|-
+| 구간별 (p.19) || 0-299, 300-599, … 에 [380, 370, 340, 320, 410, …] || 한 버킷에 몰림 → search(432) 느림
+|-
+| 일의 자리 h (p.28) || 버킷 2 [22], 3 [13→43], 9 [9] || 13, 43 충돌
+|}
+[[img:L7-19.png|L7 p.19 — 300-599 버킷에 몰림 (L5 bucket sort 의 최악 케이스와 같은 그림)|medium]]
+{exam}
+L7 목표(p.38–39): 적이 고른 모든 $u_i$ 에 대해 '''$E[u_i \text{ 의 버킷에 든 아이템 수}] \le 2$''' → 버킷 크기가 곧 SEARCH 시간이다 → [[기대 버킷 크기]].
+{/exam}
+버킷 수 n 과 키 수 n 이 같으므로 CLRS 의 [[load factor]] 는 1.
+
+== 관련 문서 ==
+* [[bucket sort]] · [[bucket sort의 최악 케이스]] · [[chaining]] · [[기대 버킷 크기]] · [[M과 n]]

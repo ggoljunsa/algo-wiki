@@ -1,0 +1,208 @@
+key: 계산·증명 문제 모음
+title: 계산·증명 문제 모음 — 유형별 예상 문제 24제
+category: 시험
+---
+L1–L7 에서 '''손으로 풀어야 하는''' 유형을 모아 예상 문제로 만들었다. 숫자는 전부 슬라이드 예제 값이거나 그것을 조금 바꾼 것이다. 각 문제 아래 "확인" 에 적힌 시뮬레이터로 답을 한 단계씩 검산할 수 있다(시뮬레이터는 유형마다 처음 한 번만 실었다).
+
+{info}
+족보·실제 시험지는 아직 없다. 이 문제들은 해설본의 ⭐⭐⭐, 녹음본 강조, HW1 유형에서 뽑은 '''예상'''이다. 시험 형식이 공지되면 [[시험 정보]]와 함께 조정한다.
+{/info}
+
+{analogy}
+🎭 '''수영 드릴.''' 영법 원리를 아는 것(개념 문서)과 50m 를 실제로 헤엄치는 것(이 문서)은 다르다. 점화식·증명·손 실행은 몸이 기억해야 시험장에서 손이 먼저 나간다. 문제마다 '''백지에 먼저 쓰고''' 답을 펼칠 것 — 펼친 뒤 읽기만 하면 드릴이 아니라 관람이다.
+{/analogy}
+
+{|
+! 유형 || 문제 번호 || 시뮬레이터
+|-
+| A. 점화식 (master / 치환) || 1–6 || `master_method`, `substitution_method`, `recursion_tree_sum`
+|-
+| B. Big-O 증명·반증 || 7–9 || `bigo_witness`
+|-
+| C. loop invariant / 정확성 서술 || 10–11 || `loop_invariant_check`
+|-
+| D. select 와 피벗 || 12–14 || `select_partition`, `median_of_medians`
+|-
+| E. 선형 시간 정렬 손 실행 || 15–18 || `counting_sort`, `bucket_sort`, `radix_sort`
+|-
+| F. 확률·기댓값 (L6) || 19–21 || `randomized_quicksort`, `geometric_expectation`, `majority_dc`
+|-
+| G. 해시 (L7) || 22–24 || `universal_hash_check`, `hash_chaining`
+|}
+
+== A. 점화식 ==
+=== 문제 1 — master method 네 칸 ===
+{quiz}다음 점화식을 master method 로 푸시오. 반드시 a, b, d, $b^d$ 네 칸을 적을 것.
+(가) $T(n) = 3T(n/2) + O(n)$ (나) $T(n) = 2T(n/2) + O(n^2)$ (다) $T(n) = 4T(n/2) + O(n)$ (라) $T(n) = T(n/2) + O(n)${/quiz}
+{answer}
+{|
+! || a || b || d || $b^d$ || 비교 || 결과
+|-
+| 가 (Karatsuba) || 3 || 2 || 1 || 2 || $a > b^d$ || $O(n^{\log_2 3}) \approx O(n^{1.585})$
+|-
+| 나 || 2 || 2 || 2 || 4 || $a < b^d$ || $O(n^2)$
+|-
+| 다 (단순 곱셈) || 4 || 2 || 1 || 2 || $a > b^d$ || $O(n^{\log_2 4}) = O(n^2)$
+|-
+| 라 (select 이상적) || 1 || 2 || 1 || 2 || $a < b^d$ || $O(n)$
+|}
+L3 p.87 의 예시들이다. → [[master method 세 케이스]]
+{/answer}
+확인:
+[[sim:master_method]]
+
+=== 문제 2 — 수업 연습 (9/8) ===
+{quiz}$T(n) = aT(n/2) + n$ 에서 $a = 1, 2, 4$ 일 때 각각의 결과와, 재귀 트리에서 일이 어디에 몰리는지(top / 균등 / bottom) 쓰시오.{/quiz}
+{answer}$b^d = 2$. $a = 1$: $1 < 2$ → $O(n)$, '''루트'''(tall and skinny). $a = 2$: $2 = 2$ → $O(n\log n)$, 레벨마다 '''균등'''. $a = 4$: $4 > 2$ → $O(n^2)$, '''리프'''(bushy). → [[eternal struggle]] · [[bushy tree와 tall and skinny tree]]{/answer}
+[[anim:master_struggle|문제 2 의 세 경우가 줄다리기 세 판이다. 판마다 어느 쪽 막대가 굵은지 보고 답과 맞춰 보자]]
+
+=== 문제 3 — 재귀 트리로 직접 합 ===
+{quiz}$n = 8$, $c = 1$, $T(1) = 1$ 로 $T(n) = 2T(n/2) + n$ 의 재귀 트리 레벨 합과 총합을 구하시오. $T(n) = 4T(n/2) + n$ 이면?{/quiz}
+{answer}2T(n/2)+n: 레벨 합 8, 8, 8 + 리프 8 = '''32''' $= n\log_2 n + n$. 4T(n/2)+n: 8, 16, 32 + 리프 $4^3 = 64$ = '''120''' (리프 지배).{/answer}
+[[sim:recursion_tree_sum]]
+
+=== 문제 4 — master method 를 쓸 수 있나 ===
+{quiz}다음 중 master method 를 '''쓸 수 없는''' 것을 고르고 이유를 쓰시오.
+(가) $T(n) = 7T(n/2) + \Theta(n^3)$ (나) $T(n) = T(n/5) + T(7n/10) + O(n)$ (다) $T(n) = T(n/2) + T(n/4) + T(n/8) + n$ (라) $T(n) = 2T(n/2) + \Theta(n)${/quiz}
+{answer}(나)와 (다). 부분 문제의 '''크기가 서로 달라서''' $aT(n/b)$ 꼴이 아니다(9/10 교수: "all sub-problems have the same size" 가 전제). → [[substitution method]] · [[master method의 한계]]{/answer}
+
+=== 문제 5 — 치환법 (L3 p.112–115) ===
+{quiz}$T(n) = 10n$ ($1 \le n \le 10$), $T(n) = 3n + T(n/5) + T(n/2)$ (그 외). $T(n) = O(n)$ 을 치환법으로 증명하고 상수 C 를 구하시오.{/quiz}
+{answer}
+<pre class="txt">
+'''Guess''': 3n ≤ T(n) ≤ O(n log n) 사이 → O(n)
+'''IH''': ∀ 1 ≤ k < n, T(k) ≤ C k
+'''Base''' (k ≤ 10): T(k) = 10k ≤ C k  → C ≥ 10
+'''Step''': T(n) = 3n + T(n/5) + T(n/2)
+              ≤ 3n + C(n/5) + C(n/2)
+              = (3 + 7C/10) n
+              ≤ C n   ⟺  3 ≤ 3C/10  ⟺  C ≥ 10
+'''Conclusion''': C = 10 → T(n) ≤ 10n → O(n)   ("pretend like we knew it all along")
+</pre>
+{/answer}
+[[sim:substitution_method]]
+
+=== 문제 6 — median of medians 점화식 (L4 p.101–104) ===
+{quiz}$T(n) = n\log n$ ($n \le 100$), $T(n) \le T(n/5) + T(7n/10) + dn$ 에서 $T(n) \le Cn$ 이 되는 C 를 구하시오.{/quiz}
+{answer}Base: $k\log k \le Ck$ ($k \le 100$) → $C \ge \log 100 \approx 6.6$ → $C \ge 7$. Step: $\frac{C}{5}n + \frac{7C}{10}n + dn = \frac{9C}{10}n + dn \le Cn$ ⟺ $C \ge 10d$. → '''$C = \max\{7, 10d\}$'''. 직관: $\frac15 + \frac{7}{10} = \frac{9}{10} < 1$. → [[T(n/5) + T(7n/10) + O(n)]] · [[부분 문제 크기의 합]]{/answer}
+
+== B. Big-O 증명·반증 ==
+=== 문제 7 — c, n₀ 찾기 (L2 p.25 Claim I) ===
+{quiz}$\frac32 n^2 + \frac52 n - 3 = O(n^2)$ 을 정의로 증명하시오.{/quiz}
+{answer}$n \ge 1$ 에서 $\frac32 n^2 + \frac52 n - 3 < \frac32 n^2 + 5n^2 + n^2 = \frac{15}{2}n^2$. 따라서 '''$c = \frac{15}{2}$, $n_0 = 1$'''. (c = 3, n₀ = 2 도 성립하지만 슬라이드 값은 15/2, 1.) → [[O임을 증명하기]]{/answer}
+[[sim:bigo_witness]]
+
+=== 문제 8 — Θ (L2 p.26 Claim II) ===
+{quiz}$\frac12 n^2 - 3n = \Theta(n^2)$ 을 보이시오: $c_1, c_2, n_0$ 를 구할 것.{/quiz}
+{answer}양변을 $n^2$ 으로 나누면 $c_1 \le \frac12 - \frac3n \le c_2$. 오른쪽: $c_2 = \frac12$ ($n \ge 1$). 왼쪽: $n \ge 7$ 이면 $\frac12 - \frac37 = \frac{1}{14}$ → $c_1 = \frac{1}{14}$. '''$c_1 = \frac1{14}$, $c_2 = \frac12$, $n_0 = 7$'''. → [[Big-Θ]] · [[L2 연습 Claim]]{/answer}
+
+=== 문제 9 — 반증 ===
+{quiz}$n^3 \ne O(n^2)$ 을 귀류법으로 보이시오.{/quiz}
+{answer}∃ $c, n_0$, ∀ $n \ge n_0$: $n^3 \le cn^2$ 라 가정 → $n \le c$. $n = \max\{c, n_0\} + 1$ 이면 $n \ge n_0$ 이고 $n > c$ → $n^3 > cn^2$. 모순. → [[max{c, n₀}+1 트릭]] · [[귀류법]]{/answer}
+
+== C. loop invariant / 정확성 ==
+=== 문제 10 — insertion sort ===
+{quiz}insertion sort 의 loop invariant 를 쓰고, 귀납법 4요소로 정확성을 증명하시오. CLRS 에서의 이름도 병기하시오.{/quiz}
+{answer}
+<pre class="txt">
+'''Invariant''': 바깥 루프 i 번째 반복이 끝나면 A[:i+1] 은 정렬돼 있다
+'''Inductive hypothesis''': i 번째 반복 후 A[:i+1] 정렬
+'''Base case''' (i = 0, Initialization): A[:1] 은 원소 1 개 → 자명히 정렬
+'''Inductive step''' (Maintenance): 정렬된 A[:i+1] 에 A[i+1] 을 "자신보다 작은 것 중 가장 큰 것의 바로 오른쪽" 에 끼우면
+                                    결과도 정렬, 길이 +1 → A[:i+2] 정렬
+'''Conclusion''' (Termination): i = n-1 후 A[:n] = 전체가 정렬 → 알고리즘은 옳다
+</pre>
+{/answer}
+[[sim:loop_invariant_check]]
+
+=== 문제 11 — recursion invariant ===
+{quiz}select(A, k) 의 정확성 증명에서 "귀납 단계" 의 세 경우를 쓰시오. 무엇에 대한 귀납인가?{/quiz}
+{answer}'''입력 길이'''에 대한 (강한) 귀납. 길이 $i+1$ 입력에서 partition 후: ① `len(left) == k` → 피벗이 답 ② `len(left) > k` → 답은 left 에, left 는 길이 ≤ i 라 IH 적용 ③ `len(left) < k` → 답은 right 의 `k − len(left) − 1` 번째, right 도 길이 ≤ i. → [[select의 정확성 증명]] · [[recursion invariant]]{/answer}
+
+== D. select 와 피벗 ==
+=== 문제 12 — select 손 실행 (L4 p.9–15) ===
+{quiz}$A = [1,64,9,49,16,4,0,25,36,81]$, $k = 3$. 피벗이 차례로 36, 1, 9 로 뽑힐 때 각 단계의 left, right, 다음 k 와 최종 답, partition 비용 합을 쓰시오.{/quiz}
+{answer}
+<pre class="txt">
+피벗 36: left [1,9,16,4,0,25] (6개) > 3 → 왼쪽, k = 3               비용 10
+피벗 1 : left [0] (1개) < 3 → 오른쪽 [9,16,4,25], k = 3 - 1 - 1 = 1   비용 6
+피벗 9 : left [4] (1개) == 1 → 답 '''9'''                           비용 4
+partition 비용 합 = 10 + 6 + 4 = 20       (검산: 정렬 [0,1,4,9,…] 의 index 3 = 9)
+</pre>
+{/answer}
+[[sim:select_partition]]
+
+=== 문제 13 — 피벗 시나리오 3종 (L4 p.116) ===
+{quiz}select 에서 피벗을 ① 랜덤(매번 불운) ② 정확한 median ③ 3n/10 ~ 7n/10 보장 으로 고를 때 각각의 점화식과 결과, 그리고 ②가 실제로 불가능한 이유를 쓰시오.{/quiz}
+{answer}① $T(n) = T(n-1) + O(n)$ → $\Theta(n^2)$ ② $T(n) = T(n/2) + O(n)$ → master $1 < 2$ → $\Theta(n)$, 하지만 median 을 구하는 게 곧 select 라 '''닭과 달걀''' ③ $T(n) = T(7n/10) + O(n)$ → master $a = 1$, $b = 10/7$, $1 < 10/7$ → $\Theta(n)$ — 실현 수단이 [[median of medians]]. → [[피벗 시나리오 3종]] · [[닭과 달걀 문제]]{/answer}
+
+=== 문제 14 — median of medians 손 실행 (L4 p.76–84) ===
+{quiz}$A$(23개) $= [2,11,9,3,13,\ 5,16,4,6,12,\ 17,23,10,7,21,\ 8,18,15,1,20,\ 22,19,14]$ 의 sub-median 들과 median of medians 를 구하시오. 이 피벗보다 작다고 '''보장'''되는 원소 수의 하한 공식은?{/quiz}
+{answer}그룹 5 개, sub-medians $[9, 6, 17, 15, 19]$ → 그 median '''15''' (실제 median 12). 보장 개수 $3(\lceil g/2 \rceil - 2) + 2 \ge \frac{3n}{10} - 4$; 여기서 $g = 5$ → $3(3-2)+2 = 5$. 실제 len(left) = 14, len(right) = 8 로 $\frac{3n}{10} - 4 = 2.9 \le 8$, $14 \le \frac{7n}{10} + 3 = 19.1$. → [[3n/10 논증]]{/answer}
+[[sim:median_of_medians]]
+
+== E. 선형 시간 정렬 ==
+=== 문제 15 — counting sort ===
+{quiz}$A = [2,0,2,1,4,1]$, $k = 5$ 에 counting sort 를 실행해 counts 배열과 결과를 쓰고, 원소끼리 비교 횟수와 단계 수(n + k)를 쓰시오.{/quiz}
+{answer}counts $= [1, 2, 2, 0, 1]$ → 결과 $[0,1,1,2,2,4]$. 비교 '''0 회''', 단계 $n + k = 6 + 5 = 11$ → $\Theta(n+k)$. (슬라이드 예 [0,0,3,1,1,3,1,0], k=4 → counts [3,3,0,2].) → [[counting sort]] · [[counts 배열]]{/answer}
+[[sim:counting_sort]]
+
+=== 문제 16 — get_bucket ===
+{quiz}$k = 30$, num_buckets $= 10$ 일 때 `get_bucket(28)`, `get_bucket(13)` 과 각 버킷의 값 범위는? 모든 값이 한 버킷에 몰리면 worst-case 는?{/quiz}
+{answer}폭 $= \lceil 30/10 \rceil = 3$. $28 // 3 = 9$ → "27–29", $13 // 3 = 4$ → "12–14". 한 버킷에 몰리면 그 버킷을 stable_sort(비교 기반) → $\Theta(n\log n)$; 전체 worst $\Theta(\max\{n\log n, n+k\})$. → [[get_bucket]] · [[bucket sort의 최악 케이스]]{/answer}
+[[sim:bucket_sort]]
+
+=== 문제 17 — radix sort 손 실행 (L5 p.53–58) ===
+{quiz}$A = [31,5,210,14,95,477,555,125]$ 에 `radix_sort(A, 3, 10)` 을 실행할 때 i = 0, 1, 2 후의 A 를 쓰시오. 비용 $d(n+k)$ 는?{/quiz}
+{answer}
+<pre class="txt">
+i=0 (일의 자리): [210, 031, 014, 005, 095, 555, 125, 477]
+i=1 (십의 자리): [005, 210, 014, 125, 031, 555, 477, 095]
+i=2 (백의 자리): [005, 014, 031, 095, 125, 210, 477, 555]
+비용 d(n+k) = 3(8 + 10) = 54
+</pre>
+i=1 에서 210 과 014 는 십의 자리가 모두 1 — '''stable''' 이라 i=0 의 순서(210 앞, 014 뒤)가 유지된다. → [[radix sort]] · [[stable sort]]
+{/answer}
+[[sim:radix_sort]]
+
+=== 문제 18 — 결정 트리 하한 ===
+{quiz}원소 5 개를 정렬하는 결정론적 비교 기반 알고리즘은 최악의 경우 적어도 몇 번 비교해야 하는가?{/quiz}
+{answer}리프 $\ge 5! = 120$, $2^6 = 64 < 120 \le 128 = 2^7$ → 깊이 $\ge \lceil \log_2 120 \rceil = $ '''7'''. → [[decision tree]] · [[순열과 n!]]{/answer}
+
+== F. 확률·기댓값 ==
+=== 문제 19 — P(X_{a,b}=1) ===
+{quiz}값이 $0..11$ 인 12 개 원소를 randomized quicksort 할 때 (가) 6 과 10 이 비교될 확률 (나) 0 과 11 이 비교될 확률 (다) 5 와 6 이 비교될 확률을 구하시오.{/quiz}
+{answer}$P = \frac{2}{b-a+1}$: (가) $\frac{2}{5}$ — {6,7,8,9,10} 중 6 이나 10 이 먼저 피벗 (나) $\frac{2}{12} = \frac16$ (다) $\frac22 = 1$ — 인접한 값은 '''반드시''' 비교된다. $n$ 과 무관. → [[P(X_{a,b}=1)]]{/answer}
+[[sim:randomized_quicksort]]
+
+=== 문제 20 — bogosort 와 랜덤 majority ===
+{quiz}(가) $n = 4$ 일 때 bogosort 의 기대 셔플 횟수와 기대 비용 (나) 랜덤 majority 의 기대 반복 횟수 상한과 기대 equals 호출 수 상한 (다) 둘의 worst-case 를 쓰시오.{/quiz}
+{answer}(가) $p = 1/4! = 1/24$ → 기대 24 번, 비용 $n \cdot n! = 96$ (나) $p \ge \frac12$ → $E \le \sum (1/2)^i = 2$, equals $\le 2n$ → $O(n)$ (다) 둘 다 $O(\infty)$ — 적이 주사위를 고정. → [[기하분포]] · [[bogosort]] · [[랜덤 majority]]{/answer}
+[[sim:geometric_expectation]]
+
+=== 문제 21 — 분할정복 majority ===
+{quiz}$A = [2,1,2,3,2,2,4,2]$ 에 분할정복 majority 를 적용하면 각 절반의 후보와 최종 답은? 점화식과 수행 시간은?{/quiz}
+{answer}왼쪽 [2,1,2,3] → 후보 3 (슬라이드식 m2 반환), 오른쪽 [2,2,4,2] → 2. 전체에서 count(3) = 1 ≤ 4 → '''2''' 반환. $T(n) = 2T(n/2) + O(n)$ → $O(n\log n)$, equals 24 회 $= n\log_2 n$. → [[분할정복 majority]]{/answer}
+[[sim:majority_dc]]
+
+== G. 해시 ==
+=== 문제 22 — 기대 버킷 크기 ===
+{quiz}균등 무작위 해시 함수, 키 $n = 10$ 개, 버킷 10 개일 때 $u_i$ 의 버킷에 있는 원소 수의 기댓값을 L7 p.41 의 식으로 계산하시오.{/quiz}
+{answer}$E = \sum_{j} P\{h(u_i) = h(u_j)\} = 1 + \sum_{j \ne i} \frac1n = 1 + \frac{9}{10} = 1.9 \le 2$. ($n = 3$ 이면 $1 + \frac23 \approx 1.67$.) → [[기대 버킷 크기]] · [[기대값의 선형성]]{/answer}
+[[sim:universal_hash_check]]
+
+=== 문제 23 — universal 인가 ===
+{quiz}(가) $H = \{h_0 = \text{최상위 자리}, h_1 = \text{일의 자리}\}$, 버킷 10 개. 서로 다른 두 키 11 과 101 의 충돌 확률을 구하고 universal 인지 판정하시오. (나) $p = 5$, $n = 3$ 의 $h_{a,b}$ family 에서 임의의 쌍의 충돌 확률이 $\frac{4}{20}$ 일 때 universal 인가?{/quiz}
+{answer}(가) $h_0(11) = h_0(101) = 1$, $h_1(11) = h_1(101) = 1$ → 충돌 확률 '''1''' $> \frac1{10}$ → universal '''아님''' (L7 p.57: 적이 H 를 안다). (나) $\frac{4}{20} = \frac15 \le \frac13 = \frac1n$ → universal. → [[universal hash family]] · [[해싱 게임]]{/answer}
+[[sim:hash_chaining]]
+
+=== 문제 24 — h_{a,b} 계산과 공간 ===
+{quiz}$M = p = 5$, $n = 3$, $a = 2$, $b = 1$ 일 때 $h_{2,1}(x)$ ($x = 0..4$) 를 구하고 충돌 쌍을 쓰시오. 이 family 의 크기와 h 하나를 저장하는 비트 수의 점근은?{/quiz}
+{answer}$f = (2x+1) \bmod 5 = [1,3,0,2,4]$ (충돌 없음), $h = f \bmod 3 = [1,0,0,2,1]$ → 충돌 (1,2), (0,4). $\lvert H \rvert = p(p-1) = 20 = O(M^2)$ → $\log(M^2) = O(\log M)$ 비트 (균등 무작위 h 는 $M\log n$ 비트). → [[h_{a,b}]] · [[H의 크기]] · [[modular arithmetic]]{/answer}
+
+{exam}
+녹음에서 교수가 가장 오래 설명한 증명 둘 — '''quicksort 기대 비교 횟수'''(9/17, 약 25분)와 '''median of medians → 치환법'''(9/10) — 은 문제 5·6·14·19 의 조합으로 백지 재현을 연습할 것.
+{/exam}
+
+== 관련 문서 ==
+* [[공식·점화식 모음]] · [[HW1 복기]] · [[자주 틀리는 함정 모음]] · [[읽는 순서]]

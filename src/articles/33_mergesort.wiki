@@ -1,0 +1,85 @@
+key: mergesort
+title: Mergesort (병합 정렬)
+category: 3강 D&C I, 알고리즘
+---
+== 개요 ==
+리스트를 반으로 나누고, 각 절반을 재귀로 정렬한 뒤, 정렬된 두 절반을 [[merge]] 로 합치는 [[divide and conquer]] 정렬. [[L3 Divide and Conquer I]] 의 주인공이며, worst-case 와 best-case 가 모두 $\Theta(n \log n)$ 이다.
+
+{def}
+'''Intuition''': "Divide the list into halves, recursively sort them, merge the sorted halves into a whole sorted list, and return this list." (L3 p.33)
+리스트를 반으로 나누고, 두 절반을 재귀적으로 정렬하고, 정렬된 두 절반을 하나의 정렬된 리스트로 병합해 돌려준다.
+{/def}
+
+{analogy}
+'''시험지 채점 후 번호순 정리.''' 조교 둘에게 시험지 더미를 반씩 주고 "번호순으로 정리해 와" 한다(각 조교는 또 반씩 나눠 다른 사람에게 맡긴다). 돌아온 두 더미는 각각 이미 번호순이므로, 두 더미의 '''맨 위 장만 비교'''해 작은 번호를 한 장씩 내려놓으면 전체가 번호순이 된다. 한 장짜리 더미는 이미 정렬돼 있으니 더 나눌 필요가 없다(base case).
+{/analogy}
+
+== 코드 (p.13–17) ==
+<pre class="c">
+def mergesort(A):
+  if len(A) <= 1:             # base case
+    return A
+  L = mergesort(A[0:n/2])     # 왼쪽 절반 재귀 (n = len(A))
+  R = mergesort(A[n/2:n])     # 오른쪽 절반 재귀
+  return merge(L, R)          # 병합
+</pre>
+{|
+! 변수 || 뜻 || 예제 [8,4,1,5,3,2,6,7] 최상위에서
+|-
+| `A` || 이번 호출의 입력 || [8,4,1,5,3,2,6,7]
+|-
+| `n` || `len(A)` || 8
+|-
+| `L` / `R` (p.33~ `left` / `right`) || 정렬된 왼쪽·오른쪽 절반 || [1,4,5,8] / [2,3,6,7]
+|-
+| 반환값 || `merge(L, R)` || [1,2,3,4,5,6,7,8]
+|}
+
+== 실행 예 (p.9–12, 25–32) ==
+[[img:L3-32.png|L3 p.32 — Merge! 로 올라오는 완성 그림 (둘째 줄 셋째 칸 '3 2' 는 슬라이드 오타, 실제로는 '2 3')|large]]
+<pre class="txt">
+깊이 0   [8 4 1 5 3 2 6 7]                       Recurse!
+깊이 1   [8 4 1 5]        [3 2 6 7]              Recurse!
+깊이 2   [8 4] [1 5]      [3 2] [6 7]            Recurse!
+깊이 3   [8][4][1][5]     [3][2][6][7]           ← base case (길이 1)
+merge    [4 8] [1 5]      [2 3] [6 7]
+merge    [1 4 5 8]        [2 3 6 7]
+merge    [1 2 3 4 5 6 7 8]
+'''깊이 = log2 8 = 3, merge 호출 7 회'''
+</pre>
+[[anim:mergesort_split_merge|쪼개지는 방향(Recurse!)과 합쳐지는 방향(Merge!)을 한 번 보고, 시뮬레이터에서 호출 순서(왼쪽 먼저 끝까지)를 확인하자]]
+[[sim:mergesort_tree]]
+merge 한 번의 내부는 다음 시뮬레이터로.
+[[sim:merge_step]]
+
+== ① Does it work? ==
+[[입력 크기에 대한 귀납법]]으로 증명한다(p.36–38). 가설 "길이 1~i 에서 올바르다"([[강한 귀납법]]), base i=1 (trivially sorted), step: 두 절반은 길이 1~i → 정렬됨 → merge 가 올바르면 전체도 정렬. merge 의 올바름은 따로 [[merge의 loop invariant]] 로. 교수의 이름은 [[recursion invariant]].
+
+== ② Is it fast? ==
+merge 가 $\Theta(n)$ 이므로 $T(n) = T(\lceil n/2 \rceil) + T(\lfloor n/2 \rfloor) + \Theta(n)$ → [[점화식 단순화 3단계]] → $T(n) \le 2T(n/2) + cn$ → [[recursion tree method]] / [[iteration method]] / [[master method]] (a=2, b=2, d=1, $a = b^d$) 어느 것으로 풀어도 $\Theta(n \log n)$.
+{exam}
+p.101–102: '''Worst-case runtime $\Theta(n \log n)$, Best-case runtime $\Theta(n \log n)$ — "It's the same as the worst-case runtime!"''' 입력이 이미 정렬돼 있어도 똑같이 반으로 쪼개고 merge 하므로 best 가 좋아지지 않는다. [[insertion sort]] (best $\Omega(n)$, worst $O(n^2)$) 와 비교하는 문제가 단골.
+{/exam}
+{info}
+mergesort 는 merge 결과를 새 리스트 `result` 에 담으므로 [[in-place]] 가 아니다(추가 공간 $O(n)$). 대신 [[merge]] 에서 같은 값일 때 `else`(R 쪽)로 가는 슬라이드 코드는 동률을 R 먼저 뽑으므로 엄밀히는 [[stable sort]] 가 아니다 — `<` 를 `<=` 로 바꾸면 안정해진다(CLRS 버전). 비교는 [[QuickSort vs MergeSort]].
+{/info}
+
+{quiz}
+코드 빈칸: 슬라이드 mergesort 를 완성하라.
+<pre class="c">
+def mergesort(A):
+  if ________:
+    return A
+  L = mergesort(A[0:n/2])
+  R = mergesort(________)
+  return ________
+</pre>
+{/quiz}
+{answer}
+`len(A) <= 1` / `A[n/2:n]` / `merge(L, R)`. base case 조건을 `len(A) == 1` 로 쓰면 빈 리스트 입력에서 무한 재귀가 된다.
+{/answer}
+
+== 관련 문서 ==
+* [[merge]] · [[merge의 loop invariant]] · [[divide and conquer]]
+* [[recursion invariant]] · [[입력 크기에 대한 귀납법]]
+* [[T(n)]] · [[master method]] · [[inversion]] (HW1 5번: mergesort 에 카운터 얹기)

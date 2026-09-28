@@ -1,0 +1,57 @@
+key: partition_about_pivot
+title: partition_about_pivot (pivot 기준 분할 — Θ(n) 한 번 훑기)
+category: 4강 D&C II, 알고리즘
+---
+{def}
+"Partition around the pivot, such that all elements to the left are less than it and all elements to the right are greater than it (Notice that the halves remain unsorted.)" — Worst-case runtime $\Theta(n)$ (L4 p.10, p.31)
+{/def}
+<pre class="c">
+def partition_about_pivot(A, pivot):
+  left, right = [], []
+  for i in range(len(A)):
+    if A[i] == pivot: continue     # pivot 자신은 빼 둔다
+    elif A[i] < pivot:
+      left.append(A[i])            # 작으면 왼쪽
+    else:
+      right.append(A[i])           # 크면 오른쪽
+  return left, right
+</pre>
+{|
+! 변수 || 뜻 || 예제 (A = [1,64,9,49,16,4,0,25,36,81], pivot = 36)
+|-
+| `A` || 분할할 리스트 || 10 개
+|-
+| `pivot` || 기준 원소 ([[pivot]]) || 36
+|-
+| `i` || 훑는 위치 0..n−1 || 0 → 9
+|-
+| `left` || pivot 보다 작은 원소, '''원래 순서대로''' 쌓임 || [1,9,16,4,0,25]
+|-
+| `right` || pivot 보다 큰 원소 || [64,49,81]
+|}
+[[img:L4-31.png|p.31 — partition_about_pivot 코드와 Worst-case runtime Θ(n)|medium]]
+
+== 이름에서 개념 끌어내기 ==
+"partition '''about''' pivot" = pivot 을 '''중심으로''' 나누기. 리스트를 한 번만 훑고 원소마다 비교 1 번 → 비교 $n-1$ 번, $\Theta(n)$. [[select의 점화식]]의 "$+\,O(n)$" 이 바로 이 함수의 비용이다("The runtime to partition about the chosen pivot", p.47).
+
+{analogy}
+'''분리수거.''' 봉투 하나를 뒤집어 물건을 하나씩 집으며 "기준보다 작으면 왼쪽 통, 크면 오른쪽 통". 통 안은 정리돼 있지 않지만, 봉투를 '''딱 한 번'''만 훑었다.
+{/analogy}
+
+== 특징 ==
+* left/right 내부는 정렬 안 됨 → 그래서 [[select]] 가 재귀한다.
+* 원소가 distinct 라고 가정([[distinct 가정]]). pivot 과 같은 값이 여럿이면 `continue` 때문에 모두 사라지는 점은 슬라이드 범위 밖.
+* 새 리스트 left, right 를 만든다 → 추가 메모리 사용(not [[in-place]]). L6 의 [[in-place partition]] 과 대비된다.
+* L4 p.80 두 번째 예: pivot 6 으로 25 개를 분할 → L 13 개, R 11 개 ("it's almost the same size as L").
+[[anim:pivot_partition|원소들이 pivot 36 을 기준으로 왼쪽·오른쪽으로 흩어지는 모습을 보고, 아래에서 left/right 가 쌓이는 순서를 확인하자]]
+[[sim:select_partition]]
+
+{quiz}
+A = [1,9,16,4,0,25], pivot = 1 이면 left, right 는? (p.13)
+{/quiz}
+{answer}
+left = [0], right = [9,16,4,25] (원래 순서 유지). len(left) = 1 이 pivot 1 의 순위.
+{/answer}
+
+== 관련 문서 ==
+* [[pivot]] · [[select]] · [[한쪽만 재귀]] · [[in-place partition]] · [[quicksort]] · [[select의 점화식]]

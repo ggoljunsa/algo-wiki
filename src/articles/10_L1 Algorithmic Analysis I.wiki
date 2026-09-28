@@ -1,0 +1,164 @@
+key: L1 Algorithmic Analysis I
+title: L1 Algorithmic Analysis I — 삽입 정렬과 loop invariant 로 correctness 증명하기
+category: 1강 Analysis I, 메인
+---
+== 개요 ==
+CSE301 첫 번째 본 강의. 교수(Hoon Sung Chwa)가 이후 모든 알고리즘에 던질 '''[[두 가지 질문]]''' — ① '''Does it (actually) work?''' ② '''Is it fast?''' — 을 처음 꺼내고, 그중 ① 에 답하는 도구인 '''[[loop invariant]] + [[귀납법|proof by induction]]''' 을 [[insertion sort]] 하나로 끝까지 연습한다. ② 는 맛보기(최대 $n^2$ 반복)만 하고 [[L2 Algorithmic Analysis II]] 로 넘긴다.
+
+* 문제: [[정렬 문제|Comparison-sorting]] / 알고리즘: [[insertion sort]] / 읽을거리: [[CLRS]] 2.1, 2.2, 3장 (p.3)
+* 이 강의의 Skill: '''[[iterative algorithm]] 의 [[correctness]] 분석''' · Concept: '''loop invariant, proof by induction''' (p.63)
+* 페이지 번호는 슬라이드에 '''인쇄된 번호''' p.N 이다. p.53–56 은 교수가 숨긴 슬라이드라 PDF 에 없고, p.57–64 는 PDF(=캡처) 53–60 번이다.
+
+[[anim:two_questions|먼저 10초 — 모든 알고리즘에 붙는 두 질문 카드를 보고, 이 강의가 ① 번 카드(Does it work?)에 답하는 강의라는 것을 잡고 읽기 시작하자]]
+
+{analogy}
+이 강의는 '''요리 레시피 검증'''과 같다. 레시피(알고리즘)를 받았을 때 요리사가 묻는 건 두 가지 — "이대로 하면 정말 그 요리가 나오나?"(correctness) 와 "얼마나 오래 걸리나?"(runtime). 몇 번 만들어 보고 맛있었다고 레시피가 옳다고 말할 수는 없다(입력은 무한히 많다). 그래서 "매 단계가 끝날 때마다 '''이것만은 늘 성립한다'''" 는 체크포인트([[invariant]])를 잡고, 그 체크포인트가 처음에도 맞고(base case), 한 단계 진행해도 유지되고(inductive step), 끝났을 때 '완성 요리'를 뜻한다(conclusion)는 것을 보이는 게 이 강의의 증명법이다.
+{/analogy}
+
+== ① Does it work? — 정렬 문제와 삽입 정렬 ==
+=== p.4 — Sorting ===
+{def}
+'''Sorting''': "Sorting algorithms order sequences of values." — "For the sake of clarity, we'll pretend all elements are distinct."
+정렬 알고리즘은 값의 수열을 순서대로 재배열한다. 설명을 깔끔하게 하려고 '''모든 원소가 서로 다르다고 가정'''한다 → [[distinct 가정]].
+{/def}
+[[img:L1-04.png|p.4 — 정렬 문제: [4,7,1,5,2,8,3,6] → [1,2,3,4,5,6,7,8]|medium]]
+자세한 정의는 [[정렬 문제]]. L1–L4 의 정렬들은 모두 원소끼리 비교만 하는 [[comparison-based sorting]] 이다(L5 에서 그 한계 $\Omega(n \log n)$ 를 증명한다).
+
+=== p.5–9 — 코드 먼저, 이름은 나중 ===
+p.5 는 이름 없이 `def sort(A):` 로 코드부터 보여 주고, p.6 에서 그것이 '''[[insertion sort]]''' 라고 밝힌다.
+{def}
+'''Intuition''': "Maintain a growing sorted list. For each element, put it into the 'right place' in this growing list."
+직관: 점점 자라는 정렬된 리스트를 유지하고, 각 원소를 그 리스트의 '올바른 자리'에 끼워 넣는다.
+{/def}
+<pre class="c">
+def insertion_sort(A):
+  for i in range(1, len(A)):          # 바깥 루프: A[i] 를 끼워 넣을 차례
+    cur_value = A[i]                   # 끼워 넣을 값을 손에 든다
+    j = i - 1                          # 정렬된 부분의 맨 오른쪽부터 왼쪽으로 본다
+    while j >= 0 and A[j] > cur_value: # 나보다 큰 동안
+      A[j+1] = A[j]                    #   그 원소를 오른쪽으로 한 칸 민다
+      j -= 1
+    A[j+1] = cur_value                 # 빈 자리에 내려놓는다
+</pre>
+{|
+! 변수 || 뜻 || 예제 [4,3,1,5,2] 에서 (i=2 일 때)
+|-
+| `A` || 정렬할 리스트(제자리에서 바뀜, [[in-place]]) || [3,4,1,5,2] → [1,3,4,5,2]
+|-
+| `i` || 바깥 루프 번호 = 이번에 끼워 넣을 원소의 인덱스. 1 부터 n−1 까지 || 2
+|-
+| `cur_value` || 손에 든 값 `A[i]` (밀기 도중 `A[i]` 가 덮어써지므로 따로 보관) || 1
+|-
+| `j` || 비교 위치. 정렬된 앞부분 `A[:i]` 의 오른쪽 끝(i−1)에서 왼쪽으로 이동 || 1 → 0 → −1
+|-
+| `A[:i+1]` || 반복 i 가 끝난 뒤 정렬돼 있는 앞부분 ([[슬라이스 표기]]) || [1,3,4]
+|}
+[[img:L1-09.png|p.9 — insertion sort 코드와 두 가지 질문 (1. Does this actually work? 2. Is it fast?)|medium]]
+여기서 교수가 던지는 것이 이 과목의 뼈대인 '''[[두 가지 질문]]''' 이다. 이후 [[mergesort]], [[select]], [[counting sort]], [[randomized quicksort]], [[hash table]] 모두 이 순서로 분석한다.
+
+=== p.10–21 — 예제 [4,3,1,5,2] 한 단계씩 ===
+[[img:L1-11.png|p.11 — "Move A[1] leftwards until you find something smaller (or can't move it any further)."|medium]]
+<pre class="txt">
+시작        [4 | 3 1 5 2]     정렬된 앞부분 = [4]
+i=1 (3)     3 < 4 → 4 를 밀기(1회) → [3 4 | 1 5 2]
+i=2 (1)     1 < 4, 1 < 3 → 2회 밀기 → [1 3 4 | 5 2]
+i=3 (5)     4 < 5 → 밀기 없음("already in the right position") → [1 3 4 5 | 2]
+i=4 (2)     2 < 5, 4, 3 → 3회 밀기, 1 < 2 에서 멈춤 → [1 2 3 4 5]
+'''총 밀기(shift) = 1 + 2 + 0 + 3 = 6 회'''   "Then we're done!" (p.21)
+</pre>
+[[img:L1-21.png|p.21 — 결과 [1,2,3,4,5], "Then we're done!"|small]]
+[[anim:insertion_card|카드 놀이로 먼저 보기 — 왼손의 [4] 에 3, 1, 5, 2 를 한 장씩 끼우는 모습을 보고, 아래 시뮬레이터에서 i, cur_value, j 값을 줄 단위로 확인하자]]
+[[sim:insertion_sort_trace]]
+
+=== p.22–26 — "Ok, obviously it works." 그런데… ===
+p.23 에서 교수는 "Ok, obviously it works." 라고 하고 곧바로 p.24 에서 뒤집는다 — "'''But it won't be so obvious later''', so let's take some time now to see how to prove that it works rigorously." 나중 알고리즘([[select]], [[median of medians]], [[randomized quicksort]])은 예제 몇 개로는 절대 믿을 수 없다. 그래서 쉬운 예제로 '''증명하는 법'''을 먼저 연습한다.
+
+p.25–26 의 질문: "Is there a way to prove the algorithm works, '''without checking it for all (infinitely many) input lists'''?"
+{exam}
+'''Key Insight (p.26)''': "To reason about the behavior of algorithms, it often helps to look for '''things that don't change'''."
+— 교수의 입버릇 "find things that don't change". 이것이 [[invariant]] → [[loop invariant]] 의 출발점이다. 서술형에서 "왜 loop invariant 를 쓰는가"에 이 문장을 그대로 쓰면 된다.
+{/exam}
+
+=== p.27–43 — 삽입 한 번의 성질, 그리고 매 단계 적용 ===
+[[img:L1-30.png|p.30 — 정렬된 [1,3,4,5] 에 2 를 "2 보다 작은 것 중 가장 큰 원소(1)의 바로 오른쪽"에 넣으면 한 칸 긴 정렬 리스트 [1,2,3,4,5]|medium]]
+'''[[삽입 한 번의 성질]]''': 정렬된 리스트 + 원소 하나를 올바른 자리에 끼우면 → '''여전히 정렬, 길이 +1'''. 이 한 문장이 곧 [[inductive step]] 이 된다.
+p.31–43 은 이 논리를 "at every step" 에 적용한다. 초록 칸 = 이미 정렬된 앞부분, 노란 칸 = "our other element".
+[[img:L1-43.png|p.43 — 네 번의 삽입: [4]→[3,4]→[1,3,4]→[1,3,4,5]→[1,2,3,4,5], 매번 "longer by one element"|large]]
+
+== 정확성 증명 — loop invariant + 귀납법 ==
+=== p.44–45 — Loop invariant ===
+{def}
+'''Loop invariant''': "a condition that is true before and after each iteration of a loop."
+루프의 매 반복 전후에 항상 참인 조건. 삽입 정렬의 loop invariant: "at the beginning of iteration i (the iteration where we try to insert element A[i+1] into the sorted list), the sublist `A[:i+1]` is sorted."
+{/def}
+{warn}
+p.45 의 문장 "at the beginning of iteration i … insert element A[i+1]" 과 p.49 의 "at the end of iteration i" 는 인덱스 기준이 한 칸 어긋나 보인다. 시험 답안은 '''p.47–52 의 형식판 — Loop invariant(i): `A[:i+1]` is sorted, "holds at the end of iteration i of the outer loop"''' 를 쓰자. 코드의 반복 i 는 `A[i]` 를 끼워 넣으므로, 반복 i 가 '''끝나면''' `A[:i+1]` 이 정렬된다.
+{/warn}
+
+=== p.46 — 귀납법 4요소 (암기) ===
+[[귀납법 4요소]] — "Recall, there are four components in a proof by induction."
+{|
+! 요소 || 슬라이드 원문 (일반형, p.46) || CLRS 이름 (p.57)
+|-
+| [[inductive hypothesis|Inductive Hypothesis]] || The loop invariant holds after the ith iteration. || —
+|-
+| [[base case|Base case]] || The loop invariant holds before the first iteration. || Initialization
+|-
+| [[inductive step|Inductive step]] || If the loop invariant holds after the ith iteration, then it holds after the (i+1)st iteration. || Maintenance
+|-
+| [[귀납법의 결론|Conclusion]] || If the loop invariant holds after the last iteration, then the algorithm is correct! || Termination
+|}
+
+=== p.47–52 — 삽입 정렬에 형식적으로 ===
+[[img:L1-52.png|p.52 — 형식 증명 완성본: Loop invariant(i), Inductive Hypothesis, Base case (i=0), Inductive step, Conclusion|large]]
+<pre class="txt">
+'''Loop invariant(i):''' A[:i+1] is sorted.
+'''Inductive hypothesis:''' 바깥 루프의 반복 i 가 끝났을 때 A[:i+1] 이 정렬돼 있다.
+'''Base case (i = 0):''' 알고리즘 시작 전 A[:1] 은 원소 하나 → 자명하게 정렬.
+'''Inductive step:''' A[:i+1] 정렬(가설) + 반복 i+1 이 A[i+1] 을 "올바른 자리"에 삽입
+                → [[삽입 한 번의 성질]]에 의해 A[:i+2] 정렬 (예: [3,4] + 1 → [1,3,4])
+'''Conclusion:''' 반복 n−1 이 끝나면 A[:n] 정렬. A[:n] 은 리스트 A 전체 → 증명 끝!
+</pre>
+{info}
+'''CLRS 대응''' — Base case = Initialization / Inductive step = Maintenance / Conclusion = Termination. 자세히는 [[Initialization/Maintenance/Termination]].
+{/info}
+[[anim:loop_invariant_flow|초록 구간(invariant 가 성립하는 A[:i+1])이 한 칸씩 늘어나는 흐름과 4요소 라벨이 켜지는 순서를 보고, 아래 시뮬레이터로 매 반복 invariant 를 직접 검사해 보자]]
+[[sim:loop_invariant_check]]
+
+=== p.57 — "Another way to think of proofs by induction for iterative algorithms…" ===
+[[img:L1-53.png|p.57 (PDF 53) — Base case = "Initialization", Inductive step = "Maintenance", Conclusion = "Termination"|medium]]
+이 슬라이드는 [[iterative algorithm]] 용 증명이 CLRS 교재의 세 단계 이름과 일대일 대응한다는 것을 보여 준다. L3 에서는 같은 틀을 '''입력 크기'''에 대해 돌리는 [[recursion invariant]] 가 나온다([[반복 vs 재귀 증명 표]]).
+
+{quiz}
+HW1 3번 맛보기: [[selection sort]] 의 바깥 루프 invariant 를 "A[:i] 는 정렬돼 있다" 하나만으로 쓰면 왜 inductive step 이 막히는가?
+{/quiz}
+{answer}
+A[:i] 가 정렬돼 있어도 A[i:] 의 최솟값이 A[i−1] 보다 작을 수 있다(예: A[:i]=[1,9], 남은 원소 5 → [1,9,5]). 그래서 "'''A[:i] 의 모든 원소 ≤ A[i:] 의 모든 원소'''"(= A[:i] 는 전체에서 가장 작은 i 개)를 invariant 에 반드시 추가해야 한다. 전체 풀이는 [[selection sort]].
+{/answer}
+
+== ② Is it fast? — 맛보기 ==
+p.58–61 (PDF 54–57): 질문 ① 은 "Ok, obviously it works." → "'''Yes, and I promise to write a proof by induction if asked to prove correctness formally...'''" 로 업그레이드. 질문 ② 는 "Well, '''what does it mean to be fast?'''" — 이 질문 자체가 [[L2 Algorithmic Analysis II]] 의 주제다.
+[[img:L1-58.png|p.62 (PDF 58) — "At most n outer iters" × "At most n inner iters per outer iter" = "Total runtime at most n² iters"|medium]]
+바깥 `for` 가 최대 n 번, 안쪽 `while` 이 바깥 한 번당 최대 n 번 → '''최대 $n^2$ 번 반복'''. 이것을 다음 시간에 [[Big-O]] 로 $O(n^2)$ 라고 정식화하고, 역순 입력이 실제로 그 최악임을 보인다([[삽입 정렬의 worst-case]]).
+
+{joke}
+p.63 Outline 에는 "Proving correctness with induction — '''Done!'''" 이 붙는다. 첫 주에 증명 도구 하나를 벌써 다 배운 셈이다. 남은 여섯 강은 그 도구를 점점 무서운 알고리즘에 들이대는 과정이다.
+{/joke}
+
+== 시험 대비 핵심 요약 ==
+# '''두 가지 질문''': ① Does it (actually) work? ② Is it fast? — 모든 알고리즘 분석의 틀.
+# '''Key insight (p.26)''': "look for things that don't change" → invariant.
+# '''Loop invariant''' = 루프의 매 반복 전후에 참인 조건. 삽입 정렬: '''Loop invariant(i): `A[:i+1]` is sorted.'''
+# '''귀납법 4요소''': Inductive hypothesis / Base case (i=0, A[:1] 원소 하나) / Inductive step (정렬된 A[:i+1] 에 올바르게 삽입 → A[:i+2] 정렬) / Conclusion (i=n−1 에서 A[:n] = 전체 정렬).
+# '''CLRS 대응''': Base case = Initialization, Inductive step = Maintenance, Conclusion = Termination.
+# 예제 [4,3,1,5,2]: [3,4,1,5,2] → [1,3,4,5,2] → [1,3,4,5,2] → [1,2,3,4,5], 밀기 총 6 회.
+# 수행 시간 맛보기: 바깥 ≤ n × 안쪽 ≤ n → '''최대 $n^2$ 반복''' (L2 에서 $O(n^2)$ 로 정식화).
+# HW1 3번 = 같은 틀을 [[selection sort]] 에 적용(invariant 에 "앞부분 ≤ 뒷부분" 추가가 핵심).
+
+== 관련 문서 ==
+* [[두 가지 질문]] · [[알고리즘]] · [[정렬 문제]] · [[distinct 가정]]
+* [[insertion sort]] · [[삽입 한 번의 성질]] · [[selection sort]]
+* [[correctness]] · [[invariant]] · [[loop invariant]] · [[iterative algorithm]]
+* [[귀납법]] · [[귀납법 4요소]] · [[inductive hypothesis]] · [[base case]] · [[inductive step]] · [[귀납법의 결론]] · [[Initialization/Maintenance/Termination]]
+* 다음 강의: [[L2 Algorithmic Analysis II]] · 재귀판 증명: [[recursion invariant]] · [[증명 레시피]]
+* [[HW1 복기]] · [[CLRS]] · [[교수 소개]]

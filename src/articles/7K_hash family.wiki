@@ -1,0 +1,35 @@
+key: hash family
+title: hash family (해시 함수 모음) H
+category: 7강 Hashing, 용어
+---
+== 개요 ==
+해시 함수들의 집합 H. 무작위 해시는 "H 에서 하나를 균등하게 뽑는 것" 으로 정의되고, 뽑은 함수를 저장하는 데 $\log|H|$ 비트가 든다. "모든 해시 함수" 도 하나의 hash family 지만 너무 크다(코끼리) → '''영리하게 고른 작은 부분집합'''(쥐)이 필요하다. 단, 작기만 하면 안 되고 [[universal hash family]] 조건을 만족해야 한다.
+
+{def}
+L7 p.52: "Solution: Pick from a smaller set of functions. A cleverly chosen subset of functions. We call such a subset a '''hash family'''. We need only log|H| bits to store an element of H."
+L7 p.54: "A hash family is a collection of hash functions. 'All of the hash functions' is an example of a hash family."
+{/def}
+[[img:L7-50.png|L7 p.52 — 코끼리(모든 해시 함수) 안의 쥐(H) = hash family|medium]]
+
+{analogy}
+'''열쇠 꾸러미.''' 세상의 모든 모양 열쇠(모든 함수)를 들고 다닐 수는 없다. 적당한 개수의 열쇠 꾸러미(H)에서 오늘 쓸 열쇠를 무작위로 하나 고르고, 몇 번째 열쇠인지만 기억한다($\log|H|$ 비트). 단 꾸러미 열쇠가 전부 비슷하게 생겼으면(나쁜 H) 도둑(적)이 한 번에 다 연다.
+{/analogy}
+
+[[anim:universal_hash_pick|작은 H(쥐)에서 주사위로 a, b 를 뽑아 h_{a,b} 하나를 만드는 장면 — hash family 에서 "하나를 뽑는다" 는 것이 무엇인지 보자]]
+
+{|
+! H || $\lvert H \rvert$ || 저장 || universal? || 어디서
+|-
+| 모든 함수 $U \to \{1..n\}$ || $n^M$ || $M \log n$ 비트 || ✓ || p.50, 67
+|-
+| {최상위 자리 h₀, 일의 자리 h₁} || 2 || 1 비트 || ✗ (p.57 적이 둘 다 충돌시킴) || p.55–57
+|-
+| $\{h_{a,b}\}$ || $p(p-1)$ || $O(\log M)$ || ✓ || p.68–72
+|}
+[[img:L7-53.png|L7 p.55 — "This is still a terrible idea!" H = {least sig. digit, most sig. digit}, 1 비트|medium]]
+{exam}
+해설본 핵심 요약 9번: "{일의 자리, 최상위 자리} 같은 작은 H 는 '''적이 H 를 알고 있으므로''' 두 함수 모두에서 충돌하는 입력을 만들 수 있음 → universal 아님 (p.57)." 작은 것 + universal 조건 = 정답.
+{/exam}
+
+== 관련 문서 ==
+* [[universal hash family]] · [[h_{a,b}]] · [[H의 크기]] · [[log(s) 비트]] · [[uniformly random hash function]]

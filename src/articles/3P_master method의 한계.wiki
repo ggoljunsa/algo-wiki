@@ -1,0 +1,45 @@
+key: master method의 한계
+title: master method 의 한계 — 부분 문제 크기가 모두 같을 때만
+category: 3강 D&C I, 점화식
+---
+== 개요 ==
+[[master method]] 는 $T(n) = aT(n/b) + O(n^d)$ — '''a 개의 부분 문제가 모두 같은 크기 n/b''' — 일 때만 쓸 수 있다. 크기가 다른 부분 문제가 섞이면($T(n/5) + T(n/2)$, $T(n/5) + T(7n/10)$) 공식에 넣을 b 가 하나로 정해지지 않는다. 그때 쓰는 것이 [[substitution method]] 다. L3 p.89, 107, 112.
+
+{def}
+"'''The master theorem only works when all sub-problems are the same size.'''" (L3 p.107)
+"A formula that solves recurrences when all of the sub-problems are the same size. We will see an example later when not all problems are the same size." (p.89)
+{/def}
+[[img:L3-107.png|L3 p.107 — "The master theorem only works when all sub-problems are the same size." (A powerful theorem it is…)|medium]]
+
+{analogy}
+'''단체 할인 요금표.''' "같은 나이대 a 명이면 1인당 요금 × a" 라는 요금표는 일행이 모두 같은 나이일 때만 바로 쓸 수 있다. 어른과 아이가 섞이면 표를 쓸 수 없고 한 명씩 따져야 한다 — 그게 substitution method 다.
+{/analogy}
+
+== 적용 가능 / 불가능 ==
+{|
+! 점화식 || 부분 문제 크기 || master? || 어떻게
+|-
+| $2T(n/2) + n$ || n/2, n/2 || 가능 || $a = b^d$ → $O(n \log n)$
+|-
+| $3T(n/2) + O(n)$ || n/2 ×3 || 가능 || $O(n^{\log_2 3})$
+|-
+| $T(n/2) + T(n/3) + n$ (9/8 수업 예) || n/2, n/3 || '''불가''' || substitution
+|-
+| $3n + T(n/5) + T(n/2)$ (L3 p.112) || n/5, n/2 || '''불가''' || substitution, C = 10
+|-
+| $T(n/5) + T(7n/10) + O(n)$ (L4) || n/5, 7n/10 || '''불가''' || substitution, C = max{7, 10d}
+|-
+| $T(n/2) + T(n/4) + T(n/8) + n$ (HW1 6-b) || n/2, n/4, n/8 || '''불가''' || substitution, C = 8
+|}
+[[sim:substitution_method]]
+
+{tip}
+불가능한 경우의 '''추측'''에는 [[부분 문제 크기의 합]]이 유용하다. 크기 합이 n 보다 작으면(n/5 + n/2 = 7n/10, n/5 + 7n/10 = 9n/10, 7n/8) 층마다 일이 등비로 줄어 $O(n)$ 으로 추측, 정확히 n 이면(mergesort) $O(n \log n)$.
+{/tip}
+{exam}
+9/8 수업(녹음): "…this method is powerful but '''only works when all sub-problems are the same size'''. So in this case (2T(n/2)+n) we can apply master method, but the other case when all sub-problems are not the same size, we can use substitution method." — HW1 6-b 풀이 첫 줄도 "부분 문제 크기가 n/2, n/4, n/8 로 서로 다르므로 master method 를 쓸 수 없고 substitution method 를 쓴다". 이 한 문장을 답안에 꼭 쓰자.
+{/exam}
+
+== 관련 문서 ==
+* [[master method]] · [[substitution method]] · [[미정 상수 C]]
+* [[T(n/5) + T(7n/10) + O(n)]] · [[부분 문제 크기의 합]]

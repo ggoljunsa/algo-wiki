@@ -1,0 +1,50 @@
+key: 증가율 사다리
+title: 증가율 사다리 — 1 < log n < n < n log n < n² < 2ⁿ < n!
+category: 2강 Analysis II, 용어
+---
+== 개요 ==
+자주 나오는 함수들을 '''증가율 순서'''로 세운 것. 슬라이드에 표로 나오지는 않지만 L2 Claim III 의 $O(n) \subset O(n\log n) \subset O(n^2) \subset O(2^n)$ 가 그 일부이고, HW1 1번·4번이 이 사다리를 전제로 한다(CLRS 3장).
+
+{def}
+'''Growth-rate ladder''' (CLRS 3; L2 p.27 Claim III 의 순서):
+$$1 \ll \log n \ll n^{\varepsilon} \ll n \ll n\log n \ll n^2 \ll n^3 \ll 2^n \ll 3^n \ll n! \ll n^n$$
+$f \ll g$ 는 $f/g \to 0$, 즉 $f = O(g)$ 이지만 $f \ne \Omega(g)$.
+{/def}
+
+{analogy}
+'''교통수단 사다리''' — 걷기(log n) < 자전거(n) < 자동차(n log n) < 기차(n²) < 비행기(2ⁿ) < 로켓(n!). 걷는 사람이 아무리 부지런해도(상수배) 자동차를 영원히 이길 수는 없다. 다만 '''출발 직후'''(작은 n)에는 누가 앞설지 모른다 → [[교차점 계산]].
+{/analogy}
+
+== 숫자로 보는 사다리 ==
+{|
+! g(n) || n = 16 || n = 64 || 이 과목의 예
+|-
+| $\log_2 n$ || 4 || 6 || [[이진 트리]] 깊이, [[mergesort]] 레벨 수
+|-
+| $n$ || 16 || 64 || [[select]], [[counting sort]] ($n+k$)
+|-
+| $n\log_2 n$ || 64 || 384 || [[mergesort]], [[Ω(n log n) 하한]]
+|-
+| $n^2$ || 256 || 4,096 || [[insertion sort]] worst
+|-
+| $2^n$ || 65,536 || $\approx 1.8 \times 10^{19}$ || —
+|-
+| $n!$ || $\approx 2.1 \times 10^{13}$ || $\approx 1.3 \times 10^{89}$ || [[bogosort]] 기대 셔플 수, [[decision tree]] 리프 수
+|}
+
+== 비교 요령 ==
+* 비율 $f/g$ 의 극한: 0 → f 가 아래, ∞ → f 가 위, 양의 상수 → 같은 급(Θ).
+* '''다항 < 지수''': $n^k / c^n \to 0$ (k 가 100, c 가 1.0001 이어도).
+* '''로그 < 다항''': $\log n / n^{\varepsilon} \to 0$.
+* 로그의 밑, 곱해진 상수는 급을 안 바꾼다. 지수의 밑·지수 안 상수는 바꾼다($2^n \ne \Theta(3^n)$, $2^n \ne \Theta(2^{n/2})$).
+* 겉모습에 속지 말 것: $n^{\lg c} = c^{\lg n}$ (같은 함수), $\lg(n!) = \Theta(n\lg n)$ ([[Stirling 근사]], [[log(n!)]]).
+
+{quiz}
+'''HW1 1번''': 각 행 A 가 B 의 O / Ω / Θ 인가? a. $n^k$ vs $c^n$ · b. $2^n$ vs $2^{n/2}$ · c. $n^{\lg c}$ vs $c^{\lg n}$ · d. $\lg(n!)$ vs $\lg(n^n)$
+{/quiz}
+{answer}
+a: O yes / Ω no / Θ no (다항 < 지수) · b: O no / Ω yes / Θ no ($2^n/2^{n/2} = 2^{n/2} \to \infty$) · c: 셋 다 yes ($n^{\lg c} = 2^{\lg n \lg c} = c^{\lg n}$) · d: 셋 다 yes ($\lg(n^n) = n\lg n$, $\lg(n!) = \Theta(n\lg n)$). 근거 풀이는 [[Big-Θ]].
+{/answer}
+
+== 관련 문서 ==
+* [[asymptotic analysis]] · [[Big-Θ]] · [[tight bound]] · [[교차점 계산]] · [[로그 계산법]] · [[log(n!)]]
