@@ -36,7 +36,6 @@ ANIMS["harmonic_sum"] = {
       return 'values="' + vs.join(";") + '" keyTimes="' + ks.join(";") + '" dur="' + D + 's" fill="freeze"';
     }
     function anim(attr, pts) { return '<animate attributeName="' + attr + '" ' + kf(pts) + '/>'; }
-    function move(pts) { return '<animateTransform attributeName="transform" type="translate" ' + kf(pts) + '/>'; }
 
 
     var OX = 80, OY = 300, UX = 58, UY = 200, N = 10;

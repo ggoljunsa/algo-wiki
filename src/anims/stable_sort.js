@@ -34,7 +34,6 @@ ANIMS["stable_sort"] = {
       if (pts[pts.length - 1][0] < D) { ks.push(1); vs.push(pts[pts.length - 1][1]); }
       return 'values="' + vs.join(";") + '" keyTimes="' + ks.join(";") + '" dur="' + D + 's" fill="freeze"';
     }
-    function anim(attr, pts) { return '<animate attributeName="' + attr + '" ' + kf(pts) + '/>'; }
     function move(pts) { return '<animateTransform attributeName="transform" type="translate" ' + kf(pts) + '/>'; }
 
 

@@ -92,7 +92,6 @@ ANIMS["majority_random_pick"] = {
       sp.push([s1, cx(n - 1) + "," + RY]);
       s += '<g opacity="0"><rect x="-26" y="-21" width="52" height="42" rx="6" fill="none" stroke="' + C.pur + '" stroke-width="3"/>' + move(sp) + show(s0, s1) + '</g>';
       // count 숫자 증가
-      var cnt = 0, lastT = s0;
       var marks = [];
       A.forEach(function (v, i) { if (v === g) marks.push(s0 + step * i + 0.05); });
       var ts = [s0].concat(marks);

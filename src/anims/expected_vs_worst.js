@@ -35,7 +35,6 @@ ANIMS["expected_vs_worst"] = {
       return 'values="' + vs.join(";") + '" keyTimes="' + ks.join(";") + '" dur="' + D + 's" fill="freeze"';
     }
     function anim(attr, pts) { return '<animate attributeName="' + attr + '" ' + kf(pts) + '/>'; }
-    function move(pts) { return '<animateTransform attributeName="transform" type="translate" ' + kf(pts) + '/>'; }
 
 
     // 주사위: 중심 (x,y), 한 변 sz, 눈 face
