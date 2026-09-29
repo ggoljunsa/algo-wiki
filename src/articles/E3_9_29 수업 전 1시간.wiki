@@ -1,196 +1,144 @@
 key: 9/29 수업 전 1시간
-title: 9/29 수업 전 1시간 — L6 복습 + L7 hash table 예습 (답 포함)
+title: 9/29 수업 전 1시간 — 위에서 아래로 순서대로만 하면 되는 체크리스트
 category: 시험
 ---
-9/29(화) 수업 전 '''아무것도 안 본 상태에서 1시간''' 으로 할 수 있는 최대치를 짠 문서다. 9/24(목)은 공강이었으므로 오늘이 [[L7 Randomized Algorithms II]](hash tables) '''첫 수업'''이다. 교수는 수업 첫 5분에 지난 시간(9/22, [[majority element]]) 요약을 하고 들어가므로, 그 요약을 따라갈 만큼만 L6 를 건드리고 나머지 시간은 오늘 새로 나올 L7 전반부를 미리 한 번 본다. 수업에서 증명이 나올 때 "이거 아까 본 거다" 상태가 되면 성공.
+{exam}
+'''이 문서 사용법.''' 위에서 아래로 5개 절을 순서대로 한다. 절마다 딱 네 줄이다 — '''▶ 할 일''' / '''읽기'''(링크 1개 + 캡처 1장) / '''쓰기'''(백지) / '''답'''(접힘). 링크를 타고 들어가서 딴 문서 읽지 말 것. 이 문서 안의 것만 본다. 답은 쓴 뒤에만 펼친다.
+{/exam}
 
-각 블록은 '''읽기 → 슬라이드 덮고 백지에 쓰기 → 답 펼쳐서 채점''' 순서다. 답은 문제 바로 아래 접혀 있다. '''쓰기 전에 펼치면 드릴이 아니라 관람이다.'''
+오늘(9/29 화)은 [[L7 Randomized Algorithms II]](hash tables) '''첫 수업'''이다(9/24 공강). 예상 진도 p.1–약 50. 교수는 첫 5분에 지난 시간(L6 majority element) 요약을 하므로 ①은 그 5분용, ②–⑤는 오늘 새로 나올 내용의 예습이다.
 
-{info}
-'''오늘 진도 예상: L7 p.1–약 50.''' 자료구조 비교표 → direct addressing → 용어(U, M, n, h) → chaining → "결정론적 해시로는 안 된다"(비둘기집) → 랜덤 해시 → 기대 버킷 크기 ≤ 2 → "그 함수를 어떻게 저장하나"까지. 근거: L6 첫 차시(9/17)가 77분에 p.1–42 였고, 9/22 녹음 끝이 "That's all for today" 로 L6 종료. [[universal hash family]](p.59 이후)는 다음 차시(10/1 목) 예상.
-{/info}
-
-{analogy}
-🎭 '''경기 전 워밍업.''' 시합(수업) 직전 1시간에 새 기술을 배우려 들면 안 된다. 지난 경기 하이라이트(L6 요약)를 5분 보고, 오늘 상대의 플레이 영상(L7 슬라이드)을 훑어 "저 장면이 나오면 이렇게 반응한다"를 몸에 넣는 것이다. 그래서 이 문서는 '''전부 이해'''가 아니라 '''수업 중 인식'''이 목표다.
-{/analogy}
-
-== 시간표 ==
 {|
-! 시각 || 블록 || 무엇을 || 쓸 것
+! 시각 || 절 || 할 일
 |-
-| 0:00–0:12 || ① L6 마무리 복습 || 교수 요약 대비 — [[두 시나리오]], p.80 표, [[랜덤 majority]] 기대 시행 || 쓰기 A
+| 0:00–0:12 || ① L6 복습 || 표 1개 + 캡처 1장 읽고 → 쓰기 A
 |-
-| 0:12–0:20 || ② L7 문제 설정 || 비교표, [[direct addressing]], 기호 U·M·n·h || 쓰기 B
+| 0:12–0:20 || ② L7 문제 설정 || 캡처 1장 읽고 → 쓰기 B
 |-
-| 0:20–0:30 || ③ chaining || [[chaining]] 그림·비용, [[좋은 해시 함수의 조건]] || 쓰기 C
+| 0:20–0:30 || ③ chaining || 캡처 1장 읽고 → 쓰기 C
 |-
-| 0:30–0:42 || ④ 결정론적 해시는 안 된다 ⭐⭐⭐ || [[비둘기집 원리]] 논증, [[해싱 게임]] || 쓰기 D
+| 0:30–0:42 || ④ 결정론적 해시는 안 된다 ⭐⭐⭐ || 5줄 논증 읽고 → 쓰기 D
 |-
-| 0:42–0:52 || ⑤ 기대 버킷 크기 ≤ 2 ⭐⭐⭐ || [[기대 버킷 크기]] 유도 = L6 의 [[X_{a,b}]] 와 같은 틀 || 쓰기 E
+| 0:42–0:52 || ⑤ 기대 버킷 크기 ≤ 2 ⭐⭐⭐ || 5줄 유도 읽고 → 쓰기 E
 |-
-| 0:52–0:58 || ⑥ 자기 채점 || 답 펼쳐 A–E 대조, 틀린 것만 해당 절 재독 || ✗ 표시
-|-
-| 0:58–1:00 || ⑦ 수업 중 확인할 것 || 아래 목록 || 쓰기 F
+| 0:52–1:00 || 채점 || 답 5개 펼쳐 대조, 틀린 절만 다시 읽기
 |}
 
-== ① L6 마무리 복습 (12분) ==
-교수가 9/22 에 마지막으로 한 것은 [[랜덤 majority]] 의 기대 시행 횟수 계산이고, 그 전 차시(9/17)의 뼈대는 [[두 시나리오]]다. 오늘 L7 의 "적이 입력을 고르고 알고리즘이 주사위(해시 함수)를 굴린다"는 설정이 '''정확히 두 시나리오 중 첫 번째'''이므로, 이것만은 머리에 넣고 들어가야 한다.
+----
 
-=== 두 시나리오 ===
-[[anim:expected_vs_worst|왼쪽: 적이 입력만 고르고 내가 주사위를 굴린다 → 수행 시간의 기댓값. 오른쪽: 적이 주사위 눈까지 고정 → 항상 최악 한 값]]
+== ① 0:00–0:12 · L6 복습 ==
+'''▶ 할 일:''' 아래 표와 캡처를 7분 읽는다 → 덮고 쓰기 A 를 5분.
 
+'''읽기:''' [[두 시나리오]] — 적([[adversary]])이 입력만 고르면 '''expected''', 주사위까지 고르면 '''worst'''. 오늘 L7 의 "적이 키를 고르고 알고리즘이 해시 함수를 주사위로 고른다"가 정확히 Scenario 1 이다.
 {|
 ! || Scenario 1 || Scenario 2
 |-
-| [[adversary]]가 고르는 것 || 입력만 || 입력 + 주사위 결과
+| 적이 고르는 것 || 입력만 || 입력 + 주사위 결과
 |-
-| 알고리즘이 고르는 것 || 주사위 || 없음
+| 재는 양 || [[expected running time]] || [[randomized worst-case]]
 |-
-| 재는 양 || [[expected running time]] (주사위에 대한 기댓값) || [[randomized worst-case]]
-|-
-| 예: [[randomized quicksort]] || $O(n \log n)$ || $O(n^2)$
+| randomized quicksort || $O(n \log n)$ || $O(n^2)$
 |}
+[[img:L6-76.png|L6 p.80. 네 알고리즘의 worst / expected. 이 표를 그대로 쓸 수 있으면 된다|medium]]
+9/22 마지막 계산: [[랜덤 majority]] 는 무작위 인덱스 하나 뽑아 majority 인지 O(n) 에 확인, 아니면 다시. 한 번 성공 확률 $p > 1/2$ → 기대 시행 $1/p < 2$ → 기대 시간 $< 2n = O(n)$, worst $O(\infty)$.
 
-[[Las Vegas와 Monte Carlo]]: Las Vegas 는 '''정답을 보장'''하고 시간이 확률적, Monte Carlo 는 '''시간을 보장'''하고 정답이 확률적. L6 의 네 알고리즘은 전부 Las Vegas.
-
-=== p.80 요약표 (통째로 암기) ===
-[[img:L6-76.png|L6 p.80. 네 알고리즘의 worst / expected 를 이 표 그대로 쓸 수 있어야 한다|medium]]
-
-=== 랜덤 majority 의 기대 시행 (9/22 마지막 계산) ===
-무작위 인덱스를 하나 뽑아 [[majority element]]인지 확인(O(n))하고, 아니면 다시 뽑는다. majority 는 정의상 $\lfloor n/2 \rfloor + 1$ 개 이상이므로 한 번에 성공할 확률 $p > 1/2$. 성공까지 시행 횟수는 [[기하분포]] → 기대 시행 $1/p < 2$ → 기대 시간 $< 2n = O(n)$. worst 는 $O(\infty)$.
-
-[[anim:majority_random_pick|무작위 화살이 초록(majority)에 떨어질 때까지 반복. 옆의 1/2 + 1/4 + … = 2 막대가 기대 시행 횟수]]
-
-[[sim:geometric_expectation]]
-
-=== 쓰기 A ===
-{quiz}백지에: (1) 두 시나리오 표(적이 고르는 것 / 재는 양) 두 줄. (2) Las Vegas vs Monte Carlo 한 줄씩. (3) p.80 표 — bogosort · randomized quicksort · randomized select · majority(D&C / 랜덤)의 worst / expected. (4) 랜덤 majority: 한 번 성공 확률 $p >$ ___ → 기대 시행 $1/p <$ ___ → 기대 시간 ___.{/quiz}
+'''쓰기 A:'''
+{quiz}(1) Scenario 1 / 2 에서 적이 고르는 것과 재는 양. (2) [[Las Vegas와 Monte Carlo|Las Vegas]] 와 Monte Carlo 각각 무엇을 보장하나. (3) bogosort · randomized quicksort · randomized select · 랜덤 majority 의 worst / expected. (4) 랜덤 majority: $p >$ ___, 기대 시행 $<$ ___, 기대 시간 ___.{/quiz}
 {answer}
-(1) Scenario 1: 적은 입력만, 알고리즘이 주사위 → expected running time. Scenario 2: 적이 입력과 주사위까지 → worst-case.
-(2) Las Vegas: 정답 보장, 시간 확률적. Monte Carlo: 시간 보장, 정답 확률적. (L6 는 전부 Las Vegas.)
-(3)
-{|
-! 알고리즘 || worst || expected
-|-
-| [[bogosort]] || $O(\infty)$ || $O(n \cdot n!)$
-|-
-| [[randomized quicksort]] || $\Theta(n^2)$ || $\Theta(n \log n)$
-|-
-| [[randomized select]] || $\Theta(n^2)$ || $\Theta(n)$
-|-
-| [[분할정복 majority]] || $O(n \log n)$ || (항상 보장)
-|-
-| [[랜덤 majority]] || $O(\infty)$ || $O(n)$
-|}
-(4) $p > 1/2$ → 기대 시행 $< 2$ → 기대 시간 $< 2n = O(n)$. 도구는 [[기하분포]] $E = 1/p$ (또는 [[등비급수]] $\sum_{i \ge 1} (1/2)^i \cdot$ … $= 2$).
+(1) S1: 입력만 → expected running time. S2: 입력 + 주사위 → worst-case.
+(2) Las Vegas: 정답 보장, 시간 확률적. Monte Carlo: 시간 보장, 정답 확률적. L6 는 전부 Las Vegas.
+(3) bogosort $O(\infty)$ / $O(n \cdot n!)$ · randomized quicksort $\Theta(n^2)$ / $\Theta(n \log n)$ · randomized select $\Theta(n^2)$ / $\Theta(n)$ · 랜덤 majority $O(\infty)$ / $O(n)$.
+(4) $p > 1/2$, 기대 시행 $< 2$, 기대 시간 $< 2n = O(n)$. (도구: [[기하분포]] $E = 1/p$)
 {/answer}
 
-== ② L7 문제 설정 (8분) ==
-목표 한 줄: '''INSERT / DELETE / SEARCH 를 전부 O(1) 에.''' 지금까지의 자료구조는 하나가 빠르면 다른 하나가 느렸다.
+----
 
-[[img:L7-05.png|L7 p.5 자료구조 비교표. hash table 열만 expected 와 worst 가 갈린다 — 그 이유가 이 강의 전체다|medium]]
+== ② 0:12–0:20 · L7 문제 설정 ==
+'''▶ 할 일:''' 캡처 1장과 아래 세 줄을 4분 읽는다 → 덮고 쓰기 B 를 4분.
 
-[[direct addressing]]: 크기 $M$ 인 배열을 두고 키 $x$ 를 $x$ 번 칸에 넣는다. O(1) 은 되지만 공간이 $M$ = [[universe U|universe]] 크기에 비례한다. 트위터 해시태그 예(p.23)에서 $M = 128^{140}$ 이므로 불가능.
+'''읽기:''' 목표는 INSERT / DELETE / SEARCH 전부 O(1). [[direct addressing]](키 $x$ 를 $x$ 번 칸에)은 O(1) 이지만 공간이 universe 크기 $M$ 에 비례해 불가능. 기호: [[universe U|U]] = 가능한 모든 키의 집합, $\lvert U \rvert = M$, [[M과 n|n]] = 실제 저장할 개수 = 버킷 수, $M \gg n$, [[hash function|h]]$: U \to \{1, \dots, n\}$.
+[[img:L7-05.png|L7 p.5. hash table 열만 expected 와 worst 가 갈린다 — 그 이유가 오늘 수업 전체다|medium]]
 
-[[img:L7-13.png|L7 p.13 direct addressing. insert(7), insert(5), insert(0) 이 각각 7·5·0 번 칸으로|small]]
-[[img:L7-23.png|L7 p.23. 왼쪽 구름이 universe U(가능한 모든 키, M 개), 오른쪽이 실제로 쓸 n 개 칸. M 은 n 보다 압도적으로 크다|medium]]
-
-=== 쓰기 B ===
-{quiz}백지에: (1) 목표 한 줄. (2) 비교표 3줄(정렬 연결리스트 / 정렬 배열 / hash table 의 SEARCH · INSERT, hash table 은 expected 와 worst 따로). (3) direct addressing 이 안 되는 이유 한 줄. (4) 기호 표 — $U$, $M$, $n$, $h$ 의 뜻과 $h$ 의 정의역·공역.{/quiz}
+'''쓰기 B:'''
+{quiz}(1) 비교표 3줄: 정렬 linked list / 정렬 배열 / hash table 의 SEARCH · INSERT (hash table 은 expected, worst 따로). (2) direct addressing 이 안 되는 이유 한 줄. (3) $U, M, n, h$ 뜻과 $h$ 의 정의역·공역.{/quiz}
 {answer}
-(1) [[INSERT/DELETE/SEARCH]] 전부 O(1).
-(2) 정렬 [[linked list]]: SEARCH O(n), INSERT O(n). 정렬 배열: SEARCH O(log n), INSERT O(n). [[hash table]]: SEARCH·INSERT 모두 '''expected O(1), worst O(n)'''. → [[자료구조 비교표]]
-(3) 공간이 universe 크기 $M$ 에 비례. 저장할 건 $n \ll M$ 개뿐인데 $M$ 칸을 잡아야 한다.
-(4)
-{|
-! 기호 || 뜻 || 관계
-|-
-| $U$ || universe, 나올 수 있는 모든 키의 집합 || $\lvert U \rvert = M$
-|-
-| $M$ || universe 크기 || $M \gg n$
-|-
-| $n$ || 실제로 저장할 원소 수 = [[버킷]] 수 ||
-|-
-| $h$ || [[hash function]] || $h: U \to \{1, \dots, n\}$
-|}
-→ [[M과 n]]
+(1) 정렬 linked list O(n) / O(n) · 정렬 배열 O(log n) / O(n) · hash table expected O(1) / worst O(n) (둘 다).
+(2) 공간이 $M$(universe 크기)에 비례. 저장할 건 $n \ll M$ 개인데 $M$ 칸이 필요.
+(3) $U$ universe, $M = \lvert U \rvert$, $n$ = 저장 원소 수 = 버킷 수, $h: U \to \{1..n\}$.
 {/answer}
 
-== ③ chaining (10분) ==
-[[img:L7-28.png|L7 p.28. n=9 버킷, h(x)=일의 자리. 13 과 43 이 버킷 3 에 체인으로 매달린다. 교수 주석: "terrible hash function, 시연용"|large]]
+----
 
-[[chaining]]: 버킷 $n$ 개짜리 배열, 각 버킷은 [[linked list]]. 키 $x$ 는 버킷 $h(x)$ 의 리스트에 들어간다. INSERT 는 리스트 앞(또는 꼬리 포인터로 뒤)에 붙이므로 O(1), SEARCH 는 그 버킷의 리스트를 훑으므로 '''O(리스트 길이)'''. 그래서 성능은 전적으로 "버킷이 얼마나 고르게 차느냐"에 달린다. (p.27 [[open addressing]] 은 aside — 시험 범위인지 오늘 확인.)
+== ③ 0:20–0:30 · chaining ==
+'''▶ 할 일:''' 캡처 1장을 5분 읽는다 → 덮고 쓰기 C 를 5분.
 
-[[sim:hash_chaining]]
+'''읽기:''' [[chaining]] = 버킷 $n$ 개 배열, 각 버킷은 linked list, 키 $x$ 는 버킷 $h(x)$ 의 리스트에. INSERT O(1), SEARCH '''O(자기 버킷의 체인 길이)'''. 그래서 성능은 "버킷이 얼마나 고르게 차느냐"가 전부다.
+[[img:L7-28.png|L7 p.28. n=9, h=일의 자리. 13 과 43 이 버킷 3 에 체인으로. SEARCH 43 은 그 체인을 훑는다|large]]
 
-=== 쓰기 C ===
-{quiz}백지에: (1) chaining 그림(버킷 n 개 + 각 버킷의 자료구조 이름). (2) INSERT O(?), SEARCH O(?) — SEARCH 는 무엇에 비례하는가. (3) 좋은 해시 함수의 조건 두 가지(p.29). (4) 그래서 성능이 달려 있는 한 가지.{/quiz}
+'''쓰기 C:'''
+{quiz}(1) chaining 그림(버킷 + 각 버킷의 자료구조). (2) INSERT O(?), SEARCH O(?) — 무엇에 비례하나. (3) [[좋은 해시 함수의 조건]] 두 가지(p.29).{/quiz}
 {answer}
-(1) 배열 $n$ 칸, 칸마다 linked list. 키 $x$ → 버킷 $h(x)$.
-(2) INSERT O(1) (정렬 안 하니까 그냥 붙임), SEARCH O(length(list)) — '''자기 버킷의 체인 길이'''에 비례.
-(3) ① 빠르게 계산할 수 있어야 하고 ② 키를 버킷에 '''고르게''' 퍼뜨려야 한다. → [[좋은 해시 함수의 조건]]
-(4) [[hash collision|충돌]]이 한 버킷에 몰리느냐 — 즉 "버킷이 얼마나 고르게 차느냐". 다음 블록은 "고정된 $h$ 로는 이걸 보장할 수 없다"는 이야기다.
+(1) 배열 $n$ 칸, 칸마다 linked list. (2) INSERT O(1), SEARCH O(체인 길이). (3) ① 빠르게 계산 가능 ② 키를 버킷에 고르게 분산.
 {/answer}
 
-== ④ 결정론적 해시로는 worst-case O(1) 불가능 ⭐⭐⭐ (12분) ==
-[[img:L7-31.png|L7 p.31. 교수의 입버릇: "You cannot escape the dark side with deterministic hash functions"|small]]
-[[img:L7-32.png|L7 p.32 논증 그림. universe U 의 M 개 키가 n 개 버킷으로 → 어떤 버킷(노랑)에는 M/n 개 이상 → 적이 거기서 n 개를 고른다|large]]
+----
 
-논증은 다섯 줄이다. $h$ 가 고정되어 있으면 적([[adversary]])이 $h$ 를 안다. $M$ 개 키를 $n$ 개 버킷에 넣으므로 [[비둘기집 원리]]로 어떤 버킷에는 $\ge M/n$ 개의 키가 간다. $M \gg n$ 이라 $M/n \ge n$. 적은 그 버킷으로 가는 키 중 $n$ 개를 골라 입력으로 준다. 그러면 한 체인 길이가 $n$ → SEARCH O(n). '''어떤 결정론적 $h$ 를 골라도''' 이 공격이 통한다. → [[결정론적 해시 함수의 한계]]
+== ④ 0:30–0:42 · 결정론적 해시로는 worst-case O(1) 불가능 ⭐⭐⭐ ==
+'''▶ 할 일:''' 아래 5줄과 캡처를 5분 읽는다 → 덮고 쓰기 D 를 7분. 오늘 수업에서 교수가 가장 힘줄 부분.
 
-[[anim:hash_pigeonhole|비둘기집 논증을 그림으로. 거대한 U → n 버킷 → 가장 찬 버킷에서 적이 n 개를 골라 한 체인에 매단다]]
-
-해결책(p.33–34): '''$h$ 를 무작위로 고른다.''' 적은 입력을 고를 때 $h$ 를 모른다 — 게임 순서가 "적이 먼저 $n$ 개 키와 연산 순서를 고름 → 알고리즘이 주사위로 $h$ 를 고름 → 실행". 이것이 L6 의 [[두 시나리오]] 중 Scenario 1 이고, 그래서 재는 양이 [[expected running time]] 이다.
-
-[[img:L7-34.png|L7 p.34 해싱 게임. 1. 적이 n 개 키와 INSERT/DELETE/SEARCH 순서를 고른다 2. 알고리즘이 random h 를 고른다 3. HASH IT OUT|medium]]
-
-=== 쓰기 D ===
-{quiz}백지에, 교수 말투로 5줄: '''pigeonhole''', $M/n$, '''adversary''' 가 고르는 $n$ 개, 한 버킷에 전부 — 를 반드시 넣어 "결정론적 해시로는 worst-case O(1) 불가능"을 서술하고, 마지막 줄은 "그래서 해결책은 ___" 로 끝낸다. 그 아래 한 줄: 이것은 L6 두 시나리오 중 어느 쪽인가?{/quiz}
-{answer}
-① $h$ 가 고정이면 적이 $h$ 를 안다. ② $M$ 개 키를 $n$ 버킷에 넣으므로 pigeonhole 로 어떤 버킷에 $\ge M/n$ 개. ③ $M \gg n$ 이므로 $M/n \ge n$ → 그 버킷에서 adversary 가 $n$ 개를 골라 입력으로. ④ 한 체인 길이 $n$ → SEARCH O(n), 어떤 결정론적 $h$ 든 마찬가지. ⑤ 해결책: $h$ 를 함수 집합에서 '''무작위로''' 고른다 — 적은 입력을 고를 때 $h$ 를 모른다.
-시나리오: 적이 입력만 고르고 주사위($h$ 선택)는 못 고른다 → '''Scenario 1''' → 재는 양은 expected running time. (적이 $h$ 까지 고를 수 있다면 Scenario 2 = worst O(n), 그건 못 피한다.)
-{/answer}
-
-== ⑤ 기대 버킷 크기 ≤ 2 ⭐⭐⭐ (10분, 오늘의 핵심 계산) ==
-[[img:L7-40.png|L7 p.41. 이 네 줄이 오늘 수업의 핵심 계산. "HOW?" 화살표가 가리키는 1/n 이 uniformly random 이 쓰이는 유일한 곳|large]]
-
-$h$ 가 [[uniformly random hash function]] 이고 $u_1, \dots, u_n$ 이 삽입되었을 때, $u_i$ 가 들어간 버킷의 기대 크기. 도구는 L6 의 [[randomized quicksort]] 증명과 '''완전히 같다''': [[지표 확률변수]] + [[기대값의 선형성]] + 확률 한 줄.
-
+'''읽기:''' [[결정론적 해시 함수의 한계]] 논증 5줄.
 <pre class="txt">
-'''① 지표변수:'''  X_ij = 1  iff  h(u_i) = h(u_j)   (j ≠ i)
-'''② 버킷 크기:'''  size = 1 + Σ_{j≠i} X_ij            (1 은 u_i 자신)
-'''③ 선형성:'''    E[size] = 1 + Σ_{j≠i} E[X_ij] = 1 + Σ_{j≠i} P{h(u_i) = h(u_j)}
-'''④ 확률:'''      h 가 uniformly random → h(u_j) 는 n 버킷 중 균등 → P = 1/n
-'''⑤ 합:'''        E[size] = 1 + (n−1)/n ≤ 2
+① h 가 고정 → 적(adversary)이 h 를 안다
+② M 개 키를 n 버킷에 → '''pigeonhole''': 어떤 버킷에 ≥ M/n 개
+③ M ≫ n 이므로 M/n ≥ n → 적이 그 버킷의 키 중 n 개를 골라 입력으로
+④ 한 체인 길이 n → SEARCH O(n). 어떤 결정론적 h 든 마찬가지
+⑤ 해결책: h 를 함수 집합에서 '''무작위로''' 고른다 — 적은 입력을 고를 때 h 를 모른다
 </pre>
+[[img:L7-32.png|L7 p.32. U 의 M 개 키 → n 버킷 → 어떤 버킷(노랑)에 M/n 개 이상 → 적이 거기서 n 개를 고른다|large]]
+⑤ 가 L6 의 Scenario 1 이다(적은 입력만, 주사위 = $h$ 선택은 알고리즘). 그래서 재는 양이 expected running time.
 
+'''쓰기 D:'''
+{quiz}백지에 위 5줄을 '''안 보고''' 재현. pigeonhole, $M/n$, adversary 가 고르는 $n$ 개, 한 체인에 전부 — 네 단어가 들어가야 한다. 마지막 줄에 "이것은 두 시나리오 중 ___ 이고 그래서 ___ 을 잰다".{/quiz}
+{answer}
+위 ①–⑤ 그대로. 마지막 줄: Scenario 1, expected running time. (적이 $h$ 까지 고를 수 있으면 Scenario 2 = worst O(n), 그건 못 피한다 — p.31 "You cannot escape the dark side with deterministic hash functions".)
+{/answer}
+
+----
+
+== ⑤ 0:42–0:52 · 기대 버킷 크기 ≤ 2 ⭐⭐⭐ ==
+'''▶ 할 일:''' 아래 5줄 유도와 캡처를 5분 읽는다 → 덮고 쓰기 E 를 5분. L6 quicksort 증명([[X_{a,b}]])과 '''같은 틀'''임을 확인하는 게 목적.
+
+'''읽기:''' $h$ 가 [[uniformly random hash function|uniformly random]], $u_1..u_n$ 삽입. $u_i$ 버킷의 기대 크기 → [[기대 버킷 크기]].
+<pre class="txt">
+① 지표변수:  X_ij = 1  iff  h(u_i) = h(u_j)          (j ≠ i)
+② 버킷 크기:  size = 1 + Σ_{j≠i} X_ij                 (1 은 u_i 자신)
+③ 선형성:    E[size] = 1 + Σ_{j≠i} P{h(u_i) = h(u_j)}
+④ 확률:      uniformly random → h(u_j) 는 n 버킷 중 균등 → P = 1/n   ← 여기 한 줄만 랜덤성 사용
+⑤ 합:        E[size] = 1 + (n−1)/n ≤ 2
+</pre>
+[[img:L7-40.png|L7 p.41. 같은 네 줄. "HOW?" 화살표가 가리키는 1/n 이 ④|large]]
+코끼리(p.44–50): 균등 무작위 $h$ 는 $n^M$ 개 함수 중 하나 → 저장에 $M \log n$ 비트 → 불가능. ④ 만 $\le 1/n$ 으로 보장하면 되므로 '''더 작은 함수 집합'''을 찾자는 게 다음 차시([[universal hash family]]).
+
+값을 바꿔 가며 ⑤ 를 확인:
 [[sim:universal_hash_check]]
 
-'''이 증명에서 uniformly random 이 실제로 쓰인 곳은 ④ 한 줄뿐이다.''' 다음 차시의 [[universal hash family]] 는 "④ 를 $\le 1/n$ 으로 보장하는 더 작은 집합"이라는 이야기이므로, 오늘 이 문장을 교수가 하면 ✓.
-
-방 안의 코끼리(p.44–50): 균등 무작위 $h$ 는 $U \to \{1..n\}$ 의 모든 함수 $n^M$ 개 중 하나이므로 저장에 $\log(n^M) = M \log n$ 비트 — direct addressing 보다도 나쁘다. "값이 필요할 때만 주사위를 굴려 기억해 두자"(p.47)는 그 기억 자체가 O(1) 딕셔너리를 요구하므로 순환. → [[log(s) 비트]]
-
-[[img:L7-46.png|L7 p.47. h 값을 그때그때 굴려 기억하자 → 그걸 저장할 O(1) 자료구조가 또 필요하다 (DOH!)|medium]]
-
-=== 쓰기 E ===
-{quiz}백지에 ①–⑤ 를 순서대로 유도(빈칸 없이 전부). 그 아래: (a) uniformly random 이 쓰인 줄은? (b) 균등 무작위 $h$ 는 총 몇 개 중 하나이고 저장에 몇 비트인가, 왜 불가능한가.{/quiz}
+'''쓰기 E:'''
+{quiz}①–⑤ 를 안 보고 재현. 그 아래 (a) 랜덤성이 쓰인 줄 번호, (b) 균등 무작위 $h$ 의 개수와 저장 비트, 왜 불가능한가.{/quiz}
 {answer}
-① $X_{ij} = 1$ iff $h(u_i) = h(u_j)$. ② $u_i$ 자신 1 + 충돌 개수. ③ $E[\text{size}] = 1 + \sum_{j \ne i} P\{h(u_i) = h(u_j)\}$. ④ uniformly random 이면 $h(u_j)$ 가 $n$ 버킷 중 균등이라 $u_i$ 와 같은 버킷일 확률 $1/n$. ⑤ $1 + \frac{n-1}{n} \le 2$.
-(a) ④ 한 줄. (b) 함수 개수 $n^M$, 저장 $M \log n$ 비트. $M$ 이 universe 크기라 direct addressing($M$ 칸)보다 나쁨. → [[기대 버킷 크기]], [[hash family]]
+위 ①–⑤ 그대로. (a) ④. (b) $n^M$ 개, $\log(n^M) = M \log n$ 비트; $M$ 이 universe 크기라 direct addressing 보다도 나쁨.
 {/answer}
 
-== ⑦ 수업 중 확인할 것 (쓰기 F) ==
-* 오늘 어디서 끝났나 (p.N) → `_진도.md` 11차시 행
+----
+
+== 0:52–1:00 · 채점 ==
+답 A–E 를 펼쳐 대조. 틀린 절만 그 절의 '''읽기'''를 다시 본다. 다른 문서로 가지 않는다.
+
+'''수업 중 확인할 것''' (백지 구석에 적어 두고 체크):
+* 오늘 어디서 끝났나 (p.N)
 * [[open addressing]] (p.27) 시험 범위인가
-* "uniformly random 이 쓰인 곳은 충돌 확률 한 줄뿐" 을 교수가 직접 말하는가
 * 중간고사 날짜·범위 공지 → [[시험 정보]]
-* [[CLRS]] 11 어느 절을 읽으라는지 (11.2 chaining, 11.3.3 universal 예상)
+* CLRS 11 어느 절을 읽으라는지
 
 {tip}
-수업 후: 녹음을 `녹음본/0929_11_컴알_L7_Randomized2.txt` 에 넣으면 이 위키 L7 문서의 출제 포인트 박스 → 해설본 🎙 절 → `_진도.md` 순으로 반영된다. 다음 차시(10/1 목) 예습 범위는 p.44–72: [[universal hash family]] 정의, [[h_{a,b}]], $p = 5, n = 3, h_{2,1}$ 예제, O(log M) 비트.
+더 보고 싶을 때만: 각 절의 링크([[두 시나리오]], [[chaining]], [[결정론적 해시 함수의 한계]], [[기대 버킷 크기]])에 애니메이션·시뮬레이터·나머지 캡처가 있다. 수업 후에는 [[L7 Randomized Algorithms II]] 메인 문서로. 다음 차시(10/1 목) 예습은 [[universal hash family]] · [[h_{a,b}]].
 {/tip}
-
-== 관련 문서 ==
-* [[읽는 순서]] · [[시험 정보]] · [[계산·증명 문제 모음]] (F·G 유형이 이 문서의 연장)
-* [[L6 Randomized Algorithms I]] · [[L7 Randomized Algorithms II]]
-* [[두 시나리오]] · [[기대 버킷 크기]] · [[결정론적 해시 함수의 한계]] · [[universal hash family]]
