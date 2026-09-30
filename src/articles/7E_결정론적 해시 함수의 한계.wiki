@@ -33,7 +33,7 @@ L7 p.32: "We really can't beat the bad guy here. • The universe U has M items 
 이건 "모든 입력에서 나쁘다" 는 뜻이 아니다. 일의 자리 h 도 운 좋은 입력엔 잘 동작한다. "'''적이 고른 최악의 입력'''에 대해 보장할 수 없다" 는 worst-case 진술이다. 해결은 h 를 적이 입력을 고른 뒤에 랜덤으로 → [[해싱 게임]].
 {/warn}
 {exam}
-교수(9/29) ⭐⭐⭐ '''오늘의 key message''': "any deterministic or fixed hash function '''cannot achieve O(1) worst-case running time due to the pigeonhole principle'''." M 개 키 → n 버킷 → 어떤 버킷엔 $\ge M/n$ 개, $M$ 이 매우 크고 $n$ 이 작아 $M/n \gg n$ → "the bad guy chooses n items that hash to the same bucket". 해결은 "'''randomness'''" — 적이 h 를 모르게. → [[비둘기집 원리]]
+교수(9/29) ⭐⭐⭐ '''오늘의 key message''': "any deterministic or fixed hash function '''cannot achieve O(1) running time due to the pigeonhole principle'''."(여기서 O(1) 은 앞뒤 발언[33:38, 50:06]대로 '''worst-case''' 를 뜻한다) M 개 키 → n 버킷 → 어떤 버킷엔 $\ge M/n$ 개, $M$ 이 매우 크고 $n$ 이 작아 $M/n \gg n$ → "the bad guy chooses n items that hash to the same bucket". 해결은 "'''randomness'''" — 적이 h 를 모르게. → [[비둘기집 원리]]
 {/exam}
 
 == 관련 문서 ==

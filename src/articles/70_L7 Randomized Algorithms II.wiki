@@ -109,7 +109,7 @@ p.30 의 꿈: "No matter what input a bad guy chooses, the buckets will be balan
 해설본 ⭐⭐⭐: "'''You cannot escape the dark side with deterministic hash functions'''" (교수 입버릇, p.31). 비둘기집 원리로 "한 버킷 ≥ M/n > n → 적이 그중 n 개를 고름 → search O(n)" 을 '''서술할 수 있어야''' 한다 → [[결정론적 해시 함수의 한계]].
 {/exam}
 {exam}
-교수(9/29) ⭐⭐⭐ '''오늘의 key message''': "'''any deterministic or fixed hash function cannot achieve O(1) worst-case running time due to the pigeonhole principle.'''" 교수의 설명 순서 그대로: M 개 키를 n 개 버킷에 → 어떤 버킷에는 적어도 $M/n$ 개 → M 은 매우 크고 n 은 작으니 $M/n \gg n$ → "the '''bad guy''' chooses n items that hash to the same bucket" → $O(1)$ 불가. 이 한 문장과 네 단계 논증([[비둘기집 원리]])을 영어 키워드 그대로 쓸 수 있어야 한다.
+교수(9/29) ⭐⭐⭐ '''오늘의 key message''': "'''any deterministic or fixed hash function cannot achieve O(1) running time due to the pigeonhole principle.'''"(여기서 O(1) 은 앞뒤 발언[33:38, 50:06]대로 '''worst-case''' 를 뜻한다) 교수의 설명 순서 그대로: M 개 키를 n 개 버킷에 → 어떤 버킷에는 적어도 $M/n$ 개 → M 은 매우 크고 n 은 작으니 $M/n \gg n$ → "the '''bad guy''' chooses n items that hash to the same bucket" → $O(1)$ 불가. 이 한 문장과 네 단계 논증([[비둘기집 원리]])을 영어 키워드 그대로 쓸 수 있어야 한다.
 {/exam}
 
 == ⑥ 해결책: 랜덤성 — 해싱 게임 (p.33–43) ==
@@ -150,7 +150,7 @@ h: U → {1..n} 인 함수의 개수 = n^M                                ← M 
 해결책(p.52): 더 작은 함수 집합 — '''[[hash family]]''' $H$ 에서 고른다. 그러면 $\log|H|$ 비트만 필요.
 [[img:L7-50.png|p.52 — Solution: A cleverly chosen subset of functions = hash family (쥐 H), log|H| bits|medium]]
 {exam}
-교수(9/29): 분석은 끝났지만 "'''elephant in the room'''" — uniformly random h 를 '''어떻게 구현(저장)하나'''를 설명하지 않았다. 먼저 질문: 크기 s 인 집합 S 의 원소 하나를 이진수로 적으려면 몇 비트? → '''$\log s$''' ("원소가 8 개면 3 비트", [[log(s) 비트]]). $h: U \to \{1..n\}$ 은 각 키마다 n 가지 선택이 있으므로 함수가 '''$n^M$''' 개(칠판에서 a, b, c 세 원소 × 버킷 0/1 로 조합을 세어 봄) → 저장에 $\log(n^M) = M \log n$ 비트, 즉 '''아이템(키)마다 $\log n$ 비트''' — 너무 크다. 해결 아이디어: $n^M$ 보다 훨씬 작은 함수 집합에서 고르자 → [[hash family]].
+교수(9/29): 분석은 끝났지만 "'''elephant in the room'''" — uniformly random h 를 '''어떻게 구현(저장)하나'''를 설명하지 않았다. 먼저 질문: 크기 s 인 집합 S 의 원소 하나를 이진수로 적으려면 몇 비트? → '''$\log s$''' ("원소가 8 개면 3 비트(녹음이 뭉개진 구간이라 판서 내용은 추정)", [[log(s) 비트]]). $h: U \to \{1..n\}$ 은 각 키마다 n 가지 선택이 있으므로 함수가 '''$n^M$''' 개(칠판에서 a, b, c 세 원소 × 버킷 0/1 로 조합을 세어 봄) → 저장에 $\log(n^M) = M \log n$ 비트, 즉 '''아이템(키)마다 $\log n$ 비트''' — 너무 크다. 해결 아이디어: $n^M$ 보다 훨씬 작은 함수 집합에서 고르자 → [[hash family]].
 {/exam}
 
 == ⑧ 작기만 하면 안 된다 (p.54–57) ==
@@ -163,7 +163,7 @@ p.56 의 적은 {19, 22, 42, 92, 0} 을 줬고 $h_1$ 을 뽑아 버킷 2 에 22,
 
 == ⑨ Universal hash family (p.59–64) ⭐⭐⭐ ==
 {info}
-9/29 수업은 p.58 직전(hash family 도입)에서 끝났다. 이 절부터는 '''다음 수업 예정 범위'''라 녹음 강조가 아직 없다 — 해설본 ⭐ 기준.
+9/29 수업은 약 p.58(hash family 도입, universal 직전)에서 끝났다. 이 절부터는 '''다음 수업 예정 범위'''라 녹음 강조가 아직 없다 — 해설본 ⭐ 기준.
 {/info}
 p.61: p.41 계산을 다시 보면 '''실제로 필요했던 건 단 하나''' — "All we needed was that this ≤ 1/n."
 {def}
@@ -277,7 +277,7 @@ O(n) buckets
 # (9/29 강조) dictionary operations 는 "very basic, should be very fast" — hash table 은 '''$O(1)$ expected''', worst-case $O(n)$ ("better worst-case 는 나중에 tree").
 # (9/29 강조) [[direct addressing]] = one-to-one mapping = [[counting sort]] 와 같은 발상·같은 문제(범위가 크면 메모리 폭발). 범위 묶기 = [[bucket sort]] 발상, 한 버킷에 몰리면 $O(n)$.
 # (9/29 강조) 강의는 '''chaining 만''' 다룬다. [[open addressing]] 은 CLRS 11.4 자습. 목표 = "items evenly spread over the buckets", 테이블 크기 n 고정.
-# (9/29 key message) "Any deterministic / fixed hash function cannot achieve $O(1)$ worst-case due to the '''pigeonhole principle'''." 해결 = randomness(적이 h 를 모름).
+# (9/29 key message) "Any deterministic / fixed hash function cannot achieve $O(1)$ (worst-case) running time due to the '''pigeonhole principle'''." 해결 = randomness(적이 h 를 모름).
 # (9/29 강조) uniformly random h 저장 = "elephant in the room": 함수 $n^M$ 개 → $M \log n$ 비트(키당 $\log n$ 비트). $s$ 개 중 하나 = $\log s$ 비트. → 더 작은 [[hash family]] 가 필요, 그러나 {최하위, 최상위 자리} 처럼 작기만 하면 적에게 깨진다.
 
 == 관련 문서 ==

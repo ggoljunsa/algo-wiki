@@ -56,7 +56,7 @@ category: 시험, 모의고사
 {answer}'''Recursion invariant'''. 9/3 수업: 'Recursion invariant instead of loop invariant … What changes over the recursion? Only input size.' 반복 알고리즘은 loop invariant + 반복 횟수 귀납, 재귀 알고리즘은 recursion invariant + 입력 크기 귀납(mergesort: 'In every recursive call, mergesort returns a sorted list', p.37). 9/8 마무리 요약에서도 같은 대비를 반복했다.{/answer}
 
 === A12 ===
-{quiz}“A pivot-selection rule: split A into ⌈n/5⌉ groups of at most 5 elements each, find the median within each group, and then recursively SELECT the median of the list of those group medians, returning it as the pivot.” (L4 p.78–80){/quiz}
+{quiz}“A pivot-selection rule: split A into ⌈n/5⌉ groups of at most 5 elements each, find the middle element of each group (O(1) per group), then recursively call SELECT with rank m/2 on the list of those m middle elements, returning the result as the pivot.” (L4 p.78–80){/quiz}
 {answer}'''Median of medians'''. 각 그룹(크기 5)의 median 은 O(1), 그룹 수 m = ⌈n/5⌉ 이므로 for 루프 O(n), 그 뒤 크기 n/5 리스트에 SELECT 재귀 → T(n/5). 정확한 median 은 아니지만(p.84: 15 vs 실제 12) '충분히 가까운' pivot 을 보장한다. 교수(9/10): 'we cannot find the linear time median selection algorithm, we use some compromise … close enough to the median.'{/answer}
 
 === A13 ===
@@ -170,7 +170,7 @@ category: 시험, 모의고사
 {answer}'''T'''. a 와 b 는 a, a+1, …, b 중에서 a 또는 b 가 '가장 먼저' 피벗이 될 때만 비교된다. 이 b − a + 1 개 원소는 누가 먼저 뽑히든 대칭이므로 확률 = 2/(b − a + 1). 바깥 원소들은 이 구간을 가르지 않으므로 n 은 등장하지 않는다. 교수(9/17): 'n 에 무관하게 a, b 의 거리만으로 결정된다 — 흥미로운 값.' 예: P(X_6,10 = 1) = 2/5.{/answer}
 
 === B22 ===
-{quiz}(T / F) If the universe size M is much bigger than the number of buckets n, a cleverly designed deterministic hash function h: U → the set 1..n can still guarantee O(1) entries per bucket for every set of n items a bad guy might choose. (L7 p.30–32){/quiz}
+{quiz}(T / F) If the number M of possible keys is much bigger than the number of buckets n, a cleverly designed deterministic hash function h: U → the set 1..n can still guarantee O(1) entries per bucket for every set of n items a bad guy might choose. (L7 p.30–32){/quiz}
 {answer}'''F'''. 비둘기집 원리(pigeonhole principle): M 개 key 를 n 개 bucket 에 넣으면 어떤 bucket 에는 최소 M/n 개가 들어간다. M ≫ n 이라 M/n > n 이므로, h 를 아는 적은 그 bucket 으로 가는 key 중 n 개를 고르면 된다 → 한 bucket 에 n 개, SEARCH Θ(n). 교수(9/29): 'any deterministic or fixed hash function cannot achieve O(1) running time due to the pigeonhole principle' / 슬라이드 p.31 'You cannot escape the dark side with deterministic hash functions'. 해결책은 randomness(p.33). 맞는 문장: No deterministic hash function can guarantee this; a bad guy can always put n items in one bucket.{/answer}
 
 === B23 ===
@@ -228,8 +228,8 @@ category: 시험, 모의고사
 {answer}'''④ Select's two sub-problem sizes add up to n/5 + 7n/10 = 9n/10 < n, so the work per level shrinks geometrically.'''. 부분 문제 크기의 합이 9n/10 < n 이면 레벨 j 의 총 일이 (9/10)ʲ·dn 으로 등비 감소 → 합이 10dn = O(n). mergesort 는 n/2 + n/2 = n 이라 레벨마다 n 이 그대로 → × log n 레벨. 따라서 ④. ①은 틀림 — 트리 깊이는 여전히 Θ(log n) 이다. ②는 크기가 다른 두 항이 있어 master method 자체를 적용할 수 없다(치환법으로 증명). ③은 틀림 — sub-median 계산은 O(n), pivot 을 고르는 SELECT 재귀는 T(n/5) 이다.{/answer}
 
 === C12 ===
-{quiz}A call select(A, k) with k = 7 (0-indexed) partitions A of length 12 about its pivot and obtains len(left) = 4 and len(right) = 7. What happens next? (L4 p.16, p.41)<br>① select(left, 7) is called.<br>② select(right, 7) is called.<br>③ select(right, 2) is called.<br>④ The pivot is returned as the answer.{/quiz}
-{answer}'''③ select(right, 2) is called.'''. len(left) = 4 < k = 7 이므로 답은 오른쪽에 있다. 왼쪽 4개 + pivot 1개를 건너뛰므로 오른쪽 안에서의 순위는 k − len(left) − 1 = 7 − 4 − 1 = 2 → select(right, 2) (③). ①은 len(left) > k 일 때의 분기인데 left 에는 원소가 4개뿐이다. ②는 k 보정을 빠뜨린 오류 — right 는 길이 7 이라 인덱스 7 은 범위를 벗어난다. ④는 len(left) == k 일 때만.{/answer}
+{quiz}A call select(A, k) with k = 9 (0-indexed) partitions A of length 12 about its pivot and obtains len(left) = 5 and len(right) = 6. What happens next? (L4 p.16, p.41)<br>① select(left, 9) is called.<br>② select(right, 9) is called.<br>③ select(right, 3) is called.<br>④ The pivot is returned as the answer.{/quiz}
+{answer}'''③ select(right, 3) is called.'''. len(left) = 5 < k = 9 이므로 답은 오른쪽에 있다. 왼쪽 5개 + pivot 1개를 건너뛰므로 오른쪽 안에서의 순위는 k − len(left) − 1 = 9 − 5 − 1 = 3 → select(right, 3) (③). ①은 len(left) > k 일 때의 분기인데 left 에는 원소가 5개뿐이다. ②는 k 보정을 빠뜨린 오류 — right 는 길이 6 이라 인덱스 9 는 범위를 벗어난다. ④는 len(left) == k 일 때만.{/answer}
 
 === C13 ===
 {quiz}In the analysis of median_of_medians with g = ⌈n/5⌉ groups, at least 3·(⌈g/2⌉ − 2) + 2 elements are guaranteed to be smaller than the pivot. What does the '− 2' account for? (L4 p.88–90)<br>① Excluding the group that contains the pivot itself and the possibly incomplete leftover group, neither of which can be counted as contributing a full 3 elements.<br>② Excluding the smallest and the largest group medians.<br>③ The two elements of each group that are larger than its group median.<br>④ The two recursive calls, T(n/5) and T(7n/10).{/quiz}
@@ -248,7 +248,7 @@ category: 시험, 모의고사
 {answer}'''③ Because Ck ≥ k log k must hold for every k ≤ 100, which needs C ≥ log₂ 100 ≈ 6.64.'''. 기저 사례 T(k) = k log k ≤ Ck ⇔ C ≥ log k, k ≤ 100 에서 최대 log₂ 100 ≈ 6.64 → 정수로 C ≥ 7 (③). 귀납 단계는 C/5 + 7C/10 + d ≤ C ⇔ C ≥ 10d 를 주므로 최종 C = max(7, 10d). ①은 숫자 7 이 우연히 겹친 것일 뿐 — 7n/10 은 귀납 단계 조건 C ≥ 10d 를 만든다. ②는 근거 없음. ④는 d 는 미지의 상수이고 그래서 C 가 max(7, 10d) 로 표현된다.{/answer}
 
 === C17 ===
-{quiz}In the lower-bound proof, why must the decision tree of any correct deterministic comparison-based sorting algorithm on n distinct items have at least n! leaves? (L5 p.11, p.14–15)<br>① Because every internal node asks one YES/NO question, so the tree has exactly n! internal nodes.<br>② Because the algorithm must compare every pair of items, and there are n! pairs.<br>③ Because each of the n! possible orderings of the items must be returned at some leaf, and a leaf returns only one ordering.<br>④ Because a balanced binary tree of depth n always has n! leaves.{/quiz}
+{quiz}In the lower-bound proof, why must the decision tree of any correct deterministic sorting algorithm that learns the order only through YES/NO questions to a genie, on n distinct items, have at least n! leaves? (L5 p.11, p.14–15)<br>① Because every internal node asks one YES/NO question, so the tree has exactly n! internal nodes.<br>② Because the algorithm must compare every pair of items, and there are n! pairs.<br>③ Because each of the n! possible orderings of the items must be returned at some leaf, and a leaf returns only one ordering.<br>④ Because a balanced binary tree of depth n always has n! leaves.{/quiz}
 {answer}'''③ Because each of the n! possible orderings of the items must be returned at some leaf, and a leaf returns only one ordering.'''. 잎 = 알고리즘이 반환하는 결과(한 가지 순서). 입력이 n! 가지 순서 중 무엇이든 옳게 정렬해야 하므로 모든 순서가 어떤 잎에 있어야 한다 → 잎 ≥ n! → 깊이 ≥ log(n!) = Ω(n log n). ③ 정답. ①잎 수가 아니라 내부 노드 수를 말하며 사실도 아니다. ②쌍의 수는 n(n−1)/2 이지 n! 이 아니고, 모든 쌍을 비교할 필요도 없다(mergesort). ④깊이 n 인 완전 이진 트리의 잎은 2ⁿ 개이지 n! 이 아니다(n ≥ 4 에서 n! > 2ⁿ).{/answer}
 
 === C18 ===
@@ -272,7 +272,7 @@ category: 시험, 모의고사
 {answer}'''① It needs one slot per possible key, so if the set of possible keys is huge the space becomes an issue, even when only a few items are stored.'''. direct addressing = key → index 의 one-to-one mapping. 교수(9/29): 'Think about counting sort … it's a one-to-one mapping from the value to the index' / '입력 공간이 10⁶ 이상이면 실제로는 몇 개만 넣어도 거대한 메모리가 필요하다.' ① 정답. ②one-to-one 이라 collision 이 없다 — collision 은 bucket(many-to-one)에서 생긴다. ③순서 제약 없음(insert(7), insert(5), insert(0) 순서로 넣는 예, p.11–14). ④DELETE 도 해당 칸을 비우면 되므로 O(1).{/answer}
 
 === C23 ===
-{quiz}The universe U has M keys and there are n buckets. How many bits are needed to write down one hash function chosen uniformly at random from all functions h: U → the set 1..n? (L7 p.46–50)<br>① log(M) bits, one index into the universe.<br>② n·log(M) bits, log(M) bits for each of the n stored items.<br>③ M bits, one bit per key of the universe.<br>④ M·log(n) bits, since there are n^M such functions.{/quiz}
+{quiz}There are M possible keys and n buckets. How many bits are needed to write down one hash function chosen uniformly at random from all functions h: U → the set 1..n? (L7 p.46–50)<br>① log(M) bits, one index into the set of M keys.<br>② n·log(M) bits, log(M) bits for each of the n stored items.<br>③ M bits, one bit per key of the universe.<br>④ M·log(n) bits, since there are n^M such functions.{/quiz}
 {answer}'''④ M·log(n) bits, since there are n^M such functions.'''. s 개 중 하나를 적는 데 log(s) 비트가 필요하다(p.49 'Fido/Hercules' 예). 모든 함수의 개수는 key M 개 각각에 bucket n 개 중 하나를 고르므로 n^M → log(n^M) = M·log(n) 비트(p.50). ④ 정답. 교수(9/29): 'We need log n bits per item' 을 반복 — key 마다 어느 bucket 인지 적어야 한다. ③M 비트는 direct addressing 의 공간이다(슬라이드 비교: 랜덤 함수가 오히려 더 크다!). ①②는 저장할 대상을 잘못 셌다 — 랜덤 h 는 U 전체에 대해 값을 미리 정해야 하므로 M 에 비례한다(p.46 'we have to store h(x) for every x').{/answer}
 
 === C24 ===
@@ -317,7 +317,7 @@ n = max(⌈22c⌉, n₀, 1) + 1 을 택하면 n ≥ n₀ 이면서 n > 22c 이�
 {/answer}
 
 === D3 ===
-{quiz}'''Loop invariant proof for find_max''' (L1 p.26, p.44–52, p.57)<br>def find_max(A):   # A has n ≥ 1 elements<br>    m = A[0]<br>    for i in range(1, len(A)):<br>        if A[i] > m: m = A[i]<br>    return m<br>(a) State a loop invariant for the for loop.<br>(b) Prove correctness using Initialization (base case), Maintenance (inductive step), and Termination (conclusion).<br>(c) For A = [3, 8, 2, 9, 4], write the value of m at the start of each iteration i = 1, 2, 3, 4 and the returned value.{/quiz}
+{quiz}'''Loop invariant proof for find_max''' (L1 p.26, p.44–52, p.57)<br>def find_max(A):   # A has n ≥ 1 elements<br>    m = A[0]<br>    for i in range(1, len(A)):<br>        if A[i] > m: m = A[i]<br>    return m<br>(a) State a loop invariant for the for loop.<br>(b) Prove correctness by induction on the number of iterations, labeling all four components of the proof (and their CLRS names).<br>(c) For A = [3, 8, 2, 9, 4], write the value of m at the start of each iteration i = 1, 2, 3, 4 and the returned value.{/quiz}
 {answer}'''답: (a) At the start of iteration i, m = max(A[:i]). (b) Init: i = 1, m = A[0] = max(A[:1]); Maint: m' = max(m, A[i]) = max(A[:i+1]); Term: loop ends with i = n, so m = max(A[:n]) = max(A). (c) 3, 8, 8, 9; returns 9.'''
 <pre class="txt">
 교수 강조 'look for things that don't change'(L1 p.26): 반복마다 값은 바뀌지만 'm 은 지금까지 본 구간의 최댓값'이라는 사실은 변하지 않는다 → 이것이 invariant.
@@ -360,7 +360,7 @@ T(n) = O(nᵈ log n) = O(√n log n).
 (c) a = 6, b = 2, d = 3 → bᵈ = 2³ = 8.
 6 < 8 → a < bᵈ → 루트가 지배(top heavy).
 T(n) = O(n³).
-검산(Python, T(1) = 1, n = bᵏ 로 실제 점화식 계산): (a) T(n)/n² → 1.50 수렴, (b) T(n)/(√n log₄ n) → 1.10 부근으로 감소 수렴, (c) T(n)/n³ → 4 수렴 = 8/(8 − 6). 세 비율 모두 상수로 수렴하므로 판정이 맞다.
+검산(Python, T(1) = 1, n = bᵏ 로 실제 점화식 계산): (a) T(n)/n² → 1.50 수렴, (b) n = 4ᵏ 에서 T(n) = √n·(k+1) 이므로 T(n)/(√n log₄ n) = (k+1)/k → 1 로 수렴, (c) T(n)/n³ → 4 수렴 = 8/(8 − 6). 세 비율 모두 상수로 수렴하므로 판정이 맞다.
 </pre>
 {/answer}
 
@@ -493,7 +493,7 @@ E(16) = 2·24 + 16 = 64 = 16·log₂16 (Python 재귀로 확인)
 {/answer}
 
 === D12 ===
-{quiz}'''Expected bucket size and the pigeonhole principle''' (L7 p.30–32, p.35–43)<br>A hash table with chaining has n = 8 buckets. The bad guy chooses n = 8 distinct items u_1, …, u_8, and h is a uniformly random hash function (each h(u) is uniform over the 8 buckets, independently).<br>(a) For a fixed pair i ≠ j, what is P(h(u_i) = h(u_j))?<br>(b) Compute E[number of items in u_i's bucket] exactly, and show it is at most 2.<br>(c) What is the expected number of items in a fixed bucket, say bucket 1?<br>(d) Now suppose h is a fixed deterministic function from a universe of M = 1000 keys to n = 10 buckets. At least how many keys must some bucket receive, and what can a bad guy who knows h do with this?{/quiz}
+{quiz}'''Expected bucket size and the pigeonhole principle''' (L7 p.30–32, p.35–43)<br>A hash table with chaining has n = 8 buckets. The bad guy chooses n = 8 distinct items u_1, …, u_8, and h is a uniformly random hash function (each h(u) is uniform over the 8 buckets, independently).<br>(a) For a fixed pair i ≠ j, what is P(h(u_i) = h(u_j))?<br>(b) Compute E[number of items in u_i's bucket] exactly, and show it is at most 2.<br>(c) What is the expected number of items in a fixed bucket, say bucket 1?<br>(d) Now suppose h is a fixed deterministic function from a set of M = 1000 possible keys to n = 10 buckets. At least how many keys must some bucket receive, and what can a bad guy who knows h do with this?{/quiz}
 {answer}'''답: (a) 1/8. (b) 1 + 7·(1/8) = 15/8 = 1.875 ≤ 2. (c) 8·(1/8) = 1. (d) some bucket gets ≥ ⌈1000/10⌉ = 100 keys; the bad guy picks n = 10 of them → all 10 items in one bucket → SEARCH Θ(n), no O(1) guarantee.'''
 <pre class="txt">
 (a) h(u_i) 가 어느 bucket 이든, h(u_j) 가 같은 bucket 에 떨어질 확률은 1/8 (독립·균등).
