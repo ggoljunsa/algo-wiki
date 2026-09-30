@@ -26,6 +26,9 @@ L7 p.27: "The previous slide is about hash tables with chaining. There's also so
 {info}
 (CLRS 11.4, 슬라이드 밖) 다음 칸을 고르는 규칙으로 linear probing, quadratic probing, double hashing 이 있다. 모든 원소가 테이블 안에 있으므로 [[load factor]] $\alpha \le 1$ 이어야 한다. 시험 범위 외.
 {/info}
+{exam}
+교수(9/29): 충돌 시 다른 빈 버킷에 넣어 충돌을 피하는 방식이지만 "search 할 때 어디 있는지 알기 복잡하고, 분석이 복잡하다. '''We are not covered in this lecture.''' Once interested, you can see '''chapter 11.4'''." → [[CLRS]] 11.4 자습. 강의의 모든 분석은 [[chaining]] 기준.
+{/exam}
 
 == 관련 문서 ==
 * [[chaining]] · [[hash collision]] · [[hash table]]

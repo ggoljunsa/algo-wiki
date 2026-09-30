@@ -29,6 +29,9 @@ L7 p.49: "How much space does it take to store h? Say I have a set S with s thin
 {exam}
 L7 공간 계산 전부가 이 공식 하나에서 나온다: '''$\log(n^M) = M \log n$''' (p.50, ☹) vs '''$\log(M^2) = O(\log M)$''' (p.72, ☺). "We need only log|H| bits to store an element of H." (p.52)
 {/exam}
+{exam}
+교수(9/29): uniformly random h 저장량을 묻기 전에 먼저 "크기 s 인 집합 S 의 원소를 이진수로 적으려면 몇 비트?" → '''$\log s$'''. "원소가 8 개면 구분하는 데 몇 비트? — 3 비트." 이걸로 함수 $n^M$ 개 → $\log(n^M) = M \log n$ 비트(아이템당 $\log n$ 비트)를 계산했다.
+{/exam}
 
 == 관련 문서 ==
 * [[H의 크기]] · [[uniformly random hash function]] · [[hash family]] · [[해시 테이블 공간 복잡도]] · [[로그 계산법]]

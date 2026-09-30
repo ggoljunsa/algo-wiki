@@ -33,6 +33,9 @@ h_{a,b} 저장            : log(p(p-1)) = O(log M) 비트
 {exam}
 해설본 ⭐⭐ 용어 정리: "U 크기 M, 등장 최대 n, M ≫ n, 미리 모름". 공간 식에서 M 과 n 이 어디에 들어가는지(M log n vs log M vs n log M)를 헷갈리지 말 것.
 {/exam}
+{exam}
+교수(9/29): universe U 는 가능한 모든 키의 집합, 크기 M — "we assume that this M is '''very, very big'''". 실제로 등장하는 건 작은 부분집합(크기 n)뿐이고 "'''we don't know which one will show up. That's the problem setting.'''" 예: 해시태그 최대 140 개 ASCII 문자, ASCII 128 종 → $128^{140}$. 해시 테이블 크기도 n 으로 고정($n \ll M$) — "arbitrarily large table 이면 충돌을 없앨 수 있지만 trade-off".
+{/exam}
 
 == 관련 문서 ==
 * [[universe U]] · [[버킷]] · [[load factor]] · [[해시 테이블 공간 복잡도]] · [[H의 크기]]

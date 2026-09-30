@@ -35,6 +35,9 @@ SEARCH 43 → 버킷 3 을 처음부터: 13 ≠ 43, 43 = 43 → 2 칸
 |-
 | 시험 || L7 본 내용 || Aside (CLRS 11.4, 관심 있으면)
 |}
+{exam}
+교수(9/29): "array of n buckets, each bucket stores an unsorted linked list." insert 는 "just put it into the bucket" 이라 $O(1)$, search 는 버킷 찾기 $O(1)$ + 그 리스트를 훑는 '''체인 길이'''. "'''We focus on the hash table with chaining'''" — [[open addressing]] 은 강의에서 다루지 않는다. 목표: "items are '''evenly spread over the buckets'''"(테이블 크기는 n 으로 고정).
+{/exam}
 
 == 관련 문서 ==
 * [[hash table]] · [[linked list]] · [[open addressing]] · [[hash collision]] · [[기대 버킷 크기]]

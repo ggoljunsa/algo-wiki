@@ -30,6 +30,9 @@ L7 p.54: "A hash family is a collection of hash functions. 'All of the hash func
 {exam}
 해설본 핵심 요약 9번: "{일의 자리, 최상위 자리} 같은 작은 H 는 '''적이 H 를 알고 있으므로''' 두 함수 모두에서 충돌하는 입력을 만들 수 있음 → universal 아님 (p.57)." 작은 것 + universal 조건 = 정답.
 {/exam}
+{exam}
+교수(9/29): "hash family is just a name of '''a set of hash functions'''." 극단 예 {최하위 자리, 최상위 자리} 두 개면 $n^M$ 개 대신 2 개, $M \log n$ 비트 대신 '''1 비트'''. "That's the extreme case. But definitely this hash family '''cannot achieve O(1)'''" — 적이 두 함수 모두 몰리는 입력을 고른다. "The next story … is [[universal hash family]]." (9/29 수업은 여기서 종료)
+{/exam}
 
 == 관련 문서 ==
 * [[universal hash family]] · [[h_{a,b}]] · [[H의 크기]] · [[log(s) 비트]] · [[uniformly random hash function]]

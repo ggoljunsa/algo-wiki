@@ -27,6 +27,9 @@ p.47 "필요한 값만 기억하면?" — h(13)=6, h(22)=3 … 을 기억하려�
 해설본 ⭐⭐, 핵심 요약 6번: "균등 무작위 h 의 문제: 모든 함수 $n^M$ 개 → 저장에 '''$M \log n$ 비트'''" — direct addressing(M 비트)보다도 크다. 그래서 '''충돌 확률 ≤ 1/n 성질만 유지하는 작은 집합'''([[universal hash family]])이 필요.
 {/exam}
 p.67: uniformly random h 전체 집합도 universal hash family 의 한 예다("We just saw this. Of course, this one has other downsides…").
+{exam}
+교수(9/29): "Think about rolling the dice between 1 to n, and put it into the bucket" — 아이템마다 1..n 을 무작위로 골라 넣는 것이 uniformly random hash function. 이유: "'''the bad guy cannot know the specific hash function''' to choose the worst-case input." 그러나 "elephant in the room" — 분석만 했지 구현을 설명 안 했다: 함수가 $n^M$ 개라 저장에 $M \log n$ 비트(키마다 $\log n$ 비트)가 든다.
+{/exam}
 
 == 관련 문서 ==
 * [[기대 버킷 크기]] · [[해싱 게임]] · [[log(s) 비트]] · [[hash family]] · [[universal hash family]]

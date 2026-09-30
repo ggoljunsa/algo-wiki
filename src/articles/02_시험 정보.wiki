@@ -1,5 +1,5 @@
 key: 시험 정보
-title: 시험 정보 — 일정·범위·과제·교수 강조 (2026-09-28 기준)
+title: 시험 정보 — 일정·범위·과제·교수 강조 (2026-09-30 기준)
 category: 안내
 ---
 CSE301 중간고사에 관해 '''지금까지 확인된 사실만''' 적는다. 시험 날짜·범위·형식은 아직 공지되지 않았다 — 추측해서 채우지 않고 "미정" 으로 둔다. 공지가 나오면 이 문서와 과목 폴더의 `_시험정보.md` 를 함께 갱신한다.
@@ -49,9 +49,9 @@ CSE301 중간고사에 관해 '''지금까지 확인된 사실만''' 적는다. 
 |-
 | 9 || 9/22 (화) || HW1 팀 발표 → L6 p.51–80 완료 || randomized select 는 CLRS 9.2 자습 (녹음 `0922_09_컴알_L6_Randomized1_후반.txt`)
 |-
-| 10 || 9/24 (목) || L7 Randomized Algorithms II — Hash tables (추정) || 녹음 없음 → 진도 미확인 → [[L7 Randomized Algorithms II]]
+| 10 || 9/24 (목) || '''공강''' (수업 없음) || 사용자 확인 (9/29)
 |-
-| 11 || 9/29 (화) || L7 마무리 또는 L8 (예상) ||
+| 11 || 9/29 (화) || L6 복습 1분 → L7 p.1–약 p.58 (hash family 도입까지) || 녹음 `0929_11_컴알_L7_Hashing.txt`, Reading CLRS 11, open addressing 은 CLRS 11.4 자습, universal hash family(p.59–)는 다음 수업 → [[L7 Randomized Algorithms II]]
 |}
 
 == 과제 ==
@@ -96,9 +96,12 @@ CSE301 중간고사에 관해 '''지금까지 확인된 사실만''' 적는다. 
 {exam}
 '''L6 의 가장 긴 설명(9/17, 약 25분)''': randomized quicksort 기대 비교 횟수 — 비교 횟수 세기 → 모든 쌍은 0/1 회 → $X_{a,b}$ → 선형성 → $\frac{2}{b-a+1}$ (6 과 10, 사이의 7,8,9) → 조화급수 → $O(n\log n)$. → [[quicksort 기대 비교 횟수 증명]]
 {/exam}
+{exam}
+'''L7 의 key message (9/29)''': "any deterministic or fixed hash function cannot achieve $O(1)$ worst-case due to the '''pigeonhole principle'''" → 해결은 randomness. 기대 버킷 크기 $1 + \frac{n-1}{n} \le 2$ 칠판 증명, uniformly random h 저장 $M \log n$ 비트("elephant in the room") → [[hash family]]. → [[결정론적 해시 함수의 한계]] · [[기대 버킷 크기]]
+{/exam}
 
 == 다음 수업 전 체크리스트 (진도표) ==
-# L7 이 9/24 에 어디까지 나갔는지 확인 (녹음 없음). [[L7 Randomized Algorithms II]] 의 p.30–41 과 p.59–72 를 훑어 둘 것.
+# 9/29 에 L7 p.1–약 p.58 진행(9/24 공강). 다음 수업은 [[universal hash family]](p.59–)부터 — [[L7 Randomized Algorithms II]] 의 ⑨–⑪ 과 [[h_{a,b}]] 예제(p.70)를 미리 훑을 것.
 # L6 의 두 쌍 구분: Las Vegas / Monte Carlo, expected / worst-case.
 # Randomized quicksort 기대 시간 증명을 백지에 재현.
 # Randomized select 기대 시간은 CLRS 9.2 자습 — 한 줄 답: 랜덤 피벗이 중앙 절반 범위에 떨어질 확률 ≥ 1/2. → [[randomized select]]

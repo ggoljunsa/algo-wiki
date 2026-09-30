@@ -1,0 +1,512 @@
+key: 중간고사 모의 v1
+title: 중간고사 통합 문제집 (모의 v1) — 78문항 (정의→용어 · T/F · 객관식 · 서술·계산)
+category: 시험, 모의고사
+---
+2026-09-30 에 만든 '''중간고사 모의고사 v1'''. 문제는 영어(시험 언어), 해설은 한국어. 인쇄용 docx/PDF 는 `중간고사/문제풀이/중간고사_모의/중간고사_모의_v1.pdf`, 여기서는 정답이 접혀 있으니 '''먼저 답을 쓰고''' 펼친다. 틀린 문항은 해설의 링크로 바로 복습.
+
+{info}총 78문항  ·  Part A 정의→용어 18 (2 pt)  ·  Part B T/F 24 (2 pt)  ·  Part C MC 24 (3 pt)  ·  Part D 서술·계산 12 (5 pt)  = 216 pt{/info}
+
+{analogy}🎭 '''모의고사는 체온계.''' 점수보다 어느 파트·어느 장에서 열이 나는지가 정보다. 틀린 문항의 출처 페이지를 모아 보면 약한 장이 보인다.{/analogy}
+
+== Part A. Definition → Term (18문항, 각 2점) ==
+슬라이드 영어 정의를 보고 용어를 답한다.
+
+=== A1 ===
+{quiz}“A condition that is true before and after each iteration of a loop. To prove the correctness of insertion sort, we use it to proceed by induction.” (L1 p.44–45){/quiz}
+{answer}'''Loop invariant'''. 루프의 매 반복 전후로 항상 참인 조건. insertion sort 에서는 'A[:i+1] is sorted'(L1 p.47). 교수 강조(L1 p.26 Key Insight): 'look for things that don't change' — 변하지 않는 것을 찾는 것이 이 개념의 출발점이고, 이것을 귀납법(proof by induction)의 가설로 삼아 correctness 를 증명한다.{/answer}
+
+=== A2 ===
+{quiz}“In a proof by induction for an iterative algorithm, the component stating that the invariant holds before the first iteration; for insertion sort (i = 0), A[:1] contains only one element, and this is sorted.” (L1 p.46, p.50, p.57){/quiz}
+{answer}'''Base case (Initialization)'''. 귀납법 4요소(Inductive hypothesis · Base case · Inductive step · Conclusion) 중 두 번째. CLRS 이름은 Initialization(L1 p.57). 흔한 실수: base case 를 i = 1 로 잡는 것 — 슬라이드는 i = 0, A[:1] 원소 하나.{/answer}
+
+=== A3 ===
+{quiz}“A mathematical notation for upper-bounding a function's rate of growth: T(n) belongs to it with respect to g(n) iff ∃c, n₀ > 0 s.t. ∀n ≥ n₀, 0 ≤ T(n) ≤ c·g(n).” (L2 p.9–10){/quiz}
+{answer}'''Big-O notation'''. 해설본 ⭐⭐ '반드시 암기'. 읽는 법: 적절한 상수 c 를 곱한 g(n) 이 n₀ 오른쪽에서 항상 T(n) 위에 있다. 증명할 때는 c 와 n₀ 를 직접 제시하면 된다(L2 p.16–17). 비공식 표현: 'g(n) grows at least as fast as T(n) as n gets large'.{/answer}
+
+=== A4 ===
+{quiz}“A mathematical notation for lower-bounding a function's rate of growth: we say T(n) belongs to it with respect to g(n) if g(n) grows at most as fast as T(n) as n gets large; formally ∃c, n₀ > 0 s.t. ∀n ≥ n₀, 0 ≤ c·g(n) ≤ T(n).” (L2 p.21–22){/quiz}
+{answer}'''Big-Ω notation'''. Big-O 정의에서 부등호 방향만 뒤집은 것 — 슬라이드의 'Switched these!'. 그래프로는 c·g(n) 이 n₀ 이후 항상 T(n) 아래에 있어야 한다(p.23). insertion sort 의 best-case 가 이 표기로 Ω(n) 이다.{/answer}
+
+=== A5 ===
+{quiz}“The type of runtime analysis that asks for the runtime of the algorithm on the input that makes it take the longest; this course focuses on it since it tells us that an algorithm performs at least this fast for every input.” (L2 p.3){/quiz}
+{answer}'''Worst-case analysis'''. runtime 을 보는 세 관점(worst / best / average) 중 이 수업의 기본 초점. 이유는 '어떤 입력이 와도 최소한 이만큼은 빠르다'는 보장. insertion sort 에서는 reverse order 입력이 이 경우이며 O(n²) (L2 p.30, p.34).{/answer}
+
+=== A6 ===
+{quiz}“An approach to measuring runtime that is independent of hardware and programming language: focus on how the runtime scales with n (the input size); one algorithm is 'faster' than another if its runtime scales better with the size of the input.” (L2 p.4–6){/quiz}
+{answer}'''Asymptotic analysis'''. 초 단위 real-world time 은 하드웨어·언어에 의존하므로(p.4) 보편적 척도로 n 에 대한 스케일링을 본다(p.5). Pros: 하드웨어·언어 추상화, 분석이 tractable. Cons: n 이 상수에 비해 클 때만 의미 — '9,999,999,999,999 n is better than n²?!' (p.6). L1 의 두 번째 질문 'Is it fast?' 에 답하는 도구.{/answer}
+
+=== A7 ===
+{quiz}“An algorithm design paradigm with two steps: first, break the current problem into smaller (easier) sub-problems; second, solve the smaller problems and collect the results to solve the current problem.” (L3 p.8){/quiz}
+{answer}'''Divide and conquer'''. Divide(더 작은 부분 문제로 쪼갬) → Conquer(부분 문제를 풀고 결과를 모아 현재 문제를 해결). mergesort 가 대표 예. 교수(9/3·9/8): insertion sort 는 한 번에 하나씩 늘려 가는 incremental approach, 분할 정복은 부분 문제들이 서로 independent 해서 parallel approach 라고 대비시켰다.{/answer}
+
+=== A8 ===
+{quiz}“A function or sequence whose values are defined in terms of earlier or smaller values; for example, the Fibonacci sequence is defined by T(n) = T(n−1) + T(n−2).” (L3 p.53–54){/quiz}
+{answer}'''Recurrence relation'''. 재귀 알고리즘의 수행 시간을 T(n) 으로 두면 자기 자신의 더 작은 입력 T(n/2) 등으로 표현된다. 9/3 수업의 3단계 스토리: ① 재귀 알고리즘 → 점화식 ② 점화식 → closed-form ③ 점근 분석. 점화식 자체는 closed-form 으로 바꾸기 전에는 쓸모가 적다(p.55).{/answer}
+
+=== A9 ===
+{quiz}“A formula that solves recurrences of the form T(n) = a·T(n/b) + O(nᵈ), where a is the number of subproblems, b is the factor by which the input size shrinks, and nᵈ is the work to create the subproblems and combine their solutions; it applies only when all of the sub-problems are the same size.” (L3 p.89–90, p.107){/quiz}
+{answer}'''Master method (master theorem)'''. 세 케이스: a = bᵈ → O(nᵈ log n), a < bᵈ → O(nᵈ), a > bᵈ → O(n^(log_b a)) (L4 p.49 에 정리). 교수(9/8): 'You can memorize the master method, but you should understand the meaning' — 세 케이스가 왜 나오는지(top heavy / balanced / bottom heavy)를 이해하라고 강조. 전제는 모든 부분 문제 크기가 같을 것(p.107).{/answer}
+
+=== A10 ===
+{quiz}“A method for solving recurrences: Step 1, generate a guess; Step 2, try to prove by induction that the guess is correct, possibly leaving some constants unspecified until the end and then seeing what they need to be; Step 3, pretend you did not do Steps 1 and 2 and write down a nice proof.” (L3 p.109, p.116){/quiz}
+{answer}'''Substitution method'''. 크기가 다른 부분 문제(T(n/5) + T(n/2) 등) 때문에 master method 를 못 쓸 때 사용한다. 귀납 가설 T(k) ≤ Ck 의 C 를 미정으로 두고 기저·귀납 단계의 조건에서 C 를 결정한 뒤, 최종 답안은 'Pretend like we knew it all along'(p.115) — 처음부터 C = 10 을 알았던 것처럼 깔끔하게 쓴다. 교수(9/8): 4가지 풀이법 중 master method 와 이것만 기억하면 충분.{/answer}
+
+=== A11 ===
+{quiz}“The professor's name for the recursive counterpart of the property maintained in an iterative proof: a condition that holds across every recursive call, used because the only thing that changes over the recursion is the size of the input rather than an iteration counter.” (L3 p.35–42 (9/3 수업)){/quiz}
+{answer}'''Recursion invariant'''. 9/3 수업: 'Recursion invariant instead of loop invariant … What changes over the recursion? Only input size.' 반복 알고리즘은 loop invariant + 반복 횟수 귀납, 재귀 알고리즘은 recursion invariant + 입력 크기 귀납(mergesort: 'In every recursive call, mergesort returns a sorted list', p.37). 9/8 마무리 요약에서도 같은 대비를 반복했다.{/answer}
+
+=== A12 ===
+{quiz}“A pivot-selection rule: split A into ⌈n/5⌉ groups of at most 5 elements each, find the median within each group, and then recursively SELECT the median of the list of those group medians, returning it as the pivot.” (L4 p.78–80){/quiz}
+{answer}'''Median of medians'''. 각 그룹(크기 5)의 median 은 O(1), 그룹 수 m = ⌈n/5⌉ 이므로 for 루프 O(n), 그 뒤 크기 n/5 리스트에 SELECT 재귀 → T(n/5). 정확한 median 은 아니지만(p.84: 15 vs 실제 12) '충분히 가까운' pivot 을 보장한다. 교수(9/10): 'we cannot find the linear time median selection algorithm, we use some compromise … close enough to the median.'{/answer}
+
+=== A13 ===
+{quiz}“Algorithms that use “comparisons” (YES/NO questions of the form ‘is this bigger than that?’) to achieve their output; insertion_sort, merge_sort and linear-time select are examples, and any deterministic sorting algorithm of this kind requires Ω(n log(n)) time.” (L5 p.7–9){/quiz}
+{answer}'''Comparison-based sorting (algorithm)'''. 두 원소를 비교하는 질문(genie 에게 묻는 YES/NO)만으로 순서를 알아내는 정렬. 모든 이런 알고리즘은 decision tree 로 표현되므로 worst-case 가 Ω(n log n) 이다(p.9–15). counting / bucket / radix sort 는 비교를 전혀 하지 않고 입력에 대한 가정(정수, 범위 0..k−1)을 쓰기 때문에 이 하한을 피해 간다(p.16). 교수(9/17 L5 복습): 'counting sort 는 comparison-based 가 아니다.'{/answer}
+
+=== A14 ===
+{quiz}“A sorting property that keeps equal elements in the same order: [1(a), 3, 2, 1(b)] => [1(a), 1(b), 2, 3].” (L5 p.42){/quiz}
+{answer}'''Stable sort'''. 값이 같은 원소들의 원래 상대 순서를 유지하는 정렬. bucket_sort 는 num_buckets < k 일 때 각 버킷을 이런 정렬로 다시 정렬하고(p.35–43), radix_sort 의 정확성 증명 inductive step 이 '각 라운드의 bucket_sort 가 이 성질을 가진다'에 기대고 있다(p.59). 교수(9/17): '원래 배열과 같은 순서를 유지하면 stable — radix sort 설계에 중요한 성질.'{/answer}
+
+=== A15 ===
+{quiz}“An algorithm that incorporates randomness as part of its operation; it often aims for good average-case behavior, getting exact answers with high probability, or getting answers that are close to the right answer.” (L6 p.4){/quiz}
+{answer}'''Randomized algorithm'''. 실행 중에 random choice 를 하는 알고리즘. 교수(9/17): '입력이 랜덤인 게 아니다 — 같은 입력에도 실행마다 수행 시간이 달라진다.' 이미 본 예가 L4 의 select 를 랜덤 피벗으로 바꾼 randomized_select. 목표 세 가지(좋은 average-case, 높은 확률로 exact answer, 근사 답)는 슬라이드 순서 그대로 외워 둘 것.{/answer}
+
+=== A16 ===
+{quiz}“A class of algorithms that make random choices and always guarantee correctness, but not runtime; bogosort, quicksort with a random pivot and the ‘guess and check’ majority algorithm are all of this kind.” (L6 p.4){/quiz}
+{answer}'''Las Vegas algorithm'''. 정답은 항상 맞고 수행 시간이 랜덤. 반대편은 Monte Carlo(수행 시간은 보장, 정답은 확률적으로 틀릴 수 있음 — Karger's algorithm 에서 다시 봄). 교수(9/17) 명시 강조: '둘의 차이를 구분할 수 있어야 한다.' 암기법: Las Vegas 카지노는 돈(시간)을 얼마나 잃을지 모르지만 게임 규칙(정답)은 지킨다.{/answer}
+
+=== A17 ===
+{quiz}“For an algorithm that makes random choices, the measure used when (1) a bad guy picks the input and (2) you run the algorithm with your own random choices; the running time is then a random variable, and this measure averages it over the random choices for that fixed input.” (L6 p.5){/quiz}
+{answer}'''Expected running time'''. Scenario 1 의 척도. Scenario 2(적이 입력도 고르고 주사위까지 고정)의 척도는 randomized algorithm 의 worst-case running time 이다. 교수(9/17): '수행 시간에 영향을 주는 변수가 둘 — 어떤 입력인가, 어떤 random choice 인가.' 입력 분포에 대한 평균(average-case)이 아니라 고정된 최악 입력 위에서 알고리즘 자신의 동전에 대한 평균이라는 점이 핵심.{/answer}
+
+=== A18 ===
+{quiz}“The set of all possible keys, of size M, where M is really big (for example all strings of at most 140 ASCII characters, 128^140 of them); only a few (at most n) of its elements will actually show up, but we don't know which ones in advance.” (L7 p.22–25){/quiz}
+{answer}'''Universe (U)'''. hashing 용어 3종: universe U(크기 M) → hash function h: U → 1..n → n 개의 bucket. M 은 n 보다 'waaaayyyy' 크다. 이 비대칭이 direct addressing(M 칸 필요)을 불가능하게 만들고, 비둘기집 원리로 deterministic hash 가 실패하는 이유(M/n > n, p.32)도 된다.{/answer}
+
+== Part B. True / False (24문항, 각 2점) ==
+
+=== B1 ===
+{quiz}(T / F) The lecture's key insight for proving that an algorithm works on infinitely many inputs is to track the quantities that change at every step. (L1 p.25–26){/quiz}
+{answer}'''F'''. 교수 강조(L1 p.26 Key Insight): 'To reason about the behavior of algorithms, it often helps to look for things that don't change.' 변하는 것이 아니라 변하지 않는 것(invariant)을 찾아야 모든 입력에 대한 증명이 가능하다. 맞는 문장: The key insight is to look for things that don't change.{/answer}
+
+=== B2 ===
+{quiz}(T / F) In CLRS terminology for loop-invariant proofs, the inductive step (if the invariant holds after the ith iteration, then it holds after the (i+1)st) is called Maintenance. (L1 p.57){/quiz}
+{answer}'''T'''. L1 p.57(PDF 53): Base case = Initialization, Inductive step = Maintenance, Conclusion = Termination. Inductive hypothesis 에는 대응하는 CLRS 이름이 따로 없다(invariant 서술 자체).{/answer}
+
+=== B3 ===
+{quiz}(T / F) To answer the question 'Is it fast?', the lecture measures an algorithm's runtime in seconds on a fixed reference machine. (L1 p.8, L2 p.4–5){/quiz}
+{answer}'''F'''. 교수가 모든 알고리즘에 던지는 두 가지 질문 ① Does this actually work? ② Is it fast? 중 ② 는 real-world time 이 아니라 asymptotic analysis 로 답한다. 초 단위 시간은 hardware·programming language 에 심하게 의존하므로 'it will not be the emphasis of this course'(L2 p.4). 맞는 문장: The lecture answers 'Is it fast?' by examining how the runtime scales with the input size n.{/answer}
+
+=== B4 ===
+{quiz}(T / F) In the definition of T(n) = O(g(n)), once T(n), g(n), and c are fixed, there is exactly one valid choice of n₀. (L2 p.14){/quiz}
+{answer}'''F'''. L2 p.14: 'it's obvious that there isn't one correct choice for n₀.' 어떤 n₀ 에서 부등식이 성립하면 그보다 큰 모든 n₀ 도 성립한다. 맞는 문장: n₀ is not unique; any n₀ beyond which 0 ≤ T(n) ≤ c·g(n) always holds is valid.{/answer}
+
+=== B5 ===
+{quiz}(T / F) In the definition of T(n) = O(g(n)), the constant c may be chosen as a function of n, for example c = n. (L2 p.10, p.19–20){/quiz}
+{answer}'''F'''. 정의는 ∃c, n₀ > 0 이 ∀n ≥ n₀ 보다 먼저 온다 — c 는 n 과 무관한 고정 상수다. c = n 을 허용하면 n² ≤ n·n 이 되어 n² = O(n) 이 '증명'되는 모순이 생긴다(p.19–20 에서 귀류법으로 반증한 바로 그 명제). 맞는 문장: c must be a positive constant that does not depend on n.{/answer}
+
+=== B6 ===
+{quiz}(T / F) If T(n) = O(n²), then T(n) = Θ(n²). (L2 p.24, p.27){/quiz}
+{answer}'''F'''. Θ 는 O 와 Ω 가 동시에 성립해야 한다(p.24). O 는 상한일 뿐이므로 f(n) = 5n + 12 는 O(n²) 이지만 Ω(n²) 이 아니어서 Θ(n²) 이 아니다(p.27 Claim III). 맞는 문장: If T(n) = O(n²) and T(n) = Ω(n²), then T(n) = Θ(n²).{/answer}
+
+=== B7 ===
+{quiz}(T / F) Insertion sort's inner while loop runs i times in every outer iteration when the input is in reverse order, which is why its worst-case runtime is O(n²). (L2 p.29–30, p.34, p.37){/quiz}
+{answer}'''T'''. reverse order 입력 n, …, 3, 2, 1 에서는 매 cur_value 가 앞의 모든 원소보다 작아 맨 앞까지 밀려야 하므로 내부 루프가 i 번 돈다. 외부 최대 n 번 × 내부 최대 n 번 → upper-bound for worst-case runtime O(n²) (L2 p.37 = PDF 36).{/answer}
+
+=== B8 ===
+{quiz}(T / F) The best-case runtime of insertion sort is Ω(n), which occurs when the input is already sorted. (L2 p.32–34, p.38){/quiz}
+{answer}'''T'''. sorted order 입력 1, 2, …, n 에서는 매 외부 반복마다 비교 한 번으로 while 이 끝난다. 외부 n 번 × 내부 1 번 → lower-bound for best-case runtime Ω(n) (L2 p.38 = PDF 37). 관례: worst-case 는 O, best-case 는 Ω 로 말한다.{/answer}
+
+=== B9 ===
+{quiz}(T / F) The master method can be applied directly to the recurrence T(n) = T(n/3) + T(n/2) + n. (L3 p.89, p.107){/quiz}
+{answer}'''F'''. master method 의 형태는 a·T(n/b) — 모든 부분 문제 크기가 같아야 한다('The master theorem only works when all sub-problems are the same size', p.107). n/3 과 n/2 는 크기가 달라 a, b 를 정할 수 없다. 맞는 문장: this recurrence must be solved with another method such as the substitution method (결과는 n/3 + n/2 = 5n/6 < n 이므로 O(n)).{/answer}
+
+=== B10 ===
+{quiz}(T / F) In a substitution-method proof that T(n) = O(n), it is fine to state the inductive hypothesis as T(k) = O(k) instead of T(k) ≤ C·k for one fixed constant C. (L3 p.114, L4 p.103){/quiz}
+{answer}'''F'''. O(k) 는 '어떤 상수'를 숨기므로 귀납 단계마다 상수가 조금씩 커져도 알아챌 수 없다(예: T(n) ≤ O(n) + n = O(n) 을 반복하면 잘못된 결론도 '증명'된다). 슬라이드는 반드시 T(k) ≤ Ck 로 상수를 명시하고, 귀납 단계 끝에서 정확히 ≤ Cn 이 되는 C 를 찾는다. 맞는 문장: the inductive hypothesis must be T(k) ≤ Ck with an explicit constant C that is the same at every step.{/answer}
+
+=== B11 ===
+{quiz}(T / F) Mergesort has worst-case runtime Θ(n log n) and best-case runtime Θ(n log n). (L3 p.101–102){/quiz}
+{answer}'''T'''. p.102: 'It's the same as the worst-case runtime!' 입력이 이미 정렬돼 있어도 항상 반으로 나누고 매 레벨 Θ(n) merge 를 하므로 best 도 Θ(n log n). insertion sort(best Ω(n), worst O(n²))와 대비되는 점이 포인트.{/answer}
+
+=== B12 ===
+{quiz}(T / F) The pivot returned by median_of_medians is always the exact median of the input list. (L4 p.84, p.92){/quiz}
+{answer}'''F'''. p.84 예시에서 median of medians 는 15, 실제 median 은 12 — 'not necessarily the actual median, but … guaranteed to be pretty close'. 보장되는 것은 근사 범위뿐이다. 맞는 문장: the pivot is not necessarily the exact median, but it is guaranteed to be close to it (3n/10 − 4 ≤ len(left), len(right) ≤ 7n/10 + 3).{/answer}
+
+=== B13 ===
+{quiz}(T / F) After partitioning about the pivot, select makes recursive calls on both the left and the right sublists and then combines their answers. (L4 p.16, p.32){/quiz}
+{answer}'''F'''. select 는 len(left) 와 k 를 비교해 pivot 을 바로 반환하거나, left 또는 right '한쪽만' 재귀한다('recurse on the left or right sublists (but not both)', p.32). 교수(9/8): 'Merge sort we need to solve every subproblem … in the selection problem, we don't need to solve every sub-problem.' 맞는 문장: select recurses on only one of the two sublists (or returns the pivot).{/answer}
+
+=== B14 ===
+{quiz}(T / F) For T(n) = a·T(n/b) + O(nᵈ) with a > bᵈ, most of the work is done at the bottom of the recursion tree, so T(n) = O(n^(log_b a)). (L3 p.96, p.98){/quiz}
+{answer}'''T'''. a > bᵈ 는 가지치기가 일의 축소를 이기는 bushy tree — 'Most work at the bottom of the tree', 잎 수 a^(log_b n) = n^(log_b a) 가 지배. 교수(9/8): 'Important thing to remember is three cases of master method — top heavy, balanced, bottom heavy' (p.98). a < bᵈ 는 top heavy, a = bᵈ 는 balanced.{/answer}
+
+=== B15 ===
+{quiz}(T / F) If select picks its pivot uniformly at random, its worst-case runtime is Θ(n²), and this worst case depends on both the input and the random choices. (L4 p.54–57, p.116){/quiz}
+{answer}'''T'''. 불운하면 len(left) = n − 1 이 매번 반복 → T(n) ≤ T(n−1) + O(n) → Θ(n²) (p.54, p.116 Idea #1). 교수(9/10): 'for insertion sort input determines the worst case. But here there are two factors … input and the random value' — 입력만으로 정해지는 worst-case 와 개념이 다르다는 정정. Randomized Algorithms 단원에서 재론.{/answer}
+
+=== B16 ===
+{quiz}(T / F) When the pivot is chosen by median_of_medians, both len(left) and len(right) are at least 3n/10 − 4 and at most 7n/10 + 3. (L4 p.88–92){/quiz}
+{answer}'''T'''. g = ⌈n/5⌉ 그룹 중 sub-median 이 pivot 보다 작은 그룹이 ⌈g/2⌉ 개(pivot 의 그룹 포함). pivot 의 그룹과 자투리 그룹을 빼고(−2) 각 3개, pivot 의 그룹에서 2개 → 최소 3(⌈g/2⌉ − 2) + 2 ≥ 3n/10 − 4 개가 더 작다. 반대쪽은 최대 n − 1 − (3n/10 − 4) ≤ 7n/10 + 3. 대칭이므로 left, right 모두 같은 범위(p.92). 9/10 수업에서 그룹별 개수를 직접 세며 유도한 3n/10 논증.{/answer}
+
+=== B17 ===
+{quiz}(T / F) Counting sort escapes the Ω(n log(n)) lower bound because, on integers in the range 0 to k−1, it needs only O(n) comparisons between elements of A in the worst case. (L5 p.16–21){/quiz}
+{answer}'''F'''. counting sort 는 원소끼리 비교를 한 번도 하지 않는다 — counts[A[i]] += 1 로 값 자체를 index 로 쓰는 one-to-one mapping 이다. 하한 Ω(n log n) 은 comparison-based 알고리즘에만 적용되므로, '비교를 적게 한다'가 아니라 '비교를 안 하고 입력 가정(정수, 범위 0..k−1)을 쓴다'가 이유. worst-case Θ(n+k). 맞는 문장: Counting sort makes no comparisons; it avoids the lower bound by assuming the inputs are integers in 0..k−1, and runs in Θ(n+k).{/answer}
+
+=== B18 ===
+{quiz}(T / F) In radix_sort, the first iteration (i = 0) bucket-sorts the values according to their most significant digit. (L5 p.47, p.53–54, p.59){/quiz}
+{answer}'''F'''. make_pairs 의 key = (a // k**i) % k 이고 i = 0 이면 k**0 = 1 이라 일의 자리, 즉 least significant digit 이다(슬라이드 예: [23, 4, 51, 76, 8] → (3, 23), (4, 4), …). 정확성 증명의 inductive hypothesis 도 'A is sorted by the first i least-significant digits'. 교수(9/17 L5 복습): 'least significant digit 먼저, 마지막 자릿수까지.' 맞는 문장: The first iteration sorts by the least significant digit.{/answer}
+
+=== B19 ===
+{quiz}(T / F) In the slides' bucket_sort with num_buckets < k, the worst-case runtime Θ(max(n log(n), n+k)) happens when all of the values end up in the same bucket. (L5 p.41–43, p.46){/quiz}
+{answer}'''T'''. p.43: 'Happens if k > num_buckets and all of the values end up in the same bucket' — 그 버킷 하나를 stable_sort 로 n log n 에 정렬해야 한다. 예: k = 3000, num_buckets = 10 에서 [380, 370, 340, 320, 410, …] 는 전부 300–599 버킷(p.46). 교수(9/17): bucket sort 가 빠르려면 원소가 버킷에 고르게 퍼진다는(균등 분포) 가정이 필요하고 '모든 원소가 한 bucket 에 몰리면 그게 bucket sort 의 문제'.{/answer}
+
+=== B20 ===
+{quiz}(T / F) Because randomized_quicksort picks its pivot uniformly at random, its worst-case runtime improves to Θ(n log(n)), matching mergesort. (L6 p.18, p.43, p.48){/quiz}
+{answer}'''F'''. randomized algorithm 의 worst-case 는 Scenario 2 — 적이 주사위까지 고정해 매번 가장 작은(또는 가장 큰) 원소를 피벗으로 만들 수 있다 → T(n) = T(n−1) + Θ(n) = Θ(n²). 랜덤이 바꾸는 것은 expected 쪽(Θ(n log n))뿐. 교수(9/17): '피벗을 랜덤으로 바꿔도 worst-case 는 여전히 n²'. 맞는 문장: randomized_quicksort has worst-case Θ(n²) and expected Θ(n log(n)).{/answer}
+
+=== B21 ===
+{quiz}(T / F) In the analysis of randomized_quicksort on the values 0 to n−1, P(X_a,b = 1) = 2/(b − a + 1) depends only on how far apart a and b are, not on the total number of elements n. (L6 p.34–36){/quiz}
+{answer}'''T'''. a 와 b 는 a, a+1, …, b 중에서 a 또는 b 가 '가장 먼저' 피벗이 될 때만 비교된다. 이 b − a + 1 개 원소는 누가 먼저 뽑히든 대칭이므로 확률 = 2/(b − a + 1). 바깥 원소들은 이 구간을 가르지 않으므로 n 은 등장하지 않는다. 교수(9/17): 'n 에 무관하게 a, b 의 거리만으로 결정된다 — 흥미로운 값.' 예: P(X_6,10 = 1) = 2/5.{/answer}
+
+=== B22 ===
+{quiz}(T / F) If the universe size M is much bigger than the number of buckets n, a cleverly designed deterministic hash function h: U → the set 1..n can still guarantee O(1) entries per bucket for every set of n items a bad guy might choose. (L7 p.30–32){/quiz}
+{answer}'''F'''. 비둘기집 원리(pigeonhole principle): M 개 key 를 n 개 bucket 에 넣으면 어떤 bucket 에는 최소 M/n 개가 들어간다. M ≫ n 이라 M/n > n 이므로, h 를 아는 적은 그 bucket 으로 가는 key 중 n 개를 고르면 된다 → 한 bucket 에 n 개, SEARCH Θ(n). 교수(9/29): 'any deterministic or fixed hash function cannot achieve O(1) running time due to the pigeonhole principle' / 슬라이드 p.31 'You cannot escape the dark side with deterministic hash functions'. 해결책은 randomness(p.33). 맞는 문장: No deterministic hash function can guarantee this; a bad guy can always put n items in one bucket.{/answer}
+
+=== B23 ===
+{quiz}(T / F) If h is a uniformly random hash function into n buckets, then for every item u_i the bad guy chose, the expected number of items in u_i's bucket is at most 2, which gives O(1) expected time per INSERT/DELETE/SEARCH. (L7 p.38–43){/quiz}
+{answer}'''T'''. E = ∑ⱼ P(h(u_i) = h(u_j)) = 1 + ∑_(j≠i) 1/n = 1 + (n−1)/n ≤ 2 (j = i 항이 1, 나머지 n−1 개가 각 1/n). 버킷 길이의 기대값이 상수이므로 chaining 에서 각 연산의 expected time 이 O(1). 교수(9/29) 강조: '2 는 어떤 상수로 바꿔도 된다 — 상수이기만 하면 O(1) expected'. 확률은 h 의 선택에 대한 것이지 입력에 대한 것이 아니다.{/answer}
+
+=== B24 ===
+{quiz}(T / F) In a hash table with chaining, each bucket stores an unsorted linked list, so INSERT takes O(1) while SEARCH takes O(length(list)). (L7 p.26, p.28){/quiz}
+{answer}'''T'''. 슬라이드 그대로: 'insert in O(1) since it's unsorted; search in O(length(list))'. 예: h(x) = least significant digit(시연용 — 'This is a terrible hash function!'), n = 9, INSERT 13, 22, 43, 9 → bucket 3 에 13 → 43, SEARCH 43 은 bucket 3 을 훑는다. 그래서 목표가 '체인 길이를 짧게 = 버킷에 고르게 퍼뜨리기'(p.29)가 된다. open addressing 은 CLRS 11.4 자습(p.27, 교수 9/29 '이 강의에서 다루지 않는다').{/answer}
+
+== Part C. Multiple Choice (24문항, 각 3점) ==
+
+=== C1 ===
+{quiz}In the slides' correctness proof of insertion_sort (outer loop: for i in range(1, len(A))), which statement is used as Loop invariant(i)? (L1 p.45, p.47)<br>① A[i:] is sorted.<br>② A[i] is the largest element of the whole list A.<br>③ A[:i+1] consists of the i+1 smallest elements of A, in sorted order.<br>④ A[:i+1] is sorted.{/quiz}
+{answer}'''④ A[:i+1] is sorted.'''. L1 p.47: 'Loop invariant(i): A[:i+1] is sorted.' → ④. ①뒷부분 A[i:] 는 아직 손대지 않은 원래 입력 그대로라 정렬 보장이 없다. ②insertion sort 는 전체 최댓값을 확정하지 않는다(그건 bubble sort 류의 성질). ③'가장 작은 i+1 개'는 selection sort 의 invariant — insertion sort 의 A[:i+1] 은 원래 앞쪽 i+1 개 원소를 정렬한 것일 뿐, 뒤에 더 작은 원소가 남아 있을 수 있다(예: 1 3 4 5 뒤의 2).{/answer}
+
+=== C2 ===
+{quiz}In CLRS terminology, what must the 'Termination' part of a loop-invariant correctness proof establish? (L1 p.46, p.57, p.59)<br>① The loop stops after at most n iterations, which proves the runtime is O(n).<br>② If the invariant holds after iteration i, then it also holds after iteration i+1.<br>③ The algorithm halts on every input, and halting by itself shows the output is correct.<br>④ The invariant holds after the last iteration, and this implies the algorithm is correct.{/quiz}
+{answer}'''④ The invariant holds after the last iteration, and this implies the algorithm is correct.'''. L1 p.57: Conclusion 'If the loop invariant holds after the last iteration, then the algorithm is correct!' = CLRS 'Termination' → ④. 교수 강조(L1 p.59): 'I promise to write a proof by induction if asked to prove correctness formally' — Termination 은 'invariant 가 성립한다'에서 멈추지 말고 '그러므로 알고리즘이 올바르다'까지 이어야 한다(insertion sort: A[:n] 은 전체 리스트이므로 정렬 완료). ①runtime 은 두 번째 질문 'Is it fast?' 의 영역이지 correctness 증명의 Termination 이 아니다. ②는 Inductive step = Maintenance. ③멈춘다는 사실만으로는 올바른 출력이 보장되지 않는다 — 종료 시점의 invariant 가 '정렬됨'을 함의해야 한다.{/answer}
+
+=== C3 ===
+{quiz}According to the lecture, which of the following is a con (drawback) of asymptotic analysis? (L2 p.4–6)<br>① It depends heavily on the computer hardware and the programming language.<br>② It only makes sense if n is large compared to the constant factors.<br>③ It makes algorithm analysis much less tractable.<br>④ It cannot rank an O(n) algorithm against an O(n²) algorithm.{/quiz}
+{answer}'''② It only makes sense if n is large compared to the constant factors.'''. L2 p.6 Cons: 'Only makes sense if n is large (compared to the constant factors).' 예: 9,999,999,999,999 n 이 n² 보다 '좋다'?!  → ②. ①은 real-world time 의 단점(p.4)이고, asymptotic analysis 는 오히려 이것을 abstract away 하는 것이 Pros. ③Pros 는 'Make algorithm analysis much more tractable' — 정반대. ④n 과 n² 의 비교야말로 asymptotic analysis 가 바로 하는 일이다.{/answer}
+
+=== C4 ===
+{quiz}To prove n² ≠ O(n) by contradiction, assume there exist c, n₀ > 0 such that n² ≤ c·n for all n ≥ n₀. Which choice of n yields the contradiction? (L2 p.18–20)<br>① n = max(c, n₀) + 1<br>② n = n₀<br>③ n = c / 2<br>④ n = min(c, n₀) − 1{/quiz}
+{answer}'''① n = max(c, n₀) + 1'''. n = max(c, n₀) + 1 이면 (i) n ≥ n₀ 라서 가정의 부등식이 적용되고 (ii) n > c 라서 n² = n·n > c·n — 모순 → ①. 해설본이 '시험 단골'로 표시한 트릭. ②n = n₀ 는 n₀ ≤ c 인 경우 n² ≤ c·n 이 그대로 성립할 수 있어 모순이 보장되지 않는다. ③c/2 는 n₀ 보다 작을 수 있어 가정이 적용되지 않고, 적용돼도 n < c 라 부등식이 성립한다. ④min − 1 은 n₀ 보다 작아 가정의 범위 밖이다.{/answer}
+
+=== C5 ===
+{quiz}Which statement is the lecture's definition of T(n) = Θ(g(n))? (L2 p.24)<br>① T(n) = O(g(n)) AND T(n) = Ω(g(n))<br>② T(n) = O(g(n)) OR T(n) = Ω(g(n))<br>③ T(n) = O(g(n)) with the specific constant c = 1<br>④ T(n) ≤ g(n) for every n ≥ 1{/quiz}
+{answer}'''① T(n) = O(g(n)) AND T(n) = Ω(g(n))'''. L2 p.24: 'We say T(n) is Θ(g(n)) iff T(n) = O(g(n)) AND T(n) is Ω(g(n))' → ①. 상한과 하한이 동시에 성립하는 tight bound. ②OR 이면 5n + 12 = O(n²) 만으로 Θ(n²) 이 되어버린다. ③c 값을 고정해도 여전히 상한일 뿐 하한 조건이 없다. ④상수 c 와 n₀ 가 없는 단순 부등식이며, 역시 상한 한쪽뿐이다.{/answer}
+
+=== C6 ===
+{quiz}To prove (1/2)n² − 3n = Θ(n²), we need c₁, c₂, n₀ > 0 with c₁n² ≤ (1/2)n² − 3n ≤ c₂n² for all n ≥ n₀. Which triple (c₁, c₂, n₀) works? (L2 p.26)<br>① c₁ = 1/14, c₂ = 1/2, n₀ = 1<br>② c₁ = 1/14, c₂ = 1/2, n₀ = 7<br>③ c₁ = 1/4, c₂ = 1/2, n₀ = 7<br>④ c₁ = 1/14, c₂ = 1/4, n₀ = 7{/quiz}
+{answer}'''② c₁ = 1/14, c₂ = 1/2, n₀ = 7'''. n² 으로 나누면 c₁ ≤ 1/2 − 3/n ≤ c₂. 오른쪽: 1/2 − 3/n ≤ 1/2 이므로 c₂ = 1/2 (n ≥ 1). 왼쪽: n = 7 이면 1/2 − 3/7 = 1/14 이고 n 이 커질수록 증가하므로 c₁ = 1/14, n₀ = 7 → ② (슬라이드 Claim II 의 답). ①n = 1 에서 (1/2) − 3 = −2.5 < 0 이라 하한이 깨진다(n < 6 이면 좌변 음수). ③n = 7 에서 1/14 < 1/4 이라 하한이 깨진다. ④n ≥ 13 이면 1/2 − 3/n > 1/4 이라 상한이 깨진다. (Python 으로 n = 7…9999 전부 대입해 ②만 성립함을 확인.){/answer}
+
+=== C7 ===
+{quiz}Let f(n) = 5n + 12. The statements f(n) = O(n), O(n log n), O(n²), and O(2ⁿ) are all true. Which one does the lecture mark as the tight upper bound? (L2 p.27)<br>① O(n log n)<br>② O(n²)<br>③ O(n)<br>④ O(2ⁿ){/quiz}
+{answer}'''③ O(n)'''. L2 p.27 Claim III: '1. f(n) = O(n) True (tight upper bound)' → ③. Big-O 는 상한일 뿐이므로 더 빨리 자라는 함수로도 모두 참이지만, f(n) = Θ(n) 이기도 한 O(n) 만 tight 하다. ①②④는 참이지만 f(n) 이 그 함수의 Ω 가 아니므로 느슨한(loose) 상한이다 — TF 'O(n²) 이면 Θ(n²)' 가 거짓인 이유와 같은 논리.{/answer}
+
+=== C8 ===
+{quiz}Let A(n) = 4^(log₂ n) and B(n) = n². Which relationship holds? (L2 p.10, p.22, p.24 (HW1 1-c 변형))<br>① A(n) = O(B(n)) but A(n) ≠ Ω(B(n))<br>② A(n) = Ω(B(n)) but A(n) ≠ O(B(n))<br>③ A(n) = Θ(B(n))<br>④ Neither A(n) = O(B(n)) nor A(n) = Ω(B(n)){/quiz}
+{answer}'''③ A(n) = Θ(B(n))'''. 4^(log₂ n) = (2²)^(log₂ n) = (2^(log₂ n))² = n² — 두 식은 같은 함수다(검산: n = 8 → 4³ = 64 = 8²). c = 1, n₀ = 1 로 O 와 Ω 모두 성립하므로 Θ → ③. ①②는 지수 형태에 속아 한쪽이 더 빠르다고 본 오류(2ⁿ vs 2^(n/2) 같은 경우와 혼동). ④같은 함수는 언제나 서로의 O 이자 Ω 이다.{/answer}
+
+=== C9 ===
+{quiz}Using the master method, what is the closed-form bound for T(n) = 8·T(n/4) + O(n^1.5)? (L3 p.90–91, L4 p.49)<br>① O(n^1.5)<br>② O(n^1.5 log n)<br>③ O(n²)<br>④ O(n log n){/quiz}
+{answer}'''② O(n^1.5 log n)'''. a = 8, b = 4, d = 1.5 → bᵈ = 4^1.5 = (√4)³ = 8 = a → 케이스 a = bᵈ(balanced) → O(nᵈ log n) = O(n^1.5 log n) (②). ①은 a < bᵈ(top heavy) 로 잘못 판정한 결과 — 레벨마다 일이 같으므로 log n 배가 붙어야 한다. ③은 a > bᵈ 로 잘못 보고 n^(log_b a) 를 쓰면서 log₄ 8 을 2 로 착각한 값(실제 log₄ 8 = 1.5). ④는 mergesort 의 답을 그대로 가져온 것으로 d = 1 일 때만 맞다.{/answer}
+
+=== C10 ===
+{quiz}Using the master method, what is the closed-form bound for T(n) = 5·T(n/2) + O(n²)? (L3 p.90, p.96)<br>① O(n^(log₂ 5)) ≈ O(n^2.32)<br>② O(n² log n)<br>③ O(n²)<br>④ O(n^(log₅ 2)){/quiz}
+{answer}'''① O(n^(log₂ 5)) ≈ O(n^2.32)'''. a = 5, b = 2, d = 2 → bᵈ = 4 < 5 = a → 케이스 a > bᵈ(bottom heavy, bushy tree) → O(n^(log_b a)) = O(n^(log₂ 5)) ≈ O(n^2.32) (①). ②는 a = bᵈ 케이스 공식 — 5 ≠ 4. ③은 a < bᵈ 케이스(루트 지배) 공식 — 여기선 잎이 지배한다. ④는 로그의 밑과 진수를 뒤바꾼 오류(log_a b 가 아니라 log_b a).{/answer}
+
+=== C11 ===
+{quiz}Mergesort satisfies T(n) = 2T(n/2) + O(n) = O(n log n), while select with median_of_medians satisfies a recurrence with two recursive terms yet runs in O(n). What is the key reason for the difference? (L4 p.97–104)<br>① Select's recursion tree has only O(1) levels.<br>② Select's recurrence falls into the a < bᵈ case of the master method.<br>③ Computing the pivot with median_of_medians takes only O(1) time.<br>④ Select's two sub-problem sizes add up to n/5 + 7n/10 = 9n/10 < n, so the work per level shrinks geometrically.{/quiz}
+{answer}'''④ Select's two sub-problem sizes add up to n/5 + 7n/10 = 9n/10 < n, so the work per level shrinks geometrically.'''. 부분 문제 크기의 합이 9n/10 < n 이면 레벨 j 의 총 일이 (9/10)ʲ·dn 으로 등비 감소 → 합이 10dn = O(n). mergesort 는 n/2 + n/2 = n 이라 레벨마다 n 이 그대로 → × log n 레벨. 따라서 ④. ①은 틀림 — 트리 깊이는 여전히 Θ(log n) 이다. ②는 크기가 다른 두 항이 있어 master method 자체를 적용할 수 없다(치환법으로 증명). ③은 틀림 — sub-median 계산은 O(n), pivot 을 고르는 SELECT 재귀는 T(n/5) 이다.{/answer}
+
+=== C12 ===
+{quiz}A call select(A, k) with k = 7 (0-indexed) partitions A of length 12 about its pivot and obtains len(left) = 4 and len(right) = 7. What happens next? (L4 p.16, p.41)<br>① select(left, 7) is called.<br>② select(right, 7) is called.<br>③ select(right, 2) is called.<br>④ The pivot is returned as the answer.{/quiz}
+{answer}'''③ select(right, 2) is called.'''. len(left) = 4 < k = 7 이므로 답은 오른쪽에 있다. 왼쪽 4개 + pivot 1개를 건너뛰므로 오른쪽 안에서의 순위는 k − len(left) − 1 = 7 − 4 − 1 = 2 → select(right, 2) (③). ①은 len(left) > k 일 때의 분기인데 left 에는 원소가 4개뿐이다. ②는 k 보정을 빠뜨린 오류 — right 는 길이 7 이라 인덱스 7 은 범위를 벗어난다. ④는 len(left) == k 일 때만.{/answer}
+
+=== C13 ===
+{quiz}In the analysis of median_of_medians with g = ⌈n/5⌉ groups, at least 3·(⌈g/2⌉ − 2) + 2 elements are guaranteed to be smaller than the pivot. What does the '− 2' account for? (L4 p.88–90)<br>① Excluding the group that contains the pivot itself and the possibly incomplete leftover group, neither of which can be counted as contributing a full 3 elements.<br>② Excluding the smallest and the largest group medians.<br>③ The two elements of each group that are larger than its group median.<br>④ The two recursive calls, T(n/5) and T(7n/10).{/quiz}
+{answer}'''① Excluding the group that contains the pivot itself and the possibly incomplete leftover group, neither of which can be counted as contributing a full 3 elements.'''. sub-median ≤ pivot 인 그룹이 ⌈g/2⌉ 개. 그중 pivot 자신의 그룹(pivot 보다 작은 건 2개뿐 — 뒤의 '+ 2' 로 따로 셈)과 원소가 5개보다 적을 수 있는 자투리 그룹은 '3개씩' 셀 수 없으므로 빼서 ⌈g/2⌉ − 1 − 1 (①). ②의 최소·최대 median 은 논증에 등장하지 않는다. ③의 '2개'는 '+ 2' 쪽(pivot 그룹에서 pivot 보다 작은 2개)과 혼동한 것이다. ④는 점화식 항이지 개수 세기와 무관.{/answer}
+
+=== C14 ===
+{quiz}In the recursion tree for T(n) = 3·T(n/4) + n², what is the total work at depth j, and where is most of the work done? (L3 p.92–98)<br>① 3ʲ·n² at depth j; most work at the bottom<br>② n² at every depth; the work is balanced across levels<br>③ n²·(4/3)ʲ at depth j; most work at the bottom<br>④ n²·(3/16)ʲ at depth j; most work at the top{/quiz}
+{answer}'''④ n²·(3/16)ʲ at depth j; most work at the top'''. 깊이 j 에 노드 3ʲ 개, 각 크기 n/4ʲ, 노드당 일 (n/4ʲ)² → 합 3ʲ·n²/16ʲ = n²·(3/16)ʲ. 공비 3/16 < 1 이라 루트가 지배(top heavy, tall and skinny) → O(n²) (④). master method 로도 a = 3 < bᵈ = 16. ①은 노드 크기가 줄어드는 것을 무시했다. ②는 a = bᵈ(balanced)일 때의 모습. ③은 공비를 a/bᵈ = 3/16 이 아니라 b/a = 4/3 로 뒤집고 d = 2 제곱까지 빠뜨린 오류 — 공비가 1 보다 커 보여 bottom 으로 오판하게 된다.{/answer}
+
+=== C15 ===
+{quiz}When proving that recursive mergesort is correct by induction, what quantity does the induction run over? (L3 p.35–38)<br>① The loop iteration number of the merge step<br>② The length of the input list<br>③ The number of merge calls already completed<br>④ The value of the largest element in the list{/quiz}
+{answer}'''② The length of the input list'''. p.35: 'rather than inducting on the loop iteration, we induct on the length of the input list.' 가설: 길이 1 ~ i 에서 올바르게 정렬, 기저 i = 1, 귀납 단계 i → i + 1 (②). ①은 반복 알고리즘(insertion sort, merge 함수 자체)의 증명 방식 — mergesort 전체는 재귀 알고리즘이다. ③·④는 입력 크기와 무관한 양이라 귀납 가설을 적용할 '더 작은 입력'을 정의하지 못한다.{/answer}
+
+=== C16 ===
+{quiz}In the substitution-method proof for select, the base case is T(n) = n log n for n ≤ 100 and the hypothesis is T(k) ≤ Ck. Why must C be at least 7? (L4 p.103–104)<br>① Because the recurrence contains the term T(7n/10).<br>② Because the recursion tree for n = 100 has 7 levels.<br>③ Because Ck ≥ k log k must hold for every k ≤ 100, which needs C ≥ log₂ 100 ≈ 6.64.<br>④ Because the constant d hidden in O(n) is assumed to be 7.{/quiz}
+{answer}'''③ Because Ck ≥ k log k must hold for every k ≤ 100, which needs C ≥ log₂ 100 ≈ 6.64.'''. 기저 사례 T(k) = k log k ≤ Ck ⇔ C ≥ log k, k ≤ 100 에서 최대 log₂ 100 ≈ 6.64 → 정수로 C ≥ 7 (③). 귀납 단계는 C/5 + 7C/10 + d ≤ C ⇔ C ≥ 10d 를 주므로 최종 C = max(7, 10d). ①은 숫자 7 이 우연히 겹친 것일 뿐 — 7n/10 은 귀납 단계 조건 C ≥ 10d 를 만든다. ②는 근거 없음. ④는 d 는 미지의 상수이고 그래서 C 가 max(7, 10d) 로 표현된다.{/answer}
+
+=== C17 ===
+{quiz}In the lower-bound proof, why must the decision tree of any correct deterministic comparison-based sorting algorithm on n distinct items have at least n! leaves? (L5 p.11, p.14–15)<br>① Because every internal node asks one YES/NO question, so the tree has exactly n! internal nodes.<br>② Because the algorithm must compare every pair of items, and there are n! pairs.<br>③ Because each of the n! possible orderings of the items must be returned at some leaf, and a leaf returns only one ordering.<br>④ Because a balanced binary tree of depth n always has n! leaves.{/quiz}
+{answer}'''③ Because each of the n! possible orderings of the items must be returned at some leaf, and a leaf returns only one ordering.'''. 잎 = 알고리즘이 반환하는 결과(한 가지 순서). 입력이 n! 가지 순서 중 무엇이든 옳게 정렬해야 하므로 모든 순서가 어떤 잎에 있어야 한다 → 잎 ≥ n! → 깊이 ≥ log(n!) = Ω(n log n). ③ 정답. ①잎 수가 아니라 내부 노드 수를 말하며 사실도 아니다. ②쌍의 수는 n(n−1)/2 이지 n! 이 아니고, 모든 쌍을 비교할 필요도 없다(mergesort). ④깊이 n 인 완전 이진 트리의 잎은 2ⁿ 개이지 n! 이 아니다(n ≥ 4 에서 n! > 2ⁿ).{/answer}
+
+=== C18 ===
+{quiz}Which fact directly justifies the claim log(n!) = Ω(n log(n)) used in the sorting lower bound? (L5 p.14)<br>① At least n/2 of the factors in n! are ≥ n/2, so n! ≥ (n/2)^(n/2) and log(n!) ≥ (n/2)·log(n/2).<br>② n! ≤ nⁿ, so log(n!) ≤ n·log(n).<br>③ log(n!) is exactly n·log(n) for every n ≥ 1.<br>④ The master method with a = n, b = 2, d = 1 gives log(n!) = Θ(n log(n)).{/quiz}
+{answer}'''① At least n/2 of the factors in n! are ≥ n/2, so n! ≥ (n/2)^(n/2) and log(n!) ≥ (n/2)·log(n/2).'''. Ω 는 아래에서 누르는 bound 가 필요하다. n! 의 곱 n·(n−1)·…·1 중 위쪽 절반(≥ n/2 인 인수) 만 남겨도 n! ≥ (n/2)^(n/2) → log(n!) ≥ (n/2)log(n/2) = Ω(n log n). 슬라이드 표현은 'log(n!) is about n log(n/e)'(Stirling). ① 정답. ②는 참이지만 upper bound(O)라서 Ω 를 증명하지 못한다 — 방향 함정. ③ 예: n = 2 이면 log 2! = 1 ≠ 2 log 2 = 2. ④master method 는 T(n) = aT(n/b) + O(nᵈ) 꼴 점화식용이고 a 는 n 에 의존하면 안 된다.{/answer}
+
+=== C19 ===
+{quiz}bogosort repeatedly calls random.shuffle(A) and then checks whether A is sorted. With n distinct items, what is its expected runtime? (L6 p.6, p.9)<br>① O(n log(n)), the same as randomized quicksort.<br>② O(n!), because it expects n! shuffles.<br>③ O(∞), because the shuffles might never produce the sorted order.<br>④ O(n·n!), because it expects n! shuffles and each shuffle-and-check takes O(n) time.{/quiz}
+{answer}'''④ O(n·n!), because it expects n! shuffles and each shuffle-and-check takes O(n) time.'''. 한 번 섞었을 때 정렬될 확률 p = 1/n!. 성공할 때까지의 시도 횟수는 기하분포라 기대값 1/p = n! 회(교수 9/17: E = 1 + (1−p)E → E = 1/p). 매 시도마다 shuffle + for 문 검사가 O(n) → O(n·n!). ④ 정답. ①quicksort 의 expected 이다. ②시도 1회의 비용 O(n) 을 빠뜨렸다. ③은 worst-case(적이 주사위를 고정, Scenario 2)이지 expected 가 아니다.{/answer}
+
+=== C20 ===
+{quiz}randomized_quicksort is run on the distinct values 0, 1, …, 9. Exactly when are the values 3 and 7 compared with each other? (L6 p.24–36)<br>① Whenever 3 or 7 is chosen as a pivot at some point during the algorithm.<br>② If and only if, among 3, 4, 5, 6, 7, the first one ever chosen as a pivot is 3 or 7.<br>③ If and only if none of 0, 1, 2, 8, 9 is chosen as a pivot before 3 or 7.<br>④ If and only if 3 and 7 are still in the same subarray when the recursion reaches arrays of length 1.{/quiz}
+{answer}'''② If and only if, among 3, 4, 5, 6, 7, the first one ever chosen as a pivot is 3 or 7.'''. 두 원소는 둘 중 하나가 피벗일 때만 비교되고(조건 ①), 그 전에 사이 값 4, 5, 6 이 피벗이 되면 3 과 7 은 다른 subarray 로 갈라져 영원히 비교되지 않는다(조건 ②). 두 조건을 합치면 ②번 보기 → 확률 2/(7−3+1) = 2/5. ①조건 ② 가 빠졌다: 5 가 먼저 뽑힌 뒤에 3 이 피벗이 되면 7 은 이미 다른 쪽에 있다. ③바깥 값 0, 1, 2, 8, 9 는 3 과 7 을 가르지 않으므로 무관하다. ④길이 1 까지 같은 subarray 에 남는 것은 불가능하고, 비교는 피벗이 될 때 일어난다.{/answer}
+
+=== C21 ===
+{quiz}In the majority element problem, a list A of length n = 30 has a majority element. At least how many times must that element occur? (L6 p.55–56)<br>① 15<br>② 16<br>③ 17<br>④ 20{/quiz}
+{answer}'''② 16'''. 정의: 'the element that occurs at least ⌊n/2⌋ + 1 times' → ⌊30/2⌋ + 1 = 16. ② 정답. ①15 는 정확히 절반 — 교수(9/22): 'strictly more than half … 정확히 절반은 안 된다.' ③ ④ 17, 20 은 majority 이긴 하지만 '최소' 가 아니다. 이 정의(> n/2) 때문에 무작위로 하나 뽑았을 때 majority 일 확률이 1/2 보다 커서 randomized 버전이 기대 2 회 안에 끝난다(p.77).{/answer}
+
+=== C22 ===
+{quiz}Direct addressing stores key x at index x of an array and gets O(1) INSERT/DELETE/SEARCH. What is its main issue, the same one that counting_sort has? (L7 p.11–17)<br>① It needs one slot per possible key, so if the set of possible keys is huge the space becomes an issue, even when only a few items are stored.<br>② Two different keys can land at the same index, so SEARCH degrades to O(n).<br>③ The keys must be inserted in sorted order, otherwise SEARCH fails.<br>④ It supports INSERT and SEARCH in O(1), but DELETE requires O(n) time.{/quiz}
+{answer}'''① It needs one slot per possible key, so if the set of possible keys is huge the space becomes an issue, even when only a few items are stored.'''. direct addressing = key → index 의 one-to-one mapping. 교수(9/29): 'Think about counting sort … it's a one-to-one mapping from the value to the index' / '입력 공간이 10⁶ 이상이면 실제로는 몇 개만 넣어도 거대한 메모리가 필요하다.' ① 정답. ②one-to-one 이라 collision 이 없다 — collision 은 bucket(many-to-one)에서 생긴다. ③순서 제약 없음(insert(7), insert(5), insert(0) 순서로 넣는 예, p.11–14). ④DELETE 도 해당 칸을 비우면 되므로 O(1).{/answer}
+
+=== C23 ===
+{quiz}The universe U has M keys and there are n buckets. How many bits are needed to write down one hash function chosen uniformly at random from all functions h: U → the set 1..n? (L7 p.46–50)<br>① log(M) bits, one index into the universe.<br>② n·log(M) bits, log(M) bits for each of the n stored items.<br>③ M bits, one bit per key of the universe.<br>④ M·log(n) bits, since there are n^M such functions.{/quiz}
+{answer}'''④ M·log(n) bits, since there are n^M such functions.'''. s 개 중 하나를 적는 데 log(s) 비트가 필요하다(p.49 'Fido/Hercules' 예). 모든 함수의 개수는 key M 개 각각에 bucket n 개 중 하나를 고르므로 n^M → log(n^M) = M·log(n) 비트(p.50). ④ 정답. 교수(9/29): 'We need log n bits per item' 을 반복 — key 마다 어느 bucket 인지 적어야 한다. ③M 비트는 direct addressing 의 공간이다(슬라이드 비교: 랜덤 함수가 오히려 더 크다!). ①②는 저장할 대상을 잘못 셌다 — 랜덤 h 는 U 전체에 대해 값을 미리 정해야 하므로 M 에 비례한다(p.46 'we have to store h(x) for every x').{/answer}
+
+=== C24 ===
+{quiz}Instead of all hash functions, the slides try the family H = (h0, h1), where h0 returns the most significant digit and h1 the least significant digit, choosing one at random. Why is this still a terrible idea? (L7 p.54–57)<br>① Storing which function was chosen still needs M·log(n) bits.<br>② Because h0 and h1 are deterministic, a random choice between them always doubles the expected bucket size.<br>③ An adversary who knows H can pick items such as 11, 101, 111, 121, 131, 141 that all land in the same bucket under both h0 and h1.<br>④ Picking h at random from H makes the table's output wrong with some probability, turning it into a Monte Carlo data structure.{/quiz}
+{answer}'''③ An adversary who knows H can pick items such as 11, 101, 111, 121, 131, 141 that all land in the same bucket under both h0 and h1.'''. 게임 규칙상 적은 H 를 안다(단지 어느 h 가 뽑힐지 모를 뿐). 11, 101, 111, 121, 131, 141 은 최상위 자리도 1, 최하위 자리도 1 → h0 이든 h1 이든 6 개 전부 bucket 1 → SEARCH O(n). ③ 정답. 무작위성이 도움이 되려면 H 의 어떤 두 key 도 잘 충돌하지 않아야 한다(→ 다음 시간 universal hash family). ①H 가 2 개라 1 비트면 충분하다('Store just one bit', p.55) — 공간은 오히려 이 방식의 장점. ②'항상 두 배' 같은 성질은 없다; 문제는 적이 둘 다에 대해 나쁜 입력을 고를 수 있다는 것. ④hashing 은 결과(정답)가 틀리지 않는다 — 느려질 뿐이다.{/answer}
+
+== Part D. 서술 · 계산 (12문항, 각 5점) ==
+
+=== D1 ===
+{quiz}'''Tracing insertion sort on a new array''' (L1 p.5–21, L2 p.29–34)<br>Run the slides' insertion_sort on A = [5, 2, 6, 1, 3, 4].<br>def insertion_sort(A): for i in range(1, len(A)): cur_value = A[i]; j = i − 1; while j >= 0 and A[j] > cur_value: A[j+1] = A[j]; j −= 1; then A[j+1] = cur_value<br>(a) For each outer iteration i = 1, …, 5, write cur_value, the number of shifts (executions of A[j+1] = A[j]), and the array after the iteration.<br>(b) What is the total number of shifts? Which iteration behaves like the best case, and why?<br>(c) For an input of size n = 6 in reverse order, how many shifts does insertion sort perform in total?{/quiz}
+{answer}'''답: (a) i=1: 2, 1 shift → [2,5,6,1,3,4]; i=2: 6, 0 → [2,5,6,1,3,4]; i=3: 1, 3 → [1,2,5,6,3,4]; i=4: 3, 2 → [1,2,3,5,6,4]; i=5: 4, 2 → [1,2,3,4,5,6]. (b) 8 shifts; i=2 (6 ≥ everything before it, one comparison, 0 shifts). (c) 1+2+3+4+5 = 15.'''
+<pre class="txt">
+규칙: cur_value 보다 큰 앞 원소를 한 칸씩 오른쪽으로 민다(shift). 멈추면 빈자리 A[j+1] 에 cur_value 를 넣는다. 매 반복 후 A[:i+1] 은 정렬돼 있다(loop invariant).
+시작: [5, 2, 6, 1, 3, 4]
+i=1, cur_value=2: 5 > 2 → shift 1회, j=−1 에서 멈춤 → [2, 5, 6, 1, 3, 4]  (A[:2] 정렬)
+i=2, cur_value=6: 5 > 6 거짓 → shift 0회 → [2, 5, 6, 1, 3, 4]  (A[:3] 정렬)
+i=3, cur_value=1: 6, 5, 2 모두 > 1 → shift 3회, 맨 앞에 삽입 → [1, 2, 5, 6, 3, 4]
+i=4, cur_value=3: 6, 5 > 3 → shift 2회, 2 > 3 거짓에서 멈춤 → [1, 2, 3, 5, 6, 4]
+i=5, cur_value=4: 6, 5 > 4 → shift 2회, 3 > 4 거짓에서 멈춤 → [1, 2, 3, 4, 5, 6]
+(b) 총 shift = 1 + 0 + 3 + 2 + 2 = 8 (= 이 배열의 inversion 쌍 개수 8, Python 으로 확인).
+i=2 는 cur_value 가 정렬된 앞부분의 최댓값보다 커서 비교 1번으로 while 이 끝난다 — 이미 정렬된 입력에서 매 반복이 이렇게 되므로 best-case 가 Ω(n) (L2 p.33–34).
+(c) reverse order [6, 5, 4, 3, 2, 1] 이면 반복 i 마다 내부 루프가 i 번 돈다(L2 p.30): 1 + 2 + 3 + 4 + 5 = 15 = n(n−1)/2.
+일반적으로 n(n−1)/2 회 → worst-case O(n²) 의 근거.
+</pre>
+{/answer}
+
+=== D2 ===
+{quiz}'''Formal Big-O proof and disproof''' (L2 p.16–20, p.25)<br>Use the formal definition: T(n) = O(g(n)) iff ∃c, n₀ > 0 s.t. ∀n ≥ n₀, 0 ≤ T(n) ≤ c·g(n).<br>(a) Prove that 4n² + 7n + 2 = O(n²) by giving explicit c and n₀.<br>(b) Prove that (1/2)n³ ≠ O(n² + 10n) by contradiction.{/quiz}
+{answer}'''답: (a) c = 13, n₀ = 1: 4n² + 7n + 2 ≤ 4n² + 7n² + 2n² = 13n² for n ≥ 1. (b) n² + 10n ≤ 11n² for n ≥ 1 gives n ≤ 22c; choose n = max(⌈22c⌉, n₀, 1) + 1 → contradiction.'''
+<pre class="txt">
+(a) 목표: n ≥ n₀ 에서 0 ≤ 4n² + 7n + 2 ≤ c·n² 가 되는 c, n₀ 를 제시.
+n ≥ 1 이면 n ≤ n² 이고 1 ≤ n² 이므로 7n ≤ 7n², 2 ≤ 2n².
+따라서 ∀n ≥ 1: 0 ≤ 4n² + 7n + 2 ≤ 4n² + 7n² + 2n² = 13n².
+c = 13, n₀ = 1 이 정의를 만족하므로 4n² + 7n + 2 = O(n²). ∎  (Python: n = 1 … 99999 전부 성립 확인. n = 1 에서 13 ≤ 13 로 등호.)
+(b) 귀류법: ∃c, n₀ > 0 s.t. ∀n ≥ n₀, (1/2)n³ ≤ c·(n² + 10n) 이라고 가정하자.
+n ≥ 1 이면 10n ≤ 10n² 이므로 n² + 10n ≤ 11n². 따라서 ∀n ≥ max(n₀, 1): (1/2)n³ ≤ 11c·n².
+양변을 n² > 0 으로 나누면 n ≤ 22c — 즉 가정은 n 을 위에서 막는다.
+n = max(⌈22c⌉, n₀, 1) + 1 을 택하면 n ≥ n₀ 이면서 n > 22c 이므로 (1/2)n³ > 11c·n² ≥ c·(n² + 10n). 가정에 모순.
+따라서 (1/2)n³ ≠ O(n² + 10n). ∎  (Python 검산: (c, n₀) = (1, 1) → n = 23, (5, 10) → n = 111, (100, 3) → n = 2201, (1/3, 50) → n = 51 에서 모두 (1/2)n³ > c·(n² + 10n).)
+핵심: c 는 n 과 무관한 상수이므로 'n ≤ 22c' 는 n 이 무한히 커질 수 없다는 뜻 — max(…) + 1 트릭으로 그 한계를 넘는 n 을 하나 고르면 끝(L2 p.19–20).
+</pre>
+{/answer}
+
+=== D3 ===
+{quiz}'''Loop invariant proof for find_max''' (L1 p.26, p.44–52, p.57)<br>def find_max(A):   # A has n ≥ 1 elements<br>    m = A[0]<br>    for i in range(1, len(A)):<br>        if A[i] > m: m = A[i]<br>    return m<br>(a) State a loop invariant for the for loop.<br>(b) Prove correctness using Initialization (base case), Maintenance (inductive step), and Termination (conclusion).<br>(c) For A = [3, 8, 2, 9, 4], write the value of m at the start of each iteration i = 1, 2, 3, 4 and the returned value.{/quiz}
+{answer}'''답: (a) At the start of iteration i, m = max(A[:i]). (b) Init: i = 1, m = A[0] = max(A[:1]); Maint: m' = max(m, A[i]) = max(A[:i+1]); Term: loop ends with i = n, so m = max(A[:n]) = max(A). (c) 3, 8, 8, 9; returns 9.'''
+<pre class="txt">
+교수 강조 'look for things that don't change'(L1 p.26): 반복마다 값은 바뀌지만 'm 은 지금까지 본 구간의 최댓값'이라는 사실은 변하지 않는다 → 이것이 invariant.
+(a) Invariant(i): 반복 i 가 시작될 때 m = max(A[:i]) (A[:i] = A[0..i−1], 지금까지 훑은 원소들).
+(b) Initialization (base case, i = 1): 루프 진입 직전 m = A[0]. A[:1] 은 원소 하나뿐이므로 max(A[:1]) = A[0] = m. ✓
+Maintenance (inductive step, i → i+1): 가설 m = max(A[:i]). 경우 1: A[i] > m 이면 m := A[i] 이고, A[i] 는 A[:i] 의 모든 원소보다 크므로 max(A[:i+1]) = A[i]. 경우 2: A[i] ≤ m 이면 m 유지, max(A[:i+1]) = max(m, A[i]) = m. 두 경우 모두 반복 i+1 시작 시 m = max(A[:i+1]). ✓
+Termination (conclusion): 루프는 i = n 에서 끝난다(range(1, n) 소진). Invariant(n): m = max(A[:n]) 이고 A[:n] 은 리스트 A 전체이므로 반환값 m 은 A 의 최댓값 → find_max 는 올바르다. ∎
+(c) Python 실행 결과: i=1 시작 m=3 (=max[3]), i=2 시작 m=8 (=max[3,8]), i=3 시작 m=8 (=max[3,8,2]), i=4 시작 m=9 (=max[3,8,2,9]), 반환 9 = max(A). 매 시점 invariant 성립 확인.
+채점 포인트: 네 라벨(또는 CLRS 3 라벨)을 명시하고, Conclusion 에서 종료 시 i 값과 '그러므로 알고리즘이 올바르다'까지 쓸 것(L1 p.59 'prove correctness formally').
+</pre>
+{/answer}
+
+=== D4 ===
+{quiz}'''Crossover points: asymptotics vs. real input sizes''' (L2 p.5–8 (HW1 4번 변형))<br>Three algorithms have worst-case runtimes W₁(n) = 64n, W₂(n) = n log₂n, W₃(n) = 0.25n².<br>(a) Order them from asymptotically fastest to slowest.<br>(b) Find every crossover point: W₁ = W₃, W₁ = W₂, W₂ = W₃ (n ≥ 2).<br>(c) For which ranges of n is each algorithm the fastest? Relate your answer to the lecture's con of asymptotic analysis.{/quiz}
+{answer}'''답: (a) W₁ (n) < W₂ (n log n) < W₃ (n²). (b) W₁ = W₃ at n = 256; W₁ = W₂ at n = 2⁶⁴; W₂ = W₃ at n = 16. (c) 2 ≤ n ≤ 15: W₃; n = 16: tie W₂ = W₃ = 64; 17 ≤ n < 2⁶⁴: W₂; n = 2⁶⁴: tie W₁ = W₂; n > 2⁶⁴: W₁.'''
+<pre class="txt">
+(a) 상수 무시: 64n ~ n, n log₂n ~ n log n, 0.25n² ~ n². n/(n log n) = 1/log n → 0, (n log n)/n² = (log n)/n → 0 이므로 점근적으로 W₁ < W₂ < W₃.
+(b) W₁ = W₃: 64n = 0.25n² ⟺ n = 256. n < 256 이면 W₃ 가 W₁ 보다 작다(예: n = 255 → 16320 vs 16256.25).
+W₁ = W₂: 64n = n log₂n ⟺ log₂n = 64 ⟺ n = 2⁶⁴ ≈ 1.8 × 10¹⁹.
+W₂ = W₃: n log₂n = 0.25n² ⟺ 4 log₂n = n. n = 16 대입: 4·4 = 16 ✓ → n = 16 (W₂ = W₃ = 64).
+검산(Python): n = 15 → W₂ ≈ 58.60, W₃ = 56.25 (W₃ 승); n = 17 → W₂ ≈ 69.49, W₃ = 72.25 (W₂ 승).
+(c) 최솟값 비교(Python 으로 n = 2 … 4999 전수 확인, 최솟값이 바뀌는 곳은 n = 16 한 번뿐): 2 ≤ n ≤ 15 → W₃, n = 16 → W₂ = W₃ 동률, 17 ≤ n < 2⁶⁴ → W₂.
+n = 2⁶³ → W₂ 승, n = 2⁶⁴ → W₁ = W₂ = 64·2⁶⁴ 동률, n = 2⁶⁵ → W₁ 승. (n = 1 은 W₂ = 0 으로 퇴화하므로 제외.)
+해석: 점근적으로 최고인 W₁ 은 n > 2⁶⁴ 에서만 최선 — 실용 범위에서는 한 번도 이기지 못한다. 이것이 L2 p.6 의 Cons 'Only makes sense if n is large (compared to the constant factors)' 의 구체적 예('9,999,999,999,999 n is better than n²?!').
+그래도 점근 순서가 의미 있는 이유: 교수의 두 번째 질문 'Is it fast?' 는 n 이 커질 때 스케일링을 묻는 것이고, n 이 충분히 크면 순서는 결국 W₁ < W₂ < W₃ 로 확정된다.
+</pre>
+{/answer}
+
+=== D5 ===
+{quiz}'''Applying the master method''' (L3 p.90–98, L4 p.49)<br>For each recurrence, identify a, b, d, compare a with bᵈ, name the case (top heavy / balanced / bottom heavy), and give the closed-form bound.<br>(a) T(n) = 9·T(n/3) + O(n)<br>(b) T(n) = 2·T(n/4) + O(√n)<br>(c) T(n) = 6·T(n/2) + O(n³){/quiz}
+{answer}'''답: (a) a = 9 > bᵈ = 3 → bottom heavy → O(n^(log₃ 9)) = O(n²). (b) a = 2 = bᵈ = 4^0.5 → balanced → O(√n log n). (c) a = 6 < bᵈ = 8 → top heavy → O(n³).'''
+<pre class="txt">
+공식: T(n) = a·T(n/b) + O(nᵈ) 이면 a = bᵈ → O(nᵈ log n), a < bᵈ → O(nᵈ), a > bᵈ → O(n^(log_b a)).
+(a) a = 9, b = 3, d = 1 → bᵈ = 3¹ = 3.
+9 > 3 → a > bᵈ → 가지치기가 이김, 잎이 지배(bottom heavy).
+T(n) = O(n^(log₃ 9)) = O(n²).
+(b) a = 2, b = 4, d = 1/2 (√n = n^0.5) → bᵈ = 4^0.5 = 2.
+2 = 2 → a = bᵈ → 매 레벨 일이 같음(balanced).
+T(n) = O(nᵈ log n) = O(√n log n).
+(c) a = 6, b = 2, d = 3 → bᵈ = 2³ = 8.
+6 < 8 → a < bᵈ → 루트가 지배(top heavy).
+T(n) = O(n³).
+검산(Python, T(1) = 1, n = bᵏ 로 실제 점화식 계산): (a) T(n)/n² → 1.50 수렴, (b) T(n)/(√n log₄ n) → 1.10 부근으로 감소 수렴, (c) T(n)/n³ → 4 수렴 = 8/(8 − 6). 세 비율 모두 상수로 수렴하므로 판정이 맞다.
+</pre>
+{/answer}
+
+=== D6 ===
+{quiz}'''Recursion tree and iteration for T(n) = 3T(n/3) + n''' (L3 p.66–78, p.97)<br>Let T(1) = 1 and T(n) = 3·T(n/3) + n, where n is a power of 3.<br>(a) Using the recursion tree method, give the number of nodes, the size of each node, and the total work at depth j. State the depth of the tree.<br>(b) Using the iteration method, write T(n) after k expansions, choose k to reach T(1), and obtain the exact closed form.<br>(c) Give the tight asymptotic bound and confirm it with the master method.{/quiz}
+{answer}'''답: (a) depth j: 3ʲ nodes of size n/3ʲ, total n per level; depth log₃ n. (b) T(n) = 3ᵏT(n/3ᵏ) + kn, k = log₃ n → T(n) = n log₃ n + n. (c) Θ(n log n); a = 3 = bᵈ = 3¹.'''
+<pre class="txt">
+(a) 깊이 j 에는 노드가 3ʲ 개, 각 노드의 입력 크기는 n/3ʲ, 노드당 일(비재귀 부분)은 n/3ʲ.
+깊이 j 의 총 일 = 3ʲ × n/3ʲ = n → 모든 레벨의 합이 n 으로 같다(balanced).
+크기가 1 이 되는 깊이: n/3ʲ = 1 → j = log₃ n. 즉 내부 레벨 0 ~ log₃ n − 1 (log₃ n 개) + 잎 레벨.
+잎 레벨: 노드 3^(log₃ n) = n 개 × T(1) = 1 → n.
+총합 = n × log₃ n + n = n log₃ n + n.
+(b) 1회: T(n) = 3T(n/3) + n.
+2회: T(n) = 3(3T(n/9) + n/3) + n = 9T(n/9) + 2n.
+3회: T(n) = 9(3T(n/27) + n/9) + 2n = 27T(n/27) + 3n.
+패턴: k 회 후 T(n) = 3ᵏ·T(n/3ᵏ) + k·n.
+n/3ᵏ = 1 → k = log₃ n (재귀 트리의 깊이와 같다 — 9/8 수업에서 교수가 두 방법을 연결한 지점).
+T(n) = n·T(1) + n log₃ n = n log₃ n + n.
+검산(Python): n = 1, 3, 9, 27, 81, 243, 729, 2187 에서 실제 T(n) = 1, 6, 27, 108, 405, 1458, 5103, 17496 이 모두 n log₃ n + n 과 일치.
+(c) n log₃ n = n log₂ n / log₂ 3 이므로 T(n) = Θ(n log n).
+master method: a = 3, b = 3, d = 1 → bᵈ = 3 = a → O(nᵈ log n) = O(n log n). 일치.
+</pre>
+{/answer}
+
+=== D7 ===
+{quiz}'''Substitution method: finding the constant C''' (L3 p.109–116, L4 p.102–104)<br>Let T(n) = 4n for 1 ≤ n ≤ 10, and T(n) = T(n/3) + T(n/2) + n otherwise.<br>(a) Explain why the master method cannot be used, and make a guess for T(n).<br>(b) Prove T(n) = O(n) by the substitution method with the hypothesis T(k) ≤ Ck for all 1 ≤ k < n. Derive the condition on C from the base case and from the inductive step, and choose C.<br>(c) Rewrite the proof in its final form, as presented in class.<br>(d) Show that the same approach fails for T(n) = T(n/4) + T(3n/4) + n, and explain why.{/quiz}
+{answer}'''답: (a) sub-problem sizes differ; n/3 + n/2 = 5n/6 < n → guess O(n). (b) base: C ≥ 4; step: C/3 + C/2 + 1 ≤ C ⇔ C ≥ 6 → C = max(4, 6) = 6. (c) hypothesis T(k) ≤ 6k, step 2n + 3n + n = 6n. (d) C/4 + 3C/4 + 1 = C + 1 > C for every C; sizes sum to n → Θ(n log n).'''
+<pre class="txt">
+(a) 부분 문제 크기가 n/3 과 n/2 로 서로 달라 a·T(n/b) 꼴이 아니다 → master method 불가(L3 p.107).
+추측: 크기의 합 n/3 + n/2 = 5n/6 < n → 레벨마다 일이 5/6 배로 줄어드는 등비급수 → O(n) 으로 추측.
+(b) 귀납 가설: 1 ≤ k < n 인 모든 k 에 대해 T(k) ≤ Ck (C 는 아직 미정).
+기저 사례: 1 ≤ k ≤ 10 에서 T(k) = 4k ≤ Ck 이려면 C ≥ 4.
+귀납 단계: T(n) = T(n/3) + T(n/2) + n ≤ C(n/3) + C(n/2) + n = (C/3 + C/2 + 1)n.
+이것이 ≤ Cn 이려면 C/3 + C/2 + 1 ≤ C ⇔ 1 ≤ C − 5C/6 = C/6 ⇔ C ≥ 6.
+두 조건을 모두 만족: C = max(4, 6) = 6.
+결론: 모든 n ≥ 1 에 대해 T(n) ≤ 6n → T(n) = O(n).
+(c) 'Pretend like we knew it all along' — 처음부터 C = 6 을 알았던 것처럼 쓴다:
+가설 T(k) ≤ 6k (1 ≤ k < n). 기저: k ≤ 10 에서 T(k) = 4k ≤ 6k.
+단계: T(n) ≤ 6(n/3) + 6(n/2) + n = 2n + 3n + n = 6n. 결론: T(n) ≤ 6n, T(n) = O(n).
+(d) 같은 가설 T(k) ≤ Ck 를 넣으면 T(n) ≤ C(n/4) + C(3n/4) + n = (C + 1)n.
+(C + 1)n ≤ Cn 을 만족하는 C 는 없다 → 증명 실패. 크기 합이 n/4 + 3n/4 = n 이라 mergesort 처럼 레벨마다 일이 n 그대로이므로 실제 답은 Θ(n log n).
+검산(Python, floor 사용): (b) 식으로 n ≤ 200000 을 모두 계산하면 max T(n)/n = 5.76 ≤ 6 — 부등식 성립. C = 5 이면 단계 계수 5/3 + 5/2 + 1 = 5.17 > 5 로 실패, C = 6 이면 정확히 6.0.
+(d) 식을 T(n) = n (n ≤ 3) 으로 계산하면 T(n)/n = 6.7, 10.8, 14.9, 19.0, 23.1 (n = 10², …, 10⁶) — 상수로 수렴하지 않고 log n 에 비례해 증가(10배마다 약 4.1 증가)하므로 O(n) 이 아니다.
+</pre>
+{/answer}
+
+=== D8 ===
+{quiz}'''Tracing select with the last-element pivot rule''' (L4 p.8, p.16, p.25, p.41)<br>Consider select(A, k) from the lecture with k 0-indexed (select(A, 0) returns the minimum). Modify it as follows:<br>  - the pivot is always the LAST element of the current list;<br>  - partition_about_pivot scans the list from left to right and appends to left / right in that order;<br>  - the base case is len(A) ≤ 1, which returns A[k].<br>A = [42, 17, 93, 8, 61, 25, 76, 3, 54, 30], k = 7.<br>For every call, write the list, k, the pivot, left, right, the branch taken, and the new k passed to the next call. What value is returned?{/quiz}
+{answer}'''답: Call 1: pivot 30, left [17, 8, 25, 3], right [42, 93, 61, 76, 54], 4 < 7 → select(right, 2). Call 2: pivot 54, left [42], right [93, 61, 76], 1 < 2 → select(right, 0). Call 3: pivot 76, left [61], right [93], 1 > 0 → select(left, 0). Call 4: [61] base → 61.'''
+<pre class="txt">
+Call 1: A = [42, 17, 93, 8, 61, 25, 76, 3, 54, 30], k = 7, pivot = 30.
+partition: 42 → R, 17 → L, 93 → R, 8 → L, 61 → R, 25 → L, 76 → R, 3 → L, 54 → R (30 자신은 건너뜀).
+left = [17, 8, 25, 3], right = [42, 93, 61, 76, 54], len(left) = 4.
+4 < 7 → 답은 오른쪽. 새 k = k − len(left) − 1 = 7 − 4 − 1 = 2 → select(right, 2).
+Call 2: A = [42, 93, 61, 76, 54], k = 2, pivot = 54.
+left = [42], right = [93, 61, 76], len(left) = 1.
+1 < 2 → 새 k = 2 − 1 − 1 = 0 → select([93, 61, 76], 0).
+Call 3: A = [93, 61, 76], k = 0, pivot = 76.
+left = [61], right = [93], len(left) = 1.
+1 > 0 → 답은 왼쪽, k 는 그대로 → select([61], 0).
+Call 4: A = [61], len ≤ 1 → base case, A[0] = 61 반환.
+답: 61. 검증 — 정렬하면 [3, 8, 17, 25, 30, 42, 54, 61, 76, 93], 인덱스 7 = 61 ✓.
+관찰: 매 호출에서 한쪽만 재귀했고(merge sort 와의 차이), right 로 갈 때만 k 를 보정(왼쪽 원소 + pivot 만큼 뺌), left 로 갈 때는 k 를 그대로 둔다.
+검산(Python): 슬라이드 partition_about_pivot 코드를 그대로 실행한 출력이 위 left/right 와 동일하고 결과 61 = sorted(A)[7].
+</pre>
+{/answer}
+
+=== D9 ===
+{quiz}'''Tracing radix_sort on a new array''' (L5 p.47–59)<br>Call radix_sort(A, 3, 10) on A = [82, 407, 3, 219, 64, 350, 71, 128] (treat every value as a 3-digit number, e.g. 3 = 003).<br>Each iteration i builds (digit i, value) pairs with key = (a // 10**i) % 10 and bucket-sorts them with 10 buckets.<br>(a) For i = 0, 1, 2 write the keys and the array A after the iteration.<br>(b) In iteration i = 2, which values share the same key? Explain why the final order among them is correct only because the per-digit bucket sort is stable.<br>(c) Give the worst-case runtime in terms of d, n, k and plug in the numbers.{/quiz}
+{answer}'''답: (a) i=0 keys 2,7,3,9,4,0,1,8 → [350, 71, 82, 3, 64, 407, 128, 219]; i=1 keys 5,7,8,0,6,0,2,1 → [3, 407, 219, 128, 350, 64, 71, 82]; i=2 keys 0,4,2,1,3,0,0,0 → [3, 64, 71, 82, 128, 219, 350, 407]. (b) 3, 64, 71, 82 all have key 0; stability keeps their i=1 order (by last two digits) → sorted. (c) Θ(d(n+k)) = 3·(8+10) = 54 basic steps.'''
+<pre class="txt">
+규칙: i 번째 라운드는 10^i 자리 숫자(key = (a // 10**i) % 10)로 bucket 0..9 에 순서대로 넣고 0 번 bucket 부터 꺼낸다. 같은 bucket 안에서는 들어온 순서 유지(stable).
+시작: [82, 407, 3, 219, 64, 350, 71, 128]
+i=0 (일의 자리): keys = 2, 7, 3, 9, 4, 0, 1, 8 → bucket0 [350], 1 [71], 2 [82], 3 [3], 4 [64], 7 [407], 8 [128], 9 [219]
+  → A = [350, 71, 82, 3, 64, 407, 128, 219]
+i=1 (십의 자리): keys = 5, 7, 8, 0, 6, 0, 2, 1 → bucket0 [3, 407] (3 이 먼저 들어옴), 1 [219], 2 [128], 5 [350], 6 [64], 7 [71], 8 [82]
+  → A = [3, 407, 219, 128, 350, 64, 71, 82]  (이제 마지막 두 자리 기준 정렬: 03, 07, 19, 28, 50, 64, 71, 82)
+i=2 (백의 자리): keys = 0, 4, 2, 1, 3, 0, 0, 0 → bucket0 [3, 64, 71, 82], 1 [128], 2 [219], 3 [350], 4 [407]
+  → A = [3, 64, 71, 82, 128, 219, 350, 407]  — 정렬 완료 (Python 으로 추적해 확인)
+(b) i=2 에서 key 0 을 공유하는 값: 3, 64, 71, 82. 백의 자리로는 구분이 안 되므로 bucket 안 순서가 곧 최종 순서다.
+stable 하므로 i=1 이 끝났을 때의 순서(3 → 64 → 71 → 82, 즉 아래 두 자리 기준 정렬)가 그대로 유지된다 = 증명의 inductive step(p.59): 'by the inductive hypothesis, they are ordered by their i least-significant digits'.
+만약 bucket 안에서 순서를 뒤섞는다면 예컨대 [82, 3, 71, 64, …] 가 나올 수 있어 정렬이 깨진다.
+(c) radix_sort worst-case Θ(d(n+k)) (p.51): 라운드마다 make_pairs Θ(n) + bucket_sort_with_pairs Θ(n+k), 라운드 d 번.
+d = 3, n = 8, k = 10 → 3·(8 + 10) = 54 (상수 무시한 기본 단계 수). d 와 k 가 상수면 Θ(n) — '선형 시간 정렬'.
+</pre>
+{/answer}
+
+=== D10 ===
+{quiz}'''Comparison probabilities in randomized_quicksort''' (L6 p.27–42)<br>randomized_quicksort sorts distinct values 0, 1, …, n−1. Let X_a,b = 1 if a and b are compared, 0 otherwise (a < b).<br>(a) With n = 12, compute P(X_4,9 = 1), P(X_0,11 = 1) and P(X_4,5 = 1). Explain the value for 4 and 9 using the elements between them.<br>(b) With n = 6, compute the exact expected total number of comparisons E[∑∑ X_a,b] = ∑∑ 2/(b − a + 1).<br>(c) Compare (b) with the number of comparisons in the worst case for n = 6.{/quiz}
+{answer}'''답: (a) 2/6 = 1/3, 2/12 = 1/6, 2/2 = 1. (b) 5·1 + 4·(2/3) + 3·(2/4) + 2·(2/5) + 1·(2/6) = 103/10 = 10.3. (c) worst case n(n−1)/2 = 15 comparisons.'''
+<pre class="txt">
+핵심: a 와 b 는 a, a+1, …, b 중에서 '처음으로' 뽑힌 피벗이 a 또는 b 일 때에만 비교된다. 그 사이 값이 먼저 뽑히면 a 와 b 는 서로 다른 subarray 로 갈라진다.
+(a) 4 와 9: 사이 값은 5, 6, 7, 8. 후보 구간 4..9 는 6 개 원소, 이 중 누가 먼저 피벗이 될지는 대칭(각 1/6).
+  4 또는 9 가 먼저 → 비교됨: P(X_4,9 = 1) = 2/6 = 1/3. 5, 6, 7, 8 중 하나가 먼저 → 영원히 비교 안 됨.
+  P(X_0,11 = 1) = 2/(11 − 0 + 1) = 2/12 = 1/6 (양 끝은 거의 비교되지 않는다).
+  P(X_4,5 = 1) = 2/2 = 1 (인접한 값은 사이에 가를 원소가 없어 반드시 비교된다).
+  검산: Python 으로 무작위 순열 10만 번 → P(X_4,9) ≈ 0.334.
+(b) linearity of expectation: E[∑∑ X_a,b] = ∑∑ E[X_a,b] = ∑∑ P(X_a,b = 1) = ∑∑ 2/(b − a + 1).
+거리 c = b − a 로 묶으면 거리 c 인 쌍은 n − c 개, 각 확률 2/(c + 1):
+c=1: 5 쌍 × 2/2 = 5
+c=2: 4 쌍 × 2/3 = 8/3
+c=3: 3 쌍 × 2/4 = 3/2
+c=4: 2 쌍 × 2/5 = 4/5
+c=5: 1 쌍 × 2/6 = 1/3
+합 = 5 + 8/3 + 3/2 + 4/5 + 1/3 = 103/10 = 10.3 (Fraction 으로 정확히 계산, 20만 회 시뮬레이션 평균 10.30).
+(c) worst-case(적이 매번 최솟값/최댓값을 피벗으로): 5 + 4 + 3 + 2 + 1 = n(n−1)/2 = 15 → 모든 쌍이 다 비교된다.
+일반 n 에서 합 ≤ 2n ∑ 1/c (harmonic series) = O(n log n) — expected Θ(n log n) vs worst Θ(n²) 의 차이가 n = 6 에서도 10.3 vs 15 로 보인다.
+</pre>
+{/answer}
+
+=== D11 ===
+{quiz}'''Majority element: randomized vs. divide-and-conquer''' (L6 p.62–66, p.73–79)<br>(a) A list of n = 20 elements has a majority element that occurs 13 times. The randomized algorithm picks guess = random.choice(A) and counts it with n equals calls, repeating until count > n/2.<br>    Compute p = P(one guess is the majority), the expected number of iterations, the expected number of equals calls, and P(the algorithm succeeds exactly on the 3rd iteration).<br>(b) Why is the expected number of iterations at most 2 for every input that has a majority element? What is the worst-case runtime?<br>(c) The divide-and-conquer majority_element recurses on both halves and then counts m1 over all of A with n equals calls. Write the recurrence and compute the number of equals calls for n = 16 (no equals calls when n = 1).{/quiz}
+{answer}'''답: (a) p = 13/20 = 0.65; E[iterations] = 1/p = 20/13 ≈ 1.54; E[equals] = 20·20/13 = 400/13 ≈ 30.8; P(3rd) = 0.35²·0.65 = 637/8000 ≈ 0.0796. (b) majority occurs ≥ ⌊n/2⌋+1 times → p > 1/2 → E = 1/p < 2 → E[equals] ≤ 2n = O(n); worst-case O(∞). (c) E(n) = 2E(n/2) + n → n log₂ n = 64; T(n) = 2T(n/2) + O(n) = O(n log n).'''
+<pre class="txt">
+(a) 한 번 뽑아서 majority 일 확률 p = 13/20 = 0.65.
+시도 횟수 N 은 기하분포: P(N = i) = (1 − p)^(i−1)·p → E[N] = 1/p = 20/13 ≈ 1.54 회 (교수 9/22 유도 그대로).
+각 시도의 확인은 equals n = 20 번 → E[equals] = 20 × 20/13 = 400/13 ≈ 30.8 번.
+정확히 3 번째에 성공 = 두 번 실패 후 성공: (0.35)² × 0.65 = 637/8000 ≈ 0.0796.
+검산: Python 으로 10만 번 시뮬레이션 → 평균 시도 1.54 회.
+(b) majority 는 ⌊n/2⌋ + 1 번 이상 → p ≥ (⌊n/2⌋+1)/n > 1/2 → E[N] = 1/p < 2 (슬라이드 p.77 은 ∑ i/2^i 기하급수로 ≤ 2).
+  → E[equals] ≤ 2n = O(n). 하지만 적이 주사위를 고정하면 계속 majority 가 아닌 원소만 뽑힌다 → worst-case O(∞) (Las Vegas: 답은 항상 맞음).
+(c) 재귀 두 번(각 n/2) + 전체 A 를 m1 과 비교하는 for 문 n 번: E(n) = 2E(n/2) + n, E(1) = 0.
+E(2) = 2·0 + 2 = 2
+E(4) = 2·2 + 4 = 8
+E(8) = 2·8 + 8 = 24
+E(16) = 2·24 + 16 = 64 = 16·log₂16 (Python 재귀로 확인)
+일반형 T(n) = 2T(n/2) + O(n) → master method(a = 2, b = 2, d = 1, a = bᵈ) → O(n log n), expected 와 worst-case 모두.
+비교(p.79): D&C 는 항상 O(n log n), randomized 는 expected O(n)·worst O(∞) — 같은 n = 16 에서 majority 10 개면 randomized 기대 equals = 16·16/10 = 25.6 < 64.
+</pre>
+{/answer}
+
+=== D12 ===
+{quiz}'''Expected bucket size and the pigeonhole principle''' (L7 p.30–32, p.35–43)<br>A hash table with chaining has n = 8 buckets. The bad guy chooses n = 8 distinct items u_1, …, u_8, and h is a uniformly random hash function (each h(u) is uniform over the 8 buckets, independently).<br>(a) For a fixed pair i ≠ j, what is P(h(u_i) = h(u_j))?<br>(b) Compute E[number of items in u_i's bucket] exactly, and show it is at most 2.<br>(c) What is the expected number of items in a fixed bucket, say bucket 1?<br>(d) Now suppose h is a fixed deterministic function from a universe of M = 1000 keys to n = 10 buckets. At least how many keys must some bucket receive, and what can a bad guy who knows h do with this?{/quiz}
+{answer}'''답: (a) 1/8. (b) 1 + 7·(1/8) = 15/8 = 1.875 ≤ 2. (c) 8·(1/8) = 1. (d) some bucket gets ≥ ⌈1000/10⌉ = 100 keys; the bad guy picks n = 10 of them → all 10 items in one bucket → SEARCH Θ(n), no O(1) guarantee.'''
+<pre class="txt">
+(a) h(u_i) 가 어느 bucket 이든, h(u_j) 가 같은 bucket 에 떨어질 확률은 1/8 (독립·균등).
+(b) 지표 확률변수: u_j 가 u_i 의 bucket 에 있으면 1. u_i 자신(j = i)은 항상 1.
+E = ∑_(j=1..8) P(h(u_i) = h(u_j)) = 1 + ∑_(j≠i) 1/8 = 1 + 7/8 = 15/8 = 1.875
+일반형 1 + (n − 1)/n < 2 → 교수(9/29)가 칠판에서 유도한 바로 그 식 → 각 연산 O(1) expected.
+검산: Python 으로 10만 번 무작위 h → 평균 1.877.
+(c) 고정된 bucket 1 의 크기 = ∑ⱼ [h(u_j) = 1] → 기대값 8 × 1/8 = 1. (b) 가 1 보다 큰 이유: u_i 자신이 이미 그 bucket 에 들어 있다는 조건이 붙기 때문.
+(d) 비둘기집 원리: 1000 개 key 를 10 개 bucket 에 → 어떤 bucket 은 ⌈1000/10⌉ = 100 개 이상을 받는다.
+h 를 아는 bad guy 는 그 100 개 중 10 개를 골라 INSERT → 10 개 전부 한 bucket, SEARCH 는 체인 전체를 훑어 Θ(n).
+M/n = 100 > n = 10 이므로 슬라이드 p.32 의 조건 그대로 — deterministic hash 로는 worst-case O(1) 불가 → 해결책은 h 를 랜덤으로 고르는 것(적이 모르는 함수는 공략 못 함).
+</pre>
+{/answer}
+
+== 관련 문서 ==
+* [[계산·증명 문제 모음]] · [[공식·점화식 모음]] · [[자주 틀리는 함정 모음]] · [[HW1 복기]] · [[읽는 순서]] · [[시험 정보]]

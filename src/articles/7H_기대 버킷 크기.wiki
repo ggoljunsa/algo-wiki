@@ -43,6 +43,9 @@ h 가 uniformly random 이고 n = 5 일 때, 적이 고른 $u_3$ 의 버킷에 �
 {answer}
 uniformly random: $1 + \frac{4}{5} = 1.8$. universal: 각 충돌 확률 $\le \frac15$ 이므로 $\le 1 + 4 \cdot \frac15 = 1.8 \le 2$. 같은 상한.
 {/answer}
+{exam}
+교수(9/29) ⭐⭐⭐ 칠판 증명: "모든 i 에 대해 $E[\#\text{items in } u_i\text{'s bucket}] \le 2$ 를 증명하면 $O(1)$ expected." $\sum_{j=1}^{n} P(h(u_i)=h(u_j))$ 에서 '''$j = i$ 항은 1''', 나머지 $n-1$ 항은 각 $\frac1n$ → $1 + \frac{n-1}{n} \le 2$. "두 해시 값이 같을 확률 $= \frac1n$" 은 해시 값 1..n 에 대해 합해서 따로 보였다. "'''We can replace 2 with any constant'''."
+{/exam}
 
 == 관련 문서 ==
 * [[지표 확률변수]] · [[기대값의 선형성]] · [[X_{a,b}]] (L6 의 같은 기법) · [[uniformly random hash function]] · [[universal hash family]] · [[load factor]]

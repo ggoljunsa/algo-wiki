@@ -5,7 +5,8 @@ category: 7강 Hashing, 메인
 == 개요 ==
 [[L6 Randomized Algorithms I]] 에서 "랜덤성을 넣으면 '''기대'''(expected) 성능이 좋아진다"를 정렬·선택에서 봤다면, L7 은 같은 아이디어를 '''자료구조'''에 쓴다. 핵심 질문: '''"[[INSERT/DELETE/SEARCH]] 를 전부 $O(1)$ 에 하는 자료구조를 만들 수 있나?"''' 답은 [[hash table]] 이고, 그 성능을 보장하는 진짜 비밀은 '''[[hash function]] 을 무작위로 고르는 것''', 그리고 그걸 적은 메모리로 가능하게 하는 '''[[universal hash family]]''' 다. [[두 가지 질문]] 으로 말하면 ① Does it work? — 해시 테이블은 항상 맞는 답을 준다(Las Vegas 형) ② Is it fast? — 연산당 '''expected $O(1)$''', 저장 공간 '''$O(n \log M)$ 비트'''.
 
-* 교재: [[CLRS]] 11 (p.3) · 녹음본 없음(해설본의 ⭐⭐⭐ 를 출제 포인트로 표시)
+* 교재: [[CLRS]] 11 (p.3) — 교수(9/29): "the reading chapter is chapter 11."
+* 진도: '''9/29(화) 수업에서 p.1–약 p.58(hash family 도입)까지 진행, universal hash family(p.59–)는 다음 수업.''' 녹음 `0929_11_컴알_L7_Hashing.txt` (GoodNotes 녹음 whisper 전사). 9/24(목)는 공강. 아래 "교수(9/29)" 박스가 녹음 강조, "해설본 ⭐" 박스는 슬라이드 기준 출제 포인트.
 * L7 의 $n$ 은 L1–L6 의 "입력 크기" 와 다르다: '''n = 등장하는 키 수 = 버킷 수''', $M = |U|$ (universe 크기) → [[M과 n]].
 * 페이지 번호는 슬라이드에 '''인쇄된 번호''' p.N 이다. 숨긴 슬라이드(p.40, 48, 65, 66, 71, 74–80)가 PDF 에 없어서 캡처 번호가 구간별로 밀린다.
 
@@ -44,6 +45,9 @@ category: 7강 Hashing, 메인
 {exam}
 해설본 ⭐⭐: p.5 비교표 — 해시 테이블은 '''expected $O(1)$ / worst-case $O(n)$'''. L6 의 randomized quicksort(expected $n \log n$ / worst $n^2$)와 같은 "평균은 좋고 최악은 나쁜" 트레이드오프.
 {/exam}
+{exam}
+교수(9/29): [[INSERT/DELETE/SEARCH]] 같은 dictionary operations 는 "'''very basic operation, and it should be very fast'''". 표를 학생에게 물으며 이유까지 짚었다 — sorted [[linked list]] 는 원하는 원소로 바로 점프할 수 없고 첫 포인터부터 따라가야 하므로 search $O(n)$, insert/delete 도 정렬 상태를 유지하려면 링크를 따라가야 해서 $O(n)$. sorted array 는 점프가 되니 binary search 로 $O(\log n)$ 이지만, 자리를 찾은 뒤 나머지 원소를 한 칸씩 '''밀어야''' 하므로 insert/delete $O(n)$. [[hash table]] 은 셋 다 '''$O(1)$ expected''' — "that's the power of hash table". 단 worst-case 는 여전히 $O(n)$ 이고, "'''better worst-case''' 자료구조는 나중에 tree 에서 본다. 오늘은 expected running time 에 집중."
+{/exam}
 
 == ② Direct addressing 과 버킷 (p.11–21) ==
 [[img:L7-15.png|p.15 — Direct addressing: insert(7), insert(5), insert(0), insert(8) → 칸 0, 5, 7, 8; search(7), search(2) 모두 O(1)|medium]]
@@ -51,6 +55,9 @@ category: 7강 Hashing, 메인
 p.18–20 은 [[bucket sort]] 처럼 여러 값을 한 칸([[버킷]])에 묶는다: 값이 퍼지면 `search(12)` 가 빠르지만, [380, 370, 340, 320, 410] 처럼 300–599 한 버킷에 몰리면 `search(432)` 가 느리다.
 [[img:L7-19.png|p.19 — 300-599 버킷에 380, 370, 340, 320, 410 … 이 몰림 → search(432) is slow|medium]]
 p.20–21: "This is an example of a hash table … not a very good one." → 더 영리하고 '''덜 결정론적으로'''(less deterministic) 버킷팅하겠다.
+{exam}
+교수(9/29): "direct addressing — '''we already know this concept'''. It's a '''one-to-one mapping'''." [[counting sort]] 가 값을 인덱스로 일대일 대응시킨 것과 '''같은 발상'''이고, 문제도 counting sort 와 같다고 학생에게 되물었다 — 입력 공간이 크면(예: $10^6$ 이상) 실제로 넣을 원소는 몇 개 안 되는데도 '''어떤 원소가 올지 모르기 때문에''' 전 범위만큼 메모리가 필요하다(space explosion). 해결 첫 시도는 "'''we already know the solution'''" — 한 칸에 여러 키(작은 범위)를 담는 [[bucket sort]] 의 발상. 그러나 bucket sort 와 똑같은 문제가 남는다: 한 버킷에 몰리면 버킷 안을 뒤져야 해서 $O(1)$ 이 깨진다(최악 $O(n)$).
+{/exam}
 
 == ③ 용어 — U, M, n, h (p.22–25) ==
 [[img:L7-22.png|p.22 — Universe U (size M, really big), 등장하는 건 최대 n 개, 트위터 해시태그 예 (128^140 개 문자열)|medium]]
@@ -59,6 +66,9 @@ p.20–21: "This is an example of a hash table … not a very good one." → 더
 → [[universe U]] 의 크기 $M$ 은 거대하고, 실제 등장 키는 최대 n 개, 어떤 게 올지 미리 모른다([[M과 n]]).
 {/def}
 "There is a [[hash function]] $h: U \to \{1, …, n\}$ which says what element goes in what bucket." 예: $h(x)$ = x 의 일의 자리(least significant digit) → $h(22) = 2$, $h(13) = 3$.
+{exam}
+교수(9/29) 용어 정리: '''universe U''' = 가능한 모든 키의 집합, 크기 '''M''' — "we assume that this M is '''very, very big'''". 실제로 자료구조에 등장하는 건 그중 작은 부분집합(크기 '''n''')뿐이고, "'''we don't know which one will show up. That's the problem setting.'''" 예: 트위터 해시태그는 최대 140 개 ASCII 문자, ASCII 는 128 종 → universe 크기 $128^{140}$, 실제 저장되는 건 trending 해시태그 몇 개. 버킷 배열이 hash table, $U \to$ 버킷 번호 사상이 [[hash function]]. → [[universe U]] · [[M과 n]]
+{/exam}
 
 == ④ Hash table with chaining (p.26–29) ==
 [[img:L7-28.png|p.28 — chaining: INSERT 13, 22, 43, 9 → 버킷 2 [22], 버킷 3 [13→43], 버킷 9 [9]; SEARCH 43 은 버킷 3 을 훑음|large]]
@@ -77,6 +87,10 @@ SEARCH 43 → 버킷 h(43)=3 을 처음부터: 13(아님) → 43(찾음), 2 칸
 p.27 Aside: 충돌 시 다른 빈 칸으로 "bounce" 하는 [[open addressing]] 도 있다(CLRS 11.4, 관심 있으면).
 [[img:L7-29.png|p.29 — 좋은 해시(고르게) vs 나쁜 해시(한 버킷에 13→43→23→3→93)|medium]]
 [[좋은 해시 함수의 조건]](p.29): ① 버킷이 많지 않을 것(n 개 → 공간 절약) ② 아이템이 버킷에 '''고르게 퍼질 것'''(→ 빠른 SEARCH/INSERT/DELETE).
+{exam}
+교수(9/29): [[chaining]] 은 "array of n buckets, each bucket stores an unsorted linked list" — insert 는 버킷에 넣기만 하면 되니 $O(1)$, search 는 버킷 찾기 $O(1)$ + 그 linked list 를 훑는 '''체인 길이'''. [[open addressing]] 은 충돌 시 다른 빈 버킷에 넣는 방식인데 "search 할 때 어디 있는지 알기 복잡하고 분석이 복잡하다 → '''We are not covered in this lecture''', 관심 있으면 '''CLRS 11.4'''(자습)". "'''We focus on the hash table with chaining.'''"
+목표는 한 문장: "design a hash function so that the '''items are evenly spread over the buckets'''." 전부 한 버킷에 몰리면 search 가 $O(1)$ 이 안 된다. 테이블을 임의로 크게 만들면 충돌을 없앨 수 있지만 메모리를 먹는다 — "'''always trade-offs'''". 그래서 '''테이블 크기는 n 으로 고정'''($n \ll M$)하고 생각한다.
+{/exam}
 
 == ⑤ 결정론적 해시 함수로는 안 된다 (p.30–32) ⭐⭐⭐ ==
 p.30 의 꿈: "No matter what input a bad guy chooses, the buckets will be balanced (O(1) entries per bucket)." — 그런 h 를 설계할 수 있나?
@@ -94,6 +108,9 @@ p.30 의 꿈: "No matter what input a bad guy chooses, the buckets will be balan
 {exam}
 해설본 ⭐⭐⭐: "'''You cannot escape the dark side with deterministic hash functions'''" (교수 입버릇, p.31). 비둘기집 원리로 "한 버킷 ≥ M/n > n → 적이 그중 n 개를 고름 → search O(n)" 을 '''서술할 수 있어야''' 한다 → [[결정론적 해시 함수의 한계]].
 {/exam}
+{exam}
+교수(9/29) ⭐⭐⭐ '''오늘의 key message''': "'''any deterministic or fixed hash function cannot achieve O(1) worst-case running time due to the pigeonhole principle.'''" 교수의 설명 순서 그대로: M 개 키를 n 개 버킷에 → 어떤 버킷에는 적어도 $M/n$ 개 → M 은 매우 크고 n 은 작으니 $M/n \gg n$ → "the '''bad guy''' chooses n items that hash to the same bucket" → $O(1)$ 불가. 이 한 문장과 네 단계 논증([[비둘기집 원리]])을 영어 키워드 그대로 쓸 수 있어야 한다.
+{/exam}
 
 == ⑥ 해결책: 랜덤성 — 해싱 게임 (p.33–43) ==
 [[img:L7-34.png|p.34 — The game: 1. adversary 가 n 개 아이템과 연산 순서 선택 → 2. 알고리즘이 random h 선택 → 3. HASH IT OUT|medium]]
@@ -101,6 +118,9 @@ p.30 의 꿈: "No matter what input a bad guy chooses, the buckets will be balan
 [[img:L7-35.png|p.35 — h is uniformly random: h(1), h(2), … 가 각각 독립적으로 1..n 균등|medium]]
 '''[[uniformly random hash function]]''': $h(1)$ 은 1..n 중 균등 무작위, $h(2)$ 도 균등이고 $h(1)$ 과 독립, … 모든 원소가 각자 주사위를 굴려 버킷을 정한다.
 p.37–39 목표: '''적이 고른 모든 $u_i$ 에 대해 $E[u_i \text{ 의 버킷 크기}] \le 2$''' ("2" 는 아무 상수로 바꿔도 됨). 그러면 $u_i$ 에 대한 각 연산의 기대 시간이 $O(1)$.
+{exam}
+교수(9/29): "What was the solution? '''The solution is randomness.'''" 적(bad guy)이 n 개 아이템을 고른 '''뒤''', 고정 함수 대신 '''무작위 해시 함수'''를 쓴다 — 각 아이템마다 1..n 주사위를 굴려 그 버킷에 넣는 것이 [[uniformly random hash function]]. 왜 통하나: "'''the bad guy cannot know the specific hash function''' to choose the worst-case input." (L6 의 [[adversary]] 구도와 같다.)
+{/exam}
 
 === p.41 — 기대 버킷 크기 계산 ⭐⭐⭐ ===
 [[img:L7-40.png|p.41 — E[# items in u_i's bucket] = Σ P{h(u_i)=h(u_j)} = 1 + Σ_{j≠i} 1/n = 1 + (n−1)/n ≤ 2|large]]
@@ -112,6 +132,9 @@ E[u_i 의 버킷 크기] = Σ_{j=1}^{n} P{ h(u_i) = h(u_j) }     ← [[지표 �
 </pre>
 {exam}
 해설본 ⭐⭐⭐ (L7 핵심 계산): $E = 1 + \sum_{j \ne i} P\{h(u_i)=h(u_j)\} = 1 + \frac{n-1}{n} \le 2$. 각 줄의 이유(선형성 / 자기 자신 1 / 충돌 확률 1/n / 합)를 한 줄씩 말할 수 있어야 한다 → [[기대 버킷 크기]]. L6 quicksort 증명([[X_{a,b}]] + 선형성)과 같은 기법.
+{/exam}
+{exam}
+교수(9/29) ⭐⭐⭐ 칠판 증명: 목표는 "모든 $i$ 에 대해 $E[\#\text{items in } u_i\text{'s bucket}] \le 2$ — 이것만 증명하면 $O(1)$ expected". 전개는 $E = \sum_{j=1}^{n} P(h(u_i)=h(u_j))$ 에서 '''$j = i$ 항은 확률 1''', 나머지 $n-1$ 개는 각각 $\frac1n$ → $1 + (n-1)\cdot\frac1n \le 2$. 핵심 부품 "두 아이템의 해시 값이 같을 확률 $= \frac1n$" 은 해시 값 $1..n$ 에 대해 따로 보였다($\sum_{k=1}^{n} \frac1n \cdot \frac1n = \frac1n$). "'''We can replace 2 with any constant'''" — 상수이기만 하면 된다. → [[기대 버킷 크기]]
 {/exam}
 [[sim:universal_hash_check]]
 결론(p.43): "For any sequence of INSERT/DELETE/SEARCH operations on any n elements of U, the expected runtime (over the random choice of h) is $O(1)$ per operation." → 해결책: '''uniformly random hash function 을 골라라.''' (참고: 키 n 개·버킷 n 개라 CLRS 의 [[load factor]] $\alpha = n/n = 1$.)
@@ -126,13 +149,22 @@ h: U → {1..n} 인 함수의 개수 = n^M                                ← M 
 </pre>
 해결책(p.52): 더 작은 함수 집합 — '''[[hash family]]''' $H$ 에서 고른다. 그러면 $\log|H|$ 비트만 필요.
 [[img:L7-50.png|p.52 — Solution: A cleverly chosen subset of functions = hash family (쥐 H), log|H| bits|medium]]
+{exam}
+교수(9/29): 분석은 끝났지만 "'''elephant in the room'''" — uniformly random h 를 '''어떻게 구현(저장)하나'''를 설명하지 않았다. 먼저 질문: 크기 s 인 집합 S 의 원소 하나를 이진수로 적으려면 몇 비트? → '''$\log s$''' ("원소가 8 개면 3 비트", [[log(s) 비트]]). $h: U \to \{1..n\}$ 은 각 키마다 n 가지 선택이 있으므로 함수가 '''$n^M$''' 개(칠판에서 a, b, c 세 원소 × 버킷 0/1 로 조합을 세어 봄) → 저장에 $\log(n^M) = M \log n$ 비트, 즉 '''아이템(키)마다 $\log n$ 비트''' — 너무 크다. 해결 아이디어: $n^M$ 보다 훨씬 작은 함수 집합에서 고르자 → [[hash family]].
+{/exam}
 
 == ⑧ 작기만 하면 안 된다 (p.54–57) ==
 p.55: $H$ = {가장 큰 자리 $h_0$, 일의 자리 $h_1$} — 1 비트면 저장 끝. 하지만 "This is still a terrible idea!"
 [[img:L7-55.png|p.57 — This adversary could have been more adversarial! {11, 101, 111, 121, 131, 141} 은 h0 이든 h1 이든 전부 버킷 1|medium]]
 p.56 의 적은 {19, 22, 42, 92, 0} 을 줬고 $h_1$ 을 뽑아 버킷 2 에 22, 42, 92 가 몰렸다. p.57: 적은 '''H 자체는 안다''' → {11, 101, 111, 121, 131, 141} 처럼 '''두 함수 모두에서''' 같은 버킷으로 가는 입력을 고르면 무엇을 뽑든 search $O(n)$.
+{exam}
+교수(9/29): "hash family is just a name of '''a set of hash functions'''." 극단 예 — {최하위 자리(least significant digit), 최상위 자리(most significant digit)} 두 함수만 두고 그중 하나를 무작위로 뽑으면 $n^M$ 개 대신 2 개, 저장은 $M \log n$ 비트 대신 '''1 비트'''. "That's the extreme case. But '''definitely this hash family cannot achieve O(1)'''" — 적이 이 family 에서 무엇이 뽑히든 몰리는 입력을 고른다. "'''The next story''' is how can we define the hash family so that it achieves the expected O(1) time → [[universal hash family]]." (9/29 수업은 여기서 종료)
+{/exam}
 
 == ⑨ Universal hash family (p.59–64) ⭐⭐⭐ ==
+{info}
+9/29 수업은 p.58 직전(hash family 도입)에서 끝났다. 이 절부터는 '''다음 수업 예정 범위'''라 녹음 강조가 아직 없다 — 해설본 ⭐ 기준.
+{/info}
 p.61: p.41 계산을 다시 보면 '''실제로 필요했던 건 단 하나''' — "All we needed was that this ≤ 1/n."
 {def}
 "H is a '''universal hash family''' if: When h is chosen uniformly at random from H, for all $u_i, u_j \in U$ with $u_i \ne u_j$, $P_{h \in H}\{h(u_i) = h(u_j)\} \le \frac{1}{n}$."
@@ -242,6 +274,11 @@ O(n) buckets
 # [[h_{a,b}]]: 소수 $p \ge M$, $h_{a,b}(x) = ((ax+b) \bmod p) \bmod n$, $a \in \{1..p-1\}$, $b \in \{0..p-1\}$. $|H| = p(p-1) = O(M^2)$ → $O(\log M)$ 비트. mod p 는 전단사, 충돌은 mod n 에서만. 예제 $h_{2,1}$ (p=5, n=3): f = [1,3,0,2,4], h = [1,0,0,2,1].
 # {최상위 자리, 일의 자리} 같은 작은 H 는 적이 H 를 알므로 universal 아님 (p.57: {11, 101, 111, 121, 131, 141}).
 # 해시 테이블 전체 공간: '''$O(n \log M)$ 비트'''.
+# (9/29 강조) dictionary operations 는 "very basic, should be very fast" — hash table 은 '''$O(1)$ expected''', worst-case $O(n)$ ("better worst-case 는 나중에 tree").
+# (9/29 강조) [[direct addressing]] = one-to-one mapping = [[counting sort]] 와 같은 발상·같은 문제(범위가 크면 메모리 폭발). 범위 묶기 = [[bucket sort]] 발상, 한 버킷에 몰리면 $O(n)$.
+# (9/29 강조) 강의는 '''chaining 만''' 다룬다. [[open addressing]] 은 CLRS 11.4 자습. 목표 = "items evenly spread over the buckets", 테이블 크기 n 고정.
+# (9/29 key message) "Any deterministic / fixed hash function cannot achieve $O(1)$ worst-case due to the '''pigeonhole principle'''." 해결 = randomness(적이 h 를 모름).
+# (9/29 강조) uniformly random h 저장 = "elephant in the room": 함수 $n^M$ 개 → $M \log n$ 비트(키당 $\log n$ 비트). $s$ 개 중 하나 = $\log s$ 비트. → 더 작은 [[hash family]] 가 필요, 그러나 {최하위, 최상위 자리} 처럼 작기만 하면 적에게 깨진다.
 
 == 관련 문서 ==
 * 이전 강의: [[L6 Randomized Algorithms I]] ([[두 시나리오]], [[adversary]], [[X_{a,b}]]) · [[L5 Linear-Time Sorting]] ([[counting sort]], [[bucket sort]])

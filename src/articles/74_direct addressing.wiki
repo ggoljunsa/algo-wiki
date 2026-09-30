@@ -32,6 +32,9 @@ p.18–20: 여러 값을 한 칸에 묶으면([[버킷]]) 공간은 줄지만 �
 {exam}
 L7 p.72 비교 기준: "Compare: direct addressing was '''M bits'''!" — uniformly random h 저장($M \log n$ 비트)은 이보다도 크고, $h_{a,b}$ ($O(\log M)$ 비트)는 훨씬 작다. 공간 비교표에서 direct addressing 을 기준선으로 쓸 수 있어야 한다.
 {/exam}
+{exam}
+교수(9/29): "direct addressing — we already know this concept. It's a '''one-to-one mapping'''." "Think about the [[counting sort]]" — 값을 배열 인덱스로 일대일 대응시킨 counting sort 와 '''같은 발상'''이고, 문제도 같다: 입력 공간이 크면(예: $10^6$ 이상) 실제로 넣을 원소가 몇 개뿐이어도 '''어떤 원소가 올지 모르니''' 전 범위만큼 메모리가 필요하다. 해결 첫 시도(범위 묶기)는 [[bucket sort]] 발상이지만 한 버킷에 몰리면 $O(n)$.
+{/exam}
 
 == 관련 문서 ==
 * [[counting sort]] · [[버킷]] · [[hash table]] · [[universe U]] · [[M과 n]] · [[해시 테이블 공간 복잡도]]
