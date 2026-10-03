@@ -41,5 +41,13 @@ Las Vegas = 정답 보장, 시간은 운. Monte Carlo = 시간 보장, 정답은
 원래 코드는 확인(count)을 통과한 것만 반환하므로 답은 항상 맞고 시간이 운 → '''Las Vegas'''. 10 번 제한 버전은 시간이 $O(10n)$ 으로 보장되지만 틀린 답을 낼 수 있음(확률 ≤ $(1/2)^{10}$) → '''Monte Carlo'''.
 {/answer}
 
+== HW2 3번 ==
+{quiz}
+HW2 3번: trustworthy toad 가 n/2 초과. Alg 1 = 확인될 때까지 무작위로 묻기, Alg 2 = 100 번만 묻고 실패하면 toad 0 반환, Alg 3 = 섞고($O(n)$) 앞에서부터 묻기. 각각 Las Vegas / Monte Carlo 는?
+{/quiz}
+{answer}
+Alg 1 '''Las Vegas'''(expected $\Theta(1)$, worst 무한, 확률 1) · Alg 2 '''Monte Carlo'''(expected·worst $\Theta(1)$, 확률 $\ge 1 - (1/2)^{100}$ — 확인 없이 toad 0 을 반환할 수 있음) · Alg 3 '''Las Vegas'''(expected·worst $\Theta(n)$, 확률 1). → [[HW2 복기]]
+{/answer}
+
 == 관련 문서 ==
 * [[randomized algorithm]] · [[Karger's algorithm]] · [[expected running time]] · [[L6 Randomized Algorithms I]]

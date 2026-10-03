@@ -56,6 +56,14 @@ L6 p.75 슬라이드 코드의 `if count > n/2+1` 은 정의(⌊n/2⌋+1 번 이
 {quiz}성공 확률이 $\frac13$ 인 시행을 성공할 때까지 반복하고, 한 번 시도에 $5n$ 의 비용이 든다. 기대 총비용은?{/quiz}
 {answer}기대 시도 $= 1/p = 3$. 기대 비용 $= 3 \cdot 5n = 15n = O(n)$ (한 번 비용 × 기대 시도 — [[기대값의 선형성]]).{/answer}
 
+== HW2 3번 ==
+{quiz}
+HW2 3번 Alg 1: 무작위 toad 가 trustworthy 일 확률 p > 1/2 일 때 확인될 때까지 묻는다. 기대 질문 수와 expected running time 은?
+{/quiz}
+{answer}
+시도 횟수 ~ 기하분포, $E = 1/p < 2$ → 질문당 $\Theta(1)$ 이므로 expected $\Theta(1)$. 그러나 $P(\text{k 번 연속 실패}) = (1-p)^k > 0$ 이라 worst-case 는 상한 없음. → [[HW2 복기]]
+{/answer}
+
 == 관련 문서 ==
 * [[등비급수]] · [[확률과 기댓값]] · [[expected running time]]
 * [[bogosort]] · [[랜덤 majority]] · [[majority element]] · [[Las Vegas와 Monte Carlo]]

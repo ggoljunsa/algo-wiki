@@ -125,7 +125,7 @@ category: 3강 D&C I, 용어
 `main`(대문) · `읽는 순서` · `시험 정보` · `자주 틀리는 함정 모음`
 
 ### 시험 (`시험`) [E0_–E3_]
-`HW1 복기` · `계산·증명 문제 모음` · `공식·점화식 모음` · `9/29 수업 전 1시간`(수업 직전 1시간 복습·예습 플랜, 답 포함; 파일 `E3_9_29 수업 전 1시간.wiki`)
+`HW1 복기` · `계산·증명 문제 모음` · `공식·점화식 모음` · `9/29 수업 전 1시간`(수업 직전 1시간 복습·예습 플랜, 답 포함; 파일 `E3_9_29 수업 전 1시간.wiki`) · `HW2 복기`(L5–L7 과제 5문제, 2번 발표 대본; 파일 `E5_HW2 복기.wiki`)
 
 ### 1강 L1 Algorithmic Analysis I (`1강 Analysis I`) [10_–]
 **메인**: `L1 Algorithmic Analysis I`
@@ -196,6 +196,7 @@ category: 3강 D&C I, 용어
 | majority_dc | 분할정복 majority: 반으로 재귀 → m1, m2 → m1 의 count 로 선택 (슬라이드 코드의 mid 인덱스 문제는 §1 대로 반으로 나누기로 수정). equals 호출 수 누적 (옵션 = n=8 [2,1,2,3,2,2,4,2] 전체 재귀 / 슬라이드 p.63 [0,1,2,3,4,5,2,2,2,2,2,2] 최상위 한 번만: m_left=5, m_right=2) | n=8: 왼쪽 [2,1,2,3] → 3, 오른쪽 [2,2,4,2] → 2, count(3)=1 ≤ 4 → **답 2**; equals 24 회 = n log₂n · 슬라이드: count(5)=1 ≤ 6 → m_right **2** (2 는 7 번 등장) | L6 p.55–66 (PNG 52–63) | `분할정복 majority`, `majority element`, `equals` |
 | hash_chaining | 버킷 배열 + 체인(연결 리스트). INSERT 는 체인 끝에 O(1)(꼬리 포인터; 슬라이드 그림 순서 13→43), SEARCH 는 체인 길이만큼 훑기 (옵션 = p.28 h=일의 자리, n=9, INSERT 13,22,43,9, SEARCH 43 / p.34 게임 순서 INSERT 13,22,43,92,7, SEARCH 43, DELETE 92, SEARCH 7, INSERT 92 / p.57 적의 입력 {11,101,111,121,131,141} with H={h0=최상위 자리, h1=일의 자리} / p.70 $h_{2,1}$, U={0..4}, n=3) | p.28: 버킷2 [22], 버킷3 [13→43], 버킷9 [9], SEARCH 43 은 2 칸 훑음 · p.57: h0 이든 h1 이든 6개 전부 버킷 1 → search O(n) · p.70: f = [1,3,0,2,4] (x=0..4), h = f mod 3 = [1,0,0,2,1] → x=1,2 충돌, x=0,4 충돌 | L7 p.26–28, 34, 55–57 (PNG 26–28, 34, 53–55), p.70 (PNG 66) | `chaining`, `hash table`, `hash function`, `hash collision`, `h_{a,b}`, `해싱 게임` |
 | universal_hash_check | ① 기대 버킷 크기 $1 + \sum_{j\ne i} P\{h(u_i)=h(u_j)\} = 1 + \frac{n-1}{n}$ 를 n 에 대해 계산 ② $h_{a,b}$ (p=5, n=3) 의 20 개 (a,b) 를 전부 나열해 각 쌍 x≠y 의 충돌 횟수 세기 (옵션 = 기대 버킷 크기 n=3 / n=10 / h_{a,b} 전수 조사) | n=3: 1 + 2/3 ≈ 1.67 ≤ 2 · n=10: 1.9 ≤ 2 · h_{a,b}: \|H\| = p(p−1) = 20, 모든 쌍 충돌 4/20 = 1/5 ≤ 1/n = 1/3 → universal | L7 p.41 (PNG 40), 59–72 (PNG 57–67) | `기대 버킷 크기`, `universal hash family`, `h_{a,b}`, `H의 크기`, `지표 확률변수`, `기대값의 선형성` |
+| close_pair_bucket | HW2 2번 "거리 T 이내 쌍": (c) 폭 T 버킷 index=⌊x/T⌋ 에 넣다 같은 버킷이면 즉시 True, 아니면 이웃 버킷 i,i+1 만 검사 / (b) mergesort + 인접 / (a) 모든 쌍. vars = x, i, B(비어 있지 않은 idx:값), checked_pairs, comparisons(연산 수), bound, result. svg 버킷(빈 구간 "…" 생략)·정렬 배열·쌍 격자 (옵션 mode = c/b/a × data = hw [10,5,15,25,20,26,5000,500] T=2 / nopair [3,30,11,50,22] T=3 / same [14,9,40,15,33] T=4) | hw: True (25,26), 버킷 12·13 · nopair: False · same: True (14,15), 버킷 3 에서 즉시. comparisons — c: 13 / 9 / 4 (삽입 + 인접 검사), b: 18 / 11 / 8 (mergesort 비교 + 인접), a: 20 / 10 / 3 (early return; 최악 C(n,2)) | HW2 2번 | `HW2 복기`, `bucket sort`, `비둘기집 원리` |
 
 (총 18 개. `test_sims.js` 는 모든 옵션 조합을 돌리므로 옵션 수를 3~8 개로 유지할 것.)
 
@@ -292,5 +293,6 @@ python3 build.py                        # index.html 재생성 + 문서에서 �
 | majority_random_pick | 절반 넘게 초록(majority)인 배열에서 무작위 화살이 떨어짐: 빨강(실패) → 다시, 초록(성공) → count 로 확인 → 반환. 옆에 1/2 + 1/4 + … = 2 누적 막대 | `랜덤 majority`, `majority element`, `기하분포`, `등비급수` |
 | hash_pigeonhole | 거대한 universe U(M 개 점)를 n 개 버킷으로 보냄 → 어떤 버킷은 ≥ M/n 개 → 적이 그 버킷에서 n 개를 골라 입력 → 한 체인에 n 개가 매달려 search O(n) | `결정론적 해시 함수의 한계`, `비둘기집 원리`, `해싱 게임` |
 | universal_hash_pick | 작은 H(쥐)에서 주사위로 a=2, b=1 을 뽑아 $h_{2,1}$ 생성 → U={0..4} 가 mod 5 원(충돌 없음, 전단사) → mod 3 버킷(여기서만 충돌) → 요점 "충돌 확률 ≤ 1/n, 저장 O(log M) 비트" | `universal hash family`, `h_{a,b}`, `hash family`, `소수 p`, `L7 Randomized Algorithms II` |
+| close_pair_buckets | HW2 2번 (c), 12초: 수직선 위 A=[10,5,15,25,20,26,5000,500](500·5000 은 ≈ 뒤 압축), T=2 → 폭 T 격자(index 0–13, 250, 2500)로 점이 떨어짐 → 같은 버킷 개수 모두 1 (비둘기집: 같은 칸이면 거리 ≤ T−1) → 주황 괄호가 이웃 버킷 쌍 2,5,7,10,12 를 훑다 12·13 에서 25·26 빨강, "26 − 25 = 1 ≤ 2 → True" → O(n). (id 를 쓰는 요소 없음; 추가 시 접두어 `cpb_`) | `HW2 복기`, `bucket sort`, `비둘기집 원리` |
 
-(총 20 개.)
+(총 21 개.)

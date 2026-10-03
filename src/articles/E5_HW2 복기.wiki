@@ -1,0 +1,354 @@
+key: HW2 복기
+title: HW2 복기 — L5–L7 5문제 100점 (2번 발표 대본 포함)
+category: 시험
+---
+HW2 는 '''L5 Linear-Time Sorting · L6 Randomized Algorithms I · L7 Randomized Algorithms II 의 도구를 한 번씩 써 보게 만든 과제'''다(개인 과제, 마감 '''10/6(화) 23:59''', 100 점 = 5 문제 × 20 점). HW1 이 L1–L4 의 증명·점화식이었다면 HW2 는 '''"비교 없이 정렬하기 · 주사위 넣기 · 해시"''' 세 묶음이다. 그리고 '''이번에는 내가 2번 문제 발표 담당'''이다 — 그래서 2번 절은 발표 흐름 순서(문제 → (a) → (b) → (c) → 예제 → 비교표 → 예상 질문)로 길게 썼다.
+
+각 문제는 "문제 요지 → 관련 개념 → 원문 요지(❓) → 풀이(접힘) → 여기서 배울 것" 순서다. 먼저 스스로 풀고 펼칠 것. 모든 답은 Python 으로 한 번 더 검산했다(검산 결과는 각 풀이 안에).
+
+{|
+! 번 || 배점 || 도구 || 강의 || 관련 시뮬레이터 / 그림
+|-
+| 1 || 20 || [[radix sort]] 손 실행, [[stable sort]], [[Θ(d(n+k))]] || L5 p.35–51 || `radix_sort`, `bucket_sort`
+|-
+| 2 || 20 || brute force / [[mergesort]] + 인접 검사 / [[bucket sort]] 변형 + [[비둘기집 원리]] || L3, L5 p.35–45 || `close_pair_bucket`, `close_pair_buckets`
+|-
+| 3 || 20 || [[Las Vegas와 Monte Carlo]], [[expected running time]], [[randomized worst-case]], [[기하분포]] || L6 p.4–5, p.80 || `geometric_expectation`
+|-
+| 4 || 20 || 정렬로 같은 기울기 묶기 / 랜덤 두 점 [[randomized algorithm]] || L3, L6 || —
+|-
+| 5 || 20 || [[universal hash family]] 판정, [[modular arithmetic]], [[hash collision]], [[h_{a,b}]] 와 비교 || L7 p.62–73 || `universal_hash_check`
+|}
+
+{analogy}
+🎭 '''놀이공원 자유이용권 다섯 장.''' HW2 는 L5–L7 놀이기구 다섯 개를 한 번씩 타게 한다. 1번은 '''컨베이어 벨트'''(자릿수마다 같은 벨트를 d 번 통과), 2번은 '''사물함'''(번호대로 넣으면 이웃 사물함만 보면 된다), 3번은 '''두더지 잡기'''(언제 맞힐지는 운, 맞힌 건 확실), 4번은 '''다트'''(두 발이 같은 과녁에 꽂힐 때까지), 5번은 '''돌림판'''(b 를 아무리 돌려도 7 칸씩 건너뛰는 틀은 안 바뀐다). 각 기구에서 떨어지는 지점에 깃발을 꽂아 둔다.
+{/analogy}
+
+== 문제 1 (20점) — radix sort 손 실행 ==
+네 글자 단어 [care, race, acre, bear] 를 radix sort(서브루틴 = stable bucket sort)로 a–z 오름차순 정렬. '''[[least-significant digit|가장 오른쪽 글자]]부터''' 한 글자씩 키로 삼는 것이 핵심이다.
+관련 개념: [[radix sort]] · [[stable sort]] · [[bucket sort]] · [[least-significant digit]] · [[Θ(d(n+k))]] · [[Θ(n+k)]]
+{quiz}
+(a) [care, race, acre, bear] 에 radix sort 를 적용할 때 1·2·3·4 번째 bucket sort 호출 직후 리스트 순서를 각각 쓰시오.
+(b) n 개 단어, 각 d 글자(소문자), bucket 수 k. (1) bucket sort 한 번의 시간 (2) radix sort 전체 시간 (3) 알파벳이 26 글자뿐이면 Big-O 로 단순화.
+{/quiz}
+{answer}
+<pre class="txt">
+'''(a)'''  키 = 4번째 → 3번째 → 2번째 → 1번째 글자,  같은 키는 '''이전 순서 유지(stable)'''
+ 1차 (4번째 글자: e, e, e, r)   → [care, race, acre, bear]     e 세 개가 원래 순서 그대로, r 은 맨 뒤
+ 2차 (3번째 글자: r, c, r, a)   → [bear, race, care, acre]     a < c < r,  r 끼리는 care → acre 순서 유지
+ 3차 (2번째 글자: e, a, a, c)   → [race, care, acre, bear]     a(race, care 순 유지) < c < e
+ 4차 (1번째 글자: r, c, a, b)   → [acre, bear, care, race]     최종 결과
+'''(b)'''
+ (1) 한 번의 bucket sort: 원소 n 개 분배 Θ(n) + 버킷 k 개 만들기·이어붙이기 Θ(k) → Θ(n + k)
+ (2) 글자 수 d 만큼 반복 → Θ(d(n + k))
+ (3) k = 26 은 상수 → Θ(d(n + 26)) = O(dn);  d 도 상수(예: 네 글자)면 O(n)
+</pre>
+'''검산'''(Python `sorted` 는 stable, 키를 4→1 번째 글자로 4 번): `['care','race','acre','bear']` → `['bear','race','care','acre']` → `['race','care','acre','bear']` → `['acre','bear','care','race']` ✓
+{/answer}
+{tip}여기서 배울 것: 2차에서 care 와 acre 는 3번째 글자가 둘 다 r 이다. 이때 '''1차 결과의 순서(care 가 acre 앞)를 그대로 지키는 것'''이 stable 의 의미이고, radix sort 정확성 증명(L5 p.59 "Since bucket_sort is stable …")의 핵심 줄이다. 오답 패턴: 첫 글자부터 정렬(MSD)하거나, 같은 키끼리 순서를 임의로 바꿈. (b)(3)에서 "O(26dn)" 처럼 상수를 남기지 말 것.{/tip}
+
+== 문제 2 — 거리 T 이내 쌍 찾기 (발표) ==
+'''내가 발표하는 문제.''' 아래 소절 ①~⑦ 이 그대로 발표 순서다. 슬라이드 한 장 = 소절 하나로 잡으면 7 장.
+
+=== ① 문제 정의와 예제 ===
+정렬되지 않은 배열 A, 원소는 1 이상 M 이하 정수, '''M 은 고정된 큰 양의 정수''', '''모든 원소 distinct'''. 거리가 T 이하인 쌍 $\{A[i], A[j]\}$ ($\lvert A[i] - A[j] \rvert \le T$) 가 하나라도 있으면 True.
+예제: A = [10, 5, 15, 25, 20, 26, 5000, 500], T = 2 → 25 와 26 의 거리 1 ≤ 2 → '''True'''.
+관련 개념: [[mergesort]] · [[bucket sort]] · [[get_bucket]] · [[비둘기집 원리]] · [[floor와 ceil]] · [[distinct 가정]] · [[Big-O]]
+{quiz}
+(a) $O(n^2)$, (b) $O(n \log n)$, (c) $O(n)$ 시간에 푸는 의사코드를 각각 쓰시오. (c) 의 힌트: bucket sort 를 변형하라.
+{/quiz}
+{analogy}
+🎭 '''사물함 배정.''' 학생(숫자) n 명에게 번호대로 폭 T 짜리 사물함을 준다(0~1 번은 0 번 칸, 2~3 번은 1 번 칸 …). 두 학생이 '''같은 칸'''에 배정되면 번호 차가 T 보다 작으니 바로 "가까운 쌍 있음". 아무도 같은 칸이 아니라면 각 칸에 한 명씩뿐이고, 가까운 쌍이 있다면 '''바로 옆 칸 사람'''뿐이다 — 두 칸 건너 사람은 이미 T 보다 멀다. 그러니 복도를 한 번 걸으며 옆 칸끼리만 확인하면 끝.
+{/analogy}
+
+=== ② (a) Brute force — O(n²) ===
+모든 쌍을 검사한다. 정의 그대로라 정확성은 자명하다.
+<pre class="c">
+def close_pair_brute(A, T):
+  n = len(A)
+  for i in range(n):
+    for j in range(i+1, n):          # 모든 쌍 (i, j), i < j
+      if abs(A[i] - A[j]) <= T:
+        return True
+  return False
+</pre>
+* 시간: 쌍의 수 $\binom{n}{2} = \frac{n(n-1)}{2}$, 쌍마다 $O(1)$ → $O(n^2)$.
+* 예제: 28 쌍 중 (25, 26) 에서 True.
+
+=== ③ (b) 정렬 + 인접 검사 — O(n log n) ===
+<pre class="c">
+def close_pair_sorted(A, T):
+  B = mergesort(A)                   # O(n log n)
+  for i in range(len(B) - 1):        # 인접한 쌍만, O(n)
+    if B[i+1] - B[i] <= T:
+      return True
+  return False
+</pre>
+'''왜 인접만 보면 되나 (한 줄 증명):''' 정렬된 B 에서 $i < j$ 이면 $B[j] - B[i] = \sum_{t=i}^{j-1} (B[t+1] - B[t]) \ge B[i+1] - B[i]$ — 모든 차가 양수(distinct)이므로 '''가장 가까운 쌍은 반드시 정렬 후 이웃'''이다. 따라서 이웃 쌍 중 T 이하가 없으면 어떤 쌍도 T 이하가 아니다.
+* 시간: [[mergesort]] $O(n \log n)$ + 스캔 $O(n)$ = $O(n \log n)$. ([[comparison-based sorting]] 이라 정렬 단계에서 $\Omega(n\log n)$ 하한에 걸린다 → (c) 에서 비교를 버린다.)
+* 예제: B = [5, 10, 15, 20, 25, 26, 500, 5000], 인접 차 5, 5, 5, 5, '''1''', 474, 4500 → True.
+
+=== ④ (c) 버킷 아이디어 — O(n) ===
+[[anim:close_pair_buckets|폭 T 버킷에 원소를 하나씩 떨어뜨린다 — 같은 버킷에 두 개가 들어가는 순간 True, 아니면 이웃 버킷끼리만 차를 잰다]]
+L5 의 [[bucket sort]] 에서 '''정렬은 버리고 분배만''' 쓴다. 폭이 T 인 버킷을 만들고 원소 x 를 버킷 $\lfloor x / T \rfloor$ 에 넣는다([[get_bucket]] 과 같은 방식). 값이 1..M 이므로 버킷 번호는 0..$\lfloor M/T \rfloor$, 버킷 수는 $\lfloor M/T \rfloor + 1 \le \lceil M/T \rceil + 1$.
+* '''관찰 1 (같은 버킷 → True)''': $\lfloor x/T \rfloor = \lfloor y/T \rfloor = i$ 면 $iT \le x, y \le iT + T - 1$ → $\lvert x - y \rvert \le T - 1 \le T$. 버킷 하나에 두 번째 원소가 들어오는 순간 바로 True 를 반환할 수 있다([[비둘기집 원리]]: 폭 T 칸에 두 마리가 들어가면 둘은 가깝다).
+* '''관찰 2 (그렇지 않으면 버킷당 ≤ 1 개)''': 반환하지 않았다면 모든 버킷에 원소가 0 개 또는 1 개. 그래서 버킷 안을 '''정렬할 필요가 없다'''(bucket sort 의 병목이 사라짐).
+* '''관찰 3 (이웃 버킷만 보면 충분)''': x 가 버킷 i, y 가 버킷 $i + 2$ 이상이면 $y \ge (i+2)T$, $x \le iT + T - 1$ → $y - x \ge T + 1 > T$. 그러므로 거리 T 이하 쌍은 '''같은 버킷이거나 이웃 버킷(i, i+1)'''에만 있을 수 있다.
+<pre class="c">
+def close_pair_bucket(A, T, M):
+  # A: distinct integers in [1, M],  T >= 1
+  num_buckets = M // T + 1           # 버킷 번호 0 .. M//T
+  buckets = [None] * num_buckets     # 각 버킷에 원소 최대 1개만 저장
+  for x in A:                        # 분배: O(n)
+    i = x // T                       # get_bucket: 폭 T
+    if buckets[i] is not None:
+      return True                    # 같은 버킷 -> 거리 <= T-1
+    buckets[i] = x
+  for i in range(num_buckets - 1):   # 이웃 버킷 검사: O(M/T)
+    if buckets[i] is not None and buckets[i+1] is not None:
+      if buckets[i+1] - buckets[i] <= T:
+        return True
+  return False
+</pre>
+{|
+! 변수 || 뜻 || 예제(T = 2, M = 5000)에서의 값
+|-
+| `T` || 거리 한계 = 버킷 폭 || 2
+|-
+| `M` || 값의 상한(고정 상수) || 5000 (예제 최댓값으로 둠)
+|-
+| `num_buckets` || 버킷 수 $\lfloor M/T \rfloor + 1$ || 2501
+|-
+| `i` || 원소 x 의 버킷 번호 $\lfloor x/T \rfloor$ || 25 → 12, 26 → 13
+|-
+| `buckets[i]` || 버킷 i 의 유일한 원소(없으면 None) || buckets[12] = 25
+|}
+'''정확성 (두 방향)'''
+<pre class="txt">
+'''True 를 반환하면 정말 가까운 쌍이 있다'''
+  - 분배 중 반환: 같은 버킷 → 관찰 1 → 거리 ≤ T-1 ≤ T
+  - 이웃 검사 중 반환: buckets[i+1] - buckets[i] ≤ T 를 직접 확인했음
+'''가까운 쌍 (x, y), x < y, y - x ≤ T 가 있으면 반드시 True 를 반환한다'''
+  - 같은 버킷이면 분배 단계에서 True
+  - 다른 버킷이면 관찰 3 에 의해 버킷 번호 차는 정확히 1 → 이웃 검사에서 그 쌍을 봄 → True
+  (분배에서 반환하지 않았으므로 각 버킷 원소는 1개 → buckets[i], buckets[i+1] 가 바로 x, y)
+</pre>
+'''복잡도''': 분배 $O(n)$ + 버킷 배열 초기화·이웃 검사 $O(M/T)$ → $O(n + M/T)$. 문제에서 '''M 은 고정 상수'''이고 $T \ge 1$ 이므로 $M/T \le M = O(1)$ → 전체 $O(n)$. (이것이 [[bucket sort]] 의 $\Theta(n + k)$ 에서 k 가 상수일 때 선형이 되는 것과 같은 논리 — [[Θ(n+k)]].)
+{exam}
+발표의 핵심 문장 세 개: ① "'''폭 T 버킷에 두 개가 들어가면 그 둘은 이미 T 이내'''(pigeonhole) — 그래서 버킷 안 정렬이 필요 없다." ② "'''두 칸 떨어진 버킷끼리는 최소 T+1 차이''' — 그래서 이웃 버킷만 본다." ③ "비교 정렬의 $\Omega(n\log n)$ 하한을 피하는 방법은 L5 와 같다 — '''값을 인덱스로 쓴다'''."
+{/exam}
+
+=== ⑤ 예제 추적 ===
+[[sim:close_pair_bucket]]
+A = [10, 5, 15, 25, 20, 26, 5000, 500], T = 2 → 버킷 번호 $\lfloor x/2 \rfloor$:
+{|
+! 순서 || x || 버킷 $\lfloor x/2 \rfloor$ || 버킷 상태 || 결과
+|-
+| 1 || 10 || 5 || 5:{10} || 비어 있음 → 넣기
+|-
+| 2 || 5 || 2 || 2:{5} || 넣기
+|-
+| 3 || 15 || 7 || 7:{15} || 넣기
+|-
+| 4 || 25 || 12 || 12:{25} || 넣기
+|-
+| 5 || 20 || 10 || 10:{20} || 넣기
+|-
+| 6 || 26 || 13 || 13:{26} || 넣기
+|-
+| 7 || 5000 || 2500 || 2500:{5000} || 넣기
+|-
+| 8 || 500 || 250 || 250:{500} || 넣기
+|}
+<pre class="txt">
+분배 결과: 같은 버킷 없음 (5, 2, 7, 12, 10, 13, 2500, 250 모두 다름)
+비어 있지 않은 버킷 (번호순): 2:5  5:10  7:15  10:20  '''12:25  13:26'''  250:500  2500:5000
+이웃 버킷 쌍 (i, i+1) 이 둘 다 찬 곳: (12, 13) 뿐 → 26 - 25 = 1 ≤ 2 → '''True'''
+</pre>
+'''검산''' (Python): 버킷 번호 `[5, 2, 7, 12, 10, 13, 2500, 250]`, brute / 정렬 / 버킷 세 함수 모두 True. 무작위 입력 20,000 개(M ≤ 200, n ≤ 15, T ≤ 40)에서 세 함수의 답이 '''한 번도 어긋나지 않음'''(mismatch 0).
+
+=== ⑥ 세 알고리즘 비교 ===
+{|
+! || (a) brute force || (b) 정렬 + 인접 || (c) 폭 T 버킷
+|-
+| 아이디어 || 모든 쌍 || 최소 거리 쌍은 정렬 후 이웃 || 같은 버킷 → True, 아니면 이웃 버킷만
+|-
+| 시간 || $O(n^2)$ || $O(n \log n)$ || $O(n + M/T) = O(n)$
+|-
+| 추가 공간 || $O(1)$ || $O(n)$ (mergesort) || $O(M/T)$ 버킷 배열
+|-
+| 비교 기반? || 예 || 예 (하한 $\Omega(n\log n)$) || 아니오 (값을 인덱스로)
+|-
+| 전제 || 없음 || 없음 || 값이 정수, 범위 M 고정
+|-
+| 강의 연결 || — || L3 [[mergesort]] || L5 [[bucket sort]] · L7 [[비둘기집 원리]]
+|}
+
+=== ⑦ 예상 질문 5개와 답 ===
+{quiz}
+Q1. M 이 매우 크면(예: $10^9$) 버킷 배열 초기화가 $O(M/T)$ 로 비싸지 않나?
+Q2. T = 0 이면?
+Q3. 원소가 중복될 수 있으면?
+Q4. 버킷 폭을 T 가 아니라 T+1 로 하면?
+Q5. "거리 < T" 와 "거리 ≤ T" 는 무엇이 달라지나?
+{/quiz}
+{answer}
+* '''A1.''' 문제에서 M 은 '''고정 상수'''라 $O(M/T) = O(1)$ 이다. 실전에서 M 이 n 에 비해 크면 ① 한 번 훑어 min, max 를 구해 범위를 $\max - \min$ 으로 줄이거나(버킷 번호 $\lfloor (x - \min)/T \rfloor$), ② 배열 대신 [[hash table]] 에 버킷 번호 → 원소를 저장하면 비어 있는 버킷을 만들지 않으므로 기대 $O(n)$ (L7 의 [[universal hash family]] 로 기대 $O(1)$ 연산). 이웃 검사는 각 원소 x 에 대해 버킷 $i-1$, $i+1$ 만 조회.
+* '''A2.''' 원소가 distinct 이므로 거리 0 인 쌍은 없다 → 바로 False. 코드에서도 `x // 0` 을 피하려면 `if T == 0: return False` 를 맨 앞에 둔다(문제의 T 는 양수로 보는 것이 자연스러움).
+* '''A3.''' 같은 값 두 개는 같은 버킷 → 거리 0 ≤ T → True. 알고리즘은 그대로 맞다(distinct 가정은 (b) 의 "차가 양수" 와 버킷당 1 개 저장을 깔끔하게 해 줄 뿐, 결과에는 영향 없음).
+* '''A4.''' 폭 T+1 도 된다: 같은 버킷이면 차 ≤ T 라 여전히 True, 버킷 i 와 i+2 는 차 ≥ T+2 라 여전히 이웃만 보면 된다. 버킷 수가 약간 줄 뿐 복잡도 동일. 반대로 '''폭 > T+1''' 이면 같은 버킷 안에 거리 T+1 쌍이 들어갈 수 있어 "같은 버킷 → True" 가 깨진다. 폭 T 는 가장 직관적인 안전한 선택.
+* '''A5.''' "< T" 로 바꾸면 이웃 검사의 비교만 `< T` 로 바꾸면 된다. 같은 버킷 쌍은 차 ≤ T−1 < T 이므로 관찰 1 은 그대로 성립. 문제 원문은 "less than or equal to T" 이므로 `<=`.
+{/answer}
+{tip}여기서 배울 것: 같은 문제를 세 번 푸는 구성 자체가 L3→L5 의 흐름이다 — '''모든 쌍 → 비교 정렬(하한 n log n) → 값을 인덱스로 쓰는 버킷(선형)'''. bucket sort 를 "정렬" 이 아니라 '''"값이 가까운 것끼리 모으는 도구"''' 로 쓴다는 발상이 핵심.{/tip}
+
+== 문제 3 (20점) — toad 세 알고리즘: Las Vegas 인가 Monte Carlo 인가 ==
+n 마리 toad 중 trustworthy 가 '''엄격히 n/2 초과'''. expert 는 한 마리를 $\Theta(1)$ 에 판정한다. 세 알고리즘(아래)이 trustworthy toad 하나를 찾으려 한다.
+관련 개념: [[Las Vegas와 Monte Carlo]] · [[expected running time]] · [[randomized worst-case]] · [[기하분포]] · [[randomized algorithm]] · [[랜덤 majority]]
+<pre class="c">
+# Algorithm 1
+while True:
+  i = random index in {0, ..., n-1}
+  if expert says toad i is trustworthy:    # Θ(1)
+    return toad i
+
+# Algorithm 2
+for 100 iterations:
+  i = random index in {0, ..., n-1}
+  if expert says toad i is trustworthy:
+    return toad i
+return toad 0
+
+# Algorithm 3
+put the toads in a random order           # O(n)
+for i = 0, ..., n-1:
+  if expert says toad i is trustworthy:
+    return toad i
+</pre>
+{quiz}
+각 알고리즘에 대해 Monte Carlo / Las Vegas, expected running time, worst-case running time, truthful toad 를 반환할 확률(가장 tight 한 bound)을 표로 채우고 짧게 근거를 쓰시오.
+{/quiz}
+{analogy}
+🎭 '''두더지 잡기.''' 구멍의 절반 넘게에서 진짜 두더지가 올라온다. Alg 1 은 "잡을 때까지 망치질" — 언젠가 반드시 잡지만 몇 번 칠지는 운(Las Vegas). Alg 2 는 "100 번만 치고 못 잡으면 아무 구멍이나 가리킴" — 시간은 정해졌지만 틀릴 수 있다(Monte Carlo). Alg 3 은 "구멍 순서를 섞어 놓고 차례로 확인" — 섞는 데 n 만큼 드니 기대값도 n.
+{/analogy}
+{answer}
+{|
+! Algorithm || MC / LV || Expected || Worst-case || P(truthful 반환)
+|-
+| 1 || '''Las Vegas''' || $\Theta(1)$ || $\infty$ (무한) || 1
+|-
+| 2 || '''Monte Carlo''' || $\Theta(1)$ || $\Theta(1)$ (100 회) || $\ge 1 - (1/2)^{100}$
+|-
+| 3 || '''Las Vegas''' || $\Theta(n)$ || $\Theta(n)$ || 1
+|}
+<pre class="txt">
+전제: trustworthy > n/2 → 무작위 한 마리가 trustworthy 일 확률 p > 1/2  (매 시도 독립)
+'''Alg 1''' 성공 확률 p 인 시도를 성공할 때까지 → 시도 횟수 ~ 기하분포
+        E[시도] = 1/p < 2,  시도당 Θ(1) → 기대 Θ(1)
+        운이 계속 나쁘면 끝없이 반복 가능 → worst-case 무한 (P(k 번 실패) = (1-p)^k > 0)
+        expert 가 확인한 toad 만 반환 → 항상 정답 → Las Vegas, 확률 1
+'''Alg 2''' 반복 ≤ 100 → 기대·최악 모두 Θ(1)
+        100 번 모두 실패할 확률 (1-p)^100 < (1/2)^100 ≈ 7.9 × 10^-31
+        실패하면 확인 안 된 toad 0 반환 → 틀릴 수 있음 → Monte Carlo
+        P(truthful) ≥ 1 - (1/2)^100  (toad 0 이 우연히 trustworthy 일 수도 있어 '''하한''')
+'''Alg 3''' 섞기 O(n) 는 항상 수행 → 기대값도 Ω(n),  스캔의 기대 길이 < 2 (앞에서부터 확인, 절반 넘게 정답)
+        worst: 섞인 순서에서 tricky 가 전부(< n/2 마리) 앞에 와도 n 번 안에 반드시 찾음 → Θ(n)
+        trustworthy 가 최소 1 마리 → 반드시 반환, 확인된 것만 반환 → Las Vegas, 확률 1
+</pre>
+{/answer}
+{tip}여기서 배울 것: 판정 기준은 '''"틀린 답을 낼 수 있는가?"''' 하나 — 확인을 통과한 것만 반환하면 Las Vegas, 시간 제한 후 확인 없이 반환하면 Monte Carlo(L6 p.4, 9/17 "you should distinguish"). Alg 3 의 함정: 스캔은 기대 상수 번이지만 '''셔플 $O(n)$ 이 기대값까지 지배'''한다. Alg 1 의 worst-case 를 "Θ(n)" 으로 쓰면 오답 — 같은 toad 를 다시 뽑을 수 있으므로 상한이 없다.{/tip}
+
+== 문제 4 (20점) — 최대 collinear 집합 ==
+x 좌표·y 좌표가 모두 서로 다른 n 개 점. 같은 직선 위에 있는 점들의 최대 부분집합을 찾는다(해싱 금지, 두 점 → 직선 m, b 는 $O(1)$, 기울기·절편 비교 $O(1)$).
+관련 개념: [[randomized algorithm]] · [[expected running time]] · [[Las Vegas와 Monte Carlo]] · [[기하분포]] · [[mergesort]] · [[randomized worst-case]]
+{quiz}
+(a) $O(n^2 \log n)$ 알고리즘을 설계하시오.
+(b) 최대 collinear 집합의 크기가 정확히 n/k (k 는 상수)라는 것을 안다. expected $O(n)$ (= $O(k^2 n)$) randomized 알고리즘을 설계하고, 정확성·기대 시간을 정당화하고, worst-case 시간을 정의·설명하시오.
+{/quiz}
+{analogy}
+🎭 '''다트 두 발.''' 과녁판의 1/k 이 "정답 직선" 구역이다. 다트를 두 발 던져 '''둘 다''' 그 구역에 꽂힐 확률은 약 $1/k^2$. 꽂혔는지는 줄자로 한 번 재 보면(O(n) 세기) 확실히 안다. 그러니 평균 $k^2$ 번 던지면 되고, k 가 상수면 상수 번 — 다만 운이 끝없이 나쁘면 영원히 던질 수도 있다.
+{/analogy}
+{answer}
+'''(a) 각 점을 기준으로 기울기 정렬 — $O(n^2 \log n)$'''
+<pre class="c">
+def max_collinear(P):                # P: n points, x 좌표 모두 다름
+  best = [P[0]]
+  for i in range(n):
+    S = [(slope(P[i], P[j]), P[j]) for j in range(n) if j != i]   # O(n)
+    S = mergesort(S, key=slope)                                    # O(n log n)
+    # 같은 기울기가 연속된 가장 긴 run 찾기                          # O(n)
+    run = longest_equal_slope_run(S)
+    if len(run) + 1 > len(best):
+      best = [P[i]] + [q for (m, q) in run]
+  return best
+</pre>
+* 정확성: 점 $P_i$ 를 지나는 직선은 기울기 하나로 결정된다(같은 점을 지나고 기울기가 같으면 같은 직선). 정렬하면 같은 기울기가 연속하므로 최장 run + 1 = "$P_i$ 를 지나는 최대 collinear 집합". 최대 집합은 어떤 점이든 반드시 포함하므로 모든 i 중 최대가 답.
+* x 가 모두 달라 기울기가 항상 정의된다(수직선 없음). 해싱 없이 '''정렬로 같은 값 묶기'''.
+* 시간: $n \times O(n \log n) = O(n^2 \log n)$.
+
+'''(b) 랜덤 두 점 — expected $O(k^2 n) = O(n)$, Las Vegas'''
+<pre class="c">
+def random_collinear(P, k):
+  while True:
+    pick two distinct points p, q uniformly at random
+    m, b = line(p, q)                                  # O(1)
+    S = [r for r in P if r.y == m * r.x + b]           # O(n) 세기
+    if len(S) == n / k:                                # 최대 크기를 알고 있음
+      return S
+</pre>
+<pre class="txt">
+정확성: |S| = n/k 일 때만 반환, n/k 가 최대 크기 → 반환한 S 는 항상 최대 집합  (틀린 답 없음 → Las Vegas)
+성공 확률: 최대 집합 S* (크기 n/k) 에서 두 점을 모두 뽑으면 그 직선 = S* 의 직선
+   q = (n/k)(n/k - 1) / (n(n - 1)) ≈ 1/k^2
+   n ≥ 2k-1 이면 (n/k - 1)/(n - 1) ≥ 1/(2k) → q ≥ 1/(2k^2)
+기대 시도 수 = 1/q ≤ 2k^2  (기하분포),  시도당 O(n)
+→ 기대 시간 O(k^2 n) = O(n)   (k 는 상수)
+worst-case: 매번 S* 밖의 쌍을 뽑을 수 있음 (확률 (1-q)^t > 0) → 상한 없음 = 무한
+</pre>
+'''검산''' (Python, n = 60): $k = 2$ 에서 q = 0.2458 (1/k² = 0.25), $k = 3$ 에서 0.1073 (0.1111), $k = 4$ 에서 0.0593 (0.0625) — $\approx 1/k^2$ 확인.
+{/answer}
+{tip}여기서 배울 것: (b) 는 L6 [[랜덤 majority]] 와 '''같은 틀'''이다 — "무작위로 후보를 뽑고 O(n) 으로 확인, 통과하면 반환". 성공 확률이 상수($1/k^2$)면 기대 시도 수가 상수(기하분포 $1/p$), 그래서 기대 O(n). "worst-case 를 정의하라" 는 '''randomized worst-case''' — 입력이 아니라 난수가 최악일 때(L6 [[두 종류의 worst-case]]).{/tip}
+
+== 문제 5 (20점) — h_b(x) = (85x + b) mod 13 은 universal 인가 ==
+$h_b(x) = (85x + b) \bmod 13$, $b \in [0, 12]$, 키 universe $U = \{0, 1, \ldots, 29\}$. 버킷은 13 개이므로 universal 이려면 서로 다른 모든 $x \ne y$ 에 대해 $P_b[h_b(x) = h_b(y)] \le 1/13$ 이어야 한다.
+관련 개념: [[universal hash family]] · [[h_{a,b}]] · [[modular arithmetic]] · [[hash collision]] · [[hash family]] · [[소수 p]] · [[결정론적 해시 함수의 한계]]
+{quiz}
+(a) 이 hash family 는 universal 인가? Yes/No 와 근거.
+(b) $x < y$ 인 쌍 중 최대 충돌 확률을 달성하는 쌍은 몇 개인가? 최대 충돌 확률은?
+(c) b 를 [0,12] 에서 균등 무작위로 고를 때, 고정된 $x \ne y$ 에 대해 b 의 무작위성이 $P_b[h_b(x) = h_b(y)]$ 를 줄여 주는가? 수학적으로 설명.
+{/quiz}
+{analogy}
+🎭 '''돌림판의 시작 칸만 돌리기.''' 13 칸 돌림판에서 키 x 는 "7x 칸 + b 칸" 위치에 떨어진다. b 를 무작위로 돌리면 '''모든 키가 똑같이 b 칸씩 밀릴 뿐''' 두 키 사이 간격 $7(x-y)$ 는 그대로다. 처음부터 같은 칸이던 두 키(13 차이 나는 키)는 b 를 몇 번 돌려도 같은 칸 — 섞이는 건 위치이지 '''간격'''이 아니다.
+{/analogy}
+{answer}
+<pre class="txt">
+85 = 6·13 + 7  → 85 mod 13 = 7  → h_b(x) = (7x + b) mod 13
+충돌 조건:  h_b(x) = h_b(y)
+  ⟺ 7x + b ≡ 7y + b (mod 13)
+  ⟺ 7(x - y) ≡ 0 (mod 13)            ← b 는 양변에서 소거
+  ⟺ x ≡ y (mod 13)                   ← 13 은 소수, gcd(7, 13) = 1 → 7 의 역원(2, 7·2 = 14 ≡ 1) 을 곱함
+→ 충돌 여부가 b 와 무관: x ≡ y (mod 13) 이면 모든 b 에서 충돌 (확률 1), 아니면 어떤 b 에서도 충돌 안 함 (확률 0)
+
+'''(a) No.'''  예: x = 0, y = 13 → 모든 b 에서 h_b(0) = h_b(13) = b → P = 1 > 1/13
+
+'''(b)''' U = {0..29} 를 mod 13 잉여류로 나누면
+  잉여 0,1,2,3 : {0,13,26} {1,14,27} {2,15,28} {3,16,29}  → 각 3 개 → C(3,2) = 3 쌍 × 4 = 12
+  잉여 4..12   : {4,17} … {12,25}                        → 각 2 개 → 1 쌍 × 9   =  9
+  최대 충돌 확률 '''1''' 을 달성하는 쌍 = '''21 쌍'''  (나머지 435 - 21 = 414 쌍은 확률 0)
+
+'''(c) 아니다.'''  P_b[h_b(x) = h_b(y)] = (1/13)·|{b : 7(x-y) ≡ 0 mod 13}|
+  = 1 (x ≡ y mod 13 이면 13 개 b 전부)  또는  0 (아니면 b 하나도 없음)
+  b 는 두 값에 똑같이 더해져 차 h_b(x) - h_b(y) ≡ 7(x - y) 를 바꾸지 못함 → 무작위성이 충돌 확률에 기여 0
+</pre>
+'''검산''' (Python, 435 쌍 × b 13 개 전수): `85 % 13 = 7`, 최대 충돌 확률 `1.0`, 그 쌍 수 `21`, 충돌 확률 값은 `{0.0, 1.0}` 두 가지뿐 → universal 아님.
+
+'''슬라이드의 [[h_{a,b}]] 와 비교''': L7 p.68 의 $h_{a,b}(x) = ((ax + b) \bmod p) \bmod n$ 은 '''a 도 무작위'''로 뽑는다. 충돌 여부를 정하는 것은 차 $a(x - y)$ 인데, a 가 무작위면 이 차가 mod p 에서 고르게 흩어져 충돌 확률이 $\le 1/n$ 이 된다. 이 문제는 a 를 85 로 '''고정'''하고 b 만 무작위로 뽑으니, 사실상 '''결정론적 해시 함수 하나'''($7x \bmod 13$)를 평행이동한 것뿐이다 — "You cannot escape the dark side with deterministic hash functions"(L7 p.31). 또 $U$ 의 크기 30 > 13 이라 [[비둘기집 원리]]로 같은 잉여류 키가 반드시 생긴다.
+{/answer}
+{tip}여기서 배울 것: universal 판정은 '''"충돌 조건을 식으로 풀어서 무작위 변수가 남는지 본다"'''. b 처럼 '''양쪽에 똑같이 더해지는''' 무작위성은 차를 못 바꾸므로 소거된다. universal 이 되려면 무작위성이 '''차에 곱해지는 위치(a)'''에 있어야 한다.{/tip}
+
+{exam}
+HW2 에서 시험으로 이어질 가능성이 큰 기술: ① radix sort 손 실행에서 '''stable 이 결과를 바꾸는 지점'''(같은 키 순서 유지) ② bucket 을 "가까운 값 묶기" 로 쓰는 pigeonhole 논증 ③ '''"틀릴 수 있나?" 로 Las Vegas / Monte Carlo 판정''', 셔플 비용이 기대값을 지배하는 경우 ④ 성공 확률 p 인 반복 → 기대 $1/p$ 회(기하분포) ⑤ 충돌 조건을 mod 식으로 풀어 universal 판정.
+{/exam}
+
+== 관련 문서 ==
+* [[HW1 복기]] · [[계산·증명 문제 모음]] · [[공식·점화식 모음]] · [[자주 틀리는 함정 모음]] · [[시험 정보]]
+* [[L5 Linear-Time Sorting]] · [[L6 Randomized Algorithms I]] · [[L7 Randomized Algorithms II]]

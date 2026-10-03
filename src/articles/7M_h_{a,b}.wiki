@@ -71,5 +71,13 @@ $|H| = p(p-1) = O(M^2)$ → 저장 $\log(M^2) = O(\log M)$ 비트 (a, b 두 수)
 $(17 \bmod 7) \bmod 4 = 3 \bmod 4 = 3$. a = 0 이면 $f_{0,b}(x) = b$ 로 '''모든 x 가 같은 값''' → 모든 키가 한 버킷에서 충돌. a ≠ 0 이고 p 가 소수여야 $x \mapsto ax + b \bmod p$ 가 전단사가 된다([[modular arithmetic]]).
 {/answer}
 
+== HW2 5번 — a 를 고정하면? ==
+{quiz}
+HW2 5번(c): $h_b(x) = (85x + b) \bmod 13$ 에서 b 만 무작위로 고르면 고정된 $x \ne y$ 의 충돌 확률이 줄어드는가? $h_{a,b}$ 와 무엇이 다른가?
+{/quiz}
+{answer}
+줄지 않는다. b 는 두 값에 똑같이 더해져 차 $7(x - y)$ 를 못 바꾸므로 $P_b = 1$ (x ≡ y mod 13) 또는 0. $h_{a,b}$ 는 '''a 도 무작위'''라 차 $a(x-y)$ 가 흩어진다 — a 를 85 로 고정하면 결정론적 해시 함수를 평행이동한 것뿐. → [[HW2 복기]]
+{/answer}
+
 == 관련 문서 ==
 * [[universal hash family]] · [[소수 p]] · [[H의 크기]] · [[modular arithmetic]] · [[hash collision]] · [[hash family]]

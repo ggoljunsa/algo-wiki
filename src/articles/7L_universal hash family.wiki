@@ -36,5 +36,13 @@ H = {h₀ = 최상위 자리, h₁ = 일의 자리}, n = 10 버킷. 키 11 과 1
 h₀(11) = 1 = h₀(101), h₁(11) = 1 = h₁(101) → 두 함수 모두 충돌 → 확률 $\frac22 = 1 > \frac{1}{10}$. 한 쌍이라도 1/n 을 넘으면 '''universal 아님'''.
 {/answer}
 
+== HW2 5번 ==
+{quiz}
+HW2 5번: $h_b(x) = (85x + b) \bmod 13$, $b \in [0,12]$, $U = \{0, \ldots, 29\}$. 이 family 는 universal 인가?
+{/quiz}
+{answer}
+'''No.''' $85 \bmod 13 = 7$ 이므로 충돌 $\iff 7(x-y) \equiv 0 \pmod{13} \iff x \equiv y \pmod{13}$ — b 와 무관. 예: x = 0, y = 13 은 모든 b 에서 충돌 → 확률 1 > 1/13. 그런 쌍이 U 안에 21 개. → [[HW2 복기]]
+{/answer}
+
 == 관련 문서 ==
 * [[h_{a,b}]] · [[hash family]] · [[기대 버킷 크기]] · [[H의 크기]] · [[hash collision]] · [[uniformly random hash function]]

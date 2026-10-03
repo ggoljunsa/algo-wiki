@@ -65,5 +65,13 @@ result = [0,1] + [12,13] + [15,16,17] + [27,28] = '''[0,1,12,13,15,16,17,27,28]'
 9/17 복습: bucket sort 는 counting sort 보다 넓은 범위에서 '''many-to-one mapping'''(여러 원소가 한 bucket), 단 '''균등 분포 가정''' — "모든 원소가 한 bucket 에 몰리면 그게 bucket sort 의 문제." 그리고 버킷 안은 '''stable''' 해야 radix sort 에 쓸 수 있다.
 {/exam}
 
+== HW2 2번 — bucket sort 변형 ==
+{quiz}
+HW2 2번(c): 1..M(M 고정) 의 distinct 정수 배열 A 에서 거리 T 이하인 쌍이 있는지 $O(n)$ 에 판정하라. 힌트: bucket sort 를 변형.
+{/quiz}
+{answer}
+폭 T 버킷, 원소 x → 버킷 $\lfloor x/T \rfloor$. 같은 버킷에 두 번째 원소가 오면 거리 ≤ T−1 → 즉시 True. 아니면 버킷당 ≤ 1 개라 '''버킷 안 정렬이 필요 없고''', 버킷 i 와 i+2 는 차 ≥ T+1 이므로 이웃 버킷 (i, i+1) 만 검사. $O(n + M/T) = O(n)$. 예제 [10,5,15,25,20,26,5000,500], T=2 → 버킷 12·13 의 25, 26 → True. → [[HW2 복기]]
+{/answer}
+
 == 관련 문서 ==
 * [[get_bucket]] · [[num_buckets와 k]] · [[bucket sort의 최악 케이스]] · [[stable sort]] · [[counting sort]] · [[radix sort]] · [[linear-time sorting]] · [[버킷]] (L7 해시 테이블의 버킷과 같은 말)

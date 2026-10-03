@@ -106,5 +106,13 @@ def make_pairs(A, k, i):
 (1) `d` (2) `i` — 0 부터, 즉 일의 자리부터 (3) `k` — 버킷 수 = 자릿값 범위 → 재정렬 불필요 (4) `A` (슬라이드는 오타로 `result`) (5) `(a // (k ** i)) % k` (슬라이드 표기 `(a / (k ** i)) % k`, 정수 나눗셈)
 {/answer}
 
+== HW2 1번 ==
+{quiz}
+HW2 1번: [care, race, acre, bear] 를 radix sort(stable bucket sort, 글자 단위)로 정렬할 때 1·2·3·4 번째 bucket sort 직후의 순서는? 또 n 개 단어·d 글자·k 버킷일 때 전체 시간과 k = 26 일 때의 단순화는?
+{/quiz}
+{answer}
+마지막 글자부터: [care, race, acre, bear] → [bear, race, care, acre] → [race, care, acre, bear] → '''[acre, bear, care, race]'''. 한 번 $\Theta(n + k)$, 전체 $\Theta(d(n + k))$, k = 26 상수 → $O(dn)$ (d 도 상수면 $O(n)$). 풀이 전체 → [[HW2 복기]]
+{/answer}
+
 == 관련 문서 ==
 * [[least-significant digit]] · [[make_pairs]] · [[Θ(d(n+k))]] · [[stable sort]] · [[bucket sort]] · [[counting sort]] · [[in-place]] · [[비교 기반 정렬을 여전히 쓰는 이유]] · [[L5 Linear-Time Sorting]]

@@ -49,5 +49,13 @@ L6 p.4: "A randomized algorithm — an algorithm that incorporates randomness as
 | [[hash table]] + [[universal hash family]] || L7 || $O(n)$ / 연산 || $O(1)$ / 연산
 |}
 
+== HW2 4번 ==
+{quiz}
+HW2 4번(b): n 개 점 중 최대 collinear 집합의 크기가 정확히 n/k (k 상수)임을 안다. expected $O(n)$ randomized 알고리즘과 그 worst-case 는?
+{/quiz}
+{answer}
+무작위 두 점으로 직선을 만들고 $O(n)$ 으로 그 위의 점을 센다. n/k 개면 반환(항상 정답 → Las Vegas). 두 점이 모두 최대 집합에서 나올 확률 $\approx 1/k^2$ → 기대 시도 $\approx k^2$ → expected $O(k^2 n) = O(n)$. 운이 계속 나쁠 수 있어 worst-case 는 무한. → [[HW2 복기]]
+{/answer}
+
 == 관련 문서 ==
 * [[Las Vegas와 Monte Carlo]] · [[두 시나리오]] · [[expected running time]] · [[randomized worst-case]] · [[L6 Randomized Algorithms I]]

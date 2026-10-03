@@ -46,5 +46,13 @@ category: 5강 Linear Sorting, 용어
 9/17 복습에서 교수가 '''따로 되물은 정의''': "원래 배열과 같은 순서를 유지하면 stable — radix sort 설계에 중요한 성질." 정의 → 용어 문제 1순위. 슬라이드 예 [1(a),3,2,1(b)] ⇒ [1(a),1(b),2,3] 를 그대로 쓸 것.
 {/exam}
 
+== HW2 1번 ==
+{quiz}
+HW2 1번의 2차 호출(3번째 글자가 키)에서 care 와 acre 는 키가 둘 다 r 이다. 1차 결과가 [care, race, acre, bear] 일 때 2차 결과에서 둘의 순서는?
+{/quiz}
+{answer}
+stable 이므로 1차 순서 그대로 care → acre: 2차 결과 [bear, race, '''care, acre''']. 순서를 바꾸면 4차 최종 결과는 우연히 맞더라도 radix sort 정확성 증명("Since bucket_sort is stable …")이 깨진다. → [[HW2 복기]]
+{/answer}
+
 == 관련 문서 ==
 * [[radix sort]] · [[bucket sort]] · [[counting sort]] · [[least-significant digit]] · [[insertion sort]] · [[mergesort]]
