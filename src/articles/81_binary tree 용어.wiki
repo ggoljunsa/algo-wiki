@@ -1,0 +1,65 @@
+key: binary tree 용어
+title: binary tree 용어 — node, key, root, child, parent, descendant, leaf, NIL
+category: 8강 Tree, 용어
+---
+== 개요 ==
+L8 p.10 한 장에 [[이진 트리]] 를 자료구조로 다룰 때 쓰는 단어가 전부 모여 있다. 이후 [[binary search tree]], [[BST DELETE]], [[red-black tree]] 의 모든 설명이 이 단어로 쓰이므로, 특히 '''child''' 와 '''descendant''' 의 차이([[BST property]] 함정)와 '''[[NIL]]''' 을 정확히 구분해 두자. 슬라이드 오른쪽 위: '''"For today all keys are distinct."''' — L1 의 [[distinct 가정]] 과 같은 단순화로, 같은 키가 두 번 나오지 않는다.
+
+{def}
+L8 p.10 "Binary tree terminology":
+* "This is a '''node'''. It has a '''key''' (7)."
+* "This node is the '''root'''." (5)
+* "Each node has two '''children'''."
+* "The '''left child''' of 3 is 2." / "The '''right child''' of 3 is 4."
+* "2 is a '''descendant''' of 5."
+* "These nodes are '''leaves'''." (1, 4, 8)
+* "Both children of 1 are '''NIL'''."
+* "Each node has a pointer to its left child, right child, and parent."
+노드(node)는 키(key) 하나와 포인터 세 개(left, right, parent)를 가진 칸이다. 맨 위 노드가 root, 바로 아래가 child(그 반대가 parent), 아래로 몇 칸이든 내려가서 닿는 노드는 모두 descendant, 자식이 둘 다 NIL 인 노드가 leaf 다.
+{/def}
+[[img:L8-10.png|L8 p.10 — Binary tree terminology (root 5, leaves 1·4·8, 1 의 두 자식은 NIL)|large]]
+
+{analogy}
+'''족보.''' root 는 시조 할아버지, child 는 자식, descendant 는 자식·손자·증손자를 다 합친 "후손", leaf 는 아직 자식이 없는 막내 세대다. 자식 자리가 비어 있으면 그 자리에 "없음"이라는 이름표(NIL)를 붙여 둔다 — 빈칸을 빈칸이라고 '''명시'''해 두는 것이 나중에 red-black tree 에서 중요해진다.
+{/analogy}
+
+== 용어 표 (p.10 트리 기준) ==
+<pre class="ascii">
+          5          ← root
+        /   \
+       3     7
+      / \     \
+     2   4     8     ← 4, 8 은 leaf
+    /
+   1                 ← leaf (1.left = 1.right = NIL)
+</pre>
+{|
+! 용어 || 뜻 || p.10 예
+|-
+| node / key || 키 하나 + 포인터 3개(left, right, parent) || 노드 7 의 key 는 7
+|-
+| root || parent 가 없는 맨 위 노드 || 5
+|-
+| left child / right child || 바로 아래 왼쪽/오른쪽 노드 || 3.left = 2, 3.right = 4
+|-
+| parent || 바로 위 노드 || 2.parent = 3
+|-
+| descendant || 아래로 '''몇 칸이든''' 내려가서 닿는 노드 전부 || 2 는 5 의 descendant (자식은 아님)
+|-
+| leaf || 두 자식이 모두 NIL 인 노드 || 1, 4, 8
+|-
+| [[NIL]] || "자식 없음"을 나타내는 빈 자리 || 1 의 두 자식, 4·8 의 두 자식, 2.right, 7.left
+|}
+
+{warn}
+'''child ≠ descendant.''' 2 는 3 의 child 이자 5 의 descendant 이지만 5 의 child 는 아니다. BST 의 정의(p.11)는 "Every LEFT '''descendant'''…" 라서, 부모·자식 쌍만 확인하면 BST 인지 판정할 수 없다 → [[BST property]].
+{/warn}
+
+== 어디서 쓰이나 ==
+* p.11–17 [[binary search tree]] 정의 — descendant
+* p.19–23 [[BST SEARCH]]·[[BST INSERT]]·[[BST DELETE]] — "트리 밖으로(NIL 로) 나가기 직전 노드", left/right child 에 매달기, parent 포인터
+* p.24 [[height]] — root 에서 NIL 까지의 가장 긴 경로
+* p.33 [[red-black 규칙 5가지]] — "NIL children count as black nodes"
+
+== 관련 문서 ==
+* [[이진 트리]] · [[NIL]] · [[distinct 가정]] · [[binary search tree]] · [[BST property]] · [[height]]

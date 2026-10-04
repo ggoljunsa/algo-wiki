@@ -1,0 +1,61 @@
+key: height ≤ 2 log(n+1) 증명
+title: height ≤ 2 log(n+1) 증명 — 왜 red-black tree 는 균형인가
+category: 8강 Tree, 용어
+---
+== 개요 ==
+[[red-black tree]] 의 [[height]] 가 항상 $2\log_2(n+1)$ 이하라는 증명(L8 p.36–37). 교수가 p.59 에서 "'''(more important)''' why does that guarantee that they are balanced?" 라고 한 바로 그 "why" 다. 직관(p.36) — red 로 패딩해도 한 경로가 다른 경로의 '''두 배'''까지만 길어진다 — 과 엄밀한 사슬(p.37) — [[2^b(x) − 1 claim]] + 규칙 ④ — 두 층으로 이해하면 된다. 이 결과에 "BST 연산은 [[O(height)]]" 를 붙이면 모든 연산이 $O(\log n)$ 이 된다(p.60).
+
+{def}
+L8 p.36 "Guess: the height of a red-black tree is at most 2 log(n)" — p.37 "That turns out to be basically right."
+L8 p.60 "Red-Black Trees always have height at most 2log(n+1)."
+→ 노드 n 개인 red-black tree 의 height ≤ $2\log(n+1)$.
+{/def}
+
+== 직관: 불균형하게 만들어 보기 (p.36) ==
+[[img:L8-36.png|L8 p.36 — This is pretty balanced. 오른쪽 경로를 red 로 패딩하면 길이가 두 배까지. Other internal nodes need to go here! Guess: height ≤ 2 log(n)|medium]]
+"To see why, intuitively, let's try to build a Red-Black Tree that's unbalanced." — "'''One path could be twice as long another if we pad it with red nodes.'''"
+* 가장 짧은 경로: black 만 (B, B, …) → 길이 ≈ b
+* 가장 긴 경로: black 과 red 를 번갈아 (B, R, B, R, …) → 길이 ≈ 2b. red 를 더 끼우고 싶어도 규칙 ④(red 의 자식은 black) 때문에 red 두 개를 연달아 놓을 수 없다.
+* 게다가 규칙 ⑤ 때문에 짧은 쪽도 black 수를 맞춰야 하므로, 긴 경로 옆에는 "Other internal nodes need to go here!"(p.36 초록 구름) — 노드가 많이 필요하다. 그래서 노드 수 대비 height 가 로그 수준으로 묶인다.
+[[anim:rb_height_padding|black 만의 균형 트리(b=3) 한 경로에 red 를 끼워 길이를 6 까지 늘이면 거기서 막힌다 — red 의 자식은 black. 이어서 n ≥ 2^b − 1 ≥ 2^(height/2) − 1 ⇒ height ≤ 2 log(n+1) 이 한 줄씩]]
+
+== 엄밀한 사슬 (p.37) ==
+[[img:L8-37.png|L8 p.37 — n ≥ 2^b(root) − 1 (using the Claim) ≥ 2^(height/2) − 1 (b(root) ≥ height/2 because of RBTree rules). Rearranging → height ≤ 2log(n+1)|large]]
+<pre class="txt">
+① n ≥ 2^{b(root)} − 1               ← [[2^b(x) − 1 claim]] 을 x = root 에 (n = non-NIL 노드 수)
+② b(root) ≥ height/2                ← 규칙 ④: 가장 긴 경로(root 제외 h+1 개, 끝은 NIL=black)에서
+                                       red 는 연달아 못 나오므로 절반 이상이 black
+③ n ≥ 2^{height/2} − 1              ← ① 에 ② 대입 (2^t 는 증가함수)
+④ n + 1 ≥ 2^{height/2}              ← 양변 +1 ("Rearranging")
+⑤ log₂(n+1) ≥ height/2              ← 양변 log₂
+⑥ height ≤ 2 log₂(n+1)               ■
+</pre>
+② 의 자세한 셈은 [[black height b(x)]]. ⑤ 의 로그 변형은 [[로그 계산법]].
+
+== 그래서 무엇이 좋은가 (p.60) ==
+<pre class="txt">
+height ≤ 2 log(n+1) = O(log n)
+BST 의 SEARCH / INSERT / DELETE = O(height)          (p.24, p.60 "As with general Binary Search Trees")
+⇒ red-black tree 의 모든 연산 = O(log n)             (p.60 "So all operations are O(log(n)).")
+</pre>
+이것이 p.61 [[best of both worlds 표]] 의 "Balanced Binary Search Trees: Search O(log n), Insert/Delete O(log n)" 칸의 근거다.
+
+{analogy}
+'''줄넘기 줄 길이.''' 모든 아이(경로)가 같은 수의 '''정식 매듭(black)''' 을 지나야 하고(⑤), 매듭 사이에 '''보조 매듭(red)''' 은 하나까지만 끼울 수 있다(④). 그러면 가장 긴 줄도 가장 짧은 줄의 두 배를 못 넘는다. 그리고 정식 매듭이 b 단이면 전체 매듭 수가 최소 $2^b - 1$ 이니, 매듭 수 n 으로 거꾸로 풀면 b ≤ log(n+1), 길이 ≤ 2b ≤ 2 log(n+1).
+{/analogy}
+
+{exam}
+슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언 p.39: "You are not responsible for the details for this class – but you should understand the main ideas." p.59: "You are not responsible for the nitty-gritty details of Red-Black Trees… You should know: What are the properties of an RB tree? And '''(more important) why does that guarantee that they are balanced?'''" — '''이 문서가 그 "more important" 의 답이다.''' 서술형 대비로 ①(Claim), ②(b(root) ≥ height/2, 규칙 ④ 때문), ⑥(정리) 세 줄과 각 줄의 이유를 쓸 수 있게 할 것.
+{/exam}
+
+{quiz}
+(1) 노드 15 개인 red-black tree 의 height 상한은? (2) 노드 1023 개라면? (3) 왜 "≤ 2 log(n+1)" 의 2 가 필요한가(왜 log(n+1) 이 아닌가)?
+{/quiz}
+{answer}
+(1) $2\log_2(15+1) = 2 \cdot 4 = 8$.
+(2) $2\log_2(1023+1) = 2 \cdot 10 = 20$.
+(3) red 노드로 한 경로를 패딩할 수 있기 때문(p.36). black 만 세면 완전 균형이라 black 높이는 $\log(n+1)$ 이하지만, 실제 경로에는 black 사이마다 red 가 하나씩 끼어 최대 두 배까지 길어진다(규칙 ④ 가 그 이상은 막는다).
+{/answer}
+
+== 관련 문서 ==
+* [[2^b(x) − 1 claim]] · [[black height b(x)]] · [[red-black 규칙 5가지]] · [[red-black tree]] · [[O(height)]] · [[로그 계산법]] · [[best of both worlds 표]] · [[L8 Tree Algorithms]]

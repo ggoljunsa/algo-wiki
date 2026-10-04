@@ -1,0 +1,63 @@
+key: CLRS 12와 13
+title: CLRS 12 와 13 — BST 와 Red-Black Tree 읽기 범위
+category: 8강 Tree, 용어
+---
+== 개요 ==
+L8 p.3 Outline 의 읽기 과제는 "'''Reading: CLRS 12.1, 12.2, 12.3 and 13'''" 이다. [[CLRS]] 12장은 [[binary search tree]], 13장은 [[red-black tree]]. 슬라이드는 개념을 그림 위주로 보여 주고 "See CLRS for more details"(p.39) 라며 세부를 교재로 넘긴다. 아래 표로 각 절이 슬라이드 몇 쪽에 대응하는지, 무엇이 시험 범위의 중심인지 정리한다.
+
+{def}
+L8 p.3: "Today's Outline — Tree Algorithms. Reading: CLRS 12.1, 12.2, 12.3 and 13."
+L8 p.39: "For the rest of lecture: sketch of how we'd do this. See CLRS for more details. ('''You are not responsible for the details for this class''' – but you should understand the main ideas)."
+L8 p.59: "You are not responsible for the nitty-gritty details of Red-Black Trees. (For this class) … You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?"
+{/def}
+
+{analogy}
+'''영화 vs 원작 소설.''' 슬라이드는 핵심 장면만 고른 영화고, CLRS 12–13장은 모든 장면과 대사가 다 있는 원작 소설이다. 교수는 "소설의 세부 대사(RB 삽입·삭제의 모든 경우)까지 외울 필요는 없고, 줄거리(규칙 5가지와 왜 균형인지)는 알아야 한다" 고 했다.
+{/analogy}
+
+== 절 ↔ 슬라이드 대응 ==
+{|
+! CLRS 절 || 내용 || L8 슬라이드 || 이 위키 || 비중
+|-
+| 12.1 What is a binary search tree? || 정의, binary-search-tree property, in-order 순회 || p.10–17 || [[binary tree 용어]], [[binary search tree]], [[BST property]] || 핵심
+|-
+| 12.2 Querying a binary search tree || SEARCH, MINIMUM/MAXIMUM, SUCCESSOR/PREDECESSOR, 모두 $O(h)$ || p.19, p.23(successor), p.24 || [[BST SEARCH]], [[immediate successor]], [[O(height)]] || 핵심
+|-
+| 12.3 Insertion and deletion || TREE-INSERT, TREE-DELETE(세 경우, TRANSPLANT) || p.20–23 || [[BST INSERT]], [[BST DELETE]] || 핵심
+|-
+| 13.1 Properties of red-black trees || 규칙 5가지, black-height, Lemma 13.1 (height $\le 2\lg(n+1)$) || p.32–37 || [[red-black 규칙 5가지]], [[black height b(x)]], [[height ≤ 2 log(n+1) 증명]] || '''시험 중심''' (p.59)
+|-
+| 13.2 Rotations || LEFT-ROTATE / RIGHT-ROTATE, $O(1)$, BST property 유지 || p.28–29 (YOINK) || [[rotation]] || 아이디어
+|-
+| 13.3 Insertion || RB-INSERT + RB-INSERT-FIXUP || p.40–57 || [[rb_insert]], [[recolor]], [[RB 삽입 세 경우]], [[uncle]] || 아이디어만 ("not responsible for the details")
+|-
+| 13.4 Deletion || RB-DELETE + fixup || p.58 "Fun exercise!" 한 장 || — || 범위 밖에 가까움
+|}
+
+== 슬라이드와 CLRS 가 다르게 말하는 곳 ==
+{|
+! 주제 || 슬라이드 || CLRS
+|-
+| SEARCH 의 반환값 (없는 키) || 트리 밖으로 나가기 직전 노드 (p.19, 4.5 → 4) || NIL
+|-
+| height 세는 법 || "depth n" (노드/층 수로 느슨하게) || 간선 수 (노드 1개 = 0)
+|-
+| DELETE Case 3 || successor 로 "replace" || TRANSPLANT 로 노드 자체를 옮김
+|-
+| black height || b(x): x 제외, NIL 포함 (p.37) || bh(x): 같은 정의
+|-
+| NIL || "NIL children count as black nodes" || 하나의 sentinel 노드 T.nil 로 구현
+|-
+| RB 삽입의 경우 나누기 || 부모 black / 부모 red·uncle red / 부모 red·uncle black (p.41–54) || fixup 의 case 1 (uncle red), case 2·3 (uncle black, 꺾인 모양·일자 모양)
+|}
+
+{exam}
+(L8 은 아직 수업 전 — 슬라이드 강조 기준) 교수 선언 두 문장이 범위를 정한다: p.39 "'''You are not responsible for the details for this class – but you should understand the main ideas'''", p.59 "'''You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?'''" → 13.1 (규칙 5가지 + height ≤ 2 log(n+1)) 을 가장 꼼꼼히, 13.2–13.3 은 그림으로 이해, 13.4 는 훑기. 12.1–12.3 은 BST 연산 세 가지를 직접 손으로 추적할 수 있을 만큼.
+{/exam}
+
+{tip}
+읽는 순서 제안: 12.1 → 12.2 → 12.3 (BST 위키 문서와 나란히) → 13.1 (Lemma 13.1 증명을 [[2^b(x) − 1 claim]] 문서와 대조) → 13.2 그림 → 13.3 은 RB-INSERT-FIXUP 의 그림만. 12장 끝의 random BST 내용은 읽기 과제가 아니다([[BST와 quicksort]] 에 직관만 있음).
+{/tip}
+
+== 관련 문서 ==
+* [[CLRS]] · [[L8 Tree Algorithms]] · [[binary search tree]] · [[red-black tree]] · [[red-black 규칙 5가지]] · [[rotation]]

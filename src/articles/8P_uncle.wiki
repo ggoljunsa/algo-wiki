@@ -1,0 +1,44 @@
+key: uncle
+title: uncle — 부모의 형제; 그 색이 flip 이냐 rotation 이냐를 정한다
+category: 8강 Tree, 용어
+---
+== 개요 ==
+'''uncle''' 은 새로 넣은 노드 v 의 부모 p 의 형제, 즉 조부모 grand_p 의 '''다른 자식'''이다. [[recolor]] 에서 부모 p 가 red 일 때(규칙 ④ 위반), uncle 의 색 하나로 처리 방법이 갈린다 — uncle red 면 색 뒤집기(flip), uncle black 이면 [[rotation]]. ([[RB 삽입 세 경우]])
+
+{def}
+L8 p.57 코드: `grand_p = p.parent`, `uncle = grand_p.right` (p 가 왼쪽 자식일 때), `if uncle.color == red: … else: # uncle.color == black`
+→ grand_p 의 두 자식 중 p 가 아닌 쪽. p 가 왼쪽 자식이면 grand_p.right, 오른쪽 자식이면 grand_p.left.
+{/def}
+
+== 가계도로 보기 ==
+<pre class="ascii">
+          grand_p (black)            p.47 예: grand_p = 6, p = 3, uncle = 7, v = 0
+           /        \
+       p (red)     uncle   ← 이 색이 갈림길
+        /
+    v (red, 새 노드)
+</pre>
+
+== 왜 uncle 색이 경우를 정하는가 ==
+{|
+! uncle 색 || 할 수 있는 일 || 이유
+|-
+| '''red''' || p, uncle → black, grand_p → red (flip), grand_p 에서 재귀 || grand_p 아래 '''양쪽''' 경로 모두 black 한 칸이 grand_p 에서 p/uncle 로 내려올 뿐 → 규칙 ⑤ 유지 (p.47 "Claim: RB-Tree properties still hold.")
+|-
+| '''black''' (NIL 포함) || p → black, grand_p → red, right_rotate(grand_p) (YOINK) || flip 을 하면 uncle 은 이미 black 이라 바꿀 수 없고, grand_p 만 red 가 되면 uncle 쪽 경로의 black 이 하나 줄어 ⑤ 가 깨진다 → 모양을 바꿔야 한다 (p.54)
+|}
+핵심: '''flip 은 양쪽 자식이 모두 red 일 때만''' black 수를 보존한다. uncle 이 그 "양쪽 중 한쪽" 이다.
+
+== NIL uncle 은 black ==
+규칙 ③ "NIL children count as black nodes" 때문에, grand_p 에 다른 자식이 없으면 uncle = [[NIL]] = '''black''' → rotation 경우. p.52 는 6B(3R(0R), 7B) 그림을 보이며 "Actually, this can't happen?(6-3 path has one black node, 6-7-… has at least two)" 라고 묻고, 두 가지 답을 준다: "It might happen that we just turned 0 red from the previous step." 그리고 "'''Or it could happen if 7 is actually NIL.'''"
+
+{analogy}
+'''집안 행사 짐 나르기.''' 동생(v)이 짐을 형(p)에게 넘겼는데 형도 이미 짐이 있다(red-red). 삼촌(uncle)도 짐을 들고 있으면 형과 삼촌이 둘 다 짐을 내려놓고 할아버지(grand_p)가 대신 하나 든다 — 양쪽 균형 그대로, 문제는 할아버지 윗대로 넘어감. 삼촌이 빈손(black)이면 그 방식은 균형이 안 맞으니, 아예 자리 배치를 바꾼다(rotation).
+{/analogy}
+
+{exam}
+슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" — uncle 은 삽입 main idea 의 갈림길. "uncle red → flip, uncle black(또는 NIL) → rotate" 한 줄이면 된다.
+{/exam}
+
+== 관련 문서 ==
+* [[recolor]] · [[RB 삽입 세 경우]] · [[NIL]] · [[rb_insert]] · [[rotation]]

@@ -1,0 +1,67 @@
+key: BST와 quicksort
+title: BST 와 quicksort — 루트가 pivot, 좌우 부분 트리가 partition
+category: 8강 Tree, 용어
+---
+== 개요 ==
+L8 p.16 은 BST 를 만드는 과정 한가운데에 "'''Aside: this should look familiar — kinda like QuickSort'''" 라는 장을 끼워 넣는다. 키 하나를 루트로 골라 나머지를 "그보다 작은 것 / 큰 것" 두 무리로 나누고 각 무리에서 같은 일을 반복하는 것 — 이것은 [[quicksort]] 가 [[pivot]] 을 골라 [[partition_about_pivot|partition]] 하고 양쪽을 재귀하는 것과 '''같은 재귀 구조'''다. 이 대응 하나로 [[편향 트리]] = quicksort 의 나쁜 pivot, 랜덤 순서 삽입 = [[randomized quicksort]] 라는 두 사실이 따라 나온다.
+
+{def}
+L8 p.16 "Aside: this should look familiar — kinda like QuickSort" (그림: 흩어진 키 3, 4, 8, 1, 5, 7, 2 중 5 가 초록색으로 골라지고, 점선이 작은 쪽과 큰 쪽을 가른다)
+BST 를 만들 때 루트로 고른 키는 quicksort 의 pivot 이고, 왼쪽 부분 트리 = pivot 보다 작은 무리(left), 오른쪽 부분 트리 = 큰 무리(right)다. 트리의 각 노드는 한 번의 partition 호출에 대응한다.
+{/def}
+[[img:L8-16.png|L8 p.16 — Aside: kinda like QuickSort. 5 가 pivot 처럼 골라지고 점선으로 나뉜다|medium]]
+
+{analogy}
+'''반 편성 토너먼트.''' 한 명(pivot)을 기준으로 세우고 "너보다 키 작은 사람 왼쪽, 큰 사람 오른쪽" 으로 나눈 뒤, 각 무리에서 또 기준을 세운다. 이 과정을 '''종이에 기록하면 BST''', 기록 없이 마지막에 줄만 세우면 '''quicksort''' 다. 같은 놀이를 남기는 방식만 다르다.
+{/analogy}
+
+== 대응표 ==
+{|
+! BST (L8) || quicksort (L6)
+|-
+| 루트로 고른 키 || pivot
+|-
+| 왼쪽 부분 트리 / 오른쪽 부분 트리 || partition 의 left / right
+|-
+| 부분 트리를 재귀적으로 만든다 || left, right 를 재귀적으로 정렬
+|-
+| 노드의 깊이 || 그 원소가 pivot 으로 뽑히기까지 거친 재귀 깊이
+|-
+| [[height]] || 재귀 트리의 깊이
+|-
+| [[편향 트리]] (정렬 순서로 삽입) || 정렬된 입력 + "첫 원소 = pivot" → $\Theta(n^2)$
+|-
+| 균형 트리 || 매번 [[median]] 근처 pivot → $\Theta(n \log n)$
+|-
+| 랜덤 순서로 삽입 → expected height $O(\log n)$ || [[randomized quicksort]] → expected $O(n \log n)$
+|-
+| in-order 로 읽기 || 정렬 결과
+|}
+
+== p.11–15 예제를 quicksort 로 읽기 ==
+<pre class="txt">
+quicksort([3,4,5,8,7,1,2])         BST 만들기 (p.11–15)
+  pivot 5 → left [3,4,1,2], right [8,7]      root = 5
+  quicksort([3,4,1,2])                        5.left 무리
+    pivot 3 → left [1,2], right [4]          5.left = 3
+    quicksort([1,2]): pivot 2 → left [1]     3.left = 2, 2.left = 1
+    quicksort([4])                            3.right = 4
+  quicksort([8,7])
+    pivot 7 → right [8]                       5.right = 7, 7.right = 8
+결과 1,2,3,4,5,7,8   =   BST 의 in-order (왼쪽 → 나 → 오른쪽)
+</pre>
+
+== 왜 이 대응이 쓸모 있나 ==
+* '''편향 트리 = 나쁜 pivot.''' 2,3,4,…,8 순서로 INSERT 하는 것은 정렬된 배열에 "첫 원소 = pivot" quicksort 를 돌리는 것과 같다. 매번 한쪽이 비어 재귀 깊이 n, 비교 $n(n-1)/2$ → [[quicksort의 좋은 경우와 나쁜 경우]].
+* '''비교 횟수가 정확히 같다.''' 키 a, b 가 BST 삽입 중 비교되는 것은 "a 와 b 사이 값 중 먼저 삽입된 것이 a 또는 b" 일 때뿐 — L6 의 [[X_{a,b}]] 조건("a 와 b 사이에서 처음 pivot 으로 뽑힌 것이 a 또는 b")과 같은 말이다.
+* '''랜덤 삽입 순서 ↔ randomized quicksort.''' 키를 무작위 순서로 넣으면 각 단계의 루트는 무작위 pivot 과 같다. 그래서 기대 비교 횟수가 $O(n \log n)$ 이고([[quicksort 기대 비교 횟수 증명]]), 노드당 평균 깊이가 $O(\log n)$ 이다.
+{warn}
+'''우리가 삽입 순서를 고를 수는 없다.''' 데이터는 사용자가 주는 순서대로 들어오고, 적([[adversary]])은 정렬된 순서로 넣을 수 있다. quicksort 는 pivot 을 '''알고리즘이''' 랜덤으로 골라 적을 피했지만, BST 는 그럴 수 없다 → 그래서 랜덤화 대신 [[self-balancing BST]](rotation 으로 매번 균형 보정)로 간다. "random BST 의 expected height 가 $O(\log n)$" 은 CLRS 12.4 내용이며 슬라이드에는 없다.
+{/warn}
+
+{exam}
+(L8 은 아직 수업 전 — 슬라이드 강조 기준) p.16 은 "Aside" 라 본류는 아니지만, "정렬된 순서로 삽입하면 왜 나쁜가?" 를 quicksort 의 나쁜 pivot 으로 설명할 수 있으면 서술형에서 L6 과 L8 을 잇는 답이 된다.
+{/exam}
+
+== 관련 문서 ==
+* [[quicksort]] · [[randomized quicksort]] · [[pivot]] · [[편향 트리]] · [[binary search tree]] · [[quicksort의 좋은 경우와 나쁜 경우]] · [[X_{a,b}]]

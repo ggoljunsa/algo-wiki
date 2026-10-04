@@ -1,0 +1,54 @@
+key: immediate successor
+title: immediate successor — 다음으로 큰 키, 오른쪽 부분 트리의 최솟값
+category: 8강 Tree, 용어
+---
+== 개요 ==
+'''immediate successor'''(직후 원소)는 트리 안의 키 중에서 x.key 다음으로 큰 키다. 정렬해서 한 줄로 세우면 x 의 바로 오른쪽 이웃. [[BST DELETE]] 의 Case 3(지울 노드의 자식이 둘)에서 x 자리를 채울 후보로 쓰인다 — 이 노드를 올리면 [[BST property]] 가 그대로 유지되기 때문이다.
+
+{def}
+L8 p.23: "Case 3: if 3 has two children, replace 3 with it's '''immediate successor'''. (aka, '''next biggest thing after 3''')" — "How do we find the immediate successor? '''SEARCH for 3 in the subtree under 3.right'''."
+x 의 immediate successor = x.key 보다 큰 키 중 가장 작은 것. x 의 오른쪽 부분 트리가 비어 있지 않으면 그 부분 트리의 최솟값이다.
+{/def}
+
+{analogy}
+'''키 순서로 선 줄에서 내 바로 뒷사람.''' 나보다 큰 사람들은 전부 내 오른쪽 무리에 있다. 그 무리 중 가장 작은 사람을 찾으려면, 오른쪽 무리로 한 걸음 들어간 다음 "더 작은 쪽(왼쪽)"으로만 계속 가면 된다. 더 갈 데가 없는 곳에 선 사람이 바로 내 뒷사람.
+{/analogy}
+
+== 찾는 법 ==
+<pre class="txt">
+successor(x)  (x 의 자식이 둘일 때 — DELETE Case 3 의 상황)
+  1. 오른쪽으로 한 번:    y = x.right
+  2. 왼쪽으로 끝까지:     while y.left != NIL: y = y.left
+  3. return y
+= "SEARCH for x.key in the subtree under x.right" (p.23)
+  : 그 부분 트리의 키는 전부 x.key 보다 크므로 SEARCH 는 매번 왼쪽으로 가고,
+    NIL 직전 노드(= 최솟값)에서 멈춘다 → [[BST SEARCH]] 의 반환 규칙 그대로
+</pre>
+<pre class="ascii">
+p.10 트리에서 successor(3):          p.23 그림에서 successor(3):
+        5                                    5
+      /                                     /
+     3   ← x                               3   ← x
+    / \                                   / \
+   2   4   ← x.right, 4.left = NIL       2   4   ← x.right
+  /         → successor = 4                 /
+ 1                                       ...
+                                         /
+                                       3.1   ← 왼쪽 끝 = successor
+</pre>
+이것은 부분 트리에서 MIN 을 찾는 것과 같다 — [[MIN과 MAX]] 의 트리 버전.
+[[img:L8-23.png|L8 p.23 — immediate successor 3.1 은 4 아래 부분 트리의 왼쪽 끝에 있다|medium]]
+
+== 자식이 많아야 하나인 이유 ==
+successor s 에 왼쪽 자식 c 가 있다면 $x.key < c < s.key$ (c 는 x 의 오른쪽 부분 트리 안, 그리고 s 의 왼쪽 descendant) → c 가 s 보다 "다음으로 큰 것"에 더 가깝다는 모순([[귀류법]]). 따라서 '''s.left = NIL''', 자식은 오른쪽 하나 또는 없음. 그래서 p.23: "What if [3.1] has two children? — '''It doesn't.'''" 떼어낼 때는 [[BST DELETE]] 의 Case 1 또는 Case 2 로 충분하다.
+
+{warn}
+x 의 '''오른쪽 자식'''이 곧 successor 인 것은 아니다. p.23 처럼 4 아래에 3.1 이 있으면 successor 는 3.1 이다. 오른쪽 자식에게 왼쪽 자식이 없을 때만(p.10 트리의 4) 오른쪽 자식 = successor.
+{/warn}
+
+{info}
+슬라이드 밖(CLRS 12.2 TREE-SUCCESSOR): x 의 오른쪽 부분 트리가 '''비어 있으면''' successor 는 위쪽 조상 중 "x 가 그 조상의 왼쪽 부분 트리에 처음 들어가는" 조상이다(parent 포인터로 올라감). DELETE Case 3 에서는 오른쪽 자식이 항상 있으므로 이 경우가 필요 없다.
+{/info}
+
+== 관련 문서 ==
+* [[BST DELETE]] · [[BST SEARCH]] · [[MIN과 MAX]] · [[BST property]] · [[binary search tree]]

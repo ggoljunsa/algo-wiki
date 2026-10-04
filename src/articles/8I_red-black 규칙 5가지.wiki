@@ -1,0 +1,79 @@
+key: red-black 규칙 5가지
+title: red-black 규칙 5가지 — 외워야 하는 유일한 것
+category: 8강 Tree, 용어
+---
+== 개요 ==
+[[red-black tree]] 를 정의하는 다섯 규칙(L8 p.33). 교수가 p.59 에서 "You should know: What are the properties of an RB tree?" 라고 직접 요구한 것이므로 '''영어 원문 그대로''' 쓸 수 있어야 한다. 슬라이드 제목 아래 문구 그대로 "these rules are the [[proxy for balance]]" — 규칙 ⑤ 가 black 노드의 완전한 균형을, 규칙 ④ 가 red 노드의 '흩어짐' 을 보장하고, 둘이 합쳐 [[height ≤ 2 log(n+1) 증명]] 이 나온다.
+
+{def}
+L8 p.33 "Red-Black Trees — these rules are the proxy for balance"
+① Every node is colored '''red''' or '''black'''.
+② The root node is a '''black''' node.
+③ NIL children count as '''black''' nodes.
+④ Children of a '''red''' node are '''black''' nodes.
+⑤ For all nodes x: all paths from x to NIL's have the same number of '''black''' nodes on them.
+→ ① 모든 노드는 red 또는 black. ② root 는 black. ③ [[NIL]] 자식은 black 으로 센다. ④ red 노드의 자식은 black(= red 가 두 번 연달아 나올 수 없다). ⑤ 모든 노드 x 에 대해, x 에서 NIL 까지 가는 모든 경로의 black 노드 수가 같다(→ [[black height b(x)]] 가 잘 정의된다).
+{/def}
+[[img:L8-33.png|L8 p.33 — 규칙 다섯 줄과 예시 5B(3R(2B,4B), 7R(6B,8B)), 맨 아래 NIL 8개. I'm not going to draw the NIL children in the future|large]]
+
+== p.33 예시 트리로 확인 ==
+<pre class="txt">
+트리: 5B( 3R(2B,4B), 7R(6B,8B) ), 2·4·6·8 의 자식은 전부 NIL(black)
+① 모든 노드가 R 또는 B                                   ✓
+② root 5 = B                                             ✓
+③ NIL 8개 = B 로 센다                                    ✓
+④ red 노드 3 의 자식 2,4 = B / red 노드 7 의 자식 6,8 = B   ✓
+⑤ x = 5 에서: 5→3→2→NIL 의 black = {2, NIL} = 2개 (x 제외)
+             5→7→8→NIL 의 black = {8, NIL} = 2개 … 8개 경로 전부 2  ✓
+   x = 3 에서: 3→2→NIL, 3→4→NIL 모두 2개                     ✓ (다른 x 도 마찬가지)
+</pre>
+
+== p.34 Examples(?) — 어느 것이 RB tree 인가 ==
+[[img:L8-34.png|L8 p.34 — Examples(?): 왼쪽 위 Yes! 하나, 아래 No! 셋|large]]
+{|
+! 그림 || 모양(B=black, R=red) || 판정 || 어긴 규칙
+|-
+| 왼쪽 위 || B( B, B( R, · ) ) — 오른쪽 B 의 왼쪽 자식만 red || '''Yes!''' || 없음. root→왼쪽 B→NIL 의 black 2개, root→오른쪽 B→R→NIL 도 black 2개(red 는 안 셈), root→오른쪽 B→NIL 도 2개
+|-
+| 아래 1 || R( B, B( R, · ) ) || '''No!''' || '''②''' root 가 red. (나머지는 Yes 트리와 같은 모양이라 ④⑤ 는 문제 없음)
+|-
+| 아래 2 || B( R, R( R, · ) ) || '''No!''' || '''④''' red 노드(root 의 오른쪽 자식)의 자식이 또 red. black 수는 모든 경로가 NIL 하나뿐이라 ⑤ 는 만족
+|-
+| 아래 3 || B( B, B( B, · ) ) — 전부 black || '''No!''' || '''⑤''' root→왼쪽 B→NIL 은 black 2개, root→오른쪽 B→B→NIL 은 3개. (오른쪽 B 에서도 왼쪽 경로 2개 vs 오른쪽 NIL 1개)
+|}
+교훈: 아래 3 처럼 '''전부 black 이라고 RB tree 가 되는 것은 아니다'''. 모양이 한쪽으로 기울면 black 만으로는 ⑤ 를 맞출 수 없고, 그때 red 가 '높이를 채우는 여분' 으로 쓰인다(Yes 트리의 red 노드).
+
+{analogy}
+'''교통 신호 규칙.''' 도로망(트리)의 모든 교차로에 빨강 또는 검정 표지판이 있다(①). 출발점(root)은 검정(②), 막다른 길 끝(NIL)도 검정으로 친다(③). 빨강 표지판 바로 다음엔 반드시 검정(④). 그리고 어느 교차로에서 출발해 어느 막다른 길까지 가든 '''지나치는 검정 표지판 수가 같다'''(⑤). 이 다섯 가지만 지키면 아무리 돌아가는 길도 가장 짧은 길의 두 배를 넘지 않는다.
+{/analogy}
+
+== 각 규칙의 역할 ==
+{|
+! 규칙 || 역할
+|-
+| ①② || 색칠의 기본 틀. ② 는 사실 없어도 균형에는 지장이 없지만(root 를 black 으로 바꿔도 ⑤ 가 안 깨짐) 삽입 마무리를 단순하게 한다
+|-
+| ③ || leaf 아래에서도 ⑤ 를 셀 수 있게 경로의 끝을 통일 → [[NIL]]
+|-
+| ④ || 한 경로 위에서 red 는 black 사이사이에만 → 경로 길이 ≤ 2 × (black 수)
+|-
+| ⑤ || black 노드끼리는 완전 균형 → [[black height b(x)]], [[2^b(x) − 1 claim]]
+|}
+
+{exam}
+슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: '''What are the properties of an RB tree?''' And (more important) why does that guarantee that they are balanced?" → 이 문서가 첫 번째 질문의 답이다. 다섯 줄을 '''영어 원문으로''' 쓰고, p.34 같은 그림을 보고 어긴 규칙 번호를 댈 수 있을 것.
+{/exam}
+
+{quiz}
+다음 각 트리가 red-black tree 인지 판정하고, 아니라면 어긴 규칙을 쓰라(B = black, R = red, 생략된 자식은 NIL).
+(a) B( R(B, B), R(B, B) )   (b) B( R(R, ·), B )   (c) R( B, B )   (d) B( B(B, ·), B )
+{/quiz}
+{answer}
+(a) '''RB tree''' — p.33 예시와 같은 모양. 모든 경로 black 2개(NIL 포함, root 제외).
+(b) '''No, ④''' — red 의 자식이 red. (black 수도 확인: 왼쪽 R→R→NIL 은 1개, 오른쪽 B→NIL 은 2개 → '''⑤ 도''' 어긴다.)
+(c) '''No, ②''' — root 가 red.
+(d) '''No, ⑤''' — root→왼쪽 B→B→NIL 은 black 3개, root→오른쪽 B→NIL 은 2개. 왼쪽 B 에서도 왼쪽 경로 2개 vs 오른쪽 NIL 1개.
+{/answer}
+
+== 관련 문서 ==
+* [[red-black tree]] · [[NIL]] · [[black height b(x)]] · [[height ≤ 2 log(n+1) 증명]] · [[proxy for balance]] · [[RB 삽입 세 경우]] · [[L8 Tree Algorithms]]

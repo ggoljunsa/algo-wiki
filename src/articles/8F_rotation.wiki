@@ -1,0 +1,83 @@
+key: rotation
+title: rotation — YOINK: BST property 를 지키면서 모양만 바꾸는 O(1) 연산
+category: 8강 Tree, 용어
+---
+== 개요 ==
+'''rotation''' 은 부모–자식 한 쌍의 위아래를 바꾸는 연산이다. 자식 Y 를 손으로 집어 올리면("YOINK!") 원래 부모 X 가 Y 아래로 내려가고, 둘 사이에 끼어 있던 부분 트리 B 하나만 주인을 바꾼다. [[BST property]] 는 그대로이고, 아래에 무엇이 매달려 있든 시간은 $O(1)$. [[self-balancing BST]] 의 Idea 1(L8 p.28)이고, [[red-black tree]] 삽입의 마지막 경우(p.54, [[RB 삽입 세 경우]])에서 다시 쓰인다.
+
+{def}
+L8 p.28 "Idea 1: Rotations — Maintain Binary Search Tree (BST) property, while moving stuff around."
+"No matter what lives underneath A,B,C, this takes time O(1). (Why?)"
+"CLAIM: this still has BST property."
+→ BST property 를 유지한 채 부모와 자식의 위치를 맞바꾸는 $O(1)$ 연산.
+{/def}
+
+== p.28 YOINK 세 장면 ==
+[[img:L8-28.png|L8 p.28 — Idea 1: Rotations. X(Y(A,B),C) 에서 Y 를 YOINK → 'That's not binary!!' → B fell down → Y(A, X(B,C))|large]]
+<pre class="ascii">
+  ① 원래            ② Y 를 들어 올림        ③ B 가 떨어짐
+       X                  Y                    Y
+      / \              /  |  \                / \
+     Y   C            A   B   X              A   X
+    / \                        \                / \
+   A   B                        C              B   C
+                    "That's not binary!!"   "B fell down."
+</pre>
+# Y 를 집어 올린다(YOINK). X 는 Y 의 오른쪽 자식처럼 매달린다.
+# 그러면 Y 가 A, B, X 세 자식을 갖게 된다 — '''"That's not binary!!"'''
+# B 는 X 의 왼쪽 자리(원래 Y 가 있던 자리, 지금 비어 있음)로 떨어진다. 결과 Y(A, X(B, C)).
+X 기준으로 보면 왼쪽 자식이 위로 올라왔으니 '''right rotation'''(p.57 코드의 `right_rotate(grand_p)`)이고, 반대 방향(③ → ①)이 left rotation 이다.
+
+[[anim:rotation_yoink|p.28 그대로 — Y 를 YOINK 하면 잠시 자식이 셋("That's not binary!!"), B 가 X 의 왼쪽으로 떨어져 Y(A, X(B,C)). 이어서 p.29 의 3→5 숫자 예]]
+
+== CLAIM: 여전히 BST property (왜?) ==
+BST property 는 "중위 순회(in-order) 순서가 정렬돼 있다" 와 같은 말이다. 회전 전후의 in-order 순서를 적어 보면:
+<pre class="txt">
+회전 전 X(Y(A,B),C) 의 in-order : A, Y, B, X, C
+회전 후 Y(A,X(B,C)) 의 in-order : A, Y, B, X, C      ← 똑같다
+즉 A < Y < B < X < C 라는 대소 관계를 아무도 어기지 않는다.
+특히 B: 회전 전엔 "Y 의 오른쪽 & X 의 왼쪽" → Y < B < X
+        회전 후엔 "Y 의 오른쪽(X 아래) & X 의 왼쪽" → 여전히 Y < B < X
+</pre>
+
+== O(1) 인 이유 (왜?) ==
+A, B, C 안쪽은 '''한 번도 건드리지 않는다'''. 바뀌는 연결은 다음 셋뿐(부모 포인터까지 치면 상수 개 더):
+{|
+! 바뀌는 포인터 || 회전 전 || 회전 후
+|-
+| X 의 부모(또는 root)가 가리키는 자식 || X || Y
+|-
+| Y.right || B || X
+|-
+| X.left || Y || B
+|}
+부분 트리 크기가 1 이든 100만이든 포인터 3개 → $O(1)$.
+
+== p.29 숫자 예 — "This seems helpful" ==
+[[img:L8-29.png|L8 p.29 — 3(2, 5(4, 7(6,8))) 에서 5 를 YOINK → 5(3(2,4), 7(6,8))|medium]]
+<pre class="txt">
+회전 전: 3(2, 5(4, 7(6,8)))      height 3 (3→5→7→6)
+5 를 YOINK (3 기준 left rotation; p.28 그림의 거울상)
+  X = 3, Y = 5, A 자리 = 7(6,8), B = 4, C 자리 = 2
+  4 가 '떨어져서' 3 의 오른쪽 자식이 된다
+회전 후: 5(3(2,4), 7(6,8))       height 2, 완전 균형
+</pre>
+회전 한 번에 오른쪽으로 쏠린 트리가 완전 균형이 됐다 — 그래서 "This seems helpful". 하지만 "언제, 어디를 회전할지" 가 정해지지 않으면 막연하다(p.30) → [[proxy for balance]].
+
+{analogy}
+'''모빌 들어 올리기.''' 천장에 매달린 모빌에서 X 의 왼팔에 걸린 Y 를 잡아 위로 들면, X 는 Y 의 오른팔에 매달리게 된다. Y 의 오른팔에 원래 걸려 있던 장식 B 는 이제 걸 데가 없으니 X 의 빈 왼팔로 옮겨 건다. 장식 A, B, C 안쪽은 하나도 풀지 않았고, 왼쪽에서 오른쪽으로 읽는 순서(A, Y, B, X, C)도 그대로다.
+{/analogy}
+
+{exam}
+슬라이드 기준(아직 수업 전, 녹음 없음). p.28 의 두 "(Why?)" — '''BST property 가 유지되는 이유'''(in-order 순서 A<Y<B<X<C 불변)와 '''O(1) 인 이유'''(포인터 3개만 바뀜) — 를 직접 설명할 수 있어야 한다. 그리고 "B 가 어디로 가는가" 를 그림으로 그릴 수 있을 것.
+{/exam}
+
+{quiz}
+X(Y(A,B),C) 에서 X 를 기준으로 right rotation(Y 를 YOINK)을 하면, 부모가 바뀌는 부분 트리는 A, B, C 중 무엇이며 새 부모는 누구인가? 결과 트리를 쓰라.
+{/quiz}
+{answer}
+'''B''' 만 옮긴다. 원래 Y 의 오른쪽 자식이었다가 '''X 의 왼쪽 자식'''이 된다(Y < B < X 이므로 X 의 왼쪽이 맞는 자리). A 는 계속 Y 의 왼쪽, C 는 계속 X 의 오른쪽. 결과 Y(A, X(B, C)).
+{/answer}
+
+== 관련 문서 ==
+* [[self-balancing BST]] · [[proxy for balance]] · [[BST property]] · [[RB 삽입 세 경우]] · [[recolor]] · [[red-black tree]] · [[L8 Tree Algorithms]]

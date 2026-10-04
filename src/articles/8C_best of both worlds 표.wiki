@@ -1,0 +1,63 @@
+key: best of both worlds 표
+title: best of both worlds 표 — sorted array / linked list / balanced BST
+category: 8강 Tree, 용어
+---
+== 개요 ==
+L8 은 이 표로 시작하고(p.9 "Motivation for Binary Search Trees") 이 표로 끝난다(p.61 "Conclusion: The best of both worlds"). sorted array 는 SEARCH 가 빠르고 INSERT/DELETE 가 느리며, linked list 는 그 반대다. '''balanced''' binary search tree 는 두 연산 모두 $O(\log n)$ 으로 "양쪽의 장점"을 가진다. L7 의 [[자료구조 비교표]] 의 후속편이다.
+
+{def}
+L8 p.9 / p.61:
+{|
+! || Sorted Arrays || Linked Lists || (Balanced) Binary Search Trees
+|-
+| Search || O(log(n)) || O(n) || O(log(n))
+|-
+| Insert/Delete || O(n) || O(1) || O(log(n))
+|}
+p.9 의 열 이름은 "Binary Search Trees'''*'''"(별표, TODAY!), p.61 은 "'''Balanced''' Binary Search Trees". p.5: "The punchline is important: A data structure with O(log(n)) INSERT/DELETE/SEARCH."
+{/def}
+[[img:L8-09.png|L8 p.9 — Motivation for Binary Search Trees (BST 열에 별표*)|medium]]
+[[img:L8-61.png|L8 p.61 — Conclusion: The best of both worlds (Balanced BST)|medium]]
+
+{analogy}
+'''사전 vs 메모 쪽지 묶음 vs 색인 카드 서랍.''' 종이 사전(sorted array)은 찾기는 빠른데 새 단어를 끼우려면 뒷장을 전부 다시 찍어야 한다. 쪽지를 끈으로 엮은 묶음(linked list)은 아무 데나 쪽지를 끼우기 쉽지만 찾으려면 처음부터 넘겨야 한다. 갈림길 표지판이 달린 색인 카드 서랍(balanced BST)은 찾기도 끼우기도 몇 번의 갈림길이면 끝난다.
+{/analogy}
+
+== 칸마다 왜 그런가 ==
+{|
+! || 근거 (L8 슬라이드)
+|-
+| Sorted array Search $O(\log n)$ || p.7 "Binary search to see if 3 is in A"
+|-
+| Sorted array Insert/Delete $O(n)$ || p.7 4.5 를 넣으려면 5, 7, 8 을 한 칸씩 밀어야 한다
+|-
+| Linked list Search $O(n)$ || p.8 HEAD 부터 하나씩 따라가야 한다 (binary search 불가)
+|-
+| Linked list Insert/Delete $O(1)$ || p.8 "'''assuming we have a pointer to the location''' of the insert/delete" — 포인터 두 개만 바꾸면 된다
+|-
+| Balanced BST 둘 다 $O(\log n)$ || 모든 연산 [[O(height)]], 균형이면 height $= O(\log n)$; [[red-black tree]] 는 height $\le 2\log(n+1)$
+|}
+
+{warn}
+'''linked list 의 O(1) 에는 조건이 붙어 있다.''' p.8: "assuming we have a pointer to the location". 위치를 모르면 먼저 찾아야 하므로 $O(n)$ 이다 — 실제로 L7 p.5 표([[자료구조 비교표]])는 같은 sorted linked list 의 Insert/Delete 를 $O(n)$ (without a pointer) 으로 적었다. 두 표가 모순인 것이 아니라 가정이 다르다.
+{/warn}
+{warn}
+'''BST 열의 별표(*) = balanced 일 때만.''' 일반 BST 는 [[편향 트리]] 가 되면 세 연산 모두 $O(n)$ 이다. p.61 에서 "Balanced" 를 붙인 이유.
+{/warn}
+
+== L7 hash table 과 비교 ==
+{|
+! || Search || Insert/Delete || 최악 || 순서 정보
+|-
+| [[hash table]] (L7, [[chaining]]) || $O(1)$ expected || $O(1)$ expected || $O(n)$ || 없음 (키가 흩어짐)
+|-
+| Balanced BST (L8) || $O(\log n)$ || $O(\log n)$ || $O(\log n)$ '''worst-case''' || 있음 (in-order 가 정렬 순서)
+|}
+hash table 은 평균은 더 빠르지만 '''expected''' 이고 worst-case 는 $O(n)$ 이다. balanced BST 는 조금 느린 대신 '''worst-case''' $O(\log n)$ 을 보장하고, 키의 대소 순서를 유지하므로 MIN/MAX, [[immediate successor]], 범위 질의(“3 이상 7 이하 전부”)를 할 수 있다 — hash table 로는 못 하는 일.
+
+{exam}
+(L8 은 아직 수업 전 — 슬라이드 강조 기준) 첫 장과 마지막 장에 같은 표가 나오므로 L8 의 결론 그 자체다. 표의 여섯 칸을 근거와 함께 채울 수 있어야 하고, "linked list $O(1)$ 의 가정"과 "BST 는 balanced 여야 $O(\log n)$" 두 단서를 빠뜨리지 말 것.
+{/exam}
+
+== 관련 문서 ==
+* [[자료구조 비교표]] · [[hash table]] · [[linked list]] · [[O(height)]] · [[red-black tree]] · [[self-balancing BST]] · [[L8 Tree Algorithms]]

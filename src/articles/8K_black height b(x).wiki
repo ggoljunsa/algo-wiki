@@ -1,0 +1,47 @@
+key: black height b(x)
+title: black height b(x) — x 에서 NIL 까지 경로의 black 노드 수 (x 제외, NIL 포함)
+category: 8강 Tree, 용어
+---
+== 개요 ==
+'''black height''' $b(x)$ 는 노드 x 에서 아래로 [[NIL]] 까지 내려가는 경로 위에 있는 black 노드의 수다(L8 p.37). [[red-black 규칙 5가지]] 의 ⑤ 덕분에 '''어느 경로를 골라도 같은 값'''이라 x 마다 숫자 하나로 정해진다. [[2^b(x) − 1 claim]] 과 [[height ≤ 2 log(n+1) 증명]] 의 주인공 변수.
+
+{def}
+L8 p.37: "Say there are b(x) black nodes in any path from x to NIL. (excluding x, including NIL)."
+→ x 에서 NIL 까지 아무 경로에서 센 black 노드 수. '''x 자신은 빼고, 끝의 NIL 은 넣는다.'''
+{/def}
+[[img:L8-37.png|L8 p.37 — 보라색 경로가 x 에서 NIL 까지 내려가며 black 노드를 센다(excluding x, including NIL). 아래에 Claim 과 height ≤ 2log(n+1) 유도|medium]]
+
+== 세는 법 — x 제외, NIL 포함 ==
+<pre class="txt">
+p.33 예: 5B( 3R(2B,4B), 7R(6B,8B) ), 맨 아래 NIL 은 black
+b(NIL) = 0                       ← x 자신(NIL)은 제외, 그 아래는 없음
+b(2)   = 1                       ← 2→NIL : {NIL}
+b(3)   = 2                       ← 3→2→NIL : {2, NIL}   (3 은 red 지만 어차피 x 라 제외)
+b(5)   = 2                       ← 5→3→2→NIL : {2, NIL} (3 은 red 라 안 셈)
+</pre>
+x 가 black 이든 red 든 '''자기 자신은 세지 않는다'''. 그래서 black 자식 c 를 가진 x 는 $b(c) = b(x) - 1$, red 자식 c 는 $b(c) = b(x)$ 이다 — [[2^b(x) − 1 claim]] 의 inductive step 이 바로 이 관계를 쓴다.
+
+== 왜 잘 정의되는가 — 규칙 ⑤ ==
+"in '''any''' path from x to NIL" 이라고 말할 수 있는 이유는 규칙 ⑤ "For all nodes x: all paths from x to NIL's have the same number of black nodes" 때문이다. ⑤ 가 없으면 경로마다 값이 달라 b(x) 가 함수가 아니다(p.34 아래 3번 트리처럼).
+
+== b(root) ≥ height/2 — 규칙 ④ ==
+<pre class="txt">
+가장 긴 경로: root = v0 → v1 → … → v_h (leaf) → NIL       (h = [[height]])
+x = root 를 제외하면 경로 위 노드는 v1, …, v_h, NIL 의 h+1 개
+규칙 ④: red 의 자식은 black → red 가 두 번 연달아 나올 수 없다
+규칙 ③: 끝의 NIL 은 black
+⇒ h+1 개 중 적어도 절반은 black
+⇒ b(root) ≥ (h+1)/2 ≥ h/2 = height/2
+</pre>
+p.37 의 주황 글씨 "b(root) >= height/2 because of RBTree rules." 가 이 계산이다.
+
+{analogy}
+'''계단 속 층계참.''' 건물 꼭대기(x)에서 지하(NIL)까지 어느 계단으로 내려가도 '''층계참(black)을 지나는 횟수가 같다'''(⑤). 층계참 사이에는 짧은 중간 발판(red)이 '''최대 하나'''만 있다(④). 그래서 층계참 수 b 만 알면 계단 전체 길이는 많아야 2b 정도다.
+{/analogy}
+
+{exam}
+슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And (more important) '''why does that guarantee that they are balanced?'''" — 그 "why" 의 증명이 b(x) 위에서 돌아간다. 정의의 괄호 "(excluding x, including NIL)" 까지 그대로 쓸 것.
+{/exam}
+
+== 관련 문서 ==
+* [[2^b(x) − 1 claim]] · [[height ≤ 2 log(n+1) 증명]] · [[red-black 규칙 5가지]] · [[NIL]] · [[height]]

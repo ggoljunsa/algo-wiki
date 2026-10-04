@@ -1,0 +1,89 @@
+key: recolor
+title: recolor — 부모가 red 일 때 uncle 색을 보고 뒤집거나 회전한다 (p.57)
+category: 8강 Tree, 알고리즘
+---
+== 개요 ==
+'''recolor''' 는 [[rb_insert]] 가 새 red 노드 v 를 붙인 직후 부르는 fix-up 함수(L8 p.57)다. 새 노드가 red 라 깨질 수 있는 규칙은 ④(red 의 자식은 black)뿐이고, 그것도 '''부모가 red 일 때만'''이다. 그때 [[uncle]] 의 색에 따라 두 갈래로 나뉜다 — uncle 이 red 면 색만 뒤집고 grand_p 에서 다시 recolor(재귀), uncle 이 black 이면 [[rotation]](yoink) 한 번과 색 교환으로 끝. 세 경우의 그림 이야기는 [[RB 삽입 세 경우]].
+
+{def}
+L8 p.57 "insert in Red-Black Trees — def recolor(v): … Runtime: O(log n)"
+L8 p.43 "Fix things up if needed."
+→ 새로 넣은 red 노드 v 기준으로 부모·uncle·조부모의 색을 고치고, 필요하면 조부모에서 right rotation 을 해 [[red-black 규칙 5가지]] 를 복구하는 함수.
+{/def}
+
+== 코드 (p.57 그대로) ==
+<pre class="c">
+def recolor(v):
+    p = parent(v)
+    if p.color == black:
+        return                      # 경우 A: 부모 black → ④ 안 깨짐, 끝
+    grand_p = p.parent
+    uncle = grand_p.right           # 슬라이드는 p 가 왼쪽 자식인 경우만 적었다 (아래 warn)
+    if uncle.color == red:          # 경우 B: 부모 red, uncle red → flip colors
+        p.color = black
+        uncle.color = black
+        grand_p.color = red
+        recolor(grand_p)            # grand_p 가 red 가 됐으니 그 위에서 다시 검사 (Recurse!)
+    else:  # uncle.color == black   # 경우 C: 부모 red, uncle black (NIL 포함)
+        p.color = black
+        grand_p.color = red
+        right_rotate(grand_p)  # yoink
+</pre>
+[[img:L8-57.png|L8 p.57 — recolor 코드. p 가 black 이면 return, uncle 이 red 면 색 뒤집기 후 recolor(grand_p), 아니면 색 교환 후 right_rotate(grand_p). Runtime: O(log n)|medium]]
+
+{|
+! 변수 || 뜻 || p.47 예(−1B 아래 6B(3R,7R), 0 삽입) || p.54 예(6B(3R,7B), 0 삽입)
+|-
+| `v` || 방금 red 가 된 노드(처음엔 새 노드) || 0 (red) → 재귀 후 6 || 0 (red)
+|-
+| `p` || v 의 부모 || 3 (red) → 재귀 후 −1 (black) || 3 (red)
+|-
+| `grand_p` || p 의 부모(조부모) || 6 (black) || 6 (black)
+|-
+| `uncle` || grand_p 의 다른 자식 = p 의 형제 || 7 (red) → flip || 7 (black) → rotate
+|-
+| 결과 || || 3B, 7B, 6R → recolor(6): 부모 −1 이 black → return || 3B(0R, 6R(·, 7B))
+|}
+[[sim:rb_insert_fix]]
+
+== 두 갈래 ==
+=== uncle red → 색 뒤집기(flip) ===
+p 와 uncle 을 black 으로, grand_p 를 red 로. grand_p 아래 모든 경로에서 black 이 "grand_p 한 칸" 에서 "p 또는 uncle 한 칸" 으로 내려왔을 뿐이라 '''black 수가 그대로''' → ⑤ 유지. v(red)의 부모 p 가 black 이 됐으니 ④ 도 그 자리에서는 해결. 대신 grand_p 가 red 가 됐으니 '''grand_p 의 부모가 red 라면''' 같은 문제가 두 층 위로 올라간 것 → `recolor(grand_p)` (p.50 "Now we're basically inserting 6 into some smaller tree. Recurse!").
+
+=== uncle black → rotation + 색 교환 ===
+uncle 이 black 이면 flip 은 안 된다(uncle 쪽 경로의 black 수가 하나 늘어 ⑤ 가 깨짐). 대신 p 를 black, grand_p 를 red 로 바꾸고 grand_p 에서 right rotation(p 를 YOINK)을 한다. p 가 새 부분 트리의 black root 가 되어 위에서 보면 black 수가 그대로이고, 끝. 재귀 없음.
+
+== Runtime O(log n) ==
+<pre class="txt">
+각 recolor 호출의 일: 색 바꾸기 몇 개 + (최대 한 번) rotation  → O(1)
+재귀는 uncle red 갈래에서만, v → grand_p 로 '두 층씩' 위로
+⇒ 호출 횟수 ≤ height/2 + 1 = O(height) = O(log n)       ([[height ≤ 2 log(n+1) 증명]])
+rotation 은 else 갈래에서 한 번 하고 끝나므로 삽입 전체에서 최대 한 번(슬라이드 버전 기준)
+</pre>
+
+{warn}
+'''슬라이드 코드는 한쪽 경우만 적었다.''' `uncle = grand_p.right`, `right_rotate(grand_p)` 는 '''p 가 grand_p 의 왼쪽 자식'''이고 v 도 p 의 왼쪽 자식인 경우(p.47, p.54 그림)만 맞다. 생략된 것:
+* '''대칭(거울) 경우''': p 가 grand_p 의 오른쪽 자식이면 `uncle = grand_p.left`, 회전은 `left_rotate(grand_p)`.
+* '''꺾인(zig-zag) 경우''': v 가 p 의 오른쪽 자식인데 p 는 왼쪽 자식이면, 먼저 `left_rotate(p)` 로 일자로 편 뒤 위의 처리를 한다.
+* '''root 처리''': v 가 root 이면 parent 가 없으므로 그냥 black 으로 칠하고 끝; flip 으로 root 가 red 가 되면 마지막에 root 를 black 으로(규칙 ②).
+[[CLRS]] 13.3 RB-INSERT-FIXUP 은 이것들을 포함해 대칭 포함 6 경우(한쪽 3 경우 × 좌우)로 정리한다. 교수는 "You are not responsible for the nitty-gritty details" 라고 했으니 시험은 슬라이드 버전의 main idea 수준으로 대비하면 된다.
+{/warn}
+
+{analogy}
+'''층간 소음 민원 처리.''' 새로 이사 온 집(v)이 시끄러운데 윗집(p)도 시끄러우면 규칙 위반. 옆집(uncle)도 시끄러우면, 윗집과 옆집을 둘 다 조용하게 만들고 대신 그 위층(grand_p)에 '시끄러움' 을 넘긴다 — 문제가 두 층 위로 올라갔으니 거기서 다시 민원 처리(재귀). 옆집이 조용하면 그렇게 넘길 수 없으니, 아예 세대 배치를 바꿔(rotation) 한 번에 끝낸다.
+{/analogy}
+
+{exam}
+슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" — recolor 의 줄 단위 세부보다 "'''부모 black → 끝 / uncle red → flip 후 위로 / uncle black → yoink'''" 세 갈래와 왜 $O(\log n)$ 인지(두 층씩 올라감)를 말할 수 있으면 된다.
+{/exam}
+
+{quiz}
+코드 빈칸: p.57 에서 uncle 이 red 인 갈래의 마지막 줄 `recolor(____)` 의 인자는? else 갈래의 마지막 줄 `________(grand_p)` 는?
+{/quiz}
+{answer}
+`recolor(grand_p)` — flip 으로 grand_p 가 red 가 됐으므로 grand_p 와 그 부모 사이에 ④ 위반이 생길 수 있어 grand_p 를 '새로 넣은 red 노드' 처럼 다시 검사한다.
+`right_rotate(grand_p)` — p 를 YOINK 해서 grand_p 자리로 올린다(p.54).
+{/answer}
+
+== 관련 문서 ==
+* [[rb_insert]] · [[RB 삽입 세 경우]] · [[uncle]] · [[rotation]] · [[red-black 규칙 5가지]] · [[red-black tree]] · [[L8 Tree Algorithms]]

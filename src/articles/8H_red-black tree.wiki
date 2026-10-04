@@ -1,0 +1,76 @@
+key: red-black tree
+title: red-black tree — 규칙 5가지로 height ≤ 2 log(n+1) 을 보장하는 BST
+category: 8강 Tree, 용어
+---
+== 개요 ==
+'''red-black tree''' 는 L8 후반부(p.32–60)의 주인공인 [[self-balancing BST]] 다. 각 노드에 red 또는 black 색을 칠하고 [[red-black 규칙 5가지]] 를 지키게 하면, 그 규칙이 [[proxy for balance]] 가 되어 [[height]] 가 항상 $2\log(n+1)$ 이하로 묶인다. BST 의 모든 연산이 [[O(height)]] 이므로 결과적으로 SEARCH/INSERT/DELETE 가 전부 $O(\log n)$ — p.61 의 [[best of both worlds 표]] 마지막 열을 채우는 자료구조다.
+
+{def}
+L8 p.32 "Red-Black Trees — A Binary Search Tree that balances itself! No more time-consuming by-hand balancing!" "Maintain balance by stipulating that '''black nodes are balanced''', and that there '''aren't too many red nodes'''. It's just good sense!"
+→ 노드에 색을 칠하고, black 노드끼리는 균형을 맞추며 red 노드는 너무 많지 않게(연달아 나오지 않게) 강제하는 BST.
+{/def}
+[[img:L8-32.png|L8 p.32 — Red-Black Trees: A Binary Search Tree that balances itself! 예시 트리 5B(3R(2B,4B), 7R(6B,8B)). It's just good sense!|medium]]
+
+{joke}
+p.32 의 1950년대 광고풍 그림과 "No more time-consuming by-hand balancing! … It's just good sense!" 는 옛날 가전제품 광고 패러디다. 균형 잡기를 "주방 가전" 처럼 파는 농담이다.
+{/joke}
+
+== 한 장 요약 ==
+{|
+! 질문 || 답 || 자세히
+|-
+| 규칙은? || ① red/black ② root black ③ NIL 은 black ④ red 의 자식은 black ⑤ 모든 x 에서 x→NIL 경로의 black 수 동일 || [[red-black 규칙 5가지]], [[NIL]]
+|-
+| 왜 균형인가? || black 은 완전 균형(⑤), red 는 사이사이에만(④) → 가장 긴 경로 ≤ 가장 짧은 경로 × 2 || [[black height b(x)]], [[2^b(x) − 1 claim]], [[height ≤ 2 log(n+1) 증명]]
+|-
+| 삽입은? || 새 노드를 red 로 BST 처럼 넣고, 부모가 red 면 [[uncle]] 색에 따라 색 뒤집기 또는 rotation || [[rb_insert]], [[recolor]], [[RB 삽입 세 경우]]
+|-
+| 삭제는? || p.58 "Deleting from a Red-Black tree — Fun exercise!" (강의 범위 밖, [[CLRS]] 13.4) || [[CLRS 12와 13]]
+|-
+| 결론 || p.60 "Red-Black Trees always have height at most 2log(n+1)… So all operations are O(log(n))." || 아래 공식 표
+|}
+
+== 왜 균형인가 (p.35–37) ==
+p.35: "The black nodes are balanced. The red nodes are 'spread out' so they don't mess things up too much." 직관(p.36)은 "한 경로를 red 로 패딩하면 다른 경로의 두 배까지 길어질 수 있다 — 그 이상은 안 된다" 이고, 증명(p.37)은
+<pre class="txt">
+n ≥ 2^{b(root)} − 1          ← [[2^b(x) − 1 claim]]
+  ≥ 2^{height/2} − 1         ← b(root) ≥ height/2 (규칙 ④)
+⇒ height ≤ 2 log(n+1)
+</pre>
+자세한 단계는 [[height ≤ 2 log(n+1) 증명]].
+
+== 삽입 개요 (p.40–57) ==
+* p.41: "Make a new red node. Insert it as you would normally. Fix things up if needed."
+* 부모가 black → 끝. 부모 red · uncle red → 색 뒤집기 후 조부모에서 재귀(p.47–50). 부모 red · uncle black → [[rotation]](YOINK) + 색 교환(p.52–54).
+* 코드: p.56 `rb_insert`, p.57 `recolor`. Runtime $O(\log n)$.
+[[anim:rb_insert_cases|0 을 red 로 삽입했을 때 세 장면 — 부모 black 이면 끝, uncle red 면 색 뒤집기 후 위로, uncle black 이면 YOINK + 색 교환. 장면마다 규칙 체크표가 초록으로]]
+[[sim:rb_insert_fix]]
+
+== 결론 (p.60) ==
+[[img:L8-60.png|L8 p.60 — What was the point again? height ≤ 2log(n+1), 모든 연산 O(height), 그러므로 O(log n)|medium]]
+
+== 공식 모음 ==
+{|
+! 연산 || 시간 || 근거
+|-
+| height || $\le 2\log_2(n+1)$ || p.37
+|-
+| SEARCH || $O(\log n)$ || BST SEARCH = $O(\text{height})$ (p.24, p.60)
+|-
+| INSERT || $O(\log n)$ || BST INSERT $O(\text{height})$ + recolor 가 2칸씩 위로, rotation $O(1)$ (p.56–57)
+|-
+| DELETE || $O(\log n)$ || CLRS 13.4 (슬라이드 p.58 "Fun exercise!")
+|-
+| rotation 1회 || $O(1)$ || 포인터 3개 (p.28)
+|}
+
+{analogy}
+'''회사 조직도.''' black 노드는 정규 관리자, red 노드는 임시 팀장이다. 규칙: 사장(root)은 정규(②), 어느 직원에서 맨 아래까지 결재 라인을 따라가도 '''정규 관리자 수는 똑같고'''(⑤), 임시 팀장 바로 밑에 또 임시 팀장을 둘 수는 없다(④). 그러면 가장 긴 결재 라인도 "정규, 임시, 정규, 임시, …" 로 가장 짧은 라인(정규만)의 두 배를 못 넘는다. 사람이 들어올 때마다 임시 팀장 자리를 바꾸거나(색 뒤집기) 한 팀을 통째로 위로 올리는(rotation) 작은 인사이동만 한다.
+{/analogy}
+
+{exam}
+슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언 p.39: "You are not responsible for the details for this class – but you should understand the main ideas." p.59: "You are not responsible for the nitty-gritty details of Red-Black Trees. (For this class) … You should know: '''What are the properties of an RB tree?''' And '''(more important) why does that guarantee that they are balanced?'''" → 1순위는 [[red-black 규칙 5가지]] 를 영어로 쓰기, 2순위(더 중요)는 [[height ≤ 2 log(n+1) 증명]] 을 설명하기. 삽입의 세 경우는 "main idea" 수준(red 로 넣는다 / flip / rotate)으로.
+{/exam}
+
+== 관련 문서 ==
+* [[red-black 규칙 5가지]] · [[height ≤ 2 log(n+1) 증명]] · [[RB 삽입 세 경우]] · [[rb_insert]] · [[recolor]] · [[proxy for balance]] · [[self-balancing BST]] · [[best of both worlds 표]] · [[CLRS 12와 13]] · [[L8 Tree Algorithms]]

@@ -1,0 +1,40 @@
+key: proxy for balance
+title: proxy for balance — 완벽한 균형 대신 유지할 수 있는 성질
+category: 8강 Tree, 용어
+---
+== 개요 ==
+'''proxy for balance''' 는 [[self-balancing BST]] 설계의 핵심 발상(L8 p.31, Idea 2)이다. 완벽한 균형은 유지하기 너무 비싸니, 대신 (a) '''만족하면 꽤 균형이라는 것이 보장되고''' (b) '''[[rotation]] 으로 값싸게 유지할 수 있는''' 어떤 성질 [SOME PROPERTY] 를 골라 그것만 지킨다. [[red-black tree]] 에서는 [[red-black 규칙 5가지]] 가 바로 그 proxy 다(p.33 "these rules are the proxy for balance").
+
+{def}
+L8 p.31 "Idea 2: have some proxy for balance — Maintaining perfect balance is too hard. Instead, come up with some proxy for balance: If the tree satisfies [SOME PROPERTY], then it's pretty balanced. We can maintain [SOME PROPERTY] using rotations."
+→ 완벽한 균형 대신, 균형을 '''함의'''하면서 '''유지 가능한''' 대리 성질.
+{/def}
+[[img:L8-31.png|L8 p.31 — Idea 2: have some proxy for balance. 두 조건: SOME PROPERTY ⇒ pretty balanced, SOME PROPERTY 는 rotation 으로 유지 가능|medium]]
+
+== 이름에서 개념 끌어내기 ==
+'''proxy''' = 대리인. 우리가 진짜 원하는 것은 "height 가 $O(\log n)$" 인데, 이것을 직접 감시하기는 어렵다(p.30 "What do we mean by 'seems unbalanced'? What's 'okay'?"). 그래서 노드 하나하나에서 '''국소적으로 확인할 수 있는''' 성질을 대리인으로 세운다. red-black tree 의 규칙은 전부 "이 노드 색", "이 노드 자식의 색", "이 노드에서 내려가는 경로" 처럼 국소적이다.
+
+== 두 조건이 둘 다 필요한 이유 ==
+{|
+! 후보 성질 || (a) 균형을 함의? || (b) rotation 으로 유지 가능? || 판정
+|-
+| 완벽한 균형(perfect balance) || ✓ || ✗ "too hard" (p.31) || 탈락
+|-
+| 아무 조건 없음(그냥 BST) || ✗ ([[편향 트리]]) || ✓ (지킬 게 없음) || 탈락
+|-
+| [[red-black 규칙 5가지]] || ✓ height $\le 2\log(n+1)$ ([[height ≤ 2 log(n+1) 증명]]) || ✓ 삽입 시 recolor + rotation ([[RB 삽입 세 경우]]) || 채택
+|}
+p.35: "This is the really clever idea! This Red-Black structure is a proxy for balance. '''It's just a little weaker than perfect balance, but we can actually maintain it!'''"
+[[img:L8-35.png|L8 p.35 — Why??? black 노드는 균형, red 노드는 'spread out'. 'It's just a little weaker than perfect balance, but we can actually maintain it!'|medium]]
+red-black tree 에서 (a) 는 "black 노드는 균형"(규칙 ⑤) + "red 는 흩어져 있다"(규칙 ④) 로, (b) 는 삽입 때 색 뒤집기와 rotation 으로 확인된다.
+
+{analogy}
+'''몸무게 대신 허리둘레.''' 건강(균형)을 직접 재기는 어렵다. 대신 "허리둘레 ≤ 기준" 이라는 대리 지표를 쓴다 — 이 지표를 지키면 대체로 건강하고(조건 a), 매일 줄자 하나로 확인하고 조금씩 관리할 수 있다(조건 b). 완벽한 체지방률 관리(perfect balance)는 너무 비싸서 포기하지만, 이 정도면 충분히 건강하다.
+{/analogy}
+
+{exam}
+슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" — 이 '''"why"''' 가 바로 proxy 의 조건 (a) 다. "proxy for balance 의 두 조건" 을 말할 수 있으면 RB 단원 서술형의 첫 문장이 된다.
+{/exam}
+
+== 관련 문서 ==
+* [[self-balancing BST]] · [[rotation]] · [[red-black 규칙 5가지]] · [[red-black tree]] · [[height ≤ 2 log(n+1) 증명]] · [[L8 Tree Algorithms]]

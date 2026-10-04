@@ -1,0 +1,94 @@
+key: RB 삽입 세 경우
+title: RB 삽입 세 경우 — 부모 black / uncle red → flip / uncle black → rotate
+category: 8강 Tree, 용어
+---
+== 개요 ==
+[[red-black tree]] 에 새 키를 넣을 때(L8 p.40–55) 새 노드는 항상 '''red''' 로 BST 처럼 붙인다([[rb_insert]]). 그 뒤 일어날 수 있는 상황은 세 가지다 — '''A''' 부모가 black 이면 아무 일도 없다, '''B''' 부모가 red 이고 [[uncle]] 도 red 면 색을 뒤집고(flip) 조부모에서 다시 본다, '''C''' 부모가 red 이고 uncle 이 black 이면 [[rotation]](YOINK) 한 번과 색 교환으로 끝낸다. 슬라이드는 같은 예 "6(3,7) 의 3 아래에 0 삽입" 을 세 가지 색 조합으로 보여 준다(p.40 / 42 / 51 / 55 "Many cases"). 코드 버전은 [[recolor]].
+
+{def}
+L8 p.41/43 "Inserting into a Red-Black Tree — Make a new red node. Insert it as you would normally. Fix things up if needed."
+L8 p.40 "Many cases — Suppose we want to insert here. eg, want to insert 0."
+→ 삽입 후 fix-up 은 (A) parent black, (B) parent red & uncle red, (C) parent red & uncle black 의 세 경우로 나뉜다.
+{/def}
+[[img:L8-55.png|L8 p.55 — Many cases: 6B(3B,7B), 6B(3R,7R), 6B(3R,7B) 세 경우 모두 체크 표시. 보라 화살표가 0 을 넣을 자리|medium]]
+
+== 요약 표 ==
+{|
+! 경우 || 조건 || 조치 || 다음 || 슬라이드
+|-
+| A || 부모 p 가 black || 없음 || 끝 || p.41
+|-
+| B || p red, uncle red || p, uncle → black, grand_p → red (flip colors) || grand_p 에서 다시 검사(재귀, 두 층 위로) || p.45–50
+|-
+| C || p red, uncle black (NIL 포함) || p → black, grand_p → red, right_rotate(grand_p) (YOINK) || 끝 || p.52–54
+|}
+
+== 경우 A — 부모 black (p.41) ==
+<pre class="txt">
+6B( 3B(·,주황), 7B(초록) ) 에 0 삽입
+BST 처럼: 0 < 6 → 왼쪽, 0 < 3 → 왼쪽, 3.left = NIL 이므로 3.left = 0(red)
+④ red 0 의 자식은 NIL(black)            ✓
+⑤ 0 은 red 라 어떤 경로의 black 수도 안 바뀜  ✓
+→ 끝 (p.41 큰 체크 표시)
+</pre>
+'''왜 처음부터 black 으로 넣지 않나?''' p.43 은 6B(3R,7R) 에 0 을 red 로 넣으면 3R–0R 이 연달아 "No!" 가 되는 것을 보이고, p.44 는 "Can't we just insert 0 as a black node? '''No!'''" — 6→3→0→NIL 경로만 black 이 하나 늘어 규칙 ⑤ 가 깨진다. ⑤ 위반은 트리 전체 문제지만 ④ 위반(red–red)은 국소 문제라 고칠 수 있다.
+
+== 경우 B — 부모 red, uncle red → flip (p.45–50) ==
+[[img:L8-47.png|L8 p.47 — We need a bit more context: −1B 아래 6R(3B(0R, 주황), 7B(초록)). 6, 3, 7 의 색을 뒤집었다(Flip colors!). Claim: RB-Tree properties still hold|medium]]
+<pre class="txt">
+p.45–46: 위쪽 맥락까지 보면  −1B( 회색, 6B( 3R(·,주황), 7R(초록) ) ),  0 을 red 로 3.left 에
+         → 3R–0R : ④ 위반
+p.47 flip colors:  3 → black, 7 → black, 6 → red
+결과:     −1B( 회색, 6R( 3B(0R, 주황), 7B(초록) ) )
+Claim "RB-Tree properties still hold" 확인:
+  ① 색은 전부 R/B                                            ✓
+  ② root(−1 또는 그 위)는 안 바뀜                              ✓
+  ③ NIL 은 그대로 black                                        ✓
+  ④ 0R 의 부모 3 은 이제 B, 6R 의 자식 3B·7B, 6R 의 부모 −1 은 B  ✓
+  ⑤ 6 아래 모든 경로: 전에는 (6B 에서 1개 + 3R/7R 0개), 이제는 (6R 0개 + 3B/7B 1개)
+     → 어느 경로든 black 수 그대로                               ✓
+</pre>
+p.48 "But what if that was red?" — −1 이 red 였다면 6R–(−1)R 이 새 ④ 위반이다. p.49–50 은 맥락을 하나 더(−3) 보여 주고 이렇게 말한다: "'''Now we're basically inserting 6 into some smaller tree. Recurse!'''" — 6 을 '방금 넣은 red 노드' 로 보고 같은 판정을 두 층 위에서 다시 한다(코드의 `recolor(grand_p)`).
+[[img:L8-50.png|L8 p.50 — More context: −3 아래 −1R, 그 아래 6R. Now we're basically inserting 6 into some smaller tree. Recurse!|small]]
+
+== 경우 C — 부모 red, uncle black → rotate (p.51–54) ==
+p.52: 6B( 3R(0R, 주황), 7B(초록) ) — "Actually, this can't happen?" 6–3 경로는 black 이 하나인데 6–7–… 은 적어도 둘이라 처음 삽입에서는 생길 수 없어 보인다. 하지만
+* "It might happen that we just turned 0 red from the previous step." — 경우 B 의 flip 으로 0 이 막 red 가 된 경우(0 아래에 파란 부분 트리가 있다).
+* "Or it could happen if 7 is actually NIL." — uncle 이 [[NIL]] 이면 black.
+[[img:L8-54.png|L8 p.54 — YOINK! 6B(3R(0R,파랑), 7B(초록)) 에서 3 을 들어 올려 3B(0R(파랑), 6R(주황, 7B(초록))). Need to argue that if RB-Tree property held before, it still does|medium]]
+<pre class="txt">
+p.53 Recall Rotations: X(Y(A,B),C) → Y(A, X(B,C))   여기서 X = 6, Y = 3, A = 0(파랑), B = 주황, C = 7(초록)
+p.54 YOINK:   6B( 3R(0R, 주황), 7B )   →   3( 0R, 6( 주황, 7B ) )
+색 교환:      p = 3 → black, grand_p = 6 → red
+결과:         3B( 0R(파랑), 6R(주황, 7B(초록)) )
+확인 (파랑·주황·초록 위의 black 수를 k 라 하자 — 회전 전 ⑤ 에서 셋이 같았다):
+  ④ 0R 의 부모 3B, 6R 의 부모 3B, 6R 의 자식 주황(원래 red 3 의 자식이라 black)·7B   ✓
+  ⑤ 3 에서: 0→파랑 = k, 6→주황 = k, 6→7→초록 = k        ✓
+     위에서 보면 부분 트리 root 가 6B 에서 3B 로 바뀌었을 뿐, black 하나 그대로   ✓
+→ 끝 (재귀 없음)
+</pre>
+
+[[anim:rb_insert_cases|0 을 red 로 삽입한 세 장면 — 부모 black 이면 끝, 부모·uncle red 면 색 뒤집기 후 조부모로, uncle black 이면 YOINK 와 색 교환. 장면 끝마다 규칙 다섯 칸이 초록]]
+[[sim:rb_insert_fix]]
+
+{warn}
+슬라이드(p.54, p.57)는 p 가 grand_p 의 '''왼쪽''' 자식이고 v 도 p 의 '''왼쪽''' 자식인 모양만 다룬다. 거울 경우(left_rotate)와 꺾인 경우(v 가 p 의 오른쪽 자식 → 회전 두 번)는 [[CLRS]] 13.3 에 있다 — 자세한 것은 [[recolor]] 의 주의 박스.
+{/warn}
+
+{analogy}
+'''불난 집 처리 매뉴얼.''' 새 집(red)을 지었는데 ① 윗집이 멀쩡하면(black) 끝. ② 윗집도 불났고(red) 옆집(uncle)도 불났으면, 둘 다 끄고 대신 그 위 관리사무소(grand_p)에 경보(red)를 넘긴다 — 관리사무소 위층에서 같은 매뉴얼을 다시. ③ 윗집만 불났고 옆집은 멀쩡하면 경보를 넘길 수 없으니, 윗집을 관리사무소 자리로 올리는 구조 변경(rotation) 한 번으로 끝낸다.
+{/analogy}
+
+{exam}
+슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언 p.39: "You are not responsible for the details for this class – but you should understand the main ideas." p.59: "You are not responsible for the nitty-gritty details of Red-Black Trees… You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" → 세 경우의 '''이름과 조치'''(표 한 장), "새 노드는 red(왜?)", "flip 후 Recurse!", "uncle black 이면 YOINK" 를 main idea 로 말할 수 있으면 된다. 세부 증명은 책임 범위 밖.
+{/exam}
+
+{quiz}
+트리 5B( 2R, 8R ) (root 5 는 black, 자식 2·8 은 red, 이것이 트리 전체)에 1 을 삽입하라. 1 은 2 의 왼쪽 자식 자리로 간다. 어떤 경우이며 결과 트리는?
+{/quiz}
+{answer}
+새 노드 1 은 red, 부모 2 는 red(④ 위반), uncle 8 은 '''red''' → '''경우 B (flip)'''. 2 → black, 8 → black, 5 → red. 이어서 `recolor(5)`: 5 는 root 라 부모가 없다 — 슬라이드 코드에는 없지만 CLRS 대로 root 를 다시 black 으로 칠해 규칙 ② 를 맞춘다. 결과 5B( 2B(1R, ·), 8B ). 모든 경로 black 수: 5→2→1→NIL = {2, NIL} = 2, 5→2→NIL = 2, 5→8→NIL = 2 ✓.
+{/answer}
+
+== 관련 문서 ==
+* [[recolor]] · [[rb_insert]] · [[uncle]] · [[rotation]] · [[red-black 규칙 5가지]] · [[NIL]] · [[red-black tree]] · [[L8 Tree Algorithms]]

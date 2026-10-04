@@ -1,0 +1,115 @@
+key: BST DELETE
+title: BST DELETE — 세 경우 (leaf / 자식 하나 / 자식 둘 → immediate successor)
+category: 8강 Tree, 알고리즘
+---
+== 개요 ==
+[[binary search tree]] 에서 키를 지우는 연산. [[BST SEARCH]] 로 지울 노드 x 를 찾은 뒤, x 의 자식 수에 따라 세 경우로 나눈다. 앞의 두 경우는 포인터 몇 개만 바꾸면 끝이고, 자식이 둘인 경우만 [[immediate successor]] 를 찾아 x 자리에 올려야 해서 "a bit more complicated"(p.21) 하다. 전체 비용은 여전히 [[O(height)]].
+
+{def}
+L8 p.21: "DELETE(key): x = SEARCH(key); if x.key == key: ….delete x…. — This is a bit more complicated…"
+L8 p.22–23 "several cases (by example) — say we want to delete 3":
+* "'''Case 1''': if 3 is a leaf, just delete it."
+* "'''Case 2''': if 3 has just one child, move that up."
+* "'''Case 3''': if 3 has two children, replace 3 with it's '''immediate successor'''. (aka, next biggest thing after 3)"
+지울 노드가 leaf 면 그냥 떼고, 자식이 하나면 그 자식(부분 트리째)을 x 자리로 끌어올리고, 자식이 둘이면 x 보다 바로 다음으로 큰 키(오른쪽 부분 트리의 최솟값)를 x 자리에 넣고 그 노드를 원래 자리에서 지운다.
+{/def}
+
+{analogy}
+'''회사에서 팀장이 퇴사할 때.''' 부하가 없는 팀장(leaf)은 그냥 자리를 없앤다(Case 1). 부하가 한 팀뿐이면 그 팀의 리더가 팀째로 한 칸 올라온다(Case 2). 부하 팀이 둘이면 아무나 올릴 수 없다 — 연봉 서열을 지키려면 "팀장 바로 다음 서열"인 사람(오른쪽 팀에서 가장 서열이 낮은 사람)을 데려와 앉혀야 한다(Case 3). 그 사람은 원래 자리에서 부하가 최대 한 팀뿐이라 빼내기도 쉽다.
+{/analogy}
+
+== Case 1, 2 (p.22) ==
+[[img:L8-22.png|L8 p.22 — Case 1: 3 이 leaf 면 그냥 삭제 / Case 2: 자식 하나면 그 자식(삼각형 = 부분 트리)을 위로|large]]
+<pre class="txt">
+Case 1 (leaf)            5            5
+                        /     →
+                       3              (5.left = NIL)
+
+Case 2 (자식 하나)        5            5
+                        /            /
+                       3      →     2      (5.left = 2, 2.parent = 5)
+                      /            /\
+                     2            [부분 트리]
+                    /\
+                [부분 트리]
+</pre>
+"This triangle is a cartoon for a subtree" — 2 아래에 무엇이 매달려 있든 통째로 한 칸 올라간다. 2 의 부분 트리 키는 전부 3 의 왼쪽 descendant 였으므로 5 보다 작다 → [[BST property]] 유지.
+
+== Case 3 (p.23) ==
+[[img:L8-23.png|L8 p.23 — Case 3: 3 을 immediate successor 3.1 로 교체. 3.1 은 4 아래 부분 트리 안에 있다|large]]
+슬라이드의 문답을 그대로:
+{|
+! 질문 (p.23) || 답 || 이유
+|-
+| Does this maintain the BST property? || Yes. || 3.1 은 3 의 오른쪽 부분 트리 원소라 왼쪽(2 쪽) 전부보다 크고, 오른쪽 부분 트리에서 가장 작으니 나머지 오른쪽 원소 전부보다 작다
+|-
+| How do we find the immediate successor? || SEARCH for 3 in the subtree under 3.right || 3.right 에서 시작해 3 을 찾으면 3 보다 큰 키만 있으니 계속 왼쪽으로 내려가다 NIL 직전에서 멈춘다 = 최솟값
+|-
+| How do we remove it when we find it? || If [3.1] has 0 or 1 children, do one of the previous cases. || Case 1 또는 Case 2 로 떼어낸다
+|-
+| What if [3.1] has two children? || It doesn't. || 아래 증명
+|}
+{info}
+'''왜 successor 는 자식이 둘일 수 없나.''' successor s 에게 왼쪽 자식 c 가 있다고 하자. c 는 3 의 오른쪽 부분 트리 안에 있으므로 $c > 3$, 그리고 s 의 왼쪽 descendant 이므로 $c < s$. 그러면 $3 < c < s$ 로 c 가 s 보다 "3 바로 다음"에 가깝다 — s 가 immediate successor 라는 데 모순. 따라서 s 에게는 '''왼쪽 자식이 없다''' → 자식은 많아야 하나(오른쪽). ([[귀류법]]) SEARCH 의 관점에서도 같다: SEARCH(3) 은 s 에서 왼쪽으로 가려다 NIL 을 만나 멈춘 것이니 s.left = NIL.
+{/info}
+
+== 예제: p.10 트리에서 하나씩 지우기 ==
+<pre class="txt">
+트리: 5 (3 (2 (1), 4), 7 (-, 8))
+
+DELETE 1   1 은 leaf                    → Case 1: 2.left = NIL
+DELETE 2   2 의 자식은 1 하나            → Case 2: 3.left = 1, 1.parent = 3
+DELETE 3   3 의 자식은 2, 4 둘          → Case 3:
+             successor = SEARCH(3) in 3.right 부분 트리
+                       = 4 에서 3 < 4 → 4.left = NIL → 멈춤 → '''4'''
+             4 를 원래 자리에서 제거 (4 는 leaf → Case 1)
+             3 자리에 4 를 넣는다
+           결과: 5 (4 (2 (1), -), 7 (-, 8))
+</pre>
+[[sim:bst_ops]]
+(op = DELETE 1 / DELETE 2 / DELETE 3)
+
+== 코드 (슬라이드는 "Write pseudocode for all of these!" — 연습용 Python 풍) ==
+<pre class="c">
+def delete(root, key):
+    x = search(root, key)
+    if x.key != key:
+        return                                   # 없는 키
+    if x.left is NIL and x.right is NIL:         # Case 1: leaf
+        replace_in_parent(x, NIL)
+    elif x.left is NIL or x.right is NIL:        # Case 2: 자식 하나
+        child = x.left if x.left is not NIL else x.right
+        replace_in_parent(x, child)              # 부분 트리째 끌어올림
+    else:                                        # Case 3: 자식 둘
+        s = search(x.right, key)                 # immediate successor (3.right 아래에서 SEARCH)
+        replace_in_parent(s, s.right)            # s 는 left 가 없다 → Case 1 또는 2
+        x.key = s.key                            # x 자리에 successor 의 키
+</pre>
+{|
+! 변수 || 뜻 || DELETE 3 에서의 값
+|-
+| `x` || 지울 노드 (SEARCH 결과) || 노드 3
+|-
+| `child` || Case 2 에서 끌어올릴 유일한 자식 || (Case 3 이라 안 씀)
+|-
+| `s` || [[immediate successor]] = x.right 부분 트리의 최솟값 || 4
+|-
+| `replace_in_parent(a, b)` || a 의 부모가 a 대신 b 를 가리키게 (b.parent 도 갱신) || 3 의 오른쪽 자리를 NIL 로
+|}
+{info}
+`x.key = s.key` 로 키만 복사하는 방식은 "replace 3 with its immediate successor" 의 가장 짧은 구현이다. CLRS 12.3 의 TREE-DELETE 는 키 복사 대신 TRANSPLANT 로 노드 자체를 옮긴다(노드 포인터를 들고 있는 외부 코드가 있을 때 안전). 결과 트리 모양은 같다.
+{/info}
+
+{quiz}
+p.10 트리(5 (3 (2 (1), 4), 7 (-, 8)))에서 DELETE 3 을 하면 3 자리에 누가 오는가? 결과 트리의 root 의 왼쪽 자식과 그 자식들을 적어라.
+{/quiz}
+{answer}
+3 은 자식이 둘(2, 4) → Case 3. immediate successor = 3.right 부분 트리의 최솟값 = '''4'''(4 는 왼쪽 자식이 없으니 바로 4). 4 를 원래 자리에서 떼고(leaf, Case 1) 3 자리에 넣는다. 결과: 5.left = 4, 4.left = 2, 4.right = NIL, 2.left = 1. 흔한 오답 "2 가 올라온다" — 2 는 immediate '''predecessor'''(바로 작은 것)라 그것도 BST property 는 지키지만, 슬라이드의 규칙은 '''successor''' 다.
+{/answer}
+
+{exam}
+(L8 은 아직 수업 전 — 슬라이드 강조 기준) 세 경우의 이름과 처리, 그리고 p.23 의 네 문답(유지되나? Yes / 찾는 법: 3.right 아래에서 SEARCH 3 / 제거: 0 또는 1 자식이니 앞의 경우 / 자식 둘? It doesn't)이 서술형 후보. "왜 successor 는 자식이 둘일 수 없나"를 한 문단으로 쓸 수 있게.
+{/exam}
+
+== 관련 문서 ==
+* [[immediate successor]] · [[BST SEARCH]] · [[BST INSERT]] · [[BST property]] · [[binary search tree]] · [[O(height)]] · [[MIN과 MAX]]

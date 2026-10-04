@@ -1,0 +1,55 @@
+key: O(height)
+title: O(height) — SEARCH 가 전부이고 나머지는 SEARCH + O(1)
+category: 8강 Tree, 용어
+---
+== 개요 ==
+L8 p.24 의 결론: [[binary search tree]] 의 세 연산 SEARCH/INSERT/DELETE 는 모두 '''트리의 [[height]] 에 비례'''하는 시간이 걸린다. 비용 분석이 연산마다 따로 필요 없는 이유는, INSERT 와 DELETE 가 결국 [[BST SEARCH]] 를 한 번 부르고 포인터 몇 개를 바꾸는 것뿐이기 때문이다. 문제는 그 height 가 $\log n$ 일 수도, $n$ 일 수도 있다는 것(p.25) — 여기서 [[self-balancing BST]] 가 시작된다.
+
+{def}
+L8 p.24 "How long do these operations take?": "'''SEARCH is the big one.''' Everything else just calls SEARCH and then does some small O(1)-time operation." — "'''Time = O(height of tree)'''. Trees have depth O(log(n)). Done!"
+L8 p.26: "Goal: Fast SEARCH/INSERT/DELETE. All these things take time O(height). '''And the height might be big!!!'''"
+BST 연산의 시간은 $O(\text{height})$. 균형 잡힌 트리면 $O(\log n)$ 이지만, height 자체는 보장되지 않는다.
+{/def}
+[[img:L8-24.png|L8 p.24 — SEARCH is the big one; Time = O(height of tree); "Trees have depth O(log(n)). Done!" (← 다음 장에서 뒤집힌다)|large]]
+
+{analogy}
+'''택배 배송 = 찾아가는 시간 + 문 앞에 놓는 시간.''' 놓는 데는 몇 초(O(1))면 되고, 시간의 대부분은 집을 '''찾아가는''' 데 든다. 그러니 배송 시간은 결국 "동네 길이 얼마나 깊게 꼬였나(height)" 로 정해진다. 길이 반듯한 신도시(균형 트리)면 금방이고, 외길 산동네(편향 트리)면 끝집까지 한참이다.
+{/analogy}
+
+== 연산별 분해 ==
+{|
+! 연산 || SEARCH 부분 || 그 뒤의 일 || 합
+|-
+| [[BST SEARCH]] || 한 층에 비교 1번, 최대 height 층 || — || $O(\text{height})$
+|-
+| [[BST INSERT]] || x = SEARCH(key) || 새 노드 만들어 x.left/x.right 에 연결: $O(1)$ || $O(\text{height})$
+|-
+| [[BST DELETE]] Case 1, 2 || x = SEARCH(key) || 포인터 바꾸기: $O(1)$ || $O(\text{height})$
+|-
+| [[BST DELETE]] Case 3 || x = SEARCH(key) + successor 찾는 SEARCH(x.right 아래) || 키 교체, Case 1/2 로 떼기: $O(1)$ || $O(\text{height}) + O(\text{height})$
+|}
+DELETE Case 3 은 SEARCH 를 두 번 하지만 두 번째는 x 아래에서 이어서 내려가는 것이라 합쳐도 경로 하나 길이 → 여전히 $O(\text{height})$.
+
+== "Done!" ... 이 아니다 (p.25–26) ==
+<pre class="txt">
+p.24  "Trees have depth O(log(n)). Done!"
+p.25  "Wait..."  2,3,4,5,6,7,8 순으로 INSERT → 사슬, depth n      → [[편향 트리]]
+                 "So this could happen."  → O(height) = O(n)
+p.26  Idea 0: 트리가 얼마나 깊어지는지 기록하다가
+              너무 높아지면 처음부터 다시 만든다 (re-do everything from scratch)
+              → "At least Ω(n) every so often…"
+              → "How often is 'every so often' in the worst case? It's actually pretty often!"
+              → "Turns out that's not a great idea."
+p.27  Instead we turn to… '''Self-Balancing Binary Search Trees'''
+</pre>
+[[anim:bst_skew_vs_balanced|왼쪽: 2..8 순서로 삽입 → 오른쪽으로만 자라는 사슬 / 오른쪽: 5,3,7,2,4,8,1 → 가지가 퍼진 낮은 트리. SEARCH 8 의 걸음 수를 비교하자]]
+{info}
+Idea 0 이 왜 "pretty often" 인가: 적이 정렬된 순서로 계속 INSERT 하면 트리는 몇 번만 넣어도 다시 한쪽으로 기운다. 다시 만들 때마다 $\Omega(n)$ 이 드니, 재구성 빈도가 높으면 연산당 비용이 $\log n$ 으로 내려오지 않는다. 그래서 '''매 연산마다 조금씩''' 균형을 고치는 방법 — [[rotation]] 과 [[proxy for balance]] — 로 넘어간다.
+{/info}
+
+{exam}
+(L8 은 아직 수업 전 — 슬라이드 강조 기준) 한 줄 요약 "SEARCH is the big one; 나머지는 SEARCH + O(1) → 전부 O(height)" 와, 그 다음 장의 반전 "height might be big (편향 트리 → O(n))" 이 L8 전반부의 결론이다. "BST 연산이 $O(\log n)$ 이다" 는 '''틀린 문장'''(balanced 일 때만) — T/F 함정 후보. [[red-black tree]] 는 height $\le 2\log(n+1)$ 을 보장해서 이것을 참으로 만든다.
+{/exam}
+
+== 관련 문서 ==
+* [[height]] · [[편향 트리]] · [[BST SEARCH]] · [[BST INSERT]] · [[BST DELETE]] · [[self-balancing BST]] · [[best of both worlds 표]]

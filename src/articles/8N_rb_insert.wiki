@@ -1,0 +1,78 @@
+key: rb_insert
+title: rb_insert — red 로 넣고 recolor 로 고친다 (p.56)
+category: 8강 Tree, 알고리즘
+---
+== 개요 ==
+'''rb_insert''' 는 [[red-black tree]] 의 삽입 함수(L8 p.56)다. 하는 일은 세 줄 요약 그대로 — 새 노드를 '''red''' 로 만들고, 보통 [[BST INSERT]] 처럼 자리를 찾아 붙이고, 규칙이 깨졌으면 [[recolor]] 로 고친다. 앞 두 단계는 일반 BST 와 같고, 차이는 마지막 `recolor(v)` 한 줄뿐이다. Runtime $O(\log n)$.
+
+{def}
+L8 p.41 "Inserting into a Red-Black Tree — Make a new red node. Insert it as you would normally. Fix things up if needed." (세 번째 줄은 p.43 부터)
+L8 p.56 "insert in Red-Black Trees … Runtime: O(log n)"
+→ 새 키를 red 노드로 BST 삽입한 뒤 recolor 로 [[red-black 규칙 5가지]] 를 복구하는 함수.
+{/def}
+
+== 코드 (p.56 그대로) ==
+<pre class="c">
+def rb_insert(root, key_to_insert):
+    x = search(root, key_to_insert)          # BST SEARCH: 키가 없으면 '트리 밖으로 나가기 직전 마지막 노드'
+    v = new red vertex with key_to_insert    # 새 노드는 항상 red
+    if key_to_insert > x.key:
+        x.right = v
+        recolor(v)                           # 규칙 복구 (p.57)
+    if key_to_insert < x.key:
+        x.left = v
+        recolor(v)
+    if key_to_insert == x.key:
+        return                               # 이미 있는 키 (distinct 가정) → 아무것도 안 함
+</pre>
+[[img:L8-56.png|L8 p.56 — rb_insert 코드. search 로 자리 찾기 → new red vertex → x.left/x.right 에 붙이고 recolor(v). Runtime: O(log n)|medium]]
+{|
+! 변수 || 뜻 || 예제(p.41: 6B(3B,7B) 에 0 삽입)에서의 값
+|-
+| `root` || 트리의 root || 6
+|-
+| `key_to_insert` || 넣을 키 || 0
+|-
+| `x` || [[BST SEARCH]] 가 돌려준 노드 = 새 노드의 '''부모'''가 될 노드(키가 없으면 마지막으로 방문한 노드) || 3 (6 → 3 → 3.left = NIL 직전에서 멈춤)
+|-
+| `v` || 새로 만든 '''red''' 노드 || 0 (red)
+|}
+예제 추적: `0 < 3` 이므로 `x.left = v` → `recolor(v)`: 부모 3 이 black → 바로 return. 끝. (부모가 red 인 경우는 [[RB 삽입 세 경우]])
+[[sim:rb_insert_fix]]
+
+== 왜 red 로 넣는가 (p.44) ==
+p.44 "Can't we just insert 0 as a black node? '''No!'''"
+<pre class="txt">
+트리 6B( 3R(·,주황), 7R(초록) ) 에 0 을 black 으로 넣으면:
+  6 → 3 → 0 → NIL 경로만 black 이 하나 늘어난다
+  6 → 3 → 주황 …, 6 → 7 → 초록 … 경로는 그대로
+  ⇒ 규칙 ⑤ (모든 경로의 black 수 동일) 가 트리 전체에서 깨진다 — 고치기 어렵다
+red 로 넣으면:
+  black 수는 어느 경로에서도 변하지 않는다 → ⑤ 는 자동으로 유지
+  깨질 수 있는 것은 ④ (red 의 자식은 black) 하나뿐 — 부모가 red 일 때만, 그것도 국소적으로
+</pre>
+즉 "⑤ 를 깨뜨리는 전역 문제" 대신 "④ 를 깨뜨리는 국소 문제" 를 고르는 것이다. 국소 문제는 [[recolor]] 가 [[uncle]] 색을 보고 고친다.
+
+== Runtime O(log n) ==
+* `search`: [[O(height)]] = $O(\log n)$ ([[height ≤ 2 log(n+1) 증명]])
+* 노드 생성·연결: $O(1)$
+* `recolor`: 한 번 재귀할 때마다 두 층(v → grand_p)씩 올라가고, 각 단계 $O(1)$(rotation 도 $O(1)$) → $O(\text{height}) = O(\log n)$
+
+{analogy}
+'''새 직원은 임시직(red)으로 채용.''' 정규직(black)으로 바로 뽑으면 그 부서 결재 라인만 정규직이 하나 늘어 전사 규칙("모든 결재 라인의 정규직 수 동일")이 깨진다. 임시직으로 뽑으면 그 규칙은 안 건드리고, 생길 수 있는 문제는 "임시직 상사 밑에 임시직" 이라는 '''그 부서만의''' 문제뿐이라 근처 인사 조정(recolor)으로 해결된다.
+{/analogy}
+
+{exam}
+슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" — 코드 세부보다는 "'''새 노드는 red'''(왜? black 이면 ⑤ 가 깨지니까) → BST 처럼 삽입 → fix up" 이라는 main idea 와 runtime $O(\log n)$ 을 설명할 수 있으면 된다.
+{/exam}
+
+{quiz}
+코드 빈칸: p.56 `rb_insert` 의 두 번째 줄 `v = new ____ vertex with key_to_insert` 의 빈칸은? 그리고 `key_to_insert < x.key` 일 때 실행되는 두 줄은?
+{/quiz}
+{answer}
+'''red''' — `v = new red vertex with key_to_insert`. black 으로 넣으면 그 경로만 black 이 하나 늘어 규칙 ⑤ 가 깨진다(p.44 "No!").
+`x.left = v` 그리고 `recolor(v)`.
+{/answer}
+
+== 관련 문서 ==
+* [[recolor]] · [[RB 삽입 세 경우]] · [[uncle]] · [[BST INSERT]] · [[BST SEARCH]] · [[red-black tree]] · [[L8 Tree Algorithms]]

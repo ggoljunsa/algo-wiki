@@ -1,0 +1,45 @@
+key: self-balancing BST
+title: self-balancing BST — 스스로 균형을 유지하는 이진 탐색 트리
+category: 8강 Tree, 용어
+---
+== 개요 ==
+[[binary search tree]] 의 모든 연산(SEARCH/INSERT/DELETE)은 [[O(height)]] 다. 그런데 [[height]] 는 삽입 순서에 따라 n 까지 커질 수 있다([[편향 트리]]). '''self-balancing BST''' 는 삽입·삭제를 할 때마다 트리가 '''스스로''' 모양을 고쳐 height 를 $O(\log n)$ 으로 묶어 두는 BST 다. L8 p.26–31 은 "어떻게 하면 스스로 균형을 잡게 할까" 를 Idea 0 → Idea 1 → Idea 2 순서로 다듬어 가고, 그 답으로 p.32 부터 [[red-black tree]] 를 소개한다.
+
+{def}
+L8 p.32: "A Binary Search Tree that balances itself! No more time-consuming by-hand balancing!"
+L8 p.26 Goal: "Fast SEARCH/INSERT/DELETE. All these things take time O(height). And the height might be big!!!"
+→ 스스로 균형을 잡는 BST. 연산마다 조금씩 손을 봐서 height 를 항상 $O(\log n)$ 으로 유지한다.
+{/def}
+
+== 이름에서 개념 끌어내기 ==
+* '''self''' — 사용자가 "이제 재정렬해 줘" 라고 부르지 않는다. INSERT/DELETE 안에 균형 잡기 단계가 들어 있다.
+* '''balancing''' — 완벽한 균형(모든 leaf 깊이가 거의 같음)이 아니라 "height 가 $O(\log n)$" 정도면 된다. 이 느슨함이 핵심이다([[proxy for balance]]).
+* '''BST''' — [[BST property]] 는 절대 깨지면 안 된다. 그래서 모양을 바꾸는 도구도 BST property 를 지키는 [[rotation]] 이어야 한다.
+
+== Idea 0 → 1 → 2 (p.26–31) ==
+[[img:L8-26.png|L8 p.26 — What to do? Goal 은 빠른 SEARCH/INSERT/DELETE, 전부 O(height). Idea 0: 너무 높아지면 처음부터 다시 만들기 → Ω(n) every so often|medium]]
+{|
+! 단계 || 슬라이드 || 내용 || 판정
+|-
+| Idea 0 || p.26 || 트리 깊이를 추적하다가 "If it gets too tall, re-do everything from scratch." 다시 만드는 데 최소 $\Omega(n)$ || "Turns out that's not a great idea." — "How often is 'every so often' in the worst case? It's actually pretty often!"
+|-
+| Idea 1 || p.28–30 || [[rotation]]: BST property 를 지키며 $O(1)$ 에 모양을 바꾼다. "Whenever something seems unbalanced, do rotations until it's okay again." || 도구는 좋지만 기준이 모호 — p.30 "Even for me this is pretty vague. What do we mean by 'seems unbalanced'? What's 'okay'?"
+|-
+| Idea 2 || p.31 || [[proxy for balance]]: "[SOME PROPERTY]" 를 만족하면 꽤 균형이고, 그 성질을 rotation 으로 유지할 수 있다 || "There are actually several ways to do this, but today we'll see…" → [[red-black tree]]
+|}
+
+[[anim:rotation_yoink|Idea 1 의 도구: X 아래의 Y 를 YOINK 로 들어 올리면 B 가 X 쪽으로 떨어지고, BST property 는 그대로, 바뀐 포인터는 3개뿐이다]]
+
+{analogy}
+'''책장 정리.''' 책을 꽂을 때마다 대충 끝에 꽂다가 너무 엉망이 되면 주말에 책장 전체를 다시 정리하는 것이 Idea 0 이다 — 정리 한 번이 $\Omega(n)$ 이고, 최악의 경우 "주말" 이 매우 자주 온다. self-balancing 은 책 한 권 꽂을 때마다 '''바로 옆 두세 권만''' 살짝 자리를 바꿔(rotation) 책장이 기울지 않게 하는 습관이다. 다만 "언제 얼마나 바꿀지" 규칙이 있어야 하는데, 그 규칙이 red-black tree 의 [[red-black 규칙 5가지]] 다.
+{/analogy}
+
+== 여러 가지 방법 ==
+p.31 의 "several ways" — AVL tree, 2-3 tree, splay tree 등이 모두 self-balancing BST 다(슬라이드 밖 이름; [[CLRS]] 13장 문제·참고에 나온다). L8 에서 다루는 것은 [[red-black tree]] 하나뿐이고, 그 결과는 p.60 "Red-Black Trees always have height at most 2log(n+1)… So all operations are O(log(n))."
+
+{exam}
+슬라이드 기준(아직 수업 전, 녹음 없음). "왜 그냥 BST 로는 부족한가 → $O(\text{height})$ 인데 height 가 n 일 수 있다 → self-balancing" 의 동기 흐름, 그리고 Idea 0 이 왜 나쁜지(재구성 $\Omega(n)$ 이 자주 일어난다)를 한 문장으로 말할 수 있으면 된다. 결론 표는 [[best of both worlds 표]].
+{/exam}
+
+== 관련 문서 ==
+* [[rotation]] · [[proxy for balance]] · [[red-black tree]] · [[편향 트리]] · [[O(height)]] · [[best of both worlds 표]] · [[L8 Tree Algorithms]]

@@ -1,0 +1,56 @@
+key: BST INSERT
+title: BST INSERT — SEARCH 한 뒤 그 노드의 자식으로 매단다
+category: 8강 Tree, 알고리즘
+---
+== 개요 ==
+[[binary search tree]] 에 새 키를 넣는 연산. [[BST SEARCH]] 가 "없는 키면 트리 밖으로 나가기 직전 노드 x" 를 돌려주므로, 새 노드를 x 의 비어 있는(NIL) 자식 자리에 매달기만 하면 된다. SEARCH + $O(1)$ = [[O(height)]].
+
+{def}
+L8 p.20 "INSERT in a Binary Search Tree — EXAMPLE: Insert 4.5":
+* INSERT(key):
+* → x = SEARCH(key)
+* → '''if''' key > x.key: Make a new node with the correct key, and put it as the '''right child''' of x.
+* → '''if''' key < x.key: Make a new node with the correct key, and put it as the '''left child''' of x.
+* → '''if''' x.key == key: '''return'''
+SEARCH 가 멈춘 노드 x 와 비교해, 크면 오른쪽 자식, 작으면 왼쪽 자식으로 새 노드를 단다. 이미 있으면(키 distinct 가정) 아무것도 안 한다.
+{/def}
+[[img:L8-20.png|L8 p.20 — Insert 4.5: x = SEARCH(4.5) = 4, 4.5 > 4 이므로 4 의 right child 로|large]]
+
+{analogy}
+'''줄 서기 자리 찾기.''' 키 순서대로 선 사람들 사이 갈림길을 표지판대로 따라가다 막다른 곳(빈자리)에 닿으면, 바로 앞 사람(x)의 왼쪽이나 오른쪽 빈칸에 서면 끝. 이미 서 있는 사람을 밀어낼 필요가 없다 — 그래서 정렬 배열(뒤를 전부 밀어야 하는 $O(n)$)보다 빠르다.
+{/analogy}
+
+== 예제 (p.20) ==
+<pre class="txt">
+INSERT(4.5)
+  x = SEARCH(4.5)        5 → 3 → 4, 4.right = NIL → x = 4
+  4.5 > x.key = 4        → 새 노드 4.5 를 4.right 에
+  (4.5 의 left, right = NIL, parent = 4)
+
+          5                      5
+        /   \                  /   \
+       3     7       →        3     7
+      / \     \              / \     \
+     2   4     8            2   4     8
+    /                      /     \
+   1                      1      4.5
+</pre>
+[[sim:bst_ops]]
+(op = INSERT 4.5)
+
+{info}
+SEARCH 가 멈춘 x 의 해당 쪽 자식은 '''반드시 NIL''' 이다 — NIL 을 만나서 멈춘 것이니까. 그래서 "put it as the right child of x" 가 기존 노드를 덮어쓸 일이 없다. 그리고 새 노드는 항상 '''leaf''' 로 들어간다.
+{/info}
+
+== 왜 BST property 가 유지되나 ==
+SEARCH 경로의 각 조상 y 에서 key < y.key 이면 왼쪽으로, 크면 오른쪽으로 내려왔다. 새 노드는 그 경로의 끝에 붙으므로 모든 조상에 대해 "왼쪽 descendant 면 작고, 오른쪽 descendant 면 크다" 가 맞는다 → [[BST property]] 유지.
+
+== 시간 ==
+SEARCH $O(\text{height})$ + 노드 생성·포인터 연결 $O(1)$ = $O(\text{height})$. 정렬된 순서(2,3,4,…)로 계속 넣으면 [[편향 트리]] 가 되어 i 번째 삽입이 $i-1$ 번 비교 → 전체 $\Theta(n^2)$.
+
+{exam}
+(L8 은 아직 수업 전 — 슬라이드 강조 기준) [[red-black tree]] 의 삽입 [[rb_insert]](p.56)는 '''이 INSERT 와 똑같고 끝에 `recolor(v)` 한 줄'''이 붙는다: `x = search(root, key_to_insert)` → 새 '''red''' 노드 v 를 x.right/x.left 에 → [[recolor]]. INSERT 의 세 갈래를 외워 두면 rb_insert 의 앞부분은 공짜다.
+{/exam}
+
+== 관련 문서 ==
+* [[BST SEARCH]] · [[BST DELETE]] · [[binary search tree]] · [[BST property]] · [[O(height)]] · [[rb_insert]] · [[편향 트리]]

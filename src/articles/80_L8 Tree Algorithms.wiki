@@ -1,0 +1,392 @@
+key: L8 Tree Algorithms
+title: L8 Tree Algorithms — Binary Search Tree 와 Red-Black Tree
+category: 8강 Tree, 메인
+---
+== 개요 ==
+[[L7 Randomized Algorithms II]] 의 [[hash table]] 은 [[INSERT/DELETE/SEARCH]] 를 '''expected''' $O(1)$ 에 해 주지만 worst-case 는 $O(n)$ 이었다. 교수는 그때 "better worst-case 자료구조는 나중에 tree 에서" 라고 예고했고, L8 이 그 답이다. 핵심 질문: '''"정렬된 배열의 빠른 SEARCH 와 [[linked list]] 의 빠른 INSERT/DELETE 를 동시에, 그것도 worst-case $O(\log n)$ 으로 가질 수 있나?"''' 답은 '''균형 잡힌 [[binary search tree]]''', 그리고 균형을 스스로 유지하는 '''[[red-black tree]]''' 다.
+
+[[두 가지 질문]] 으로 말하면:
+* ① '''Does it work?''' — 트리가 늘 [[BST property]] 를 지키는가? 그리고 red-black tree 라면 [[red-black 규칙 5가지]] 를 삽입·삭제 후에도 지키는가? ([[rotation]] 과 [[recolor]] 가 둘 다 깨지 않는다.)
+* ② '''Is it fast?''' — BST 의 모든 연산은 [[O(height)]] 다. 그런데 height 는 $n$ 까지 커질 수 있다([[편향 트리]]). red-black tree 는 '''height $\le 2\log(n+1)$''' 을 보장하므로([[height ≤ 2 log(n+1) 증명]]) 모든 연산이 $O(\log n)$.
+
+* 교재: [[CLRS]] '''12.1, 12.2, 12.3 과 13''' (p.3) → [[CLRS 12와 13]].
+* '''슬라이드만 게시됨(2026-10-04), 아직 수업 전 — 녹음 없음.''' 아래 `{exam}` 은 슬라이드 ⭐ 기준이며 수업 후 갱신.
+* 페이지 번호는 슬라이드에 인쇄된 번호 p.N 이다. L8 은 '''PNG 번호 = 인쇄 번호''', 숨긴 슬라이드 없음 (p.38 은 빈 흰 페이지, p.1·19·27·56·57·62 는 번호가 인쇄되지 않았을 뿐 같은 순서). 예: p.33 규칙 5가지 → `L8-33.png`.
+* "For today all keys are distinct." (p.10) — L1 의 [[distinct 가정]] 과 같은 단순화.
+
+[[anim:bst_skew_vs_balanced|먼저 10초 — 같은 7개 키라도 2,3,4,5,6,7,8 순서로 넣으면 한쪽으로 늘어진 사슬(height 7), 5,3,7,2,4,8,1 순서로 넣으면 height 3. "모든 연산 = O(height)" 이니 균형이 전부라는 L8 의 결론을 먼저 잡자]]
+
+{analogy}
+'''회사 조직도와 인사팀.''' [[binary search tree]] 는 "나보다 작은 사람은 전부 왼쪽 팀, 큰 사람은 전부 오른쪽 팀" 이라는 규칙의 조직도다. 사람을 찾을 때는 사장부터 "왼쪽? 오른쪽?" 만 물으며 내려가니 걸리는 시간 = 조직도의 '''층 수'''([[height]]). 그런데 입사 순서가 나쁘면(2,3,4,5,… 순서대로 입사) 조직도가 "부장 밑에 차장 하나, 그 밑에 과장 하나 …" 인 일자 사슬이 되어 층 수가 사람 수만큼 된다([[편향 트리]]). [[red-black tree]] 는 '''인사팀'''이다 — 매번 완벽한 피라미드로 재편하는 건 너무 비싸니, "빨간 명찰은 연달아 서 있을 수 없다, 어느 경로든 검은 명찰 수는 같다" 같은 '''간단한 규칙'''([[proxy for balance]])만 지키게 한다. 규칙이 깨지면 명찰 색을 바꾸거나([[recolor]]) 상사와 부하를 한 칸 맞바꾼다([[rotation]], YOINK!). 그 정도만으로도 층 수가 $2\log(n+1)$ 을 넘지 않는다.
+{/analogy}
+
+== ① 왜 트리인가 — 자료구조 비교 (p.4–9) ==
+p.5 "Why are we studying self-balancing BSTs?" — ① punchline: '''$O(\log n)$ INSERT/DELETE/SEARCH 자료구조''' ② red-black tree 의 아이디어가 clever 하다("It's good to be exposed to clever ideas.").
+p.6–8 은 key 가 붙은 node 를 저장하는 두 가지 익숙한 방법을 비교한다([[자료구조 비교표]]).
+* '''Sorted array''' (p.7): SEARCH 는 binary search 로 $O(\log n)$, 그러나 INSERT/DELETE 는 4.5 를 넣으려면 뒤를 한 칸씩 밀어야 해서 $O(n)$.
+* '''Sorted [[linked list]]''' (p.8): INSERT/DELETE 는 $O(1)$ ("assuming we have a pointer to the location of the insert/delete"), 그러나 SEARCH 는 HEAD 부터 따라가야 해서 $O(n)$.
+[[img:L8-09.png|p.9 — Motivation: Sorted Arrays O(log n)/O(n), Linked Lists O(n)/O(1), Binary Search Trees* O(log n)/O(log n)|medium]]
+{|
+! 연산 || Sorted array || Linked list || Binary Search Tree*
+|-
+| Search || $O(\log n)$ || $O(n)$ || $O(\log n)$
+|-
+| Insert/Delete || $O(n)$ || $O(1)$ || $O(\log n)$
+|}
+p.9 의 별표(*)가 L8 의 줄거리 전체다 — BST 가 $O(\log n)$ 인 건 '''균형이 잡혀 있을 때만'''이다(⑤ 절). 결론 슬라이드 p.61 에서 같은 표가 "Balanced Binary Search Trees" 로 이름이 바뀌어 다시 나온다 → [[best of both worlds 표]].
+
+== ② Binary tree 용어 (p.10) ==
+[[img:L8-10.png|p.10 — Binary tree terminology: node·key(7), root(5), left/right child(3 의 2, 4), descendant(2 는 5 의), leaves(1, 4, 8), NIL(1 의 두 자식)|medium]]
+{|
+! 용어 || 뜻 || p.10 예
+|-
+| node / key || 트리의 칸 하나와 그 안의 값 || 7 이 적힌 칸은 key 7 인 node
+|-
+| root || 맨 위 node || 5
+|-
+| left child / right child || 바로 아래 왼쪽/오른쪽 node (각 node 는 자식 '''최대 2개''') || 3 의 left child = 2, right child = 4
+|-
+| descendant || 아래로 내려가서 닿는 모든 node (자식, 자식의 자식, …) || 2 는 5 의 descendant
+|-
+| leaf || 자식이 없는 node || 1, 4, 8
+|-
+| [[NIL]] || "자식 없음" 자리 || 1 의 두 자식은 NIL
+|}
+"Each node has a pointer to its left child, right child, and parent." — 노드마다 포인터 3개. 이 포인터 몇 개만 바꾸는 것이 ⑥ 의 [[rotation]] 이 $O(1)$ 인 이유다. 용어 정리는 [[binary tree 용어]], 일반적인 이진 트리 성질(꽉 찬 이진 트리의 깊이 $\log n$ 등)은 [[이진 트리]].
+
+== ③ BST 정의와 만들기 (p.11–17) ==
+{def}
+"It's a binary tree so that:
+* Every LEFT descendant of a node has key less than that node.
+* Every RIGHT descendant of a node has key larger than that node."
+→ [[BST property]]: 모든 node 에 대해, 왼쪽 '''descendant''' 전부 < 그 node < 오른쪽 '''descendant''' 전부.
+{/def}
+{warn}
+'''child 가 아니라 descendant''' 다. "왼쪽 '''자식'''이 작고 오른쪽 '''자식'''이 크다" 만 확인하면 p.17 오른쪽 트리 같은 가짜를 통과시킨다.
+{/warn}
+p.11–15 는 키 {1, 2, 3, 4, 5, 7, 8} 로 BST 를 만드는 과정이다: 5 를 먼저 root 로 고르고, 나머지를 "5 보다 작다/크다" 로 양쪽에 나눈 뒤, 각 쪽에서 다시 하나(3, 7)를 골라 같은 일을 반복한다. 결과는 5(3(2(1), 4), 7(·, 8)) — p.10 의 그 트리.
+p.15 Q: "Is this the only binary search tree I could possibly build with these values?" A: '''No.''' "I made choices about which nodes to choose when. Any choices would have been fine." — 같은 키 집합에 BST 는 여러 개 있다(그래서 균형 잡힌 것을 골라야 한다).
+[[img:L8-16.png|p.16 — Aside: "this should look familiar — kinda like QuickSort": 5 가 pivot, 점선 왼쪽/오른쪽으로 나뉨|small]]
+p.16 Aside: 이 과정은 [[quicksort]] 와 똑같다 — root 를 고르는 것 = [[pivot]] 고르기, 왼쪽/오른쪽 부분 트리로 나누기 = partition([[partition_about_pivot]]). BST 의 모양은 quicksort 의 '''재귀 트리'''와 같다 → [[BST와 quicksort]]. 그래서 pivot 을 나쁘게 고르면 quicksort 가 $O(n^2)$ 이 되듯, 키를 나쁜 순서로 넣으면 BST 가 사슬이 된다(⑤ 절).
+[[img:L8-17.png|p.17 — Which of these is a BST? 왼쪽은 BST, 오른쪽은 NOT a BST (1 이 4 의 왼쪽 자식 = 3 의 RIGHT descendant 인데 3 보다 작음)|medium]]
+p.17 오른쪽 트리는 부모-자식 쌍만 보면 멀쩡하다(4 의 왼쪽 자식 1 < 4). 그러나 1 은 3 의 '''오른쪽 descendant''' 인데 1 < 3 → BST property 위반.
+{quiz}
+p.17 오른쪽 트리 5(3(2, 4(1)), 7(·, 8)) 에서 1 을 SEARCH 하면 어디로 가는가? 왜 찾지 못하는가?
+{/quiz}
+{answer}
+5 → (1 < 5) 왼쪽 3 → (1 < 3) 왼쪽 2 → (1 < 2) 왼쪽 = NIL. 1 은 4 아래에 있지만 SEARCH 는 3 에서 왼쪽으로 꺾었으므로 절대 닿지 못한다. BST property 가 깨지면 SEARCH 의 "한쪽만 보면 된다" 는 전제가 무너진다 — 정의가 descendant 인 이유.
+{/answer}
+
+== ④ SEARCH / INSERT / DELETE (p.18–23) ==
+p.18 "Remember the goal: Fast SEARCH/INSERT/DELETE. Can we do these?"
+
+=== SEARCH (p.19) ===
+[[img:L8-19.png|p.19 — SEARCH: 4 를 찾으면 5→3→4, 4.5 를 찾으면 트리 밖으로 나가기 직전 마지막 node 4 를 반환. O(length of longest path) = O(height)|medium]]
+[[BST SEARCH]]: root 에서 시작해 찾는 key 가 작으면 왼쪽, 크면 오른쪽, 같으면 멈춘다.
+* EXAMPLE: Search for 4 → 5 → 3 → 4 (찾음).
+* EXAMPLE: Search for 4.5 → 5 → 3 → 4 → 4.right = NIL. "It turns out it will be convenient to '''return 4''' in this case (that is, return the last node before we went off the tree)." — 이 관례 덕분에 INSERT 가 SEARCH 한 번으로 끝난다.
+* 시간: "O(length of longest path) = '''O(height)'''".
+<pre class="c">
+# p.19 를 의사코드로 ("Write pseudocode (or actual code) to implement this!")
+def search(root, key):
+    x = root
+    while True:
+        if key == x.key:
+            return x
+        nxt = x.left if key < x.key else x.right
+        if nxt is NIL:
+            return x          # 트리 밖으로 나가기 직전 마지막 node
+        x = nxt
+</pre>
+
+=== INSERT (p.20) ===
+[[img:L8-20.png|p.20 — INSERT 4.5: x = SEARCH(4.5) = 4, 4.5 > 4 이므로 4 의 right child 로|medium]]
+[[BST INSERT]] (슬라이드 그대로):
+<pre class="txt">
+INSERT(key):
+  x = SEARCH(key)
+  if key > x.key:  Make a new node with the correct key, and put it as the right child of x.
+  if key < x.key:  Make a new node with the correct key, and put it as the left child of x.
+  if x.key == key: return
+</pre>
+예: INSERT 4.5 → SEARCH 가 4 를 반환 → 4.5 > 4 → 4.right = 4.5. SEARCH 한 번 + $O(1)$.
+
+=== DELETE (p.21–23) ===
+[[BST DELETE]]: x = SEARCH(key), x.key == key 면 x 를 지운다 — "This is a bit more complicated…". 3 을 지우는 세 경우:
+[[img:L8-22.png|p.22 — Case 1: 3 이 leaf 면 그냥 삭제 / Case 2: 3 의 자식이 하나(2)면 그 자식을 끌어올림|medium]]
+[[img:L8-23.png|p.23 — Case 3: 자식이 둘이면 immediate successor(3.1)로 교체. successor 는 3.right 아래에서 SEARCH 3, 자식이 둘일 수 없음|medium]]
+{|
+! 경우 || 처리 || p.22–23 예
+|-
+| Case 1: leaf || 그냥 삭제 || 5(3) → 5
+|-
+| Case 2: 자식 하나 || 그 자식(부분 트리째)을 x 자리로 끌어올림 || 5(3(2(△))) → 5(2(△))
+|-
+| Case 3: 자식 둘 || x 를 [[immediate successor]](x 다음으로 큰 key)로 교체하고, successor 원래 자리에서 그것을 지움 || 5(3(2, 4(3.1, …))) → 5(3.1(2, 4(…)))
+|}
+p.23 의 문답 네 개(그대로 외울 것):
+* Does this maintain the BST property? — '''Yes.''' (successor 는 왼쪽 부분 트리 전부보다 크고, 오른쪽 부분 트리의 나머지 전부보다 작다.)
+* How do we find the immediate successor? — '''SEARCH for 3 in the subtree under 3.right''' (오른쪽 부분 트리에서 3 을 찾으면 계속 왼쪽으로만 가다 멈춘다 = 오른쪽 부분 트리의 최솟값).
+* How do we remove it when we find it? — If [3.1] has 0 or 1 children, do one of the previous cases.
+* What if [3.1] has two children? — '''It doesn't.''' (왼쪽 자식이 있었다면 SEARCH 가 거기로 더 내려갔을 것이다.)
+
+[[sim:bst_ops]]
+
+== ⑤ 모든 연산은 O(height) — 그런데 height 가 클 수 있다 (p.24–26) ==
+[[img:L8-24.png|p.24 — SEARCH is the big one; Time = O(height of tree); "Trees have depth O(log(n)). Done!"|medium]]
+p.24: "SEARCH is the big one. Everything else just calls SEARCH and then does some small O(1)-time operation." → '''Time = [[O(height)]]''' (height of tree = 가장 긴 root→leaf 경로의 길이, [[height]]). 그리고 "Trees have depth $O(\log n)$. Done!" — 라고 하고 싶지만…
+{exam}
+(슬라이드 ⭐, 수업 전) '''"Everything is O(height)"''' — SEARCH 가 $O(\text{height})$, INSERT·DELETE 는 SEARCH + $O(1)$ 이라 역시 $O(\text{height})$. L8 의 모든 논증(편향 트리가 왜 나쁜가, red-black tree 가 왜 좋은가)이 이 한 줄에서 출발한다 → [[O(height)]].
+{/exam}
+[[img:L8-25.png|p.25 — Wait... 2,3,4,5,6,7,8 순서로 넣으면 오른쪽으로만 자라는 사슬. n 개 node 면 depth n, not O(log n). So this could happen.|medium]]
+p.25 "Wait…": 2-3-4-5-6-7-8 사슬도 '''valid BST''' 다. "The version with n nodes has depth n, '''not''' $O(\log n)$." Could such a tree show up? → "'''Inserting in the order 2,3,4,5,6,7,8 would do it.''' So this ''could'' happen." → [[편향 트리]]
+<pre class="txt">
+2,3,4,5,6,7,8 순서로 INSERT (매번 지금까지 중 가장 큰 key → 항상 맨 오른쪽 끝에 붙음)
+INSERT 2 : 비교 0번 → root
+INSERT 3 : 비교 1번 (2) → 2.right
+INSERT 4 : 비교 2번 (2, 3) → 3.right
+ …
+INSERT 8 : 비교 6번 → 7.right
+총 비교 = 0+1+…+6 = 21  (n 개면 n(n-1)/2 = Θ(n^2)),  height = n = 7  → SEARCH 8 도 7칸
+같은 키를 5,3,7,2,4,8,1 순서로 넣으면 height 3 (p.10 트리)
+</pre>
+{exam}
+(슬라이드 ⭐, 수업 전) p.25: '''정렬된 순서(2,3,4,5,6,7,8)로 삽입하면 depth n 인 [[편향 트리]]''' 가 생긴다 → 연산이 $O(n)$. "트리는 depth $O(\log n)$" 은 공짜가 아니다. [[quicksort]] 에서 매번 최솟값을 pivot 으로 고르는 것과 같은 상황([[BST와 quicksort]]).
+{/exam}
+p.26 "What to do?": Goal 은 빠른 SEARCH/INSERT/DELETE, 모든 연산은 $O(\text{height})$, "And the height might be big!!!". '''Idea 0''': 트리 깊이를 추적하다 너무 깊어지면 처음부터 다시 만든다 — 그러면 "every so often" 마다 $\Omega(n)$, 그런데 worst-case 에서 "every so often" 은 "'''actually pretty often'''" → 좋은 생각이 아니다.
+
+== ⑥ Self-balancing: rotation (p.27–30) ==
+[[self-balancing BST]]: 삽입·삭제 때마다 '''스스로''' 균형을 조금씩 고치는 BST.
+[[img:L8-28.png|p.28 — Idea 1: Rotations. X(Y(A,B),C) 에서 Y 를 YOINK! → "That's not binary!!" → B fell down → Y(A, X(B,C)). CLAIM: this still has BST property. 시간 O(1)|large]]
+'''Idea 1: [[rotation]]''' — "Maintain Binary Search Tree (BST) property, while moving stuff around."
+<pre class="txt">
+       X                          Y
+      / \     YOINK! (Y 를       / \
+     Y   C    위로 집어 올림)    A   X
+    / \           ──▶               / \
+   A   B                           B   C      ← B fell down (Y 의 오른쪽 → X 의 왼쪽)
+
+BST property 확인:  A < Y < B < X < C   (회전 전후 모두 이 순서 그대로)
+바뀌는 포인터: Y.right(B→X), X.left(Y→B), X 부모의 자식 포인터(X→Y)  → O(1)
+</pre>
+* "No matter what lives underneath A, B, C, '''this takes time O(1)'''. (Why?)" — 부분 트리 A, B, C 는 통째로 매달린 채 움직이고, 바뀌는 건 포인터 몇 개뿐.
+* "CLAIM: this still has BST property." — 크기 순서 $A < Y < B < X < C$ 가 그대로.
+[[anim:rotation_yoink|p.28 그대로 — 손이 Y 를 YOINK 해서 잠깐 자식이 셋("That's not binary!!")이 되었다가 B 가 X 쪽으로 떨어져 Y(A, X(B,C)). 이어서 p.29 의 3 → 5 회전 예]]
+p.29 "This seems helpful": 3(2, 5(4, 7(6, 8))) 에서 5 를 YOINK → 5(3(2, 4), 7(6, 8)). 오른쪽으로 늘어졌던 트리가 한 번의 회전으로 균형이 잡힌다.
+p.30 "Does this work?" — "Whenever something seems unbalanced, do rotations until it's okay again." 그러나 "Even for me this is pretty vague. What do we mean by '''seems unbalanced'''? What's '''okay'''?" → 기준이 필요하다.
+
+== ⑦ Proxy for balance → Red-Black tree 규칙 5가지 (p.31–35) ==
+'''Idea 2: have some [[proxy for balance]]''' (p.31):
+* "Maintaining perfect balance is too hard."
+* "Instead, come up with some proxy for balance: If the tree satisfies '''[SOME PROPERTY]''', then it's pretty balanced. We can maintain [SOME PROPERTY] using rotations."
+* "There are actually several ways to do this, but today we'll see…" → [[red-black tree]].
+p.32: "A Binary Search Tree that '''balances itself'''!" — "Maintain balance by stipulating that '''black nodes are balanced''', and that there '''aren't too many red nodes'''. It's just good sense!"
+[[img:L8-33.png|p.33 — Red-Black Trees: these rules are the proxy for balance. 예: 5B(3R(2B, 4B), 7R(6B, 8B)), 맨 아래 NIL 8개는 black|large]]
+{def}
+'''[[red-black 규칙 5가지]]''' (p.33, "these rules are the proxy for balance")
+# Every node is colored '''red''' or '''black'''.
+# The '''root''' node is a '''black''' node.
+# '''[[NIL]]''' children count as '''black''' nodes.
+# '''Children of a red node are black''' nodes.
+# For all nodes x: '''all paths from x to NIL's have the same number of black nodes''' on them.
+"I'm not going to draw the NIL children in the future, but they are treated as black nodes."
+{/def}
+{exam}
+(슬라이드 ⭐⭐⭐, 수업 전) '''규칙 5가지를 영어 원문 그대로''' 쓸 수 있어야 한다. p.59 에서 "You should know: '''What are the properties of an RB tree?'''" 라고 직접 꼽았다. 특히 ④(red 연속 금지)와 ⑤(black 수 동일)가 균형의 원천이다 — ⑤ 는 "black node 끼리는 완벽한 균형", ④ 는 "red 는 끼어들어도 연달아 못 온다".
+{/exam}
+[[img:L8-34.png|p.34 — Examples(?): Yes! 하나와 No! 셋 — red root / red 아래 red / black 수가 경로마다 다름|medium]]
+p.34 판정(어느 규칙이 깨졌나):
+{|
+! 그림 || 판정 || 이유
+|-
+| 왼쪽 위: B(B, B(R, ·)) || Yes! || 모든 root→NIL 경로의 black 수가 같고 red 의 자식(NIL)은 black
+|-
+| 아래 ①: R(B, B(R, ·)) || No! || 규칙 2 (root 는 black) 위반
+|-
+| 아래 ②: B(R, R(R, ·)) || No! || 규칙 4 (red 의 자식은 black) 위반 — red 아래 red
+|-
+| 아래 ③: B(B, B(B, ·)) || No! || 규칙 5 위반 — 오른쪽 아래로 가는 경로만 black 이 하나 더 많다
+|}
+p.35 "Why???????": "This is pretty balanced. The black nodes are balanced. The red nodes are 'spread out' so they don't mess things up too much. We can maintain this property as we insert/delete nodes, by using rotations. '''This is the really clever idea!''' This Red-Black structure is a proxy for balance. It's just a little weaker than perfect balance, but we can actually maintain it!"
+
+== ⑧ 왜 균형인가 — height ≤ 2log(n+1) 증명 (p.36–37) ==
+[[img:L8-36.png|p.36 — "pretty balanced" 직관: unbalanced RB tree 를 만들어 보면 한 경로를 red 로 패딩해서 다른 경로의 두 배까지만 늘릴 수 있다. Guess: height ≤ 2 log(n)|medium]]
+p.36 직관: 일부러 '''불균형한''' red-black tree 를 만들어 보자. 모든 경로의 black 수는 같아야 하므로(규칙 5) 늘릴 수 있는 건 red 뿐인데, red 는 연달아 올 수 없다(규칙 4). → 긴 경로는 black-red-black-red… 로 '''짧은 경로의 두 배까지만''' 늘어난다("One path could be twice as long another if we pad it with red nodes."). 게다가 경로를 길게 만들면 규칙 5 를 맞추느라 다른 내부 node 가 그만큼 필요하다("Other internal nodes need to go here!"). Guess: the height of a red-black tree is at most $2 \log n$.
+[[anim:rb_height_padding|black 만으로 된 균형 트리(b(root)=3) 의 한 경로에 red 를 끼워 넣으면 길이가 6 까지(두 배)만 늘어나고, 그 이상은 "red 의 자식은 black" 에 걸려 멈춘다. 이어서 n ≥ 2^b − 1 ≥ 2^(height/2) − 1 ⇒ height ≤ 2 log(n+1) 가 한 줄씩]]
+[[img:L8-37.png|p.37 — proof sketch: b(x) = x→NIL 경로의 black 수(x 제외, NIL 포함), Claim: x 아래 non-NIL node ≥ 2^b(x) − 1, 그러면 height ≤ 2log(n+1)|large]]
+'''p.37 "That turns out to be basically right." [proof sketch]'''
+{def}
+'''[[black height b(x)]]''': "Say there are b(x) black nodes in any path from x to NIL (excluding x, including NIL)." — 규칙 5 덕분에 "any path" 라고 말할 수 있다(경로마다 같으니까).
+'''[[2^b(x) − 1 claim]]''': "Then there are at least $2^{b(x)} - 1$ non-NIL nodes in the subtree underneath x. (Including x). [Proof by induction]"
+{/def}
+<pre class="txt">
+'''Claim 의 증명 ([[귀납법]], x 아래 부분 트리의 높이에 대해 — 슬라이드는 "[Proof by induction]" 만 적음)'''
+'''Inductive hypothesis:''' x 의 자식 y, z 에 대해 Claim 성립: y 아래 non-NIL node ≥ 2^b(y) - 1 (z 도 같음)
+'''Base case:'''           x = NIL 이면 b(x) = 0, non-NIL node 0 개 ≥ 2^0 - 1 = 0  ✓
+'''Inductive step:'''      자식 y 가 black 이면 b(y) = b(x) - 1,  red 이면 b(y) = b(x)   → 어느 쪽이든 b(y) ≥ b(x) - 1
+                     x 아래 non-NIL node ≥ 1 (x 자신) + (2^(b(x)-1) - 1) + (2^(b(x)-1) - 1)
+                                       = 2·2^(b(x)-1) - 1 = 2^b(x) - 1
+'''Conclusion:'''          모든 node x 에 대해 x 아래 non-NIL node ≥ 2^b(x) - 1
+
+'''Then (p.37 그대로)'''
+n ≥ 2^b(root) - 1                  ← using the Claim (x = root, n = 전체 node 수)
+  ≥ 2^(height/2) - 1               ← b(root) ≥ height/2 because of RBTree rules
+                                     (가장 긴 경로에서 red 는 연달아 못 오므로[규칙 4] 절반 이상이 black)
+Rearranging:
+n + 1 ≥ 2^(height/2)
+log(n+1) ≥ height/2                ← 양변에 log₂ ([[로그 계산법]])
+height ≤ 2 log(n+1)                ⇒ height = O(log n)
+</pre>
+→ [[height ≤ 2 log(n+1) 증명]]
+{exam}
+(슬라이드 ⭐⭐⭐, 수업 전) '''증명 사슬 세 줄''': $n \ge 2^{b(\text{root})} - 1$ (Claim) $\ge 2^{\text{height}/2} - 1$ (규칙 4: red 연속 금지 → $b(\text{root}) \ge \text{height}/2$) ⇒ $\text{height} \le 2\log(n+1)$. 각 부등호가 '''어느 규칙/Claim 에서 오는지''' 말할 수 있어야 한다. p.59 "(more important) '''why does that guarantee that they are balanced?'''" 가 바로 이 증명이다.
+{/exam}
+
+== ⑨ 삽입 — 세 경우 (p.39–57) ==
+p.39 "Okay, so it's balanced… but can we maintain it? '''Yes!'''" — 나머지는 sketch, "See CLRS for more details."
+{exam}
+(슬라이드 ⭐⭐⭐, 수업 전) 교수 선언 (p.39, p.59): '''"You are not responsible for the nitty-gritty details of Red-Black Trees (for this class) — but you should understand the main ideas."''' You should know: ① '''What are the properties of an RB tree?''' ② (more important) '''Why does that guarantee that they are balanced?''' → 삽입 경우 분석을 외우는 것보다 [[red-black 규칙 5가지]] 와 [[height ≤ 2 log(n+1) 증명]] 이 우선. (수업에서 범위가 바뀌면 갱신)
+{/exam}
+[[rb_insert]] 의 큰 틀 (p.41, 43): "Make a new '''red''' node. Insert it as you would normally ([[BST INSERT]]). Fix things up if needed."
+p.44: "Can't we just insert 0 as a black node?" — '''No!''' black 으로 넣으면 그 경로만 black 이 하나 늘어 규칙 5 가 깨진다. red 로 넣으면 규칙 5 는 그대로이고, 깨질 수 있는 건 규칙 4(red 아래 red) 하나뿐이다.
+[[anim:rb_insert_cases|0 을 red 로 삽입하는 세 장면 — ① 부모 black 이면 끝(p.41) ② 부모 red·uncle red 면 색 뒤집기 후 조부모에서 반복(p.47) ③ 부모 red·uncle black 이면 YOINK + 색 교환(p.54). 각 장면 끝에 규칙 5가지 체크]]
+[[RB 삽입 세 경우]] (p.40/42/51/55 "Many cases" 의 세 그림 6(3,7) — 3·7 의 색이 다름). 새 node 0 은 3 의 왼쪽 자식으로 들어간다. 부모 p = 3, 조부모 grand_p = 6, [[uncle]] = 7.
+{|
+! 경우 || 상황 || 처리 || 슬라이드
+|-
+| ① 부모 black || 6B(3B, 7B) 에 0R || 아무것도 안 함 — 규칙이 모두 성립 ✓ || p.41
+|-
+| ② 부모 red, uncle red || 6B(3R, 7R) 에 0R → 3 과 0 이 red 연속 || '''Flip colors!''' 3·7 → black, 6 → red. 6 의 부모(−1)가 black 이면 끝(p.47), red 이면 6 을 "새로 넣은 red node" 로 보고 '''재귀'''(p.48–50 "Now we're basically inserting 6 into some smaller tree. Recurse!") || p.45–50
+|-
+| ③ 부모 red, uncle black || 6B(3R, 7B) 에 0R || 6 에서 '''rotation'''(3 을 YOINK) + 색 교환: 3 → black, 6 → red → 3B(0R, 6R(·, 7B)) ✓ || p.52–54
+|}
+[[img:L8-47.png|p.47 — 경우 ②: −1B 아래 6B(3R, 7R) 에 0R 삽입 → Flip colors! 3, 7 은 black, 6 은 red. Claim: RB-Tree properties still hold|medium]]
+p.52 "Actually, this can't happen?" — 경우 ③ 그림은 처음 보면 불가능해 보인다: 6-3 경로는 black 1개인데 6-7-… 은 최소 2개. 그러나 ⓐ 바로 전 단계(경우 ②)에서 0 이 red 로 '''방금 바뀐''' 경우이거나 ⓑ 7 이 실제로 '''NIL''' 인 경우에는 일어난다.
+[[img:L8-54.png|p.54 — 경우 ③: 6B(3R(0R), 7B) 에서 3 을 YOINK → 3B(0R, 6R(·, 7B)). Need to argue that if RB-Tree property held before, it still does|medium]]
+p.53 은 p.28 rotation 을 다시 보여 준다("Recall Rotations") — 경우 ③ 의 YOINK 가 바로 그 회전이다(X = 6, Y = 3, B = 3 의 오른쪽 부분 트리).
+
+=== 코드 (p.56–57) ===
+<pre class="c">
+# p.56 — insert in Red-Black Trees
+def rb_insert(root, key_to_insert):
+    x = search(root, key_to_insert)
+    v = new red vertex with key_to_insert
+    if key_to_insert > x.key:
+        x.right = v
+        recolor(v)
+    if key_to_insert < x.key:
+        x.left = v
+        recolor(v)
+    if key_to_insert == x.key:
+        return
+# Runtime: O(log n)
+</pre>
+<pre class="c">
+# p.57 — insert in Red-Black Trees
+def recolor(v):
+    p = parent(v)
+    if p.color == black:          # 경우 ①: 부모 black → 끝
+        return
+    grand_p = p.parent
+    uncle = grand_p.right
+    if uncle.color == red:        # 경우 ②: 색 뒤집기
+        p.color = black
+        uncle.color = black
+        grand_p.color = red
+        recolor(grand_p)          #   조부모에서 재귀
+    else: # uncle.color == black  # 경우 ③: 회전 + 색 교환
+        p.color = black
+        grand_p.color = red
+        right_rotate(grand_p) # yoink
+# Runtime: O(log n)
+</pre>
+{|
+! 변수 || 뜻 || p.47 예 (경우 ②) || p.54 예 (경우 ③)
+|-
+| `root` || 트리의 root || −1 || 6
+|-
+| `key_to_insert` || 넣을 key || 0 || 0
+|-
+| `x` || `search` 가 돌려준 "트리 밖으로 나가기 직전 마지막 node" = 새 node 의 부모 자리 || 3 || 3
+|-
+| `v` || 새로 만든 '''red''' node || 0 || 0
+|-
+| `p` || `v` 의 부모 || 3 (red) || 3 (red)
+|-
+| `grand_p` || `p` 의 부모 (조부모) || 6 (black → red) || 6 (black → red)
+|-
+| `uncle` || 조부모의 다른 자식 (`grand_p.right`) || 7 (red → black) || 7 (black)
+|-
+| `right_rotate(grand_p)` || grand_p 에서 왼쪽 자식(p)을 위로 YOINK 하는 [[rotation]] || — || 3 이 6 자리로
+|}
+'''[[recolor]]''' 는 경우 ② 에서 조부모로 두 칸씩 올라가며 재귀하므로 최대 height 번 → $O(\log n)$. [[rotation]] 은 $O(1)$ 이고 최대 한 번. 그래서 rb_insert 전체가 $O(\log n)$.
+{warn}
+'''슬라이드 코드는 한쪽 경우만 적었다.''' `uncle = grand_p.right` 는 p 가 grand_p 의 '''왼쪽''' 자식인 경우만 다룬다(p 가 오른쪽 자식이면 uncle = grand_p.left 이고 회전도 `left_rotate` — '''대칭 경우 생략'''). 또 경우 ③ 에서 v 가 p 의 오른쪽 자식(꺾인 모양)이면 p 에서 먼저 한 번 회전해 일자로 편 뒤 `right_rotate(grand_p)` 를 해야 한다. 재귀가 root 까지 올라가 root 가 red 가 되면 마지막에 root 를 black 으로 칠하는 처리(규칙 2)도 생략되어 있다. 전체 경우는 CLRS 13.3 `RB-INSERT-FIXUP` — 교수 말대로 "not responsible for the nitty-gritty details".
+{/warn}
+[[sim:rb_insert_fix]]
+{quiz}
+6B(3R, 7R) 아래(6 의 부모는 −1B) 3 의 왼쪽에 0 을 넣는다. `recolor(0)` 이 실행하는 줄을 순서대로 적고, 최종 색을 적어라.
+{/quiz}
+{answer}
+p = 3 (red) → return 안 함. grand_p = 6, uncle = 6.right = 7 (red) → 경우 ②: 3.color = black, 7.color = black, 6.color = red, `recolor(6)`. 6 의 부모 −1 이 black → return. 최종: −1B / 6R(3B(0R), 7B). 모든 경로의 black 수는 그대로(6 에서 하나 빠지고 3·7 에서 하나씩 늘어 상쇄) — p.47 "Claim: RB-Tree properties still hold".
+{/answer}
+
+== ⑩ 삭제·결론 (p.58–63) ==
+p.58 "Deleting from a Red-Black tree — '''Fun exercise!'''" — 강의에서는 다루지 않는다(CLRS 13.4).
+p.59 "That's a lot of cases" — "You are not responsible for the nitty-gritty details of Red-Black Trees. (For this class) Though implementing them is a great exercise! You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" (위 ⑨ 의 `{exam}` 참고)
+p.60 "What was the point again?":
+* Red-Black Trees always have '''height at most $2\log(n+1)$'''.
+* As with general Binary Search Trees, all operations are '''$O(\text{height})$'''.
+* So all operations are '''$O(\log n)$'''.
+[[img:L8-61.png|p.61 — Conclusion: The best of both worlds. Sorted Arrays O(log n)/O(n), Linked Lists O(n)/O(1), Balanced BST O(log n)/O(log n)|medium]]
+{|
+! 연산 || Sorted array || Linked list || '''Balanced BST'''
+|-
+| Search || $O(\log n)$ || $O(n)$ || '''$O(\log n)$'''
+|-
+| Insert/Delete || $O(n)$ || $O(1)$ || '''$O(\log n)$'''
+|}
+→ [[best of both worlds 표]]. p.9 의 별표(*)가 "Balanced" 로 바뀐 것이 L8 의 결론이다. [[hash table]] 과 비교하면: hash table 은 '''expected''' $O(1)$ / worst $O(n)$, balanced BST 는 '''worst-case''' $O(\log n)$ 이고 key 를 정렬된 순서로 유지한다.
+p.63 Recap: "Balanced binary trees are the best of both worlds! But we need to keep them balanced. Red-Black Trees do that for us. We get $O(\log n)$-time INSERT/DELETE/SEARCH. '''Clever idea: have a proxy for balance'''."
+
+== 공식 모음 ==
+{|
+! 연산 || BST worst ([[편향 트리]]) || balanced BST (red-black tree) || 비고
+|-
+| [[BST SEARCH]] || $O(n)$ || $O(\log n)$ || $O(\text{height})$ (p.19)
+|-
+| [[BST INSERT]] || $O(n)$ || $O(\log n)$ || SEARCH + $O(1)$ (p.20); RB 는 + [[recolor]] $O(\log n)$
+|-
+| [[BST DELETE]] || $O(n)$ || $O(\log n)$ || SEARCH + successor 찾기 + $O(1)$ (p.22–23)
+|-
+| [[rotation]] || $O(1)$ || $O(1)$ || 포인터 몇 개, BST property 유지 (p.28)
+|-
+| [[height]] || $n$ (2,3,…,8 순 삽입) || $\le 2\log(n+1)$ || p.25 / p.37
+|-
+| [[2^b(x) − 1 claim]] || — || $\ge 2^{b(x)} - 1$ || x 아래 non-NIL node 수, 귀납법
+|-
+| [[black height b(x)]] || — || $b(\text{root}) \ge \text{height}/2$ || 규칙 4 (red 연속 금지)
+|-
+| n 개 연속 삽입 총 비교 || $0+1+\dots+(n-1) = \Theta(n^2)$ || $O(n \log n)$ || 정렬 순서로 삽입할 때
+|}
+
+== 시험 대비 핵심 요약 ==
+# [[자료구조 비교표]] → [[best of both worlds 표]] (p.9/p.61): sorted array $O(\log n)$/$O(n)$, linked list $O(n)$/$O(1)$, '''balanced BST $O(\log n)$/$O(\log n)$'''.
+# [[BST property]] (p.11): 모든 LEFT '''descendant''' < node < 모든 RIGHT '''descendant'''. child 만 보면 p.17 오른쪽 같은 가짜를 놓친다.
+# [[BST SEARCH]] (p.19): 없는 key 를 찾으면 '''트리 밖으로 나가기 직전 마지막 node''' 를 반환(4.5 → 4). [[BST INSERT]] 는 SEARCH 결과의 left/right 에 붙이기.
+# [[BST DELETE]] 세 경우 (p.22–23): leaf → 삭제 / 자식 하나 → 끌어올림 / 자식 둘 → [[immediate successor]] 로 교체(3.right 아래에서 SEARCH 3; successor 는 자식이 둘일 수 없음).
+# '''Everything is [[O(height)]]''' (p.24) — SEARCH 가 본체, 나머지는 SEARCH + $O(1)$.
+# [[편향 트리]] (p.25): 2,3,4,5,6,7,8 순서로 삽입하면 depth n → $O(n)$. [[BST와 quicksort]]: root = pivot, 나쁜 순서 = 나쁜 pivot.
+# [[rotation]] (p.28): X(Y(A,B),C) → Y(A, X(B,C)), "B fell down", BST property 유지, '''$O(1)$'''.
+# [[proxy for balance]] (p.31): 완벽한 균형 대신 "[SOME PROPERTY] 를 만족하면 pretty balanced" 인 성질을 rotation 으로 유지.
+# [[red-black 규칙 5가지]] (p.33) 영어 원문: red or black / root black / NIL black / red 의 자식은 black / 모든 x 에서 x→NIL 경로의 black 수 동일.
+# [[height ≤ 2 log(n+1) 증명]] (p.37): [[black height b(x)]](x 제외·NIL 포함), [[2^b(x) − 1 claim]](귀납), $n \ge 2^{b(\text{root})} - 1 \ge 2^{\text{height}/2} - 1$ ⇒ $\text{height} \le 2\log(n+1)$.
+# [[RB 삽입 세 경우]] (p.41/47/54): 새 node 는 '''red''' 로 → 부모 black 끝 / 부모·[[uncle]] red → 색 뒤집기 후 조부모에서 재귀 / uncle black → YOINK + 색 교환. 전체 $O(\log n)$.
+# 교수 선언 (p.39, 59): "not responsible for the nitty-gritty details" — '''규칙 5가지'''와 '''왜 균형이 보장되는가'''가 우선. (수업 후 녹음 강조로 갱신 예정)
+
+== 관련 문서 ==
+* 이전 강의: [[L7 Randomized Algorithms II]] ([[hash table]], [[자료구조 비교표]], [[INSERT/DELETE/SEARCH]], [[linked list]]) · [[L6 Randomized Algorithms I]] ([[quicksort]], [[pivot]])
+* BST: [[binary tree 용어]] · [[binary search tree]] · [[BST property]] · [[BST SEARCH]] · [[BST INSERT]] · [[BST DELETE]] · [[immediate successor]] · [[height]] · [[O(height)]] · [[편향 트리]] · [[BST와 quicksort]]
+* 균형: [[self-balancing BST]] · [[rotation]] · [[proxy for balance]]
+* Red-black tree: [[red-black tree]] · [[red-black 규칙 5가지]] · [[NIL]] · [[black height b(x)]] · [[2^b(x) − 1 claim]] · [[height ≤ 2 log(n+1) 증명]] · [[rb_insert]] · [[recolor]] · [[uncle]] · [[RB 삽입 세 경우]] · [[best of both worlds 표]]
+* 교재·도구: [[CLRS 12와 13]] · [[CLRS]] · [[귀납법]] · [[이진 트리]] · [[로그 계산법]]

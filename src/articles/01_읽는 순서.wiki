@@ -1,10 +1,10 @@
 key: 읽는 순서
-title: 읽는 순서 — L1 → L7, 이 순서로 읽으면 수업이 이해된다
+title: 읽는 순서 — L1 → L8, 이 순서로 읽으면 수업이 이해된다
 category: 안내
 ---
 강의는 앞 강의의 도구를 다음 강의가 그대로 가져다 쓰는 사슬이다(L1 의 귀납법 → L3 의 recursion invariant → L4 의 select 증명, L3 의 치환법 → L4 의 median of medians, L5 의 bucket sort → L7 의 해시 테이블 …). 그래서 '''강의 순서대로''' 읽는 것이 가장 빠르다. 각 단계는 "먼저 볼 사전 문서 → 메인 문서 → 확인용 시뮬레이터" 순서다.
 
-[[anim:two_questions|이 과목 전체의 지도. 모든 알고리즘에 ① Does it work? ② Is it fast? 두 카드가 붙고, 각 카드에 붙는 도구가 L1~L7 에서 하나씩 늘어난다]]
+[[anim:two_questions|이 과목 전체의 지도. 모든 알고리즘에 ① Does it work? ② Is it fast? 두 카드가 붙고, 각 카드에 붙는 도구가 L1~L8 에서 하나씩 늘어난다]]
 
 {analogy}
 🎭 '''레고 설명서.''' 설명서의 7 단계는 앞 단계에서 만든 부품을 다음 단계가 끼워 쓴다. 3 단계를 건너뛰고 4 단계를 보면 "이 부품 어디서 났지?" 가 된다. 각 단계의 "사전 문서" 는 그 단계에 필요한 부품 목록이다 — 이미 아는 부품이면 건너뛰고, 모르면 먼저 조립한다.
@@ -55,6 +55,15 @@ category: 안내
 메인: '''[[L7 Randomized Algorithms II]]''' — chaining, 결정론적 h 의 한계(비둘기집), 균등 무작위 h → 기대 버킷 크기 ≤ 2, universal hash family, $h_{a,b}$, $O(\log M)$ 비트.
 확인: `hash_chaining`, `universal_hash_check`
 이 단계가 끝나면: "왜 무작위로 고르나, 왜 작은 family 인가, 무엇이 universal 인가" 를 한 흐름으로 말할 수 있다. 그리고 L5~L7 을 모두 쓰는 HW2 를 풀 수 있다 → [[HW2 복기]].
+
+== 8단계 — L8: 이진 탐색 트리와 red-black tree ==
+{info}
+L8 은 '''슬라이드만 게시된 상태(2026-10-04), 아직 수업 전'''이다. 수업·녹음이 오면 메인 문서의 `{exam}` 이 갱신된다. 중간고사 범위 포함 여부도 미정 → [[시험 정보]].
+{/info}
+먼저: [[이진 트리]] · [[binary tree 용어]] · [[BST property]] · [[O(height)]] · [[편향 트리]] · [[rotation]] · [[red-black 규칙 5가지]] · [[black height b(x)]] · [[로그 계산법]]
+메인: '''[[L8 Tree Algorithms]]''' — BST 의 SEARCH/INSERT/DELETE(immediate successor), 모든 연산 = $O(\text{height})$, 편향 트리, rotation(YOINK), proxy for balance, red-black 규칙 5가지, height $\le 2\log(n+1)$ 증명, 삽입 세 경우.
+확인: `bst_ops`, `rb_insert_fix`
+이 단계가 끝나면: 규칙 5가지를 영어로 쓰고, "왜 그 규칙이 height $\le 2\log(n+1)$ 을 보장하는가" 를 세 줄 부등식으로 설명할 수 있다.
 
 == 시험 3일 전 압축 코스 ==
 메인 문서 7 편의 '''`시험 대비 핵심 요약`''' 절만 순서대로 읽고, 그다음 시험 그룹 세 문서로 마무리한다.

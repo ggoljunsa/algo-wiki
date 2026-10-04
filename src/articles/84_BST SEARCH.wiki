@@ -1,0 +1,93 @@
+key: BST SEARCH
+title: BST SEARCH — 내려가다 트리 밖으로 나가기 직전 노드를 돌려준다
+category: 8강 Tree, 알고리즘
+---
+== 개요 ==
+[[binary search tree]] 에서 키를 찾는 연산. 루트에서 시작해 찾는 키가 작으면 왼쪽, 크면 오른쪽으로 내려간다. 이 강의의 SEARCH 에는 특별한 약속이 하나 있다 — '''키가 없으면 NIL 을 돌려주는 대신, 트리 밖으로 나가기 직전의 마지막 노드를 돌려준다.''' 이 약속 덕분에 [[BST INSERT]] 와 [[BST DELETE]] 가 "SEARCH 한 번 + $O(1)$" 로 끝난다([[O(height)]]).
+
+{def}
+L8 p.19 "SEARCH in a Binary Search Tree — definition by example": "EXAMPLE: Search for 4. EXAMPLE: Search for 4.5 — It turns out it will be convenient to '''return 4''' in this case (that is, '''return the last node before we went off the tree''')." "How long does this take? O(length of longest path) = O(height)."
+키를 찾으면 그 노드를, 없으면 내려가다 [[NIL]] 을 만나기 직전의 노드를 반환한다. 시간은 지나는 경로 길이, 즉 최악 [[height]].
+{/def}
+[[img:L8-19.png|L8 p.19 — Search for 4 / Search for 4.5 (4 의 오른쪽이 NIL "!!!!" → 4 반환)|large]]
+
+{analogy}
+'''아파트 동 찾기 갈림길.''' 갈림길마다 "103동 이하는 왼쪽, 초과는 오른쪽" 표지판을 따라간다. 찾는 동이 있으면 도착. 104.5동처럼 없는 동이면 길이 끊긴 막다른 곳에서 멈추고 "가장 가까운 곳은 104동 앞" 이라고 알려 준다 — 새 동을 지을 자리가 바로 거기다(INSERT).
+{/analogy}
+
+== 예제 추적 (p.19 트리) ==
+<pre class="txt">
+트리: 5 (3 (2 (1), 4), 7 (-, 8))
+
+SEARCH 4
+  x = 5 : 4 < 5  → x.left = 3
+  x = 3 : 4 > 3  → x.right = 4
+  x = 4 : 4 == 4 → return 4            (비교 3회, 경로 5→3→4)
+
+SEARCH 4.5
+  x = 5 : 4.5 < 5 → 3
+  x = 3 : 4.5 > 3 → 4
+  x = 4 : 4.5 > 4 → x.right = NIL  "!!!!" 트리 밖으로 나간다
+          → 나가기 직전 노드 '''return 4'''
+</pre>
+[[sim:bst_ops]]
+시뮬레이터에서 op = SEARCH 4 / SEARCH 4.5 를 골라 한 줄씩 확인하자.
+
+== 코드 ==
+슬라이드는 "Write pseudocode (or actual code) to implement this!" 라고만 하고 코드를 주지 않는다. p.56 `rb_insert` 의 `x = search(root, key_to_insert)` 와 맞는 Python 풍 버전:
+<pre class="c">
+def search(root, key):
+    x = root
+    while True:
+        if key == x.key:
+            return x                      # 찾았다
+        nxt = x.left if key < x.key else x.right
+        if nxt is NIL:
+            return x                      # 트리 밖으로 나가기 직전 노드
+        x = nxt
+</pre>
+{|
+! 변수 || 뜻 || SEARCH 4.5 에서의 값
+|-
+| `root` || 트리의 루트(비어 있지 않다고 가정) || 노드 5
+|-
+| `key` || 찾는 키 || 4.5
+|-
+| `x` || 지금 서 있는 노드 || 5 → 3 → 4
+|-
+| `nxt` || 다음에 갈 자식 (key 가 작으면 left, 크면 right) || 3 → 4 → NIL
+|-
+| 반환값 || 키가 같은 노드, 또는 마지막 non-NIL 노드 || 4 (4.key ≠ 4.5 이므로 호출자가 "없음"을 안다)
+|}
+{info}
+호출자는 반환된 x 에 대해 `x.key == key` 인지 다시 확인해야 "찾았다/없다"를 안다. INSERT 의 세 갈래(`key > x.key` / `key < x.key` / `==`)가 바로 그 확인이다. CLRS 12.2 의 TREE-SEARCH 는 없으면 NIL 을 반환하는 버전이니 혼동하지 말 것.
+{/info}
+
+== 시간 ==
+루프 한 번에 한 층씩 내려가므로 반복 횟수 ≤ root→leaf 가장 긴 경로 길이 = [[height]]. 그래서 $O(\text{height})$ (p.19 아래). 균형 트리면 $O(\log n)$, [[편향 트리]] 면 $O(n)$.
+
+{exam}
+(L8 은 아직 수업 전 — 슬라이드 강조 기준) "'''return the last node before we went off the tree'''" 는 시험에서 "SEARCH(4.5) 의 반환값은?" 으로 바로 물을 수 있다 → 4. 그리고 p.24 "SEARCH is the big one" — 나머지 연산 비용이 전부 SEARCH 로 환원된다.
+{/exam}
+
+== 손코딩 빈칸 ==
+{quiz}
+빈칸을 채워라 (없는 키면 트리 밖으로 나가기 직전 노드를 반환하는 SEARCH).
+<pre class="c">
+def search(root, key):
+    x = root
+    while True:
+        if key == x.key:
+            return ____(1)____
+        nxt = x.left if ____(2)____ else x.right
+        if nxt is NIL:
+            return ____(3)____
+        x = ____(4)____
+</pre>
+{/quiz}
+{answer}
+(1) `x` (2) `key < x.key` — 작으면 왼쪽 (3) `x` — NIL 을 반환하지 않는다! 나가기 직전 노드(4.5 검색 → 4) (4) `nxt`
+{/answer}
+
+== 관련 문서 ==
+* [[binary search tree]] · [[BST INSERT]] · [[BST DELETE]] · [[O(height)]] · [[height]] · [[NIL]] · [[rb_insert]]

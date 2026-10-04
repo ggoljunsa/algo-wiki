@@ -2,14 +2,14 @@ key: main
 title: 알고위키 — DGIST CSE301 Introduction to Algorithms 중간고사
 category: 안내
 ---
-'''알고위키'''는 DGIST [CSE301] Introduction to Algorithms (Prof. Hoon Sung Chwa, 2026 Fall) 중간고사 범위 — '''L1 Algorithmic Analysis I · L2 Algorithmic Analysis II · L3 Divide and Conquer I · L4 Divide and Conquer II · L5 Linear-Time Sorting · L6 Randomized Algorithms I · L7 Randomized Algorithms II''' — 를 나무위키 스타일로 정리한 학습 위키다. 교재는 [[CLRS]]. 강의는 영어, 문서는 한국어 산문 + 영어 용어 그대로.
+'''알고위키'''는 DGIST [CSE301] Introduction to Algorithms (Prof. Hoon Sung Chwa, 2026 Fall) 중간고사 범위 — '''L1 Algorithmic Analysis I · L2 Algorithmic Analysis II · L3 Divide and Conquer I · L4 Divide and Conquer II · L5 Linear-Time Sorting · L6 Randomized Algorithms I · L7 Randomized Algorithms II · L8 Tree Algorithms''' — 를 나무위키 스타일로 정리한 학습 위키다. 교재는 [[CLRS]]. 강의는 영어, 문서는 한국어 산문 + 영어 용어 그대로.
 
 해설본(`정리본/L#_해설.md`)이 "그림이 없고, 변수를 그때마다 까먹어서" 안 읽히던 문제를 풀려고 만들었다. 그래서 이 위키는 세 가지를 약속한다.
 # '''기호·용어를 까먹으면 클릭한다.''' $T(n)$, $c$, $n_0$, $a, b, d$, $C$, $k$, $X_{a,b}$, $M$, $p$ … 모든 기호와 용어에 사전 문서가 있고 본문 첫 등장 시 링크돼 있다.
 # '''계산이 나오면 옆에서 값이 바뀌는 걸 본다.''' 삽입 정렬, merge, select, median of medians, counting/bucket/radix sort, quicksort, 해시 … 슬라이드 예제를 한 단계씩 밟는 '''시뮬레이터 18 종'''(◀ ▶).
 # '''보고만 있어도 흐름이 들어온다.''' 두 질문, 카드 끼우기, 줄다리기(master method), 피벗 분할, 결정 트리, 적과 주사위 … '''움직이는 그림 20 종'''과 실제 슬라이드 캡처.
 
-[[anim:two_questions|이 과목의 지도. 모든 알고리즘에 ① Does it work? ② Is it fast? 두 카드가 붙는다. L1~L7 은 이 두 카드에 붙일 도구를 하나씩 늘려 가는 과정이다]]
+[[anim:two_questions|이 과목의 지도. 모든 알고리즘에 ① Does it work? ② Is it fast? 두 카드가 붙는다. L1~L8 은 이 두 카드에 붙일 도구를 하나씩 늘려 가는 과정이다]]
 
 == 어디서부터 읽나 ==
 * 처음이면 → [[읽는 순서]] (강의 순서대로, 한 강의 = 메인 문서 1 편 + 사전 문서들)
@@ -46,6 +46,8 @@ category: 안내
 | L6 || [[L6 Randomized Algorithms I]] || [[두 시나리오]]: expected vs worst-case, [[bogosort]], [[randomized quicksort]] 기대 $O(n\log n)$ 증명, [[randomized select]], [[majority element]] || `randomized_quicksort` · `majority_dc` · `anim:quicksort_random_pivot`
 |-
 | L7 || [[L7 Randomized Algorithms II]] || [[hash table]] 과 [[chaining]], [[비둘기집 원리|결정론적 해시의 한계]], [[기대 버킷 크기]] ≤ 2, [[universal hash family]] 와 [[h_{a,b}]], $O(\log M)$ 비트 || `hash_chaining` · `universal_hash_check` · `anim:universal_hash_pick`
+|-
+| L8 || [[L8 Tree Algorithms]] || [[binary search tree]] 의 SEARCH/INSERT/DELETE = [[O(height)]], [[rotation]], [[red-black tree]] 규칙 5가지와 [[height ≤ 2 log(n+1) 증명]] || `bst_ops` · `rb_insert_fix` · `anim:rotation_yoink`
 |}
 
 == 시험 대비 ==
@@ -173,4 +175,4 @@ L6–L7 의 확률 증명과 L3–L5 의 점화식·하한 증명에 쓰이는 �
 * [[교수 소개]] · [[CLRS]]
 
 ----
-마지막 갱신: 2026-09-28 (L1–L7 전 문서, 시뮬레이터 18 · 움직이는 그림 20)
+마지막 갱신: 2026-10-04 (L1–L8 전 문서 221편, 시뮬레이터 21 · 움직이는 그림 25; L8 은 슬라이드 기준, 수업 전)
