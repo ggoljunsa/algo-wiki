@@ -4,7 +4,7 @@
 # sims
 
 ## Purpose
-Step-through simulators — "a C debugger for the slide's pseudocode": code panels with a current-line marker, a variable table that highlights diffs, a description per step, optional SVG per step. 18 sims, inserted into articles with `[[sim:name]]`; the catalogue with target articles and expected final values is `../CONTRACT.md` §6.
+Step-through simulators — "a C debugger for the slide's pseudocode": code panels with a current-line marker, a variable table that highlights diffs, a description per step, optional SVG per step. 24 sims, inserted into articles with `[[sim:name]]`; the catalogue with target articles and expected final values is `../CONTRACT.md` §6.
 
 ## Key Files
 | File | Description |
@@ -18,6 +18,7 @@ Step-through simulators — "a C debugger for the slide's pseudocode": code pane
 | `counting_sort.js`, `bucket_sort.js`, `radix_sort.js` | L5: slide examples (counting_sort L5 p.17, bucket_sort p.35 / get_bucket p.44, radix_sort p.47 / make_pairs p.52). |
 | `randomized_quicksort.js`, `geometric_expectation.js`, `majority_dc.js` | L6: quicksort comparison counts and X_{a,b}; geometric expectation E=1/p (bogosort, 랜덤 majority); divide-and-conquer majority_element (L6 p.66 with the `mid` fix). |
 | `hash_chaining.js`, `universal_hash_check.js` | L7: chaining INSERT/SEARCH/DELETE (L7 p.26/28/34/57/70); universal-family check of h_{a,b} with p=5, n=3. |
+| `close_pair_bucket.js`, `toad_algorithms.js`, `collinear_points.js`, `hb_mod13_check.js` | HW2 #2–#5 (2026-10-03/04): width-T buckets; three toad algorithms (LV/MC, fixed luck sequences); max collinear set (slope sort / random pair); h_b(x)=(85x+b) mod 13 universality check (b sweep, residue-class pair count = 21). |
 
 ## For AI Agents
 

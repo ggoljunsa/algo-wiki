@@ -2308,7 +2308,7 @@ const ARTICLES = {
   "category": [
    "시험"
   ],
-  "body": "HW2 는 '''L5 Linear-Time Sorting · L6 Randomized Algorithms I · L7 Randomized Algorithms II 의 도구를 한 번씩 써 보게 만든 과제'''다(개인 과제, 마감 '''10/6(화) 23:59''', 100 점 = 5 문제 × 20 점). HW1 이 L1–L4 의 증명·점화식이었다면 HW2 는 '''\"비교 없이 정렬하기 · 주사위 넣기 · 해시\"''' 세 묶음이다. 그리고 '''이번에는 내가 2번 문제 발표 담당'''이다 — 그래서 2번 절은 발표 흐름 순서(문제 → (a) → (b) → (c) → 예제 → 비교표 → 예상 질문)로 길게 썼다.\n\n각 문제는 \"문제 요지 → 관련 개념 → 원문 요지(❓) → 풀이(접힘) → 여기서 배울 것\" 순서다. 먼저 스스로 풀고 펼칠 것. 모든 답은 Python 으로 한 번 더 검산했다(검산 결과는 각 풀이 안에).\n\n{|\n! 번 || 배점 || 도구 || 강의 || 관련 시뮬레이터 / 그림\n|-\n| 1 || 20 || [[radix sort]] 손 실행, [[stable sort]], [[Θ(d(n+k))]] || L5 p.35–51 || `radix_sort`, `bucket_sort`\n|-\n| 2 || 20 || brute force / [[mergesort]] + 인접 검사 / [[bucket sort]] 변형 + [[비둘기집 원리]] || L3, L5 p.35–45 || `close_pair_bucket`, `close_pair_buckets`\n|-\n| 3 || 20 || [[Las Vegas와 Monte Carlo]], [[expected running time]], [[randomized worst-case]], [[기하분포]] || L6 p.4–5, p.80 || `geometric_expectation`\n|-\n| 4 || 20 || 정렬로 같은 기울기 묶기 / 랜덤 두 점 [[randomized algorithm]] || L3, L6 || —\n|-\n| 5 || 20 || [[universal hash family]] 판정, [[modular arithmetic]], [[hash collision]], [[h_{a,b}]] 와 비교 || L7 p.62–73 || `universal_hash_check`\n|}\n\n{analogy}\n🎭 '''놀이공원 자유이용권 다섯 장.''' HW2 는 L5–L7 놀이기구 다섯 개를 한 번씩 타게 한다. 1번은 '''컨베이어 벨트'''(자릿수마다 같은 벨트를 d 번 통과), 2번은 '''사물함'''(번호대로 넣으면 이웃 사물함만 보면 된다), 3번은 '''두더지 잡기'''(언제 맞힐지는 운, 맞힌 건 확실), 4번은 '''다트'''(두 발이 같은 과녁에 꽂힐 때까지), 5번은 '''돌림판'''(b 를 아무리 돌려도 7 칸씩 건너뛰는 틀은 안 바뀐다). 각 기구에서 떨어지는 지점에 깃발을 꽂아 둔다.\n{/analogy}\n\n== 문제 1 (20점) — radix sort 손 실행 ==\n네 글자 단어 [care, race, acre, bear] 를 radix sort(서브루틴 = stable bucket sort)로 a–z 오름차순 정렬. '''[[least-significant digit|가장 오른쪽 글자]]부터''' 한 글자씩 키로 삼는 것이 핵심이다.\n관련 개념: [[radix sort]] · [[stable sort]] · [[bucket sort]] · [[least-significant digit]] · [[Θ(d(n+k))]] · [[Θ(n+k)]]\n{quiz}\n(a) [care, race, acre, bear] 에 radix sort 를 적용할 때 1·2·3·4 번째 bucket sort 호출 직후 리스트 순서를 각각 쓰시오.\n(b) n 개 단어, 각 d 글자(소문자), bucket 수 k. (1) bucket sort 한 번의 시간 (2) radix sort 전체 시간 (3) 알파벳이 26 글자뿐이면 Big-O 로 단순화.\n{/quiz}\n{answer}\n<pre class=\"txt\">\n'''(a)'''  키 = 4번째 → 3번째 → 2번째 → 1번째 글자,  같은 키는 '''이전 순서 유지(stable)'''\n 1차 (4번째 글자: e, e, e, r)   → [care, race, acre, bear]     e 세 개가 원래 순서 그대로, r 은 맨 뒤\n 2차 (3번째 글자: r, c, r, a)   → [bear, race, care, acre]     a < c < r,  r 끼리는 care → acre 순서 유지\n 3차 (2번째 글자: e, a, a, c)   → [race, care, acre, bear]     a(race, care 순 유지) < c < e\n 4차 (1번째 글자: r, c, a, b)   → [acre, bear, care, race]     최종 결과\n'''(b)'''\n (1) 한 번의 bucket sort: 원소 n 개 분배 Θ(n) + 버킷 k 개 만들기·이어붙이기 Θ(k) → Θ(n + k)\n (2) 글자 수 d 만큼 반복 → Θ(d(n + k))\n (3) k = 26 은 상수 → Θ(d(n + 26)) = O(dn);  d 도 상수(예: 네 글자)면 O(n)\n<\/pre>\n'''검산'''(Python `sorted` 는 stable, 키를 4→1 번째 글자로 4 번): `['care','race','acre','bear']` → `['bear','race','care','acre']` → `['race','care','acre','bear']` → `['acre','bear','care','race']` ✓\n{/answer}\n{tip}여기서 배울 것: 2차에서 care 와 acre 는 3번째 글자가 둘 다 r 이다. 이때 '''1차 결과의 순서(care 가 acre 앞)를 그대로 지키는 것'''이 stable 의 의미이고, radix sort 정확성 증명(L5 p.59 \"Since bucket_sort is stable …\")의 핵심 줄이다. 오답 패턴: 첫 글자부터 정렬(MSD)하거나, 같은 키끼리 순서를 임의로 바꿈. (b)(3)에서 \"O(26dn)\" 처럼 상수를 남기지 말 것.{/tip}\n\n== 문제 2 — 거리 T 이내 쌍 찾기 (발표) ==\n'''내가 발표하는 문제.''' 아래 소절 ①~⑦ 이 그대로 발표 순서다. 슬라이드 한 장 = 소절 하나로 잡으면 7 장.\n\n=== ① 문제 정의와 예제 ===\n정렬되지 않은 배열 A, 원소는 1 이상 M 이하 정수, '''M 은 고정된 큰 양의 정수''', '''모든 원소 distinct'''. 거리가 T 이하인 쌍 $\\{A[i], A[j]\\}$ ($\\lvert A[i] - A[j] \\rvert \\le T$) 가 하나라도 있으면 True.\n예제: A = [10, 5, 15, 25, 20, 26, 5000, 500], T = 2 → 25 와 26 의 거리 1 ≤ 2 → '''True'''.\n관련 개념: [[mergesort]] · [[bucket sort]] · [[get_bucket]] · [[비둘기집 원리]] · [[floor와 ceil]] · [[distinct 가정]] · [[Big-O]]\n{quiz}\n(a) $O(n^2)$, (b) $O(n \\log n)$, (c) $O(n)$ 시간에 푸는 의사코드를 각각 쓰시오. (c) 의 힌트: bucket sort 를 변형하라.\n{/quiz}\n{analogy}\n🎭 '''사물함 배정.''' 학생(숫자) n 명에게 번호대로 폭 T 짜리 사물함을 준다(0~1 번은 0 번 칸, 2~3 번은 1 번 칸 …). 두 학생이 '''같은 칸'''에 배정되면 번호 차가 T 보다 작으니 바로 \"가까운 쌍 있음\". 아무도 같은 칸이 아니라면 각 칸에 한 명씩뿐이고, 가까운 쌍이 있다면 '''바로 옆 칸 사람'''뿐이다 — 두 칸 건너 사람은 이미 T 보다 멀다. 그러니 복도를 한 번 걸으며 옆 칸끼리만 확인하면 끝.\n{/analogy}\n\n=== ② (a) Brute force — O(n²) ===\n모든 쌍을 검사한다. 정의 그대로라 정확성은 자명하다.\n<pre class=\"c\">\ndef close_pair_brute(A, T):\n  n = len(A)\n  for i in range(n):\n    for j in range(i+1, n):          # 모든 쌍 (i, j), i < j\n      if abs(A[i] - A[j]) <= T:\n        return True\n  return False\n<\/pre>\n* 시간: 쌍의 수 $\\binom{n}{2} = \\frac{n(n-1)}{2}$, 쌍마다 $O(1)$ → $O(n^2)$.\n* 예제: 28 쌍 중 (25, 26) 에서 True.\n\n=== ③ (b) 정렬 + 인접 검사 — O(n log n) ===\n<pre class=\"c\">\ndef close_pair_sorted(A, T):\n  B = mergesort(A)                   # O(n log n)\n  for i in range(len(B) - 1):        # 인접한 쌍만, O(n)\n    if B[i+1] - B[i] <= T:\n      return True\n  return False\n<\/pre>\n'''왜 인접만 보면 되나 (한 줄 증명):''' 정렬된 B 에서 $i < j$ 이면 $B[j] - B[i] = \\sum_{t=i}^{j-1} (B[t+1] - B[t]) \\ge B[i+1] - B[i]$ — 모든 차가 양수(distinct)이므로 '''가장 가까운 쌍은 반드시 정렬 후 이웃'''이다. 따라서 이웃 쌍 중 T 이하가 없으면 어떤 쌍도 T 이하가 아니다.\n* 시간: [[mergesort]] $O(n \\log n)$ + 스캔 $O(n)$ = $O(n \\log n)$. ([[comparison-based sorting]] 이라 정렬 단계에서 $\\Omega(n\\log n)$ 하한에 걸린다 → (c) 에서 비교를 버린다.)\n* 예제: B = [5, 10, 15, 20, 25, 26, 500, 5000], 인접 차 5, 5, 5, 5, '''1''', 474, 4500 → True.\n\n=== ④ (c) 버킷 아이디어 — O(n) ===\n[[anim:close_pair_buckets|폭 T 버킷에 원소를 하나씩 떨어뜨린다 — 같은 버킷에 두 개가 들어가는 순간 True, 아니면 이웃 버킷끼리만 차를 잰다]]\nL5 의 [[bucket sort]] 에서 '''정렬은 버리고 분배만''' 쓴다. 폭이 T 인 버킷을 만들고 원소 x 를 버킷 $\\lfloor x / T \\rfloor$ 에 넣는다([[get_bucket]] 과 같은 방식). 값이 1..M 이므로 버킷 번호는 0..$\\lfloor M/T \\rfloor$, 버킷 수는 $\\lfloor M/T \\rfloor + 1 \\le \\lceil M/T \\rceil + 1$.\n* '''관찰 1 (같은 버킷 → True)''': $\\lfloor x/T \\rfloor = \\lfloor y/T \\rfloor = i$ 면 $iT \\le x, y \\le iT + T - 1$ → $\\lvert x - y \\rvert \\le T - 1 \\le T$. 버킷 하나에 두 번째 원소가 들어오는 순간 바로 True 를 반환할 수 있다([[비둘기집 원리]]: 폭 T 칸에 두 마리가 들어가면 둘은 가깝다).\n* '''관찰 2 (그렇지 않으면 버킷당 ≤ 1 개)''': 반환하지 않았다면 모든 버킷에 원소가 0 개 또는 1 개. 그래서 버킷 안을 '''정렬할 필요가 없다'''(bucket sort 의 병목이 사라짐).\n* '''관찰 3 (이웃 버킷만 보면 충분)''': x 가 버킷 i, y 가 버킷 $i + 2$ 이상이면 $y \\ge (i+2)T$, $x \\le iT + T - 1$ → $y - x \\ge T + 1 > T$. 그러므로 거리 T 이하 쌍은 '''같은 버킷이거나 이웃 버킷(i, i+1)'''에만 있을 수 있다.\n<pre class=\"c\">\ndef close_pair_bucket(A, T, M):\n  # A: distinct integers in [1, M],  T >= 1\n  num_buckets = M // T + 1           # 버킷 번호 0 .. M//T\n  buckets = [None] * num_buckets     # 각 버킷에 원소 최대 1개만 저장\n  for x in A:                        # 분배: O(n)\n    i = x // T                       # get_bucket: 폭 T\n    if buckets[i] is not None:\n      return True                    # 같은 버킷 -> 거리 <= T-1\n    buckets[i] = x\n  for i in range(num_buckets - 1):   # 이웃 버킷 검사: O(M/T)\n    if buckets[i] is not None and buckets[i+1] is not None:\n      if buckets[i+1] - buckets[i] <= T:\n        return True\n  return False\n<\/pre>\n{|\n! 변수 || 뜻 || 예제(T = 2, M = 5000)에서의 값\n|-\n| `T` || 거리 한계 = 버킷 폭 || 2\n|-\n| `M` || 값의 상한(고정 상수) || 5000 (예제 최댓값으로 둠)\n|-\n| `num_buckets` || 버킷 수 $\\lfloor M/T \\rfloor + 1$ || 2501\n|-\n| `i` || 원소 x 의 버킷 번호 $\\lfloor x/T \\rfloor$ || 25 → 12, 26 → 13\n|-\n| `buckets[i]` || 버킷 i 의 유일한 원소(없으면 None) || buckets[12] = 25\n|}\n'''정확성 (두 방향)'''\n<pre class=\"txt\">\n'''True 를 반환하면 정말 가까운 쌍이 있다'''\n  - 분배 중 반환: 같은 버킷 → 관찰 1 → 거리 ≤ T-1 ≤ T\n  - 이웃 검사 중 반환: buckets[i+1] - buckets[i] ≤ T 를 직접 확인했음\n'''가까운 쌍 (x, y), x < y, y - x ≤ T 가 있으면 반드시 True 를 반환한다'''\n  - 같은 버킷이면 분배 단계에서 True\n  - 다른 버킷이면 관찰 3 에 의해 버킷 번호 차는 정확히 1 → 이웃 검사에서 그 쌍을 봄 → True\n  (분배에서 반환하지 않았으므로 각 버킷 원소는 1개 → buckets[i], buckets[i+1] 가 바로 x, y)\n<\/pre>\n'''복잡도''': 분배 $O(n)$ + 버킷 배열 초기화·이웃 검사 $O(M/T)$ → $O(n + M/T)$. 문제에서 '''M 은 고정 상수'''이고 $T \\ge 1$ 이므로 $M/T \\le M = O(1)$ → 전체 $O(n)$. (이것이 [[bucket sort]] 의 $\\Theta(n + k)$ 에서 k 가 상수일 때 선형이 되는 것과 같은 논리 — [[Θ(n+k)]].)\n{exam}\n발표의 핵심 문장 세 개: ① \"'''폭 T 버킷에 두 개가 들어가면 그 둘은 이미 T 이내'''(pigeonhole) — 그래서 버킷 안 정렬이 필요 없다.\" ② \"'''두 칸 떨어진 버킷끼리는 최소 T+1 차이''' — 그래서 이웃 버킷만 본다.\" ③ \"비교 정렬의 $\\Omega(n\\log n)$ 하한을 피하는 방법은 L5 와 같다 — '''값을 인덱스로 쓴다'''.\"\n{/exam}\n\n=== ⑤ 예제 추적 ===\n[[sim:close_pair_bucket]]\nA = [10, 5, 15, 25, 20, 26, 5000, 500], T = 2 → 버킷 번호 $\\lfloor x/2 \\rfloor$:\n{|\n! 순서 || x || 버킷 $\\lfloor x/2 \\rfloor$ || 버킷 상태 || 결과\n|-\n| 1 || 10 || 5 || 5:{10} || 비어 있음 → 넣기\n|-\n| 2 || 5 || 2 || 2:{5} || 넣기\n|-\n| 3 || 15 || 7 || 7:{15} || 넣기\n|-\n| 4 || 25 || 12 || 12:{25} || 넣기\n|-\n| 5 || 20 || 10 || 10:{20} || 넣기\n|-\n| 6 || 26 || 13 || 13:{26} || 넣기\n|-\n| 7 || 5000 || 2500 || 2500:{5000} || 넣기\n|-\n| 8 || 500 || 250 || 250:{500} || 넣기\n|}\n<pre class=\"txt\">\n분배 결과: 같은 버킷 없음 (5, 2, 7, 12, 10, 13, 2500, 250 모두 다름)\n비어 있지 않은 버킷 (번호순): 2:5  5:10  7:15  10:20  '''12:25  13:26'''  250:500  2500:5000\n이웃 버킷 쌍 (i, i+1) 이 둘 다 찬 곳: (12, 13) 뿐 → 26 - 25 = 1 ≤ 2 → '''True'''\n<\/pre>\n'''검산''' (Python): 버킷 번호 `[5, 2, 7, 12, 10, 13, 2500, 250]`, brute / 정렬 / 버킷 세 함수 모두 True. 무작위 입력 20,000 개(M ≤ 200, n ≤ 15, T ≤ 40)에서 세 함수의 답이 '''한 번도 어긋나지 않음'''(mismatch 0).\n\n=== ⑥ 세 알고리즘 비교 ===\n{|\n! || (a) brute force || (b) 정렬 + 인접 || (c) 폭 T 버킷\n|-\n| 아이디어 || 모든 쌍 || 최소 거리 쌍은 정렬 후 이웃 || 같은 버킷 → True, 아니면 이웃 버킷만\n|-\n| 시간 || $O(n^2)$ || $O(n \\log n)$ || $O(n + M/T) = O(n)$\n|-\n| 추가 공간 || $O(1)$ || $O(n)$ (mergesort) || $O(M/T)$ 버킷 배열\n|-\n| 비교 기반? || 예 || 예 (하한 $\\Omega(n\\log n)$) || 아니오 (값을 인덱스로)\n|-\n| 전제 || 없음 || 없음 || 값이 정수, 범위 M 고정\n|-\n| 강의 연결 || — || L3 [[mergesort]] || L5 [[bucket sort]] · L7 [[비둘기집 원리]]\n|}\n\n=== ⑦ 예상 질문 5개와 답 ===\n{quiz}\nQ1. M 이 매우 크면(예: $10^9$) 버킷 배열 초기화가 $O(M/T)$ 로 비싸지 않나?\nQ2. T = 0 이면?\nQ3. 원소가 중복될 수 있으면?\nQ4. 버킷 폭을 T 가 아니라 T+1 로 하면?\nQ5. \"거리 < T\" 와 \"거리 ≤ T\" 는 무엇이 달라지나?\n{/quiz}\n{answer}\n* '''A1.''' 문제에서 M 은 '''고정 상수'''라 $O(M/T) = O(1)$ 이다. 실전에서 M 이 n 에 비해 크면 ① 한 번 훑어 min, max 를 구해 범위를 $\\max - \\min$ 으로 줄이거나(버킷 번호 $\\lfloor (x - \\min)/T \\rfloor$), ② 배열 대신 [[hash table]] 에 버킷 번호 → 원소를 저장하면 비어 있는 버킷을 만들지 않으므로 기대 $O(n)$ (L7 의 [[universal hash family]] 로 기대 $O(1)$ 연산). 이웃 검사는 각 원소 x 에 대해 버킷 $i-1$, $i+1$ 만 조회.\n* '''A2.''' 원소가 distinct 이므로 거리 0 인 쌍은 없다 → 바로 False. 코드에서도 `x // 0` 을 피하려면 `if T == 0: return False` 를 맨 앞에 둔다(문제의 T 는 양수로 보는 것이 자연스러움).\n* '''A3.''' 같은 값 두 개는 같은 버킷 → 거리 0 ≤ T → True. 알고리즘은 그대로 맞다(distinct 가정은 (b) 의 \"차가 양수\" 와 버킷당 1 개 저장을 깔끔하게 해 줄 뿐, 결과에는 영향 없음).\n* '''A4.''' 폭 T+1 도 된다: 같은 버킷이면 차 ≤ T 라 여전히 True, 버킷 i 와 i+2 는 차 ≥ T+2 라 여전히 이웃만 보면 된다. 버킷 수가 약간 줄 뿐 복잡도 동일. 반대로 '''폭 > T+1''' 이면 같은 버킷 안에 거리 T+1 쌍이 들어갈 수 있어 \"같은 버킷 → True\" 가 깨진다. 폭 T 는 가장 직관적인 안전한 선택.\n* '''A5.''' \"< T\" 로 바꾸면 이웃 검사의 비교만 `< T` 로 바꾸면 된다. 같은 버킷 쌍은 차 ≤ T−1 < T 이므로 관찰 1 은 그대로 성립. 문제 원문은 \"less than or equal to T\" 이므로 `<=`.\n{/answer}\n{tip}여기서 배울 것: 같은 문제를 세 번 푸는 구성 자체가 L3→L5 의 흐름이다 — '''모든 쌍 → 비교 정렬(하한 n log n) → 값을 인덱스로 쓰는 버킷(선형)'''. bucket sort 를 \"정렬\" 이 아니라 '''\"값이 가까운 것끼리 모으는 도구\"''' 로 쓴다는 발상이 핵심.{/tip}\n\n== 문제 3 (20점) — toad 세 알고리즘: Las Vegas 인가 Monte Carlo 인가 ==\nn 마리 toad 중 trustworthy 가 '''엄격히 n/2 초과'''. expert 는 한 마리를 $\\Theta(1)$ 에 판정한다. 세 알고리즘(아래)이 trustworthy toad 하나를 찾으려 한다.\n관련 개념: [[Las Vegas와 Monte Carlo]] · [[expected running time]] · [[randomized worst-case]] · [[기하분포]] · [[randomized algorithm]] · [[랜덤 majority]]\n<pre class=\"c\">\n# Algorithm 1\nwhile True:\n  i = random index in {0, ..., n-1}\n  if expert says toad i is trustworthy:    # Θ(1)\n    return toad i\n\n# Algorithm 2\nfor 100 iterations:\n  i = random index in {0, ..., n-1}\n  if expert says toad i is trustworthy:\n    return toad i\nreturn toad 0\n\n# Algorithm 3\nput the toads in a random order           # O(n)\nfor i = 0, ..., n-1:\n  if expert says toad i is trustworthy:\n    return toad i\n<\/pre>\n{quiz}\n각 알고리즘에 대해 Monte Carlo / Las Vegas, expected running time, worst-case running time, truthful toad 를 반환할 확률(가장 tight 한 bound)을 표로 채우고 짧게 근거를 쓰시오.\n{/quiz}\n{analogy}\n🎭 '''두더지 잡기.''' 구멍의 절반 넘게에서 진짜 두더지가 올라온다. Alg 1 은 \"잡을 때까지 망치질\" — 언젠가 반드시 잡지만 몇 번 칠지는 운(Las Vegas). Alg 2 는 \"100 번만 치고 못 잡으면 아무 구멍이나 가리킴\" — 시간은 정해졌지만 틀릴 수 있다(Monte Carlo). Alg 3 은 \"구멍 순서를 섞어 놓고 차례로 확인\" — 섞는 데 n 만큼 드니 기대값도 n.\n{/analogy}\n{answer}\n{|\n! Algorithm || MC / LV || Expected || Worst-case || P(truthful 반환)\n|-\n| 1 || '''Las Vegas''' || $\\Theta(1)$ || $\\infty$ (무한) || 1\n|-\n| 2 || '''Monte Carlo''' || $\\Theta(1)$ || $\\Theta(1)$ (100 회) || $\\ge 1 - (1/2)^{100}$\n|-\n| 3 || '''Las Vegas''' || $\\Theta(n)$ || $\\Theta(n)$ || 1\n|}\n<pre class=\"txt\">\n전제: trustworthy > n/2 → 무작위 한 마리가 trustworthy 일 확률 p > 1/2  (매 시도 독립)\n'''Alg 1''' 성공 확률 p 인 시도를 성공할 때까지 → 시도 횟수 ~ 기하분포\n        E[시도] = 1/p < 2,  시도당 Θ(1) → 기대 Θ(1)\n        운이 계속 나쁘면 끝없이 반복 가능 → worst-case 무한 (P(k 번 실패) = (1-p)^k > 0)\n        expert 가 확인한 toad 만 반환 → 항상 정답 → Las Vegas, 확률 1\n'''Alg 2''' 반복 ≤ 100 → 기대·최악 모두 Θ(1)\n        100 번 모두 실패할 확률 (1-p)^100 < (1/2)^100 ≈ 7.9 × 10^-31\n        실패하면 확인 안 된 toad 0 반환 → 틀릴 수 있음 → Monte Carlo\n        P(truthful) ≥ 1 - (1/2)^100  (toad 0 이 우연히 trustworthy 일 수도 있어 '''하한''')\n'''Alg 3''' 섞기 O(n) 는 항상 수행 → 기대값도 Ω(n),  스캔의 기대 길이 < 2 (앞에서부터 확인, 절반 넘게 정답)\n        worst: 섞인 순서에서 tricky 가 전부(< n/2 마리) 앞에 와도 n 번 안에 반드시 찾음 → Θ(n)\n        trustworthy 가 최소 1 마리 → 반드시 반환, 확인된 것만 반환 → Las Vegas, 확률 1\n<\/pre>\n{/answer}\n{tip}여기서 배울 것: 판정 기준은 '''\"틀린 답을 낼 수 있는가?\"''' 하나 — 확인을 통과한 것만 반환하면 Las Vegas, 시간 제한 후 확인 없이 반환하면 Monte Carlo(L6 p.4, 9/17 \"you should distinguish\"). Alg 3 의 함정: 스캔은 기대 상수 번이지만 '''셔플 $O(n)$ 이 기대값까지 지배'''한다. Alg 1 의 worst-case 를 \"Θ(n)\" 으로 쓰면 오답 — 같은 toad 를 다시 뽑을 수 있으므로 상한이 없다.{/tip}\n\n== 문제 4 (20점) — 최대 collinear 집합 ==\nx 좌표·y 좌표가 모두 서로 다른 n 개 점. 같은 직선 위에 있는 점들의 최대 부분집합을 찾는다(해싱 금지, 두 점 → 직선 m, b 는 $O(1)$, 기울기·절편 비교 $O(1)$).\n관련 개념: [[randomized algorithm]] · [[expected running time]] · [[Las Vegas와 Monte Carlo]] · [[기하분포]] · [[mergesort]] · [[randomized worst-case]]\n{quiz}\n(a) $O(n^2 \\log n)$ 알고리즘을 설계하시오.\n(b) 최대 collinear 집합의 크기가 정확히 n/k (k 는 상수)라는 것을 안다. expected $O(n)$ (= $O(k^2 n)$) randomized 알고리즘을 설계하고, 정확성·기대 시간을 정당화하고, worst-case 시간을 정의·설명하시오.\n{/quiz}\n{analogy}\n🎭 '''다트 두 발.''' 과녁판의 1/k 이 \"정답 직선\" 구역이다. 다트를 두 발 던져 '''둘 다''' 그 구역에 꽂힐 확률은 약 $1/k^2$. 꽂혔는지는 줄자로 한 번 재 보면(O(n) 세기) 확실히 안다. 그러니 평균 $k^2$ 번 던지면 되고, k 가 상수면 상수 번 — 다만 운이 끝없이 나쁘면 영원히 던질 수도 있다.\n{/analogy}\n{answer}\n'''(a) 각 점을 기준으로 기울기 정렬 — $O(n^2 \\log n)$'''\n<pre class=\"c\">\ndef max_collinear(P):                # P: n points, x 좌표 모두 다름\n  best = [P[0]]\n  for i in range(n):\n    S = [(slope(P[i], P[j]), P[j]) for j in range(n) if j != i]   # O(n)\n    S = mergesort(S, key=slope)                                    # O(n log n)\n    # 같은 기울기가 연속된 가장 긴 run 찾기                          # O(n)\n    run = longest_equal_slope_run(S)\n    if len(run) + 1 > len(best):\n      best = [P[i]] + [q for (m, q) in run]\n  return best\n<\/pre>\n* 정확성: 점 $P_i$ 를 지나는 직선은 기울기 하나로 결정된다(같은 점을 지나고 기울기가 같으면 같은 직선). 정렬하면 같은 기울기가 연속하므로 최장 run + 1 = \"$P_i$ 를 지나는 최대 collinear 집합\". 최대 집합은 어떤 점이든 반드시 포함하므로 모든 i 중 최대가 답.\n* x 가 모두 달라 기울기가 항상 정의된다(수직선 없음). 해싱 없이 '''정렬로 같은 값 묶기'''.\n* 시간: $n \\times O(n \\log n) = O(n^2 \\log n)$.\n\n'''(b) 랜덤 두 점 — expected $O(k^2 n) = O(n)$, Las Vegas'''\n<pre class=\"c\">\ndef random_collinear(P, k):\n  while True:\n    pick two distinct points p, q uniformly at random\n    m, b = line(p, q)                                  # O(1)\n    S = [r for r in P if r.y == m * r.x + b]           # O(n) 세기\n    if len(S) == n / k:                                # 최대 크기를 알고 있음\n      return S\n<\/pre>\n<pre class=\"txt\">\n정확성: |S| = n/k 일 때만 반환, n/k 가 최대 크기 → 반환한 S 는 항상 최대 집합  (틀린 답 없음 → Las Vegas)\n성공 확률: 최대 집합 S* (크기 n/k) 에서 두 점을 모두 뽑으면 그 직선 = S* 의 직선\n   q = (n/k)(n/k - 1) / (n(n - 1)) ≈ 1/k^2\n   n ≥ 2k-1 이면 (n/k - 1)/(n - 1) ≥ 1/(2k) → q ≥ 1/(2k^2)\n기대 시도 수 = 1/q ≤ 2k^2  (기하분포),  시도당 O(n)\n→ 기대 시간 O(k^2 n) = O(n)   (k 는 상수)\nworst-case: 매번 S* 밖의 쌍을 뽑을 수 있음 (확률 (1-q)^t > 0) → 상한 없음 = 무한\n<\/pre>\n'''검산''' (Python, n = 60): $k = 2$ 에서 q = 0.2458 (1/k² = 0.25), $k = 3$ 에서 0.1073 (0.1111), $k = 4$ 에서 0.0593 (0.0625) — $\\approx 1/k^2$ 확인.\n{/answer}\n{tip}여기서 배울 것: (b) 는 L6 [[랜덤 majority]] 와 '''같은 틀'''이다 — \"무작위로 후보를 뽑고 O(n) 으로 확인, 통과하면 반환\". 성공 확률이 상수($1/k^2$)면 기대 시도 수가 상수(기하분포 $1/p$), 그래서 기대 O(n). \"worst-case 를 정의하라\" 는 '''randomized worst-case''' — 입력이 아니라 난수가 최악일 때(L6 [[두 종류의 worst-case]]).{/tip}\n\n== 문제 5 (20점) — h_b(x) = (85x + b) mod 13 은 universal 인가 ==\n$h_b(x) = (85x + b) \\bmod 13$, $b \\in [0, 12]$, 키 universe $U = \\{0, 1, \\ldots, 29\\}$. 버킷은 13 개이므로 universal 이려면 서로 다른 모든 $x \\ne y$ 에 대해 $P_b[h_b(x) = h_b(y)] \\le 1/13$ 이어야 한다.\n관련 개념: [[universal hash family]] · [[h_{a,b}]] · [[modular arithmetic]] · [[hash collision]] · [[hash family]] · [[소수 p]] · [[결정론적 해시 함수의 한계]]\n{quiz}\n(a) 이 hash family 는 universal 인가? Yes/No 와 근거.\n(b) $x < y$ 인 쌍 중 최대 충돌 확률을 달성하는 쌍은 몇 개인가? 최대 충돌 확률은?\n(c) b 를 [0,12] 에서 균등 무작위로 고를 때, 고정된 $x \\ne y$ 에 대해 b 의 무작위성이 $P_b[h_b(x) = h_b(y)]$ 를 줄여 주는가? 수학적으로 설명.\n{/quiz}\n{analogy}\n🎭 '''돌림판의 시작 칸만 돌리기.''' 13 칸 돌림판에서 키 x 는 \"7x 칸 + b 칸\" 위치에 떨어진다. b 를 무작위로 돌리면 '''모든 키가 똑같이 b 칸씩 밀릴 뿐''' 두 키 사이 간격 $7(x-y)$ 는 그대로다. 처음부터 같은 칸이던 두 키(13 차이 나는 키)는 b 를 몇 번 돌려도 같은 칸 — 섞이는 건 위치이지 '''간격'''이 아니다.\n{/analogy}\n{answer}\n<pre class=\"txt\">\n85 = 6·13 + 7  → 85 mod 13 = 7  → h_b(x) = (7x + b) mod 13\n충돌 조건:  h_b(x) = h_b(y)\n  ⟺ 7x + b ≡ 7y + b (mod 13)\n  ⟺ 7(x - y) ≡ 0 (mod 13)            ← b 는 양변에서 소거\n  ⟺ x ≡ y (mod 13)                   ← 13 은 소수, gcd(7, 13) = 1 → 7 의 역원(2, 7·2 = 14 ≡ 1) 을 곱함\n→ 충돌 여부가 b 와 무관: x ≡ y (mod 13) 이면 모든 b 에서 충돌 (확률 1), 아니면 어떤 b 에서도 충돌 안 함 (확률 0)\n\n'''(a) No.'''  예: x = 0, y = 13 → 모든 b 에서 h_b(0) = h_b(13) = b → P = 1 > 1/13\n\n'''(b)''' U = {0..29} 를 mod 13 잉여류로 나누면\n  잉여 0,1,2,3 : {0,13,26} {1,14,27} {2,15,28} {3,16,29}  → 각 3 개 → C(3,2) = 3 쌍 × 4 = 12\n  잉여 4..12   : {4,17} … {12,25}                        → 각 2 개 → 1 쌍 × 9   =  9\n  최대 충돌 확률 '''1''' 을 달성하는 쌍 = '''21 쌍'''  (나머지 435 - 21 = 414 쌍은 확률 0)\n\n'''(c) 아니다.'''  P_b[h_b(x) = h_b(y)] = (1/13)·|{b : 7(x-y) ≡ 0 mod 13}|\n  = 1 (x ≡ y mod 13 이면 13 개 b 전부)  또는  0 (아니면 b 하나도 없음)\n  b 는 두 값에 똑같이 더해져 차 h_b(x) - h_b(y) ≡ 7(x - y) 를 바꾸지 못함 → 무작위성이 충돌 확률에 기여 0\n<\/pre>\n'''검산''' (Python, 435 쌍 × b 13 개 전수): `85 % 13 = 7`, 최대 충돌 확률 `1.0`, 그 쌍 수 `21`, 충돌 확률 값은 `{0.0, 1.0}` 두 가지뿐 → universal 아님.\n\n'''슬라이드의 [[h_{a,b}]] 와 비교''': L7 p.68 의 $h_{a,b}(x) = ((ax + b) \\bmod p) \\bmod n$ 은 '''a 도 무작위'''로 뽑는다. 충돌 여부를 정하는 것은 차 $a(x - y)$ 인데, a 가 무작위면 이 차가 mod p 에서 고르게 흩어져 충돌 확률이 $\\le 1/n$ 이 된다. 이 문제는 a 를 85 로 '''고정'''하고 b 만 무작위로 뽑으니, 사실상 '''결정론적 해시 함수 하나'''($7x \\bmod 13$)를 평행이동한 것뿐이다 — \"You cannot escape the dark side with deterministic hash functions\"(L7 p.31). 또 $U$ 의 크기 30 > 13 이라 [[비둘기집 원리]]로 같은 잉여류 키가 반드시 생긴다.\n{/answer}\n{tip}여기서 배울 것: universal 판정은 '''\"충돌 조건을 식으로 풀어서 무작위 변수가 남는지 본다\"'''. b 처럼 '''양쪽에 똑같이 더해지는''' 무작위성은 차를 못 바꾸므로 소거된다. universal 이 되려면 무작위성이 '''차에 곱해지는 위치(a)'''에 있어야 한다.{/tip}\n\n{exam}\nHW2 에서 시험으로 이어질 가능성이 큰 기술: ① radix sort 손 실행에서 '''stable 이 결과를 바꾸는 지점'''(같은 키 순서 유지) ② bucket 을 \"가까운 값 묶기\" 로 쓰는 pigeonhole 논증 ③ '''\"틀릴 수 있나?\" 로 Las Vegas / Monte Carlo 판정''', 셔플 비용이 기대값을 지배하는 경우 ④ 성공 확률 p 인 반복 → 기대 $1/p$ 회(기하분포) ⑤ 충돌 조건을 mod 식으로 풀어 universal 판정.\n{/exam}\n\n== 관련 문서 ==\n* [[HW1 복기]] · [[계산·증명 문제 모음]] · [[공식·점화식 모음]] · [[자주 틀리는 함정 모음]] · [[시험 정보]]\n* [[L5 Linear-Time Sorting]] · [[L6 Randomized Algorithms I]] · [[L7 Randomized Algorithms II]]"
+  "body": "HW2 는 '''L5 Linear-Time Sorting · L6 Randomized Algorithms I · L7 Randomized Algorithms II 의 도구를 한 번씩 써 보게 만든 과제'''다(개인 과제, 마감 '''10/6(화) 23:59''', 100 점 = 5 문제 × 20 점). HW1 이 L1–L4 의 증명·점화식이었다면 HW2 는 '''\"비교 없이 정렬하기 · 주사위 넣기 · 해시\"''' 세 묶음이다. 그리고 '''이번에는 내가 2번 문제 발표 담당'''이다 — 그래서 2번 절은 발표 흐름 순서(문제 → (a) → (b) → (c) → 예제 → 비교표 → 예상 질문)로 길게 썼다.\n\n각 문제는 \"문제 요지 → 관련 개념 → 원문 요지(❓) → 풀이(접힘) → 여기서 배울 것\" 순서다. 먼저 스스로 풀고 펼칠 것. 모든 답은 Python 으로 한 번 더 검산했다(검산 결과는 각 풀이 안에).\n\n{|\n! 번 || 배점 || 도구 || 강의 || 관련 시뮬레이터 / 그림\n|-\n| 1 || 20 || [[radix sort]] 손 실행, [[stable sort]], [[Θ(d(n+k))]] || L5 p.35–51 || `radix_sort`, `bucket_sort`\n|-\n| 2 || 20 || brute force / [[mergesort]] + 인접 검사 / [[bucket sort]] 변형 + [[비둘기집 원리]] || L3, L5 p.35–45 || `close_pair_bucket`, `close_pair_buckets`\n|-\n| 3 || 20 || [[Las Vegas와 Monte Carlo]], [[expected running time]], [[randomized worst-case]], [[기하분포]] || L6 p.4–5, p.80 || `toad_algorithms`, `toad_three_algorithms`, `geometric_expectation`\n|-\n| 4 || 20 || 정렬로 같은 기울기 묶기 / 랜덤 두 점 [[randomized algorithm]] || L3, L6 || `collinear_points`, `collinear_random_pair`\n|-\n| 5 || 20 || [[universal hash family]] 판정, [[modular arithmetic]], [[hash collision]], [[h_{a,b}]] 와 비교 || L7 p.62–73 || `hb_mod13_check`, `hb_shift_only`, `universal_hash_check`\n|}\n\n{analogy}\n🎭 '''놀이공원 자유이용권 다섯 장.''' HW2 는 L5–L7 놀이기구 다섯 개를 한 번씩 타게 한다. 1번은 '''컨베이어 벨트'''(자릿수마다 같은 벨트를 d 번 통과), 2번은 '''사물함'''(번호대로 넣으면 이웃 사물함만 보면 된다), 3번은 '''두더지 잡기'''(언제 맞힐지는 운, 맞힌 건 확실), 4번은 '''다트'''(두 발이 같은 과녁에 꽂힐 때까지), 5번은 '''돌림판'''(b 를 아무리 돌려도 7 칸씩 건너뛰는 틀은 안 바뀐다). 각 기구에서 떨어지는 지점에 깃발을 꽂아 둔다.\n{/analogy}\n\n== 문제 1 (20점) — radix sort 손 실행 ==\n네 글자 단어 [care, race, acre, bear] 를 radix sort(서브루틴 = stable bucket sort)로 a–z 오름차순 정렬. '''[[least-significant digit|가장 오른쪽 글자]]부터''' 한 글자씩 키로 삼는 것이 핵심이다.\n관련 개념: [[radix sort]] · [[stable sort]] · [[bucket sort]] · [[least-significant digit]] · [[Θ(d(n+k))]] · [[Θ(n+k)]]\n{quiz}\n(a) [care, race, acre, bear] 에 radix sort 를 적용할 때 1·2·3·4 번째 bucket sort 호출 직후 리스트 순서를 각각 쓰시오.\n(b) n 개 단어, 각 d 글자(소문자), bucket 수 k. (1) bucket sort 한 번의 시간 (2) radix sort 전체 시간 (3) 알파벳이 26 글자뿐이면 Big-O 로 단순화.\n{/quiz}\n{answer}\n<pre class=\"txt\">\n'''(a)'''  키 = 4번째 → 3번째 → 2번째 → 1번째 글자,  같은 키는 '''이전 순서 유지(stable)'''\n 1차 (4번째 글자: e, e, e, r)   → [care, race, acre, bear]     e 세 개가 원래 순서 그대로, r 은 맨 뒤\n 2차 (3번째 글자: r, c, r, a)   → [bear, race, care, acre]     a < c < r,  r 끼리는 care → acre 순서 유지\n 3차 (2번째 글자: e, a, a, c)   → [race, care, acre, bear]     a(race, care 순 유지) < c < e\n 4차 (1번째 글자: r, c, a, b)   → [acre, bear, care, race]     최종 결과\n'''(b)'''\n (1) 한 번의 bucket sort: 원소 n 개 분배 Θ(n) + 버킷 k 개 만들기·이어붙이기 Θ(k) → Θ(n + k)\n (2) 글자 수 d 만큼 반복 → Θ(d(n + k))\n (3) k = 26 은 상수 → Θ(d(n + 26)) = O(dn);  d 도 상수(예: 네 글자)면 O(n)\n<\/pre>\n'''검산'''(Python `sorted` 는 stable, 키를 4→1 번째 글자로 4 번): `['care','race','acre','bear']` → `['bear','race','care','acre']` → `['race','care','acre','bear']` → `['acre','bear','care','race']` ✓\n{/answer}\n{tip}여기서 배울 것: 2차에서 care 와 acre 는 3번째 글자가 둘 다 r 이다. 이때 '''1차 결과의 순서(care 가 acre 앞)를 그대로 지키는 것'''이 stable 의 의미이고, radix sort 정확성 증명(L5 p.59 \"Since bucket_sort is stable …\")의 핵심 줄이다. 오답 패턴: 첫 글자부터 정렬(MSD)하거나, 같은 키끼리 순서를 임의로 바꿈. (b)(3)에서 \"O(26dn)\" 처럼 상수를 남기지 말 것.{/tip}\n\n== 문제 2 — 거리 T 이내 쌍 찾기 (발표) ==\n'''내가 발표하는 문제.''' 아래 소절 ①~⑦ 이 그대로 발표 순서다. 슬라이드 한 장 = 소절 하나로 잡으면 7 장.\n\n=== ① 문제 정의와 예제 ===\n정렬되지 않은 배열 A, 원소는 1 이상 M 이하 정수, '''M 은 고정된 큰 양의 정수''', '''모든 원소 distinct'''. 거리가 T 이하인 쌍 $\\{A[i], A[j]\\}$ ($\\lvert A[i] - A[j] \\rvert \\le T$) 가 하나라도 있으면 True.\n예제: A = [10, 5, 15, 25, 20, 26, 5000, 500], T = 2 → 25 와 26 의 거리 1 ≤ 2 → '''True'''.\n관련 개념: [[mergesort]] · [[bucket sort]] · [[get_bucket]] · [[비둘기집 원리]] · [[floor와 ceil]] · [[distinct 가정]] · [[Big-O]]\n{quiz}\n(a) $O(n^2)$, (b) $O(n \\log n)$, (c) $O(n)$ 시간에 푸는 의사코드를 각각 쓰시오. (c) 의 힌트: bucket sort 를 변형하라.\n{/quiz}\n{analogy}\n🎭 '''사물함 배정.''' 학생(숫자) n 명에게 번호대로 폭 T 짜리 사물함을 준다(0~1 번은 0 번 칸, 2~3 번은 1 번 칸 …). 두 학생이 '''같은 칸'''에 배정되면 번호 차가 T 보다 작으니 바로 \"가까운 쌍 있음\". 아무도 같은 칸이 아니라면 각 칸에 한 명씩뿐이고, 가까운 쌍이 있다면 '''바로 옆 칸 사람'''뿐이다 — 두 칸 건너 사람은 이미 T 보다 멀다. 그러니 복도를 한 번 걸으며 옆 칸끼리만 확인하면 끝.\n{/analogy}\n\n=== ② (a) Brute force — O(n²) ===\n모든 쌍을 검사한다. 정의 그대로라 정확성은 자명하다.\n<pre class=\"c\">\ndef close_pair_brute(A, T):\n  n = len(A)\n  for i in range(n):\n    for j in range(i+1, n):          # 모든 쌍 (i, j), i < j\n      if abs(A[i] - A[j]) <= T:\n        return True\n  return False\n<\/pre>\n* 시간: 쌍의 수 $\\binom{n}{2} = \\frac{n(n-1)}{2}$, 쌍마다 $O(1)$ → $O(n^2)$.\n* 예제: 28 쌍 중 (25, 26) 에서 True.\n\n=== ③ (b) 정렬 + 인접 검사 — O(n log n) ===\n<pre class=\"c\">\ndef close_pair_sorted(A, T):\n  B = mergesort(A)                   # O(n log n)\n  for i in range(len(B) - 1):        # 인접한 쌍만, O(n)\n    if B[i+1] - B[i] <= T:\n      return True\n  return False\n<\/pre>\n'''왜 인접만 보면 되나 (한 줄 증명):''' 정렬된 B 에서 $i < j$ 이면 $B[j] - B[i] = \\sum_{t=i}^{j-1} (B[t+1] - B[t]) \\ge B[i+1] - B[i]$ — 모든 차가 양수(distinct)이므로 '''가장 가까운 쌍은 반드시 정렬 후 이웃'''이다. 따라서 이웃 쌍 중 T 이하가 없으면 어떤 쌍도 T 이하가 아니다.\n* 시간: [[mergesort]] $O(n \\log n)$ + 스캔 $O(n)$ = $O(n \\log n)$. ([[comparison-based sorting]] 이라 정렬 단계에서 $\\Omega(n\\log n)$ 하한에 걸린다 → (c) 에서 비교를 버린다.)\n* 예제: B = [5, 10, 15, 20, 25, 26, 500, 5000], 인접 차 5, 5, 5, 5, '''1''', 474, 4500 → True.\n\n=== ④ (c) 버킷 아이디어 — O(n) ===\n[[anim:close_pair_buckets|폭 T 버킷에 원소를 하나씩 떨어뜨린다 — 같은 버킷에 두 개가 들어가는 순간 True, 아니면 이웃 버킷끼리만 차를 잰다]]\nL5 의 [[bucket sort]] 에서 '''정렬은 버리고 분배만''' 쓴다. 폭이 T 인 버킷을 만들고 원소 x 를 버킷 $\\lfloor x / T \\rfloor$ 에 넣는다([[get_bucket]] 과 같은 방식). 값이 1..M 이므로 버킷 번호는 0..$\\lfloor M/T \\rfloor$, 버킷 수는 $\\lfloor M/T \\rfloor + 1 \\le \\lceil M/T \\rceil + 1$.\n* '''관찰 1 (같은 버킷 → True)''': $\\lfloor x/T \\rfloor = \\lfloor y/T \\rfloor = i$ 면 $iT \\le x, y \\le iT + T - 1$ → $\\lvert x - y \\rvert \\le T - 1 \\le T$. 버킷 하나에 두 번째 원소가 들어오는 순간 바로 True 를 반환할 수 있다([[비둘기집 원리]]: 폭 T 칸에 두 마리가 들어가면 둘은 가깝다).\n* '''관찰 2 (그렇지 않으면 버킷당 ≤ 1 개)''': 반환하지 않았다면 모든 버킷에 원소가 0 개 또는 1 개. 그래서 버킷 안을 '''정렬할 필요가 없다'''(bucket sort 의 병목이 사라짐).\n* '''관찰 3 (이웃 버킷만 보면 충분)''': x 가 버킷 i, y 가 버킷 $i + 2$ 이상이면 $y \\ge (i+2)T$, $x \\le iT + T - 1$ → $y - x \\ge T + 1 > T$. 그러므로 거리 T 이하 쌍은 '''같은 버킷이거나 이웃 버킷(i, i+1)'''에만 있을 수 있다.\n<pre class=\"c\">\ndef close_pair_bucket(A, T, M):\n  # A: distinct integers in [1, M],  T >= 1\n  num_buckets = M // T + 1           # 버킷 번호 0 .. M//T\n  buckets = [None] * num_buckets     # 각 버킷에 원소 최대 1개만 저장\n  for x in A:                        # 분배: O(n)\n    i = x // T                       # get_bucket: 폭 T\n    if buckets[i] is not None:\n      return True                    # 같은 버킷 -> 거리 <= T-1\n    buckets[i] = x\n  for i in range(num_buckets - 1):   # 이웃 버킷 검사: O(M/T)\n    if buckets[i] is not None and buckets[i+1] is not None:\n      if buckets[i+1] - buckets[i] <= T:\n        return True\n  return False\n<\/pre>\n{|\n! 변수 || 뜻 || 예제(T = 2, M = 5000)에서의 값\n|-\n| `T` || 거리 한계 = 버킷 폭 || 2\n|-\n| `M` || 값의 상한(고정 상수) || 5000 (예제 최댓값으로 둠)\n|-\n| `num_buckets` || 버킷 수 $\\lfloor M/T \\rfloor + 1$ || 2501\n|-\n| `i` || 원소 x 의 버킷 번호 $\\lfloor x/T \\rfloor$ || 25 → 12, 26 → 13\n|-\n| `buckets[i]` || 버킷 i 의 유일한 원소(없으면 None) || buckets[12] = 25\n|}\n'''정확성 (두 방향)'''\n<pre class=\"txt\">\n'''True 를 반환하면 정말 가까운 쌍이 있다'''\n  - 분배 중 반환: 같은 버킷 → 관찰 1 → 거리 ≤ T-1 ≤ T\n  - 이웃 검사 중 반환: buckets[i+1] - buckets[i] ≤ T 를 직접 확인했음\n'''가까운 쌍 (x, y), x < y, y - x ≤ T 가 있으면 반드시 True 를 반환한다'''\n  - 같은 버킷이면 분배 단계에서 True\n  - 다른 버킷이면 관찰 3 에 의해 버킷 번호 차는 정확히 1 → 이웃 검사에서 그 쌍을 봄 → True\n  (분배에서 반환하지 않았으므로 각 버킷 원소는 1개 → buckets[i], buckets[i+1] 가 바로 x, y)\n<\/pre>\n'''복잡도''': 분배 $O(n)$ + 버킷 배열 초기화·이웃 검사 $O(M/T)$ → $O(n + M/T)$. 문제에서 '''M 은 고정 상수'''이고 $T \\ge 1$ 이므로 $M/T \\le M = O(1)$ → 전체 $O(n)$. (이것이 [[bucket sort]] 의 $\\Theta(n + k)$ 에서 k 가 상수일 때 선형이 되는 것과 같은 논리 — [[Θ(n+k)]].)\n{exam}\n발표의 핵심 문장 세 개: ① \"'''폭 T 버킷에 두 개가 들어가면 그 둘은 이미 T 이내'''(pigeonhole) — 그래서 버킷 안 정렬이 필요 없다.\" ② \"'''두 칸 떨어진 버킷끼리는 최소 T+1 차이''' — 그래서 이웃 버킷만 본다.\" ③ \"비교 정렬의 $\\Omega(n\\log n)$ 하한을 피하는 방법은 L5 와 같다 — '''값을 인덱스로 쓴다'''.\"\n{/exam}\n\n=== ⑤ 예제 추적 ===\n[[sim:close_pair_bucket]]\nA = [10, 5, 15, 25, 20, 26, 5000, 500], T = 2 → 버킷 번호 $\\lfloor x/2 \\rfloor$:\n{|\n! 순서 || x || 버킷 $\\lfloor x/2 \\rfloor$ || 버킷 상태 || 결과\n|-\n| 1 || 10 || 5 || 5:{10} || 비어 있음 → 넣기\n|-\n| 2 || 5 || 2 || 2:{5} || 넣기\n|-\n| 3 || 15 || 7 || 7:{15} || 넣기\n|-\n| 4 || 25 || 12 || 12:{25} || 넣기\n|-\n| 5 || 20 || 10 || 10:{20} || 넣기\n|-\n| 6 || 26 || 13 || 13:{26} || 넣기\n|-\n| 7 || 5000 || 2500 || 2500:{5000} || 넣기\n|-\n| 8 || 500 || 250 || 250:{500} || 넣기\n|}\n<pre class=\"txt\">\n분배 결과: 같은 버킷 없음 (5, 2, 7, 12, 10, 13, 2500, 250 모두 다름)\n비어 있지 않은 버킷 (번호순): 2:5  5:10  7:15  10:20  '''12:25  13:26'''  250:500  2500:5000\n이웃 버킷 쌍 (i, i+1) 이 둘 다 찬 곳: (12, 13) 뿐 → 26 - 25 = 1 ≤ 2 → '''True'''\n<\/pre>\n'''검산''' (Python): 버킷 번호 `[5, 2, 7, 12, 10, 13, 2500, 250]`, brute / 정렬 / 버킷 세 함수 모두 True. 무작위 입력 20,000 개(M ≤ 200, n ≤ 15, T ≤ 40)에서 세 함수의 답이 '''한 번도 어긋나지 않음'''(mismatch 0).\n\n=== ⑥ 세 알고리즘 비교 ===\n{|\n! || (a) brute force || (b) 정렬 + 인접 || (c) 폭 T 버킷\n|-\n| 아이디어 || 모든 쌍 || 최소 거리 쌍은 정렬 후 이웃 || 같은 버킷 → True, 아니면 이웃 버킷만\n|-\n| 시간 || $O(n^2)$ || $O(n \\log n)$ || $O(n + M/T) = O(n)$\n|-\n| 추가 공간 || $O(1)$ || $O(n)$ (mergesort) || $O(M/T)$ 버킷 배열\n|-\n| 비교 기반? || 예 || 예 (하한 $\\Omega(n\\log n)$) || 아니오 (값을 인덱스로)\n|-\n| 전제 || 없음 || 없음 || 값이 정수, 범위 M 고정\n|-\n| 강의 연결 || — || L3 [[mergesort]] || L5 [[bucket sort]] · L7 [[비둘기집 원리]]\n|}\n\n=== ⑦ 예상 질문 5개와 답 ===\n{quiz}\nQ1. M 이 매우 크면(예: $10^9$) 버킷 배열 초기화가 $O(M/T)$ 로 비싸지 않나?\nQ2. T = 0 이면?\nQ3. 원소가 중복될 수 있으면?\nQ4. 버킷 폭을 T 가 아니라 T+1 로 하면?\nQ5. \"거리 < T\" 와 \"거리 ≤ T\" 는 무엇이 달라지나?\n{/quiz}\n{answer}\n* '''A1.''' 문제에서 M 은 '''고정 상수'''라 $O(M/T) = O(1)$ 이다. 실전에서 M 이 n 에 비해 크면 ① 한 번 훑어 min, max 를 구해 범위를 $\\max - \\min$ 으로 줄이거나(버킷 번호 $\\lfloor (x - \\min)/T \\rfloor$), ② 배열 대신 [[hash table]] 에 버킷 번호 → 원소를 저장하면 비어 있는 버킷을 만들지 않으므로 기대 $O(n)$ (L7 의 [[universal hash family]] 로 기대 $O(1)$ 연산). 이웃 검사는 각 원소 x 에 대해 버킷 $i-1$, $i+1$ 만 조회.\n* '''A2.''' 원소가 distinct 이므로 거리 0 인 쌍은 없다 → 바로 False. 코드에서도 `x // 0` 을 피하려면 `if T == 0: return False` 를 맨 앞에 둔다(문제의 T 는 양수로 보는 것이 자연스러움).\n* '''A3.''' 같은 값 두 개는 같은 버킷 → 거리 0 ≤ T → True. 알고리즘은 그대로 맞다(distinct 가정은 (b) 의 \"차가 양수\" 와 버킷당 1 개 저장을 깔끔하게 해 줄 뿐, 결과에는 영향 없음).\n* '''A4.''' 폭 T+1 도 된다: 같은 버킷이면 차 ≤ T 라 여전히 True, 버킷 i 와 i+2 는 차 ≥ T+2 라 여전히 이웃만 보면 된다. 버킷 수가 약간 줄 뿐 복잡도 동일. 반대로 '''폭 > T+1''' 이면 같은 버킷 안에 거리 T+1 쌍이 들어갈 수 있어 \"같은 버킷 → True\" 가 깨진다. 폭 T 는 가장 직관적인 안전한 선택.\n* '''A5.''' \"< T\" 로 바꾸면 이웃 검사의 비교만 `< T` 로 바꾸면 된다. 같은 버킷 쌍은 차 ≤ T−1 < T 이므로 관찰 1 은 그대로 성립. 문제 원문은 \"less than or equal to T\" 이므로 `<=`.\n{/answer}\n{tip}여기서 배울 것: 같은 문제를 세 번 푸는 구성 자체가 L3→L5 의 흐름이다 — '''모든 쌍 → 비교 정렬(하한 n log n) → 값을 인덱스로 쓰는 버킷(선형)'''. bucket sort 를 \"정렬\" 이 아니라 '''\"값이 가까운 것끼리 모으는 도구\"''' 로 쓴다는 발상이 핵심.{/tip}\n\n== 문제 3 (20점) — toad 세 알고리즘: Las Vegas 인가 Monte Carlo 인가 ==\nn 마리 toad 중 trustworthy 가 '''엄격히 n/2 초과'''. expert 는 한 마리를 $\\Theta(1)$ 에 판정한다. 세 알고리즘이 trustworthy toad 하나를 찾으려 한다. 표(Monte Carlo / Las Vegas, expected, worst-case, truthful 반환 확률의 tightest bound)를 채우고 짧게 근거를 쓰는 문제.\n관련 개념: [[Las Vegas와 Monte Carlo]] · [[두 시나리오]] · [[expected running time]] · [[randomized worst-case]] · [[기하분포]] · [[등비급수]] · [[randomized algorithm]] · [[랜덤 majority]] · [[bogosort]]\n\n=== 📚 관련 수업 내용 ===\n* '''L6 p.4 두 분류''' — [[Las Vegas와 Monte Carlo]]: Las Vegas 는 \"정확성은 항상 보장, 수행 시간은 보장 안 됨\"(randomized select, randomized quicksort, bogosort). Monte Carlo 는 \"수행 시간은 항상 보장, 정확성은 확률적으로 틀릴 수 있음\"(Karger). 9/17 교수: \"'''you should distinguish what the difference is between'''\" — 이 문제의 첫 열이 그대로 그 질문이다.\n* '''L6 p.5 두 시나리오''' — [[두 시나리오]]: 적이 입력만 고르고 내가 주사위를 굴리면 수행 시간은 [[random variable]] → [[expected running time]]. 적이 주사위 눈까지 고정하면 → [[randomized worst-case]]. 표의 2·3열이 이 둘이다.\n* '''기하분포 $E = 1/p$''' — [[기하분포]]: 성공 확률 p 인 시도를 성공할 때까지 반복하면 기대 시도 수는 $1/p$. 9/22 녹음에서 교수가 [[랜덤 majority]] 로 유도: \"$E = 1 + (1-p)E$ → $E = 1/p$\", majority 는 $p > 1/2$ 라 \"'''< 2'''\". [[bogosort]] 는 $p = 1/n!$ 라 $n!$ 회.\n* '''L6 p.80 요약표''' — bogosort $O(\\infty)$ / $O(n \\cdot n!)$, 랜덤 majority $O(\\infty)$ / $O(n)$. \"worst-case = ∞\" 라는 답이 정식 답안이라는 선례.\n\n{quiz}\n각 알고리즘에 대해 Monte Carlo / Las Vegas, expected running time, worst-case running time, truthful toad 를 반환할 확률(가장 tight 한 bound)을 표로 채우고 짧게 근거를 쓰시오.\n{/quiz}\n<pre class=\"c\">\n# Algorithm 1 : FindTrustworthyToad1\nwhile true:\n  i = random index in {0, ..., n-1}\n  ask the expert if toad i is trustworthy     # Θ(1)\n  if the expert says toad i is trustworthy:\n    return toad i\n\n# Algorithm 2 : FindTrustworthyToad2\nfor 100 iterations:\n  i = random index in {0, ..., n-1}\n  ask the expert if toad i is trustworthy     # Θ(1)\n  if the expert says toad i is trustworthy:\n    return toad i\nreturn toad 0                                 # 100 번 다 실패하면 확인 없이 반환\n\n# Algorithm 3 : FindTrustworthyToad3\nput the toads in a random order               # O(n)\nfor i = 0, ..., n-1:\n  ask the expert if toad i is trustworthy     # Θ(1)\n  if the expert says toad i is trustworthy:\n    return toad i\n<\/pre>\n{analogy}\n🎭 '''두더지 잡기.''' 구멍의 절반 넘게에서 진짜 두더지가 올라온다. Alg 1 은 \"잡을 때까지 망치질\" — 언젠가 반드시 잡지만 몇 번 칠지는 운(Las Vegas). Alg 2 는 \"100 번만 치고 못 잡으면 아무 구멍이나 가리킴\" — 시간은 정해졌지만 틀릴 수 있다(Monte Carlo). Alg 3 은 \"구멍 순서를 섞어 놓고 차례로 확인\" — 섞는 데 n 만큼 드니 기대값도 n.\n{/analogy}\n\n=== 🔍 왜 이 답이 나오는가 ===\n[[anim:toad_three_algorithms|세 알고리즘을 한 화면에서: Alg 1 은 맞힐 때까지, Alg 2 는 100 번 뒤 확인 없이 toad 0, Alg 3 은 섞고 나서 훑기. 먼저 보고, 아래 네 열을 왜 그렇게 채우는지 따라갈 것]]\n\n'''공통 전제.''' trustworthy 가 $n/2$ 초과이므로 무작위로 한 마리를 뽑았을 때 trustworthy 일 확률을 $p$ 라 하면 '''$p > 1/2$'''. 정확한 값은 모른다(문제가 \"strictly more than n/2\" 만 줌) — 그래서 확률 답은 $p$ 가 아니라 $1/2$ 로 bound 를 쓴다.\n\n'''판정 기준 하나.''' 네 열 중 첫 열은 \"'''틀린 답을 낼 수 있는가?'''\" 하나로 갈린다.\n<pre class=\"ascii\">\n반환하는 toad 를 expert 가 \"trustworthy\" 라고 확인했는가?\n ├ 항상 그렇다 (확인된 것만 return)          → '''Las Vegas'''   → P(truthful) = 1, 시간이 확률변수   … Alg 1, Alg 3\n └ 아니다 (시간 제한 뒤 확인 없이 return)     → '''Monte Carlo''' → 시간 보장, P(truthful) < 1 가능   … Alg 2\n<\/pre>\n\n==== Algorithm 1 — while true ====\n<pre class=\"txt\">\n시도 횟수 N:  매 시도 독립, 성공 확률 p  →  N ~ 기하분포,  P(N = i) = (1-p)^(i-1) p\nE[N] = 1/p  <  1/(1/2) = 2                          ← p > 1/2\nexpected 시간 = E[N] × Θ(1) = '''Θ(1)'''\nworst-case:  P(N > k) = (1-p)^k > 0  for every k      ← 아무리 큰 k 를 잡아도 \"k 번 넘게 실패\" 가 가능\n             → 어떤 상수(또는 n 의 함수)로도 상한을 못 둔다 → '''∞ (unbounded)'''\n정확성:  return 하는 toad 는 expert 가 확인한 것뿐 → 틀릴 수 없음 → '''Las Vegas''',  P(truthful) = '''1'''\n<\/pre>\n{warn}\n'''함정: worst-case 를 Θ(n) 으로 쓰면 오답.''' \"n 마리뿐이니 n 번 안에 끝난다\"는 복원 추출(with replacement)을 잊은 것이다. `random index` 는 매번 새로 뽑으므로 '''같은 tricky toad 를 영원히 다시 뽑을 수 있다'''. [[bogosort]]·[[랜덤 majority]] 의 worst-case 가 ∞ 인 것과 같은 이유.\n{/warn}\n\n==== Algorithm 2 — for 100 iterations ====\n<pre class=\"txt\">\n반복 ≤ 100,  반복당 Θ(1)  →  어떤 난수가 나와도 비용 ≤ 100·Θ(1)\nexpected = worst-case = '''Θ(1)'''                     ← 시간은 완전히 보장됨\n100 번 모두 tricky 일 확률 = (1-p)^100  <  (1/2)^100  ≈  7.9 × 10^-31\n그 경우 toad 0 을 '''확인 없이''' 반환 → toad 0 이 tricky 면 틀린 답 → '''Monte Carlo'''\nP(truthful)  ≥  1 - (1/2)^100\n   \"≥\" 인 이유 ①  실제 p 는 1/2 보다 크므로 (1-p)^100 은 (1/2)^100 보다 작다\n   \"≥\" 인 이유 ②  100 번 다 실패해도 toad 0 이 우연히 trustworthy 일 수 있다\n   → 문제가 \"tightest bound\" 를 요구하므로 등호 없이 '''하한 ≥''' 으로 쓴다\n<\/pre>\n{tip}\nMonte Carlo 의 전형: '''시간을 자르고(100 회) 못 찾으면 아무거나 반환'''. 틀릴 확률이 $2^{-100}$ 이면 실용적으로는 무시해도 되지만, 분류는 \"틀릴 수 있나?\" 로만 정하므로 Monte Carlo 다. 100 을 $c$ 로 바꿔도 분류는 그대로이고 실패 확률만 $(1/2)^c$ 로 바뀐다.\n{/tip}\n\n==== Algorithm 3 — shuffle 후 순서대로 ====\n<pre class=\"txt\">\n셔플:  항상 O(n)  (문제가 명시)   ← 난수와 무관하게 '''무조건''' 든다\n스캔:  섞인 순서에서 첫 trustworthy 의 위치 = 성공 확률 > 1/2 인 시도의 첫 성공 → 기대 < 2 번 (비복원이라 더 유리)\nexpected = O(n) + Θ(1) = '''Θ(n)'''                   ← 셔플이 지배\nworst-case:  tricky 가 전부 앞에 와도 그 수는 < n/2 → 늦어도 ⌊n/2⌋+1 번째에서 발견 → 스캔 ≤ n\n             O(n) + O(n) = '''Θ(n)'''                   ← 비복원이라 유한! (Alg 1 과의 차이)\n정확성:  trustworthy 가 최소 1 마리는 있으므로 반드시 return, 확인된 것만 return → '''Las Vegas''', P = '''1'''\n<\/pre>\n{warn}\n'''함정: expected 를 Θ(1) 로 쓰면 오답.''' \"스캔은 평균 2 번이면 끝나니까\" 까지는 맞지만, 그 앞의 '''셔플 O(n) 이 매번 전부 수행'''된다. expected 는 전체 비용의 기댓값이므로 $O(n) + O(1) = \\Theta(n)$. 거꾸로 Alg 3 의 장점은 worst-case 가 유한($\\Theta(n)$)이라는 것 — Alg 1 의 ∞ 와 맞바꾼 것이다.\n{/warn}\n\n[[sim:toad_algorithms]]\n\n=== ✍️ 답안 ===\n{answer}\n{|\n! Algorithm || Monte Carlo / Las Vegas || Expected || Worst-case || P(truthful)\n|-\n| 1 || '''Las Vegas''' || $\\Theta(1)$ || $\\infty$ (unbounded) || 1\n|-\n| 2 || '''Monte Carlo''' || $\\Theta(1)$ || $\\Theta(1)$ (≤ 100 회) || $\\ge 1 - (1/2)^{100}$\n|-\n| 3 || '''Las Vegas''' || $\\Theta(n)$ || $\\Theta(n)$ || 1\n|}\n표 아래 근거(알고리즘당 2–3 줄, 위 🔍 의 `txt` 블록을 줄여 쓰면 됨):\n* Alg 1: 성공 확률 $p > 1/2$ 인 시도의 반복 → 기하분포 $E[N] = 1/p < 2$ → $\\Theta(1)$. 임의의 k 에 대해 $P(N > k) = (1-p)^k > 0$ 이라 worst-case 상한 없음. 확인된 toad 만 반환하므로 항상 정답(Las Vegas).\n* Alg 2: 반복이 100 으로 고정 → 기대·최악 모두 $\\Theta(1)$. 100 번 전부 실패할 확률 $(1-p)^{100} < 2^{-100}$ 이고 그때 확인 안 된 toad 0 을 반환 → 틀릴 수 있음(Monte Carlo). $P \\ge 1 - 2^{-100}$ (toad 0 이 우연히 trustworthy 일 수 있고 $p > 1/2$ 라 하한).\n* Alg 3: 셔플 $O(n)$ 이 항상 수행되어 기댓값도 $\\Theta(n)$ (스캔 자체의 기대 길이는 < 2). tricky 가 $n/2$ 미만이라 늦어도 $\\lfloor n/2 \\rfloor + 1$ 번째에 찾음 → worst $\\Theta(n)$. 반드시 확인된 toad 를 반환 → Las Vegas, $P = 1$.\n{/answer}\n{tip}여기서 배울 것: 판정 기준은 '''\"틀린 답을 낼 수 있는가?\"''' 하나 — 확인을 통과한 것만 반환하면 Las Vegas, 시간 제한 후 확인 없이 반환하면 Monte Carlo. 두 함정은 '''Alg 1 worst = Θ(n)'''(복원 추출 망각)과 '''Alg 3 expected = Θ(1)'''(셔플 비용 망각). 이 표 한 장이 L6 전체(두 분류 + 두 시나리오 + 기하분포)의 요약이다.{/tip}\n\n== 문제 4 (20점) — 최대 collinear 집합 ==\nx 좌표·y 좌표가 모두 서로 다른 n 개 점. 같은 직선 위에 있는 점들의 최대 부분집합을 찾는다. 두 점 → 직선 $(m, b)$ 는 $O(1)$, 기울기·절편 비교 $O(1)$, '''해싱 금지'''.\n관련 개념: [[mergesort]] · [[randomized algorithm]] · [[랜덤 majority]] · [[기하분포]] · [[expected running time]] · [[randomized worst-case]] · [[두 시나리오]] · [[Las Vegas와 Monte Carlo]]\n\n=== 📚 관련 수업 내용 ===\n* '''\"같은 값끼리 묶기\" 의 두 방법''' — 보통은 hash table 로 $O(n)$ 에 묶지만(L7) 이 문제는 해싱을 금지했다. 그러면 남는 도구는 '''정렬''': [[mergesort]] $O(n \\log n)$ 후 같은 값은 연속해 있다(L3). (a) 의 $\\log n$ 은 바로 이 정렬 비용이다.\n* '''L6 랜덤 majority 의 틀''' — [[랜덤 majority]]: \"무작위로 후보를 뽑고 → $O(n)$ 으로 확인 → 통과하면 반환\". 성공 확률이 상수면 기대 시도 수가 상수([[기하분포]] $1/p$) → 기대 $O(n)$. (b) 는 이 틀을 \"후보 = 점 두 개\" 로 바꾼 것.\n* '''L6 p.5 두 시나리오''' — \"worst-case 를 정의하라\" 는 [[randomized worst-case]] 를 쓰라는 뜻: 입력이 아니라 '''난수가 최악'''인 경우.\n* '''L6 p.4''' — 반환 조건을 통과한 것만 내놓으면 Las Vegas.\n\n{quiz}\n(a) $O(n^2 \\log n)$ 알고리즘을 설계하시오.\n(b) 최대 collinear 집합의 크기가 정확히 $n/k$ ($k$ 는 상수)라는 것을 안다. expected $O(n)$ (= $O(k^2 n)$) randomized 알고리즘을 설계하고, 정확성·기대 시간을 정당화하고, worst-case 시간을 정의·설명하시오.\n{/quiz}\n{analogy}\n🎭 '''다트 두 발.''' 과녁판의 $1/k$ 이 \"정답 직선\" 구역이다. 다트를 두 발 던져 '''둘 다''' 그 구역에 꽂힐 확률은 약 $1/k^2$. 꽂혔는지는 줄자로 한 번 재 보면($O(n)$ 세기) 확실히 안다. 그러니 평균 $k^2$ 번 던지면 되고, $k$ 가 상수면 상수 번 — 다만 운이 끝없이 나쁘면 영원히 던질 수도 있다.\n{/analogy}\n\n=== 🔍 (a) 왜 \"한 점 고정 + 기울기 정렬\" 이 $O(n^2 \\log n)$ 인가 ===\n'''기하 사실 하나.''' 점 $P_i$ 를 지나는 직선은 '''기울기 하나로 유일하게''' 정해진다(같은 점을 지나고 기울기가 같으면 같은 직선). 따라서\n$$P_j, P_l \\text{ 이 } P_i \\text{ 와 같은 직선 위} \\iff \\text{slope}(P_i, P_j) = \\text{slope}(P_i, P_l)$$\nx 좌표가 모두 다르므로 기울기는 항상 정의된다(수직선 없음) — 문제가 \"$x_i \\ne x_j$\" 를 준 이유.\n\n'''그래서 알고리즘은 \"기울기가 같은 것 세기\".''' $P_i$ 를 고정하고 나머지 $n-1$ 개로의 기울기를 구한 뒤, '''정렬하면 같은 기울기가 연속''' → 가장 긴 연속 구간(run)의 길이 + 1 (= $P_i$ 자신) 이 \"$P_i$ 를 지나는 최대 collinear 집합\"의 크기.\n<pre class=\"txt\">\nP_i 하나당:   기울기 n-1 개 계산  O(n)\n              mergesort           O(n log n)      ← 해싱 대신 정렬 (문제 조건)\n              최장 run 스캔       O(n)\n              합계                O(n log n)\ni = 0..n-1 전부:  n × O(n log n) = '''O(n² log n)'''\n정확성:  최대 집합 S* 의 아무 점 P_i 를 처리하는 순간 run = |S*| - 1 이 반드시 잡힌다\n         (S* 의 다른 점들은 전부 P_i 에 대해 같은 기울기)  → 전체 최대값 = |S*|\n<\/pre>\n<pre class=\"c\">\ndef max_collinear(P):                # P: n points, x 좌표 모두 다름\n  best = [P[0]]\n  for i in range(n):\n    S = [(slope(P[i], P[j]), P[j]) for j in range(n) if j != i]   # O(n)\n    S = mergesort(S, key=slope)                                    # O(n log n)\n    run = longest_equal_slope_run(S)                               # O(n) 한 번 훑기\n    if len(run) + 1 > len(best):\n      best = [P[i]] + [q for (m, q) in run]\n  return best\n<\/pre>\n{|\n! 변수 || 뜻 || 예제(아래 sim, n = 8)에서의 값\n|-\n| `P[i]` || 고정한 기준점 || i = 0 이면 (1, 2)\n|-\n| `slope(P[i], P[j])` || 두 점의 기울기 $(y_j - y_i)/(x_j - x_i)$ || (1,2)→(2,4): 2, (1,2)→(4,1): −1/3\n|-\n| `S` (정렬 후) || 기울기 오름차순, 같은 기울기 연속 || [−1/3, 1/5, 3/7, 7/6, 2, 2, 2]\n|-\n| `run` || 가장 긴 같은-기울기 구간 || 기울기 2 가 3 개 → run = 3\n|-\n| `best` || 지금까지 최대 집합 || run 3 + P[0] = 4 개 {(1,2),(2,4),(3,6),(5,10)}\n|}\n{tip}'''왜 $n^2$ 밑으로 못 내려가나?''' 어떤 두 점이 같은 직선인지 알려면 결국 쌍 정보를 봐야 하는데 쌍은 $\\binom{n}{2}$ 개. 문제도 \"$O(n^2)$ 미만은 알려지지 않았다\"고 말한다. (a) 가 아끼는 것은 \"같은 직선끼리 묶는 비용\"뿐 — 정렬로 $\\log n$, 해싱이면 $O(1)$ 이라 $O(n^2)$ 까지 간다.{/tip}\n\n=== 🔍 (b) 왜 \"랜덤 두 점\" 이 expected $O(k^2 n)$ 인가 ===\n[[anim:collinear_random_pair|두 발이 모두 정답 직선 위에 꽂힐 때까지: 실패 두 번, 성공 한 번. 오른쪽에 성공 확률 $1/k^2$ → 기대 시도 $k^2$ → 시도당 $O(n)$ 이 차례로 붙는다]]\n\n'''(1) 성공 조건.''' 최대 집합을 $S^*$ ($|S^*| = n/k$) 라 하자. 뽑은 두 점이 '''모두''' $S^*$ 에 속하면 그 두 점이 정하는 직선이 바로 $S^*$ 의 직선이고, 그 위의 점을 세면 $n/k$ 개 → 반환.\n\n'''(2) 성공 확률.'''\n<pre class=\"txt\">\nq = P(두 점 모두 S* 안) = C(n/k, 2) / C(n, 2) = (n/k)(n/k - 1) / (n(n - 1))\nn 이 크면      q ≈ (n/k)² / n² = '''1/k²'''\n엄밀한 하한:   (n/k - 1)/(n - 1) ≥ 1/(2k)   (n ≥ 2k - 1 이면)   →   q ≥ 1/(2k²)\n<\/pre>\n'''(3) 기대 시도 수.''' 성공 확률 $q$ 인 독립 시도의 반복 → [[기하분포]] → $E[\\text{시도}] = 1/q \\le 2k^2$. $k$ 는 상수이므로 $O(1)$ 번.\n\n'''(4) 시도당 비용.''' 두 점 뽑기 $O(1)$ + 직선 $(m, b)$ 계산 $O(1)$ + $n$ 개 점을 $y = mx + b$ 에 대입해 세기 $O(n)$ → $O(n)$.\n\n'''(5) 합치면''' expected $= O(k^2) \\times O(n) = O(k^2 n) = O(n)$. (힌트의 $O(k^2 n)$ 이 바로 \"기대 시도 수 × 시도당 비용\".)\n\n'''(6) 정확성 = Las Vegas.''' 반환 조건이 `len(S) == n/k` 이고 $n/k$ 가 최대 크기임을 '''알고 있으므로''' 반환된 집합은 항상 최대 집합이다. 틀린 답을 낼 수 없다 → [[Las Vegas와 Monte Carlo|Las Vegas]]. 최대 집합이 여럿이면 그중 아무거나 — 문제가 \"some maximum cardinality set\" 이라 허용.\n{info}'''\"정확히 $n/k$ 를 안다\" 는 가정이 왜 필요한가.''' 최대 크기를 모르면 count 가 얼마가 나와도 \"더 큰 직선이 있을지\" 알 수 없어 '''언제 멈출지'''를 정할 수 없다. 크기를 알기 때문에 \"맞으면 멈춤\" 이 가능하고, 그래서 Las Vegas 가 된다. [[랜덤 majority]] 에서 \"count > n/2\" 로 확인할 수 있었던 것과 같은 역할.{/info}\n\n'''(7) worst-case 정의.''' [[두 시나리오]]의 Scenario 2 — 적이 '''난수까지''' 고른다. 매번 $S^*$ 밖의 쌍(또는 한 점만 안)이 뽑히게 하면 반환 조건이 영원히 안 맞는다. $t$ 번 연속 실패 확률 $(1-q)^t > 0$ 이 모든 $t$ 에 대해 양수이므로 상한이 없다 → '''worst-case = ∞'''. 입력이 나빠서가 아니라 난수가 나쁜 경우라는 점을 답안에 한 줄 적는다([[randomized worst-case]]; [[bogosort]]·[[랜덤 majority]] 와 동일).\n<pre class=\"c\">\ndef random_collinear(P, k):\n  while True:\n    pick two distinct points p, q uniformly at random      # O(1)\n    m, b = line(p, q)                                      # O(1)\n    S = [r for r in P if r.y == m * r.x + b]               # O(n) 세기\n    if len(S) == n / k:                                    # 최대 크기를 알고 있음\n      return S\n<\/pre>\n\n[[sim:collinear_points]]\n\n=== ✍️ 답안 ===\n{answer}\n'''(a)''' 위 `max_collinear` 의사코드 + 세 줄: ① 점 $P_i$ 를 지나는 직선은 기울기로 유일 → \"같은 직선\" ⟺ \"같은 기울기\"(x 가 모두 달라 항상 정의됨). ② 기울기 $n-1$ 개를 mergesort 하면 같은 기울기가 연속 → 최장 run + 1 이 $P_i$ 를 지나는 최대 집합; 최대 집합의 어느 점이든 $P_i$ 로 잡히는 순간 발견. ③ 시간 $n \\times (O(n) + O(n \\log n) + O(n)) = O(n^2 \\log n)$. 해싱 대신 정렬을 쓴 이유를 한 줄.\n\n'''(b)''' 위 `random_collinear` 의사코드 +\n* 정확성: $|S| = n/k$ 일 때만 반환하고 $n/k$ 가 최대 크기이므로 반환된 $S$ 는 항상 최대 집합 → Las Vegas.\n* 기대 시간: $q = \\dfrac{(n/k)(n/k-1)}{n(n-1)} \\approx \\dfrac{1}{k^2}$ ($\\ge \\dfrac{1}{2k^2}$) → 기하분포로 기대 시도 $\\le 2k^2 = O(1)$, 시도당 $O(n)$ → expected $O(k^2 n) = O(n)$.\n* worst-case: 난수가 최악이면(적이 주사위를 고름) 매번 $S^*$ 밖의 쌍 → $(1-q)^t > 0$ for all $t$ → 상한 없음, ∞. 입력이 아니라 randomness 의 worst-case 로 정의.\n{/answer}\n{tip}여기서 배울 것: (b) 는 [[랜덤 majority]] 와 '''같은 틀'''이다 — \"무작위로 후보를 뽑고 $O(n)$ 으로 확인, 통과하면 반환\". 성공 확률이 상수($1/k^2$)면 기대 시도 수가 상수(기하분포 $1/p$), 그래서 기대 $O(n)$. 서술형에서 꼭 쓸 세 숫자: '''$q \\approx 1/k^2$ · 기대 시도 $k^2$ · 시도당 $O(n)$'''.{/tip}\n\n== 문제 5 (20점) — h_b(x) = (85x + b) mod 13 은 universal 인가 ==\n$h_b(x) = (85x + b) \\bmod 13$, $b \\in [0, 12]$, 키 universe $U = \\{0, 1, \\ldots, 29\\}$. 버킷은 13 개이므로 universal 이려면 서로 다른 모든 $x \\ne y$ 에 대해 $P_b[h_b(x) = h_b(y)] \\le 1/13$ 이어야 한다.\n관련 개념: [[universal hash family]] · [[h_{a,b}]] · [[hash family]] · [[modular arithmetic]] · [[hash collision]] · [[소수 p]] · [[결정론적 해시 함수의 한계]] · [[해싱 게임]] · [[비둘기집 원리]]\n\n=== 📚 관련 수업 내용 ===\n* '''L7 p.62/64 정의''' — [[universal hash family]]: \"for all $u_i \\ne u_j$, $P_{h \\in H}\\{h(u_i) = h(u_j)\\} \\le 1/n$\". 여기서 $n$ = 버킷 수 = 13. 교수 10/1: 이 성질 '''하나만''' 있으면 [[기대 버킷 크기]] $\\le 2$ 계산이 그대로 통한다(p.61 \"All we needed was that this ≤ 1/n\").\n* '''L7 p.68 $h_{a,b}$''' — [[h_{a,b}]]: $h_{a,b}(x) = ((ax + b) \\bmod p) \\bmod n$, '''$a \\in \\{1..p-1\\}$ 과 $b \\in \\{0..p-1\\}$ 둘 다 무작위'''. p.73 직관: \"$a, b$ 가 무작위면 $ax+b$ 와 $ay+b$ 가 독립처럼 행동한다\". 이 문제는 $a$ 를 85 로 '''고정'''한 변종 — 그 차이가 답이다.\n* '''L7 p.31–32''' — [[결정론적 해시 함수의 한계]]: 고정된 함수 하나로는 적이 충돌 입력을 고를 수 있다([[비둘기집 원리]]). p.57: '''적은 H 자체를 안다''' — 작기만 한 family 는 소용없다.\n* '''modular arithmetic''' — [[modular arithmetic]]: 소수 $p$ 에서 $\\gcd(a, p) = 1$ 이면 $a$ 의 역원이 있어 $a \\cdot t \\equiv 0 \\Rightarrow t \\equiv 0 \\pmod p$. [[소수 p]] 를 쓰는 이유가 이것.\n\n{quiz}\n(a) 이 hash family 는 universal 인가? Yes/No 와 근거.\n(b) $x < y$ 인 쌍 중 최대 충돌 확률을 달성하는 쌍은 몇 개인가? 최대 충돌 확률은?\n(c) $b$ 를 $[0,12]$ 에서 균등 무작위로 고를 때, 고정된 $x \\ne y$ 에 대해 $b$ 의 무작위성이 $P_b[h_b(x) = h_b(y)]$ 를 줄여 주는가? 수학적으로 설명.\n{/quiz}\n{analogy}\n🎭 '''돌림판의 시작 칸만 돌리기.''' 13 칸 돌림판에서 키 $x$ 는 \"$7x$ 칸 + $b$ 칸\" 위치에 떨어진다. $b$ 를 무작위로 돌리면 '''모든 키가 똑같이 $b$ 칸씩 밀릴 뿐''' 두 키 사이 간격 $7(x-y)$ 는 그대로다. 처음부터 같은 칸이던 두 키(13 차이 나는 키)는 $b$ 를 몇 번 돌려도 같은 칸 — 섞이는 건 위치이지 '''간격'''이 아니다.\n{/analogy}\n\n=== 🔍 왜 이 답이 나오는가 ===\n[[anim:hb_shift_only|b 가 0→1→2→3 으로 바뀔 때 13 칸 위의 키들이 전부 같이 밀리는 것을 본다. 간격이 안 변하니 같은 칸이던 0·13·26 은 끝까지 같은 칸 — 그래서 universal 이 아니다]]\n\n'''1단계 — 85 를 먼저 줄인다.''' $85 = 6 \\cdot 13 + 7$ 이므로 $85x \\equiv 7x \\pmod{13}$. 즉 $h_b(x) = (7x + b) \\bmod 13$. (85 를 그대로 두고 계산하면 틀리진 않지만 구조가 안 보인다.)\n\n'''2단계 — 충돌 조건을 식으로 푼다.''' 이것이 universal 판정의 표준 절차: \"충돌 조건을 풀어서 '''무작위 변수가 남는지''' 본다.\"\n<pre class=\"txt\">\nh_b(x) = h_b(y)\n⟺ 7x + b ≡ 7y + b   (mod 13)\n⟺ 7(x - y) ≡ 0      (mod 13)        ← '''b 가 양변에서 소거된다'''\n⟺ x - y ≡ 0         (mod 13)        ← 13 은 소수, gcd(7,13) = 1, 7 의 역원 2 (7·2 = 14 ≡ 1) 를 양변에 곱함\n⟺ x ≡ y             (mod 13)\n<\/pre>\n결론: '''충돌 여부가 $b$ 와 무관하다.''' $x \\equiv y \\pmod{13}$ 이면 13 개의 $b$ 전부에서 충돌(확률 1), 아니면 어떤 $b$ 에서도 충돌하지 않음(확률 0). 중간값 $1/13$ 같은 건 나오지 않는다.\n{info}'''\"7 의 역원\" 줄이 왜 필요한가.''' $7t \\equiv 0 \\pmod{13}$ 에서 $t \\equiv 0$ 을 끌어내려면 7 로 \"나눌\" 수 있어야 하는데, 그건 $\\gcd(7, 13) = 1$ 일 때만 된다. 만약 법이 14 였다면 $7t \\equiv 0 \\pmod{14}$ 는 \"$t$ 가 짝수\" 라서 결론이 달라진다. 슬라이드가 [[소수 p]] 를 고르는 이유와 같다.{/info}\n\n'''3단계 — (a) 반례 하나로 끝.''' $x = 0, y = 13$: $h_b(0) = b$, $h_b(13) = (91 + b) \\bmod 13 = b$ (∵ $91 = 7 \\cdot 13$). 모든 $b$ 에서 같다 → $P_b = 1 > 1/13$ → '''universal 아님'''. (정의가 \"모든 쌍\" 을 요구하므로 깨지는 쌍 하나면 충분.)\n\n'''4단계 — (b) 최대 충돌 확률 1 인 쌍 세기 = 같은 잉여류 쌍 세기.''' $U = \\{0..29\\}$ 를 mod 13 으로 묶는다.\n{|\n! 잉여 $r$ || $U$ 의 원소 || 개수 || 쌍 수 $\\binom{s}{2}$\n|-\n| 0 || {0, 13, 26} || 3 || 3\n|-\n| 1 || {1, 14, 27} || 3 || 3\n|-\n| 2 || {2, 15, 28} || 3 || 3\n|-\n| 3 || {3, 16, 29} || 3 || 3\n|-\n| 4 … 12 (9 개 류) || {4, 17}, {5, 18}, …, {12, 25} || 2 씩 || 1 씩 → 9\n|-\n| '''합계''' || 30 개 || || '''21 쌍'''\n|}\n30 = 13 × 2 + 4 이므로 잉여 0..3 만 세 번째 원소(26, 27, 28, 29)를 갖는다. 나머지 $\\binom{30}{2} - 21 = 435 - 21 = 414$ 쌍은 충돌 확률 0.\n{warn}세는 것은 '''$x < y$ 인 순서 없는 쌍'''이다(문제 조건). $(0,13)$ 과 $(13,0)$ 을 둘 다 세면 42 가 되어 오답. 또 \"최대 충돌 확률\" 은 $1/13$ 이 아니라 '''1''' — 어떤 쌍도 $1/13$ 로 충돌하지 않는다(0 아니면 1).{/warn}\n\n'''5단계 — (c) $b$ 가 왜 도움이 안 되나, 식으로.'''\n<pre class=\"txt\">\nP_b[h_b(x) = h_b(y)] = (1/13) · |{ b ∈ {0..12} : 7(x - y) ≡ 0 (mod 13) }|\n                     = (1/13) · 13 = 1     (x ≡ y mod 13:  조건이 b 를 포함하지 않으므로 13 개 b 전부 만족)\n                     = (1/13) · 0  = 0     (아니면:  어떤 b 도 만족하지 않음)\n두 해시값의 '''차'''  h_b(x) - h_b(y) ≡ 7(x - y)  (mod 13)   ← b 가 없다\n→ b 는 두 값을 똑같이 평행이동할 뿐, 충돌을 결정하는 \"차\" 를 못 건드린다 → 무작위성의 기여 = 0\n<\/pre>\n'''슬라이드의 [[h_{a,b}]] 와 비교.''' $h_{a,b}$ 에서는 차가 $a(x - y) \\bmod p$ 이고 '''$a$ 가 무작위'''라 이 차가 $p-1$ 가지 값을 고르게 돌아다닌다 → mod $n$ 뒤 같은 칸일 확률 $\\le 1/n$. 이 문제는 $a = 85$ 로 고정했으므로 $H = \\{h_0, \\ldots, h_{12}\\}$ 는 사실상 '''결정론적 함수 $7x \\bmod 13$ 하나를 13 가지로 평행이동한 것''' — p.31 \"You cannot escape the dark side with deterministic hash functions\". 적이 $H$ 를 아는 상황(p.57)에서 $\\{0, 13, 26, \\ldots\\}$ 같은 입력을 주면 어떤 $b$ 를 뽑아도 한 버킷에 몰린다.\n\n[[sim:hb_mod13_check]]\n\n=== ✍️ 답안 ===\n{answer}\n<pre class=\"txt\">\n공통:  85 mod 13 = 7  →  h_b(x) = (7x + b) mod 13\n       h_b(x) = h_b(y) ⟺ 7(x−y) ≡ 0 (mod 13) ⟺ x ≡ y (mod 13)      (b 소거, gcd(7,13)=1)\n\n'''(a) No.'''  x = 0, y = 13 이면 모든 b 에서 h_b(0) = h_b(13) = b → P_b = 1 > 1/13.  정의 위반.\n\n'''(b)'''  충돌 확률은 x ≡ y (mod 13) 이면 1, 아니면 0 → 최대 충돌 확률 = '''1'''.\n       달성 쌍 = 같은 잉여류 쌍:  잉여 0,1,2,3 은 3 개씩 → C(3,2)×4 = 12,  잉여 4..12 는 2 개씩 → 9  →  '''21 쌍'''.\n       (나머지 414 쌍은 확률 0)\n\n'''(c) 아니다.'''  P_b[h_b(x)=h_b(y)] = (1/13)·|{b : 7(x−y) ≡ 0 (mod 13)}| 인데 조건에 b 가 없다\n       → x ≡ y 면 13/13 = 1, 아니면 0/13 = 0.  b 는 h_b(x) − h_b(y) ≡ 7(x−y) 라는 차를 바꾸지 못한다(평행이동).\n       슬라이드의 h_{a,b} 는 a 가 무작위라 차 a(x−y) 가 흩어져 ≤ 1/n 이 된다 — 여기선 a = 85 고정이라 사실상 결정론적 해시 하나.\n<\/pre>\n'''검산''' (Python, 435 쌍 × b 13 개 전수): `85 % 13 = 7`, 최대 충돌 확률 `1.0`, 그 쌍 수 `21`, 충돌 확률 값은 `{0.0, 1.0}` 두 가지뿐 → universal 아님.\n{/answer}\n{tip}여기서 배울 것: universal 판정은 '''\"충돌 조건을 식으로 풀어서 무작위 변수가 남는지 본다\"'''. $b$ 처럼 '''양쪽에 똑같이 더해지는''' 무작위성은 차에서 소거된다. universal 이 되려면 무작위성이 '''차에 곱해지는 자리($a$)'''에 있어야 한다. 자주 하는 실수: ① \"b 가 무작위니까 Yes\" ② 85 를 7 로 안 줄여 구조를 못 봄 ③ 순서쌍으로 42 를 셈 ④ 최대 확률을 1/13 이라 씀.{/tip}\n\n{exam}\nHW2 에서 시험으로 이어질 가능성이 큰 기술: ① radix sort 손 실행에서 '''stable 이 결과를 바꾸는 지점'''(같은 키 순서 유지) ② bucket 을 \"가까운 값 묶기\" 로 쓰는 pigeonhole 논증 ③ '''\"틀릴 수 있나?\" 로 Las Vegas / Monte Carlo 판정''', 셔플 비용이 기대값을 지배하는 경우 ④ 성공 확률 p 인 반복 → 기대 $1/p$ 회(기하분포) ⑤ 충돌 조건을 mod 식으로 풀어 universal 판정.\n{/exam}\n\n== 관련 문서 ==\n* [[HW1 복기]] · [[계산·증명 문제 모음]] · [[공식·점화식 모음]] · [[자주 틀리는 함정 모음]] · [[시험 정보]]\n* [[L5 Linear-Time Sorting]] · [[L6 Randomized Algorithms I]] · [[L7 Randomized Algorithms II]]"
  },
  "지표 확률변수": {
   "title": "지표 확률변수 (indicator random variable)",
@@ -4230,6 +4230,356 @@ window.SIMS = window.SIMS || {};
   };
 })(typeof window !== "undefined" ? window : globalThis);
 
+// ===== sims/collinear_points.js =====
+window.SIMS = window.SIMS || {};
+// collinear_points — HW2 4번: x·y 좌표가 모두 다른 n 점에서 최대 collinear 부분집합
+//   (a) 한 점 고정 + 기울기 mergesort O(n^2 log n) / (b) 랜덤 두 점 → O(n) 세기, expected O(k^2 n)
+//   고정 데이터: n = 8, k = 2, 직선 y = 2x 위 4 점 (P0, P2, P4, P6)
+(function (global) {
+  "use strict";
+
+  var P = [[1, 2], [4, 1], [2, 4], [6, 3], [3, 6], [7, 9], [5, 10], [8, 5]];
+  var N = P.length, K = 2, NK = N / K;
+
+  var CODE = {
+    a: [
+      "def max_collinear(P):",
+      "    best = [P[0]]",
+      "    for i in range(n):                                   # n 번",
+      "        S = [(slope(P[i], P[j]), P[j]) for j in range(n) if j != i]   # O(n)",
+      "        S = mergesort(S, key=slope)                      # O(n log n)",
+      "        run = longest_equal_slope_run(S)                 # O(n) 한 번 훑기",
+      "        if len(run) + 1 > len(best):",
+      "            best = [P[i]] + [q for (m, q) in run]",
+      "    return best"
+    ],
+    b: [
+      "def random_collinear(P, k):",
+      "    while True:",
+      "        p, q = two distinct points chosen uniformly at random",
+      "        m, b = line(p, q)                                # O(1)",
+      "        S = [r for r in P if r.y == m * r.x + b]         # O(n)",
+      "        if len(S) == n / k:",
+      "            return S"
+    ]
+  };
+
+  var COL = { blue: "#1d65b3", blueL: "#dbe8f7", green: "#2e9e4f", greenL: "#dff3e4", or: "#e09a40", orL: "#fdeec2",
+    pur: "#3b2f4a", purL: "#efe9f6", red: "#d6465f", redL: "#fbe3e7", muted: "#777", ink: "#222" };
+
+  // ---------- 유리수 기울기 ----------
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a || 1; }
+  function frac(num, den) {
+    if (den < 0) { num = -num; den = -den; }
+    var g = gcd(num, den);
+    return { n: num / g, d: den / g };
+  }
+  function fstr(f) { return f.d === 1 ? String(f.n) : f.n + "/" + f.d; }
+  function slope(i, j) { return frac(P[j][1] - P[i][1], P[j][0] - P[i][0]); }
+  function fcmp(a, b) { return a.n * b.d - b.n * a.d; }
+  function feq(a, b) { return fcmp(a, b) === 0; }
+  function nm(i) { return "P" + i; }
+  function pt(i) { return "(" + P[i][0] + "," + P[i][1] + ")"; }
+  function setStr(idx) { return "{" + idx.slice().sort(function (a, b) { return a - b; }).map(nm).join(", ") + "}"; }
+
+  // 두 점을 지나는 직선 위 점들 (정수 교차곱, 해싱 없음)
+  function onLine(i, j) {
+    var dx = P[j][0] - P[i][0], dy = P[j][1] - P[i][1], out = [];
+    for (var r = 0; r < N; r++) if ((P[r][1] - P[i][1]) * dx === dy * (P[r][0] - P[i][0])) out.push(r);
+    return out;
+  }
+  function lineStr(i, j) {
+    var m = slope(i, j);
+    var b = frac(P[i][1] * m.d - m.n * P[i][0], m.d);   // b = y1 − m·x1
+    var ms = m.d === 1 ? (m.n === 1 ? "" : m.n === -1 ? "-" : String(m.n)) : "(" + fstr(m) + ")";
+    var bs = b.n === 0 ? "" : (b.n > 0 ? " + " + fstr(b) : " − " + fstr({ n: -b.n, d: b.d }));
+    return "y = " + ms + "x" + bs;
+  }
+
+  // ---------- 그림 ----------
+  var X0 = 60, UX = 42, Y0 = 296, UY = 24;   // x 0..9, y 0..11
+  function X(x) { return X0 + x * UX; }
+  function Y(y) { return Y0 - y * UY; }
+  function txt(x, y, s, size, fill, extra) {
+    return '<text x="' + x + '" y="' + y + '" text-anchor="middle" font-size="' + (size || 12) + '" fill="' + (fill || COL.ink) + '"' + (extra || "") + '>' + s + '</text>';
+  }
+  function ltxt(x, y, s, size, fill, extra) {
+    return '<text x="' + x + '" y="' + y + '" font-size="' + (size || 12) + '" fill="' + (fill || COL.ink) + '"' + (extra || "") + '>' + s + '</text>';
+  }
+  // 직선 (i, j) 를 x∈[0,9], y∈[0,11] 상자 안으로 잘라 그린다
+  function clipLine(i, j) {
+    var x1 = P[i][0], y1 = P[i][1], dx = P[j][0] - x1, dy = P[j][1] - y1, ts = [];
+    function add(t) { var x = x1 + t * dx, y = y1 + t * dy; if (x >= -1e-9 && x <= 9 + 1e-9 && y >= -1e-9 && y <= 11 + 1e-9) ts.push(t); }
+    add((0 - x1) / dx); add((9 - x1) / dx);
+    if (dy !== 0) { add((0 - y1) / dy); add((11 - y1) / dy); }
+    ts.sort(function (a, b) { return a - b; });
+    var a = ts[0], b = ts[ts.length - 1];
+    return [X(x1 + a * dx), Y(y1 + a * dy), X(x1 + b * dx), Y(y1 + b * dy)];
+  }
+  function plot(st) {
+    var s = "";
+    for (var gx = 0; gx <= 9; gx++) {
+      s += '<line x1="' + X(gx) + '" y1="' + Y(0) + '" x2="' + X(gx) + '" y2="' + Y(11) + '" stroke="#eceef2"/>';
+      s += txt(X(gx), Y(0) + 15, gx, 10, COL.muted);
+    }
+    for (var gy = 0; gy <= 11; gy++) {
+      s += '<line x1="' + X(0) + '" y1="' + Y(gy) + '" x2="' + X(9) + '" y2="' + Y(gy) + '" stroke="#eceef2"/>';
+      s += '<text x="' + (X(0) - 6) + '" y="' + (Y(gy) + 4) + '" text-anchor="end" font-size="10" fill="' + COL.muted + '">' + gy + '</text>';
+    }
+    s += '<line x1="' + X(0) + '" y1="' + Y(0) + '" x2="' + X(9) + '" y2="' + Y(0) + '" stroke="#667" stroke-width="1.3"/>';
+    s += '<line x1="' + X(0) + '" y1="' + Y(0) + '" x2="' + X(0) + '" y2="' + Y(11) + '" stroke="#667" stroke-width="1.3"/>';
+    (st.lines || []).forEach(function (L) {
+      var c = clipLine(L.i, L.j);
+      s += '<line x1="' + c[0] + '" y1="' + c[1] + '" x2="' + c[2] + '" y2="' + c[3] + '" stroke="' + L.color + '" stroke-width="' + (L.w || 2.5) + '"' + (L.dash ? ' stroke-dasharray="' + L.dash + '"' : "") + '/>';
+      // 라벨: 잘린 선분의 70% 지점, 선 오른쪽 아래 (점 라벨과 겹치지 않게)
+      var sx = c[0] + 0.7 * (c[2] - c[0]), sy = c[1] + 0.7 * (c[3] - c[1]);
+      if (L.label) s += ltxt(sx + 10, sy + 16, L.label, 12, L.color, ' font-weight="700"');
+    });
+    if (st.pi !== null && st.pi !== undefined && st.pj !== null && st.pj !== undefined) {
+      s += '<line x1="' + X(P[st.pi][0]) + '" y1="' + Y(P[st.pi][1]) + '" x2="' + X(P[st.pj][0]) + '" y2="' + Y(P[st.pj][1]) + '" stroke="' + COL.blue + '" stroke-width="1.6" stroke-dasharray="5 3"/>';
+    }
+    for (var k = 0; k < N; k++) {
+      var cx = X(P[k][0]), cy = Y(P[k][1]);
+      var fill = "#fff", stroke = COL.blue, sw = 2, r = 6, fg = COL.blue;
+      var counted = st.counted && st.counted.indexOf(k) >= 0;
+      if (st.green && st.green.indexOf(k) >= 0) { fill = COL.green; stroke = COL.green; fg = COL.green; }
+      if (counted) { fill = st.countColor === COL.green ? COL.green : COL.redL; stroke = st.countColor; fg = st.countColor; sw = 2.5; }
+      if (st.pj === k) { fill = COL.blue; stroke = COL.blue; r = 7; fg = COL.blue; }
+      if (st.picked && st.picked.indexOf(k) >= 0) { fill = COL.or; stroke = COL.or; r = 8; fg = COL.or; }
+      if (st.pi === k) { fill = COL.or; stroke = COL.or; r = 8; fg = COL.or; }
+      s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + sw + '"/>';
+      if (counted) s += '<circle cx="' + cx + '" cy="' + cy + '" r="12" fill="none" stroke="' + st.countColor + '" stroke-width="1.5"/>';
+      s += ltxt(cx + 10, cy - 8, nm(k) + " " + pt(k), 10.5, fg, ' font-weight="700" stroke="#fff" stroke-width="3" paint-order="stroke"');
+    }
+    return s;
+  }
+  function svgOpen(h) {
+    return '<svg viewBox="0 0 760 ' + h + '" width="760" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="12">';
+  }
+  // 오른쪽 정보 패널 (x 482..750)
+  function sidePanel(title, rows) {
+    var s = '<rect x="482" y="20" width="268" height="' + (34 + rows.length * 22) + '" rx="8" fill="#f7f8fb" stroke="#d5d9e2"/>';
+    s += ltxt(496, 42, title, 13, COL.pur, ' font-weight="700"');
+    rows.forEach(function (r, k) { s += ltxt(496, 66 + k * 22, r[0], 12, r[1] || COL.ink, r[2] ? ' font-weight="700"' : ""); });
+    return s;
+  }
+  // 기울기 상자 줄 (그림 아래)
+  function slopeRow(y, label, items, hiFrom, hiTo, hiColor, curK) {
+    var s = ltxt(8, y + 21, label, 12, COL.pur, ' font-weight="700"');
+    var w = 84, gap = 6, x0 = 96;
+    items.forEach(function (it, k) {
+      var x = x0 + k * (w + gap), inRun = k >= hiFrom && k <= hiTo;
+      var fill = "#fff", stroke = "#99a", sw = 1.2, fg = COL.ink;
+      if (it.pending) { fill = "#f3f4f7"; fg = "#aaa"; }
+      if (k === curK) { fill = COL.blueL; stroke = COL.blue; sw = 2.5; fg = COL.blue; }
+      if (inRun) { fill = hiColor === COL.green ? COL.greenL : "#eef0f4"; stroke = hiColor; sw = 2.5; fg = hiColor; }
+      s += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="34" rx="5" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + sw + '"/>';
+      s += txt(x + w / 2, y + 16, it.pending ? "?" : it.s, 13, fg, ' font-weight="700"');
+      s += txt(x + w / 2, y + 29, nm(it.j), 9.5, it.pending ? "#aaa" : COL.muted);
+    });
+    if (hiFrom >= 0 && hiTo >= hiFrom) {
+      var lx = x0 + hiFrom * (w + gap), rx = x0 + hiTo * (w + gap) + w;
+      s += '<path d="M' + lx + ',' + (y + 40) + ' L' + lx + ',' + (y + 46) + ' L' + rx + ',' + (y + 46) + ' L' + rx + ',' + (y + 40) + '" fill="none" stroke="' + hiColor + '" stroke-width="2"/>';
+      s += txt((lx + rx) / 2, y + 62, "같은 기울기 run 길이 " + (hiTo - hiFrom + 1) + " → 집합 크기 " + (hiTo - hiFrom + 2), 12, hiColor, ' font-weight="700"');
+    }
+    return s;
+  }
+
+  // 정렬된 목록에서 최장 equal run [시작, 끝]
+  function longestRun(sorted) {
+    var bs = 0, be = 0, s = 0;
+    for (var k = 1; k <= sorted.length; k++) {
+      if (k === sorted.length || !feq(sorted[k].f, sorted[s].f)) {
+        if (k - 1 - s > be - bs) { bs = s; be = k - 1; }
+        s = k;
+      }
+    }
+    return [bs, be];
+  }
+  function listStr(items) { return "[" + items.map(function (it) { return it.s; }).join(", ") + "]"; }
+
+  function buildA() {
+    var steps = [];
+    var vars = [
+      { name: "i", group: "고정 점" }, { name: "j", group: "고정 점" },
+      { name: "slope(P_i,P_j)", group: "기울기" }, { name: "slopes 목록", group: "기울기" }, { name: "정렬 결과", group: "기울기" }, { name: "최장 run", group: "기울기" },
+      { name: "best 크기", group: "결과" }, { name: "best 집합", group: "결과" }
+    ];
+    var best = [0], cur = { i: "-", j: "-", sl: "-", list: "-", sorted: "-", run: "-" };
+    var bestLine = null;
+    function push(desc, line, svg, note) {
+      var st = { desc: desc, pc: { P: line },
+        vars: { "i": cur.i, "j": cur.j, "slope(P_i,P_j)": cur.sl, "slopes 목록": cur.list, "정렬 결과": cur.sorted, "최장 run": cur.run,
+          "best 크기": best.length, "best 집합": setStr(best) },
+        svg: svg };
+      if (note) st.note = note;
+      steps.push(st);
+    }
+    function frame(st, row, side) {
+      if (bestLine && !st.noBest) st.lines = [bestLine].concat(st.lines || []);
+      return svgOpen(400) + plot(st) + side + (row || "") + '</svg>';
+    }
+    push("n = 8 점. x 좌표가 모두 달라 기울기가 항상 정의된다(수직선 없음). `best = [P0]` 으로 시작.", 2,
+      frame({}, "", sidePanel("입력", [["n = 8, x·y 좌표 모두 다름"], ["해싱 금지 → 정렬로 같은 값 묶기"], ["기울기 계산·비교 O(1)"]])));
+
+    [0, 1].forEach(function (i) {
+      var others = [];
+      for (var j = 0; j < N; j++) if (j !== i) others.push({ j: j, f: slope(i, j), s: fstr(slope(i, j)) });
+      cur.i = i + " → " + nm(i) + " " + pt(i); cur.j = "-"; cur.sl = "-"; cur.list = "-"; cur.sorted = "-"; cur.run = "-";
+      var sideI = function (extra) {
+        return sidePanel(nm(i) + " 를 지나는 직선 찾기", [["기울기가 같다 ⇔ " + nm(i) + " 와 한 직선"], ["기울기 n − 1 = 7 개"]].concat(extra || []));
+      };
+      var pend = others.map(function (o) { return { j: o.j, s: o.s, pending: true }; });
+      if (i === 0) {
+        push("i = 0: '''P0 = (1,2)''' 를 고정(주황). 나머지 7 점까지 기울기를 차례로 구한다 — 각 O(1).", 3,
+          frame({ pi: i }, slopeRow(326, "slopes", pend, -1, -2, COL.muted, -1), sideI()));
+        var shown = pend.slice();
+        others.forEach(function (o, k) {
+          shown[k] = { j: o.j, s: o.s };
+          cur.j = o.j + " → " + nm(o.j) + " " + pt(o.j);
+          cur.sl = "(" + P[o.j][1] + "−" + P[i][1] + ")/(" + P[o.j][0] + "−" + P[i][0] + ") = " + o.s;
+          cur.list = listStr(shown.slice(0, k + 1));
+          push("j = " + o.j + ": slope(P0, " + nm(o.j) + ") = (" + P[o.j][1] + " − " + P[i][1] + ") / (" + P[o.j][0] + " − " + P[i][0] + ") = '''" + o.s + "'''.", 4,
+            frame({ pi: i, pj: o.j }, slopeRow(326, "slopes", shown.slice(), -1, -2, COL.muted, k), sideI()));
+        });
+      } else {
+        cur.list = listStr(others);
+        push("i = 1: '''P1 = (4,1)''' 고정. 7 개 기울기를 한 번에 구한다: " + listStr(others) + ".", 4,
+          frame({ pi: i }, slopeRow(326, "slopes", others, -1, -2, COL.muted, -1), sideI()));
+      }
+      cur.j = "-"; cur.sl = "-";
+      var sorted = others.slice().sort(function (a, b) { return fcmp(a.f, b.f); });
+      cur.sorted = listStr(sorted);
+      push("[[mergesort]] 로 기울기 정렬 → " + listStr(sorted) + ". 같은 기울기가 이제 '''연속'''으로 붙는다 — O(n log n). (해시로 묶는 대신 정렬)", 5,
+        frame({ pi: i }, slopeRow(326, "정렬", sorted, -1, -2, COL.muted, -1), sideI()));
+      var rr = longestRun(sorted), len = rr[1] - rr[0] + 1;
+      var runIdx = sorted.slice(rr[0], rr[1] + 1).map(function (o) { return o.j; });
+      var cand = [i].concat(runIdx);
+      cur.run = "기울기 " + sorted[rr[0]].s + " × " + len + " → " + setStr(cand);
+      var better = cand.length > best.length;
+      var runColor = better ? COL.green : COL.muted;
+      var candLine = { i: i, j: runIdx[0], color: runColor, dash: better ? null : "6 4", label: lineStr(i, runIdx[0]) };
+      push("한 번 훑어 최장 equal run 을 찾는다(O(n)): 기울기 '''" + sorted[rr[0]].s + "''' 가 " + len + " 개 → " + nm(i) + " 포함 '''" + cand.length + " 점''' " + setStr(cand) + " 이 한 직선 " + lineStr(i, runIdx[0]) + " 위.", 6,
+        frame({ pi: i, green: better ? cand : best, lines: [candLine], noBest: better }, slopeRow(326, "정렬", sorted, rr[0], rr[1], runColor, -1),
+          sideI([["run " + len + " + 1 = " + cand.length + " 점", runColor, true]])));
+      if (better) {
+        best = cand; bestLine = { i: i, j: runIdx[0], color: COL.green, label: lineStr(i, runIdx[0]) };
+        push("len(run) + 1 = " + cand.length + " > len(best) = 1 → '''best = " + setStr(best) + "''' (크기 " + best.length + ").", 8,
+          frame({ pi: i, green: best }, slopeRow(326, "정렬", sorted, rr[0], rr[1], COL.green, -1),
+            sideI([["best 갱신 → 크기 " + best.length, COL.green, true]])));
+      } else {
+        push("len(run) + 1 = " + cand.length + " > " + best.length + " ? '''아니오''' → best 유지 " + setStr(best) + ". " + setStr(cand) + " 도 collinear 지만 더 작다.", 7,
+          frame({ pi: i, green: best, lines: [candLine] }, slopeRow(326, "정렬", sorted, rr[0], rr[1], COL.muted, -1),
+            sideI([[cand.length + " ≤ " + best.length + " → best 유지", COL.muted, true]])));
+      }
+    });
+    // 나머지 i 도 실제로 계산해 최댓값 확인
+    var maxAll = 0;
+    for (var ii = 0; ii < N; ii++) {
+      var o2 = [];
+      for (var jj = 0; jj < N; jj++) if (jj !== ii) o2.push({ j: jj, f: slope(ii, jj) });
+      o2.sort(function (a, b) { return fcmp(a.f, b.f); });
+      var r2 = longestRun(o2);
+      maxAll = Math.max(maxAll, r2[1] - r2[0] + 2);
+    }
+    cur.i = "2..7"; cur.j = "-"; cur.sl = "-"; cur.list = "-"; cur.sorted = "-"; cur.run = "-";
+    push("i = 2..7 도 같은 방식, 최대 " + maxAll + ". 최대 집합의 아무 점이 P_i 로 잡히는 순간 그 집합을 찾으므로 정답. 시간 n × (n + n log n) = '''O(n² log n)'''.", 9,
+      frame({ green: best },
+        ltxt(8, 350, "return best = " + setStr(best) + "  (크기 " + best.length + ", 직선 y = 2x)", 14, COL.green, ' font-weight="700"') +
+        ltxt(8, 378, "시간: 점마다 기울기 O(n) + mergesort O(n log n) + run 훑기 O(n), 이것을 n 번 → O(n² log n)", 12, COL.muted),
+        sidePanel("결과", [["max over i = " + maxAll, COL.green, true], ["P1 기준 최댓값은 3 {P1, P3, P7}"], ["해싱 금지 → 정렬이 핵심"]])),
+      "n 번 × 정렬 O(n log n) = O(n² log n). 해시를 쓸 수 있으면 O(n²) 이지만 문제에서 금지.");
+    return { panels: [{ id: "P", title: "(a) 한 점 고정 + 기울기 정렬 — O(n² log n)", lang: "c", lines: CODE.a }], vars: vars, steps: steps };
+  }
+
+  function buildB() {
+    var steps = [];
+    var vars = [
+      { name: "시도", group: "시도" }, { name: "p, q", group: "시도" }, { name: "직선", group: "시도" }, { name: "직선 위 점 S", group: "시도" },
+      { name: "|S|", group: "시도" }, { name: "n/k", group: "시도" }, { name: "판정", group: "시도" },
+      { name: "성공 확률 q", group: "분석" }, { name: "1/k²", group: "분석" }, { name: "기대 시도 1/q", group: "분석" }, { name: "시도당 비용", group: "분석" },
+      { name: "expected 시간", group: "분석" }, { name: "worst-case", group: "분석" }, { name: "분류", group: "분석" }
+    ];
+    var TR = [[1, 3], [0, 3], [2, 6]];   // 고정 난수열 (Math.random 사용 안 함)
+    var SSTAR = [0, 2, 4, 6];
+    var v = { t: "-", pq: "-", ln: "-", S: "-", c: "-", ok: "-" };
+    var A = { q: "-", ik: "-", e: "-", per: "-", ex: "-", wc: "-", cls: "-" };
+    var history = [];
+    function push(desc, line, svg, note) {
+      var st = { desc: desc, pc: { P: line },
+        vars: { "시도": v.t, "p, q": v.pq, "직선": v.ln, "직선 위 점 S": v.S, "|S|": v.c, "n/k": NK + " (n = " + N + ", k = " + K + ")", "판정": v.ok,
+          "성공 확률 q": A.q, "1/k²": A.ik, "기대 시도 1/q": A.e, "시도당 비용": A.per, "expected 시간": A.ex, "worst-case": A.wc, "분류": A.cls },
+        svg: svg };
+      if (note) st.note = note;
+      steps.push(st);
+    }
+    function frame(st, trial) {
+      var rows = [["목표 |S| = n/k = " + N + "/" + K + " = " + NK]];
+      history.forEach(function (h) { rows.push(h); });
+      return svgOpen(330) + plot(st) + sidePanel("시도 기록 (시도 " + trial + ")", rows) + '</svg>';
+    }
+    v.t = 0;
+    push("최대 collinear 집합 S* 의 크기가 정확히 n/k = " + NK + " 임을 안다. 무작위로 두 점을 골라 직선을 만들고, O(n) 으로 직선 위 점을 센다. (재현을 위해 난수열 고정: (P1,P3) → (P0,P3) → (P2,P6))", 2,
+      frame({}, 0));
+    TR.forEach(function (pr, t) {
+      var a = pr[0], b = pr[1], S = onLine(a, b), ok = S.length === NK;
+      var col = ok ? COL.green : COL.red;
+      var inS = function (x) { return SSTAR.indexOf(x) >= 0; };
+      v.t = t + 1; v.pq = nm(a) + " " + pt(a) + ", " + nm(b) + " " + pt(b);
+      v.ln = "-"; v.S = "-"; v.c = "-"; v.ok = "-";
+      push("시도 " + (t + 1) + ": 랜덤 두 점 '''" + nm(a) + ", " + nm(b) + "''' (" + (inS(a) ? "S* 안" : "S* 밖") + " / " + (inS(b) ? "S* 안" : "S* 밖") + ").", 3,
+        frame({ picked: [a, b] }, t + 1));
+      v.ln = lineStr(a, b);
+      push("두 점으로 직선 " + v.ln + " — O(1).", 4,
+        frame({ picked: [a, b], lines: [{ i: a, j: b, color: col, label: v.ln }] }, t + 1));
+      v.S = setStr(S); v.c = S.length;
+      push("n = 8 점을 하나씩 대입해 직선 위인지 검사(O(n)): " + setStr(S) + " → '''|S| = " + S.length + "'''." +
+        (S.length === 3 ? " (P1, P3, P7 은 y = x − 3 위의 3 점 — collinear 지만 크기가 n/k 가 아니다)" : ""), 5,
+        frame({ picked: [a, b], counted: S, countColor: col, lines: [{ i: a, j: b, color: col, label: v.ln }] }, t + 1));
+      v.ok = ok ? S.length + " == n/k → return" : S.length + " ≠ " + NK + " → 다시";
+      history.push(["시도 " + (t + 1) + " (" + nm(a) + "," + nm(b) + "): |S| = " + S.length + (ok ? " = n/k ✓" : " ≠ " + NK + " ✗"), col, true]);
+      if (ok) {
+        push("|S| = " + S.length + " == n/k → '''return " + setStr(S) + "'''. 크기가 알려진 최댓값과 같을 때만 반환하므로 '''항상 정답'''.", 7,
+          frame({ picked: [a, b], green: S, counted: S, countColor: COL.green, lines: [{ i: a, j: b, color: COL.green, label: v.ln }] }, t + 1));
+      } else {
+        push("|S| = " + S.length + " ≠ n/k = " + NK + " → 버리고 while 루프 다시.", 6,
+          frame({ picked: [a, b], counted: S, countColor: COL.red, lines: [{ i: a, j: b, color: COL.red, label: v.ln, dash: "7 4" }] }, t + 1));
+      }
+    });
+    var qn = NK * (NK - 1), qd = N * (N - 1), q = qn / qd;
+    var q2 = Math.round(q * 100) / 100, e1 = Math.round(10 / q) / 10;
+    A.q = "(n/k)(n/k−1)/(n(n−1)) = " + qn + "/" + qd + " = " + fstr(frac(qn, qd)) + " ≈ " + q2;
+    A.ik = "1/" + (K * K) + " = " + (1 / (K * K));
+    A.e = "1/q = " + fstr(frac(qd, qn)) + " ≈ " + e1 + " (≤ 2k² = " + (2 * K * K) + ")";
+    A.per = "O(n) (직선 위 점 세기)";
+    A.ex = "O(k²) × O(n) = O(k²n) = O(n)";
+    A.wc = "∞ (난수가 최악이면 끝없이 빗나감)";
+    A.cls = "Las Vegas (항상 정답, 시간이 random)";
+    history.push(["q = " + qn + "/" + qd + " ≈ " + q2 + " ≈ 1/k² = 0.25", COL.pur, false]);
+    history.push(["기대 시도 1/q ≈ " + e1 + " ≤ 2k² = " + (2 * K * K), COL.pur, false]);
+    history.push(["시도당 O(n) → expected O(k²n) = O(n)", COL.pur, false]);
+    history.push(["worst-case ∞ → Las Vegas", COL.red, true]);
+    push("분석: 두 점이 모두 S* 안일 확률 q = (n/k)(n/k−1)/(n(n−1)) = " + qn + "/" + qd + " ≈ " + q2 + " ≈ 1/k² (n ≥ 2k−1 이면 q ≥ 1/(2k²)). 성공까지 시도 수는 [[기하분포]] → 기대 1/q ≤ 2k². 시도당 O(n) → [[expected running time]] '''O(k²n) = O(n)'''. [[randomized worst-case]]: 계속 빗나갈 확률 (1−q)^t > 0 → 상한 없음(∞). 항상 정답·시간만 random → [[Las Vegas와 Monte Carlo|Las Vegas]]. [[랜덤 majority]] 와 같은 틀.", 7,
+      frame({ green: SSTAR, lines: [{ i: 0, j: 2, color: COL.green, label: "y = 2x" }] }, 3),
+      "worst-case 는 입력이 아니라 randomness 가 최악인 경우로 정의한다 → 무한.");
+    return { panels: [{ id: "P", title: "(b) 랜덤 두 점 — expected O(k²n)", lang: "c", lines: CODE.b }], vars: vars, steps: steps };
+  }
+
+  SIMS["collinear_points"] = {
+    title: "최대 collinear 집합 — 기울기 정렬 vs 랜덤 두 점 (HW2 4번)",
+    desc: "x·y 좌표가 모두 다른 n = 8 점, 최대 collinear 집합 = 직선 y = 2x 위 4 점. (a) 각 점을 고정하고 기울기를 [[mergesort]] 해 같은 기울기 run 을 찾는다(해싱 금지). (b) 크기 n/k 를 알 때 랜덤 두 점 → 직선 → O(n) 세기 → n/k 이면 반환: [[randomized algorithm]] · [[Las Vegas와 Monte Carlo]] · [[기하분포]] · [[expected running time]] · [[randomized worst-case]] — [[랜덤 majority]] 와 같은 틀.",
+    options: [
+      { key: "mode", label: "모드", values: [
+        { value: "a", label: "(a) 한 점 고정 + 기울기 정렬 O(n² log n)" },
+        { value: "b", label: "(b) 랜덤 두 점 expected O(k²n)" }
+      ] }
+    ],
+    build: function (opts) {
+      return ((opts && opts.mode) || "a") === "b" ? buildB() : buildA();
+    }
+  };
+})(typeof window !== "undefined" ? window : globalThis);
+
 // ===== sims/counting_sort.js =====
 window.SIMS = window.SIMS || {};
 // counting_sort — L5 p.17–34 (PNG 15–32): counts 배열 채우기 → counts[i] 개씩 extend
@@ -4688,6 +5038,203 @@ window.SIMS = window.SIMS || {};
       return {
         panels: [{ id: "H", title: "chaining 연산 (L7 p.26)", lang: "c", lines: CODE }],
         vars: vars,
+        steps: steps
+      };
+    }
+  };
+})(typeof window !== "undefined" ? window : globalThis);
+
+// ===== sims/hb_mod13_check.js =====
+window.SIMS = window.SIMS || {};
+// hb_mod13_check — HW2 5번: h_b(x) = (85x + b) mod 13, b 만 무작위인 family 는 universal 인가?
+(function (global) {
+  "use strict";
+
+  var PROC = [
+    "1. 85 mod 13 = 7 → h_b(x) = (7x + b) mod 13",
+    "2. h_b(x) = h_b(y) ⟺ 7x + b ≡ 7y + b (mod 13)",
+    "3. ⟺ 7(x − y) ≡ 0 (mod 13)   (b 소거)",
+    "4. ⟺ x ≡ y (mod 13)   (gcd(7,13)=1, 7의 역원 2)",
+    "5. universal 이려면 모든 x ≠ y 에서 P_b[충돌] ≤ 1/13",
+    "6. 잉여류별 쌍 수: 3개짜리 4류 → 12,  2개짜리 9류 → 9,  합 21"
+  ];
+  var M = 13, N = 30;
+  var C = { pur: "#3b2f4a", purL: "#efe9f6", red: "#d6465f", redL: "#fbe3e7", or: "#e09a40", orL: "#fdeec2",
+    blue: "#1d65b3", blueL: "#dbe8f7", green: "#2e9e4f", greenL: "#dff3e4", muted: "#777", ink: "#222" };
+
+  function mod(a) { return ((a % M) + M) % M; }
+  function t(x, y, s, size, fill, extra) {
+    return '<text x="' + x + '" y="' + y + '" font-size="' + (size || 12) + '" fill="' + (fill || C.ink) + '" text-anchor="' +
+      ((extra && extra.anchor) || "middle") + '"' + ((extra && extra.bold) ? ' font-weight="700"' : "") + ">" + s + "</text>";
+  }
+
+  // ---- 쌍 모드 svg: 13 칸 + 두 공 + b 다이얼 + 간격 화살표 ----
+  function svgPair(v) {
+    var X0 = 30, W = 44, BY = 110, BH = 56;
+    var s = '<svg viewBox="0 0 760 250" width="760" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="12">';
+    s += t(10, 20, "h_b(x) = (7x + b) mod 13 — 13 개 bucket 에 x = " + v.x + ", y = " + v.y + " 를 넣는다", 12, "#555", { anchor: "start" });
+    // b 다이얼
+    var dx = 712, dy = 52, R = 30;
+    s += '<circle cx="' + dx + '" cy="' + dy + '" r="' + R + '" fill="' + C.orL + '" stroke="' + C.or + '" stroke-width="2"/>';
+    for (var k = 0; k < M; k++) {
+      var ang = -Math.PI / 2 + 2 * Math.PI * k / M;
+      var on = v.b !== null && k === v.b;
+      s += '<circle cx="' + (dx + (R - 6) * Math.cos(ang)).toFixed(1) + '" cy="' + (dy + (R - 6) * Math.sin(ang)).toFixed(1) +
+        '" r="' + (on ? 3.5 : 1.8) + '" fill="' + (on ? C.red : C.or) + '"/>';
+    }
+    s += t(dx, dy + 5, v.b === null ? "b=?" : "b=" + v.b, 13, C.ink, { bold: true });
+    s += t(dx, dy + R + 14, "b 다이얼 (무작위)", 10, C.muted);
+    // 칸
+    for (var i = 0; i < M; i++) {
+      var x = X0 + i * W, hit = v.hx !== null && v.hx === i && v.hy === i;
+      s += '<rect x="' + x + '" y="' + BY + '" width="' + (W - 4) + '" height="' + BH + '" rx="4" fill="' + (hit ? C.redL : C.purL) +
+        '" stroke="' + (hit ? C.red : C.pur) + '" stroke-width="' + (hit ? 2.5 : 1.2) + '"/>';
+      s += t(x + (W - 4) / 2, BY + BH + 16, i, 11, hit ? C.red : C.pur, { bold: true });
+    }
+    if (v.hx !== null) {
+      var same = v.hx === v.hy;
+      var cxX = X0 + v.hx * W + (W - 4) / 2, cxY = X0 + v.hy * W + (W - 4) / 2;
+      var colX = same ? C.red : C.blue, colY = same ? C.red : C.or;
+      s += '<circle cx="' + cxX + '" cy="' + (BY + 18) + '" r="11" fill="' + colX + '"/>' + t(cxX, BY + 22, v.x, 11, "#fff", { bold: true });
+      s += '<circle cx="' + cxY + '" cy="' + (BY + 42) + '" r="11" fill="' + colY + '"/>' + t(cxY, BY + 46, v.y, 11, "#fff", { bold: true });
+      if (!same) {
+        // 간격 화살표: x 의 칸 → y 의 칸 (오른쪽으로 7 칸, 넘치면 감아 돈다)
+        var ay = BY - 14, x1 = Math.min(cxX, cxY), x2 = Math.max(cxX, cxY);
+        s += '<line x1="' + x1 + '" y1="' + ay + '" x2="' + x2 + '" y2="' + ay + '" stroke="' + C.green + '" stroke-width="2"/>';
+        s += '<line x1="' + x1 + '" y1="' + (ay - 5) + '" x2="' + x1 + '" y2="' + (ay + 5) + '" stroke="' + C.green + '" stroke-width="2"/>';
+        s += '<line x1="' + x2 + '" y1="' + (ay - 5) + '" x2="' + x2 + '" y2="' + (ay + 5) + '" stroke="' + C.green + '" stroke-width="2"/>';
+        s += t((x1 + x2) / 2, ay - 6, v.hy > v.hx ? "간격 " + (v.hy - v.hx) + " 칸" : "오른쪽 7 칸 = 12 넘어 감아 돎 (왼쪽 " + (v.hx - v.hy) + " 칸)", 11, C.green, { bold: true });
+      }
+    }
+    var d = mod(7 * (v.y - v.x));
+    s += t(10, 210, "고정 간격: h_b(y) − h_b(x) ≡ 7(y − x) = 7·" + (v.y - v.x) + " ≡ " + d + " (mod 13) — b 를 바꿔도 그대로" +
+      (d === 0 ? " → 항상 같은 칸" : " → 절대 같은 칸 아님"), 12, d === 0 ? C.red : C.green, { anchor: "start", bold: true });
+    s += t(10, 234, "충돌 " + v.hits + " / 본 b " + v.seen + (v.seen ? "   (기준 1/13 ≈ 0.077)" : ""), 12, C.ink, { anchor: "start" });
+    s += "</svg>";
+    return s;
+  }
+
+  // ---- count 모드 svg: 13 열(잉여류) ----
+  function svgCount(v) {
+    var X0 = 22, W = 55, Y0 = 50;
+    var s = '<svg viewBox="0 0 760 270" width="760" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="12">';
+    s += t(10, 20, "U = {0..29} 를 x mod 13 으로 나눈 13 잉여류 — 같은 열 안의 두 수만 (모든 b 에서) 충돌", 12, "#555", { anchor: "start" });
+    for (var r = 0; r < M; r++) {
+      var x = X0 + r * W, done = r <= v.r, cur = r === v.r;
+      var fill = cur ? C.orL : (done ? C.purL : "#f6f6f6"), stroke = cur ? C.or : (done ? C.pur : "#ccc");
+      s += '<rect x="' + x + '" y="' + (Y0 - 8) + '" width="' + (W - 6) + '" height="118" rx="5" fill="' + fill + '" stroke="' + stroke +
+        '" stroke-width="' + (cur ? 2.5 : 1.2) + '"/>';
+      s += t(x + (W - 6) / 2, Y0 + 8, "r=" + r, 11, done ? C.pur : "#aaa", { bold: true });
+      var mem = [];
+      for (var u = r; u < N; u += M) mem.push(u);
+      for (var k = 0; k < mem.length; k++) {
+        s += t(x + (W - 6) / 2, Y0 + 34 + k * 26, mem[k], 14, done ? (mem.length === 3 ? C.red : C.ink) : "#bbb", { bold: done });
+      }
+      if (done) {
+        var c2 = mem.length * (mem.length - 1) / 2;
+        s += t(x + (W - 6) / 2, Y0 + 132, "C(" + mem.length + ",2)", 10, C.muted);
+        s += t(x + (W - 6) / 2, Y0 + 150, c2, 14, C.red, { bold: true });
+      }
+    }
+    s += t(10, 248, "누적 최대 충돌 쌍 (P = 1): " + v.total + (v.final ? "   / 나머지 435 − 21 = 414 쌍은 P = 0" : ""), 13,
+      v.final ? C.red : C.ink, { anchor: "start", bold: true });
+    s += "</svg>";
+    return s;
+  }
+
+  global.SIMS["hb_mod13_check"] = {
+    title: "HW2 5번 — h_b(x) = (85x + b) mod 13 은 universal 인가?",
+    desc: "HW2 5번. b 만 무작위인 family {h_b} 를 b = 0..12 전부 돌려 쌍의 충돌 확률을 센다. 85 ≡ 7 (mod 13) 이고 b 는 양쪽에 똑같이 더해져 소거되므로 " +
+      "충돌 여부는 b 와 무관 — 확률이 '''1 아니면 0'''. x ≡ y (mod 13) 인 쌍(21 쌍)은 P = 1 > 1/13 → [[universal hash family]] 아님. " +
+      "[[modular arithmetic]] 으로 b 가 지워지는 과정을 보고, 무작위가 차에 곱해지는 [[h_{a,b}]] 와 비교하라. [[hash collision]] · [[비둘기집 원리]]",
+    options: [
+      { key: "mode", label: "모드", values: [
+        { value: "same", label: "쌍 (0, 13): 같은 잉여류" },
+        { value: "diff", label: "쌍 (0, 1): 다른 잉여류" },
+        { value: "count", label: "최대 충돌 쌍 세기 (21 쌍)" }
+      ] }
+    ],
+    build: function (opts) {
+      var mode = opts.mode === "diff" || opts.mode === "count" ? opts.mode : "same";
+      var steps = [];
+      var panels = [{ id: "P", title: "손으로 푸는 순서 (HW2 5번)", lang: "txt", lines: PROC }];
+
+      if (mode === "count") {
+        var total = 0;
+        var cur = { r: "-", mem: "-", size: "-", c2: "-" };
+        var snapC = function (fin) {
+          return { "잉여류 r": cur.r, "구성원 (x mod 13 = r)": cur.mem, "크기": cur.size, "C(크기,2)": cur.c2,
+            "누적 쌍 수": total, "최대 충돌 확률": total ? "1 (b 와 무관)" : "-",
+            "P = 0 인 쌍": fin ? "435 − 21 = 414" : "-" };
+        };
+        steps.push({ desc: "|U| = 30 이므로 쌍은 C(30,2) = 435 개. 4 번 줄에서 '''충돌 ⟺ x ≡ y (mod 13)''' 이므로 x mod 13 이 같은 수끼리 묶으면, " +
+          "같은 묶음 안의 쌍만 (모든 b 에서) 충돌한다.",
+          pc: { P: 4 }, vars: snapC(false), svg: svgCount({ r: -1, total: 0 }) });
+        for (var r = 0; r < M; r++) {
+          var mem = [];
+          for (var u = r; u < N; u += M) mem.push(u);
+          var c2 = mem.length * (mem.length - 1) / 2;
+          total += c2;
+          cur = { r: r, mem: "{" + mem.join(", ") + "}", size: mem.length, c2: c2 };
+          steps.push({ desc: "r = " + r + ": {" + mem.join(", ") + "} — " + mem.length + " 개 → C(" + mem.length + ",2) = '''" + c2 + "''' 쌍, 누적 " + total + "." +
+            (r === 3 ? " (30 = 2·13 + 4 라서 잉여 0~3 만 3 개씩)" : ""),
+            pc: { P: 6 }, vars: snapC(false), svg: svgCount({ r: r, total: total }) });
+        }
+        cur = { r: "-", mem: "-", size: "-", c2: "-" };
+        steps.push({ desc: "합계: 3 개짜리 4 류 × 3 = 12, 2 개짜리 9 류 × 1 = 9 → '''21 쌍'''이 최대 충돌 확률 '''1''' (> 1/13). 나머지 414 쌍은 확률 0. (b) 의 답.",
+          pc: { P: 6 }, vars: snapC(true), status: { P: "done" }, svg: svgCount({ r: 99, total: total, final: true }),
+          note: "평균은 21/435 ≈ 0.048 < 1/13 이지만 universal 은 '''모든''' 쌍에서 ≤ 1/13 을 요구한다 — 쌍 하나라도 1 이면 탈락." });
+        return {
+          panels: panels,
+          vars: [
+            { name: "잉여류 r", group: "현재 묶음" }, { name: "구성원 (x mod 13 = r)", group: "현재 묶음" }, { name: "크기", group: "현재 묶음" },
+            { name: "C(크기,2)", group: "현재 묶음" },
+            { name: "누적 쌍 수", group: "집계" }, { name: "최대 충돌 확률", group: "집계" }, { name: "P = 0 인 쌍", group: "집계" }
+          ],
+          steps: steps
+        };
+      }
+
+      var X = 0, Y = mode === "same" ? 13 : 1;
+      var hits = 0, seen = 0;
+      var st = { b: "-", hx: "-", hy: "-", col: "-" };
+      var snap = function (fin) {
+        return { x: X, y: Y, b: st.b, "h_b(x)": st.hx, "h_b(y)": st.hy, "충돌?": st.col,
+          "충돌 횟수/본 b 수": hits + "/" + seen,
+          "P_b[충돌]": fin ? hits + "/13 = " + (hits === 13 ? "1" : "0") : (seen ? hits + "/" + seen : "-"),
+          "≤ 1/13 ?": fin ? (hits <= 1 ? "예 (이 쌍은 통과)" : "아니오 → universal 아님") : "-" };
+      };
+      steps.push({ desc: "85 = 6·13 + 7 이므로 '''85 mod 13 = 7''' → h_b(x) = (7x + b) mod 13. 쌍 (x, y) = (" + X + ", " + Y + ") 에 대해 b = 0..12 를 하나씩 돌려 본다.",
+        pc: { P: 1 }, vars: snap(false), svg: svgPair({ x: X, y: Y, b: null, hx: null, hy: null, hits: 0, seen: 0 }) });
+      var lastSvg = "";
+      for (var b = 0; b < M; b++) {
+        var ax = 7 * X + b, ay = 7 * Y + b, hx = mod(ax), hy = mod(ay), col = hx === hy;
+        seen++; if (col) hits++;
+        st = { b: b, hx: ax + " mod 13 = " + hx, hy: ay + " mod 13 = " + hy, col: col ? "예" : "아니오" };
+        lastSvg = svgPair({ x: X, y: Y, b: b, hx: hx, hy: hy, hits: hits, seen: seen });
+        steps.push({ desc: "b = " + b + ": 7·" + X + " + " + b + " = " + ax + " → " + hx + ",  7·" + Y + " + " + b + " = " + ay + " → " + hy + ". " +
+          (col ? "'''같은 칸 — 충돌'''" : "다른 칸") + ". 누적 " + hits + "/" + seen + ".",
+          pc: { P: 2 }, vars: snap(false), svg: lastSvg });
+      }
+      st = { b: "-", hx: "-", hy: "-", col: "-" };
+      if (mode === "same") {
+        steps.push({ desc: "13 개 b 전부 충돌: P_b[h_b(0) = h_b(13)] = 13/13 = '''1''' > 1/13 → '''universal 아님''' ((a) 의 반례). " +
+          "h_b(0) = b, h_b(13) = (91 + b) mod 13 = b — 7·13 = 91 ≡ 0 이라 b 가 무엇이든 같다.",
+          pc: { P: 5 }, vars: snap(true), status: { P: "done" }, svg: lastSvg,
+          note: "b 는 양쪽에 똑같이 더해져 소거된다: 7x + b ≡ 7y + b ⟺ 7(x − y) ≡ 0 ⟺ x ≡ y (mod 13). 무작위 b 가 충돌 여부에 아무 영향을 못 준다." });
+      } else {
+        steps.push({ desc: "13 개 b 전부 다른 칸: P_b[h_b(0) = h_b(1)] = 0/13 = '''0'''. 간격 h_b(1) − h_b(0) ≡ 7 이 b 와 무관하게 고정되어 있기 때문. " +
+          "이 쌍은 통과하지만, (0, 13) 같은 쌍 하나 때문에 family 전체는 universal 이 아니다.",
+          pc: { P: 4 }, vars: snap(true), status: { P: "done" }, svg: lastSvg,
+          note: "b 가 소거되므로 확률은 1 아니면 0 뿐이다. '1/13 근처로 흩어지는' 쌍은 하나도 없다 — 무작위가 차 7(x − y) 에 곱해지지 않기 때문 (h_{a,b} 와 대비)." });
+      }
+      return {
+        panels: panels,
+        vars: [
+          { name: "x", group: "쌍" }, { name: "y", group: "쌍" },
+          { name: "b", group: "현재 b" }, { name: "h_b(x)", group: "현재 b" }, { name: "h_b(y)", group: "현재 b" }, { name: "충돌?", group: "현재 b" },
+          { name: "충돌 횟수/본 b 수", group: "집계" }, { name: "P_b[충돌]", group: "집계" }, { name: "≤ 1/13 ?", group: "집계" }
+        ],
         steps: steps
       };
     }
@@ -6993,6 +7540,271 @@ window.SIMS = window.SIMS || {};
   };
 })(typeof window !== "undefined" ? window : globalThis);
 
+// ===== sims/toad_algorithms.js =====
+window.SIMS = window.SIMS || {};
+// toad_algorithms — HW2 3번: toad 세 알고리즘 (Las Vegas vs Monte Carlo)
+// n = 8, trustworthy = {1,2,4,5,7} (5 > n/2), tricky = {0,3,6}. 난수는 고정 수열(결정적).
+(function (global) {
+  "use strict";
+
+  var N = 8;
+  var TRUST = { 1: true, 2: true, 4: true, 5: true, 7: true };
+  var C = { green: "#2e9e4f", greenL: "#dff3e4", red: "#d6465f", redL: "#fbe3e7", or: "#e09a40", orL: "#fdeec2",
+    pur: "#3b2f4a", purL: "#efe9f6", muted: "#777", grey: "#f0f0f0", ink: "#222" };
+
+  var CODE = {
+    "1": { title: "Algorithm 1: FindTrustworthyToad1 (HW2 3번)", lines: [
+      "while True:",
+      "  i = random index in {0, ..., n-1}",
+      "  if expert says toad i is trustworthy:    # Θ(1)",
+      "    return toad i"
+    ] },
+    "2": { title: "Algorithm 2: FindTrustworthyToad2 (HW2 3번)", lines: [
+      "for 100 iterations:",
+      "  i = random index in {0, ..., n-1}",
+      "  if expert says toad i is trustworthy:",
+      "    return toad i",
+      "return toad 0"
+    ] },
+    "3": { title: "Algorithm 3: FindTrustworthyToad3 (HW2 3번)", lines: [
+      "put the toads in a random order           # O(n)",
+      "for i = 0, ..., n-1:",
+      "  if expert says toad i is trustworthy:",
+      "    return toad i"
+    ] }
+  };
+
+  // 결론 표 값 (vars 와 svg 표에 같이 쓴다)
+  var RESULT = {
+    "1": { cls: "Las Vegas", exp: "Θ(1)", expNote: "  (E[시도] = 1/p = 8/5 < 2)", worst: "∞ (unbounded)", worstNote: "", prob: "1", probSvg: "1" },
+    "2": { cls: "Monte Carlo", exp: "Θ(1)", expNote: "", worst: "Θ(1)", worstNote: "  (최대 100 회)", prob: ">= 1 - (1/2)^100", probSvg: "≥ 1 − (1/2)^100" },
+    "3": { cls: "Las Vegas", exp: "Θ(n)", expNote: "  (셔플이 지배; 스캔 기대 < 2)", worst: "Θ(n)", worstNote: "", prob: "1", probSvg: "1" }
+  };
+
+  var PICKS = { typical: [3, 6, 4], bad: [0, 3, 6] };
+  var PERM = { typical: [3, 1, 6, 2, 0, 4, 5, 7], bad: [0, 3, 6, 1, 2, 4, 5, 7] };
+
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function txt(x, y, s, size, fill, extra) {
+    return '<text x="' + x + '" y="' + y + '" font-size="' + (size || 12) + '" fill="' + (fill || C.ink) + '" text-anchor="middle"' + (extra || "") + '>' + esc(s) + '</text>';
+  }
+
+  function drawBox(x, y, k, st, w, h, sub) {
+    var checked = !!st.checked[k], t = !!TRUST[k];
+    var fill = checked ? (t ? C.greenL : C.redL) : C.grey;
+    var stroke = checked ? (t ? C.green : C.red) : C.muted;
+    var s = '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="8" fill="' + fill + '" stroke="' + stroke + '" stroke-width="1.5"/>';
+    s += txt(x + w / 2, y + 20, "toad " + k, 13, checked ? stroke : C.muted, ' font-weight="700"');
+    s += txt(x + w / 2, y + 38, checked ? (t ? "✓ trustworthy" : "✗ tricky") : "?", 11, checked ? stroke : C.muted);
+    if (sub) s += txt(x + w / 2, y - 6, sub, 10, C.muted);
+    return s;
+  }
+  function hl(x, y, w, h, color) {
+    return '<rect x="' + (x - 4) + '" y="' + (y - 4) + '" width="' + (w + 8) + '" height="' + (h + 8) + '" rx="10" fill="none" stroke="' + color + '" stroke-width="3.5"/>';
+  }
+
+  function svgFor(alg, st) {
+    var H = alg === "3" ? 330 : 260;
+    var s = '<svg viewBox="0 0 760 ' + H + '" width="760" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">';
+    var W = 74, BH = 46, GAP = 16, X0 = 30;
+    function bx(k) { return X0 + k * (W + GAP); }
+    s += '<text x="20" y="23" font-size="13" fill="' + C.ink + '" font-weight="700">' + esc(st.label || "") + '</text>';
+    s += '<rect x="560" y="6" width="190" height="24" rx="6" fill="' + C.purL + '" stroke="' + C.pur + '"/>';
+    s += txt(655, 23, "비용: " + st.cost, 12, C.pur, ' font-weight="700"');
+
+    var Y1 = 62;
+    s += '<text x="20" y="' + (Y1 - 12) + '" font-size="11" fill="' + C.muted + '">' +
+      esc(alg === "3" ? "원래 toad 0..7 (회색 = 아직 expert 가 확인 안 함)" : "toad 0..7 (회색 = 아직 확인 안 함 · 복원 추출이라 같은 toad 를 또 뽑을 수 있다)") + '</text>';
+    for (var k = 0; k < N; k++) {
+      s += drawBox(bx(k), Y1, k, st, W, BH);
+      if (alg !== "3" && st.cur === k) {
+        var wrong = st.ret === k && !TRUST[k];
+        s += hl(bx(k), Y1, W, BH, wrong ? C.red : C.or);
+        s += txt(bx(k) + W / 2, Y1 + BH + 20, st.ret === k ? (wrong ? "return (확인 안 함!)" : "return") : "i = " + k, 12, wrong ? C.red : C.or, ' font-weight="700"');
+      }
+    }
+    var yNext = Y1 + BH + 46;
+    if (alg === "3" && st.perm) {
+      var Y2 = Y1 + BH + 50;
+      s += '<text x="20" y="' + (Y2 - 22) + '" font-size="11" fill="' + C.or + '" font-weight="700">섞인 순서 (위치 i = 0..7) — 앞에서부터 expert 에게 묻는다</text>';
+      for (var p = 0; p < N; p++) {
+        s += drawBox(bx(p), Y2, st.perm[p], st, W, BH, "i=" + p);
+        if (st.curPos === p) {
+          s += hl(bx(p), Y2, W, BH, C.or);
+          s += txt(bx(p) + W / 2, Y2 + BH + 20, st.ret >= 0 ? "return" : "▲ 지금", 12, C.or, ' font-weight="700"');
+        }
+      }
+      yNext = Y2 + BH + 46;
+    }
+    if (st.banner) s += txt(380, yNext, st.banner, 13, st.bannerColor || C.ink, ' font-weight="700"');
+    if (st.table) {
+      var r = RESULT[alg], ty = yNext + 14, x = 30;
+      var cols = [["Algorithm", 90], ["MC / LV", 130], ["Expected", 140], ["Worst-case", 150], ["P(truthful)", 190]];
+      var vals = [alg, r.cls, r.exp, r.worst, r.probSvg];
+      cols.forEach(function (c, ci) {
+        s += '<rect x="' + x + '" y="' + ty + '" width="' + c[1] + '" height="22" fill="' + C.purL + '" stroke="' + C.pur + '"/>';
+        s += txt(x + c[1] / 2, ty + 15, c[0], 12, C.pur, ' font-weight="700"');
+        var col = ci === 1 ? (r.cls === "Las Vegas" ? C.green : C.red) : C.ink;
+        s += '<rect x="' + x + '" y="' + (ty + 22) + '" width="' + c[1] + '" height="24" fill="#fff" stroke="' + C.pur + '"/>';
+        s += txt(x + c[1] / 2, ty + 39, vals[ci], 12, col, ' font-weight="700"');
+        x += c[1];
+      });
+    }
+    s += '</svg>';
+    return s;
+  }
+
+  global.SIMS["toad_algorithms"] = {
+    title: "toad 세 알고리즘 — Las Vegas 인가 Monte Carlo 인가 (HW2 3번)",
+    desc: "HW2 3번. n = 8 마리 중 trustworthy 5 마리(toad 1,2,4,5,7; toad 0·3·6 은 tricky). 세 알고리즘을 고정된 난수열로 돌려 보고 " +
+      "'''틀린 답을 낼 수 있는가'''로 [[Las Vegas와 Monte Carlo]] 를 가른다. '불운' 옵션은 적이 주사위까지 고정한 [[randomized worst-case]].",
+    options: [
+      { key: "alg", label: "알고리즘", values: [
+        { value: "1", label: "Algorithm 1 (while true)" },
+        { value: "2", label: "Algorithm 2 (100 iterations)" },
+        { value: "3", label: "Algorithm 3 (shuffle + scan)" }
+      ] },
+      { key: "luck", label: "난수", values: [
+        { value: "typical", label: "보통 운" },
+        { value: "bad", label: "불운 (적이 주사위 고정)" }
+      ] }
+    ],
+    build: function (opts) {
+      var alg = CODE[opts.alg] ? opts.alg : "1";
+      var luck = opts.luck === "bad" ? "bad" : "typical";
+      var code = CODE[alg];
+      var steps = [];
+      var v = { tries: "-", pick: "-", verdict: "-", calls: 0, ret: "-", cls: "-", exp: "-", worst: "-", prob: "-" };
+      var st = { checked: {}, cur: -1, perm: null, curPos: -1, ret: -1, cost: "", label: "", banner: "", bannerColor: null, table: null };
+      var shuffleCost = 0;
+
+      function snap() {
+        return {
+          "n": "8", "trustworthy 수": "5  (> n/2 = 4)", "p": "5/8 = 0.625  (> 1/2)",
+          "시도": String(v.tries), "뽑은 i": String(v.pick), "expert 판정": v.verdict,
+          "expert 호출 수 (비용)": alg === "3" ? (v.calls + "  (+ 셔플 " + shuffleCost + ")") : String(v.calls),
+          "반환값": v.ret, "분류": v.cls, "expected": v.exp, "worst-case": v.worst, "P(truthful)": v.prob
+        };
+      }
+      function push(desc, pc, note) {
+        st.cost = alg === "3" ? ("셔플 " + shuffleCost + " + expert " + v.calls) : ("expert " + v.calls + " 회");
+        var copy = JSON.parse(JSON.stringify(st));
+        var step = { desc: desc, pc: { P: pc }, vars: snap(), svg: svgFor(alg, copy) };
+        if (note) step.note = note;
+        steps.push(step);
+      }
+      function conclude() {
+        var r = RESULT[alg];
+        v.cls = r.cls; v.exp = r.exp + r.expNote; v.worst = r.worst + r.worstNote; v.prob = r.prob;
+        st.table = alg;
+      }
+
+      if (alg === "1" || alg === "2") {
+        var picks = PICKS[luck];
+        var lim = alg === "2" ? " / 100" : "";
+        st.label = alg === "1" ? "Algorithm 1 — 성공할 때까지 무작위로 뽑기" : "Algorithm 2 — 최대 100 번만 뽑기";
+        push(alg === "1"
+          ? "`while True` — 무작위 toad 를 뽑아 expert 에게 묻고, trustworthy 면 반환. 한 번 성공 확률 p = 5/8 > 1/2 (매 시도 독립, '''복원 추출''')."
+          : "`for 100 iterations` — 같은 시도를 '''최대 100 번'''만. 100 번 다 실패하면 확인하지 않은 `toad 0` 을 반환한다.", 1);
+        for (var t = 0; t < picks.length; t++) {
+          var k = picks[t];
+          v.tries = (t + 1) + lim; v.pick = k; v.verdict = "?"; st.cur = k;
+          push("시도 " + (t + 1) + ": 난수 i = " + k + ".", 2);
+          v.calls++; st.checked[k] = true;
+          v.verdict = TRUST[k] ? "trustworthy" : "tricky";
+          if (TRUST[k]) {
+            push("expert: toad " + k + " 은 '''trustworthy''' (Θ(1)).", 3);
+            v.ret = "toad " + k + "  (trustworthy, 정답)"; st.ret = k;
+            push("`return toad " + k + "` — expert 가 '''확인한''' toad 만 반환하므로 정답이다. 시도 " + (t + 1) + " 번 = [[기하분포]]에서 흔한 값 (E = 1/p = 1.6).", 4);
+          } else {
+            push("expert: toad " + k + " 은 '''tricky''' → 다시 뽑는다. (실패 확률 1 − p = 3/8)", 3);
+          }
+        }
+        if (luck === "typical") {
+          conclude();
+          st.banner = "보통 운: " + picks.length + " 번째 시도에서 성공 — 기대 시도 1/p = 8/5 < 2";
+          st.bannerColor = C.green;
+          push(alg === "1"
+            ? "결론 — '''Las Vegas''', expected '''Θ(1)''', worst-case '''∞ (unbounded)''', P(truthful) = '''1'''. 시도 횟수는 [[기하분포]]를 따라 E[시도] = 1/p < 2, 시도당 Θ(1) → [[expected running time]] Θ(1). " +
+              "확인된 toad 만 반환하므로 절대 틀리지 않는다 → [[Las Vegas와 Monte Carlo|Las Vegas]]. 하지만 '불운' 옵션처럼 tricky 만 계속 뽑을 수 있어 [[randomized worst-case]] 는 상한이 없다."
+            : "결론 — '''Monte Carlo''', expected '''Θ(1)''', worst-case '''Θ(1)''', P(truthful) '''≥ 1 − (1/2)^100'''. 이번엔 일찍 성공했지만, 100 번 모두 실패하면 확인 안 된 toad 0 을 반환해 '''틀릴 수 있다''' → [[Las Vegas와 Monte Carlo|Monte Carlo]]. " +
+              "반복이 최대 100 회라 [[expected running time]] 과 [[randomized worst-case]] 모두 Θ(1). 실패 확률 (1−p)^100 < (1/2)^100 ([[기하분포]]의 꼬리).", 4);
+        } else if (alg === "1") {
+          st.cur = -1;
+          v.tries = "4, 5, 6, …"; v.pick = "0, 3, 6, 0, …"; v.verdict = "tricky (계속)";
+          conclude();
+          st.banner = "적이 주사위를 0, 3, 6, 0, 3, 6, … 으로 고정하면 영원히 끝나지 않는다 → worst-case ∞";
+          st.bannerColor = C.red;
+          push("결론 — '''Las Vegas''', expected '''Θ(1)''', worst-case '''∞ (unbounded)''', P(truthful) = '''1'''. 난수가 계속 tricky 만 고르면 `while True` 가 끝나지 않는다: P(k 번 연속 실패) = (3/8)^k > 0 이므로 어떤 상한도 없다 → [[randomized worst-case]] ∞. " +
+            "그래도 반환한다면 확인된 toad 뿐이라 틀린 답은 없다 → [[Las Vegas와 Monte Carlo|Las Vegas]]. 평균적으로는 [[기하분포]] E[시도] = 1/p < 2 → [[expected running time]] Θ(1).", 1,
+            "함정: worst-case 를 Θ(n) 으로 쓰면 오답 — 복원 추출이라 같은 tricky toad 를 몇 번이고 다시 뽑을 수 있다. n 번 안에 끝난다는 보장이 없다.");
+        } else {
+          st.cur = -1;
+          v.tries = "4 ~ 100 / 100"; v.pick = "0, 3, 6, 0, … (전부 tricky)"; v.verdict = "tricky"; v.calls = 100;
+          st.banner = "… 반복 4~100 도 전부 tricky — 확률 (1−p)^100 < (1/2)^100 ≈ 7.9×10⁻³¹ …";
+          st.bannerColor = C.red;
+          push("… 반복 4~100 도 전부 tricky (확률 (1−p)^100 < (1/2)^100 ≈ 7.9×10⁻³¹) … 적이 주사위를 고정했다는 가정. for 루프는 100 번에서 '''반드시''' 끝난다.", 3);
+          st.banner = "";
+          v.pick = "-"; v.verdict = "확인 안 함"; v.ret = "toad 0  (tricky, 틀린 답!)"; st.cur = 0; st.ret = 0;
+          push("`return toad 0` — expert 에게 묻지도 않고 반환한다.", 5, "toad 0 은 tricky — 틀린 답. 그래도 반환하므로 Monte Carlo");
+          conclude();
+          st.banner = "시간은 100 회로 묶였지만, 대가로 틀릴 수 있다";
+          st.bannerColor = C.red;
+          push("결론 — '''Monte Carlo''', expected '''Θ(1)''', worst-case '''Θ(1)''', P(truthful) '''≥ 1 − (1/2)^100'''. 최대 100 번이므로 [[expected running time]] 과 [[randomized worst-case]] 모두 Θ(1). " +
+            "100 번 모두 실패할 확률 (1−p)^100 < (1/2)^100 ([[기하분포]])일 때 확인 안 된 toad 0 을 반환 → '''틀릴 수 있다''' → [[Las Vegas와 Monte Carlo|Monte Carlo]]. toad 0 이 우연히 trustworthy 일 수도 있으므로 확률은 '''하한(≥)'''.", 5,
+            "toad 0 은 tricky — 틀린 답. 그래도 반환하므로 Monte Carlo");
+        }
+      } else {
+        var perm = PERM[luck];
+        st.label = "Algorithm 3 — 섞고 앞에서부터 차례로 묻기";
+        push("Algorithm 3: 먼저 toad 들을 '''무작위 순서로 섞는다''' — 이 단계만으로 O(n) (n = 8).", 1);
+        shuffleCost = N; st.perm = perm;
+        push("섞인 순서 = [" + perm.join(", ") + "]. 셔플 비용 n = 8 이 '''항상''' 든다.", 1);
+        for (var pos = 0; pos < N; pos++) {
+          var tk = perm[pos];
+          v.tries = pos + 1; v.pick = "위치 " + pos + " → toad " + tk; v.verdict = "?"; st.curPos = pos;
+          push("i = " + pos + ": 섞인 순서의 " + pos + " 번째 = toad " + tk + ".", 2);
+          v.calls++; st.checked[tk] = true; v.verdict = TRUST[tk] ? "trustworthy" : "tricky";
+          if (TRUST[tk]) {
+            push("expert: toad " + tk + " 은 '''trustworthy'''.", 3);
+            v.ret = "toad " + tk + "  (trustworthy, 정답)"; st.ret = tk;
+            push("`return toad " + tk + "` — 확인된 toad 만 반환 → 정답. 스캔은 " + (pos + 1) + " 번만에 끝났다" +
+              (luck === "bad" ? " (tricky 3 마리가 전부 앞에 와도 4 번째에 찾음 — tricky < n/2 이므로 항상 n 안에)." : "."), 4);
+            break;
+          } else {
+            push("expert: toad " + tk + " 은 '''tricky''' → 다음 위치로.", 3);
+          }
+        }
+        conclude();
+        st.banner = luck === "bad" ? "불운해도 스캔 ≤ n — 셔플 n 이 항상 지배 → worst Θ(n)" : "스캔은 짧아도(기대 < 2) 셔플 O(n) 이 이미 지불됨 → expected Θ(n)";
+        st.bannerColor = C.pur;
+        push("결론 — '''Las Vegas''', expected '''Θ(n)''', worst-case '''Θ(n)''', P(truthful) = '''1'''. 스캔만 보면 앞에서부터 절반 넘게 정답이라 기대 길이 < 2 ([[기하분포]]와 비슷)지만, " +
+          "셔플 O(n) 를 '''항상''' 하므로 [[expected running time]] 도 Θ(n). 최악(tricky 가 전부 앞)에도 n 번 안에 반드시 찾음 → [[randomized worst-case]] Θ(n). 확인된 toad 만 반환 → [[Las Vegas와 Monte Carlo|Las Vegas]], 확률 1.", 4,
+          "함정: 스캔이 기대 O(1) 이라고 expected 를 Θ(1) 로 쓰면 오답 — O(n) 셔플이 지배한다.");
+      }
+
+      return {
+        panels: [{ id: "P", title: code.title, lang: "c", lines: code.lines }],
+        vars: [
+          { name: "n", group: "설정" },
+          { name: "trustworthy 수", group: "설정" },
+          { name: "p", label: "p = P(랜덤 toad 가 trustworthy)", group: "설정" },
+          { name: "시도", group: "실행" },
+          { name: "뽑은 i", group: "실행" },
+          { name: "expert 판정", group: "실행" },
+          { name: "expert 호출 수 (비용)", group: "실행" },
+          { name: "반환값", group: "실행" },
+          { name: "분류", label: "분류 (Las Vegas / Monte Carlo)", group: "결론" },
+          { name: "expected", group: "결론" },
+          { name: "worst-case", group: "결론" },
+          { name: "P(truthful)", group: "결론" }
+        ],
+        steps: steps
+      };
+    }
+  };
+})(typeof window !== "undefined" ? window : globalThis);
+
 // ===== sims/universal_hash_check.js =====
 window.SIMS = window.SIMS || {};
 // universal_hash_check — L7 p.41 (PNG 40) 기대 버킷 크기, p.59–72 (PNG 57–67) h_{a,b} 전수 조사
@@ -7795,6 +8607,161 @@ ANIMS["close_pair_buckets"] = {
   }
 };
 
+// ===== anims/collinear_random_pair.js =====
+// ============================================================
+// collinear_random_pair — HW2 4번 (b): 랜덤 두 점 → 직선 → O(n) 세기 → |S| = n/k 이면 반환
+// 데이터: n = 8, k = 2, S* = 직선 y = 2x 위 {P0, P2, P4, P6}
+// 시간축(초): 0 문제 → 1.5 시도 1 (P1,P3) ✗ → 4.5 시도 2 (P0,P3) ✗ → 7.5 시도 3 (P2,P6) ✓ → 10.5 요점 → 13
+// ============================================================
+window.ANIMS = window.ANIMS || {};
+ANIMS["collinear_random_pair"] = {
+  title: "최대 collinear 집합 — 랜덤 두 점 다트 (13초)",
+  desc: "HW2 4번 (b). 크기 n/k 를 알 때 두 점을 무작위로 골라 직선을 만들고 O(n) 으로 센다. 두 점이 모두 S* 에 꽂힐 확률 ≈ 1/k² → 기대 시도 ≈ k² ([[기하분포]]) → expected O(k²n) = O(n). 항상 정답이고 시간만 운 → [[Las Vegas와 Monte Carlo|Las Vegas]], [[randomized worst-case]] 는 ∞. [[랜덤 majority]] 와 같은 틀. [[HW2 복기]]",
+  duration: 13,
+  build: function () {
+    var D = 13;
+    var C = { blue: "#1d65b3", blueL: "#dbe8f7", green: "#2e9e4f", greenL: "#dff3e4", or: "#e09a40", orL: "#fdeec2",
+      pur: "#3b2f4a", purL: "#efe9f6", red: "#d6465f", redL: "#fbe3e7", muted: "#777", ink: "#222" };
+    function r4(v) { return Math.round(v * 10000) / 10000; }
+    function txt(x, y, s, size, fill, extra) {
+      return '<text x="' + x + '" y="' + y + '" font-size="' + (size || 13) + '" fill="' + (fill || C.ink) + '"' + (/text-anchor/.test(extra || "") ? "" : ' text-anchor="middle"') + (extra || "") + '>' + s + '</text>';
+    }
+    function show(from, to) {
+      var f = 0.12 / D, a = r4(from / D), b = r4(Math.min(from / D + f, (from + to) / 2 / D));
+      if (to >= D) return '<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;' + a + ';' + b + ';1" dur="' + D + 's" fill="freeze"/>';
+      var c = r4(Math.max(b, to / D - f)), d = r4(to / D);
+      return '<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;' + a + ';' + b + ';' + c + ';' + d + ';1" dur="' + D + 's" fill="freeze"/>';
+    }
+    function vis(from, to, inner) { return '<g opacity="0">' + inner + show(from, to) + '</g>'; }
+    function kf(pts) {
+      var ks = [], vs = [];
+      if (pts[0][0] > 0) { ks.push(0); vs.push(pts[0][1]); }
+      pts.forEach(function (p) { ks.push(r4(p[0] / D)); vs.push(p[1]); });
+      if (pts[pts.length - 1][0] < D) { ks.push(1); vs.push(pts[pts.length - 1][1]); }
+      return 'values="' + vs.join(";") + '" keyTimes="' + ks.join(";") + '" dur="' + D + 's" fill="freeze"';
+    }
+    function anim(attr, pts) { return '<animate attributeName="' + attr + '" ' + kf(pts) + '/>'; }
+    function move(pts) { return '<animateTransform attributeName="transform" type="translate" ' + kf(pts) + '/>'; }
+
+    var P = [[1, 2], [4, 1], [2, 4], [6, 3], [3, 6], [7, 9], [5, 10], [8, 5]];
+    var SSTAR = [0, 2, 4, 6];
+    function X(x) { return 44 + x * 44; }      // x 0..9 → 44..440
+    function Y(y) { return 312 - y * 22; }     // y 0..11 → 312..70
+    function onLine(i, j) {
+      var dx = P[j][0] - P[i][0], dy = P[j][1] - P[i][1], out = [];
+      for (var r = 0; r < P.length; r++) if ((P[r][1] - P[i][1]) * dx === dy * (P[r][0] - P[i][0])) out.push(r);
+      return out;
+    }
+    function clip(i, j) {
+      var x1 = P[i][0], y1 = P[i][1], dx = P[j][0] - x1, dy = P[j][1] - y1, ts = [];
+      function add(t) { var x = x1 + t * dx, y = y1 + t * dy; if (x >= -1e-9 && x <= 9 + 1e-9 && y >= -1e-9 && y <= 11 + 1e-9) ts.push(t); }
+      add(-x1 / dx); add((9 - x1) / dx);
+      if (dy) { add(-y1 / dy); add((11 - y1) / dy); }
+      ts.sort(function (a, b) { return a - b; });
+      return [X(x1 + ts[0] * dx), Y(y1 + ts[0] * dy), X(x1 + ts[ts.length - 1] * dx), Y(y1 + ts[ts.length - 1] * dy)];
+    }
+
+    var s = '<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="랜덤 두 점으로 최대 collinear 집합 찾기 애니메이션" font-family="sans-serif">';
+
+    // ---- 단계 자막 ----
+    var caps = [
+      [0, 1.5, "n = 8 점, 최대 collinear 집합 크기 n/k = 4 를 안다 (k = 2). 랜덤 두 점으로 찾아라"],
+      [1.5, 4.5, "시도 1: 랜덤 두 점 P1, P3 → 직선 → O(n) 으로 직선 위 점을 센다"],
+      [4.5, 7.5, "시도 2: P0, P3 — 한 점이라도 S* 밖이면 직선이 S* 의 직선이 아니다"],
+      [7.5, 10.5, "시도 3: P2, P6 — 둘 다 S* 안 → 그 직선이 바로 S* 의 직선"],
+      [10.5, D, "|S| = n/k 일 때만 반환 → 항상 정답 (Las Vegas), 기대 시도 ≈ k²"]
+    ];
+    caps.forEach(function (c) { s += vis(c[0], c[1], txt(380, 26, c[2], 14, C.ink, ' font-weight="700"')); });
+
+    // ---- 좌표평면 ----
+    var g = "";
+    for (var gx = 0; gx <= 9; gx++) {
+      g += '<line x1="' + X(gx) + '" y1="' + Y(0) + '" x2="' + X(gx) + '" y2="' + Y(11) + '" stroke="#eceef2"/>';
+      g += txt(X(gx), Y(0) + 14, gx, 10, C.muted);
+    }
+    for (var gy = 0; gy <= 11; gy += 1) {
+      g += '<line x1="' + X(0) + '" y1="' + Y(gy) + '" x2="' + X(9) + '" y2="' + Y(gy) + '" stroke="#eceef2"/>';
+      if (gy % 2 === 0) g += txt(X(0) - 6, Y(gy) + 4, gy, 10, C.muted, ' text-anchor="end"');
+    }
+    g += '<line x1="' + X(0) + '" y1="' + Y(0) + '" x2="' + X(9) + '" y2="' + Y(0) + '" stroke="#667" stroke-width="1.3"/>';
+    g += '<line x1="' + X(0) + '" y1="' + Y(0) + '" x2="' + X(0) + '" y2="' + Y(11) + '" stroke="#667" stroke-width="1.3"/>';
+    s += g;
+
+    // ---- 시도별 직선 (점보다 아래 층) ----
+    var TR = [
+      { a: 1, b: 3, t: 1.5, eq: "y = x − 3" },
+      { a: 0, b: 3, t: 4.5, eq: "y = x/5 + 9/5" },
+      { a: 2, b: 6, t: 7.5, eq: "y = 2x", lx: 4.25, ly: 7.4 }
+    ];
+    TR.forEach(function (tr, k) {
+      var c = clip(tr.a, tr.b), last = k === 2, col = last ? C.green : C.red;
+      var end = last ? D : tr.t + 3;
+      var ex = c[0] > c[2] ? c[0] : c[2], ey = c[0] > c[2] ? c[1] : c[3];
+      s += vis(tr.t + 0.9, end, '<line x1="' + c[0] + '" y1="' + c[1] + '" x2="' + c[2] + '" y2="' + c[3] + '" stroke="' + col + '" stroke-width="3"' + (last ? "" : ' stroke-dasharray="8 4"') + '/>' +
+        (tr.lx ? txt(X(tr.lx), Y(tr.ly), tr.eq, 13, col, ' text-anchor="start" font-weight="700"')
+               : txt(Math.min(ex, X(9)) - 4, ey < Y(10) ? ey + 16 : ey - 8, tr.eq, 12, col, ' text-anchor="end" font-weight="700"')));
+    });
+
+    // ---- 점 ----
+    P.forEach(function (p, k) {
+      var cx = X(p[0]), cy = Y(p[1]), inS = SSTAR.indexOf(k) >= 0;
+      if (inS) s += '<circle cx="' + cx + '" cy="' + cy + '" r="11" fill="none" stroke="' + C.green + '" stroke-opacity="0.35" stroke-dasharray="3 2"/>';
+      s += '<circle cx="' + cx + '" cy="' + cy + '" r="7" fill="' + C.blue + '" stroke="#fff" stroke-width="1.5">' +
+        (inS ? anim("fill", [[9, C.blue], [9.15, C.green]]) + anim("r", [[10.5, 7], [10.9, 10], [11.3, 7], [11.7, 10], [12.1, 7]]) : "") + '</circle>';
+      s += '<text x="' + (cx + 16) + '" y="' + (cy - 9) + '" font-size="11" font-weight="700" stroke="#fff" stroke-width="3" paint-order="stroke" fill="' + C.blue + '">P' + k +
+        (inS ? anim("fill", [[9, C.blue], [9.15, C.green]]) : "") + '</text>';
+    });
+
+    // ---- 다트 + 세기 링 ----
+    TR.forEach(function (tr, k) {
+      var last = k === 2, end = last ? D : tr.t + 3, col = last ? C.green : C.red;
+      [tr.a, tr.b].forEach(function (q, m) {
+        var cx = X(P[q][0]), cy = Y(P[q][1]), td = tr.t + 0.2 + 0.25 * m;
+        var dart = '<g>' + move([[td, "0,-60"], [td + 0.35, "0,0"]]) +
+          '<circle cx="' + cx + '" cy="' + cy + '" r="10" fill="' + C.orL + '" fill-opacity="0.6" stroke="' + C.or + '" stroke-width="3"/>' +
+          '<line x1="' + (cx - 14) + '" y1="' + cy + '" x2="' + (cx + 14) + '" y2="' + cy + '" stroke="' + C.or + '" stroke-width="2"/>' +
+          '<line x1="' + cx + '" y1="' + (cy - 14) + '" x2="' + cx + '" y2="' + (cy + 14) + '" stroke="' + C.or + '" stroke-width="2"/></g>';
+        s += vis(td, end, dart);
+      });
+      var S = onLine(tr.a, tr.b), rings = "";
+      S.forEach(function (q) { rings += '<circle cx="' + X(P[q][0]) + '" cy="' + Y(P[q][1]) + '" r="15" fill="none" stroke="' + col + '" stroke-width="2"/>'; });
+      s += vis(tr.t + 1.5, end, rings);
+      var msg = "직선 위 점 수 = " + S.length + (last ? " = n/k → return ✓" : " ≠ 4 → ✗");
+      s += vis(tr.t + 1.6, end, '<rect x="' + (X(4.5) - 135) + '" y="40" width="270" height="24" rx="6" fill="' + (last ? C.greenL : C.redL) + '" stroke="' + col + '"/>' +
+        txt(X(4.5), 57, msg, 13.5, col, ' font-weight="700"'));
+    });
+
+    // ---- 오른쪽 패널 ----
+    var PX = 466;
+    s += '<rect x="' + PX + '" y="44" width="286" height="282" rx="8" fill="#f7f8fb" stroke="#d5d9e2"/>';
+    s += txt(PX + 12, 64, "시도 기록  (목표 |S| = n/k = 4)", 13, C.pur, ' text-anchor="start" font-weight="700"');
+    var hist = [
+      [1.5 + 1.8, "시도 1 (P1, P3): 3 ≠ 4 ✗", C.red],
+      [4.5 + 1.8, "시도 2 (P0, P3): 2 ≠ 4 ✗", C.red],
+      [7.5 + 1.8, "시도 3 (P2, P6): 4 = n/k ✓", C.green]
+    ];
+    hist.forEach(function (h, k) { s += vis(h[0], D, txt(PX + 14, 86 + k * 19, h[1], 12.5, h[2], ' text-anchor="start" font-weight="700"')); });
+    s += '<line x1="' + (PX + 10) + '" y1="148" x2="' + (PX + 276) + '" y2="148" stroke="#d5d9e2"/>';
+    var F = [
+      [1.5, "두 점 모두 S* 안에 있을 확률", "q = (n/k)(n/k−1) / (n(n−1)) ≈ 1/k²", C.pur],
+      [5, "기대 시도 = 1/q ≈ k²  (기하분포)", "여기선 q = 12/56 ≈ 0.21 → 1/q ≈ 4.7", C.pur],
+      [8, "시도당 O(n) 세기", "→ expected O(k²n) = O(n)", C.green],
+      [10.5, "worst-case: 난수가 계속 빗나가면 ∞", "→ 항상 정답, 시간만 운 = Las Vegas", C.red]
+    ];
+    F.forEach(function (f, k) {
+      var y = 170 + k * 40;
+      s += vis(f[0], D, txt(PX + 14, y, f[1], 12.5, f[3], ' text-anchor="start" font-weight="700"') +
+        txt(PX + 14, y + 17, f[2], 12, C.ink, ' text-anchor="start"'));
+    });
+
+    // ---- 맨 아래 한 줄 ----
+    s += vis(0, 10.5, txt(380, 350, "S* = 크기 n/k 인 최대 collinear 집합 (점선 고리) — 알고리즘은 어디 있는지 모른다", 12.5, C.muted));
+    s += vis(10.5, D, txt(380, 350, "무작위 후보 → O(n) 확인 → 통과하면 반환 — 랜덤 majority 와 같은 틀", 14, C.ink, ' font-weight="700"'));
+    s += '</svg>';
+    return s;
+  }
+};
+
 // ===== anims/counting_sort_flow.js =====
 // ============================================================
 // counting_sort_flow — L5 p.22–34 (PNG 20–32) counting sort, A = [0,0,3,1,1,3,1,0]
@@ -8472,6 +9439,164 @@ ANIMS["hash_pigeonhole"] = {
     s += vis(8, D, txt(BKX + 64, bucketY(3) + 5, "나머지 버킷은 텅 빔", 12, C.muted, ' text-anchor="start"'));
 
     s += txt(380, 360, "그래서 h 를 입력을 보기 전에 무작위로 고른다 → universal hash family", 12, C.muted);
+    s += '</svg>';
+    return s;
+  }
+};
+
+// ===== anims/hb_shift_only.js =====
+// ============================================================
+// hb_shift_only — HW2 5번: h_b(x) = (85x + b) mod 13 은 b 를 바꿔도 평행이동뿐 → universal 아님
+// 시간축(초): 0 b=0 배치 (7x mod 13) → 2 b 다이얼 0→1→2→3, 모든 키가 같이 한 칸씩 (간격 7(x−y) 불변)
+//   → 6 0,13,26 / 1,14,27 묶음이 빨갛게: P[충돌] = 1 > 1/13 → 9 대비: h_{a,b} 는 a 가 간격을 흩음 → 12
+// ============================================================
+window.ANIMS = window.ANIMS || {};
+ANIMS["hb_shift_only"] = {
+  title: "h_b(x) = (85x + b) mod 13 — b 는 평행이동만 한다 (12초)",
+  desc: "HW2 5번. 85 ≡ 7 이므로 h_b(x) = (7x + b) mod 13. b 를 바꾸면 '''모든 키가 똑같이 한 칸씩''' 움직일 뿐이라 두 키의 간격 7(x−y) 는 그대로 → " +
+    "x ≡ y (mod 13) 인 쌍은 항상 충돌(P = 1) → [[universal hash family]] 아님. 무작위가 차에 곱해지는 [[h_{a,b}]] 와 비교. [[HW2 복기]]",
+  duration: 12,
+  build: function () {
+    var D = 12;
+    var C = { blue: "#1d65b3", blueL: "#dbe8f7", green: "#2e9e4f", greenL: "#dff3e4", or: "#e09a40", orL: "#fdeec2",
+      pur: "#3b2f4a", purL: "#efe9f6", red: "#d6465f", redL: "#fbe3e7", muted: "#777", ink: "#222" };
+    function r4(v) { return Math.round(v * 10000) / 10000; }
+    function txt(x, y, s, size, fill, extra) {
+      return '<text x="' + x + '" y="' + y + '" font-size="' + (size || 13) + '" fill="' + (fill || C.ink) + '"' +
+        (/text-anchor/.test(extra || "") ? "" : ' text-anchor="middle"') + (extra || "") + '>' + s + '</text>';
+    }
+    function show(from, to) {
+      var f = 0.12 / D, a = r4(from / D), b = r4(Math.min(from / D + f, (from + to) / 2 / D));
+      if (from <= 0 && to >= D) return "";
+      if (from <= 0) {
+        var c0 = r4(to / D - f), d0 = r4(to / D);
+        return '<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;' + c0 + ';' + d0 + ';1" dur="' + D + 's" fill="freeze"/>';
+      }
+      if (to >= D) return '<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;' + a + ';' + b + ';1" dur="' + D + 's" fill="freeze"/>';
+      var c = r4(Math.max(b, to / D - f)), d = r4(to / D);
+      return '<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;' + a + ';' + b + ';' + c + ';' + d + ';1" dur="' + D + 's" fill="freeze"/>';
+    }
+    function vis(from, to, inner) { return '<g opacity="' + (from <= 0 ? 1 : 0) + '">' + inner + show(from, to) + '</g>'; }
+    function kf(pts) {
+      var ks = [], vs = [];
+      if (pts[0][0] > 0) { ks.push(0); vs.push(pts[0][1]); }
+      pts.forEach(function (p) { ks.push(r4(p[0] / D)); vs.push(p[1]); });
+      if (pts[pts.length - 1][0] < D) { ks.push(1); vs.push(pts[pts.length - 1][1]); }
+      return 'values="' + vs.join(";") + '" keyTimes="' + ks.join(";") + '" dur="' + D + 's" fill="freeze"';
+    }
+    function anim(attr, pts) { return '<animate attributeName="' + attr + '" ' + kf(pts) + '/>'; }
+    function move(pts) { return '<animateTransform attributeName="transform" type="translate" ' + kf(pts) + '/>'; }
+
+    var s = '<svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="h_b(x) = (85x + b) mod 13 에서 b 가 평행이동만 하는 애니메이션">';
+
+    // ---- 단계 자막 ----
+    var caps = [
+      [0, 2, "h_b(x) = (85x + b) mod 13 = (7x + b) mod 13 — b 는 무작위, 85 는 고정"],
+      [2, 6, "b 를 올리면 모든 키가 똑같이 한 칸씩 — 평행이동"],
+      [6, 9, "0, 13, 26 은 b 가 무엇이든 같은 칸 → P[충돌] = 1 &gt; 1/13 → universal 아님"],
+      [9, D, "슬라이드의 h_{a,b}: a 도 무작위 → 간격 a(x−y) 가 흩어짐 → 충돌 ≤ 1/n"]
+    ];
+    caps.forEach(function (c) { s += vis(c[0], c[1], txt(380, 28, c[2], 14, C.ink, ' font-weight="700"')); });
+
+    // ================= 본 장면 (0–9s) =================
+    var SX0 = 68, SW = 48, SY = 92, SH = 104;
+    function cx(slot) { return SX0 + slot * SW + SW / 2; }
+    var main = "";
+    for (var i = 0; i < 13; i++) {
+      main += '<rect x="' + (SX0 + i * SW + 2) + '" y="' + SY + '" width="' + (SW - 4) + '" height="' + SH + '" rx="5" fill="' + C.purL + '" stroke="' + C.pur + '" stroke-width="1.4"/>';
+      main += txt(cx(i), SY + SH + 17, i, 12, C.pur, ' font-weight="700"');
+    }
+    main += txt(SX0 - 14, SY + SH + 17, "칸", 11, C.pur, ' text-anchor="end"');
+    main += vis(0, 2.6, txt(SX0 - 14, 56, "b = 0 일 때 칸 = 7x mod 13", 11, C.muted, ' text-anchor="start"'));
+    main += vis(2.6, 9, txt(SX0 - 14, 56, "칸 = (7x + b) mod 13", 11, C.muted, ' text-anchor="start"'));
+
+    // b 다이얼 (오른쪽)
+    var DX = 724, DY = 144, DR = 24;
+    main += '<circle cx="' + DX + '" cy="' + DY + '" r="' + DR + '" fill="' + C.orL + '" stroke="' + C.or + '" stroke-width="2"/>';
+    for (var k = 0; k < 13; k++) {
+      var ang = -Math.PI / 2 + 2 * Math.PI * k / 13;
+      main += '<circle cx="' + (DX + (DR - 5) * Math.cos(ang)).toFixed(1) + '" cy="' + (DY + (DR - 5) * Math.sin(ang)).toFixed(1) + '" r="1.6" fill="' + C.or + '"/>';
+    }
+    var step = 360 / 13;
+    main += '<line x1="' + DX + '" y1="' + DY + '" x2="' + DX + '" y2="' + (DY - DR + 4) + '" stroke="' + C.red + '" stroke-width="2.5" stroke-linecap="round">' +
+      '<animateTransform attributeName="transform" type="rotate" ' +
+      kf([[2.6, "0 " + DX + " " + DY], [3.0, r4(step) + " " + DX + " " + DY], [3.6, r4(step) + " " + DX + " " + DY], [4.0, r4(2 * step) + " " + DX + " " + DY],
+        [4.6, r4(2 * step) + " " + DX + " " + DY], [5.0, r4(3 * step) + " " + DX + " " + DY]]) + '/></line>';
+    main += '<circle cx="' + DX + '" cy="' + DY + '" r="3" fill="' + C.red + '"/>';
+    var bvals = [[0, 2.8, 0], [2.8, 3.8, 1], [3.8, 4.8, 2], [4.8, 9, 3]];
+    bvals.forEach(function (bv) { main += vis(bv[0], bv[1], txt(DX, DY + DR + 18, "b = " + bv[2], 13, C.or, ' font-weight="700"')); });
+    main += txt(DX, DY - DR - 8, "b 다이얼", 11, C.muted);
+
+    // 움직이는 키 묶음 (모두 한 group → 같은 평행이동)
+    var keys = [
+      [0, 0, 0], [13, 0, 1], [26, 0, 2],      // [x, b=0 칸, 묶음 안 위치]
+      [1, 7, 0], [14, 7, 1], [27, 7, 2],
+      [2, 1, -1], [5, 9, -1]
+    ];
+    var moving = "";
+    keys.forEach(function (kk) {
+      var x = cx(kk[1]), y = kk[2] < 0 ? SY + 52 : SY + 24 + kk[2] * 28;
+      var hot = kk[2] >= 0;
+      moving += '<circle cx="' + x + '" cy="' + y + '" r="12" fill="' + C.blue + '">' +
+        (hot ? anim("fill", [[6, C.blue], [6.25, C.red]]) : "") + '</circle>';
+      moving += txt(x, y + 4, kk[0], 11, "#fff", ' font-weight="700"');
+    });
+    // 묶음 라벨 (칸 번호 아래)
+    moving += txt(cx(0), SY + SH + 36, "≡ 0 (mod 13)", 11, C.red, ' font-weight="700"');
+    moving += txt(cx(7), SY + SH + 36, "≡ 1 (mod 13)", 11, C.red, ' font-weight="700"');
+    // 6–9s: 묶음 테두리 맥동
+    var pulse = "";
+    [0, 7].forEach(function (sl) {
+      pulse += '<rect x="' + (SX0 + sl * SW) + '" y="' + (SY - 3) + '" width="' + SW + '" height="' + (SH + 6) + '" rx="7" fill="none" stroke="' + C.red + '" stroke-width="3">' +
+        '<animate attributeName="stroke-opacity" values="1;0.25;1" dur="0.75s" begin="6s" repeatCount="4" fill="freeze"/></rect>';
+      pulse += txt(SX0 + sl * SW + SW / 2, SY + SH + 54, "P = 1", 13, C.red, ' font-weight="700"');
+    });
+    moving += vis(6, 9, pulse);
+    // 간격 괄호: 0 의 칸 ↔ 1 의 칸
+    var BY = 80;
+    var brk = '<line x1="' + cx(0) + '" y1="' + BY + '" x2="' + cx(7) + '" y2="' + BY + '" stroke="' + C.green + '" stroke-width="2"/>' +
+      '<line x1="' + cx(0) + '" y1="' + (BY - 6) + '" x2="' + cx(0) + '" y2="' + (BY + 6) + '" stroke="' + C.green + '" stroke-width="2"/>' +
+      '<line x1="' + cx(7) + '" y1="' + (BY - 6) + '" x2="' + cx(7) + '" y2="' + (BY + 6) + '" stroke="' + C.green + '" stroke-width="2"/>' +
+      '<rect x="' + ((cx(0) + cx(7)) / 2 - 96) + '" y="' + (BY - 19) + '" width="192" height="16" fill="#fff"/>' +
+      txt((cx(0) + cx(7)) / 2, BY - 6, "간격 7(x−y) = 7·1 = 7 칸 불변", 12, C.green, ' font-weight="700"');
+    moving += vis(2.2, 9, brk);
+
+    main += '<g>' + move([[2.6, "0,0"], [3.0, SW + ",0"], [3.6, SW + ",0"], [4.0, 2 * SW + ",0"], [4.6, 2 * SW + ",0"], [5.0, 3 * SW + ",0"]]) + moving + '</g>';
+
+    // 아래 설명 줄
+    main += vis(0, 2, txt(380, 278, "b = 0: 0→0, 13→91 mod 13 = 0, 26→0  /  1→7, 14→98 mod 13 = 7, 27→7  /  2→1, 5→35 mod 13 = 9", 12, C.muted));
+    main += vis(2.2, 6, txt(380, 278, "h_b(x) − h_b(y) ≡ (7x + b) − (7y + b) = 7(x − y) — b 가 빠진다", 13, C.green, ' font-weight="700"'));
+    main += vis(6.1, 9, txt(380, 278, "h_b(13) − h_b(0) ≡ 7·13 = 91 ≡ 0 (mod 13) → 13 개 b 모두 충돌, 13/13 = 1", 13, C.red, ' font-weight="700"'));
+    s += vis(0, 9, main);
+
+    // ================= 대비 장면 (9–12s): h_{a,b} =================
+    var TX0 = 146, TW = 36, TY = 108, TH = 88;
+    function tx(slot) { return TX0 + slot * TW + TW / 2; }
+    var con = '<rect x="40" y="48" width="680" height="232" rx="10" fill="' + C.greenL + '" stroke="' + C.green + '" stroke-width="1.5"/>';
+    con += txt(380, 72, "h_{a,b}(x) = ((ax + b) mod 31) mod 13   (p = 31 ≥ |U|, b = 0 으로 두고 a 만 바꿔 본다)", 13, C.ink, ' font-weight="700"');
+    for (var j = 0; j < 13; j++) {
+      con += '<rect x="' + (TX0 + j * TW + 2) + '" y="' + TY + '" width="' + (TW - 4) + '" height="' + TH + '" rx="4" fill="' + C.purL + '" stroke="' + C.pur + '" stroke-width="1.2"/>';
+      con += txt(tx(j), TY + TH + 15, j, 11, C.pur, ' font-weight="700"');
+    }
+    con += vis(9, 10.5, txt(96, 156, "a = 1", 15, C.or, ' font-weight="700"'));
+    con += vis(10.5, D, txt(96, 156, "a = 5", 15, C.or, ' font-weight="700"'));
+    // 키 0, 13, 26, 1: a=1 → 칸 0,0,0,1 (겹침) / a=5 → 칸 0,3,6,5 (흩어짐)
+    var tk = [[0, 0, 0, 0], [13, 0, 1, 3], [26, 0, 2, 6], [1, 1, -1, 5]];
+    tk.forEach(function (q) {
+      var x1 = tx(q[1]), y1 = q[2] < 0 ? TY + 44 : TY + 18 + q[2] * 26;
+      var x2 = tx(q[3]), y2 = TY + 44;
+      var col0 = q[2] >= 0 ? C.red : C.blue;
+      con += '<g>' + move([[10.5, "0,0"], [11.0, (x2 - x1) + "," + (y2 - y1)]]) +
+        '<circle cx="' + x1 + '" cy="' + y1 + '" r="10" fill="' + col0 + '">' + anim("fill", [[10.5, col0], [11.0, C.blue]]) + '</circle>' +
+        txt(x1, y1 + 4, q[0], 10, "#fff", ' font-weight="700"') + '</g>';
+    });
+    con += vis(9, 10.5, txt(380, 236, "a = 1: 13a = 13 ≡ 0 → 0, 13, 26 이 한 칸 (이런 나쁜 a 는 일부뿐)", 13, C.red, ' font-weight="700"'));
+    con += vis(10.5, D, txt(380, 236, "a = 5: 13a = 65 ≡ 3 (mod 31) → 0, 3, 6 으로 흩어짐", 13, C.green, ' font-weight="700"'));
+    con += vis(10.5, D, txt(380, 260, "a 가 차 (x − y) 에 곱해지므로 a 를 무작위로 고르면 간격도 무작위 → 충돌 확률 ≤ 1/n", 12, C.ink));
+    s += vis(9, D, con);
+
+    // ---- 요점 ----
+    s += txt(380, 322, "더해지는 무작위(b)는 소거된다 — 무작위는 차에 곱해지는 자리(a)에 있어야 한다", 14, C.muted, ' font-weight="700"');
     s += '</svg>';
     return s;
   }
@@ -10205,6 +11330,164 @@ ANIMS["stable_sort"] = {
     s += '<g opacity="0">' + P2 + '<animate attributeName="opacity" ' + kf([[6.3, 0], [6.5, 1]]) + '/></g>';
 
     s += txt(380, 336, "radix sort 의 정확성 증명은 'bucket_sort is stable' 에 기댄다 — 매 라운드가 stable 해야 한다", 12, C.muted);
+    s += '</svg>';
+    return s;
+  }
+};
+
+// ===== anims/toad_three_algorithms.js =====
+// ============================================================
+// toad_three_algorithms — HW2 3번: toad 세 알고리즘 (Las Vegas vs Monte Carlo)
+// 시간축(초): 0 세 레인(toad 8 마리, tricky = 0·3·6) → 1.5 Alg 1: 화살 3 ✗, 6 ✗, 4 ✓ return, 기대 1/p < 2 · worst ∞
+//   → 5 Alg 2: 1/100 … 100/100 전부 ✗ → toad 0 을 확인 없이 return → 틀림 → Monte Carlo
+//   → 9 Alg 3: shuffle O(n) 막대 + 섞이기 → 앞에서부터 스캔, 첫 초록에서 return → Θ(n)
+//   → 12.5 요점 "틀린 답을 낼 수 있나?" + 3행 표 → 14
+// ============================================================
+window.ANIMS = window.ANIMS || {};
+ANIMS["toad_three_algorithms"] = {
+  title: "toad 세 알고리즘 — 틀릴 수 있으면 Monte Carlo, 아니면 Las Vegas (14초)",
+  desc: "HW2 3번. trustworthy > n/2 이라 무작위 한 마리가 맞을 확률 p > 1/2. Alg 1 은 [[기하분포]]로 기대 Θ(1)·worst ∞, Alg 2 는 100 번 후 확인 안 된 toad 0 을 반환해 '''틀릴 수 있다''', Alg 3 은 셔플 O(n) 이 지배. [[Las Vegas와 Monte Carlo]] · [[HW2 복기]]",
+  duration: 14,
+  build: function () {
+    var D = 14;
+    var C = { blue: "#1d65b3", blueL: "#dbe8f7", green: "#2e9e4f", greenL: "#dff3e4", or: "#e09a40", orL: "#fdeec2",
+      pur: "#3b2f4a", purL: "#efe9f6", red: "#d6465f", redL: "#fbe3e7", muted: "#777", grey: "#eeeeee", ink: "#222" };
+    function r4(v) { return Math.round(v * 10000) / 10000; }
+    function txt(x, y, s, size, fill, extra) {
+      return '<text x="' + x + '" y="' + y + '" font-size="' + (size || 13) + '" fill="' + (fill || C.ink) + '"' + (/text-anchor/.test(extra || "") ? "" : ' text-anchor="middle"') + (extra || "") + '>' + s + '</text>';
+    }
+    function show(from, to) {
+      var f = 0.12 / D, a = r4(from / D), b = r4(Math.min(from / D + f, (from + to) / 2 / D));
+      if (to >= D) return '<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;' + a + ';' + b + ';1" dur="' + D + 's" fill="freeze"/>';
+      var c = r4(Math.max(b, to / D - f)), d = r4(to / D);
+      return '<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;' + a + ';' + b + ';' + c + ';' + d + ';1" dur="' + D + 's" fill="freeze"/>';
+    }
+    function vis(from, to, inner) { return '<g opacity="0">' + inner + show(from, to) + '</g>'; }
+    function kf(pts) {
+      var ks = [], vs = [];
+      if (pts[0][0] > 0) { ks.push(0); vs.push(pts[0][1]); }
+      pts.forEach(function (p) { ks.push(r4(p[0] / D)); vs.push(p[1]); });
+      if (pts[pts.length - 1][0] < D) { ks.push(1); vs.push(pts[pts.length - 1][1]); }
+      return 'values="' + vs.join(";") + '" keyTimes="' + ks.join(";") + '" dur="' + D + 's" fill="freeze"';
+    }
+    function anim(attr, pts) { return '<animate attributeName="' + attr + '" ' + kf(pts) + '/>'; }
+    function move(pts) { return '<animateTransform attributeName="transform" type="translate" ' + kf(pts) + '/>'; }
+
+    var TRUST = { 1: true, 2: true, 4: true, 5: true, 7: true };
+    var LANES = [90, 172, 254];
+    function tx(k) { return 140 + 38 * k; }
+    // 판정 시각에 회색 → 초록/빨강으로 바뀌는 toad 원
+    function toad(k, y, tReveal) {
+      var t = !!TRUST[k], fl = t ? C.greenL : C.redL, st = t ? C.green : C.red;
+      var s = '<circle cx="' + tx(k) + '" cy="' + y + '" r="14" fill="' + C.grey + '" stroke="' + C.muted + '" stroke-width="1.5">';
+      if (tReveal !== null) s += anim("fill", [[tReveal, C.grey], [tReveal + 0.1, fl]]) + anim("stroke", [[tReveal, C.muted], [tReveal + 0.1, st]]);
+      s += '</circle>';
+      s += '<text x="' + tx(k) + '" y="' + (y + 5) + '" font-size="13" text-anchor="middle" font-weight="700" fill="' + C.muted + '">' + k +
+        (tReveal !== null ? anim("fill", [[tReveal, C.muted], [tReveal + 0.1, st]]) : "") + '</text>';
+      return s;
+    }
+    function mark(k, y, ok, label) {
+      return txt(tx(k), y + 32, (ok ? "✓" : "✗") + (label ? " " + label : ""), 12, ok ? C.green : C.red, ' font-weight="700"');
+    }
+    function dart(y, color) {
+      return '<path d="M -8 ' + (y - 36) + ' L 8 ' + (y - 36) + ' L 0 ' + (y - 21) + ' Z" fill="' + (color || C.or) + '"/>';
+    }
+
+    var s = '<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="toad 세 알고리즘 Las Vegas와 Monte Carlo 비교 애니메이션">';
+
+    // ---- 단계 자막 ----
+    var caps = [
+      [0, 1.5, "n 마리 중 trustworthy &gt; n/2 — trustworthy 하나를 찾아라. expert 판정 Θ(1)"],
+      [1.5, 5, "Alg 1: 잡을 때까지 무작위로 뽑는다 — 확인된 toad 만 반환 (Las Vegas)"],
+      [5, 9, "Alg 2: 100 번만 뽑고, 다 실패하면 toad 0 을 그냥 반환 (Monte Carlo)"],
+      [9, 12.5, "Alg 3: 무작위 순서로 섞고(O(n)) 앞에서부터 차례로 묻는다 (Las Vegas)"],
+      [12.5, D, "판정 기준은 하나 — 틀린 답을 낼 수 있는가?"]
+    ];
+    caps.forEach(function (c) { s += vis(c[0], c[1], txt(380, 26, c[2], 14, C.ink, ' font-weight="700"')); });
+
+    // ---- 레인 라벨 + 구분선 ----
+    var names = [["Alg 1", "while true"], ["Alg 2", "for 100 iter."], ["Alg 3", "shuffle + scan"]];
+    LANES.forEach(function (y, li) {
+      s += '<rect x="6" y="' + (y - 38) + '' + '" width="748" height="76" rx="8" fill="' + (li % 2 ? "#fafafa" : "#f5f3f8") + '" stroke="#e2dde9"/>';
+      s += txt(14, y - 4, names[li][0], 14, C.pur, ' text-anchor="start" font-weight="700"');
+      s += txt(14, y + 13, names[li][1], 11, C.muted, ' text-anchor="start"');
+    });
+    s += vis(0, 1.5, txt(590, LANES[0] + 4, "tricky 인지는 expert 에게 물어야 안다", 12, C.muted) +
+      txt(590, LANES[1] + 4, "회색 = 아직 확인 안 함", 12, C.muted));
+
+    // ---- Alg 1 (1.5–5): 3 ✗, 6 ✗, 4 ✓ ----
+    var y1 = LANES[0];
+    var rev1 = { 3: 2.3, 6: 3.1, 4: 3.9 };
+    for (var k = 0; k < 8; k++) s += toad(k, y1, rev1.hasOwnProperty(k) ? rev1[k] : null);
+    s += vis(2.3, D, mark(3, y1, false)) + vis(3.1, D, mark(6, y1, false)) + vis(3.9, D, mark(4, y1, true, "return"));
+    s += vis(1.7, 4.6, '<g>' + move([[1.7, tx(3) + ",-12"], [2.1, tx(3) + ",0"], [2.6, tx(3) + ",0"], [2.75, tx(6) + ",-12"], [2.95, tx(6) + ",0"], [3.4, tx(6) + ",0"], [3.55, tx(4) + ",-12"], [3.75, tx(4) + ",0"]]) + dart(y1) + '</g>');
+    s += vis(2.4, 12.5, txt(440, y1 - 12, "성공 확률 p &gt; 1/2 → 기대 시도 1/p &lt; 2 → Θ(1)", 12, C.green, ' text-anchor="start" font-weight="700"'));
+    s += vis(4.2, 12.5, '<line x1="440" y1="' + (y1 + 8) + '" x2="500" y2="' + (y1 + 8) + '" stroke="' + C.red + '" stroke-width="2" stroke-dasharray="2 5" opacity="0.6"/>' +
+      txt(506, y1 + 13, "…? 운이 계속 나쁘면 끝없음 → worst ∞", 12, C.red, ' text-anchor="start" font-weight="700"'));
+
+    // ---- Alg 2 (5–9): 3,6,3,6… 전부 ✗ → toad 0 을 확인 없이 return ----
+    var y2 = LANES[1];
+    var rev2 = { 3: 5.45, 6: 5.8, 0: 8.4 };
+    for (k = 0; k < 8; k++) s += toad(k, y2, rev2.hasOwnProperty(k) ? rev2[k] : null);
+    s += vis(5.45, D, mark(3, y2, false)) + vis(5.8, D, mark(6, y2, false));
+    var hop = [[5.2, tx(3) + ",0"]], hx = [3, 6], ht = 5.2;
+    for (var h = 1; h <= 10; h++) { ht += h <= 2 ? 0.35 : 0.18; hop.push([ht - 0.05, tx(hx[(h - 1) % 2]) + ",0"]); hop.push([ht, tx(hx[h % 2]) + ",0"]); }
+    hop.push([7.35, tx(hx[0]) + ",0"]); hop.push([7.55, tx(0) + ",0"]);
+    s += '<g opacity="0"><g>' + move(hop) + '<path d="M -8 ' + (y2 - 36) + ' L 8 ' + (y2 - 36) + ' L 0 ' + (y2 - 21) + ' Z" fill="' + C.or + '">' +
+      anim("fill", [[7.4, C.or], [7.55, C.red]]) + '</path></g>' + show(5.2, 9.2) + '</g>';
+    var cnt = [[5.2, "1/100"], [5.55, "2/100"], [5.9, "3/100"], [6.2, "10/100"], [6.5, "30/100"], [6.8, "60/100"], [7.1, "100/100"]];
+    cnt.forEach(function (c, i) {
+      var end = i + 1 < cnt.length ? cnt[i + 1][0] : 12.5;
+      s += vis(c[0], end, txt(14, y2 + 30, "반복 " + c[1] + (i === cnt.length - 1 ? " 끝" : ""), 11, i === cnt.length - 1 ? C.red : C.or, ' text-anchor="start" font-weight="700"'));
+    });
+    s += vis(6.2, 7.5, txt(440, y2 + 4, "✗ ✗ ✗ … 100 번 전부 tricky (적이 주사위 고정)", 12, C.red, ' text-anchor="start" font-weight="700"'));
+    s += vis(7.6, 8.4, txt(tx(0), y2 - 20, "?", 22, C.red, ' font-weight="700"'));
+    s += vis(8.4, D, txt(tx(0) + 2, y2 + 32, "✗ return", 12, C.red, ' font-weight="700"'));
+    s += vis(7.6, 12.5, txt(440, y2 - 14, "return toad 0 — 확인 안 함", 12, C.red, ' text-anchor="start" font-weight="700"') +
+      txt(440, y2 + 4, "→ 틀릴 수 있음 → Monte Carlo", 12, C.red, ' text-anchor="start" font-weight="700"'));
+    s += vis(8.4, 12.5, txt(440, y2 + 22, "P(틀림) ≤ (1−p)^100 &lt; (1/2)^100 · 시간은 항상 Θ(1)", 12, C.pur, ' text-anchor="start"'));
+
+    // ---- Alg 3 (9–12.5): 섞기(O(n)) → 스캔 ----
+    var y3 = LANES[2];
+    var perm = [3, 1, 6, 2, 0, 4, 5, 7], pos = {};
+    perm.forEach(function (t, p) { pos[t] = p; });
+    var rev3 = { 3: 10.7, 1: 11.3 };
+    for (k = 0; k < 8; k++) {
+      var dx = tx(pos[k]) - tx(k);
+      s += '<g>' + move([[9.3, "0,0"], [10.2, dx + ",0"]]) + toad(k, y3, rev3.hasOwnProperty(k) ? rev3[k] : null) +
+        (k === 3 ? vis(10.7, D, mark(3, y3, false)) : "") + (k === 1 ? vis(11.3, D, mark(1, y3, true, "return")) : "") + '</g>';
+    }
+    // shuffle O(n) 막대 (레인 아래쪽, toad 줄 밑을 왼쪽→오른쪽으로 채움)
+    s += vis(9.2, 10.6, '<rect x="' + (tx(0) - 14) + '" y="' + (y3 + 22) + '" width="294" height="8" rx="3" fill="#fff" stroke="' + C.pur + '"/>' +
+      '<rect x="' + (tx(0) - 14) + '" y="' + (y3 + 22) + '" width="0" height="8" rx="3" fill="' + C.pur + '">' + anim("width", [[9.3, 0], [10.2, 294]]) + '</rect>' +
+      txt(tx(0) + 300, y3 + 30, "shuffle O(n)", 11, C.pur, ' text-anchor="start" font-weight="700"'));
+    s += vis(10.4, 12.5, '<g>' + move([[10.4, tx(0) + ",0"], [10.9, tx(0) + ",0"], [11.05, tx(1) + ",0"]]) + dart(y3) + '</g>');
+    s += vis(10.1, 12.5, txt(440, y3 - 12, "shuffle O(n) 이 지배 → expected Θ(n), worst Θ(n)", 12, C.pur, ' text-anchor="start" font-weight="700"'));
+    s += vis(11.4, 12.5, txt(440, y3 + 8, "스캔은 기대 &lt; 2 번이지만 셔플은 항상 n", 12, C.muted, ' text-anchor="start"') +
+      txt(440, y3 + 26, "tricky 가 전부 앞이어도 n 안에 찾음 → 확률 1", 12, C.green, ' text-anchor="start"'));
+
+    // ---- 12.5–14: 표 (오른쪽 영역) + 요점 ----
+    var cols = [["Alg", 34], ["LV / MC", 92], ["expected", 62], ["worst", 46], ["P(truthful)", 84]];
+    var rows = [["1", "Las Vegas", "Θ(1)", "∞", "1"], ["2", "Monte Carlo", "Θ(1)", "Θ(1)", "≥ 1−(1/2)^100"], ["3", "Las Vegas", "Θ(n)", "Θ(n)", "1"]];
+    var tb = "", x0 = 436;
+    tb += '<rect x="' + (x0 - 6) + '" y="54" width="' + 330 + '" height="236" rx="8" fill="#fff" stroke="' + C.pur + '" stroke-width="1.5"/>';
+    var xx = x0;
+    cols.forEach(function (c) { tb += txt(xx + c[1] / 2, 72, c[0], 12, C.pur, ' font-weight="700"'); xx += c[1]; });
+    tb += '<line x1="' + x0 + '" y1="80" x2="' + (x0 + 318) + '" y2="80" stroke="' + C.pur + '"/>';
+    rows.forEach(function (r, ri) {
+      var y = LANES[ri] + 5;
+      xx = x0;
+      r.forEach(function (v, ci) {
+        var col = ci === 1 ? (v === "Las Vegas" ? C.green : C.red) : (ci === 3 && v === "∞" ? C.red : C.ink);
+        tb += txt(xx + cols[ci][1] / 2, y, v, ci === 4 && ri === 1 ? 11 : 13, col, ' font-weight="700"');
+        xx += cols[ci][1];
+      });
+    });
+    s += vis(12.5, D, tb);
+
+    s += vis(0, 12.5, txt(380, 330, "틀린 답을 낼 수 있나? 있으면 Monte Carlo, 없으면 Las Vegas", 13, C.muted, ' font-weight="700"'));
+    s += vis(12.5, D, '<rect x="130" y="306" width="500" height="36" rx="8" fill="' + C.orL + '" stroke="' + C.or + '" stroke-width="2"/>' +
+      txt(380, 330, "틀린 답을 낼 수 있나? 있으면 Monte Carlo, 없으면 Las Vegas", 15, C.ink, ' font-weight="700"'));
     s += '</svg>';
     return s;
   }

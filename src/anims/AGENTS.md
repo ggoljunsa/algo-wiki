@@ -13,6 +13,7 @@
 | `_reference_ctx_switch.js.txt` | Reference implementation copied from 운체위키 (not built). Copy its helpers (`show()`, `esc()`) and 자막–그림–요점 layout. |
 | `two_questions.js` … `mom_grid.js` (10) | L1–L4: two questions, insertion card, loop invariant flow, Big-O graph, divide&conquer flow, mergesort split/merge, recursion tree levels, master struggle, pivot partition, median-of-medians grid. |
 | `decision_tree_leaves.js` … `universal_hash_pick.js` (10) | L5–L7: decision tree leaves, counting sort flow, radix LSD, stable sort, expected vs worst, quicksort random pivot, harmonic sum, majority random pick, hash pigeonhole, universal hash pick. Full list in `../CONTRACT.md` §7. |
+| `close_pair_buckets.js`, `toad_three_algorithms.js`, `collinear_random_pair.js`, `hb_shift_only.js` | HW2 #2–#5 (2026-10-03/04): width-T buckets; three toad algorithms side by side; random pair collinear search; b-shift-only hash family (gap 7(x−y) invariant). |
 | other `*.js` | One animation per file, `ANIMS["name"]` with `name == filename`. |
 
 ## For AI Agents

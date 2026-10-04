@@ -13,11 +13,11 @@ HW2 는 '''L5 Linear-Time Sorting · L6 Randomized Algorithms I · L7 Randomized
 |-
 | 2 || 20 || brute force / [[mergesort]] + 인접 검사 / [[bucket sort]] 변형 + [[비둘기집 원리]] || L3, L5 p.35–45 || `close_pair_bucket`, `close_pair_buckets`
 |-
-| 3 || 20 || [[Las Vegas와 Monte Carlo]], [[expected running time]], [[randomized worst-case]], [[기하분포]] || L6 p.4–5, p.80 || `geometric_expectation`
+| 3 || 20 || [[Las Vegas와 Monte Carlo]], [[expected running time]], [[randomized worst-case]], [[기하분포]] || L6 p.4–5, p.80 || `toad_algorithms`, `toad_three_algorithms`, `geometric_expectation`
 |-
-| 4 || 20 || 정렬로 같은 기울기 묶기 / 랜덤 두 점 [[randomized algorithm]] || L3, L6 || —
+| 4 || 20 || 정렬로 같은 기울기 묶기 / 랜덤 두 점 [[randomized algorithm]] || L3, L6 || `collinear_points`, `collinear_random_pair`
 |-
-| 5 || 20 || [[universal hash family]] 판정, [[modular arithmetic]], [[hash collision]], [[h_{a,b}]] 와 비교 || L7 p.62–73 || `universal_hash_check`
+| 5 || 20 || [[universal hash family]] 판정, [[modular arithmetic]], [[hash collision]], [[h_{a,b}]] 와 비교 || L7 p.62–73 || `hb_mod13_check`, `hb_shift_only`, `universal_hash_check`
 |}
 
 {analogy}
@@ -202,148 +202,308 @@ Q5. "거리 < T" 와 "거리 ≤ T" 는 무엇이 달라지나?
 {tip}여기서 배울 것: 같은 문제를 세 번 푸는 구성 자체가 L3→L5 의 흐름이다 — '''모든 쌍 → 비교 정렬(하한 n log n) → 값을 인덱스로 쓰는 버킷(선형)'''. bucket sort 를 "정렬" 이 아니라 '''"값이 가까운 것끼리 모으는 도구"''' 로 쓴다는 발상이 핵심.{/tip}
 
 == 문제 3 (20점) — toad 세 알고리즘: Las Vegas 인가 Monte Carlo 인가 ==
-n 마리 toad 중 trustworthy 가 '''엄격히 n/2 초과'''. expert 는 한 마리를 $\Theta(1)$ 에 판정한다. 세 알고리즘(아래)이 trustworthy toad 하나를 찾으려 한다.
-관련 개념: [[Las Vegas와 Monte Carlo]] · [[expected running time]] · [[randomized worst-case]] · [[기하분포]] · [[randomized algorithm]] · [[랜덤 majority]]
-<pre class="c">
-# Algorithm 1
-while True:
-  i = random index in {0, ..., n-1}
-  if expert says toad i is trustworthy:    # Θ(1)
-    return toad i
+n 마리 toad 중 trustworthy 가 '''엄격히 n/2 초과'''. expert 는 한 마리를 $\Theta(1)$ 에 판정한다. 세 알고리즘이 trustworthy toad 하나를 찾으려 한다. 표(Monte Carlo / Las Vegas, expected, worst-case, truthful 반환 확률의 tightest bound)를 채우고 짧게 근거를 쓰는 문제.
+관련 개념: [[Las Vegas와 Monte Carlo]] · [[두 시나리오]] · [[expected running time]] · [[randomized worst-case]] · [[기하분포]] · [[등비급수]] · [[randomized algorithm]] · [[랜덤 majority]] · [[bogosort]]
 
-# Algorithm 2
-for 100 iterations:
-  i = random index in {0, ..., n-1}
-  if expert says toad i is trustworthy:
-    return toad i
-return toad 0
+=== 📚 관련 수업 내용 ===
+* '''L6 p.4 두 분류''' — [[Las Vegas와 Monte Carlo]]: Las Vegas 는 "정확성은 항상 보장, 수행 시간은 보장 안 됨"(randomized select, randomized quicksort, bogosort). Monte Carlo 는 "수행 시간은 항상 보장, 정확성은 확률적으로 틀릴 수 있음"(Karger). 9/17 교수: "'''you should distinguish what the difference is between'''" — 이 문제의 첫 열이 그대로 그 질문이다.
+* '''L6 p.5 두 시나리오''' — [[두 시나리오]]: 적이 입력만 고르고 내가 주사위를 굴리면 수행 시간은 [[random variable]] → [[expected running time]]. 적이 주사위 눈까지 고정하면 → [[randomized worst-case]]. 표의 2·3열이 이 둘이다.
+* '''기하분포 $E = 1/p$''' — [[기하분포]]: 성공 확률 p 인 시도를 성공할 때까지 반복하면 기대 시도 수는 $1/p$. 9/22 녹음에서 교수가 [[랜덤 majority]] 로 유도: "$E = 1 + (1-p)E$ → $E = 1/p$", majority 는 $p > 1/2$ 라 "'''< 2'''". [[bogosort]] 는 $p = 1/n!$ 라 $n!$ 회.
+* '''L6 p.80 요약표''' — bogosort $O(\infty)$ / $O(n \cdot n!)$, 랜덤 majority $O(\infty)$ / $O(n)$. "worst-case = ∞" 라는 답이 정식 답안이라는 선례.
 
-# Algorithm 3
-put the toads in a random order           # O(n)
-for i = 0, ..., n-1:
-  if expert says toad i is trustworthy:
-    return toad i
-</pre>
 {quiz}
 각 알고리즘에 대해 Monte Carlo / Las Vegas, expected running time, worst-case running time, truthful toad 를 반환할 확률(가장 tight 한 bound)을 표로 채우고 짧게 근거를 쓰시오.
 {/quiz}
+<pre class="c">
+# Algorithm 1 : FindTrustworthyToad1
+while true:
+  i = random index in {0, ..., n-1}
+  ask the expert if toad i is trustworthy     # Θ(1)
+  if the expert says toad i is trustworthy:
+    return toad i
+
+# Algorithm 2 : FindTrustworthyToad2
+for 100 iterations:
+  i = random index in {0, ..., n-1}
+  ask the expert if toad i is trustworthy     # Θ(1)
+  if the expert says toad i is trustworthy:
+    return toad i
+return toad 0                                 # 100 번 다 실패하면 확인 없이 반환
+
+# Algorithm 3 : FindTrustworthyToad3
+put the toads in a random order               # O(n)
+for i = 0, ..., n-1:
+  ask the expert if toad i is trustworthy     # Θ(1)
+  if the expert says toad i is trustworthy:
+    return toad i
+</pre>
 {analogy}
 🎭 '''두더지 잡기.''' 구멍의 절반 넘게에서 진짜 두더지가 올라온다. Alg 1 은 "잡을 때까지 망치질" — 언젠가 반드시 잡지만 몇 번 칠지는 운(Las Vegas). Alg 2 는 "100 번만 치고 못 잡으면 아무 구멍이나 가리킴" — 시간은 정해졌지만 틀릴 수 있다(Monte Carlo). Alg 3 은 "구멍 순서를 섞어 놓고 차례로 확인" — 섞는 데 n 만큼 드니 기대값도 n.
 {/analogy}
+
+=== 🔍 왜 이 답이 나오는가 ===
+[[anim:toad_three_algorithms|세 알고리즘을 한 화면에서: Alg 1 은 맞힐 때까지, Alg 2 는 100 번 뒤 확인 없이 toad 0, Alg 3 은 섞고 나서 훑기. 먼저 보고, 아래 네 열을 왜 그렇게 채우는지 따라갈 것]]
+
+'''공통 전제.''' trustworthy 가 $n/2$ 초과이므로 무작위로 한 마리를 뽑았을 때 trustworthy 일 확률을 $p$ 라 하면 '''$p > 1/2$'''. 정확한 값은 모른다(문제가 "strictly more than n/2" 만 줌) — 그래서 확률 답은 $p$ 가 아니라 $1/2$ 로 bound 를 쓴다.
+
+'''판정 기준 하나.''' 네 열 중 첫 열은 "'''틀린 답을 낼 수 있는가?'''" 하나로 갈린다.
+<pre class="ascii">
+반환하는 toad 를 expert 가 "trustworthy" 라고 확인했는가?
+ ├ 항상 그렇다 (확인된 것만 return)          → '''Las Vegas'''   → P(truthful) = 1, 시간이 확률변수   … Alg 1, Alg 3
+ └ 아니다 (시간 제한 뒤 확인 없이 return)     → '''Monte Carlo''' → 시간 보장, P(truthful) < 1 가능   … Alg 2
+</pre>
+
+==== Algorithm 1 — while true ====
+<pre class="txt">
+시도 횟수 N:  매 시도 독립, 성공 확률 p  →  N ~ 기하분포,  P(N = i) = (1-p)^(i-1) p
+E[N] = 1/p  <  1/(1/2) = 2                          ← p > 1/2
+expected 시간 = E[N] × Θ(1) = '''Θ(1)'''
+worst-case:  P(N > k) = (1-p)^k > 0  for every k      ← 아무리 큰 k 를 잡아도 "k 번 넘게 실패" 가 가능
+             → 어떤 상수(또는 n 의 함수)로도 상한을 못 둔다 → '''∞ (unbounded)'''
+정확성:  return 하는 toad 는 expert 가 확인한 것뿐 → 틀릴 수 없음 → '''Las Vegas''',  P(truthful) = '''1'''
+</pre>
+{warn}
+'''함정: worst-case 를 Θ(n) 으로 쓰면 오답.''' "n 마리뿐이니 n 번 안에 끝난다"는 복원 추출(with replacement)을 잊은 것이다. `random index` 는 매번 새로 뽑으므로 '''같은 tricky toad 를 영원히 다시 뽑을 수 있다'''. [[bogosort]]·[[랜덤 majority]] 의 worst-case 가 ∞ 인 것과 같은 이유.
+{/warn}
+
+==== Algorithm 2 — for 100 iterations ====
+<pre class="txt">
+반복 ≤ 100,  반복당 Θ(1)  →  어떤 난수가 나와도 비용 ≤ 100·Θ(1)
+expected = worst-case = '''Θ(1)'''                     ← 시간은 완전히 보장됨
+100 번 모두 tricky 일 확률 = (1-p)^100  <  (1/2)^100  ≈  7.9 × 10^-31
+그 경우 toad 0 을 '''확인 없이''' 반환 → toad 0 이 tricky 면 틀린 답 → '''Monte Carlo'''
+P(truthful)  ≥  1 - (1/2)^100
+   "≥" 인 이유 ①  실제 p 는 1/2 보다 크므로 (1-p)^100 은 (1/2)^100 보다 작다
+   "≥" 인 이유 ②  100 번 다 실패해도 toad 0 이 우연히 trustworthy 일 수 있다
+   → 문제가 "tightest bound" 를 요구하므로 등호 없이 '''하한 ≥''' 으로 쓴다
+</pre>
+{tip}
+Monte Carlo 의 전형: '''시간을 자르고(100 회) 못 찾으면 아무거나 반환'''. 틀릴 확률이 $2^{-100}$ 이면 실용적으로는 무시해도 되지만, 분류는 "틀릴 수 있나?" 로만 정하므로 Monte Carlo 다. 100 을 $c$ 로 바꿔도 분류는 그대로이고 실패 확률만 $(1/2)^c$ 로 바뀐다.
+{/tip}
+
+==== Algorithm 3 — shuffle 후 순서대로 ====
+<pre class="txt">
+셔플:  항상 O(n)  (문제가 명시)   ← 난수와 무관하게 '''무조건''' 든다
+스캔:  섞인 순서에서 첫 trustworthy 의 위치 = 성공 확률 > 1/2 인 시도의 첫 성공 → 기대 < 2 번 (비복원이라 더 유리)
+expected = O(n) + Θ(1) = '''Θ(n)'''                   ← 셔플이 지배
+worst-case:  tricky 가 전부 앞에 와도 그 수는 < n/2 → 늦어도 ⌊n/2⌋+1 번째에서 발견 → 스캔 ≤ n
+             O(n) + O(n) = '''Θ(n)'''                   ← 비복원이라 유한! (Alg 1 과의 차이)
+정확성:  trustworthy 가 최소 1 마리는 있으므로 반드시 return, 확인된 것만 return → '''Las Vegas''', P = '''1'''
+</pre>
+{warn}
+'''함정: expected 를 Θ(1) 로 쓰면 오답.''' "스캔은 평균 2 번이면 끝나니까" 까지는 맞지만, 그 앞의 '''셔플 O(n) 이 매번 전부 수행'''된다. expected 는 전체 비용의 기댓값이므로 $O(n) + O(1) = \Theta(n)$. 거꾸로 Alg 3 의 장점은 worst-case 가 유한($\Theta(n)$)이라는 것 — Alg 1 의 ∞ 와 맞바꾼 것이다.
+{/warn}
+
+[[sim:toad_algorithms]]
+
+=== ✍️ 답안 ===
 {answer}
 {|
-! Algorithm || MC / LV || Expected || Worst-case || P(truthful 반환)
+! Algorithm || Monte Carlo / Las Vegas || Expected || Worst-case || P(truthful)
 |-
-| 1 || '''Las Vegas''' || $\Theta(1)$ || $\infty$ (무한) || 1
+| 1 || '''Las Vegas''' || $\Theta(1)$ || $\infty$ (unbounded) || 1
 |-
-| 2 || '''Monte Carlo''' || $\Theta(1)$ || $\Theta(1)$ (100 회) || $\ge 1 - (1/2)^{100}$
+| 2 || '''Monte Carlo''' || $\Theta(1)$ || $\Theta(1)$ (≤ 100 회) || $\ge 1 - (1/2)^{100}$
 |-
 | 3 || '''Las Vegas''' || $\Theta(n)$ || $\Theta(n)$ || 1
 |}
-<pre class="txt">
-전제: trustworthy > n/2 → 무작위 한 마리가 trustworthy 일 확률 p > 1/2  (매 시도 독립)
-'''Alg 1''' 성공 확률 p 인 시도를 성공할 때까지 → 시도 횟수 ~ 기하분포
-        E[시도] = 1/p < 2,  시도당 Θ(1) → 기대 Θ(1)
-        운이 계속 나쁘면 끝없이 반복 가능 → worst-case 무한 (P(k 번 실패) = (1-p)^k > 0)
-        expert 가 확인한 toad 만 반환 → 항상 정답 → Las Vegas, 확률 1
-'''Alg 2''' 반복 ≤ 100 → 기대·최악 모두 Θ(1)
-        100 번 모두 실패할 확률 (1-p)^100 < (1/2)^100 ≈ 7.9 × 10^-31
-        실패하면 확인 안 된 toad 0 반환 → 틀릴 수 있음 → Monte Carlo
-        P(truthful) ≥ 1 - (1/2)^100  (toad 0 이 우연히 trustworthy 일 수도 있어 '''하한''')
-'''Alg 3''' 섞기 O(n) 는 항상 수행 → 기대값도 Ω(n),  스캔의 기대 길이 < 2 (앞에서부터 확인, 절반 넘게 정답)
-        worst: 섞인 순서에서 tricky 가 전부(< n/2 마리) 앞에 와도 n 번 안에 반드시 찾음 → Θ(n)
-        trustworthy 가 최소 1 마리 → 반드시 반환, 확인된 것만 반환 → Las Vegas, 확률 1
-</pre>
+표 아래 근거(알고리즘당 2–3 줄, 위 🔍 의 `txt` 블록을 줄여 쓰면 됨):
+* Alg 1: 성공 확률 $p > 1/2$ 인 시도의 반복 → 기하분포 $E[N] = 1/p < 2$ → $\Theta(1)$. 임의의 k 에 대해 $P(N > k) = (1-p)^k > 0$ 이라 worst-case 상한 없음. 확인된 toad 만 반환하므로 항상 정답(Las Vegas).
+* Alg 2: 반복이 100 으로 고정 → 기대·최악 모두 $\Theta(1)$. 100 번 전부 실패할 확률 $(1-p)^{100} < 2^{-100}$ 이고 그때 확인 안 된 toad 0 을 반환 → 틀릴 수 있음(Monte Carlo). $P \ge 1 - 2^{-100}$ (toad 0 이 우연히 trustworthy 일 수 있고 $p > 1/2$ 라 하한).
+* Alg 3: 셔플 $O(n)$ 이 항상 수행되어 기댓값도 $\Theta(n)$ (스캔 자체의 기대 길이는 < 2). tricky 가 $n/2$ 미만이라 늦어도 $\lfloor n/2 \rfloor + 1$ 번째에 찾음 → worst $\Theta(n)$. 반드시 확인된 toad 를 반환 → Las Vegas, $P = 1$.
 {/answer}
-{tip}여기서 배울 것: 판정 기준은 '''"틀린 답을 낼 수 있는가?"''' 하나 — 확인을 통과한 것만 반환하면 Las Vegas, 시간 제한 후 확인 없이 반환하면 Monte Carlo(L6 p.4, 9/17 "you should distinguish"). Alg 3 의 함정: 스캔은 기대 상수 번이지만 '''셔플 $O(n)$ 이 기대값까지 지배'''한다. Alg 1 의 worst-case 를 "Θ(n)" 으로 쓰면 오답 — 같은 toad 를 다시 뽑을 수 있으므로 상한이 없다.{/tip}
+{tip}여기서 배울 것: 판정 기준은 '''"틀린 답을 낼 수 있는가?"''' 하나 — 확인을 통과한 것만 반환하면 Las Vegas, 시간 제한 후 확인 없이 반환하면 Monte Carlo. 두 함정은 '''Alg 1 worst = Θ(n)'''(복원 추출 망각)과 '''Alg 3 expected = Θ(1)'''(셔플 비용 망각). 이 표 한 장이 L6 전체(두 분류 + 두 시나리오 + 기하분포)의 요약이다.{/tip}
 
 == 문제 4 (20점) — 최대 collinear 집합 ==
-x 좌표·y 좌표가 모두 서로 다른 n 개 점. 같은 직선 위에 있는 점들의 최대 부분집합을 찾는다(해싱 금지, 두 점 → 직선 m, b 는 $O(1)$, 기울기·절편 비교 $O(1)$).
-관련 개념: [[randomized algorithm]] · [[expected running time]] · [[Las Vegas와 Monte Carlo]] · [[기하분포]] · [[mergesort]] · [[randomized worst-case]]
+x 좌표·y 좌표가 모두 서로 다른 n 개 점. 같은 직선 위에 있는 점들의 최대 부분집합을 찾는다. 두 점 → 직선 $(m, b)$ 는 $O(1)$, 기울기·절편 비교 $O(1)$, '''해싱 금지'''.
+관련 개념: [[mergesort]] · [[randomized algorithm]] · [[랜덤 majority]] · [[기하분포]] · [[expected running time]] · [[randomized worst-case]] · [[두 시나리오]] · [[Las Vegas와 Monte Carlo]]
+
+=== 📚 관련 수업 내용 ===
+* '''"같은 값끼리 묶기" 의 두 방법''' — 보통은 hash table 로 $O(n)$ 에 묶지만(L7) 이 문제는 해싱을 금지했다. 그러면 남는 도구는 '''정렬''': [[mergesort]] $O(n \log n)$ 후 같은 값은 연속해 있다(L3). (a) 의 $\log n$ 은 바로 이 정렬 비용이다.
+* '''L6 랜덤 majority 의 틀''' — [[랜덤 majority]]: "무작위로 후보를 뽑고 → $O(n)$ 으로 확인 → 통과하면 반환". 성공 확률이 상수면 기대 시도 수가 상수([[기하분포]] $1/p$) → 기대 $O(n)$. (b) 는 이 틀을 "후보 = 점 두 개" 로 바꾼 것.
+* '''L6 p.5 두 시나리오''' — "worst-case 를 정의하라" 는 [[randomized worst-case]] 를 쓰라는 뜻: 입력이 아니라 '''난수가 최악'''인 경우.
+* '''L6 p.4''' — 반환 조건을 통과한 것만 내놓으면 Las Vegas.
+
 {quiz}
 (a) $O(n^2 \log n)$ 알고리즘을 설계하시오.
-(b) 최대 collinear 집합의 크기가 정확히 n/k (k 는 상수)라는 것을 안다. expected $O(n)$ (= $O(k^2 n)$) randomized 알고리즘을 설계하고, 정확성·기대 시간을 정당화하고, worst-case 시간을 정의·설명하시오.
+(b) 최대 collinear 집합의 크기가 정확히 $n/k$ ($k$ 는 상수)라는 것을 안다. expected $O(n)$ (= $O(k^2 n)$) randomized 알고리즘을 설계하고, 정확성·기대 시간을 정당화하고, worst-case 시간을 정의·설명하시오.
 {/quiz}
 {analogy}
-🎭 '''다트 두 발.''' 과녁판의 1/k 이 "정답 직선" 구역이다. 다트를 두 발 던져 '''둘 다''' 그 구역에 꽂힐 확률은 약 $1/k^2$. 꽂혔는지는 줄자로 한 번 재 보면(O(n) 세기) 확실히 안다. 그러니 평균 $k^2$ 번 던지면 되고, k 가 상수면 상수 번 — 다만 운이 끝없이 나쁘면 영원히 던질 수도 있다.
+🎭 '''다트 두 발.''' 과녁판의 $1/k$ 이 "정답 직선" 구역이다. 다트를 두 발 던져 '''둘 다''' 그 구역에 꽂힐 확률은 약 $1/k^2$. 꽂혔는지는 줄자로 한 번 재 보면($O(n)$ 세기) 확실히 안다. 그러니 평균 $k^2$ 번 던지면 되고, $k$ 가 상수면 상수 번 — 다만 운이 끝없이 나쁘면 영원히 던질 수도 있다.
 {/analogy}
-{answer}
-'''(a) 각 점을 기준으로 기울기 정렬 — $O(n^2 \log n)$'''
+
+=== 🔍 (a) 왜 "한 점 고정 + 기울기 정렬" 이 $O(n^2 \log n)$ 인가 ===
+'''기하 사실 하나.''' 점 $P_i$ 를 지나는 직선은 '''기울기 하나로 유일하게''' 정해진다(같은 점을 지나고 기울기가 같으면 같은 직선). 따라서
+$$P_j, P_l \text{ 이 } P_i \text{ 와 같은 직선 위} \iff \text{slope}(P_i, P_j) = \text{slope}(P_i, P_l)$$
+x 좌표가 모두 다르므로 기울기는 항상 정의된다(수직선 없음) — 문제가 "$x_i \ne x_j$" 를 준 이유.
+
+'''그래서 알고리즘은 "기울기가 같은 것 세기".''' $P_i$ 를 고정하고 나머지 $n-1$ 개로의 기울기를 구한 뒤, '''정렬하면 같은 기울기가 연속''' → 가장 긴 연속 구간(run)의 길이 + 1 (= $P_i$ 자신) 이 "$P_i$ 를 지나는 최대 collinear 집합"의 크기.
+<pre class="txt">
+P_i 하나당:   기울기 n-1 개 계산  O(n)
+              mergesort           O(n log n)      ← 해싱 대신 정렬 (문제 조건)
+              최장 run 스캔       O(n)
+              합계                O(n log n)
+i = 0..n-1 전부:  n × O(n log n) = '''O(n² log n)'''
+정확성:  최대 집합 S* 의 아무 점 P_i 를 처리하는 순간 run = |S*| - 1 이 반드시 잡힌다
+         (S* 의 다른 점들은 전부 P_i 에 대해 같은 기울기)  → 전체 최대값 = |S*|
+</pre>
 <pre class="c">
 def max_collinear(P):                # P: n points, x 좌표 모두 다름
   best = [P[0]]
   for i in range(n):
     S = [(slope(P[i], P[j]), P[j]) for j in range(n) if j != i]   # O(n)
     S = mergesort(S, key=slope)                                    # O(n log n)
-    # 같은 기울기가 연속된 가장 긴 run 찾기                          # O(n)
-    run = longest_equal_slope_run(S)
+    run = longest_equal_slope_run(S)                               # O(n) 한 번 훑기
     if len(run) + 1 > len(best):
       best = [P[i]] + [q for (m, q) in run]
   return best
 </pre>
-* 정확성: 점 $P_i$ 를 지나는 직선은 기울기 하나로 결정된다(같은 점을 지나고 기울기가 같으면 같은 직선). 정렬하면 같은 기울기가 연속하므로 최장 run + 1 = "$P_i$ 를 지나는 최대 collinear 집합". 최대 집합은 어떤 점이든 반드시 포함하므로 모든 i 중 최대가 답.
-* x 가 모두 달라 기울기가 항상 정의된다(수직선 없음). 해싱 없이 '''정렬로 같은 값 묶기'''.
-* 시간: $n \times O(n \log n) = O(n^2 \log n)$.
+{|
+! 변수 || 뜻 || 예제(아래 sim, n = 8)에서의 값
+|-
+| `P[i]` || 고정한 기준점 || i = 0 이면 (1, 2)
+|-
+| `slope(P[i], P[j])` || 두 점의 기울기 $(y_j - y_i)/(x_j - x_i)$ || (1,2)→(2,4): 2, (1,2)→(4,1): −1/3
+|-
+| `S` (정렬 후) || 기울기 오름차순, 같은 기울기 연속 || [−1/3, 1/5, 3/7, 7/6, 2, 2, 2]
+|-
+| `run` || 가장 긴 같은-기울기 구간 || 기울기 2 가 3 개 → run = 3
+|-
+| `best` || 지금까지 최대 집합 || run 3 + P[0] = 4 개 {(1,2),(2,4),(3,6),(5,10)}
+|}
+{tip}'''왜 $n^2$ 밑으로 못 내려가나?''' 어떤 두 점이 같은 직선인지 알려면 결국 쌍 정보를 봐야 하는데 쌍은 $\binom{n}{2}$ 개. 문제도 "$O(n^2)$ 미만은 알려지지 않았다"고 말한다. (a) 가 아끼는 것은 "같은 직선끼리 묶는 비용"뿐 — 정렬로 $\log n$, 해싱이면 $O(1)$ 이라 $O(n^2)$ 까지 간다.{/tip}
 
-'''(b) 랜덤 두 점 — expected $O(k^2 n) = O(n)$, Las Vegas'''
+=== 🔍 (b) 왜 "랜덤 두 점" 이 expected $O(k^2 n)$ 인가 ===
+[[anim:collinear_random_pair|두 발이 모두 정답 직선 위에 꽂힐 때까지: 실패 두 번, 성공 한 번. 오른쪽에 성공 확률 $1/k^2$ → 기대 시도 $k^2$ → 시도당 $O(n)$ 이 차례로 붙는다]]
+
+'''(1) 성공 조건.''' 최대 집합을 $S^*$ ($|S^*| = n/k$) 라 하자. 뽑은 두 점이 '''모두''' $S^*$ 에 속하면 그 두 점이 정하는 직선이 바로 $S^*$ 의 직선이고, 그 위의 점을 세면 $n/k$ 개 → 반환.
+
+'''(2) 성공 확률.'''
+<pre class="txt">
+q = P(두 점 모두 S* 안) = C(n/k, 2) / C(n, 2) = (n/k)(n/k - 1) / (n(n - 1))
+n 이 크면      q ≈ (n/k)² / n² = '''1/k²'''
+엄밀한 하한:   (n/k - 1)/(n - 1) ≥ 1/(2k)   (n ≥ 2k - 1 이면)   →   q ≥ 1/(2k²)
+</pre>
+'''(3) 기대 시도 수.''' 성공 확률 $q$ 인 독립 시도의 반복 → [[기하분포]] → $E[\text{시도}] = 1/q \le 2k^2$. $k$ 는 상수이므로 $O(1)$ 번.
+
+'''(4) 시도당 비용.''' 두 점 뽑기 $O(1)$ + 직선 $(m, b)$ 계산 $O(1)$ + $n$ 개 점을 $y = mx + b$ 에 대입해 세기 $O(n)$ → $O(n)$.
+
+'''(5) 합치면''' expected $= O(k^2) \times O(n) = O(k^2 n) = O(n)$. (힌트의 $O(k^2 n)$ 이 바로 "기대 시도 수 × 시도당 비용".)
+
+'''(6) 정확성 = Las Vegas.''' 반환 조건이 `len(S) == n/k` 이고 $n/k$ 가 최대 크기임을 '''알고 있으므로''' 반환된 집합은 항상 최대 집합이다. 틀린 답을 낼 수 없다 → [[Las Vegas와 Monte Carlo|Las Vegas]]. 최대 집합이 여럿이면 그중 아무거나 — 문제가 "some maximum cardinality set" 이라 허용.
+{info}'''"정확히 $n/k$ 를 안다" 는 가정이 왜 필요한가.''' 최대 크기를 모르면 count 가 얼마가 나와도 "더 큰 직선이 있을지" 알 수 없어 '''언제 멈출지'''를 정할 수 없다. 크기를 알기 때문에 "맞으면 멈춤" 이 가능하고, 그래서 Las Vegas 가 된다. [[랜덤 majority]] 에서 "count > n/2" 로 확인할 수 있었던 것과 같은 역할.{/info}
+
+'''(7) worst-case 정의.''' [[두 시나리오]]의 Scenario 2 — 적이 '''난수까지''' 고른다. 매번 $S^*$ 밖의 쌍(또는 한 점만 안)이 뽑히게 하면 반환 조건이 영원히 안 맞는다. $t$ 번 연속 실패 확률 $(1-q)^t > 0$ 이 모든 $t$ 에 대해 양수이므로 상한이 없다 → '''worst-case = ∞'''. 입력이 나빠서가 아니라 난수가 나쁜 경우라는 점을 답안에 한 줄 적는다([[randomized worst-case]]; [[bogosort]]·[[랜덤 majority]] 와 동일).
 <pre class="c">
 def random_collinear(P, k):
   while True:
-    pick two distinct points p, q uniformly at random
-    m, b = line(p, q)                                  # O(1)
-    S = [r for r in P if r.y == m * r.x + b]           # O(n) 세기
-    if len(S) == n / k:                                # 최대 크기를 알고 있음
+    pick two distinct points p, q uniformly at random      # O(1)
+    m, b = line(p, q)                                      # O(1)
+    S = [r for r in P if r.y == m * r.x + b]               # O(n) 세기
+    if len(S) == n / k:                                    # 최대 크기를 알고 있음
       return S
 </pre>
-<pre class="txt">
-정확성: |S| = n/k 일 때만 반환, n/k 가 최대 크기 → 반환한 S 는 항상 최대 집합  (틀린 답 없음 → Las Vegas)
-성공 확률: 최대 집합 S* (크기 n/k) 에서 두 점을 모두 뽑으면 그 직선 = S* 의 직선
-   q = (n/k)(n/k - 1) / (n(n - 1)) ≈ 1/k^2
-   n ≥ 2k-1 이면 (n/k - 1)/(n - 1) ≥ 1/(2k) → q ≥ 1/(2k^2)
-기대 시도 수 = 1/q ≤ 2k^2  (기하분포),  시도당 O(n)
-→ 기대 시간 O(k^2 n) = O(n)   (k 는 상수)
-worst-case: 매번 S* 밖의 쌍을 뽑을 수 있음 (확률 (1-q)^t > 0) → 상한 없음 = 무한
-</pre>
-'''검산''' (Python, n = 60): $k = 2$ 에서 q = 0.2458 (1/k² = 0.25), $k = 3$ 에서 0.1073 (0.1111), $k = 4$ 에서 0.0593 (0.0625) — $\approx 1/k^2$ 확인.
+
+[[sim:collinear_points]]
+
+=== ✍️ 답안 ===
+{answer}
+'''(a)''' 위 `max_collinear` 의사코드 + 세 줄: ① 점 $P_i$ 를 지나는 직선은 기울기로 유일 → "같은 직선" ⟺ "같은 기울기"(x 가 모두 달라 항상 정의됨). ② 기울기 $n-1$ 개를 mergesort 하면 같은 기울기가 연속 → 최장 run + 1 이 $P_i$ 를 지나는 최대 집합; 최대 집합의 어느 점이든 $P_i$ 로 잡히는 순간 발견. ③ 시간 $n \times (O(n) + O(n \log n) + O(n)) = O(n^2 \log n)$. 해싱 대신 정렬을 쓴 이유를 한 줄.
+
+'''(b)''' 위 `random_collinear` 의사코드 +
+* 정확성: $|S| = n/k$ 일 때만 반환하고 $n/k$ 가 최대 크기이므로 반환된 $S$ 는 항상 최대 집합 → Las Vegas.
+* 기대 시간: $q = \dfrac{(n/k)(n/k-1)}{n(n-1)} \approx \dfrac{1}{k^2}$ ($\ge \dfrac{1}{2k^2}$) → 기하분포로 기대 시도 $\le 2k^2 = O(1)$, 시도당 $O(n)$ → expected $O(k^2 n) = O(n)$.
+* worst-case: 난수가 최악이면(적이 주사위를 고름) 매번 $S^*$ 밖의 쌍 → $(1-q)^t > 0$ for all $t$ → 상한 없음, ∞. 입력이 아니라 randomness 의 worst-case 로 정의.
 {/answer}
-{tip}여기서 배울 것: (b) 는 L6 [[랜덤 majority]] 와 '''같은 틀'''이다 — "무작위로 후보를 뽑고 O(n) 으로 확인, 통과하면 반환". 성공 확률이 상수($1/k^2$)면 기대 시도 수가 상수(기하분포 $1/p$), 그래서 기대 O(n). "worst-case 를 정의하라" 는 '''randomized worst-case''' — 입력이 아니라 난수가 최악일 때(L6 [[두 종류의 worst-case]]).{/tip}
+{tip}여기서 배울 것: (b) 는 [[랜덤 majority]] 와 '''같은 틀'''이다 — "무작위로 후보를 뽑고 $O(n)$ 으로 확인, 통과하면 반환". 성공 확률이 상수($1/k^2$)면 기대 시도 수가 상수(기하분포 $1/p$), 그래서 기대 $O(n)$. 서술형에서 꼭 쓸 세 숫자: '''$q \approx 1/k^2$ · 기대 시도 $k^2$ · 시도당 $O(n)$'''.{/tip}
 
 == 문제 5 (20점) — h_b(x) = (85x + b) mod 13 은 universal 인가 ==
 $h_b(x) = (85x + b) \bmod 13$, $b \in [0, 12]$, 키 universe $U = \{0, 1, \ldots, 29\}$. 버킷은 13 개이므로 universal 이려면 서로 다른 모든 $x \ne y$ 에 대해 $P_b[h_b(x) = h_b(y)] \le 1/13$ 이어야 한다.
-관련 개념: [[universal hash family]] · [[h_{a,b}]] · [[modular arithmetic]] · [[hash collision]] · [[hash family]] · [[소수 p]] · [[결정론적 해시 함수의 한계]]
+관련 개념: [[universal hash family]] · [[h_{a,b}]] · [[hash family]] · [[modular arithmetic]] · [[hash collision]] · [[소수 p]] · [[결정론적 해시 함수의 한계]] · [[해싱 게임]] · [[비둘기집 원리]]
+
+=== 📚 관련 수업 내용 ===
+* '''L7 p.62/64 정의''' — [[universal hash family]]: "for all $u_i \ne u_j$, $P_{h \in H}\{h(u_i) = h(u_j)\} \le 1/n$". 여기서 $n$ = 버킷 수 = 13. 교수 10/1: 이 성질 '''하나만''' 있으면 [[기대 버킷 크기]] $\le 2$ 계산이 그대로 통한다(p.61 "All we needed was that this ≤ 1/n").
+* '''L7 p.68 $h_{a,b}$''' — [[h_{a,b}]]: $h_{a,b}(x) = ((ax + b) \bmod p) \bmod n$, '''$a \in \{1..p-1\}$ 과 $b \in \{0..p-1\}$ 둘 다 무작위'''. p.73 직관: "$a, b$ 가 무작위면 $ax+b$ 와 $ay+b$ 가 독립처럼 행동한다". 이 문제는 $a$ 를 85 로 '''고정'''한 변종 — 그 차이가 답이다.
+* '''L7 p.31–32''' — [[결정론적 해시 함수의 한계]]: 고정된 함수 하나로는 적이 충돌 입력을 고를 수 있다([[비둘기집 원리]]). p.57: '''적은 H 자체를 안다''' — 작기만 한 family 는 소용없다.
+* '''modular arithmetic''' — [[modular arithmetic]]: 소수 $p$ 에서 $\gcd(a, p) = 1$ 이면 $a$ 의 역원이 있어 $a \cdot t \equiv 0 \Rightarrow t \equiv 0 \pmod p$. [[소수 p]] 를 쓰는 이유가 이것.
+
 {quiz}
 (a) 이 hash family 는 universal 인가? Yes/No 와 근거.
 (b) $x < y$ 인 쌍 중 최대 충돌 확률을 달성하는 쌍은 몇 개인가? 최대 충돌 확률은?
-(c) b 를 [0,12] 에서 균등 무작위로 고를 때, 고정된 $x \ne y$ 에 대해 b 의 무작위성이 $P_b[h_b(x) = h_b(y)]$ 를 줄여 주는가? 수학적으로 설명.
+(c) $b$ 를 $[0,12]$ 에서 균등 무작위로 고를 때, 고정된 $x \ne y$ 에 대해 $b$ 의 무작위성이 $P_b[h_b(x) = h_b(y)]$ 를 줄여 주는가? 수학적으로 설명.
 {/quiz}
 {analogy}
-🎭 '''돌림판의 시작 칸만 돌리기.''' 13 칸 돌림판에서 키 x 는 "7x 칸 + b 칸" 위치에 떨어진다. b 를 무작위로 돌리면 '''모든 키가 똑같이 b 칸씩 밀릴 뿐''' 두 키 사이 간격 $7(x-y)$ 는 그대로다. 처음부터 같은 칸이던 두 키(13 차이 나는 키)는 b 를 몇 번 돌려도 같은 칸 — 섞이는 건 위치이지 '''간격'''이 아니다.
+🎭 '''돌림판의 시작 칸만 돌리기.''' 13 칸 돌림판에서 키 $x$ 는 "$7x$ 칸 + $b$ 칸" 위치에 떨어진다. $b$ 를 무작위로 돌리면 '''모든 키가 똑같이 $b$ 칸씩 밀릴 뿐''' 두 키 사이 간격 $7(x-y)$ 는 그대로다. 처음부터 같은 칸이던 두 키(13 차이 나는 키)는 $b$ 를 몇 번 돌려도 같은 칸 — 섞이는 건 위치이지 '''간격'''이 아니다.
 {/analogy}
+
+=== 🔍 왜 이 답이 나오는가 ===
+[[anim:hb_shift_only|b 가 0→1→2→3 으로 바뀔 때 13 칸 위의 키들이 전부 같이 밀리는 것을 본다. 간격이 안 변하니 같은 칸이던 0·13·26 은 끝까지 같은 칸 — 그래서 universal 이 아니다]]
+
+'''1단계 — 85 를 먼저 줄인다.''' $85 = 6 \cdot 13 + 7$ 이므로 $85x \equiv 7x \pmod{13}$. 즉 $h_b(x) = (7x + b) \bmod 13$. (85 를 그대로 두고 계산하면 틀리진 않지만 구조가 안 보인다.)
+
+'''2단계 — 충돌 조건을 식으로 푼다.''' 이것이 universal 판정의 표준 절차: "충돌 조건을 풀어서 '''무작위 변수가 남는지''' 본다."
+<pre class="txt">
+h_b(x) = h_b(y)
+⟺ 7x + b ≡ 7y + b   (mod 13)
+⟺ 7(x - y) ≡ 0      (mod 13)        ← '''b 가 양변에서 소거된다'''
+⟺ x - y ≡ 0         (mod 13)        ← 13 은 소수, gcd(7,13) = 1, 7 의 역원 2 (7·2 = 14 ≡ 1) 를 양변에 곱함
+⟺ x ≡ y             (mod 13)
+</pre>
+결론: '''충돌 여부가 $b$ 와 무관하다.''' $x \equiv y \pmod{13}$ 이면 13 개의 $b$ 전부에서 충돌(확률 1), 아니면 어떤 $b$ 에서도 충돌하지 않음(확률 0). 중간값 $1/13$ 같은 건 나오지 않는다.
+{info}'''"7 의 역원" 줄이 왜 필요한가.''' $7t \equiv 0 \pmod{13}$ 에서 $t \equiv 0$ 을 끌어내려면 7 로 "나눌" 수 있어야 하는데, 그건 $\gcd(7, 13) = 1$ 일 때만 된다. 만약 법이 14 였다면 $7t \equiv 0 \pmod{14}$ 는 "$t$ 가 짝수" 라서 결론이 달라진다. 슬라이드가 [[소수 p]] 를 고르는 이유와 같다.{/info}
+
+'''3단계 — (a) 반례 하나로 끝.''' $x = 0, y = 13$: $h_b(0) = b$, $h_b(13) = (91 + b) \bmod 13 = b$ (∵ $91 = 7 \cdot 13$). 모든 $b$ 에서 같다 → $P_b = 1 > 1/13$ → '''universal 아님'''. (정의가 "모든 쌍" 을 요구하므로 깨지는 쌍 하나면 충분.)
+
+'''4단계 — (b) 최대 충돌 확률 1 인 쌍 세기 = 같은 잉여류 쌍 세기.''' $U = \{0..29\}$ 를 mod 13 으로 묶는다.
+{|
+! 잉여 $r$ || $U$ 의 원소 || 개수 || 쌍 수 $\binom{s}{2}$
+|-
+| 0 || {0, 13, 26} || 3 || 3
+|-
+| 1 || {1, 14, 27} || 3 || 3
+|-
+| 2 || {2, 15, 28} || 3 || 3
+|-
+| 3 || {3, 16, 29} || 3 || 3
+|-
+| 4 … 12 (9 개 류) || {4, 17}, {5, 18}, …, {12, 25} || 2 씩 || 1 씩 → 9
+|-
+| '''합계''' || 30 개 || || '''21 쌍'''
+|}
+30 = 13 × 2 + 4 이므로 잉여 0..3 만 세 번째 원소(26, 27, 28, 29)를 갖는다. 나머지 $\binom{30}{2} - 21 = 435 - 21 = 414$ 쌍은 충돌 확률 0.
+{warn}세는 것은 '''$x < y$ 인 순서 없는 쌍'''이다(문제 조건). $(0,13)$ 과 $(13,0)$ 을 둘 다 세면 42 가 되어 오답. 또 "최대 충돌 확률" 은 $1/13$ 이 아니라 '''1''' — 어떤 쌍도 $1/13$ 로 충돌하지 않는다(0 아니면 1).{/warn}
+
+'''5단계 — (c) $b$ 가 왜 도움이 안 되나, 식으로.'''
+<pre class="txt">
+P_b[h_b(x) = h_b(y)] = (1/13) · |{ b ∈ {0..12} : 7(x - y) ≡ 0 (mod 13) }|
+                     = (1/13) · 13 = 1     (x ≡ y mod 13:  조건이 b 를 포함하지 않으므로 13 개 b 전부 만족)
+                     = (1/13) · 0  = 0     (아니면:  어떤 b 도 만족하지 않음)
+두 해시값의 '''차'''  h_b(x) - h_b(y) ≡ 7(x - y)  (mod 13)   ← b 가 없다
+→ b 는 두 값을 똑같이 평행이동할 뿐, 충돌을 결정하는 "차" 를 못 건드린다 → 무작위성의 기여 = 0
+</pre>
+'''슬라이드의 [[h_{a,b}]] 와 비교.''' $h_{a,b}$ 에서는 차가 $a(x - y) \bmod p$ 이고 '''$a$ 가 무작위'''라 이 차가 $p-1$ 가지 값을 고르게 돌아다닌다 → mod $n$ 뒤 같은 칸일 확률 $\le 1/n$. 이 문제는 $a = 85$ 로 고정했으므로 $H = \{h_0, \ldots, h_{12}\}$ 는 사실상 '''결정론적 함수 $7x \bmod 13$ 하나를 13 가지로 평행이동한 것''' — p.31 "You cannot escape the dark side with deterministic hash functions". 적이 $H$ 를 아는 상황(p.57)에서 $\{0, 13, 26, \ldots\}$ 같은 입력을 주면 어떤 $b$ 를 뽑아도 한 버킷에 몰린다.
+
+[[sim:hb_mod13_check]]
+
+=== ✍️ 답안 ===
 {answer}
 <pre class="txt">
-85 = 6·13 + 7  → 85 mod 13 = 7  → h_b(x) = (7x + b) mod 13
-충돌 조건:  h_b(x) = h_b(y)
-  ⟺ 7x + b ≡ 7y + b (mod 13)
-  ⟺ 7(x - y) ≡ 0 (mod 13)            ← b 는 양변에서 소거
-  ⟺ x ≡ y (mod 13)                   ← 13 은 소수, gcd(7, 13) = 1 → 7 의 역원(2, 7·2 = 14 ≡ 1) 을 곱함
-→ 충돌 여부가 b 와 무관: x ≡ y (mod 13) 이면 모든 b 에서 충돌 (확률 1), 아니면 어떤 b 에서도 충돌 안 함 (확률 0)
+공통:  85 mod 13 = 7  →  h_b(x) = (7x + b) mod 13
+       h_b(x) = h_b(y) ⟺ 7(x−y) ≡ 0 (mod 13) ⟺ x ≡ y (mod 13)      (b 소거, gcd(7,13)=1)
 
-'''(a) No.'''  예: x = 0, y = 13 → 모든 b 에서 h_b(0) = h_b(13) = b → P = 1 > 1/13
+'''(a) No.'''  x = 0, y = 13 이면 모든 b 에서 h_b(0) = h_b(13) = b → P_b = 1 > 1/13.  정의 위반.
 
-'''(b)''' U = {0..29} 를 mod 13 잉여류로 나누면
-  잉여 0,1,2,3 : {0,13,26} {1,14,27} {2,15,28} {3,16,29}  → 각 3 개 → C(3,2) = 3 쌍 × 4 = 12
-  잉여 4..12   : {4,17} … {12,25}                        → 각 2 개 → 1 쌍 × 9   =  9
-  최대 충돌 확률 '''1''' 을 달성하는 쌍 = '''21 쌍'''  (나머지 435 - 21 = 414 쌍은 확률 0)
+'''(b)'''  충돌 확률은 x ≡ y (mod 13) 이면 1, 아니면 0 → 최대 충돌 확률 = '''1'''.
+       달성 쌍 = 같은 잉여류 쌍:  잉여 0,1,2,3 은 3 개씩 → C(3,2)×4 = 12,  잉여 4..12 는 2 개씩 → 9  →  '''21 쌍'''.
+       (나머지 414 쌍은 확률 0)
 
-'''(c) 아니다.'''  P_b[h_b(x) = h_b(y)] = (1/13)·|{b : 7(x-y) ≡ 0 mod 13}|
-  = 1 (x ≡ y mod 13 이면 13 개 b 전부)  또는  0 (아니면 b 하나도 없음)
-  b 는 두 값에 똑같이 더해져 차 h_b(x) - h_b(y) ≡ 7(x - y) 를 바꾸지 못함 → 무작위성이 충돌 확률에 기여 0
+'''(c) 아니다.'''  P_b[h_b(x)=h_b(y)] = (1/13)·|{b : 7(x−y) ≡ 0 (mod 13)}| 인데 조건에 b 가 없다
+       → x ≡ y 면 13/13 = 1, 아니면 0/13 = 0.  b 는 h_b(x) − h_b(y) ≡ 7(x−y) 라는 차를 바꾸지 못한다(평행이동).
+       슬라이드의 h_{a,b} 는 a 가 무작위라 차 a(x−y) 가 흩어져 ≤ 1/n 이 된다 — 여기선 a = 85 고정이라 사실상 결정론적 해시 하나.
 </pre>
 '''검산''' (Python, 435 쌍 × b 13 개 전수): `85 % 13 = 7`, 최대 충돌 확률 `1.0`, 그 쌍 수 `21`, 충돌 확률 값은 `{0.0, 1.0}` 두 가지뿐 → universal 아님.
-
-'''슬라이드의 [[h_{a,b}]] 와 비교''': L7 p.68 의 $h_{a,b}(x) = ((ax + b) \bmod p) \bmod n$ 은 '''a 도 무작위'''로 뽑는다. 충돌 여부를 정하는 것은 차 $a(x - y)$ 인데, a 가 무작위면 이 차가 mod p 에서 고르게 흩어져 충돌 확률이 $\le 1/n$ 이 된다. 이 문제는 a 를 85 로 '''고정'''하고 b 만 무작위로 뽑으니, 사실상 '''결정론적 해시 함수 하나'''($7x \bmod 13$)를 평행이동한 것뿐이다 — "You cannot escape the dark side with deterministic hash functions"(L7 p.31). 또 $U$ 의 크기 30 > 13 이라 [[비둘기집 원리]]로 같은 잉여류 키가 반드시 생긴다.
 {/answer}
-{tip}여기서 배울 것: universal 판정은 '''"충돌 조건을 식으로 풀어서 무작위 변수가 남는지 본다"'''. b 처럼 '''양쪽에 똑같이 더해지는''' 무작위성은 차를 못 바꾸므로 소거된다. universal 이 되려면 무작위성이 '''차에 곱해지는 위치(a)'''에 있어야 한다.{/tip}
+{tip}여기서 배울 것: universal 판정은 '''"충돌 조건을 식으로 풀어서 무작위 변수가 남는지 본다"'''. $b$ 처럼 '''양쪽에 똑같이 더해지는''' 무작위성은 차에서 소거된다. universal 이 되려면 무작위성이 '''차에 곱해지는 자리($a$)'''에 있어야 한다. 자주 하는 실수: ① "b 가 무작위니까 Yes" ② 85 를 7 로 안 줄여 구조를 못 봄 ③ 순서쌍으로 42 를 셈 ④ 최대 확률을 1/13 이라 씀.{/tip}
 
 {exam}
 HW2 에서 시험으로 이어질 가능성이 큰 기술: ① radix sort 손 실행에서 '''stable 이 결과를 바꾸는 지점'''(같은 키 순서 유지) ② bucket 을 "가까운 값 묶기" 로 쓰는 pigeonhole 논증 ③ '''"틀릴 수 있나?" 로 Las Vegas / Monte Carlo 판정''', 셔플 비용이 기대값을 지배하는 경우 ④ 성공 확률 p 인 반복 → 기대 $1/p$ 회(기하분포) ⑤ 충돌 조건을 mod 식으로 풀어 universal 판정.
