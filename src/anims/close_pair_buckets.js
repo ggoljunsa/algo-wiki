@@ -62,6 +62,8 @@ ANIMS["close_pair_buckets"] = {
     s += '<line x1="584" y1="' + LY + '" x2="724" y2="' + LY + '" stroke="#555" stroke-width="1.5" stroke-dasharray="5 4"/>';
     s += txt(616, LY + 18, "…500", 10, C.muted) + txt(698, LY + 18, "…5000", 10, C.muted);
     s += txt(52, 60, "T = 2", 14, C.or, ' font-weight="700"');
+    // 버킷 번호 공식 — 2s 부터 끝까지 고정 표시 (왜 5 가 i=2 인지)
+    s += vis(2, D, txt(380, 262, "i = ⌊x / T⌋   예) 5 → ⌊5/2⌋ = 2,  10 → ⌊10/2⌋ = 5,  26 → 13", 12, C.or, ' font-weight="700"'));
 
     // ---- 폭 T 격자 (2s 부터) ----
     var g = "";
