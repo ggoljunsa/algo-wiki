@@ -45,7 +45,10 @@ BST 의 SEARCH / INSERT / DELETE = O(height)          (p.24, p.60 "As with gener
 {/analogy}
 
 {exam}
-슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언 p.39: "You are not responsible for the details for this class – but you should understand the main ideas." p.59: "You are not responsible for the nitty-gritty details of Red-Black Trees… You should know: What are the properties of an RB tree? And '''(more important) why does that guarantee that they are balanced?'''" — '''이 문서가 그 "more important" 의 답이다.''' 서술형 대비로 ①(Claim), ②(b(root) ≥ height/2, 규칙 ④ 때문), ⑥(정리) 세 줄과 각 줄의 이유를 쓸 수 있게 할 것.
+슬라이드 기준. 교수 선언 p.39: "You are not responsible for the details for this class – but you should understand the main ideas." p.59: "You are not responsible for the nitty-gritty details of Red-Black Trees… You should know: What are the properties of an RB tree? And '''(more important) why does that guarantee that they are balanced?'''" — '''이 문서가 그 "more important" 의 답이다.''' 서술형 대비로 ①(Claim), ②(b(root) ≥ height/2, 규칙 ④ 때문), ⑥(정리) 세 줄과 각 줄의 이유를 쓸 수 있게 할 것.
+{/exam}
+{exam}
+⭐⭐⭐ 교수(10/6): 직관 — "'''try to make a red-black tree as tall as possible'''" → red 로 번갈아 패딩해도 한 경로는 다른 경로의 "'''at most two times'''". 형식 — $n \ge 2^{b(\text{root})} - 1 \ge 2^{\text{height}/2} - 1$, "rearranging and take the log" → $\text{height} \le 2\log(n+1)$. 범위 선언: "you should remember the property of red-black tree '''and how to guarantee the height'''" — 이 증명이 출제 핵심.
 {/exam}
 
 {quiz}

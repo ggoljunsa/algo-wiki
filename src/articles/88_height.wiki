@@ -45,7 +45,7 @@ h ≥ log₂(n+1)
 [[red-black tree]] 는 이 최솟값의 '''2배 이내'''를 보장한다: $\text{height} \le 2\log(n+1)$ (p.37). 핵심은 [[black height b(x)]] 와 [[2^b(x) − 1 claim]].
 
 {exam}
-(L8 은 아직 수업 전 — 슬라이드 강조 기준) "모든 연산 = $O(\text{height})$, height 는 $\log n$ 일 수도 $n$ 일 수도 있다" 가 BST → self-balancing BST 로 넘어가는 이유다. RB tree 의 결론 $\text{height} \le 2\log(n+1)$ 은 교수가 "you should know … why does that guarantee that they are balanced?"(p.59) 라고 한 바로 그 내용.
+(슬라이드 강조 기준) "모든 연산 = $O(\text{height})$, height 는 $\log n$ 일 수도 $n$ 일 수도 있다" 가 BST → self-balancing BST 로 넘어가는 이유다. RB tree 의 결론 $\text{height} \le 2\log(n+1)$ 은 교수가 "you should know … why does that guarantee that they are balanced?"(p.59) 라고 한 바로 그 내용.
 {/exam}
 
 == 관련 문서 ==

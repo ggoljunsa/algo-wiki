@@ -64,7 +64,10 @@ BST 를 삽입으로 만드는 것은 첫 키를 [[pivot]] 으로 골라 나머�
 {/warn}
 
 {exam}
-(L8 은 아직 수업 전 — 슬라이드 강조 기준) "어떤 삽입 순서가 depth n 을 만드는가?" → 정렬된 순서(2,3,4,5,6,7,8), 역순도 마찬가지. 이 문제를 고치려는 것이 [[self-balancing BST]] 이고, p.26 의 Idea 0(너무 높아지면 처음부터 재구성)은 "$\Omega(n)$ every so often" 이라 기각된다.
+(슬라이드 강조 기준) "어떤 삽입 순서가 depth n 을 만드는가?" → 정렬된 순서(2,3,4,5,6,7,8), 역순도 마찬가지. 이 문제를 고치려는 것이 [[self-balancing BST]] 이고, p.26 의 Idea 0(너무 높아지면 처음부터 재구성)은 "$\Omega(n)$ every so often" 이라 기각된다.
+{/exam}
+{exam}
+교수(10/6): 지난 시간 복습 — "look at this tree, all the right descendants have larger keys, so '''it is a valid binary search tree''', but its depth is '''O(n)''', so we cannot achieve log n worst-case running time with this shape." BST 의 모든 연산은 search 하나로 결정되고 search 는 height 로 결정되기 때문.
 {/exam}
 
 == 관련 문서 ==

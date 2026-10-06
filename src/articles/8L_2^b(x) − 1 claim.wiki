@@ -43,7 +43,10 @@ $2^{b} - 1$ 은 '''높이가 b − 1 인 완전 이진 트리의 노드 수'''($
 {/analogy}
 
 {exam}
-슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And '''(more important) why does that guarantee that they are balanced?'''" — 그 "why" 의 첫 단계가 이 Claim 이다. 슬라이드는 증명을 생략했으니 inductive step 의 핵심 한 줄 "자식의 black height ≥ b(x) − 1 → $1 + 2(2^{b(x)-1} - 1) = 2^{b(x)} - 1$" 을 쓸 수 있으면 충분하다.
+슬라이드 기준. 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And '''(more important) why does that guarantee that they are balanced?'''" — 그 "why" 의 첫 단계가 이 Claim 이다. 슬라이드는 증명을 생략했으니 inductive step 의 핵심 한 줄 "자식의 black height ≥ b(x) − 1 → $1 + 2(2^{b(x)-1} - 1) = 2^{b(x)} - 1$" 을 쓸 수 있으면 충분하다.
+{/exam}
+{exam}
+교수(10/6): "There are at least $2^{b(x)} - 1$ non-NIL nodes in the subtree underneath x, '''including x''' — prove by '''mathematical induction'''." base case 는 trivial, inductive step: $N(x) = 1 + N(x.\text{left}) + N(x.\text{right}) \ge 1 + 2(2^{b(x)-1} - 1) = 2^{b(x)} - 1$. 그 다음 x = root 로 놓아 $n \ge 2^{b(\text{root})} - 1$.
 {/exam}
 
 {quiz}

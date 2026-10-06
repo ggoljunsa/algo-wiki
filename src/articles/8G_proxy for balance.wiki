@@ -33,7 +33,10 @@ red-black tree 에서 (a) 는 "black 노드는 균형"(규칙 ⑤) + "red 는 �
 {/analogy}
 
 {exam}
-슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" — 이 '''"why"''' 가 바로 proxy 의 조건 (a) 다. "proxy for balance 의 두 조건" 을 말할 수 있으면 RB 단원 서술형의 첫 문장이 된다.
+슬라이드 기준. 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" — 이 '''"why"''' 가 바로 proxy 의 조건 (a) 다. "proxy for balance 의 두 조건" 을 말할 수 있으면 RB 단원 서술형의 첫 문장이 된다.
+{/exam}
+{exam}
+교수(10/6): "'''Maintaining perfect balance is difficult or time-consuming.''' Instead, maintain '''some property as a proxy for balance''' — if the tree satisfies some property, then we say it's pretty balanced." red-black tree 에서 그 property 가 규칙 5가지이고, "black node provides balance structure, red node allows flexibility".
 {/exam}
 
 == 관련 문서 ==

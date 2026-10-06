@@ -32,7 +32,7 @@ p.33 예: 5B(3R(2B,4B), 7R(6B,8B)) 의 맨 아래 NIL 8개를 그려 넣으면
 {/analogy}
 
 {exam}
-슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" — 규칙 ③ 은 그 properties 중 하나. b(x) 를 셀 때 '''NIL 은 포함, x 는 제외''' 를 헷갈리지 말 것.
+슬라이드 기준. 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" — 규칙 ③ 은 그 properties 중 하나. b(x) 를 셀 때 '''NIL 은 포함, x 는 제외''' 를 헷갈리지 말 것.
 {/exam}
 
 == 관련 문서 ==

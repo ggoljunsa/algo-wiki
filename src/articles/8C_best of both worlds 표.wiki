@@ -56,7 +56,7 @@ p.9 의 열 이름은 "Binary Search Trees'''*'''"(별표, TODAY!), p.61 은 "''
 hash table 은 평균은 더 빠르지만 '''expected''' 이고 worst-case 는 $O(n)$ 이다. balanced BST 는 조금 느린 대신 '''worst-case''' $O(\log n)$ 을 보장하고, 키의 대소 순서를 유지하므로 MIN/MAX, [[immediate successor]], 범위 질의(“3 이상 7 이하 전부”)를 할 수 있다 — hash table 로는 못 하는 일.
 
 {exam}
-(L8 은 아직 수업 전 — 슬라이드 강조 기준) 첫 장과 마지막 장에 같은 표가 나오므로 L8 의 결론 그 자체다. 표의 여섯 칸을 근거와 함께 채울 수 있어야 하고, "linked list $O(1)$ 의 가정"과 "BST 는 balanced 여야 $O(\log n)$" 두 단서를 빠뜨리지 말 것.
+(슬라이드 강조 기준) 첫 장과 마지막 장에 같은 표가 나오므로 L8 의 결론 그 자체다. 표의 여섯 칸을 근거와 함께 채울 수 있어야 하고, "linked list $O(1)$ 의 가정"과 "BST 는 balanced 여야 $O(\log n)$" 두 단서를 빠뜨리지 말 것.
 {/exam}
 
 == 관련 문서 ==

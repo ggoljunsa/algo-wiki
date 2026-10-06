@@ -74,7 +74,10 @@ rotation 은 else 갈래에서 한 번 하고 끝나므로 삽입 전체에서 �
 {/analogy}
 
 {exam}
-슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" — recolor 의 줄 단위 세부보다 "'''부모 black → 끝 / uncle red → flip 후 위로 / uncle black → yoink'''" 세 갈래와 왜 $O(\log n)$ 인지(두 층씩 올라감)를 말할 수 있으면 된다.
+슬라이드 기준. 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" — recolor 의 줄 단위 세부보다 "'''부모 black → 끝 / uncle red → flip 후 위로 / uncle black → yoink'''" 세 갈래와 왜 $O(\log n)$ 인지(두 층씩 올라감)를 말할 수 있으면 된다.
+{/exam}
+{exam}
+교수(10/6): "The first if condition is case 1, the second is case 2, and else is case 3." case 2 는 색 flip 후 "'''check recursively the recoloring function based on the grandparent again'''", case 3 은 색 교환 + right rotation. 한 번은 $O(1)$, "how many times it recursively calls? '''At most the height'''" → $O(\log n)$.
 {/exam}
 
 {quiz}

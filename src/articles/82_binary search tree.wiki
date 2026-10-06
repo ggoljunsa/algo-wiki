@@ -61,7 +61,7 @@ p.15 의 질문: 이 값들로 만들 수 있는 BST 는 이것 하나뿐인가?
 [[sim:bst_ops]]
 
 {exam}
-(L8 은 아직 수업 전 — 아래는 슬라이드 강조 기준) 정의 문장의 '''descendant''' (p.17 에서 굵게 다시 강조), p.15 "BST 는 유일하지 않다", 모든 연산이 $O(\text{height})$ 이라 '''균형이 전부'''라는 흐름이 L8 전체의 뼈대다. 이 문제를 해결하는 것이 [[self-balancing BST]] → [[red-black tree]].
+(슬라이드 강조 기준) 정의 문장의 '''descendant''' (p.17 에서 굵게 다시 강조), p.15 "BST 는 유일하지 않다", 모든 연산이 $O(\text{height})$ 이라 '''균형이 전부'''라는 흐름이 L8 전체의 뼈대다. 이 문제를 해결하는 것이 [[self-balancing BST]] → [[red-black tree]].
 {/exam}
 
 == 관련 문서 ==

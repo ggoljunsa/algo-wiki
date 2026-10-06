@@ -61,7 +61,10 @@ L8 p.33 "Red-Black Trees — these rules are the proxy for balance"
 |}
 
 {exam}
-슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: '''What are the properties of an RB tree?''' And (more important) why does that guarantee that they are balanced?" → 이 문서가 첫 번째 질문의 답이다. 다섯 줄을 '''영어 원문으로''' 쓰고, p.34 같은 그림을 보고 어긴 규칙 번호를 댈 수 있을 것.
+슬라이드 기준. 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: '''What are the properties of an RB tree?''' And (more important) why does that guarantee that they are balanced?" → 이 문서가 첫 번째 질문의 답이다. 다섯 줄을 '''영어 원문으로''' 쓰고, p.34 같은 그림을 보고 어긴 규칙 번호를 댈 수 있을 것.
+{/exam}
+{exam}
+교수(10/6): 다섯 규칙을 원문 순서대로 읽고(① red or black ② root black ③ NIL black ④ red 의 자식은 black ⑤ 모든 x 에서 x→NIL 모든 경로의 black 수 동일), 예제 4개 중 '''유효한 것은 1번 하나'''(2번 root red → 규칙 2, 3번 red 연속 → 규칙 4, 4번 black 3 vs 2 → 규칙 5). "'''You should be able to tell which rule is violated.'''" 역할: "black node provides balance structure(규칙 5), red node allows flexibility" 그러나 규칙 4 로 제한.
 {/exam}
 
 {quiz}

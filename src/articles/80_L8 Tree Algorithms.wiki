@@ -10,7 +10,8 @@ category: 8강 Tree, 메인
 * ② '''Is it fast?''' — BST 의 모든 연산은 [[O(height)]] 다. 그런데 height 는 $n$ 까지 커질 수 있다([[편향 트리]]). red-black tree 는 '''height $\le 2\log(n+1)$''' 을 보장하므로([[height ≤ 2 log(n+1) 증명]]) 모든 연산이 $O(\log n)$.
 
 * 교재: [[CLRS]] '''12.1, 12.2, 12.3 과 13''' (p.3) → [[CLRS 12와 13]].
-* '''슬라이드만 게시됨(2026-10-04), 아직 수업 전 — 녹음 없음.''' 아래 `{exam}` 은 슬라이드 ⭐ 기준이며 수업 후 갱신.
+* 진도: '''10/1(목, 녹음 없음)''' 수업에서 L7 후반 + BST 기본(p.1–26 추정), '''10/6(화)''' 수업에서 [[rotation]](p.27)부터 삽입 case·코드(p.57)까지, 삭제(p.58–)는 생략. 녹음 `1006_13_컴알_L8_RedBlack.txt`. `{exam}` 중 "교수(10/6)" 로 시작하는 것은 녹음 기준, "(슬라이드 ⭐)" 는 슬라이드 기준.
+* 공지(10/6): '''중간고사 10/15(목) 13:00, 수업 강의실, 범위 L1–L8(tree algorithms 까지)''' → [[시험 정보]].
 * 페이지 번호는 슬라이드에 인쇄된 번호 p.N 이다. L8 은 '''PNG 번호 = 인쇄 번호''', 숨긴 슬라이드 없음 (p.38 은 빈 흰 페이지, p.1·19·27·56·57·62 는 번호가 인쇄되지 않았을 뿐 같은 순서). 예: p.33 규칙 5가지 → `L8-33.png`.
 * "For today all keys are distinct." (p.10) — L1 의 [[distinct 가정]] 과 같은 단순화.
 
@@ -34,6 +35,9 @@ p.6–8 은 key 가 붙은 node 를 저장하는 두 가지 익숙한 방법을 
 | Insert/Delete || $O(n)$ || $O(1)$ || $O(\log n)$
 |}
 p.9 의 별표(*)가 L8 의 줄거리 전체다 — BST 가 $O(\log n)$ 인 건 '''균형이 잡혀 있을 때만'''이다(⑤ 절). 결론 슬라이드 p.61 에서 같은 표가 "Balanced Binary Search Trees" 로 이름이 바뀌어 다시 나온다 → [[best of both worlds 표]].
+{exam}
+교수(10/6) 도입: [[hash table]] 은 "'''O(1) expected running time, but the worst case was O(n)'''" — [[self-balancing BST]] 로는 '''worst-case $O(\log n)$''' INSERT/DELETE/SEARCH 를 얻는다. 지난 시간 복습: "all the search/insert/delete operations are '''determined by the one search operation's running time'''", 그리고 search 의 running time 은 '''height''' 로 결정된다. 그런데 [[편향 트리]]도 valid BST 이고 depth 가 $O(n)$ 이라 "we cannot achieve log n worst-case running time with this shape".
+{/exam}
 
 == ② Binary tree 용어 (p.10) ==
 [[img:L8-10.png|p.10 — Binary tree terminology: node·key(7), root(5), left/right child(3 의 2, 4), descendant(2 는 5 의), leaves(1, 4, 8), NIL(1 의 두 자식)|medium]]
@@ -136,7 +140,7 @@ p.23 의 문답 네 개(그대로 외울 것):
 [[img:L8-24.png|p.24 — SEARCH is the big one; Time = O(height of tree); "Trees have depth O(log(n)). Done!"|medium]]
 p.24: "SEARCH is the big one. Everything else just calls SEARCH and then does some small O(1)-time operation." → '''Time = [[O(height)]]''' (height of tree = 가장 긴 root→leaf 경로의 길이, [[height]]). 그리고 "Trees have depth $O(\log n)$. Done!" — 라고 하고 싶지만…
 {exam}
-(슬라이드 ⭐, 수업 전) '''"Everything is O(height)"''' — SEARCH 가 $O(\text{height})$, INSERT·DELETE 는 SEARCH + $O(1)$ 이라 역시 $O(\text{height})$. L8 의 모든 논증(편향 트리가 왜 나쁜가, red-black tree 가 왜 좋은가)이 이 한 줄에서 출발한다 → [[O(height)]].
+(슬라이드 ⭐) '''"Everything is O(height)"''' — SEARCH 가 $O(\text{height})$, INSERT·DELETE 는 SEARCH + $O(1)$ 이라 역시 $O(\text{height})$. L8 의 모든 논증(편향 트리가 왜 나쁜가, red-black tree 가 왜 좋은가)이 이 한 줄에서 출발한다 → [[O(height)]].
 {/exam}
 [[img:L8-25.png|p.25 — Wait... 2,3,4,5,6,7,8 순서로 넣으면 오른쪽으로만 자라는 사슬. n 개 node 면 depth n, not O(log n). So this could happen.|medium]]
 p.25 "Wait…": 2-3-4-5-6-7-8 사슬도 '''valid BST''' 다. "The version with n nodes has depth n, '''not''' $O(\log n)$." Could such a tree show up? → "'''Inserting in the order 2,3,4,5,6,7,8 would do it.''' So this ''could'' happen." → [[편향 트리]]
@@ -151,9 +155,12 @@ INSERT 8 : 비교 6번 → 7.right
 같은 키를 5,3,7,2,4,8,1 순서로 넣으면 height 3 (p.10 트리)
 </pre>
 {exam}
-(슬라이드 ⭐, 수업 전) p.25: '''정렬된 순서(2,3,4,5,6,7,8)로 삽입하면 depth n 인 [[편향 트리]]''' 가 생긴다 → 연산이 $O(n)$. "트리는 depth $O(\log n)$" 은 공짜가 아니다. [[quicksort]] 에서 매번 최솟값을 pivot 으로 고르는 것과 같은 상황([[BST와 quicksort]]).
+(슬라이드 ⭐) p.25: '''정렬된 순서(2,3,4,5,6,7,8)로 삽입하면 depth n 인 [[편향 트리]]''' 가 생긴다 → 연산이 $O(n)$. "트리는 depth $O(\log n)$" 은 공짜가 아니다. [[quicksort]] 에서 매번 최솟값을 pivot 으로 고르는 것과 같은 상황([[BST와 quicksort]]).
 {/exam}
 p.26 "What to do?": Goal 은 빠른 SEARCH/INSERT/DELETE, 모든 연산은 $O(\text{height})$, "And the height might be big!!!". '''Idea 0''': 트리 깊이를 추적하다 너무 깊어지면 처음부터 다시 만든다 — 그러면 "every so often" 마다 $\Omega(n)$, 그런데 worst-case 에서 "every so often" 은 "'''actually pretty often'''" → 좋은 생각이 아니다.
+{exam}
+교수(10/6): Idea 0(깊어지면 처음부터 재구축) — "'''every time we do reconstruction, it requires at least Ω(n)''', because we need to revisit every item one time. So '''it's not a good idea'''." → 그래서 [[self-balancing BST]] 로 간다.
+{/exam}
 
 == ⑥ Self-balancing: rotation (p.27–30) ==
 [[self-balancing BST]]: 삽입·삭제 때마다 '''스스로''' 균형을 조금씩 고치는 BST.
@@ -174,6 +181,9 @@ BST property 확인:  A < Y < B < X < C   (회전 전후 모두 이 순서 그�
 [[anim:rotation_yoink|p.28 그대로 — 손이 Y 를 YOINK 해서 잠깐 자식이 셋("That's not binary!!")이 되었다가 B 가 X 쪽으로 떨어져 Y(A, X(B,C)). 이어서 p.29 의 3 → 5 회전 예]]
 p.29 "This seems helpful": 3(2, 5(4, 7(6, 8))) 에서 5 를 YOINK → 5(3(2, 4), 7(6, 8)). 오른쪽으로 늘어졌던 트리가 한 번의 회전으로 균형이 잡힌다.
 p.30 "Does this work?" — "Whenever something seems unbalanced, do rotations until it's okay again." 그러나 "Even for me this is pretty vague. What do we mean by '''seems unbalanced'''? What's '''okay'''?" → 기준이 필요하다.
+{exam}
+교수(10/6): "'''right rotation at the node X''' — let Y be X's left child, '''promote Y''' to the top, then X becomes Y's right child; the middle subtree B (원래 Y 의 right child) is positioned as '''X's left child'''." 순서 $A < Y < B < X < C$ 가 그대로라 [[BST property]] 유지. 시간은 "'''just changing the pointers'''" → '''$O(1)$'''. left rotation 도 대칭으로 있다. 오른쪽이 훨씬 깊은 트리도 rotation 한 번으로 "pretty balanced between the left and right subtrees" — "instead of reconstruction, make the balanced tree with just a few operations". 다만 "rotate until it looks okay" 는 "pretty vague" → 언제 회전할지 '''조건'''이 필요하다.
+{/exam}
 
 == ⑦ Proxy for balance → Red-Black tree 규칙 5가지 (p.31–35) ==
 '''Idea 2: have some [[proxy for balance]]''' (p.31):
@@ -181,6 +191,9 @@ p.30 "Does this work?" — "Whenever something seems unbalanced, do rotations un
 * "Instead, come up with some proxy for balance: If the tree satisfies '''[SOME PROPERTY]''', then it's pretty balanced. We can maintain [SOME PROPERTY] using rotations."
 * "There are actually several ways to do this, but today we'll see…" → [[red-black tree]].
 p.32: "A Binary Search Tree that '''balances itself'''!" — "Maintain balance by stipulating that '''black nodes are balanced''', and that there '''aren't too many red nodes'''. It's just good sense!"
+{exam}
+교수(10/6): "'''Maintaining perfect balance is difficult or time-consuming.''' Instead, maintain '''some property as a proxy for balance''' — if the tree satisfies some property, then we say it's pretty balanced." → [[proxy for balance]]. red-black tree 는 node 마다 '''1 bit'''(색) 만 더 쓴다.
+{/exam}
 [[img:L8-33.png|p.33 — Red-Black Trees: these rules are the proxy for balance. 예: 5B(3R(2B, 4B), 7R(6B, 8B)), 맨 아래 NIL 8개는 black|large]]
 {def}
 '''[[red-black 규칙 5가지]]''' (p.33, "these rules are the proxy for balance")
@@ -192,7 +205,10 @@ p.32: "A Binary Search Tree that '''balances itself'''!" — "Maintain balance b
 "I'm not going to draw the NIL children in the future, but they are treated as black nodes."
 {/def}
 {exam}
-(슬라이드 ⭐⭐⭐, 수업 전) '''규칙 5가지를 영어 원문 그대로''' 쓸 수 있어야 한다. p.59 에서 "You should know: '''What are the properties of an RB tree?'''" 라고 직접 꼽았다. 특히 ④(red 연속 금지)와 ⑤(black 수 동일)가 균형의 원천이다 — ⑤ 는 "black node 끼리는 완벽한 균형", ④ 는 "red 는 끼어들어도 연달아 못 온다".
+⭐⭐⭐ 교수(10/6) — '''색의 의미''': "The color does not describe the key's importance or value. It controls the tree shape. '''Black node provides a balance structure, but red node allows some flexibility''' — because maintaining perfect balance is pretty difficult." 규칙 5(모든 경로의 black 수 동일)가 '''균형'''을 만들고, 규칙 4(red 의 자식은 black, "not two consecutive red nodes in a row")가 red 의 flexibility 를 '''제한'''한다(red 가 무한정 한쪽으로 쏠리지 못하게).
+{/exam}
+{exam}
+(슬라이드 ⭐⭐⭐) '''규칙 5가지를 영어 원문 그대로''' 쓸 수 있어야 한다. p.59 에서 "You should know: '''What are the properties of an RB tree?'''" 라고 직접 꼽았다. 특히 ④(red 연속 금지)와 ⑤(black 수 동일)가 균형의 원천이다 — ⑤ 는 "black node 끼리는 완벽한 균형", ④ 는 "red 는 끼어들어도 연달아 못 온다".
 {/exam}
 [[img:L8-34.png|p.34 — Examples(?): Yes! 하나와 No! 셋 — red root / red 아래 red / black 수가 경로마다 다름|medium]]
 p.34 판정(어느 규칙이 깨졌나):
@@ -207,11 +223,17 @@ p.34 판정(어느 규칙이 깨졌나):
 |-
 | 아래 ③: B(B, B(B, ·)) || No! || 규칙 5 위반 — 오른쪽 아래로 가는 경로만 black 이 하나 더 많다
 |}
+{exam}
+교수(10/6): 규칙 순서는 원문 그대로 ① red or black ② root black ③ NIL black ④ red 의 자식은 black ⑤ 모든 x 에서 x→NIL 모든 경로의 black 수 동일. 예제 4개 중 '''유효한 것은 1번 하나''' — 2번 root 가 red → 규칙 2, 3번 red 연속 → 규칙 4, 4번 한 경로 black 3 개 vs 다른 경로 2 개 → 규칙 5. "'''You should be able to tell whether the tree violates the red-black tree rules or not'''" — 어느 규칙이 깨졌는지 번호로 말할 수 있어야 한다.
+{/exam}
 p.35 "Why???????": "This is pretty balanced. The black nodes are balanced. The red nodes are 'spread out' so they don't mess things up too much. We can maintain this property as we insert/delete nodes, by using rotations. '''This is the really clever idea!''' This Red-Black structure is a proxy for balance. It's just a little weaker than perfect balance, but we can actually maintain it!"
 
 == ⑧ 왜 균형인가 — height ≤ 2log(n+1) 증명 (p.36–37) ==
 [[img:L8-36.png|p.36 — "pretty balanced" 직관: unbalanced RB tree 를 만들어 보면 한 경로를 red 로 패딩해서 다른 경로의 두 배까지만 늘릴 수 있다. Guess: height ≤ 2 log(n)|medium]]
 p.36 직관: 일부러 '''불균형한''' red-black tree 를 만들어 보자. 모든 경로의 black 수는 같아야 하므로(규칙 5) 늘릴 수 있는 건 red 뿐인데, red 는 연달아 올 수 없다(규칙 4). → 긴 경로는 black-red-black-red… 로 '''짧은 경로의 두 배까지만''' 늘어난다("One path could be twice as long another if we pad it with red nodes."). 게다가 경로를 길게 만들면 규칙 5 를 맞추느라 다른 내부 node 가 그만큼 필요하다("Other internal nodes need to go here!"). Guess: the height of a red-black tree is at most $2 \log n$.
+{exam}
+교수(10/6): "'''Try to make a red-black tree as tall as possible'''" — 규칙 5 때문에 black 수는 모든 경로에서 같고, 늘릴 수 있는 건 red 를 끼워 넣는 것뿐인데 규칙 4 로 red 는 번갈아만 올 수 있다. 그래서 가장 깊은 경로와 가장 얕은 경로의 차이는 "'''at most two times'''" — "one path could be twice as long as another if we pad it with red nodes". 따라서 height 는 대략 $2\log n$ 이하.
+{/exam}
 [[anim:rb_height_padding|black 만으로 된 균형 트리(b(root)=3) 의 한 경로에 red 를 끼워 넣으면 길이가 6 까지(두 배)만 늘어나고, 그 이상은 "red 의 자식은 black" 에 걸려 멈춘다. 이어서 n ≥ 2^b − 1 ≥ 2^(height/2) − 1 ⇒ height ≤ 2 log(n+1) 가 한 줄씩]]
 [[img:L8-37.png|p.37 — proof sketch: b(x) = x→NIL 경로의 black 수(x 제외, NIL 포함), Claim: x 아래 non-NIL node ≥ 2^b(x) − 1, 그러면 height ≤ 2log(n+1)|large]]
 '''p.37 "That turns out to be basically right." [proof sketch]'''
@@ -239,16 +261,23 @@ height ≤ 2 log(n+1)                ⇒ height = O(log n)
 </pre>
 → [[height ≤ 2 log(n+1) 증명]]
 {exam}
-(슬라이드 ⭐⭐⭐, 수업 전) '''증명 사슬 세 줄''': $n \ge 2^{b(\text{root})} - 1$ (Claim) $\ge 2^{\text{height}/2} - 1$ (규칙 4: red 연속 금지 → $b(\text{root}) \ge \text{height}/2$) ⇒ $\text{height} \le 2\log(n+1)$. 각 부등호가 '''어느 규칙/Claim 에서 오는지''' 말할 수 있어야 한다. p.59 "(more important) '''why does that guarantee that they are balanced?'''" 가 바로 이 증명이다.
+(슬라이드 ⭐⭐⭐) '''증명 사슬 세 줄''': $n \ge 2^{b(\text{root})} - 1$ (Claim) $\ge 2^{\text{height}/2} - 1$ (규칙 4: red 연속 금지 → $b(\text{root}) \ge \text{height}/2$) ⇒ $\text{height} \le 2\log(n+1)$. 각 부등호가 '''어느 규칙/Claim 에서 오는지''' 말할 수 있어야 한다. p.59 "(more important) '''why does that guarantee that they are balanced?'''" 가 바로 이 증명이다.
+{/exam}
+{exam}
+⭐⭐⭐ 교수(10/6) 형식 증명 순서: ① [[black height b(x)]] = x→NIL 경로의 black 수('''x 제외, NIL 포함''') ② Claim: x 아래(x 포함) non-NIL node 수 $\ge 2^{b(x)} - 1$ — "by mathematical induction": base case 는 trivial, inductive step 은 $N(x) = 1 + N(x.\text{left}) + N(x.\text{right}) \ge 1 + 2(2^{b(x)-1} - 1) = 2^{b(x)} - 1$ ③ x = root 로 놓으면 $n \ge 2^{b(\text{root})} - 1$ ④ "$b(\text{root})$ should be at least height/2" → $n \ge 2^{\text{height}/2} - 1$ ⑤ $-1$ 을 넘기고 양변에 log → '''$\text{height} \le 2\log(n+1)$'''. → [[2^b(x) − 1 claim]], [[height ≤ 2 log(n+1) 증명]].
 {/exam}
 
 == ⑨ 삽입 — 세 경우 (p.39–57) ==
 p.39 "Okay, so it's balanced… but can we maintain it? '''Yes!'''" — 나머지는 sketch, "See CLRS for more details."
 {exam}
-(슬라이드 ⭐⭐⭐, 수업 전) 교수 선언 (p.39, p.59): '''"You are not responsible for the nitty-gritty details of Red-Black Trees (for this class) — but you should understand the main ideas."''' You should know: ① '''What are the properties of an RB tree?''' ② (more important) '''Why does that guarantee that they are balanced?''' → 삽입 경우 분석을 외우는 것보다 [[red-black 규칙 5가지]] 와 [[height ≤ 2 log(n+1) 증명]] 이 우선. (수업에서 범위가 바뀌면 갱신)
+(슬라이드 ⭐⭐⭐) 교수 선언 (p.39, p.59): '''"You are not responsible for the nitty-gritty details of Red-Black Trees (for this class) — but you should understand the main ideas."''' You should know: ① '''What are the properties of an RB tree?''' ② (more important) '''Why does that guarantee that they are balanced?''' → 삽입 경우 분석을 외우는 것보다 [[red-black 규칙 5가지]] 와 [[height ≤ 2 log(n+1) 증명]] 이 우선.
+교수(10/6) 확인: "'''You are not responsible for the details of how to implement insert/delete operations. But you should know the five rules — what's the property of red-black tree — and how to guarantee the height.'''" 슬라이드 선언 그대로 범위가 확정되었다.
 {/exam}
 [[rb_insert]] 의 큰 틀 (p.41, 43): "Make a new '''red''' node. Insert it as you would normally ([[BST INSERT]]). Fix things up if needed."
 p.44: "Can't we just insert 0 as a black node?" — '''No!''' black 으로 넣으면 그 경로만 black 이 하나 늘어 규칙 5 가 깨진다. red 로 넣으면 규칙 5 는 그대로이고, 깨질 수 있는 건 규칙 4(red 아래 red) 하나뿐이다.
+{exam}
+⭐⭐ 교수(10/6): "'''The inserting node is always red.'''" 규칙 1·2·3 은 자동으로 OK, 규칙 5 도 red 만 넣었으니 그대로("we don't care about rule five") → "'''the only rule we care about is rule four'''". 0 을 black 으로 넣으면? "It can violate rule five" — 그래서 안 된다. 세 경우: case 1 '''parent black''' → 그냥 끝 / case 2 '''[[uncle]] red''' → parent·uncle 을 black, grandparent 를 red 로 '''flip'''(어느 경로의 black 수도 안 바뀜), 그런데 grandparent 의 부모가 red 면 "another problem" → '''grandparent 에서 재귀''' / case 3 '''uncle black''' → 아래 참고.
+{/exam}
 [[anim:rb_insert_cases|0 을 red 로 삽입하는 세 장면 — ① 부모 black 이면 끝(p.41) ② 부모 red·uncle red 면 색 뒤집기 후 조부모에서 반복(p.47) ③ 부모 red·uncle black 이면 YOINK + 색 교환(p.54). 각 장면 끝에 규칙 5가지 체크]]
 [[RB 삽입 세 경우]] (p.40/42/51/55 "Many cases" 의 세 그림 6(3,7) — 3·7 의 색이 다름). 새 node 0 은 3 의 왼쪽 자식으로 들어간다. 부모 p = 3, 조부모 grand_p = 6, [[uncle]] = 7.
 {|
@@ -264,6 +293,9 @@ p.44: "Can't we just insert 0 as a black node?" — '''No!''' black 으로 넣�
 p.52 "Actually, this can't happen?" — 경우 ③ 그림은 처음 보면 불가능해 보인다: 6-3 경로는 black 1개인데 6-7-… 은 최소 2개. 그러나 ⓐ 바로 전 단계(경우 ②)에서 0 이 red 로 '''방금 바뀐''' 경우이거나 ⓑ 7 이 실제로 '''NIL''' 인 경우에는 일어난다.
 [[img:L8-54.png|p.54 — 경우 ③: 6B(3R(0R), 7B) 에서 3 을 YOINK → 3B(0R, 6R(·, 7B)). Need to argue that if RB-Tree property held before, it still does|medium]]
 p.53 은 p.28 rotation 을 다시 보여 준다("Recall Rotations") — 경우 ③ 의 YOINK 가 바로 그 회전이다(X = 6, Y = 3, B = 3 의 오른쪽 부분 트리).
+{exam}
+교수(10/6) case 3: "'''Actually, this cannot happen'''" from a fresh insert — 6→3 경로와 6→7 경로의 black 수가 달라 '''규칙 5 위반'''이기 때문. "But it might happen that we just turned [the node] red from the previous step — '''it might happen from case 2'''." 해결: '''right rotation at grandparent(6)''' + 색 교환(parent → black, grandparent → red). "Through the rotation we don't change the number of black nodes" → 규칙 5 를 유지한 채 규칙 4 만 해결.
+{/exam}
 
 === 코드 (p.56–57) ===
 <pre class="c">
@@ -320,6 +352,9 @@ def recolor(v):
 | `right_rotate(grand_p)` || grand_p 에서 왼쪽 자식(p)을 위로 YOINK 하는 [[rotation]] || — || 3 이 6 자리로
 |}
 '''[[recolor]]''' 는 경우 ② 에서 조부모로 두 칸씩 올라가며 재귀하므로 최대 height 번 → $O(\log n)$. [[rotation]] 은 $O(1)$ 이고 최대 한 번. 그래서 rb_insert 전체가 $O(\log n)$.
+{exam}
+교수(10/6) 코드 설명: [[rb_insert]] = '''search''' 로 자리 x 를 찾고 → '''red''' node 를 x.right / x.left 에 붙이고 → `recolor`. `recolor` 의 세 if 가 곧 '''case 1 / case 2 / case 3''' (return / flip 후 `recolor(grand_p)` / 색 교환 + `right_rotate`). 한 번 호출은 색·포인터만 바꾸니 $O(1)$, "how many times it recursively calls? '''At most the height'''" → height $\le 2\log(n+1)$ 이므로 삽입 전체 '''$O(\log n)$'''.
+{/exam}
 {warn}
 '''슬라이드 코드는 한쪽 경우만 적었다.''' `uncle = grand_p.right` 는 p 가 grand_p 의 '''왼쪽''' 자식인 경우만 다룬다(p 가 오른쪽 자식이면 uncle = grand_p.left 이고 회전도 `left_rotate` — '''대칭 경우 생략'''). 또 경우 ③ 에서 v 가 p 의 오른쪽 자식(꺾인 모양)이면 p 에서 먼저 한 번 회전해 일자로 편 뒤 `right_rotate(grand_p)` 를 해야 한다. 재귀가 root 까지 올라가 root 가 red 가 되면 마지막에 root 를 black 으로 칠하는 처리(규칙 2)도 생략되어 있다. 전체 경우는 CLRS 13.3 `RB-INSERT-FIXUP` — 교수 말대로 "not responsible for the nitty-gritty details".
 {/warn}
@@ -333,11 +368,17 @@ p = 3 (red) → return 안 함. grand_p = 6, uncle = 6.right = 7 (red) → 경�
 
 == ⑩ 삭제·결론 (p.58–63) ==
 p.58 "Deleting from a Red-Black tree — '''Fun exercise!'''" — 강의에서는 다루지 않는다(CLRS 13.4).
+{exam}
+⭐⭐⭐ 교수(10/6) '''범위 선언''': "Deletion is '''much more complex''' than insertion — you already did a lot when implementing deletion of red-black tree (이전 데이터구조 과목) — so '''skip''' this." "In the algorithm course, '''you're not responsible for remembering all the details for deletion/insertion operations. But you should remember what is the property of red-black tree, and how to guarantee the height'''." → [[red-black 규칙 5가지]] + [[height ≤ 2 log(n+1) 증명]].
+{/exam}
 p.59 "That's a lot of cases" — "You are not responsible for the nitty-gritty details of Red-Black Trees. (For this class) Though implementing them is a great exercise! You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" (위 ⑨ 의 `{exam}` 참고)
 p.60 "What was the point again?":
 * Red-Black Trees always have '''height at most $2\log(n+1)$'''.
 * As with general Binary Search Trees, all operations are '''$O(\text{height})$'''.
 * So all operations are '''$O(\log n)$'''.
+{exam}
+교수(10/6) takeaway: "'''Red-black tree always maintains the height at most $2\log(n+1)$'''" → "all the operations are bounded by $O(\log n)$ — that's the property of self-balancing binary search tree."
+{/exam}
 [[img:L8-61.png|p.61 — Conclusion: The best of both worlds. Sorted Arrays O(log n)/O(n), Linked Lists O(n)/O(1), Balanced BST O(log n)/O(log n)|medium]]
 {|
 ! 연산 || Sorted array || Linked list || '''Balanced BST'''
@@ -382,7 +423,9 @@ p.63 Recap: "Balanced binary trees are the best of both worlds! But we need to k
 # [[red-black 규칙 5가지]] (p.33) 영어 원문: red or black / root black / NIL black / red 의 자식은 black / 모든 x 에서 x→NIL 경로의 black 수 동일.
 # [[height ≤ 2 log(n+1) 증명]] (p.37): [[black height b(x)]](x 제외·NIL 포함), [[2^b(x) − 1 claim]](귀납), $n \ge 2^{b(\text{root})} - 1 \ge 2^{\text{height}/2} - 1$ ⇒ $\text{height} \le 2\log(n+1)$.
 # [[RB 삽입 세 경우]] (p.41/47/54): 새 node 는 '''red''' 로 → 부모 black 끝 / 부모·[[uncle]] red → 색 뒤집기 후 조부모에서 재귀 / uncle black → YOINK + 색 교환. 전체 $O(\log n)$.
-# 교수 선언 (p.39, 59): "not responsible for the nitty-gritty details" — '''규칙 5가지'''와 '''왜 균형이 보장되는가'''가 우선. (수업 후 녹음 강조로 갱신 예정)
+# '''시험 범위 선언''' (p.39, 59 + 교수 10/6): "not responsible for the details of insert/delete implementation" — '''[[red-black 규칙 5가지]]''' 와 '''[[height ≤ 2 log(n+1) 증명]]'''(왜 height 가 bounded 인가)이 출제 핵심. 삭제는 수업에서 생략.
+# '''색의 의미 한 줄''' (교수 10/6): "'''black node provides balance structure, red node allows flexibility'''" — 규칙 5 가 균형, 규칙 4 가 red 의 flexibility 를 제한.
+# 중간고사 '''10/15(목) 13:00''', 범위 L1–L8 (교수 10/6 공지) → [[시험 정보]].
 
 == 관련 문서 ==
 * 이전 강의: [[L7 Randomized Algorithms II]] ([[hash table]], [[자료구조 비교표]], [[INSERT/DELETE/SEARCH]], [[linked list]]) · [[L6 Randomized Algorithms I]] ([[quicksort]], [[pivot]])

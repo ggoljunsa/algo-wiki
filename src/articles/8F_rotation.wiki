@@ -69,7 +69,10 @@ A, B, C 안쪽은 '''한 번도 건드리지 않는다'''. 바뀌는 연결은 �
 {/analogy}
 
 {exam}
-슬라이드 기준(아직 수업 전, 녹음 없음). p.28 의 두 "(Why?)" — '''BST property 가 유지되는 이유'''(in-order 순서 A<Y<B<X<C 불변)와 '''O(1) 인 이유'''(포인터 3개만 바뀜) — 를 직접 설명할 수 있어야 한다. 그리고 "B 가 어디로 가는가" 를 그림으로 그릴 수 있을 것.
+슬라이드 기준. p.28 의 두 "(Why?)" — '''BST property 가 유지되는 이유'''(in-order 순서 A<Y<B<X<C 불변)와 '''O(1) 인 이유'''(포인터 3개만 바뀜) — 를 직접 설명할 수 있어야 한다. 그리고 "B 가 어디로 가는가" 를 그림으로 그릴 수 있을 것.
+{/exam}
+{exam}
+교수(10/6): "'''Right rotation at the node X''' — let Y be X's left child and '''promote Y''' to the top; X becomes Y's right child; the middle subtree B (원래 Y 의 right child) 는 '''X 의 left child''' 로." 순서 A < Y < B < X < C 가 그대로라 BST property 유지, "'''just changing the pointers'''" → '''$O(1)$'''. 오른쪽이 훨씬 깊은 트리도 rotation 한 번으로 균형이 잡힌다 — "instead of reconstruction, make the balanced tree with just a few operations".
 {/exam}
 
 {quiz}

@@ -58,7 +58,7 @@ category: 안내
 
 == 8단계 — L8: 이진 탐색 트리와 red-black tree ==
 {info}
-L8 은 '''슬라이드만 게시된 상태(2026-10-04), 아직 수업 전'''이다. 수업·녹음이 오면 메인 문서의 `{exam}` 이 갱신된다. 중간고사 범위 포함 여부도 미정 → [[시험 정보]].
+L8 은 10/1·10/6 수업에서 삽입까지 진행(삭제 생략), 10/6 녹음 강조가 메인 문서 `{exam}` 에 반영되었다. '''중간고사 10/15(목) 13:00, 범위 L1–L8''' → [[시험 정보]]. 우선순위: [[red-black 규칙 5가지]] 와 [[height ≤ 2 log(n+1) 증명]] ("not responsible for the details of insert/delete").
 {/info}
 먼저: [[이진 트리]] · [[binary tree 용어]] · [[BST property]] · [[O(height)]] · [[편향 트리]] · [[rotation]] · [[red-black 규칙 5가지]] · [[black height b(x)]] · [[로그 계산법]]
 메인: '''[[L8 Tree Algorithms]]''' — BST 의 SEARCH/INSERT/DELETE(immediate successor), 모든 연산 = $O(\text{height})$, 편향 트리, rotation(YOINK), proxy for balance, red-black 규칙 5가지, height $\le 2\log(n+1)$ 증명, 삽입 세 경우.

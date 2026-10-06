@@ -1,8 +1,8 @@
 key: 시험 정보
-title: 시험 정보 — 일정·범위·과제·교수 강조 (2026-09-30 기준)
+title: 시험 정보 — 일정·범위·과제·교수 강조 (2026-10-06 기준)
 category: 안내
 ---
-CSE301 중간고사에 관해 '''지금까지 확인된 사실만''' 적는다. 시험 날짜·범위·형식은 아직 공지되지 않았다 — 추측해서 채우지 않고 "미정" 으로 둔다. 공지가 나오면 이 문서와 과목 폴더의 `_시험정보.md` 를 함께 갱신한다.
+CSE301 중간고사에 관해 '''지금까지 확인된 사실만''' 적는다. 시험 날짜·범위는 10/6 수업에서 구두 공지되었고, 형식은 아직 공지되지 않았다 — 추측해서 채우지 않고 "미정" 으로 둔다. 공지가 나오면 이 문서와 과목 폴더의 `_시험정보.md` 를 함께 갱신한다.
 
 == 과목 ==
 {|
@@ -23,11 +23,11 @@ CSE301 중간고사에 관해 '''지금까지 확인된 사실만''' 적는다. 
 
 == 중간고사 ==
 {warn}
-'''날짜: 미정 — 공지되면 갱신.''' '''범위: 미정 — 공지되면 갱신.''' '''형식(서술/객관식, 오픈북 여부, 계산기): 미정 — 공지되면 갱신.''' 성적 비중도 이 위키 자료에서는 확인되지 않았다.
+'''중간고사: 10/15(목) 13:00, 강의실(수업 교실). 범위: L1–L8 (tree algorithms 까지) — 교수 10/6 공지.''' 녹음: "the midterm schedule will be on '''next Thursday, this time, 1 p.m. in this room'''", "the topic on the midterm exam will be on the '''tree algorithms'''"(= L8 까지). 사용자 체감 '1주 1일 뒤(10/14)' 와 하루 차이이므로 '''LMS 공지로 재확인'''할 것. '''형식(서술/객관식, 오픈북 여부, 계산기): 미정 — 공지되면 갱신.''' 성적 비중도 이 위키 자료에서는 확인되지 않았다.
 {/warn}
-참고로 지금까지 나간 진도는 '''L1–L7''' 이고(아래 진도표), 이 위키는 그 7 개 강의를 다룬다. 족보·실제 시험지는 아직 없다.
+지금까지 나간 진도는 '''L1–L8''' 이고(아래 진도표), 이 위키는 그 8 개 강의를 다룬다. 족보·실제 시험지는 아직 없다.
 
-'''L8 Tree Algorithms''' 슬라이드가 '''2026-10-04''' 에 게시되었다(Reading: CLRS 12.1–12.3, 13 → [[CLRS 12와 13]]). 아직 수업 전이며, '''L8 이 중간고사 범위에 들어가는지는 미정 — 공지되면 갱신.''' 위키에는 미리 [[L8 Tree Algorithms]] 를 올려 두었다.
+'''L8 Tree Algorithms''' (Reading: CLRS 12.1–12.3, 13 → [[CLRS 12와 13]]) 는 10/1·10/6 수업에서 삽입까지 진행, 삭제는 생략. 범위 선언: "not responsible for the details of insert/delete — know the '''five rules''' and '''why the height is bounded'''" → [[L8 Tree Algorithms]].
 
 == 진도표 (_진도.md 기준) ==
 {|
@@ -54,6 +54,10 @@ CSE301 중간고사에 관해 '''지금까지 확인된 사실만''' 적는다. 
 | 10 || 9/24 (목) || '''공강''' (수업 없음) || 사용자 확인 (9/29)
 |-
 | 11 || 9/29 (화) || L6 복습 1분 → L7 p.1–약 p.58 (hash family 도입까지) || 녹음 `0929_11_컴알_L7_Hashing.txt`, Reading CLRS 11, open addressing 은 CLRS 11.4 자습, universal hash family(p.59–)는 다음 수업 → [[L7 Randomized Algorithms II]]
+|-
+| 12 || 10/1 (목) || L7 후반 + L8 BST 기본 (p.1–26 추정) || '''녹음 없음''' — 10/6 첫머리 복습(BST 정의·O(height)·편향 트리)으로 추정
+|-
+| 13 || 10/6 (화) || L8 p.27–57 (rotation → red-black 5규칙 → height 증명 → 삽입 세 경우·코드), 삭제 생략 || 녹음 `1006_13_컴알_L8_RedBlack.txt`, 중간고사 일정·범위 공지, HW2 발표자 명단 LMS 게시 → [[L8 Tree Algorithms]]
 |}
 
 == 과제 ==
@@ -81,7 +85,7 @@ CSE301 중간고사에 관해 '''지금까지 확인된 사실만''' 적는다. 
 |-
 | 마감 || '''10/6(화) 23:59'''
 |-
-| 발표 || '''내 담당: 2번 문제'''(거리 T 이내 쌍 — $O(n^2)$ / $O(n \log n)$ / bucket 변형 $O(n)$)
+| 발표 || 발표자 명단 LMS 게시 (10/6 공지). '''내 담당: 2번 문제'''(거리 T 이내 쌍 — $O(n^2)$ / $O(n \log n)$ / bucket 변형 $O(n)$)
 |-
 | 문제 || 1 radix sort 손 실행·복잡도 · 2 거리 T 쌍 세 가지 알고리즘 · 3 toad 세 알고리즘 Las Vegas/Monte Carlo 표 · 4 최대 collinear 집합($O(n^2 \log n)$ / 랜덤 expected $O(n)$) · 5 $(85x+b) \bmod 13$ universal 판정
 |}
@@ -115,6 +119,9 @@ CSE301 중간고사에 관해 '''지금까지 확인된 사실만''' 적는다. 
 {exam}
 '''L7 의 key message (9/29)''': "any deterministic or fixed hash function cannot achieve $O(1)$ worst-case due to the '''pigeonhole principle'''" → 해결은 randomness. 기대 버킷 크기 $1 + \frac{n-1}{n} \le 2$ 칠판 증명, uniformly random h 저장 $M \log n$ 비트("elephant in the room") → [[hash family]]. → [[결정론적 해시 함수의 한계]] · [[기대 버킷 크기]]
 {/exam}
+{exam}
+'''L8 범위 선언 (10/6)''': "you are '''not responsible''' for the details of how to implement insert/delete, but you should know the '''five rules''' — what's the property of red-black tree — and '''how to guarantee the height'''." 색의 의미: "black node provides balance structure, red node allows flexibility". → [[red-black 규칙 5가지]] · [[height ≤ 2 log(n+1) 증명]]
+{/exam}
 
 == 다음 수업 전 체크리스트 (진도표) ==
 # 9/29 에 L7 p.1–약 p.58 진행(9/24 공강). 다음 수업은 [[universal hash family]](p.59–)부터 — [[L7 Randomized Algorithms II]] 의 ⑨–⑪ 과 [[h_{a,b}]] 예제(p.70)를 미리 훑을 것.
@@ -125,7 +132,7 @@ CSE301 중간고사에 관해 '''지금까지 확인된 사실만''' 적는다. 
 # 읽기: CLRS 5, 7, 9.2 (L6) · CLRS 11 (L7) · CLRS 8.1–8.2 (L5) · CLRS 9 (L4) · CLRS 2.3.1 (L3).
 
 {analogy}
-🎭 '''일기예보 게시판.''' 이 문서는 확정된 것(과제 마감, 진도)만 적고, 아직 모르는 것(시험 날짜)은 "미정" 으로 비워 두는 게시판이다. 추측으로 채운 예보는 우산을 두고 나가게 만든다.
+🎭 '''일기예보 게시판.''' 이 문서는 확정된 것(과제 마감, 진도)만 적고, 아직 모르는 것(시험 형식)은 "미정" 으로 비워 두는 게시판이다. 추측으로 채운 예보는 우산을 두고 나가게 만든다.
 {/analogy}
 
 == 관련 문서 ==

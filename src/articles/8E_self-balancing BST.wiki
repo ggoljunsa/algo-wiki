@@ -38,7 +38,10 @@ L8 p.26 Goal: "Fast SEARCH/INSERT/DELETE. All these things take time O(height). 
 p.31 의 "several ways" — AVL tree, 2-3 tree, splay tree 등이 모두 self-balancing BST 다(슬라이드 밖 이름; [[CLRS]] 13장 문제·참고에 나온다). L8 에서 다루는 것은 [[red-black tree]] 하나뿐이고, 그 결과는 p.60 "Red-Black Trees always have height at most 2log(n+1)… So all operations are O(log(n))."
 
 {exam}
-슬라이드 기준(아직 수업 전, 녹음 없음). "왜 그냥 BST 로는 부족한가 → $O(\text{height})$ 인데 height 가 n 일 수 있다 → self-balancing" 의 동기 흐름, 그리고 Idea 0 이 왜 나쁜지(재구성 $\Omega(n)$ 이 자주 일어난다)를 한 문장으로 말할 수 있으면 된다. 결론 표는 [[best of both worlds 표]].
+슬라이드 기준. "왜 그냥 BST 로는 부족한가 → $O(\text{height})$ 인데 height 가 n 일 수 있다 → self-balancing" 의 동기 흐름, 그리고 Idea 0 이 왜 나쁜지(재구성 $\Omega(n)$ 이 자주 일어난다)를 한 문장으로 말할 수 있으면 된다. 결론 표는 [[best of both worlds 표]].
+{/exam}
+{exam}
+교수(10/6): [[hash table]] 은 "O(1) expected, but the worst case was O(n)" → self-balancing BST 로 '''worst-case $O(\log n)$''' INSERT/DELETE/SEARCH. Idea 0(재구축)은 "'''every reconstruction requires at least Ω(n)''' — not a good idea". 대신 rotation 몇 번으로 균형을 고치고, 언제 고칠지는 [[proxy for balance]](red-black tree 의 5규칙)로 정한다. "There are several types of self-balancing binary trees, but today we focus on the red-black tree."
 {/exam}
 
 == 관련 문서 ==

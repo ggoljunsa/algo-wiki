@@ -63,7 +63,7 @@ red 로 넣으면:
 {/analogy}
 
 {exam}
-슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" — 코드 세부보다는 "'''새 노드는 red'''(왜? black 이면 ⑤ 가 깨지니까) → BST 처럼 삽입 → fix up" 이라는 main idea 와 runtime $O(\log n)$ 을 설명할 수 있으면 된다.
+슬라이드 기준. 교수 선언(p.39, p.59): "You are not responsible for the nitty-gritty details of Red-Black Trees." "You should know: What are the properties of an RB tree? And (more important) why does that guarantee that they are balanced?" — 코드 세부보다는 "'''새 노드는 red'''(왜? black 이면 ⑤ 가 깨지니까) → BST 처럼 삽입 → fix up" 이라는 main idea 와 runtime $O(\log n)$ 을 설명할 수 있으면 된다.
 {/exam}
 
 {quiz}

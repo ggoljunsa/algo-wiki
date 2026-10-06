@@ -49,7 +49,7 @@ SEARCH 경로의 각 조상 y 에서 key < y.key 이면 왼쪽으로, 크면 오
 SEARCH $O(\text{height})$ + 노드 생성·포인터 연결 $O(1)$ = $O(\text{height})$. 정렬된 순서(2,3,4,…)로 계속 넣으면 [[편향 트리]] 가 되어 i 번째 삽입이 $i-1$ 번 비교 → 전체 $\Theta(n^2)$.
 
 {exam}
-(L8 은 아직 수업 전 — 슬라이드 강조 기준) [[red-black tree]] 의 삽입 [[rb_insert]](p.56)는 '''이 INSERT 와 똑같고 끝에 `recolor(v)` 한 줄'''이 붙는다: `x = search(root, key_to_insert)` → 새 '''red''' 노드 v 를 x.right/x.left 에 → [[recolor]]. INSERT 의 세 갈래를 외워 두면 rb_insert 의 앞부분은 공짜다.
+(슬라이드 강조 기준) [[red-black tree]] 의 삽입 [[rb_insert]](p.56)는 '''이 INSERT 와 똑같고 끝에 `recolor(v)` 한 줄'''이 붙는다: `x = search(root, key_to_insert)` → 새 '''red''' 노드 v 를 x.right/x.left 에 → [[recolor]]. INSERT 의 세 갈래를 외워 두면 rb_insert 의 앞부분은 공짜다.
 {/exam}
 
 == 관련 문서 ==

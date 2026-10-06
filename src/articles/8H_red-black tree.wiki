@@ -69,7 +69,10 @@ n ≥ 2^{b(root)} − 1          ← [[2^b(x) − 1 claim]]
 {/analogy}
 
 {exam}
-슬라이드 기준(아직 수업 전, 녹음 없음). 교수 선언 p.39: "You are not responsible for the details for this class – but you should understand the main ideas." p.59: "You are not responsible for the nitty-gritty details of Red-Black Trees. (For this class) … You should know: '''What are the properties of an RB tree?''' And '''(more important) why does that guarantee that they are balanced?'''" → 1순위는 [[red-black 규칙 5가지]] 를 영어로 쓰기, 2순위(더 중요)는 [[height ≤ 2 log(n+1) 증명]] 을 설명하기. 삽입의 세 경우는 "main idea" 수준(red 로 넣는다 / flip / rotate)으로.
+슬라이드 기준. 교수 선언 p.39: "You are not responsible for the details for this class – but you should understand the main ideas." p.59: "You are not responsible for the nitty-gritty details of Red-Black Trees. (For this class) … You should know: '''What are the properties of an RB tree?''' And '''(more important) why does that guarantee that they are balanced?'''" → 1순위는 [[red-black 규칙 5가지]] 를 영어로 쓰기, 2순위(더 중요)는 [[height ≤ 2 log(n+1) 증명]] 을 설명하기. 삽입의 세 경우는 "main idea" 수준(red 로 넣는다 / flip / rotate)으로.
+{/exam}
+{exam}
+⭐⭐⭐ 교수(10/6): "The color does not describe the key's importance. '''Black node provides a balance structure, but red node allows some flexibility'''." 규칙 5 가 균형, 규칙 4 가 red 의 flexibility 제한. 범위 선언: "'''you are not responsible for the details of how to implement insert/delete, but you should know the five rules and how to guarantee the height'''" — 삭제는 수업에서 생략. takeaway: "red-black tree always maintains height at most $2\log(n+1)$ → all operations $O(\log n)$".
 {/exam}
 
 == 관련 문서 ==

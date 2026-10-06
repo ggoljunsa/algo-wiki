@@ -67,7 +67,7 @@ def search(root, key):
 루프 한 번에 한 층씩 내려가므로 반복 횟수 ≤ root→leaf 가장 긴 경로 길이 = [[height]]. 그래서 $O(\text{height})$ (p.19 아래). 균형 트리면 $O(\log n)$, [[편향 트리]] 면 $O(n)$.
 
 {exam}
-(L8 은 아직 수업 전 — 슬라이드 강조 기준) "'''return the last node before we went off the tree'''" 는 시험에서 "SEARCH(4.5) 의 반환값은?" 으로 바로 물을 수 있다 → 4. 그리고 p.24 "SEARCH is the big one" — 나머지 연산 비용이 전부 SEARCH 로 환원된다.
+(슬라이드 강조 기준) "'''return the last node before we went off the tree'''" 는 시험에서 "SEARCH(4.5) 의 반환값은?" 으로 바로 물을 수 있다 → 4. 그리고 p.24 "SEARCH is the big one" — 나머지 연산 비용이 전부 SEARCH 로 환원된다.
 {/exam}
 
 == 손코딩 빈칸 ==
