@@ -133,7 +133,9 @@
       init: function (tr) { var t3 = N(tr, 3, "R", null, T(tr, "orange")), t7 = N(tr, 7, "R", null, T(tr, "green", true)); return N(tr, -1, "B", T(tr, "gray"), N(tr, 6, "B", t3, t7)); } },
     p54: { label: "p.54 uncle black → rotate(YOINK)", keys: [0],
       init: function (tr) { return N(tr, 6, "B", N(tr, 3, "R", null, T(tr, "orange")), N(tr, 7, "B", null, T(tr, "green", true))); } },
-    build: { label: "BUILD 1,2,3,4,5,6,7 (빈 트리에서)", keys: [1, 2, 3, 4, 5, 6, 7], init: function () { return null; } }
+    build: { label: "BUILD 1,2,3,4,5,6,7 (빈 트리에서)", keys: [1, 2, 3, 4, 5, 6, 7], init: function () { return null; } },
+    wb07: { label: "문제집 ③-07: 10,20,30,15,25,5,1", keys: [10, 20, 30, 15, 25, 5, 1], init: function () { return null; } },
+    wb08: { label: "문제집 ③-08: 41,38,31,12,19,8 (지그재그)", keys: [41, 38, 31, 12, 19, 8], init: function () { return null; } }
   };
 
   global.SIMS["rb_insert_fix"] = {
