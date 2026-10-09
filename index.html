@@ -7829,6 +7829,39 @@ window.SIMS = window.SIMS || {};
     "6. 모든 쌍에서 <= 1/n 이면 H 는 universal hash family"
   ];
 
+  var PROC_D = [
+    "1. U = {10..99} (두 자리 수), 버킷 n = 10, H = { h0(x) = x mod 10, h1(x) = floor(x/10) },  |H| = 2",
+    "2. universal 조건: 모든 x != y 에 대해 P_h{h(x) = h(y)} <= 1/n = 1/10",
+    "3. |H| = 2 이므로 어떤 쌍이든 충돌 확률은 0, 1/2, 1 중 하나 (충돌시키는 함수 수 / 2)",
+    "4. 쌍 (x, y) 를 골라 h0, h1 에서 각각 같은 버킷인지 본다",
+    "5. 한 함수에서라도 충돌하면 1/2 > 1/10 → 그 쌍이 반례 → universal 아님",
+    "6. 일반화: |H| < n 이면 어떤 쌍이 한 함수에서만 충돌해도 1/|H| > 1/n → 작은 family 는 애초에 불가능"
+  ];
+  function svgD(v) {
+    var s = '<svg viewBox="0 0 760 250" width="760" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="12">';
+    var rows = [{ name: "h0(x) = x mod 10 (일의 자리)", y: 50, f: function (x) { return x % 10; } },
+                { name: "h1(x) = ⌊x/10⌋ (십의 자리)", y: 140, f: function (x) { return Math.floor(x / 10); } }];
+    rows.forEach(function (r) {
+      s += '<text x="10" y="' + (r.y - 14) + '" font-size="12" font-weight="700" fill="#3b2f4a">' + r.name + '</text>';
+      for (var b = 0; b < 10; b++) {
+        var x0 = 40 + b * 68, same = v.x != null && r.f(v.x) === b && r.f(v.y) === b;
+        var hit = v.x != null && (r.f(v.x) === b || r.f(v.y) === b);
+        s += '<rect x="' + x0 + '" y="' + r.y + '" width="62" height="44" rx="4" fill="' + (same ? "#fdecee" : hit ? "#fff7e6" : "#f4f4f8") + '" stroke="' + (same ? "#d6465f" : hit ? "#e09a40" : "#99a") + '" stroke-width="' + (same ? 2.5 : 1) + '"/>';
+        s += '<text x="' + (x0 + 31) + '" y="' + (r.y + 58) + '" text-anchor="middle" font-size="10" fill="#666">' + b + '</text>';
+        if (v.x != null) {
+          var lab = [];
+          if (r.f(v.x) === b) lab.push(v.x);
+          if (r.f(v.y) === b) lab.push(v.y);
+          if (lab.length) s += '<text x="' + (x0 + 31) + '" y="' + (r.y + 27) + '" text-anchor="middle" font-size="13" font-weight="700" fill="' + (same ? "#d6465f" : "#1d65b3") + '">' + lab.join(" ") + '</text>';
+        }
+      }
+      if (v.x != null) s += '<text x="748" y="' + (r.y - 14) + '" text-anchor="end" font-size="12" font-weight="700" fill="' + (r.f(v.x) === r.f(v.y) ? "#d6465f" : "#2e9e4f") + '">' + (r.f(v.x) === r.f(v.y) ? "충돌" : "충돌 아님") + '</text>';
+    });
+    s += '<text x="380" y="236" text-anchor="middle" font-size="13" font-weight="700" fill="#3b2f4a">' + (v.msg || "") + '</text>';
+    s += "</svg>";
+    return s;
+  }
+
   function frac(num, den) { return num + "/" + den; }
 
   function svgE(v) {
@@ -7898,12 +7931,54 @@ window.SIMS = window.SIMS || {};
       { key: "mode", label: "모드", values: [
         { value: "e3", label: "기대 버킷 크기 n = 3" },
         { value: "e10", label: "기대 버킷 크기 n = 10" },
-        { value: "hab", label: "h_{a,b} 전수 조사 (p=5, n=3)" }
+        { value: "hab", label: "h_{a,b} 전수 조사 (p=5, n=3)" },
+        { value: "digits", label: "작은 family {일의 자리, 십의 자리} — 왜 universal 이 아닌가 (문제집 7단원 ③-12)" }
       ] }
     ],
     build: function (opts) {
-      var mode = opts.mode === "e10" || opts.mode === "hab" ? opts.mode : "e3";
+      var mode = opts.mode === "e10" || opts.mode === "hab" || opts.mode === "digits" ? opts.mode : "e3";
       var steps = [];
+
+      if (mode === "digits") {
+        var h0 = function (x) { return x % 10; }, h1 = function (x) { return Math.floor(x / 10); };
+        var cd = { pair: "-", h0: "-", h1: "-", k: "-", prob: "-", verdict: "-", worst: "0/2" };
+        var worstK = 0;
+        var snapD = function () {
+          return { "|H|": 2, n: 10, "조건 1/n": "1/10", "쌍 (x, y)": cd.pair, "h0(x), h0(y)": cd.h0, "h1(x), h1(y)": cd.h1,
+            "충돌시키는 함수 수 k": cd.k, "P{h(x)=h(y)} = k/|H|": cd.prob, "≤ 1/10 ?": cd.verdict, "지금까지 최대 확률": cd.worst };
+        };
+        var pushD = function (desc, pc, vis, note) {
+          steps.push({ desc: desc, pc: { P: pc }, vars: snapD(), note: note, svg: svgD(vis) });
+        };
+        pushD("설정: 두 자리 수 키 10..99, 버킷 10 개, 함수는 '''일의 자리''' h0 와 '''십의 자리''' h1 두 개뿐(|H| = 2). 동전을 던져 하나를 쓴다. 슬라이드 p.55–57 의 극단 예와 같은 구조.", 1, { msg: "두 함수의 버킷 10 칸씩" });
+        pushD("universal 이려면 '''어떤''' 두 키를 잡아도 충돌 확률 ≤ 1/n = '''1/10''' 이어야 한다. 그런데 함수가 2 개뿐이라 확률은 0, 1/2, 1 중 하나만 가능 — 1/2 가 나오는 쌍이 '''하나라도''' 있으면 끝.", 3, { msg: "가능한 확률: 0 · 1/2 · 1   (1/10 은 만들 수조차 없다)" });
+        var cases = [[10, 11, "십의 자리가 같은 쌍"], [10, 20, "일의 자리가 같은 쌍"], [12, 34, "둘 다 다른 쌍"], [57, 75, "자리가 뒤바뀐 쌍"]];
+        cases.forEach(function (c) {
+          var x = c[0], y = c[1], k = (h0(x) === h0(y) ? 1 : 0) + (h1(x) === h1(y) ? 1 : 0);
+          worstK = Math.max(worstK, k);
+          cd = { pair: "(" + x + ", " + y + ")", h0: h0(x) + ", " + h0(y) + (h0(x) === h0(y) ? " (같다)" : ""), h1: h1(x) + ", " + h1(y) + (h1(x) === h1(y) ? " (같다)" : ""),
+            k: k, prob: k + "/2" + (k === 1 ? " = 1/2" : k === 2 ? " = 1" : " = 0"), verdict: k === 0 ? "예" : "아니오 (" + k + "/2 > 1/10)", worst: worstK + "/2" };
+          pushD("쌍 " + cd.pair + " — " + c[2] + ". h0: " + h0(x) + " vs " + h0(y) + (h0(x) === h0(y) ? " → '''충돌'''" : " → 다름") + ", h1: " + h1(x) + " vs " + h1(y) + (h1(x) === h1(y) ? " → '''충돌'''" : " → 다름") +
+            ". 충돌시키는 함수 " + k + " 개 → P = " + k + "/2" + (k === 1 ? " = '''1/2 > 1/10''' → 이 쌍이 반례." : k === 0 ? " = 0 ≤ 1/10 → 이 쌍은 괜찮다(하지만 한 쌍이 괜찮은 건 의미 없다 — 모든 쌍이 통과해야 한다)." : " = 1."),
+            k ? 5 : 4, { x: x, y: y, msg: "P{h(" + x + ") = h(" + y + ")} = " + k + "/2" + (k === 1 ? "  > 1/10  ✗" : k === 0 ? "  ≤ 1/10  ✓" : "  ✗") });
+        });
+        cd.pair = "-"; cd.h0 = "-"; cd.h1 = "-"; cd.k = "-"; cd.prob = "-"; cd.verdict = "-";
+        pushD("'''두 함수 모두에서 충돌하는 쌍은 없다'''(일의 자리도 십의 자리도 같으면 같은 수). 그래도 (10, 11) 처럼 '''한 함수에서만''' 충돌하는 쌍이 있고 그 확률이 1/2 > 1/10 이므로 H 는 [[universal hash family]] 가 '''아니다'''. 슬라이드 p.57 의 적(bad guy)은 바로 이런 쌍들을 골라 넣는다.", 5,
+          { msg: "최대 충돌 확률 1/2 > 1/10 → universal ✗" });
+        pushD("일반화: 함수가 |H| 개면 한 함수에서라도 충돌하는 쌍의 확률은 ≥ 1/|H|. 이것이 1/n 이하이려면 '''|H| ≥ n''' 이 필요하다. 여기서는 2 < 10 이라 계산 전에 이미 탈락. 그래서 슬라이드는 |H| = p(p−1) ≥ n 인 [[h_{a,b}]] 로 간다(모드 'h_{a,b} 전수 조사' 에서 확인).", 6,
+          { msg: "|H| < n 이면 universal 불가능 — '작기만 하면 안 된다'" },
+          "교수(9/29): hash family 의 극단 예 {최하위 자리, 최상위 자리} 는 1 비트면 저장되지만 적이 깨뜨린다 → 다음 이야기가 universal hash family.");
+        return {
+          panels: [{ id: "P", title: "작은 family 판정 (L7 p.55–64, 문제집 7단원 ③-12)", lang: "txt", lines: PROC_D }],
+          vars: [
+            { name: "|H|", group: "설정" }, { name: "n", group: "설정" }, { name: "조건 1/n", group: "설정" },
+            { name: "쌍 (x, y)", group: "현재 쌍" }, { name: "h0(x), h0(y)", group: "현재 쌍" }, { name: "h1(x), h1(y)", group: "현재 쌍" },
+            { name: "충돌시키는 함수 수 k", group: "판정" }, { name: "P{h(x)=h(y)} = k/|H|", group: "판정" }, { name: "≤ 1/10 ?", group: "판정" }, { name: "지금까지 최대 확률", group: "판정" }
+          ],
+          steps: steps
+        };
+      }
+
 
       if (mode !== "hab") {
         var n = mode === "e10" ? 10 : 3;
