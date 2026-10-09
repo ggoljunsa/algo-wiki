@@ -24,6 +24,7 @@ E[u_i 버킷 크기] = 1 + Σ_{j≠i} P{h(u_i)=h(u_j)}
                 = 1 + (n-1)/n ≤ 2             ← "All we needed was that this ≤ 1/n." (p.61)
 → 연산당 expected O(1), 공간은 log|H| 비트
 </pre>
+{tip}시뮬레이터 모드를 '''작은 family {일의 자리, 십의 자리}''' 로 바꾸면 문제집 7단원 ③-12 — 함수 2개짜리 family 가 왜 universal 이 아닌지(쌍 (10,11) 의 충돌 확률 1/2 > 1/10, 그리고 |H| ≥ n 이 필요한 이유)를 쌍 하나씩 디버깅할 수 있다.{/tip}
 [[sim:universal_hash_check]]
 시뮬레이터 "$h_{a,b}$ 전수 조사" 옵션: p = 5, n = 3 에서 $|H| = 20$ 개 (a, b) 를 모두 나열하면 모든 쌍 x ≠ y 의 충돌이 4/20 = 1/5 ≤ 1/3 → universal 확인.
 {exam}
