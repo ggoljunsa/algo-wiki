@@ -4,7 +4,7 @@
 // 사용: node src/test_render.js index.html
 const fs=require("fs"),vm=require("vm");
 const html=fs.readFileSync(process.argv[2],"utf8");
-const body=(html.match(/<script>([\s\S]*?)<\/script>\s*<\/body>/)||[])[1];
+const _m=html.match(/<script>((?:(?!<script>)[\s\S])*?)<\/script>\s*<\/body>/); const body=_m&&_m[1];
 if(!body){console.error("script 추출 실패");process.exit(1);}
 let captured="";
 function stub(id){const e={_id:id,style:{},classList:{add(){},remove(){},toggle(){}},

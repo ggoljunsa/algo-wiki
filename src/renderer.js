@@ -11,7 +11,7 @@ function renderNav(active) {
   (typeof NAV_ORDER !== "undefined" ? NAV_ORDER : []).forEach(function (group) {
     var groupHeader = document.createElement("li");
     var gdiv = document.createElement("div");
-    gdiv.style.cssText = "font-weight:700; color:#34466b; padding:6px 4px 2px; font-size:12px;";
+    gdiv.style.cssText = "font-weight:700; color:var(--h3); padding:6px 4px 2px; font-size:12px;";
     gdiv.textContent = group.group;
     groupHeader.appendChild(gdiv);
     nav.appendChild(groupHeader);
@@ -394,7 +394,7 @@ function renderTOC() {
     var a = document.createElement("a");
     a.href = "#" + h.id;
     a.textContent = tocText(h);
-    a.style.color = "#1d65b3";
+    a.style.color = "var(--link)";
     a.style.textDecoration = "none";
     a.style.fontSize = "12px";
     a.addEventListener("click", function (ev) {
@@ -428,7 +428,7 @@ document.getElementById("searchBox").addEventListener("input", function (e) {
   });
   if (!hits) {
     var li0 = document.createElement("li");
-    li0.style.cssText = "color:#999; font-size:12px; padding:6px 4px;";
+    li0.style.cssText = "color:var(--muted); font-size:12px; padding:6px 4px;";
     li0.textContent = "검색 결과 없음";
     nav.appendChild(li0);
   }

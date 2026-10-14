@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<script>
+/* 테마: 저장값 > 시스템 설정. 첫 페인트 전에 정해 깜빡임 없음 */
+(function(){var t=null;try{t=localStorage.getItem("algo-theme");}catch(e){}
+if(t!=="dark"&&t!=="light"){t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";}
+document.documentElement.setAttribute("data-theme",t);})();
+</script>
 <title>알고위키 — DGIST CSE301 Introduction to Algorithms Wiki</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
@@ -34,6 +41,7 @@
     --exam-bg: #ffe4ea;
     --exam-border: #d6465f;
     --table-head: #ecf0f6;
+    --h3: #34466b;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -663,6 +671,116 @@
     font-weight: 700;
     font-size: 14px;
   }
+
+  /* ============================================================
+     다크모드 — html[data-theme="dark"] (2026-10-15)
+     본문·사이드·박스·sim/anim 외곽은 어둡게, SVG 그림 영역과 슬라이드
+     이미지는 밝은 카드로 남긴다(그림마다 색이 박혀 있어 색 구분 유지).
+     ============================================================ */
+  .theme-toggle {
+    background: #1c2840; color: #fff; border: 1px solid #3a4a6a; border-radius: 3px;
+    padding: 4px 9px; font-size: 14px; cursor: pointer; line-height: 1.2; white-space: nowrap;
+  }
+  .theme-toggle:hover { background: #24345a; }
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #14161a;
+    --paper: #1d2026;
+    --text: #dfe2e7;
+    --muted: #9aa1ab;
+    --link: #7fb2ec;
+    --link-visited: #b39ce6;
+    --header: #1a2438;
+    --header-text: #fff;
+    --border: #353a44;
+    --code-bg: #2a2e36;
+    --info-bg: #2e2a17;
+    --info-border: #a88a2e;
+    --warn-bg: #3a2023;
+    --warn-border: #b45a63;
+    --tip-bg: #1a2a3c;
+    --tip-border: #4f7fb3;
+    --analogy-bg: #262140;
+    --analogy-border: #7a66c8;
+    --def-bg: #1a2e1e;
+    --def-border: #4f9a57;
+    --quiz-bg: #33261a;
+    --quiz-border: #c0842e;
+    --exam-bg: #3a1c25;
+    --exam-border: #c8465d;
+    --table-head: #262b34;
+    --h3: #a9bde0;
+  }
+  html[data-theme="dark"] header.top { border-bottom-color: #0d1422; }
+  html[data-theme="dark"] header.top .search input { background: #252932; color: var(--text); border-color: #0d1422; }
+  html[data-theme="dark"] aside ul li a:hover { background: #262c38; }
+  html[data-theme="dark"] aside ul li a.active { background: #2f4670; }
+  html[data-theme="dark"] main h1 { border-bottom-color: #3a5480; }
+  html[data-theme="dark"] main h2 { background: #232a36; border-left-color: #4f6fa8; }
+  html[data-theme="dark"] main h3 { color: var(--h3); border-bottom-color: #3a3f4a; }
+  html[data-theme="dark"] main h4 { color: var(--h3); }
+  html[data-theme="dark"] main a.wiki-stub { color: #8a909a; }
+  html[data-theme="dark"] main pre,
+  html[data-theme="dark"] main pre.c, html[data-theme="dark"] main pre.asm,
+  html[data-theme="dark"] main pre.sh, html[data-theme="dark"] main pre.txt { background: #0f1115; border: 1px solid var(--border); }
+  html[data-theme="dark"] main pre.ascii { background: #191b20; color: var(--text); }
+  html[data-theme="dark"] .analogy::before { color: #b3a3f0; }
+  html[data-theme="dark"] .def::before { color: #7fd08a; }
+  html[data-theme="dark"] .quiz::before { color: #f0b060; }
+  html[data-theme="dark"] .exam::before { color: #ff8da0; }
+  html[data-theme="dark"] .exam { box-shadow: none; }
+  html[data-theme="dark"] .info > table, html[data-theme="dark"] .warn > table, html[data-theme="dark"] .tip > table,
+  html[data-theme="dark"] .joke > table, html[data-theme="dark"] .analogy > table, html[data-theme="dark"] .def > table,
+  html[data-theme="dark"] .quiz > table, html[data-theme="dark"] .exam > table { background: var(--paper); }
+  html[data-theme="dark"] details.answer { background: #22262d; }
+  html[data-theme="dark"] details.answer > summary { color: #7fd08a; }
+  html[data-theme="dark"] details.answer[open] > summary { border-bottom-color: #444a55; }
+  html[data-theme="dark"] .joke { background: #2a2036; border-left-color: #8e5cc0; color: #c4bccf; }
+  html[data-theme="dark"] .joke::before { color: #c39ae8; }
+  html[data-theme="dark"] .categories .cat-tag, html[data-theme="dark"] main .meta .cat-tag { background: #2c3039; color: #c6cad1; }
+  html[data-theme="dark"] .diagram, html[data-theme="dark"] figure.pdf-img { background: #191b20; }
+  html[data-theme="dark"] figure.pdf-img img { border-color: #444; filter: brightness(0.88); }
+  html[data-theme="dark"] .stub-banner { background: #2e2a17; border-color: #a88a2e; color: #e6d08a; }
+  /* sim */
+  html[data-theme="dark"] .sim { background: #1a1d23; border-color: #3a5480; }
+  html[data-theme="dark"] .sim .sim-head { background: #2c4166; }
+  html[data-theme="dark"] .sim .sim-opt, html[data-theme="dark"] .sim .sim-count { color: var(--h3); }
+  html[data-theme="dark"] .sim select { background: #252932; color: var(--text); }
+  html[data-theme="dark"] .sim .sim-btn { background: #252932; color: #cfdaf0; border-color: #4f6fa8; }
+  html[data-theme="dark"] .sim .sim-btn:hover:not(:disabled) { background: #2f3644; }
+  html[data-theme="dark"] .sim .sim-btn.playing { background: #3a5480; color: #fff; }
+  html[data-theme="dark"] .sim .sim-range { accent-color: #6f95d8; }
+  html[data-theme="dark"] .sim .sim-panel { background: #20242b; }
+  html[data-theme="dark"] .sim .sim-panel-head { background: #262c38; color: var(--h3); }
+  html[data-theme="dark"] .sim .sim-badge { background: #3a3f4a; color: #ccc; }
+  html[data-theme="dark"] .sim .sim-badge.running { background: #1f4a2a; color: #9ee0ad; }
+  html[data-theme="dark"] .sim .sim-badge.ready { background: #4a3a12; color: #f0d080; }
+  html[data-theme="dark"] .sim .sim-badge.spinning { background: #4a2020; color: #ffaaaa; }
+  html[data-theme="dark"] .sim .sim-badge.blocked, html[data-theme="dark"] .sim .sim-badge.parked,
+  html[data-theme="dark"] .sim .sim-badge.sleeping { background: #2c2c55; color: #b8b8f0; }
+  html[data-theme="dark"] .sim .sim-badge.done, html[data-theme="dark"] .sim .sim-badge.finished { background: #3a3a3a; color: #bbb; }
+  html[data-theme="dark"] .sim .sim-line .sim-ln { color: #666c76; }
+  html[data-theme="dark"] .sim .sim-line .sim-mark { color: #ff7a6a; }
+  html[data-theme="dark"] .sim .sim-line.cur { background: #3d3415; }
+  html[data-theme="dark"] .sim .sim-line.cur .sim-src { color: #ffe08a; }
+  html[data-theme="dark"] .sim .sim-vars th { background: #262c38; }
+  html[data-theme="dark"] .sim .sim-vars tr.sim-group th { background: #2c3546; color: var(--h3); }
+  html[data-theme="dark"] .sim .sim-vars td { background: #20242b; }
+  html[data-theme="dark"] .sim .sim-vars td.changed { background: #3d3415; }
+  html[data-theme="dark"] .sim .sim-vars td .sim-prev { color: #c8a850; }
+  html[data-theme="dark"] .sim .sim-descbox { background: #1e2838; border-left-color: #4f6fa8; }
+  html[data-theme="dark"] .sim .sim-descbox .sim-stepno { color: #8fb0e8; }
+  html[data-theme="dark"] .sim .sim-svgbox { background: #f4f6fa; border-radius: 4px; padding: 6px; color: #222; }
+  html[data-theme="dark"] .sim-missing, html[data-theme="dark"] .anim-missing { background: #3a1c25; color: #ff8da0; }
+  /* anim */
+  html[data-theme="dark"] .anim { background: #1a1d23; border-color: #3a3f4a; border-left-color: #c8465d; }
+  html[data-theme="dark"] .anim .anim-stage { background: #f4f5f9; color: #222; }
+  html[data-theme="dark"] .anim .anim-ctrl { border-top-color: #2c3039; }
+  html[data-theme="dark"] .anim .anim-btn, html[data-theme="dark"] .anim select.anim-speed { background: #252932; color: #cfdaf0; border-color: #4a5160; }
+  html[data-theme="dark"] .anim .anim-btn:hover { background: #2f3644; }
+  html[data-theme="dark"] .anim .anim-btn.playing { background: #5a4775; border-color: #5a4775; color: #fff; }
+  html[data-theme="dark"] .anim .anim-clock { color: var(--h3); }
+  html[data-theme="dark"] .anim .anim-caption { border-top-color: #2c3039; }
 </style>
 </head>
 <body>
@@ -673,6 +791,7 @@
   <div class="search">
     <input id="searchBox" type="text" placeholder="문서 검색... (예: master method, loop invariant, quicksort)">
   </div>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="다크모드 전환">🌙</button>
   <div class="tagline">DGIST CSE301 Introduction to Algorithms — 중간고사 (L1–L8)</div>
 </header>
 
@@ -697,3 +816,9 @@
 <footer class="page">
   알고위키 · DGIST CSE301 Introduction to Algorithms · Prof. Hoon Sung Chwa · CLRS
 </footer>
+<script>
+(function(){var b=document.getElementById("themeToggle"),r=document.documentElement;
+function sync(){var d=r.getAttribute("data-theme")==="dark";b.textContent=d?"☀️":"🌙";b.title=d?"라이트 모드로":"다크 모드로";}
+b.addEventListener("click",function(){var n=r.getAttribute("data-theme")==="dark"?"light":"dark";r.setAttribute("data-theme",n);try{localStorage.setItem("algo-theme",n);}catch(e){}sync();});
+sync();})();
+</script>
