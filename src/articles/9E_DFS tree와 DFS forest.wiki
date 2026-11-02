@@ -1,0 +1,42 @@
+key: DFS tree와 DFS forest
+title: DFS tree 와 DFS forest — DFS 가 실제로 지나간 간선이 만드는 트리(들)
+category: 9강 Graph I, 용어
+---
+== 개요 ==
+[[DFS]] 가 unvisited 이웃으로 들어갈 때 쓴 간선만 모으면 트리가 된다 — '''DFS tree'''. 시작점이 root, 재귀 호출 관계가 부모–자식이다. 한 번의 DFS 로 다 못 가서 unvisited 정점에서 다시 시작하면(p.48 "Do it repeatedly!") 트리가 여러 개 생기고, 그 모음이 '''DFS forest''' 다. [[parenthesis theorem]] 과 [[topological sort]] 증명은 전부 "DFS tree 에서 descendant 인가?" 로 말한다.
+
+{def}
+L9 p.49 "Why is it called depth-first? We are implicitly building a tree: … Call this the '''DFS tree'''. And '''first''' we go as '''deep''' as we can."
+{/def}
+
+[[img:L9-48.png|L9 p.49 — 그래프를 A 에서 YOINK 하면 빨간 간선이 DFS tree: A→B→C→G→{F,D}, A→E|large]]
+
+<pre class="ascii">
+        A              tree edge (빨강) : A–B, B–C, C–G, G–F, G–D, A–E
+       / \             non-tree (점선) : B–D, C–D, B–F
+      B   E            → 전부 '조상–자손' 사이를 잇는다 (undirected DFS 의 성질)
+      |
+      C                깊이 4 — 같은 그래프의 BFS tree(p.89)는 깊이 3, 얕고 넓다
+      |
+      G
+     / \
+    F   D
+</pre>
+
+== 성질 ==
+* '''유일하지 않다.''' 시작 정점과 [[adjacency list]] 의 이웃 순서에 따라 모양이 바뀐다.
+* 조상–자손 관계 ⇔ 구간 포함: v 가 w 의 descendant ⇔ w.start < v.start < v.finish < w.finish ([[parenthesis theorem]]).
+* [[undirected graph]] 에서 non-tree 간선은 항상 조상–자손을 잇는다(cross edge 없음, CLRS Thm 22.10).
+* undirected 에서 DFS forest 의 트리 하나 = [[connected component]] 하나.
+* 이 과목의 "descendant" 는 L8 [[binary tree 용어]] 와 같은 뜻(자식, 자식의 자식, …).
+
+{analogy}
+'''YOINK — 그물 집어 올리기.''' 바닥에 펼친 그물(그래프)에서 A 매듭을 손가락으로 집어 올리면, 탐험가가 실제로 지나간 줄(빨강)이 팽팽하게 늘어져 나무 모양이 된다. 안 지나간 줄(점선)은 느슨하게 늘어져 있을 뿐이다.
+{/analogy}
+
+{warn}
+"DFS tree 는 그래프마다 하나로 정해진다" — 거짓. 시험 trace 에서 이웃 순서 조건을 무시하면 다른 트리를 그리게 된다.
+{/warn}
+
+== 관련 문서 ==
+* [[DFS]] · [[parenthesis theorem]] · [[connected component]] · [[BFS]] · [[binary tree 용어]] · [[L9 Graph Algorithms I]]

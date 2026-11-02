@@ -1,0 +1,51 @@
+key: SCC finish time 보조정리
+title: SCC finish time 보조정리 (Lemma 2 + Corollary 1) — 간선 A→B 이면 A.finish > B.finish
+category: 10강 Graph II, 용어
+---
+== 개요 ==
+L10 의 핵심 보조정리. [[SCC graph]] 에 간선 $A \to B$ 가 있으면 1차 DFS 기준 '''$A.finish > B.finish$''' (Lemma 2, p.64). 뒤집으면: [[G^T]] 에 간선 $B \to A$ 가 있으면 $A.finish > B.finish$, 즉 '''$G^T$ 의 SCC 간 간선은 항상 finish 가 큰 쪽을 향한다''' (Corollary 1, p.65). L9 [[topological sort]] 의 "DAG 에서 $u \to v$ 이면 $u.finish > v.finish$" 를 SCC DAG 에 그대로 옮긴 것이고, 증명도 같은 두 case 논증이다.
+
+{def}
+L10 p.64 "Lemma 2: If there is an edge like this: A → B, then A.finish > B.finish."
+L10 p.65 "Corollary 1: If there is an edge like this in the reversed graph: B → A, then A.finish > B.finish."
+(SCC 의 finish = 원소 finish 의 최댓값, 모든 시각은 1차 DFS 기준 — p.52)
+{/def}
+
+[[img:L10-60.png|L10 p.61 — Case 1: x = A 의 finish 최대, y = B 의 finish 최대, z = A 에서 처음 발견. timeline z.start < y.start < y.finish < z.finish ≤ x.finish|large]]
+[[img:L10-64.png|L10 p.65 — Corollary 1: reversed graph 에서 B → A 이면 A.finish > B.finish|medium]]
+
+== 4칸 증명 ==
+<pre class="txt">
+'''① 설정:''' SCC graph 의 간선 A → B. x = A 에서 finish 최대 (A.finish = x.finish),
+             y = B 에서 finish 최대 (B.finish = y.finish), z = A 에서 처음 발견된 정점 (x.finish ≥ z.finish).
+             보일 것: A.finish > B.finish. 1차 DFS 가 A 와 B 중 어느 쪽을 먼저 만났나로 case 분할.
+'''② Case 1 — A 를 먼저 (p.61):'''
+             z.start 시점에 A, B 의 정점은 모두 미방문.
+             z ⇝ (A 내부) ⇝ (A→B 간선) ⇝ y 인 미방문 path → "we will discover y via z"
+             → y 는 z 의 descendant → [[parenthesis theorem]]
+             z.start < y.start < y.finish < z.finish ≤ x.finish  ⇒  B.finish < A.finish
+'''③ Case 2 — B 를 먼저 (p.62):'''
+             B ⇝ A path 가 있으면 A → B 와 합쳐 SCC graph 에 cycle → [[SCC graph는 DAG]] 에 모순.
+             → "we completely finish exploring B and never reach A. A is explored later after we restart DFS."
+             → B.finish < A.start < A.finish
+'''④ 결론 (p.63):''' 어느 case 든 A.finish > B.finish. ∎
+             Corollary 1: G^T 의 간선 B → A = G 의 간선 A → B → Lemma 2 적용.
+</pre>
+[[anim:dfs_parenthesis|Case 1 의 도구 — DFS 구간은 중첩 아니면 분리. y 가 z 의 descendant 이므로 y 의 구간이 z 의 구간 안에 들어간다]]
+
+{analogy}
+'''퇴근 시각.''' 상사 A 팀(위층)에서 부하 B 팀(아래층)으로만 내려가는 계단이 있다. 순찰자가 A 팀부터 들르면 계단으로 내려가 B 팀을 다 둘러보고 올라와야 A 팀 순찰이 끝난다 → A 팀이 늦게 끝난다. B 팀부터 들르면 올라가는 계단이 없으니 B 팀만 보고 끝나고, A 팀은 한참 뒤에 따로 들른다 → 역시 A 팀이 늦게 끝난다. '''어느 쪽이든 위층이 늦게 퇴근한다.'''
+{/analogy}
+
+{warn}
+'''start 버전은 거짓.''' "$A \to B$ 이면 $A.start < B.start$" 는 Case 2 에서 깨진다(예제: KAIST → {DGIST…} 인데 KAIST.start 11 > 0). 성질은 '''finish''' 에만 있다.
+{/warn}
+{exam}
+교수(10/27): Lemma 2 의 '''두 case — reach A before B / reach B before A'''. p.63 "Notice: this is exactly the same two-case argument that we did earlier, just with the SCC DAG!" → L9 topological sort 증명과 묶어서 외울 것.
+{/exam}
+
+== 예제 확인 ==
+SCC graph: KAIST(12) → {DGIST…}(10) → {Puppy…}(5), KAIST → {Puppy…}. 세 간선 모두 finish 큰 → 작은 ✓. $G^T$ 에서는 세 간선 모두 작은 → 큰 ✓ (p.66 "all blue arrows point towards larger finish times").
+
+== 관련 문서 ==
+* [[SCC graph]] · [[SCC graph는 DAG]] · [[parenthesis theorem]] · [[start time과 finish time]] · [[topological sort]] · [[SCC 알고리즘 정확성 증명]] · [[L10 Graph Algorithms II]]

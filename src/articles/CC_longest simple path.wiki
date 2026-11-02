@@ -1,0 +1,43 @@
+key: longest simple path
+title: longest simple path — DP 가 안 되는 최적화 문제
+category: 12강 DP I, 용어
+---
+== 개요 ==
+'''longest simple path''' 는 s 에서 t 로 가는 [[simple path]] 중 '''가장 긴''' 것을 찾는 문제다(L12 p.58–60, 모든 간선 가중치 1). 최단경로와 모양이 똑같은 최적화 문제인데 [[dynamic programming]] 이 통하지 않는다 — "최장 = 앞 조각 최장 + 뒤 조각 최장" 으로 쪼개면 두 조각이 같은 정점을 써서 합친 경로가 simple 이 아니게 된다. 즉 [[optimal substructure]] 가 없다. 실제로 NP-complete.
+
+{def}
+L12 p.59 "Optimal Substructure? Longest path from s to t = longest path from s to a + longest path from a to t? '''NOPE!'''"
+L12 p.60 "Optimal solutions to subproblems don't give us an optimal solution to the big problem. (At least if we try to do it this way). The subproblems we came up with aren't independent: Once we've chosen the longest path from a to t, which uses b, our longest path from s to a shouldn't be allowed to use b, since b was already used."
+"Actually, the longest simple path problem is NP-complete. We don't know of any polynomial-time algorithms for it, DP or otherwise!"
+{/def}
+
+[[img:L12-58.png|L12 p.60 — 주황 = s→a 최장(t, b 경유), 파랑 = a→t 최장(b 경유), 분홍 = 진짜 s→t 최장. 주황+파랑은 b 를 두 번 지난다|large]]
+
+== 최단경로와 비교 ==
+{|
+! || 최단경로 || 최장 simple path
+|-
+| 부분경로 성질 || "sub-paths of shortest paths are shortest paths" ([[최단경로의 부분경로]]) || 최장 경로의 부분경로가 최장일 필요 없음
+|-
+| 조각 이어 붙이기 || 최단 + 최단 → (negative cycle 없으면) simple 최단 || 최장 + 최장 → 정점이 겹쳐 '''simple 아님'''
+|-
+| 부분문제 독립? || 예 || 아니오 (한 조각이 쓴 정점을 다른 조각이 못 씀)
+|-
+| optimal substructure || 있음 → [[Bellman-Ford]], [[Floyd-Warshall]] || 없음
+|-
+| 알려진 알고리즘 || 다항 시간 || 다항 시간 알고리즘 모름 (NP-complete)
+|}
+{info}
+최단경로에서는 "정점이 겹치면 그 cycle 을 잘라내면 된다"(cycle 비용 ≥ 0 이니 손해 없음, [[simple path]]). 최장경로에서는 cycle 을 잘라내면 길이가 '''줄어들어''' 최장이 아니게 된다 — 그래서 같은 수법이 안 통한다.
+{/info}
+
+{analogy}
+'''조별 과제 분담.''' "가장 많은 장소를 들르는 여행 코스" 를 앞 반·뒤 반으로 나눠 두 사람에게 각자 최장 코스를 짜 오라 하면, 둘 다 경치 좋은 b 마을을 넣어 온다. 합치면 b 를 두 번 들르니 규칙 위반. 한 사람이 b 를 쓰면 다른 사람은 b 를 못 쓴다는 '''의존성''' 때문에 각자의 최선이 합쳐서 최선이 되지 않는다.
+{/analogy}
+
+{exam}
+(예상) 서술: "longest simple path 에 DP 를 쓸 수 없는 이유" → ① s→a 최장 + a→t 최장으로 쪼개면 ② 두 부분해가 같은 정점(b)을 쓸 수 있어 합친 경로가 simple 이 아님 ③ 부분문제가 독립이 아니라 optimal substructure 가 없음 (NP-complete). T/F: "모든 최적화 문제는 DP 로 다항 시간에 풀 수 있다" → F.
+{/exam}
+
+== 관련 문서 ==
+* [[optimal substructure]] · [[simple path]] · [[최단경로의 부분경로]] · [[dynamic programming]] · [[L12 Dynamic Programming I]]

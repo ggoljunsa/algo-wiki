@@ -1,0 +1,51 @@
+key: Bellman-Ford는 DP
+title: Bellman-Ford 는 DP — d(i) 표를 bottom-up 으로 채우는 알고리즘
+category: 12강 DP I, 용어
+---
+== 개요 ==
+L12 는 새 알고리즘이 아니라 L11 의 [[Bellman-Ford]] 를 다시 보며 시작한다(p.4–20). 그리고 p.21: "'''Bellman-Ford is an example of… Dynamic Programming!'''" 갱신 루프를 "n 개의 배열 $d^{(0)}, …, d^{(n-1)}$ 을 위에서부터 채우는 표" 로 다시 쓰면, [[dynamic programming]] 의 두 요소와 [[bottom-up]] 구현이 그대로 보인다.
+
+{def}
+L12 p.14/p.20 "Important thing about B-F for the rest of this lecture: $d^{(i)}[v]$ is equal to the cost of the shortest path between s and v '''with at most i edges'''."
+{/def}
+
+== DP 로 읽기 ==
+{|
+! DP 의 부품 || Bellman-Ford 에서
+|-
+| 부분문제 || $d^{(i)}[v]$ = 간선 ≤ i 개로 s→v 최단 비용 ([[d^(i) 배열]])
+|-
+| 점화식 ([[optimal substructure]], p.28) || $d^{(i+1)}[v] = \min\{\ d^{(i)}[v],\ \min_u d^{(i)}[u] + w(u,v)\ \}$ — "간선 ≤ i 개로 v" 그대로 쓰거나, "간선 ≤ i 개로 u" + 마지막 간선 (u,v)
+|-
+| [[overlapping subproblems]] (p.29) || "Lots of different entries of $d^{(i+1)}$ will use $d^{(i)}[v]$."
+|-
+| base case || $d^{(0)}[s] = 0$, 나머지 ∞
+|-
+| 채우는 순서 ([[bottom-up]], p.33) || $d^{(0)} → d^{(1)} → … → d^{(n-1)}$
+|-
+| 답 || $d^{(n-1)}[v]$ ([[simple path]] 는 간선 ≤ n−1)
+|-
+| 시간 || 행 n−1 개 × 행 하나 $O(m)$ = $O(nm)$
+|}
+<pre class="txt">
+p.9–13 Gates 예제 (s = Gates)
+          Gates  R1   E3   Park  HG
+d(0)        0    ∞    ∞    ∞     ∞
+d(1)        0    1    ∞    ∞    25
+d(2)        0    1    2   45    23     Park: min{∞, d(1)[HG]+20 = 45}
+d(3)        0    1    2    6    23     Park: min{45, d(2)[E3]+4 = 6}
+d(4)        0    1    2    6    23
+</pre>
+[[img:L12-14.png|L12 p.14 — Interpretation of d(i): 간선 ≤ i 개 최단경로 비용|medium]]
+[[sim:bellman_ford_table]]
+
+{analogy}
+'''소문 퍼지기.''' 하루(라운드)에 한 다리씩만 소문이 건너간다. $d^{(i)}$ 는 "i 일째까지 들은 가장 좋은 소식" 이고, 내일 소식은 오늘 이웃이 들은 소식에 한 다리를 더한 것 중 최선 — 오늘 표만 있으면 내일 표를 채울 수 있다.
+{/analogy}
+
+{exam}
+(예상) "Bellman-Ford 가 DP 인 이유를 부분문제·점화식·overlapping 으로 설명하라." 위 표의 세 줄을 그대로 쓰면 된다. 그리고 "n 개 배열을 다 저장해야 하나?" → 아니다, last round / this round 두 개면 된다(p.15).
+{/exam}
+
+== 관련 문서 ==
+* [[Bellman-Ford]] · [[d^(i) 배열]] · [[dynamic programming]] · [[bottom-up]] · [[Floyd-Warshall]] · [[L12 Dynamic Programming I]]

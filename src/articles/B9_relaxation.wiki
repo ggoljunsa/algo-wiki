@@ -1,0 +1,39 @@
+key: relaxation
+title: relaxation — d[v] ← min(d[v], d[u] + w(u,v)), 두 알고리즘의 공통 갱신 식
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+'''relaxation''' 은 간선 $(u,v)$ 하나를 보고 "u 를 거쳐 v 로 가면 지금 알고 있는 것보다 싸지나?"를 확인해 $d[v]$ 를 줄이는 한 줄이다. 슬라이드는 이 이름을 쓰지 않고 식만 쓴다("update"); '''relaxation''' 은 [[CLRS]] 24장 용어. [[Dijkstra]] 와 [[Bellman-Ford]] 는 '''이 식이 완전히 같고''', 어느 u 에서 relax 하느냐만 다르다.
+
+{def}
+L11 p.25: "Update all u's neighbors v: d[v] = min( d[v] , d[u] + edgeWeight(u,v))"
+Bellman-Ford (p.70): $d^{(i+1)}[v] \leftarrow \min(d^{(i)}[v],\ d^{(i)}[u] + w(u,v))$
+{/def}
+<pre class="txt">
+relax(u, v):
+    if d[u] + w(u,v) < d[v]:
+        d[v] = d[u] + w(u,v)        (그리고 v 의 부모 = u 로 기록하면 최단경로 트리)
+
+예 (p.28–29): u = R1 (d=1), v = HG (d=25), w = 22
+    1 + 22 = 23 < 25  →  d[HG] = 23
+예 (p.33–35): u = Park (d=6), v = HG (d=23), w = 20
+    6 + 20 = 26 ≥ 23  →  그대로 ("stay as it is")
+</pre>
+
+{|
+! || 누구를 relax 하나 || 몇 번
+|-
+| [[Dijkstra]] || not-sure 중 $d$ 최소인 u 의 나가는 간선만 || 간선마다 1번 (총 m)
+|-
+| [[Bellman-Ford]] || '''모든''' u 의 모든 간선 || 라운드마다 m, n−1 라운드 (총 $O(nm)$)
+|}
+
+{analogy}
+'''고무줄 풀기.''' $d[v]$ 를 s 에서 v 까지 팽팽하게 당긴 고무줄 길이라고 하면, u 를 거치는 더 짧은 길을 발견할 때마다 고무줄이 느슨해지며(relax) 짧아진다. 절대 길어지지는 않는다.
+{/analogy}
+{exam}
+교수(10/29): "'''Bellman-Ford's update rule is the same; the only difference is which vertex we pick.'''" p.69 는 "the most important slide in today's lecture".
+{/exam}
+
+== 관련 문서 ==
+* [[Dijkstra]] · [[Bellman-Ford]] · [[d 값과 sure·not-sure]] · [[d^(i) 배열]] · [[최단경로 알고리즘 비교표]]

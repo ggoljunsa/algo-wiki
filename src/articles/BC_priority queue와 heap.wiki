@@ -1,0 +1,41 @@
+key: priority queue와 heap
+title: priority queue 와 heap — findMin · removeMin · updateKey 를 지원하는 자료구조
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+[[Dijkstra]] 가 필요로 하는 자료구조(L11 p.55)는 "not-sure 정점들을 $d[v]$ 를 key 로 저장하고, 최소를 찾고(findMin), 꺼내고(removeMin), key 를 줄이는(updateKey)" 것이다. 이런 추상 자료형을 '''priority queue''' 라 부르고, 대표 구현이 '''heap''' 이다. 슬라이드: "'''Not covered in this class – see CLRS! But! We will use them.'''"
+
+{def}
+"A heap is a tree-based data structure that has the property that every node has a smaller key than its children." (L11 p.59)
+{/def}
+[[img:L11-58.png|L11 p.59 — Heaps support findMin, removeMin, updateKey. 예: 루트 0, 그 아래 2·3, 그 아래 6·5·4·10 — 모든 부모가 자식보다 작다|medium]]
+<pre class="ascii">
+            0            ← findMin = 루트, O(1)
+          /   \
+         2     3         removeMin: 루트를 빼고 마지막 원소를 올려 아래로 sift-down, O(log n)
+        / \   / \        updateKey(감소): 위로 sift-up, O(log n)  (binary heap)
+       6   5 4   10
+</pre>
+
+{|
+! 구현 || findMin || removeMin || updateKey || Dijkstra
+|-
+| array (정렬 안 함) || $O(n)$ || $O(n)$ || $O(1)$ || $O(n^2)$
+|-
+| [[red-black tree]] || $O(\log n)$ || $O(\log n)$ || $O(\log n)$ || $O((n+m)\log n)$
+|-
+| binary heap ([[CLRS]] 6장) || $O(1)$ || $O(\log n)$ || $O(\log n)$ || $O((n+m)\log n)$
+|-
+| [[Fibonacci heap]] || $O(1)$* || $O(\log n)$* || $O(1)$* || $O(n\log n+m)$
+|}
+binary heap 줄은 슬라이드 밖(p.60 "Nice chart on Wikipedia" 의 내용). * = amortized.
+
+{analogy}
+'''응급실 트리아지.''' 들어온 순서가 아니라 '''가장 급한 환자(key 최소)'''부터 진료한다(removeMin). 상태가 악화되면 우선순위를 올린다(updateKey). 접수대가 이 일을 빨리 할수록 병원(Dijkstra)이 빨리 돈다.
+{/analogy}
+{info}
+L8 의 [[binary search tree]] 와 heap 은 다르다: BST 는 "왼쪽 < 부모 < 오른쪽"(정렬 순회 가능), heap 은 "부모 < 자식"만(최소만 빨리 찾음).
+{/info}
+
+== 관련 문서 ==
+* [[Dijkstra 수행 시간]] · [[Fibonacci heap]] · [[red-black tree]] · [[Dijkstra]]

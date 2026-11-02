@@ -1,0 +1,43 @@
+key: directed graph
+title: directed graph — 방향 그래프, 간선 = 순서쌍 (u, v)
+category: 9강 Graph I, 용어
+---
+== 개요 ==
+'''directed graph'''(digraph)는 간선에 방향이 있는 [[graph]] 다. 간선은 순서쌍 $(u,v)$, 그림으로는 화살표 $u \to v$. $(u,v)$ 가 있어도 $(v,u)$ 는 없을 수 있다. 의존성(패키지 설치 순서), 웹 링크, 일방통행 도로가 전부 directed graph 다.
+
+{def}
+L9 p.14: "Has vertices and edges. V is the set of vertices. E is the set of '''DIRECTED''' edges. Formally, a graph is G = (V,E)." 예: $V=\{1,2,3,4\}$, $E=\{(1,3),(2,4),(3,4),(4,3),(3,2)\}$.
+{/def}
+
+[[img:L9-13.png|L9 p.14 — Directed Graphs. (3,4) 와 (4,3) 은 서로 다른 간선|medium]]
+
+== undirected 와 무엇이 달라지나 ==
+{|
+! || [[undirected graph]] || directed graph
+|-
+| 간선 || 집합 $\{u,v\}$ || 순서쌍 $(u,v)$
+|-
+| 차수 || [[degree]], 합 $2m$ || [[in-degree와 out-degree]], 각각 합 $m$
+|-
+| [[adjacency matrix]] || 대칭 || 비대칭 가능 (행 = Source, 열 = Destination, p.17)
+|-
+| [[adjacency list]] || 간선이 두 리스트에 (총 $2m$) || out-neighbor 만 (총 $m$)
+|-
+| DFS(w) 가 찾는 것 || [[connected component]] || w 에서 '''reachable set''' (component 아님, p.52)
+|-
+| cycle 없음 || 숲(forest) || [[DAG]]
+|}
+
+{analogy}
+'''일방통행 도로망.''' A 에서 B 로 갈 수 있다고 B 에서 A 로 돌아올 수 있는 건 아니다. 그래서 "같은 동네(component)" 개념이 깨지고, "서로 오갈 수 있는 동네" 를 따로 정의해야 한다 → L10 [[strongly connected component]].
+{/analogy}
+
+== L9 p.52 — "DFS works fine on directed graphs too!" ==
+<pre class="ascii">
+   B ──→ A ──→ C        A 에서 DFS: A, C 만 방문 (B 로 가는 간선 방향이 B→A)
+                        B 에서 DFS: B, A, C 모두 방문
+</pre>
+[[DFS]] 와 [[BFS]] 는 outgoing 간선만 따라가면 그대로 동작하고, 수행 시간도 [[O(n+m)]] 이다. 다만 결과는 "도달 가능 집합" 이지 대칭적인 component 가 아니다.
+
+== 관련 문서 ==
+* [[undirected graph]] · [[in-degree와 out-degree]] · [[DAG]] · [[topological ordering]] · [[strongly connected component]] · [[G^T]]

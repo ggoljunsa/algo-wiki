@@ -1,0 +1,55 @@
+key: start time과 finish time
+title: start time 과 finish time — DFS 가 정점에 찍는 두 timestamp (슬라이드는 0 부터)
+category: 9강 Graph I, 용어
+---
+== 개요 ==
+[[DFS]] 는 정점 w 에 두 시각을 적는다. '''start time''' = w 에 처음 들어간 시각(in progress 가 된 순간), '''finish time''' = w 의 모든 이웃을 다 보고 all done 이 된 순간. 슬라이드 p.67 코드에서는 `start_time`, `end_time`, p.68–75 예제 그림에서는 "Start", "Leave" 라고 쓴다. p.39: "the bookkeeping will be useful later!" — finish time 이 [[topological sort]] 와 L10 [[SCC 알고리즘]] 의 핵심이 된다.
+
+{def}
+L9 p.40: `w.startTime = currentTime` (들어가자마자) / `w.finishTime = currentTime` (모든 이웃을 끝낸 뒤). 시계는 들어갈 때 1, 자식에서 돌아올 때 1 증가.
+{/def}
+
+{info}
+'''슬라이드 규약은 시각 0 부터''' 시작한다(A.start = 0). [[CLRS]] 는 `time = time + 1` 을 먼저 해서 1 부터 2n 까지 쓴다. 같은 그래프라면 '''슬라이드 값 = CLRS 값 − 1'''. 시험 표는 슬라이드 규약으로, 문제에 CLRS 식이 주어지면 그쪽으로.
+{/info}
+
+== 예제 (L9 p.68–75) ==
+간선 A→C, C→D, C→B, D→B, A 에서 시작.
+<pre class="txt">
+cur 0 : A start 0          (A
+cur 1 : C start 1           (C
+cur 2 : D start 2            (D
+cur 3 : B start 3             (B
+        B 이웃 없음 → B finish 4   B)
+        D 로 돌아와 ++ → D finish 5  D)
+        C 로 돌아와 ++ (B 는 done) → C finish 6   C)
+        A 로 돌아와 ++ → A finish 7   A)
+괄호식: (A (C (D (B) ) ) )
+</pre>
+[[img:L9-74.png|L9 p.75 — A 0/7, C 1/6, D 2/5, B 3/4|medium]]
+{|
+! 정점 || start || finish
+|-
+| A || 0 || 7
+|-
+| C || 1 || 6
+|-
+| D || 2 || 5
+|-
+| B || 3 || 4
+|}
+성질: 시각 $0, 1, \dots, 2n-1$ 이 '''모두 서로 다르다'''(정점마다 정확히 두 번 증가). 자식이 없는 정점은 finish = start + 1.
+
+{analogy}
+'''호텔 체크인·체크아웃.''' start = 체크인, finish = 체크아웃. 내가 머무는 동안 들어온 손님(자손)은 나보다 먼저 체크아웃해야 내가 나갈 수 있다(재귀 return 순서). 그래서 두 손님의 숙박 기간은 '''한쪽이 다른 쪽 안에 쏙''' 들어가거나 '''아예 겹치지 않는다''' → [[parenthesis theorem]].
+{/analogy}
+
+{exam}
+교수(10/20): topological order 를 만들 때 학생이 '''start time 오름차순'''을 제안 → 반례로 틀림(p.59: 간선 coreutils → libbz2 인데 start 는 9 > 1). 정답은 '''finish time 내림차순'''. 교수(10/22): "edge 방향과 '''finish time''' 사이의 관계를 생각하라 — edge A→B 가 있으면 A 의 finish time 이 B 보다 크다."
+{/exam}
+{warn}
+start 와 finish 를 바꿔 쓰는 실수 주의. topological sort 는 '''finish 내림차순''', start 순은 틀린다.
+{/warn}
+
+== 관련 문서 ==
+* [[DFS]] · [[DFS 세 가지 색]] · [[parenthesis theorem]] · [[topological sort]] · [[SCC finish time 보조정리]]

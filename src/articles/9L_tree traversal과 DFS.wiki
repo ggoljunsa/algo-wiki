@@ -1,0 +1,49 @@
+key: tree traversal과 DFS
+title: tree traversal 과 DFS — in-order / pre-order / post-order 는 출력 시점만 다른 DFS
+category: 9강 Graph I, 용어
+---
+== 개요 ==
+트리 순회(pre-order, in-order, post-order)는 모두 '''트리 위의 [[DFS]]''' 이고, 노드를 "언제 출력하느냐" 만 다르다. L9 p.77 은 L8 의 [[binary search tree]] 를 '''in-order''' 로 순회하면 key 가 정렬 순서로 나온다는 것을 DFS 의 응용으로 보여준다.
+
+{def}
+L9 p.77 "Other use of DFS: In-order traversal of BSTs. Instead of outputting a node when you are done with it, output it '''when you are done with the left child and before you begin the right child'''."
+{/def}
+
+[[img:L9-76.png|L9 p.77 — In-order traversal of BSTs: 5(3(2(1),4),7(·,8)) → 1 2 3 4 5 7 8|medium]]
+
+<pre class="c">
+def in_order(x):
+    if x is None: return
+    in_order(x.left)
+    print(x.key)          # 왼쪽 부분 트리를 다 끝낸 뒤, 오른쪽 시작 전
+    in_order(x.right)
+</pre>
+
+== 세 가지 출력 시점 ==
+L8 의 트리 5(3(2(1), 4), 7(·, 8)) 에서:
+{|
+! 출력 시점 || 이름 || 출력
+|-
+| 들어갈 때 (start time) || pre-order || 5 3 2 1 4 7 8
+|-
+| 왼쪽 끝난 뒤, 오른쪽 전 || '''in-order''' || '''1 2 3 4 5 7 8''' (정렬됨)
+|-
+| 나올 때 (finish time) || post-order || 1 2 4 3 8 7 5
+|}
+교수(10/22): in-order 의사코드에서 '''print 줄 위치만 바꾸면''' pre-order(node 먼저)/post-order(node 마지막)라고 시연했다.
+* in-order 가 정렬 순서인 이유: [[BST property]] (왼쪽 subtree < x < 오른쪽 subtree) + subtree 크기에 대한 귀납. 시간 $O(n)$ (트리는 $m = n-1$ 이라 [[O(n+m)]] = $O(n)$).
+* post-order(끝날 때 기록)는 [[topological sort]] 의 "finish 때 리스트에 넣기" 와 같은 시점이다.
+
+{analogy}
+'''책 목차 읽기.''' pre-order 는 장 제목을 먼저 읽고 절로 내려가는 목차 읽기, post-order 는 절을 다 읽고 나서 장 요약을 쓰는 것, in-order 는 "왼쪽 절 → 장 → 오른쪽 절" 처럼 가운데에 끼워 읽는 것. 길(DFS)은 똑같고 메모하는 순간만 다르다.
+{/analogy}
+
+{quiz}
+위 트리에 6 을 [[BST INSERT]] 한 뒤(7 의 왼쪽 자식) in-order 와 post-order 출력은?
+{/quiz}
+{answer}
+트리 5(3(2(1),4), 7(6, 8)). in-order: 1 2 3 4 5 6 7 8. post-order: 1 2 4 3 6 8 7 5.
+{/answer}
+
+== 관련 문서 ==
+* [[DFS]] · [[binary search tree]] · [[BST property]] · [[start time과 finish time]] · [[topological sort]] · [[L8 Tree Algorithms]]

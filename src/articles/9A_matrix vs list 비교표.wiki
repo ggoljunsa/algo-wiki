@@ -1,0 +1,48 @@
+key: matrix vs list 비교표
+title: matrix vs list 비교표 — L9 p.20 Trade-offs (빈칸 출제 1순위 표)
+category: 9강 Graph I, 용어
+---
+== 개요 ==
+L9 p.20 "Trade-offs" 표. [[adjacency matrix]] 와 [[adjacency list]] 를 세 연산(Edge membership / Neighbor query / Space)으로 비교한다. 교수(10/20)가 학생에게 '''한 칸씩 물어보며''' 채운 표라 빈칸 문제로 그대로 나오기 좋다. 결론은 "list 가 sparse graph 에 유리, 앞으로 list 가정".
+
+[[img:L9-19.png|L9 p.20 — Trade-offs. n: the number of vertices, m: the number of edges|large]]
+
+== 표 ==
+{|
+! Say there are n vertices and m edges || adjacency matrix || adjacency list
+|-
+| '''Edge membership''' — Is e = {v,w} in E? || $O(1)$ || $O(\deg(v))$ or $O(\deg(w))$
+|-
+| '''Neighbor query''' — Give me v's neighbors. || $O(n)$ || $O(\deg(v))$
+|-
+| '''Space requirements''' || $O(n^2)$ || $O(n+m)$
+|}
+슬라이드 메모: list 쪽에 "'''Generally better for sparse graphs'''", 그리고 "'''We'll assume this representation for the rest of the class'''".
+
+== 왜 그 값인가 ==
+<pre class="txt">
+matrix  membership : A[v][w] 한 칸                                     → O(1)
+matrix  neighbors  : v 행의 n 칸을 전부 봐야 1 인 칸을 안다              → O(n)
+matrix  space      : n × n 칸                                          → O(n^2)
+list    membership : v 의 리스트를 처음부터 훑으며 w 찾기                 → O(deg(v))
+list    neighbors  : v 의 리스트 그대로                                  → O(deg(v))
+list    space      : 정점 배열 n + 리스트 노드 2m (directed 면 m)        → O(n + m)
+</pre>
+그래프 탐색([[DFS]], [[BFS]])은 "모든 정점의 이웃 나열" 이다. matrix 면 $n \times O(n) = O(n^2)$, list 면 $\sum_v O(\deg(v)) = O(m)$ + 정점 $O(n)$ = [[O(n+m)]].
+
+{analogy}
+'''전화번호부 vs 개인 연락처.''' matrix 는 "전 국민 × 전 국민" 거대한 표 — "A 와 B 가 아는 사이?" 는 즉답이지만 표가 국민 수의 제곱이고, A 의 지인 목록을 뽑으려면 A 행 전체를 읽어야 한다. list 는 각자의 연락처 앱 — 지인 목록은 즉시, 저장 공간은 실제 관계 수만큼, 대신 "B 가 내 연락처에 있나?" 는 목록을 훑어야 한다.
+{/analogy}
+
+{exam}
+교수(10/20) 수업에서 학생 답 "list 의 membership 은 O(n)" 에 "could be, '''more specifically depends on degree'''" 라고 고쳤다. 빈칸에는 $O(n)$ 이 아니라 '''$O(\deg(v))$''' 를 쓸 것. 그리고 "sparse 에는 list".
+{/exam}
+{quiz}
+Circle all that apply. (a) adjacency list 의 neighbor query 는 $O(\deg(v))$ (b) adjacency matrix 로 BFS 를 하면 $O(n+m)$ (c) undirected 그래프의 adjacency matrix 는 대칭이다 (d) adjacency list 의 공간은 $O(n^2)$
+{/quiz}
+{answer}
+'''(a), (c)''' 만. (b) matrix 면 정점마다 행 n 칸 → $O(n^2)$. (d) list 공간은 $O(n+m)$ — $O(n^2)$ 은 matrix.
+{/answer}
+
+== 관련 문서 ==
+* [[adjacency matrix]] · [[adjacency list]] · [[degree]] · [[O(n+m)]] · [[자료구조 비교표]] (L7 의 연산별 trade-off 표와 같은 사고방식)

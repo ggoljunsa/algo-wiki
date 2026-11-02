@@ -1,0 +1,39 @@
+key: d 값과 sure·not-sure
+title: d[v] 와 sure·not-sure — Dijkstra 가 줄 대신 들고 다니는 두 가지 기록
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+p.23 "How do we actually implement this? Without string and gravity?" 의 답. [[Dijkstra]] 는 정점마다
+* '''$d[v]$''' — s→v 거리의 "best '''over-estimate'''" (지금까지 찾은 경로 중 최선의 cost), 그리고
+* '''sure / not-sure''' 표시 — "이 값은 확정(I'm sure)" / "아직 모름(I'm not sure yet)"
+두 가지만 기록한다. 진짜 거리 [[d(s,v)]] 와 구분하는 것이 핵심.
+
+{def}
+"How far is a node from Gates? I'm not sure yet / I'm sure. x = d[v] is my best over-estimate for dist(Gates,v). Initialize d[v] = ∞ for all non-starting vertices v, and d[Gates] = 0." (L11 p.24)
+{/def}
+[[img:L11-24.png|L11 p.24 — 범례: 연한 민트 = I'm not sure yet, 진한 초록 = I'm sure, 네모 x = d[v], 주황 = Current node u. 초기값 Gates 0, 나머지 ∞|medium]]
+
+== 성질 ==
+{|
+! 성질 || 이유 || 출처
+|-
+| $d[v]$ 는 '''절대 증가하지 않는다''' || 갱신이 $\min(d[v], \cdot)$ 이므로 || p.40
+|-
+| 항상 $d[v] \ge d(s,v)$ || $d[v]$ 는 실제 존재하는 경로의 cost || Claim 1 (p.41–42)
+|-
+| sure 가 되는 순간 $d[v] = d(s,v)$ || not-sure 중 최소를 골랐기 때문 || Claim 2 (p.43–50)
+|-
+| sure 는 다시 not-sure 가 되지 않는다 || → while 은 정확히 n 번 || p.54
+|}
+"d[v] never increases, so after v is sure, d[v] stops changing." (p.40)
+
+{analogy}
+'''택배 도착 예정 시각.''' 처음엔 "미정(∞)". 경로 정보가 들어올 때마다 예정 시각이 '''당겨지기만''' 한다(over-estimate). "배송 확정" 도장이 찍히는 순간(sure) 예정 시각 = 실제 도착 시각이 되고 그 뒤로는 바뀌지 않는다.
+{/analogy}
+
+{warn}
+"over-estimate" 는 '''진짜 거리 이상'''이라는 뜻이다(under 가 아님). $\infty$ 로 시작해서 내려오는 이유.
+{/warn}
+
+== 관련 문서 ==
+* [[d(s,v)]] · [[Dijkstra]] · [[relaxation]] · [[Dijkstra 정확성 증명]] · [[Dijkstra 줄과 중력 직관]]

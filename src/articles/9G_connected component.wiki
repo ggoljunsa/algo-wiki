@@ -1,0 +1,44 @@
+key: connected component
+title: connected component — undirected 그래프에서 서로 오갈 수 있는 정점 덩어리
+category: 9강 Graph I, 용어
+---
+== 개요 ==
+[[undirected graph]] 에서 '''connected component''' (연결 성분)는 서로 경로로 오갈 수 있는 정점들의 최대 집합이다. [[DFS]] 나 [[BFS]] 를 정점 w 에서 한 번 돌리면 정확히 w 가 속한 component 를 얻는다(L9 p.47, p.87). 그래프 전체는 unvisited 정점에서 탐색을 반복해 component 를 하나씩 찾는다(p.48, p.51) — 전부 합쳐 [[O(n+m)]].
+
+{def}
+L9 p.47 "DFS finds all the nodes reachable from the starting point. In an undirected graph, this is called a '''connected component'''." "One application of DFS is finding connected components."
+{/def}
+
+[[img:L9-50.png|L9 p.51 — Explore the connected components one-by-one: O(n + m). m = 0 이면 component 가 n 개, 그래도 O(n)|medium]]
+
+== 전체 그래프에서 찾기 ==
+<pre class="txt">
+for each vertex u:                 # 바깥 루프 O(n)
+    if u is unvisited:
+        DFS(u)                     # u 의 component 를 전부 칠함 → component 하나 완성
+        component 수 += 1
+각 정점은 한 번만 DFS 되고 각 간선은 두 번만 스캔 → 총 O(n + m)
+</pre>
+{|
+! 극단 || component 수 || 시간
+|-
+| 전부 연결 || 1 || DFS 한 번 $O(m)$
+|-
+| 전부 고립 ($m=0$) || n || $O(n)$
+|-
+| 그 사이 || 여러 개 || $O(n+m)$
+|}
+
+{analogy}
+'''섬.''' 다리(간선)로 이어진 땅끼리는 걸어서 오갈 수 있다. 섬 하나에 상륙해 다리를 모두 건너 보면(DFS) 그 섬 무리 전체를 돌게 되고, 바다 건너 다른 무리는 배를 타고 새로 상륙해야 한다(바깥 루프).
+{/analogy}
+
+{exam}
+교수(10/20): "One application of DFS is finding connected components. '''This is important.''' … shortest path 를 찾기 전 '''step zero 는 connected component 를 먼저 찾는 것''' — 연결 안 된 두 노드 사이 shortest path 는 의미가 없다." 그리고 전체 탐색 시간은 "n plus m, not n times m".
+{/exam}
+{info}
+[[directed graph]] 에서는 "A 에서 B 로 갈 수 있다" 가 대칭이 아니라서 DFS 가 주는 것은 reachable set 일 뿐 component 가 아니다(p.52). directed 판 component 가 L10 의 [[strongly connected component]] 다.
+{/info}
+
+== 관련 문서 ==
+* [[DFS]] · [[BFS]] · [[O(n+m)]] · [[DFS tree와 DFS forest]] · [[strongly connected component]] · [[무가중치 최단거리]]

@@ -1,0 +1,39 @@
+key: 최단경로 알고리즘 비교표
+title: 최단경로 알고리즘 비교표 — BFS · Dijkstra · Bellman-Ford (L11 p.88 Recap)
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+L11 p.88 "Recap: shortest paths" 를 표로 확장한 것. 교수(10/29): "'''It is very important to understand both algorithms and the differences between them'''" — 다음 강의 DP(Bellman-Ford)·greedy(Dijkstra)의 출발점.
+
+[[img:L11-87.png|L11 p.88 — Recap: BFS (+)O(n+m) (−)only unweighted / Dijkstra (+)weighted (+)O(nlog(n)+m) (−)no negative (−)very centralized / Bellman-Ford (+)negative weights (+)distributed (−)O(nm)|large]]
+{|
+! || [[BFS]] || [[Dijkstra]] || [[Bellman-Ford]] || [[Floyd-Warshall]] (L12)
+|-
+| 문제 || single-source, unweighted || single-source || single-source || all-pairs
+|-
+| weight || 모두 같음 || '''$\ge 0$''' || 음수 OK || 음수 OK
+|-
+| 시간 || $O(n+m)$ || $O(n\log n+m)$ (Fib heap) · $O(n^2)$ (array) · $O((n+m)\log n)$ (RB tree) || $O(nm)$ || $O(n^3)$
+|-
+| 고르는 방식 || layer 순 || not-sure 중 $d$ 최소 (greedy) || 고르지 않음, 모든 간선 n−1 라운드 || 중간 정점 k 를 하나씩
+|-
+| negative cycle || — || — (음수 금지) || n 번째 라운드로 검출 || 대각선 음수로 검출
+|-
+| 성격 || — || centralized || distributed || —
+|-
+| weight 변경 || — || rerun from scratch || 계속 돌리면 전파 || —
+|-
+| 실전 || — || OSPF || RIP || —
+|-
+| 정확성 증명 || layer 귀납 (L9) || Claim 1 귀납 + Claim 2 귀류 || 간선 수 i 귀납 || k 귀납
+|}
+
+{analogy}
+'''세 가지 길찾기.''' BFS = "몇 정거장?"만 세는 노선도, Dijkstra = 관제탑이 가장 가까운 곳부터 확정하는 내비, Bellman-Ford = 동네 반장들이 매일 이웃과 표를 교환하는 소문망.
+{/analogy}
+{warn}
+시간 복잡도 짝 맞추기 함정: $O(n+m)$ = BFS/DFS, $O(n\log n + m)$ = Dijkstra(Fib heap), $O(nm)$ = Bellman-Ford. "Dijkstra 는 $O(nm)$", "Bellman-Ford 는 $O(n+m)$" 은 오답.
+{/warn}
+
+== 관련 문서 ==
+* [[L11 Graph Algorithms III]] · [[Dijkstra 수행 시간]] · [[negative cycle]] · [[OSPF와 RIP]] · [[all-pairs shortest path]]

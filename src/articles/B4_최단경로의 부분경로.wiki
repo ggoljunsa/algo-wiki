@@ -1,0 +1,37 @@
+key: 최단경로의 부분경로
+title: 최단경로의 부분경로 — A sub-path of a shortest path is also a shortest path
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+s→t 최단경로 위의 정점 x 를 잡으면, 그 경로의 '''s→x 부분도 s→x 최단경로'''다. L11 p.10 의 "Warm-up". [[Dijkstra 정확성 증명]] Claim 2, [[Bellman-Ford 정확성 증명]] 의 inductive step, 그리고 L12 [[dynamic programming]] 의 [[optimal substructure]] 가 모두 이 성질 위에 서 있다.
+
+{def}
+"A sub-path of a shortest path is also a shortest path." (L11 p.10)
+{/def}
+
+[[img:L11-10.png|L11 p.10 — Warm-up: 분홍 = s→t 최단경로, 주황 = 그 부분 s→x. 초록이 더 짧다면 보라(초록 + x→t)가 분홍보다 짧다 → CONTRADICTION!!|large]]
+
+== 증명 ([[귀류법]]) ==
+<pre class="txt">
+P = s→t 최단경로, x ∈ P.  Claim: P[s..x] 는 s→x 최단경로.
+1. 아니라고 하자: cost(Q) < cost(P[s..x]) 인 s→x 경로 Q 가 있다.   ("Suppose not, this one is shorter.")
+2. Q 뒤에 P[x..t] 를 붙인다.
+3. cost(Q) + cost(P[x..t]) < cost(P[s..x]) + cost(P[x..t]) = cost(P)
+4. P 보다 짧은 s→t 경로 → P 가 최단이라는 데 모순.   ("an even shorter path from s to t!") ∎
+</pre>
+p.9 의 질문 "R1→Park 최단경로는?" → Gates–R1–E3–Park 의 부분 R1–E3–Park (cost 5).
+
+{exam}
+교수(10/27): 초록 경로로 갈아 끼우면 보라 경로보다 짧아져 "'''that contradicts'''". 10/29 에 "one property of the shortest path" 로 다시 강조. Claim 2 의 $d(s,z) \le d(s,u)$ 와 $d[z] + w(z,z') = d(s,z')$ 가 이 성질이다.
+{/exam}
+
+{analogy}
+'''서울→부산 최단 경로가 대전을 지난다면, 그 경로의 서울→대전 구간도 서울→대전 최단이다.''' 더 빠른 서울→대전 길이 있다면 그 길로 대전까지 가서 나머지를 그대로 달리면 서울→부산이 더 빨라지니까.
+{/analogy}
+
+{info}
+Q 와 P[x..t] 를 이으면 정점이 겹쳐 cycle 이 생길 수 있지만, [[negative cycle]] 이 없으면 cycle 을 잘라내도 cost 가 늘지 않으므로 결론은 같다.
+{/info}
+
+== 관련 문서 ==
+* [[shortest path problem]] · [[Dijkstra 정확성 증명]] · [[Bellman-Ford 정확성 증명]] · [[optimal substructure]] · [[귀류법]]

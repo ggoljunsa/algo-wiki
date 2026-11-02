@@ -1,0 +1,48 @@
+key: dynamic programming
+title: dynamic programming (DP, 동적 계획법)
+category: 12강 DP I, 용어
+---
+== 개요 ==
+'''dynamic programming'''(DP)은 [[divide and conquer]] 처럼 하나의 '''알고리즘 설계 paradigm''' 이다. 큰 문제를 작은 부분문제로 나누되, 부분문제가 서로 '''겹치므로''' 한 번 푼 답을 표에 적어 두고 다시 쓴다. L12 p.27–38 에서 정의하고, [[Bellman-Ford]] 와 [[Floyd-Warshall]] 이 대표 예다. 교수 요약(p.38): "'''It's a fancy name for a pretty common-sense idea: Don't duplicate work if you don't have to!'''"
+
+{def}
+L12 p.27 "It is an algorithm design paradigm — like divide-and-conquer is an algorithm design paradigm. Usually it is for solving optimization problems (eg, shortest path)."
+L12 p.30 "Using these properties [optimal substructure, overlapping subproblems], we can design a dynamic programming algorithm: Keep a table of solutions to the smaller problems. Use the solutions in the table to solve bigger problems. At the end we can use information we collected along the way to find the solution to the whole thing."
+→ 두 성질([[optimal substructure]], [[overlapping subproblems]])을 가진 문제를, 부분문제 해의 '''표'''를 작은 것부터 채워 푸는 설계 방법.
+{/def}
+
+[[img:L12-38.png|L12 p.38 — What have we learned? paradigm / optimal substructure / overlapping subproblems / bottom-up or top-down / "Don't duplicate work if you don't have to!"|medium]]
+
+== DP 알고리즘 만드는 순서 ==
+<pre class="txt">
+1. 부분문제 정의        "작은 버전의 문제" 를 변수 하나 이상으로 (F(i), d(i)[v], D(k)[u,v])
+2. 점화식               큰 부분문제의 답 = 작은 부분문제 답들의 조합   ← '''optimal substructure'''
+3. base case            가장 작은 부분문제의 답 (F(0)=F(1)=1, d(0)[s]=0, D(0)=간선 가중치)
+4. 채우는 순서          bottom-up 루프 순서 또는 top-down 재귀 + memo
+5. 답                   표의 어느 칸이 원래 문제인가 (F[n], d(n-1)[v], D(n))
+6. 시간 = 칸 수 × 칸 하나 비용
+</pre>
+{|
+! 예 || 부분문제 || 점화식 || 시간
+|-
+| [[Fibonacci 수 계산]] || $F(i)$ || $F(i+1) = F(i) + F(i-1)$ || $O(n)$
+|-
+| [[Bellman-Ford]] || $d^{(i)}[v]$ (간선 ≤ i) || $\min\{d^{(i)}[v], \min_u d^{(i)}[u]+w(u,v)\}$ || $O(nm)$
+|-
+| [[Floyd-Warshall]] || $D^{(k)}[u,v]$ (중간 ⊆ {1..k}) || $\min\{D^{(k-1)}[u,v], D^{(k-1)}[u,k]+D^{(k-1)}[k,v]\}$ || $O(n^3)$
+|}
+
+{analogy}
+'''엑셀 표 채우기.''' 각 칸의 수식이 위쪽·왼쪽 칸을 참조한다. 엑셀은 칸마다 참조 칸을 처음부터 다시 계산하지 않고 이미 계산된 값을 그대로 가져다 쓴다. DP 는 "참조 관계(점화식)를 정하고, 참조되는 칸부터 채운다" 가 전부다.
+{/analogy}
+
+{info}
+이름의 유래: p.21 "And why is it called 'dynamic programming'?" — 수업에서 다룰 예정. (CLRS 에 따르면 여기서 "programming" 은 코딩이 아니라 '''표(tabular method)를 쓰는 계획''' 이라는 뜻이다.)
+{/info}
+
+{exam}
+(예상) "DP 와 divide and conquer 의 공통점과 차이점" — 공통: 큰 문제를 부분문제로 나누는 paradigm. 차이: DP 는 부분문제가 겹쳐서(overlapping) 표에 저장해 재사용, D&C 는 부분문제가 겹치지 않아 저장할 필요 없음.
+{/exam}
+
+== 관련 문서 ==
+* [[optimal substructure]] · [[overlapping subproblems]] · [[bottom-up]] · [[top-down과 memoization]] · [[Bellman-Ford는 DP]] · [[Floyd-Warshall]] · [[divide and conquer]] · [[L12 Dynamic Programming I]]

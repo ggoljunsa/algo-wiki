@@ -1,0 +1,40 @@
+key: Dijkstra 수행 시간
+title: Dijkstra 수행 시간 — n(findMin + removeMin) + m·updateKey
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+"Is it fast? '''Depends on how you implement it.'''" (L11 p.39) while 루프는 정점마다 한 번(n 번), 안쪽 이웃 갱신은 간선마다 한 번(총 m 번)이므로 수행 시간은 not-sure 정점을 담는 자료구조([[priority queue와 heap]])의 세 연산 비용으로 정해진다.
+
+$$\sum_{u\in V}\Big(T(\text{findMin}) + \sum_{v\in u.\text{neighbors}} T(\text{updateKey}) + T(\text{removeMin})\Big) = n\big(T(\text{findMin}) + T(\text{removeMin})\big) + m\,T(\text{updateKey})$$
+[[img:L11-55.png|L11 p.55 — We need a data structure that: stores unsure vertices, keeps track of d[v], findMin(), removeMin(u), updateKey(v,d). Total = n(T(findMin)+T(removeMin)) + m T(updateKey)|medium]]
+
+{|
+! 자료구조 || findMin || removeMin || updateKey || 합계 || 쪽
+|-
+| array || $O(n)$ || $O(n)$ || $O(1)$ || $O(n^2)+O(m) = $ '''$O(n^2)$''' || p.56
+|-
+| [[red-black tree]] || $O(\log n)$ || $O(\log n)$ || $O(\log n)$ || '''$O((n+m)\log n)$''' || p.57
+|-
+| [[Fibonacci heap]] || $O(1)$* || $O(\log n)$* || $O(1)$* || '''$O(n\log n+m)$''' || p.61
+|}
+(* amortized)
+<pre class="txt">
+array:   n·(n + n) + m·1          = 2n² + m        = O(n²)        (m ≤ n²)
+RB tree: n·(log n + log n) + m·log n               = O((n+m) log n)
+Fib:     n·(1 + log n) + m·1      = n log n + n + m = O(n log n + m)
+</pre>
+* RB tree 는 "'''Better than an array if the graph is sparse''' (m ≪ n²)". dense($m \approx n^2$)면 $O(n^2\log n)$ 이라 array 가 낫다.
+* amortized: "any sequence of d removeMin calls takes time at most $O(d\log n)$" — 개별 호출은 더 느릴 수 있어도 총합 보장.
+
+{analogy}
+'''대기표 관리 방식.''' 번호표를 종이에 아무렇게나 적어 두면(array) 다음 손님 찾을 때마다 전부 훑어야 한다($O(n)$). 정렬된 장부(RB tree)면 찾기·고치기 모두 $\log n$. Fibonacci heap 은 "고치기(updateKey)"를 거의 공짜로 해 주는 장부라서, 간선이 많을수록(updateKey 가 m 번) 이득이 크다.
+{/analogy}
+{exam}
+교수(10/29): 세 연산이 몇 번씩 불리는지(findMin·removeMin 각 n 번, updateKey m 번) → 공식 → 표 세 줄. "'''amortized, not the worst-case time complexity'''" 를 구분해 말할 것.
+{/exam}
+{warn}
+"Dijkstra = $O(n+m)$" (BFS 와 혼동) / "$O(nm)$" (Bellman-Ford 와 혼동) / "Fibonacci heap 이면 $O((n+m)\log n)$" (RB tree 와 혼동) — 모두 오답.
+{/warn}
+
+== 관련 문서 ==
+* [[Dijkstra]] · [[priority queue와 heap]] · [[Fibonacci heap]] · [[red-black tree]] · [[최단경로 알고리즘 비교표]] · [[n과 m (그래프)]]

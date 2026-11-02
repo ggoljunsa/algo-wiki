@@ -1,0 +1,49 @@
+key: adjacency matrix
+title: adjacency matrix — n×n 0/1 행렬로 그래프 표현 (Option 1)
+category: 9강 Graph I, 용어
+---
+== 개요 ==
+'''adjacency matrix''' (인접 행렬)는 그래프를 $n \times n$ 행렬 $A$ 에 담는다: 간선 $(i,j)$ 가 있으면 $A[i][j]=1$, 없으면 0. "i 와 j 가 이어져 있나?" 를 칸 하나로 $O(1)$ 에 답하지만, 공간이 $O(n^2)$ 이고 v 의 이웃을 나열하려면 행 전체를 훑어야 해서 $O(n)$ 이다. L9 p.15–17 의 Option 1.
+
+{def}
+L9 p.15–17 "How do we represent graphs? Option 1: adjacency matrix."
+→ $A[i][j] = 1 \iff (i,j) \in E$ ($n \times n$, $n$ = [[n과 m (그래프)|정점 수]]).
+{/def}
+
+== 슬라이드의 세 행렬 ==
+<pre class="txt">
+p.15 undirected (p.13 그래프)     p.16 1 에 self-loop 추가      p.17 directed (p.14 그래프)
+     1 2 3 4                          1 2 3 4                       1 2 3 4   ← Destination
+  1 [0 0 1 0]                      1 [1 0 1 0]                   1 [0 0 1 0]
+  2 [0 0 1 1]                      2 [0 0 1 1]                   2 [0 0 0 1]
+  3 [1 1 0 1]                      3 [1 1 0 1]                   3 [0 1 0 1]
+  4 [0 1 1 0]                      4 [0 1 1 0]                   4 [0 0 1 0]
+  대칭(A = A^T), 대각선 0          A[1][1] = 1                   ↑ Source. 비대칭
+</pre>
+* [[undirected graph]] → 대칭. 대각선 = self-loop.
+* [[directed graph]] → 행 = Source, 열 = Destination. 3 행의 1 = 3 의 out-neighbor {2, 4}, 4 열의 1 = 4 의 in-neighbor {2, 3} ([[in-degree와 out-degree]]).
+
+[[img:L9-19.png|L9 p.20 — Trade-offs: matrix 열은 O(1) / O(n) / O(n²)|small]]
+
+== 연산 비용 ==
+{|
+! 연산 || 비용 || 이유
+|-
+| Edge membership $\{v,w\} \in E$? || $O(1)$ || $A[v][w]$ 한 칸
+|-
+| Neighbor query || $O(n)$ || 행 v 전체(n 칸) 스캔 — 교수(10/20) "한 row 를 스캔"
+|-
+| Space || $O(n^2)$ || 간선이 0 개여도 $n^2$ 칸
+|}
+{warn}
+adjacency matrix 로 [[DFS]]·[[BFS]] 를 돌리면 정점마다 행 n 칸을 훑으므로 '''$O(n^2)$''' 이다. "$O(n+m)$" 이라고 쓰면 틀린다 — $O(n+m)$ 은 [[adjacency list]] 일 때만.
+{/warn}
+
+{analogy}
+'''반 전체 친구 관계표.''' 학생 n 명의 이름을 가로·세로로 적은 표에 친구면 O 표시. "철수와 영희가 친구?" 는 칸 하나만 보면 되지만(O(1)), "철수의 친구 전부" 는 철수 행을 처음부터 끝까지 읽어야 하고(O(n)), 친구가 거의 없는 반이어도 표는 $n^2$ 칸 그대로다.
+{/analogy}
+
+dense 그래프($m=\Theta(n^2)$)라면 list 와 공간이 같아지고 $O(1)$ membership 이 이득이다. L12 [[Floyd-Warshall]] 처럼 모든 쌍을 다루는 알고리즘은 행렬 형태를 쓴다.
+
+== 관련 문서 ==
+* [[adjacency list]] · [[matrix vs list 비교표]] · [[n과 m (그래프)]] · [[directed graph]] · [[undirected graph]]

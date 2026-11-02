@@ -1,0 +1,40 @@
+key: simple path
+title: simple path (단순 경로)
+category: 12강 DP I, 용어
+---
+== 개요 ==
+'''simple path''' 는 '''cycle 이 없는'''(같은 정점을 두 번 지나지 않는) 경로다. L12 p.49 Aside 에서 두 가지 사실을 준다: ① [[negative cycle]] 이 없으면 항상 simple 한 최단경로가 있다 ② n 개 정점 그래프의 simple path 는 간선이 '''최대 n−1 개'''다. ①은 [[Floyd-Warshall]] Case 2(k 를 정확히 한 번 지남)의 근거, ②는 [[Bellman-Ford]] 가 n−1 라운드로 충분한 이유다.
+
+{def}
+L12 p.49 "'Simple' means that the path has no cycles in it."
+"Assume there is no negative cycle. Then not only there are shortest paths, but actually there's always a simple shortest path."
+"A simple path in a graph with n vertices has at most n-1 edges in it." — "Can't add another edge without making a cycle!"
+{/def}
+
+[[img:L12-47.png|L12 p.49 — Aside: simple paths. s→v→t 경로에 붙은 cycle v→x→y→v (2+3−5 = 0) "This cycle isn't helping. Just get rid of it."|large]]
+
+== 왜 cycle 을 빼도 되나 ==
+<pre class="txt">
+p.49 예: s →(-2) v →(10) t,  cycle v →(2) x →(3) y →(-5) v  비용 2+3-5 = 0
+cycle 을 돈 경로 비용 = (cycle 안 돈 경로) + 0  → 더 짧아지지 않음
+일반적으로 negative cycle 이 없으면 모든 cycle 비용 ≥ 0
+→ cycle 을 잘라내면 비용이 같거나 줄어든다
+→ 최단경로 중 simple 한 것이 반드시 있다
+simple path 는 정점을 최대 n 개 지나므로 간선 ≤ n-1 개
+</pre>
+{|
+! 어디서 쓰나 || 역할
+|-
+| [[Bellman-Ford]] (L11, L12 p.6) || 최단경로는 간선 ≤ n−1 → $d^{(n-1)}$ 이 답, 라운드 n−1 번
+|-
+| [[Floyd-Warshall]] Case 2 (p.50) || "WLOG the shortest path from u to v through {1,…,k} is simple" → k 를 한 번만 지나므로 u⇝k, k⇝v 두 조각
+|-
+| [[longest simple path]] (p.58–60) || '''simple''' 조건 때문에 조각끼리 정점을 공유하면 안 됨 → optimal substructure 붕괴
+|}
+
+{analogy}
+'''같은 동네를 두 번 들르는 길 안내.''' 내비가 "A 동 → B 동 → 다시 A 동 → 목적지" 로 안내한다면, 그 고리를 도는 데 비용이 0 이상이니 그냥 고리를 빼고 "A 동 → 목적지" 로 가는 게 같거나 빠르다. 고리를 돌수록 이득인 경우(negative cycle)만 예외 — 그땐 최단경로 자체가 없다.
+{/analogy}
+
+== 관련 문서 ==
+* [[negative cycle]] · [[Floyd-Warshall]] · [[Bellman-Ford]] · [[longest simple path]] · [[d^(i) 배열]]

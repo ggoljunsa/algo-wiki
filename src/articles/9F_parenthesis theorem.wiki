@@ -1,0 +1,51 @@
+key: parenthesis theorem
+title: parenthesis theorem — DFS 구간 [start, finish] 는 포함 또는 서로소
+category: 9강 Graph I, 용어
+---
+== 개요 ==
+[[DFS]] 에서 두 정점의 구간 [start, finish] 는 '''한쪽이 다른 쪽 안에 완전히 들어가거나, 완전히 떨어져 있다''' — 엇갈려 겹치는 일은 없다. start 를 "(", finish 를 ")" 로 쓰면 항상 올바른 괄호식이 되므로 parenthesis(괄호) theorem. 슬라이드는 "parentheses theorem in CLRS" 라 부른다(CLRS Thm 22.7). '''cycle 이 있어도 성립'''하며, [[topological sort]] 정당성 증명(p.62 Case 1)의 도구다.
+
+{def}
+L9 p.61 "A more general statement ('''this holds even if there are cycles'''). This is called the 'parentheses theorem' in CLRS."
+* If v is a descendant of w in this tree: w.start < v.start < v.finish < w.finish
+* If w is a descendant of v in this tree: v.start < w.start < w.finish < v.finish
+* If neither are descendants of each other: v.start < v.finish < w.start < w.finish (or the other way around)
+{/def}
+
+[[img:L9-60.png|L9 p.61 — 세 경우의 timeline. DFS tree 에서 descendant 면 포함, 아니면 서로소|large]]
+
+[[anim:dfs_parenthesis|DFS 가 내려가며 "(" 를, 올라오며 ")" 를 찍는다 — 아래 시간축의 괄호가 중첩 아니면 분리뿐인 것을 확인]]
+
+== 그림 ==
+<pre class="ascii">
+ p.59 예 (dpkg 에서 DFS)
+ time                 0  1  2  3  4  5  6  7  8  9 10 11
+ dpkg                 (                                )
+ libbz2                  (              )
+ libselinux1                (        )
+ multiarch-support             (  )
+ tar                                       (  )
+ coreutils                                       (  )
+ → (dpkg (libbz2 (libselinux1 (multiarch) ) ) (tar) (coreutils) )
+ 불가능한 꼴:  ( [ ) ]   ← 엇갈림
+</pre>
+
+== 왜 성립하나 ==
+DFS 는 재귀(stack)다. w 가 in progress 인 동안 시작된 v 는 w 의 재귀 호출 안에서 불렸으므로, '''v 가 return 해야 w 도 return 할 수 있다''' → v 구간이 w 구간 안. w 가 끝난 뒤 시작한 정점은 w 와 시간상 겹치지 않는다 → 서로소. "하나를 먼저 visit 하고 먼저 return" (교수 10/22). 엇갈림 `w.start < v.start < w.finish < v.finish` 는 "v 가 아직 안 끝났는데 w 가 return" 이라 stack 에서 불가능.
+
+{analogy}
+'''러시아 인형 상자.''' 상자를 열면(start) 그 안의 상자를 다 열고 닫은 다음에야(자손 finish) 바깥 상자를 닫을(finish) 수 있다. 두 상자는 한쪽이 다른 쪽 안에 있거나, 따로 놓여 있다 — 반쯤 걸쳐 있는 상자는 없다.
+{/analogy}
+
+{exam}
+교수(10/22): p.61 세 경우를 DFS tree 그림으로 설명 — "(1) v 가 w 의 descendant → w.start < v.start < v.finish < w.finish, (2) 반대, (3) '''서로 descendant 가 아니면 구간이 disjoint'''." 그리고 바로 이 정리로 p.62 Case 1 ("B 가 A 의 descendant 면 B.finish < A.finish") 을 증명했다.
+{/exam}
+{quiz}
+Circle all that apply. (a) parenthesis theorem 은 DAG 에서만 성립한다 (b) DFS 에서 u.start < v.start < u.finish < v.finish 인 두 정점이 있을 수 있다 (c) v 가 w 의 descendant ⇔ w 구간이 v 구간을 포함한다
+{/quiz}
+{answer}
+'''(c)''' 만. (a) "holds even if there are cycles" — 거짓. (b) 엇갈림은 불가능 — 거짓.
+{/answer}
+
+== 관련 문서 ==
+* [[start time과 finish time]] · [[DFS tree와 DFS forest]] · [[topological sort]] · [[DFS]] · [[SCC finish time 보조정리]]

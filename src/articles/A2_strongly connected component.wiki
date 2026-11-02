@@ -1,0 +1,46 @@
+key: strongly connected component
+title: strongly connected component (SCC) — 서로 오갈 수 있는 정점들의 최대 묶음
+category: 10강 Graph II, 용어
+---
+== 개요 ==
+'''SCC''' 는 [[directed graph]] 에서 [[strongly connected]] 인 정점 집합 중 '''더 키울 수 없는(maximal)''' 것이다. 모든 정점은 '''정확히 하나의''' SCC 에 속하므로 그래프는 SCC 들로 partition 된다. L10 의 문제는 이 분해를 $O(n+m)$ 에 구하는 것이다 → [[SCC 알고리즘]].
+
+{def}
+L10 p.6 "We can decompose a graph into strongly connected components (SCCs). At least, we can in theory. How do we do this algorithmically?"
+CLRS: "a maximal set of vertices $C \subseteq V$ such that for every pair $u, v \in C$, $u \rightsquigarrow v$ and $v \rightsquigarrow u$."
+→ 서로 도달 가능한 정점들의 최대 집합.
+{/def}
+
+[[img:L10-06.png|L10 p.6 — 빨간 점선이 SCC 3개. SCC 사이 간선은 한 방향뿐이라 합쳐지지 않는다|medium]]
+
+== 왜 partition 이 되나 ==
+관계 $u \sim v \iff (u \rightsquigarrow v$ 이고 $v \rightsquigarrow u)$ 는
+<pre class="txt">
+reflexive : 길이 0 path 로 u ⇝ u
+symmetric : 정의 자체가 대칭
+transitive: u ~ v, v ~ w 이면 path 를 이어 붙여 u ⇝ v ⇝ w, 반대 방향도 마찬가지
+→ equivalence relation → 정점 집합이 equivalence class 로 겹치지 않게 나뉜다 = SCC 들
+</pre>
+교수(10/27): "한 노드가 두 SCC 에 속한다면 두 SCC 는 '''합쳐져야 한다'''." 혼자 있는 정점(예제의 KAIST: 나가기만 하고 들어오는 간선이 없음)도 크기 1 인 SCC 다.
+
+== 예제 (L10 p.13–48) ==
+{|
+! SCC || 정점 || 이유
+|-
+| A || DGIST, Wiki, YouTube || DGIST ⇄ Wiki, Wiki → YouTube → DGIST cycle
+|-
+| B || Puppy, Google || Puppy ⇄ Google
+|-
+| C || KAIST || 들어오는 간선이 없어 아무와도 왕복 불가
+|}
+
+{analogy}
+'''같은 반 친구 무리.''' "내가 걔한테 연락할 수 있고(직접이든 건너건너든) 걔도 나한테 연락할 수 있다" 를 친구라 하면, 친구의 친구도 친구다(transitive). 그러면 반은 저절로 '''무리'''들로 나뉘고, 한 사람이 두 무리에 동시에 속할 수는 없다 — 그랬다면 두 무리는 사실 한 무리다.
+{/analogy}
+
+{warn}
+"SCC = 1차 DFS 의 DFS tree" 가 아니다. DFS tree 는 시작점에서 도달 가능한 전부를 묶으므로 여러 SCC 가 섞일 수 있다(L10 p.11, A 에서 시작). → [[SCC 알고리즘]]
+{/warn}
+
+== 관련 문서 ==
+* [[strongly connected]] · [[SCC graph]] · [[SCC graph는 DAG]] · [[SCC 알고리즘]] · [[connected component]] · [[웹 그래프와 SCC]] · [[L10 Graph Algorithms II]]

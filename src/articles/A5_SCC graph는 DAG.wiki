@@ -1,0 +1,40 @@
+key: SCC graph는 DAG
+title: SCC graph는 DAG (Lemma 1) — cycle 이 있으면 SCC 가 합쳐진다
+category: 10강 Graph II, 용어
+---
+== 개요 ==
+L10 Lemma 1. [[SCC graph]] 에는 cycle 이 없다 — 있다면 cycle 위의 SCC 들이 서로 오갈 수 있게 되어 '''하나로 합쳐져야''' 하므로 SCC 의 maximality 에 모순. [[귀류법]] 한 방이다. 이 사실이 [[SCC finish time 보조정리]] Case 2 와 [[SCC 알고리즘 정확성 증명]] base case 에서 쓰인다.
+
+{def}
+L10 p.51 "Lemma 1: The SCC graph is a Directed Acyclic Graph (DAG). Proof idea: if not, then two SCCs would collapse into one."
+{/def}
+
+[[img:L10-50.png|L10 p.51 — Lemma 1 과 proof idea|medium]]
+
+== 4칸 증명 (귀류법) ==
+<pre class="txt">
+'''① 가정 (부정):''' SCC graph 에 cycle C1 → C2 → … → Ck → C1 (k ≥ 2) 이 있다.
+'''② 도출:'''      C1 의 임의의 u, C2 의 임의의 v.
+                 SCC 내부 이동 + C1→C2 간선 → u ⇝ v
+                 C2 → C3 → … → Ck → C1 간선과 SCC 내부 이동 → v ⇝ u
+'''③ 모순:'''      u, v 가 서로 도달 가능 → C1 ∪ C2 가 strongly connected
+                 → C1 이 maximal strongly connected 집합(SCC)이라는 정의에 모순.
+'''④ 결론:'''      SCC graph 에는 cycle 이 없다 = DAG. ∎
+</pre>
+CLRS Lemma 22.13 표현: "$u, v \in C$, $u', v' \in C'$ 이고 $u \rightsquigarrow u'$ 이면 $v' \rightsquigarrow v$ 는 있을 수 없다."
+
+{analogy}
+'''두 동아리의 합병.''' 동아리 A 에서 B 로 갈 수 있고 B 에서 다시 A 로 돌아올 수 있다면, 두 동아리를 나눠 둘 이유가 없다 — 사실상 한 동아리다. 그래서 '''제대로 나눈''' 동아리 지도에는 돌아오는 고리가 있을 수 없다.
+{/analogy}
+
+{exam}
+교수(10/27): "'''Prove by contradiction'''" — "cycle 이 있으면 각 SCC 의 노드가 서로 도달 가능하므로 하나로 합쳐져야 한다 → 모순." 서술형으로 ①–④ 를 다 적을 것.
+{/exam}
+
+== 어디서 쓰이나 ==
+* [[SCC finish time 보조정리]] Case 2: "There are no paths from B to A because the SCC graph has no cycles."
+* [[SCC 알고리즘 정확성 증명]] Base case: "what's left unvisited after 0 trees … is a DAG on all the SCCs. (TRUE by Lemma 1.)"
+* SCC graph 가 DAG 이므로 [[topological ordering]] 이 있고, 그 순서가 SCC finish 내림차순이다(p.53).
+
+== 관련 문서 ==
+* [[SCC graph]] · [[DAG]] · [[귀류법]] · [[strongly connected component]] · [[L10 Graph Algorithms II]]

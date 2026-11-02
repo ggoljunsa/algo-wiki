@@ -1,0 +1,78 @@
+key: Dijkstra
+title: Dijkstra — not-sure 중 d 최소를 골라 이웃만 갱신, 음수 간선 불가
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+'''Dijkstra's algorithm''' 은 weight 가 '''모두 0 이상'''인 [[weighted graph]] 에서 [[single-source shortest path]] 를 푼다. 정점마다 추정치 $d[v]$ 를 들고, "아직 확실하지 않은(not-sure) 정점 중 $d$ 가 가장 작은 것"을 골라 그 이웃을 [[relaxation|갱신]]하고 '''sure''' 로 확정하는 일을 n 번 반복한다. 매 순간 가장 좋아 보이는 것을 고르는 '''greedy''' 알고리즘의 원형. 시간은 [[Fibonacci heap]] 으로 $O(n\log n + m)$.
+
+{def}
+L11 p.38 그대로:
+<pre class="c">
+Dijkstra(G,s):
+  Set all vertices to not-sure
+  d[v] = ∞ for all v in V
+  d[s] = 0
+  While there are not-sure nodes:
+      Pick the not-sure node u with the smallest estimate d[u].
+      For v in u.neighbors:
+          d[v] ← min( d[v] , d[u] + edgeWeight(u,v) )
+      Mark u as sure.
+  Now d(s, v) = d[v]
+</pre>
+{/def}
+{|
+! 변수 || 뜻
+|-
+| `d[v]` || s→v 의 현재 over-estimate ([[d 값과 sure·not-sure]]). 끝나면 [[d(s,v)]]
+|-
+| not-sure / sure || 아직 확정 전 / 확정 (다시 안 바뀜)
+|-
+| `u` || not-sure 중 $d$ 최소 — '''여기가 Dijkstra 의 전부'''
+|-
+| `edgeWeight(u,v)` || $w(u,v) \ge 0$
+|}
+
+== p.24–37 예제 ==
+{|
+! 고른 u || Gates || R1 || E3 || Park || HG
+|-
+| 초기 || 0 || ∞ || ∞ || ∞ || ∞
+|-
+| Gates || 0 || 1 || ∞ || ∞ || 25
+|-
+| R1 || 0 || 1 || 2 || ∞ || 23
+|-
+| E3 || 0 || 1 || 2 || 6 || 23
+|-
+| Park || 0 || 1 || 2 || 6 || 23 (26 은 더 큼)
+|-
+| HG || 0 || 1 || 2 || 6 || 23
+|}
+[[img:L11-37.png|L11 p.37 — Dijkstra by example 최종: 0, 1, 2, 6, 23|medium]]
+[[sim:dijkstra_trace]]
+[[anim:dijkstra_yoink|줄로 이어진 공을 Gates 에서 들어 올리면 가까운 것부터 떨어진다 = sure 가 되는 순서]]
+
+== Does it work? Is it fast? ==
+* 정확성: Claim 1 ($d[v] \ge d(s,v)$) + Claim 2 (sure 순간 $d[u] = d(s,u)$) → [[Dijkstra 정확성 증명]]
+* 시간: $n(T_{\text{findMin}} + T_{\text{removeMin}}) + m\,T_{\text{updateKey}}$ → array $O(n^2)$ / RB tree $O((n+m)\log n)$ / Fibonacci heap $O(n\log n+m)$ → [[Dijkstra 수행 시간]]
+* 실전: OSPF ([[OSPF와 RIP]]). 단점: 음수 간선 불가, weight 가 바뀌면 처음부터 다시.
+
+{analogy}
+'''불 붙은 들판.''' s 에 불을 붙이면 불길은 간선을 따라 weight(타는 시간)만큼 걸려 번진다. 각 정점에 불이 '''처음''' 닿는 시각이 최단거리이고, Dijkstra 는 "다음에 불이 닿을 정점"을 미리 계산해 그 순서대로 확정하는 것이다.
+{/analogy}
+
+{exam}
+교수(10/29): "'''The important part: pick the not-sure node with the smallest estimate and update only its neighbors.'''" 그리고 "Dijkstra 와 Bellman-Ford 의 차이를 꼭 이해하라 — 다음 시간 DP·greedy 에서 다시 쓴다."
+{/exam}
+{warn}
+'''음수 간선이 있으면 틀린다.''' 반례 $s\to a$ 2, $s\to b$ 3, $b\to a$ −2, $a\to c$ 1: Dijkstra 는 a 를 d=2 로 먼저 확정하고 c = 3 을 내지만 진짜는 $3-2+1 = 2$. → [[음수 간선 가중치]], [[Bellman-Ford]].
+{/warn}
+{quiz}
+빈칸: `Pick the ________ node u with the ________ estimate d[u].`
+{/quiz}
+{answer}
+'''not-sure''' / '''smallest'''. (sure 중에서 고르거나 largest 로 쓰면 오답.)
+{/answer}
+
+== 관련 문서 ==
+* [[Dijkstra 줄과 중력 직관]] · [[d 값과 sure·not-sure]] · [[relaxation]] · [[Dijkstra 정확성 증명]] · [[Dijkstra 수행 시간]] · [[Bellman-Ford]] · [[최단경로 알고리즘 비교표]] · [[L11 Graph Algorithms III]]

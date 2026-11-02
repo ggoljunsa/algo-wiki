@@ -1,0 +1,35 @@
+key: 음수 간선 가중치
+title: 음수 간선 가중치 — Dijkstra 는 불가, Bellman-Ford 는 OK
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+weight 가 '''음수'''인 간선. 비용이 아니라 '''이득'''이 더 큰 간선이다(L11 p.66: 산책의 즐거움 = negative happiness, 공짜 음식 = negative deliciousness). 음수 간선 '''자체'''는 문제가 아니다 — [[Bellman-Ford]] 는 그대로 처리한다. 문제는 두 가지: ① [[Dijkstra]] 의 정확성이 깨진다, ② 합이 음수인 cycle([[negative cycle]])이 있으면 최단경로가 정의되지 않는다.
+
+{def}
+L11 p.65: Bellman-Ford "(+) Can handle negative edge weights." p.84: "Note: '''Negative edges are okay!!'''" (negative cycle 만 없다면)
+{/def}
+[[img:L11-65.png|L11 p.66 — Why negative edge weights? Halmae Gomtang 산책은 negative happiness, 공짜 음식은 negative deliciousness|medium]]
+{exam}
+교수(10/29): "edge weight may represent the '''balance between the benefit and expense'''. Once benefit dominates the expense, it becomes negative." "'''Negative edge weight itself is not a problem'''; the problem is if there exists a negative cycle."
+{/exam}
+
+== Dijkstra 가 틀리는 반례 ==
+<pre class="txt">
+간선: s→a 2,  s→b 3,  b→a −2,  a→c 1
+Dijkstra: s 확정 → d[a]=2, d[b]=3
+          a 확정 (d=2) → d[c]=3
+          b 확정 (d=3) → d[a] = min(2, 1) = 1   ← 이미 sure 인 a 가 바뀜
+          c 확정, d[c] = 3
+진짜:     d(s,c) = 3 − 2 + 1 = 2   (s→b→a→c)
+</pre>
+깨지는 줄은 Claim 2 의 $d(s,z) \le d(s,u)$ — "최단경로의 앞쪽 정점이 더 가깝다"는 weight ≥ 0 일 때만 참([[Dijkstra 정확성 증명]]). 줄과 중력 직관도 음수 길이 줄은 없다.
+
+{analogy}
+'''할인 쿠폰이 있는 길.''' 어떤 구간을 지나면 돈을 '''받는다'''(음수 비용). 가장 싸 보이는 곳부터 확정하는 Dijkstra 는, 멀리 돌아가며 쿠폰을 받는 길이 결국 더 싸다는 것을 놓친다.
+{/analogy}
+{warn}
+T/F: "Dijkstra 는 음수 간선이 있어도 negative cycle 만 없으면 맞다" → '''거짓'''(위 반례엔 cycle 이 없다). "Bellman-Ford 는 음수 간선이 있으면 쓸 수 없다" → '''거짓'''.
+{/warn}
+
+== 관련 문서 ==
+* [[Bellman-Ford]] · [[negative cycle]] · [[Dijkstra]] · [[Dijkstra 정확성 증명]] · [[weighted graph]]

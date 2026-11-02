@@ -1,0 +1,52 @@
+key: SCC 알고리즘 정확성 증명
+title: SCC 알고리즘 정확성 증명 — 2차 DFS 의 tree 수 t 에 대한 귀납법
+category: 10강 Graph II, 용어
+---
+== 개요 ==
+L10 p.66–69 의 Theorem: "[[SCC 알고리즘]] 은 SCC 를 정확히 찾는다." [[귀납법 4요소]] 그대로, 귀납 변수는 '''$t$ = 2차(reversed) DFS 가 지금까지 만든 tree 의 수'''. 재료는 [[SCC graph는 DAG]](Lemma 1)와 [[SCC finish time 보조정리]](Corollary 1) 두 개뿐이다. 교수 말로 "just re-write what we saw before, nothing new" — p.55·66 의 "finish 최대에서 시작 → 그 SCC 에 갇힘 → 지우고 반복" 을 귀납법 형식으로 옮긴 것.
+
+{def}
+L10 p.66 "Theorem: The algorithm we saw before will correctly identify strongly connected components."
+{/def}
+
+[[img:L10-65.png|L10 p.66 — Now we see why this works: Corollary 에 의해 파란 화살표는 전부 finish 가 큰 쪽으로 → 최대에서 시작하면 들어오기만 → 그 SCC 만 도달 → 지우고 반복|large]]
+
+== 증명 (슬라이드 p.66–69) ==
+<pre class="txt">
+'''Inductive hypothesis:''' 2차 DFS forest 의 처음 t 개 tree 는 finish 가 가장 큰 t 개 SCC 이다.
+                       Moreover, 이 t 개 tree 를 탐색한 뒤 남은 미방문 부분은 남은 SCC 들 위의 DAG 이다.
+'''Base case (t = 0):'''   처음 0 개 tree = finish 최대 0 개 SCC — TRUE.
+                       남은 것 = 모든 SCC 위의 DAG — TRUE by Lemma 1.
+'''Inductive step:'''      IH 를 가정. (t+1) 번째 tree 의 root 를 x, x 가 속한 SCC 를 A.
+                       · x 는 미방문 중 finish 최대로 골랐으므로 남은 모든 SCC B 에 대해 A.finish > B.finish.
+                       · Corollary 1 → G^T 의 SCC 간 간선은 finish 큰 쪽으로만 → 남은 SCC DAG 에서 A 에서 나가는 간선 없음.
+                       · x 에서 시작한 DFS 는 정확히 A 를 복원:
+                           not more — 다른 미방문 정점은 도달 불가 ("nothing else is reachable")
+                           not less — A 는 strongly connected (간선을 뒤집어도 여전히 strongly connected)
+                       · 그러므로 (t+1) 번째 tree = finish 가 (t+1) 번째로 큰 SCC. 지운 나머지도 DAG 의 부분 → DAG.
+'''Conclusion:'''          t = #SCCs 일 때 IH 첫 줄 → 2차 DFS forest 의 tree 들이 모든 SCC 다. ∎
+</pre>
+
+== 각 줄이 어디서 오나 ==
+{|
+! 증명의 줄 || 근거
+|-
+| 남은 것이 DAG (base) || [[SCC graph는 DAG]] (Lemma 1)
+|-
+| A 에서 나가는 간선 없음 || [[SCC finish time 보조정리]] (Corollary 1) + A 가 남은 것 중 finish 최대
+|-
+| not more || DFS 는 도달 가능한 것만 방문 ([[DFS tree와 DFS forest]])
+|-
+| not less || $G^T$ 에서도 A 는 strongly connected ([[G^T]] 성질) + DFS 는 도달 가능한 것을 전부 방문
+|}
+
+{analogy}
+'''양파 껍질 벗기기.''' 매번 "가장 바깥 껍질"(남은 것 중 finish 최대 = $G^T$ 의 막다른 SCC)을 한 장 벗긴다. 벗기고 나도 남은 양파는 여전히 양파(DAG)이고, 그 바깥 껍질을 또 벗기면 된다. 껍질 수만큼 반복하면 모든 SCC 가 한 장씩 나온다.
+{/analogy}
+
+{exam}
+교수(10/27): "'''I just re-write what we saw before. Nothing new.'''" 시험에서는 핵심 논리(Corollary 1 → finish 최대 SCC 는 $G^T$ 의 sink → 정확히 그 SCC)를 쓸 수 있으면 충분. 다만 IH 의 '''두 번째 줄(남은 것이 DAG)''' 과 '''not more / not less''' 는 빼먹기 쉬운 칸이다.
+{/exam}
+
+== 관련 문서 ==
+* [[SCC 알고리즘]] · [[SCC finish time 보조정리]] · [[SCC graph는 DAG]] · [[귀납법 4요소]] · [[sink SCC와 source SCC]] · [[L10 Graph Algorithms II]]

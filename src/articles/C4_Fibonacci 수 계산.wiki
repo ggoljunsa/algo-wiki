@@ -1,0 +1,70 @@
+key: Fibonacci 수 계산
+title: Fibonacci 수 계산 — 지수 시간 재귀에서 O(n) DP 로
+category: 12강 DP I, 용어
+---
+== 개요 ==
+L12 p.22–37 이 [[dynamic programming]] 을 소개하는 예제. 같은 정의 $F(n) = F(n-1) + F(n-2)$ 를 세 가지로 구현한다: 순수 재귀(지수 시간) → [[bottom-up]] 표(p.25) → [[top-down과 memoization|top-down + memo]](p.35). Fibonacci 는 최적화 문제는 아니지만 "they are a good example"(p.27).
+
+{def}
+L12 p.22 "F(n) = F(n-1) + F(n-2), with F(0) = F(1) = 1." The first several are: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, …
+{/def}
+{warn}
+슬라이드 규약은 '''$F(0) = F(1) = 1$''' → $F(8) = 34$. (흔한 $F(0)=0, F(1)=1$ 규약이면 $F(8)=21$.)
+{/warn}
+
+== 세 구현 ==
+<pre class="c">
+# (1) p.23 순수 재귀 — 지수 시간
+def Fibonacci(n):
+    if n == 0 or n == 1:
+        return 1
+    return Fibonacci(n-1) + Fibonacci(n-2)
+
+# (2) p.25 bottom-up — O(n)
+def fasterFibonacci(n):
+    F = [1, 1, None, None, …, None]   # 슬라이드 주석 "length n" → 실제로는 n+1 필요
+    for i = 2, …, n:
+        F[i] = F[i-1] + F[i-2]
+    return F[n]
+
+# (3) p.35 top-down + memo — O(n)
+define a global list F = [1,1,None, None, …, None]
+def Fibonacci(n):
+    if F[n] != None:
+        return F[n]
+    else:
+        F[n] = Fibonacci(n-1) + Fibonacci(n-2)
+    return F[n]
+</pre>
+순수 재귀의 수행 시간(p.23):
+<pre class="txt">
+T(n) = T(n-1) + T(n-2) + O(1)
+T(n) ≥ T(n-1) + T(n-2)  (n ≥ 2)     → T(n) ≥ F(n) 만큼 자란다
+F(n) ≈ φ^n,  φ = (1+√5)/2 ≈ 1.618 (golden ratio)
+→ T(n) = 지수 시간 ("EXPONENTIALLY QUICKLY")
+</pre>
+{|
+! 구현 || Fib(8) 비용 || 시간
+|-
+| 순수 재귀 || 호출 67번 ($2F(8)-1$) || $\approx \varphi^n$
+|-
+| bottom-up || 덧셈 7번 (i = 2..8) || $O(n)$
+|-
+| top-down + memo || 호출 15번 ($2 \cdot 7 + 1$) || $O(n)$
+|}
+[[img:L12-25.png|L12 p.25 — "Maybe this would be better": fasterFibonacci 와 8→0 사슬. "Much better running time!"|medium]]
+[[sim:fib_memo]]
+
+{analogy}
+'''계단 오르는 방법 수 세기.''' 8층 계단을 1칸·2칸씩 오르는 방법 수는 "7층까지 방법 + 6층까지 방법" 이다. 순수 재귀는 7층을 셀 때 6층을 또 처음부터 세고, 6층을 셀 때 5층을 또 센다. 아래층부터 "0층 1, 1층 1, 2층 2, 3층 3, …" 하고 벽에 적어 가며 올라가면 한 번에 끝난다.
+{/analogy}
+
+{quiz}
+p.35 top-down 코드의 빈칸을 채우라: `if F[n] != ____: return ____` / `F[n] = ____`
+{/quiz}
+{answer}
+`None` / `F[n]` / `Fibonacci(n-1) + Fibonacci(n-2)`. 전역 표 F 의 초기값은 `[1,1,None,…,None]` (base case F[0]=F[1]=1 을 미리 넣어 둠).
+{/answer}
+
+== 관련 문서 ==
+* [[overlapping subproblems]] · [[bottom-up]] · [[top-down과 memoization]] · [[dynamic programming]] · [[점화식]]

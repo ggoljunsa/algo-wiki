@@ -314,3 +314,70 @@ python3 build.py                        # index.html 재생성 + 문서에서 �
 | rb_insert_cases | p.41→47→54 14초 세 장면: 0 을 red 로 삽입 → ① 부모 black 이면 끝 ② 부모 red·uncle red → 부모·uncle black, 조부모 red 로 '색 뒤집기', 조부모로 올라가 반복 ③ 부모 red·uncle black → YOINK(rotation) + 색 교환. 각 장면 끝에 규칙 5가지 체크표가 전부 초록 | `RB 삽입 세 경우`, `recolor`, `rb_insert`, `uncle` |
 
 (총 28 개.)
+
+---
+
+## 8. 기말 범위 추가 (2026-11-02) — L9 · L10 · L11 · L12(예습)
+
+중간고사(10/15, L1–L8)가 끝나고 기말 범위가 L9 부터 시작됐다. 사용자는 **중간 이후 수업을 하나도 못 따라간 상태**이므로, L9–L11 메인 문서는 "처음 보는 사람이 이 문서 하나로 수업을 따라잡는다"를 기준으로 쓴다. L12 는 11/3(화) 수업 예정 — 슬라이드 기준 예습 문서(`{info}` 로 "수업 전 작성" 표시).
+위 §1–§7 규칙이 모두 적용된다. 여기 적힌 키·sim·anim 이 §5–§7 목록의 연장이다.
+
+### 8.1 슬라이드 (`_slides/`, `_text/`)
+| 덱 | PDF (`_text/` 이름) | PNG 수 | 인쇄 p.N → PNG 번호 | 숨김 | 해설본 (OneDrive `…/컴퓨터알고리즘/기말고사/정리본/`) |
+|---|---|---|---|---|---|
+| L9 | `L9 _ Graph Algorithms I` | 114 | p.1–11 = 같음 · p.13–92 → PNG 12–91 (p−1) · p.95–117 → PNG 92–114 (p−3) | 12, 93, 94 | `L9_해설.md` |
+| L10 | `L10 _ Graph Algorithms II` | 70 | p.1–8 = 같음 · p.10–71 → PNG 9–70 (p−1) | 9 | `L10_해설.md` |
+| L11 | `L11 _ Graph Algorithms III` | 88 | p.1–57 = 같음 · p.59–89 → PNG 58–88 (p−1) | 58 | `L11_해설.md` |
+| L12 | `L12 _ Dynamic Programming I` | 60 | p.1–38 = 같음 · p.41–62 → PNG 39–60 (p−2) | 39, 40 | `L12_해설.md` |
+PNG 이름은 `L9-05.png`, `L10-05.png`, `L11-105` 없음(최대 88). 한 자리 페이지는 `L10-5.png` 복사본도 있다.
+
+녹음본(OneDrive `…/컴퓨터알고리즘/기말고사/녹음본/`): `1020_17_컴알_L9_Graph1.txt`(L9 전반, 10/20 화) · `1022_18_컴알_L9_Graph1_후반.txt`(L9 후반, 10/22 목) · `1027_19_컴알_L10_SCC_L11_시작.txt`(10/27 화: L10 전체 + L11 p.1–22 Dijkstra 직관까지) · `1029_20_컴알_L11_ShortestPath.txt`(10/29 목). 10/27·10/29 는 faster-whisper 영어 전사라 용어가 깨져 있다. 슬라이드가 용어·수치의 권위, 녹음은 강조·공지의 권위. 실제 진도 범위는 `L10_해설.md`·`L11_해설.md` 의 🎙 절을 따를 것.
+중간고사 결과: 64/125. 약점 Top(빈칸 의사코드 설계, Circle all 과잉 선택, 분석 템플릿 생략, 그림 위 규칙 적용) → 메인 문서 `{warn}` 에 그래프 판 함정으로 반영: $O(nm)$ vs $O(n+m)$, start vs finish time, BFS 는 weighted 최단경로를 주지 않음, Dijkstra 는 음수 간선 불가, DFS tree 는 유일하지 않음.
+
+### 8.2 문서 키 (정렬 접두 L9 `90_–`, L10 `A0_–`, L11 `B0_–`, L12 `C0_–`)
+#### 9강 L9 Graph Algorithms I (`9강 Graph I`) [90_–]
+**메인**: `L9 Graph Algorithms I`
+**사전**: `graph` · `vertex와 edge` · `n과 m (그래프)` · `degree` · `in-degree와 out-degree` · `directed graph` · `undirected graph` · `adjacency matrix` · `adjacency list` · `matrix vs list 비교표` · `DFS` · `DFS 세 가지 색` · `start time과 finish time` · `DFS tree와 DFS forest` · `parenthesis theorem` · `connected component` · `O(n+m)` · `DAG` · `topological ordering` · `topological sort` · `tree traversal과 DFS` · `BFS` · `layer` · `무가중치 최단거리` · `bipartite graph` · `odd cycle`
+#### 10강 L10 Graph Algorithms II (`10강 Graph II`) [A0_–]
+**메인**: `L10 Graph Algorithms II`
+**사전**: `strongly connected` · `strongly connected component` · `웹 그래프와 SCC` · `SCC graph` · `SCC graph는 DAG` · `G^T` · `SCC 알고리즘` · `sink SCC와 source SCC` · `SCC finish time 보조정리` · `SCC 알고리즘 정확성 증명` · `Kosaraju 알고리즘`
+#### 11강 L11 Graph Algorithms III (`11강 Shortest Path`) [B0_–]
+**메인**: `L11 Graph Algorithms III`
+**사전**: `weighted graph` · `shortest path problem` · `d(s,v)` · `최단경로의 부분경로` · `single-source shortest path` · `Dijkstra` · `Dijkstra 줄과 중력 직관` · `d 값과 sure·not-sure` · `relaxation` · `Dijkstra 정확성 증명` · `Dijkstra 수행 시간` · `priority queue와 heap` · `Fibonacci heap` · `음수 간선 가중치` · `Bellman-Ford` · `d^(i) 배열` · `Bellman-Ford 정확성 증명` · `negative cycle` · `최단경로 알고리즘 비교표` · `OSPF와 RIP`
+#### 12강 L12 Dynamic Programming I (`12강 DP I`) [C0_–]
+**메인**: `L12 Dynamic Programming I`
+**사전**: `dynamic programming` · `optimal substructure` · `overlapping subproblems` · `Fibonacci 수 계산` · `bottom-up` · `top-down과 memoization` · `Bellman-Ford는 DP` · `all-pairs shortest path` · `Floyd-Warshall` · `D^(k)(u,v)` · `simple path` · `longest simple path`
+
+키별 메모:
+* `n과 m (그래프)` = |V|, |E|. L7 의 `M과 n`(universe 크기·키 수)과 다르다는 것을 첫 줄에.
+* `O(n+m)` 문서의 핵심 문장(교수): "each vertex is visited once, each edge is looked at ≤ 2 times (undirected)". $O(nm)$ 이 함정이라는 `{warn}`.
+* `start time과 finish time`: **슬라이드 규약은 시각 0 부터**(CLRS 는 1부터) — `{info}` 로.
+* `topological ordering` = 순서(정의), `topological sort` = 그것을 구하는 알고리즘(DFS finish time 내림차순). 교수: start time 순은 반례가 있다.
+* `SCC finish time 보조정리` = L10 p.58–63 의 "SCC DAG 에서 A→B 이면 A.finish > B.finish"(Case 1 A 먼저 도달 / Case 2 B 먼저 도달) + Corollary 1(reversed graph). `SCC 알고리즘` = DFS 로 finish time → 간선 뒤집기 → finish 내림차순으로 $G^T$ 에서 DFS → 각 tree = SCC. `Kosaraju 알고리즘` 은 이 알고리즘의 고전 이름(슬라이드엔 없음, `{info}`).
+* `d(s,v)` = 진짜 최단거리(수학적 값), `d[v]` = 알고리즘이 들고 있는 추정치. 둘을 구분하는 것이 Dijkstra 증명의 전부다 — 두 문서가 서로 링크.
+* `Dijkstra 수행 시간`: array $O(n^2)$, RB tree $O((n+m)\log n)$, Fibonacci heap $O(n\log n + m)$ (L11 p.54–60, 슬라이드 수치 확인).
+* `d^(i) 배열` = "최대 i 개 간선을 쓰는 경로 중 최단 비용". Bellman-Ford 는 n−1 라운드, $O(nm)$. n 번째 라운드에서 값이 바뀌면 `negative cycle`.
+* `D^(k)(u,v)` = 중간 정점이 {1..k} 안에 있는 u→v 최단 비용. 점화식 $D^{(k)}[u,v]=\min\{D^{(k-1)}[u,v],\ D^{(k-1)}[u,k]+D^{(k-1)}[k,v]\}$. Floyd-Warshall $O(n^3)$.
+
+### 8.3 시뮬레이터 (§6 엔진 API 그대로; 기대값은 작성자가 슬라이드 그래프로 Python 검산해서 파일 머리 주석에 적을 것)
+| 이름 | 내용 | 문서 |
+|---|---|---|
+| dfs_trace | L9 슬라이드 DFS 예제 그래프(인접 리스트 순서 슬라이드 그대로): 정점 색(white/gray/black), 재귀 스택, start/finish 시각(0 부터). 옵션 = L9 예제 / topo sort 예제(L9 DAG; 끝에 finish 내림차순 리스트) | `DFS`, `start time과 finish time`, `topological sort`, `L9 Graph Algorithms I` |
+| bfs_layers | L9 BFS 예제: 큐 대신 layer $L_0, L_1, …$ 리스트, parent, 옵션 = 예제 / bipartite 판별(같은 layer 내 edge 발견 시 "odd cycle ⇒ not bipartite") | `BFS`, `layer`, `bipartite graph`, `L9 Graph Algorithms I` |
+| scc_two_pass | L10 p.12–47 예제 그래프: 1차 DFS finish 시각 → 간선 뒤집기 → finish 내림차순으로 2차 DFS, 찾은 SCC 를 색칠 | `SCC 알고리즘`, `L10 Graph Algorithms II` |
+| dijkstra_trace | L11 p.24–37 의 Gates/Dormitory/E3/… 그래프: d[v] 표, sure/not-sure, 매 단계 최소 not-sure 선택과 이웃 갱신 | `Dijkstra`, `L11 Graph Algorithms III` |
+| bellman_ford_table | L11 p.70–75 / L12 p.9–13 표: $d^{(0)}…d^{(n-1)}$ 행을 한 칸씩 채움. 옵션 = 음수 간선 없음 / 음수 간선 있음(p.80–82) / negative cycle(n 번째 라운드에서 변화) | `Bellman-Ford`, `d^(i) 배열`, `negative cycle`, `L11 Graph Algorithms III` |
+| fib_memo | Fibonacci(8): 옵션 = 순수 재귀(호출 수 카운트) / top-down memo(F 배열 채워지는 순서) / bottom-up | `Fibonacci 수 계산`, `top-down과 memoization`, `L12 Dynamic Programming I` |
+| floyd_warshall_table | L12 Floyd-Warshall 예제(슬라이드에 수치 그래프가 없으면 4정점 작은 그래프를 만들고 명시): k=0..n 마다 D 행렬, 바뀐 칸 강조 | `Floyd-Warshall`, `D^(k)(u,v)`, `L12 Dynamic Programming I` |
+
+### 8.4 움직이는 그림 (§7 규약 그대로)
+| 이름 | 내용 | 문서 |
+|---|---|---|
+| dfs_parenthesis | DFS 가 내려가며 정점에 "(" start, 올라오며 ")" finish 가 찍히고, 아래 시간축에 괄호가 중첩된 구간으로 그려짐 → "중첩 or 분리, 엇갈림 없음" | `parenthesis theorem`, `DFS` |
+| bfs_wave | 시작점에서 물결처럼 $L_1, L_2, L_3$ 가 퍼짐 → 같은 layer 안 edge 가 빨갛게 → "odd cycle" | `BFS`, `bipartite graph` |
+| topo_finish_order | DAG 위 DFS 가 끝나는 정점을 리스트 앞에 차례로 끼워 넣음 → 완성 리스트가 왼→오 모든 화살표 방향과 일치 | `topological sort`, `DAG` |
+| scc_reverse_edges | SCC DAG(덩어리 4개) → 간선이 뒤집히며 sink 가 source 로 → finish 가 가장 큰 덩어리에서 2차 DFS 가 시작해 그 덩어리에 갇힘 → 다음 덩어리 | `SCC 알고리즘`, `G^T`, `L10 Graph Algorithms II` |
+| dijkstra_yoink | 줄로 이어진 공(정점)을 Gates 에서 들어 올리면 가까운 것부터 땅에서 떨어짐(sure) — 팽팽한 줄 = 최단경로 트리 | `Dijkstra 줄과 중력 직관`, `Dijkstra` |
+| bellman_ford_rounds | 라운드 i 마다 "간선 i 개까지 쓰는 경로"가 퍼져 나가며 d 값이 줄어듦 → n−1 라운드 후 고정, negative cycle 은 계속 줄어듦 | `Bellman-Ford`, `negative cycle` |
+| fib_tree_repeat | Fib(8) 재귀 트리가 자라며 같은 부분문제(Fib(5), Fib(4)…)가 같은 색으로 여러 번 → memo 를 켜면 가지가 잘려 사슬이 됨 | `overlapping subproblems`, `top-down과 memoization` |
+| floyd_k_layers | 정점 k 를 "중간 경유지 허용"에 하나씩 추가할 때 u→v 경로가 k 를 거치는 쪽으로 바뀌는 순간(Case 2) | `Floyd-Warshall`, `D^(k)(u,v)` |

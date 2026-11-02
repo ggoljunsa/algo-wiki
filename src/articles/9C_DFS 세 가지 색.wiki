@@ -1,0 +1,41 @@
+key: DFS 세 가지 색
+title: DFS 세 가지 색 — unvisited / in progress / all done (= WHITE / GRAY / BLACK)
+category: 9강 Graph I, 용어
+---
+== 개요 ==
+[[DFS]] 는 정점마다 세 상태 중 하나를 붙여 둔다. 슬라이드는 연한 민트 / 주황 / 진한 초록으로 칠하고, 코드에서는 "unvisited" / "in_progress" / "done", [[CLRS]] 는 WHITE / GRAY / BLACK 이라 부른다. 셋 다 같은 것이다.
+
+{def}
+L9 p.23–38 범례:
+* '''Not been there yet''' → unvisited (WHITE)
+* '''Been there, haven't explored all the paths out''' → in progress (GRAY)
+* '''Been there, have explored all the paths out''' → all done (BLACK)
+{/def}
+
+{|
+! 슬라이드 색 || 코드 (p.67) || CLRS || 언제 바뀌나 || 시각
+|-
+| 연한 민트 || `"unvisited"` || WHITE || 처음 상태 || —
+|-
+| 주황 || `"in_progress"` || GRAY || DFS(w) 에 들어가는 순간 || startTime 기록
+|-
+| 진한 초록 || `"done"` || BLACK || w 의 모든 이웃을 다 본 뒤 || finishTime 기록
+|}
+
+[[img:L9-74.png|L9 p.75 — 탐색이 끝나면 전부 All done(진한 초록). 범례: Unvisited / In progress / All done|medium]]
+
+== 색이 알려 주는 것 ==
+* '''주황(in progress) 정점들 = 지금 call stack''' = start 에서 현재 위치까지의 한 경로(미로의 실).
+* 간선 $u \to v$ 를 볼 때 v 의 색으로 그 간선을 분류할 수 있다(CLRS 22.3): WHITE → tree edge, '''GRAY → back edge (cycle 있음!)''', BLACK → forward/cross edge. 그래서 "이웃이 in_progress 면 cycle" 로 [[DAG]] 판정을 $O(n+m)$ 에 할 수 있다.
+* 코드는 `if v is unvisited` 만 재귀하므로 각 정점은 '''정확히 한 번''' 회색이 된다 → [[O(n+m)]] 논증의 1번 줄.
+
+{analogy}
+'''분필 표시 세 가지.''' 아무 표시 없는 방(민트), "들어왔지만 아직 안 열어 본 문이 있음" 표시(주황), "이 방의 문은 전부 확인 완료" 표시(초록). 실이 지나가는 방은 전부 주황이다.
+{/analogy}
+
+{warn}
+"visited" 를 두 상태로 쪼개는 이유를 놓치지 말 것. BFS 는 visited/unvisited 두 상태로 충분하지만, DFS 에서 in progress 와 all done 을 구분해야 back edge(= cycle)를 알아낼 수 있다.
+{/warn}
+
+== 관련 문서 ==
+* [[DFS]] · [[start time과 finish time]] · [[DAG]] · [[parenthesis theorem]]

@@ -1,0 +1,38 @@
+key: vertex와 edge
+title: vertex 와 edge — 정점(node)과 간선, neighbor
+category: 9강 Graph I, 용어
+---
+== 개요 ==
+[[graph]] $G=(V,E)$ 의 두 재료. '''vertex'''(정점, 슬라이드·교수는 '''node''' 라고도 한다)는 대상 하나, '''edge'''(간선)는 두 정점 사이의 연결 하나다. 간선으로 바로 이어진 정점을 서로의 '''neighbor''' 라고 한다.
+
+{def}
+"V is the set of vertices. E is the set of edges." (L9 p.13)
+* [[undirected graph]] 의 edge = 정점 두 개의 '''집합''' $\{u,v\}$ — 순서 없음.
+* [[directed graph]] 의 edge = '''순서쌍''' $(u,v)$ — $u \to v$, "u 에서 v 로".
+{/def}
+
+== 그림으로 ==
+<pre class="ascii">
+  undirected (p.13)                     directed (p.14)
+  간선 = 집합, 양방향                    간선 = 순서쌍, 한 방향
+    1 — 3                                 1 → 3
+    2 — 4                                 2 → 4
+    3 — 4                                 3 → 4  ┐ 서로 다른
+    2 — 3                                 4 → 3  ┘ 두 간선
+                                          3 → 2
+  4 의 neighbors = 2, 3                  4 의 incoming neighbors = 2, 3
+                                         4 의 outgoing neighbor  = 3
+</pre>
+[[img:L9-13.png|L9 p.14 — Directed Graphs: E = {(1,3),(2,4),(3,4),(4,3),(3,2)}|small]]
+
+{analogy}
+'''사람과 악수.''' vertex 는 사람, undirected edge 는 악수(누가 먼저든 같은 악수 하나), directed edge 는 "팔로우"(내가 너를 팔로우해도 네가 나를 팔로우하는 건 별개). 그래서 directed 에서는 $(3,4)$ 와 $(4,3)$ 이 다른 간선이다.
+{/analogy}
+
+== 어디서 쓰이나 ==
+* 한 정점에 붙은 간선 수 = [[degree]] ([[in-degree와 out-degree]]).
+* "v 의 neighbors 를 달라" (Neighbor Query) 와 "$\{v,w\} \in E$?" (Edge Membership) 가 그래프 자료구조의 두 기본 연산(L9 p.19) → [[matrix vs list 비교표]].
+* 간선에 숫자(비용)가 붙으면 [[weighted graph]] (L11).
+
+== 관련 문서 ==
+* [[graph]] · [[n과 m (그래프)]] · [[degree]] · [[undirected graph]] · [[directed graph]]

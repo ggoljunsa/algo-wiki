@@ -1,0 +1,54 @@
+key: bipartite graph
+title: bipartite graph — 두 색으로 칠해 같은 색 사이 간선이 없는 그래프, BFS 로 O(n+m) 판정
+category: 9강 Graph I, 용어
+---
+== 개요 ==
+'''bipartite graph''' (이분 그래프)는 정점을 두 그룹으로 나눠 '''모든 간선이 두 그룹 사이에만''' 있게 할 수 있는 그래프다. 학생–수업(수강), 작업자–작업(배정)처럼 "두 종류의 대상 사이 관계" 가 전형적이다. [[BFS]] 의 [[layer]] 를 홀짝으로 칠해 같은 layer 안 간선이 있는지 보면 [[O(n+m)]] 에 판정된다. 그리고 '''bipartite ⇔ [[odd cycle]] 이 없다'''.
+
+{def}
+L9 p.96: "A graph is '''bipartite''' iff there exists a two-coloring such that there are no edges between same-colored vertices."
+{/def}
+
+[[img:L9-93.png|L9 p.96 — Bipartite means it looks like this: 갈색 = 학생, 주황 = 수업, 간선 = 수강|medium]]
+
+== 판정 알고리즘 (L9 p.100) ==
+"Color the levels of the BFS tree in alternating colors. If you never color two connected nodes the same color, then it is bipartite. Otherwise, it's not."
+<pre class="txt">
+IS-BIPARTITE(G):
+  각 component 에서 w 를 골라 BFS(w) → L_0, L_1, ...
+  color(v) = (v 의 layer 번호) mod 2
+  for each edge {u, v}:
+      if color(u) == color(v): return False     # 같은 layer 안 간선
+  return True
+O(n + m)
+</pre>
+[[img:L9-97.png|L9 p.100 — Solution using BFS: A 주황 / B, E 갈색 / C, F, D 주황 / G 갈색|medium]]
+p.89 그래프: A($L_0$) / B, E($L_1$) / C, F, D($L_2$) / G($L_3$). 간선 C–D 가 $L_2$–$L_2$ → '''NOT bipartite''' (5-cycle A–B–C–D–E–A).
+
+[[anim:bfs_wave|layer 가 물결처럼 퍼지고 두 색이 번갈아 칠해지다가, 같은 layer 안 간선이 빨갛게 → odd cycle]]
+
+[[sim:bfs_layers]]
+
+== "No" 가 맞는 이유 (p.111–113) ==
+"이 BFS coloring 이 실패했다고 '''어떤''' coloring 도 안 된다는 건 왜?" — bipartite 그래프도 엉터리로 칠하면 같은 색 간선이 생긴다(p.111). 그래서 증명이 필요하다:
+# '''Claim 1''': BFS 가 이웃한 x, y 를 같은 색으로 칠했다면(= 같은 layer) 공통 조상 z 까지 두 트리 경로 길이가 똑같이 k → $k + k + 1 = 2k+1$ 길이의 [[odd cycle]] 이 있다.
+# '''Claim 2''': odd cycle 은 어떤 방식으로도 two-coloring 불가.
+# 결론: 그 부분조차 못 칠하니 그래프 전체가 NOT bipartite.
+"Yes" 쪽은 BFS 의 coloring 자체가 증거라 따로 증명할 필요가 없다.
+
+{analogy}
+'''댄스 파티 짝 정하기.''' 모든 춤 파트너 관계가 "A팀–B팀" 사이에만 있도록 사람을 두 팀으로 나눌 수 있나? 세 사람이 서로서로 춤춘 삼각관계(길이 3 의 odd cycle)가 하나라도 있으면, 셋 중 둘은 반드시 같은 팀이 되어 규칙이 깨진다.
+{/analogy}
+
+{exam}
+교수(10/22): 학생 아이디어 "BFS 하고 layer 마다 색을 번갈아" 를 채택. '''같은 layer 안의 두 노드 사이 edge 가 있으면 not bipartite.''' "BFS 는 coloring 방법 하나일 뿐인데 왜 다른 coloring 도 없다고 할 수 있나?" → odd cycle 논증. p.112 "'''Make this proof sketch formal!'''" (서술형 후보). p.114 "BFS can be used to detect bipartite-ness in time O(n+m)."
+{/exam}
+{quiz}
+Circle all that apply. (a) 트리는 항상 bipartite 다 (b) 길이 4 인 cycle 은 bipartite 다 (c) BFS 에서 $L_1$–$L_2$ 간선이 있으면 bipartite 가 아니다 (d) 같은 layer 안 간선이 있으면 odd cycle 이 있다
+{/quiz}
+{answer}
+'''(a), (b), (d)'''. (a) 트리는 cycle 이 없으니 odd cycle 도 없다. (b) 짝수 cycle 은 번갈아 칠하면 됨. (c) 인접 layer 간선은 색이 다르므로 문제없다 — 거짓. (d) Claim 1.
+{/answer}
+
+== 관련 문서 ==
+* [[odd cycle]] · [[BFS]] · [[layer]] · [[O(n+m)]] · [[undirected graph]] · [[L9 Graph Algorithms I]]

@@ -1,0 +1,49 @@
+key: DAG
+title: DAG (Directed Acyclic Graph) — directed cycle 이 없는 방향 그래프
+category: 9강 Graph I, 용어
+---
+== 개요 ==
+'''DAG''' 는 화살표를 따라가서 제자리로 돌아오는 경로(directed cycle)가 '''없는''' [[directed graph]] 다. 의존성 그래프(패키지 설치, 선수과목, 빌드 순서)가 전형적인 DAG 이고, DAG 이어야만 [[topological ordering]] 이 존재한다. L10 에서는 "[[SCC graph는 DAG]]" 로 다시 나온다.
+
+{def}
+L9 p.56: "A dependency graph is an instantiation of a directed acyclic graph (DAG) i.e. a '''directed graph with no directed cycles'''."
+{/def}
+
+[[img:L9-55.png|L9 p.56 — Which of these graphs are valid DAGs? 위 줄 세 개 DAG, 아래 줄 세 개는 directed cycle 이 있어 DAG 아님|medium]]
+
+== p.56–57 판정 ==
+{|
+! 그림 || 판정 || 이유
+|-
+| 위 왼쪽 (네 정점) || DAG || 화살표를 따라 한 바퀴 돌아올 수 없음 (아래 왼쪽과 비교하면 한 간선이 빠져 있다)
+|-
+| 위 가운데 (위 → 아래 하나) || DAG || 간선 하나
+|-
+| 위 오른쪽 (위에서 갈라져 아래로 모임) || DAG || 방향을 무시하면 고리가 보이지만, 모든 화살표가 아래쪽으로
+|-
+| 아래 왼쪽 (네 정점 고리, 한 방향) || 아님 || 한 바퀴 도는 directed cycle
+|-
+| 아래 가운데 (두 정점 양방향) || 아님 || $u \to v \to u$ (길이 2 cycle)
+|-
+| 아래 오른쪽 || 아님 || 화살표를 따라 한 바퀴 도는 경로가 있음
+|}
+판정 요령: 방향을 무시한 고리는 상관없다. '''화살표를 따라''' 한 바퀴 돌 수 있는지만 본다.
+
+{analogy}
+'''선수과목 체계.''' "자료구조 → 알고리즘 → 고급 알고리즘" 처럼 화살표가 "먼저 들어야 함" 을 뜻한다. 만약 "알고리즘을 들으려면 고급 알고리즘이 먼저" 라는 화살표까지 있으면 순환이 생겨 아무도 졸업할 수 없다. DAG = 졸업 가능한 커리큘럼.
+{/analogy}
+
+== 동치 조건 ==
+* G 가 DAG ⇔ [[topological ordering]] 이 존재한다.
+* G 가 DAG ⇔ [[DFS]] 가 '''back edge''' 를 만나지 않는다(이웃이 in progress 인 경우가 없음, [[DFS 세 가지 색]]) → cycle 검출 $O(n+m)$.
+* DAG 에는 in-degree 0 인 정점이 하나 이상 있다([[in-degree와 out-degree]]).
+* DAG 의 간선 $A \to B$ 마다 DFS 에서 A.finish > B.finish (L9 p.60–63) → [[topological sort]].
+
+{warn}
+"undirected cycle(방향 무시 고리)이 있으면 DAG 가 아니다" → '''거짓'''. p.56 위 오른쪽처럼 고리 모양이어도 화살표가 한 방향으로 돌지 않으면 DAG 다.
+{/warn}
+
+[[anim:topo_finish_order|DAG 위 DFS 에서 끝나는 정점을 리스트 앞에 끼워 넣으면, 완성 리스트의 모든 화살표가 왼쪽 → 오른쪽]]
+
+== 관련 문서 ==
+* [[topological ordering]] · [[topological sort]] · [[directed graph]] · [[DFS]] · [[SCC graph는 DAG]]

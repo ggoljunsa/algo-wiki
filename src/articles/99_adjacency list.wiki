@@ -1,0 +1,43 @@
+key: adjacency list
+title: adjacency list — 정점마다 이웃 linked list (Option 2, 이 과목의 기본 가정)
+category: 9강 Graph I, 용어
+---
+== 개요 ==
+'''adjacency list''' (인접 리스트)는 정점마다 그 정점의 이웃을 담은 [[linked list]] 를 둔다. 공간 $O(n+m)$, v 의 이웃 나열 $O(\deg(v))$. L9 p.20 에서 "'''We'll assume this representation for the rest of the class'''" — 이후 모든 그래프 알고리즘의 수행 시간([[O(n+m)]] 등)은 이 표현이 전제다.
+
+{def}
+L9 p.18 "How do we represent graphs? Option 2: linked lists." — 정점 배열의 각 칸에서 이웃 리스트가 매달린다. "4's neighbors are 2 and 3."
+{/def}
+
+[[img:L9-17.png|L9 p.18 — 1:[3], 2:[4,3], 3:[1,4,2], 4:[2,3]. How would you modify this for directed graphs?|medium]]
+
+<pre class="ascii">
+ p.13 그래프 (undirected)          p.14 그래프 (directed, out-neighbor 만)
+ [1] → 3                           [1] → 3
+ [2] → 4 → 3                       [2] → 4
+ [3] → 1 → 4 → 2                   [3] → 4 → 2
+ [4] → 2 → 3                       [4] → 3
+ 리스트 길이 합 = 2m = 8            리스트 길이 합 = m = 5
+</pre>
+* [[undirected graph]]: 간선 $\{u,v\}$ 가 u 리스트와 v 리스트에 둘 다 → 합 $2m$.
+* [[directed graph]]: "How would you modify this for directed graphs?" → '''outgoing neighbor 만''' 저장 → 합 $m$. 교수(10/20): incoming list 가 필요하면 따로 둘 수 있다, "depending on the application" (→ L10 [[G^T]]).
+* 리스트 안 이웃의 '''순서'''가 [[DFS]]·[[BFS]] 의 방문 순서를 정한다. 시험 trace 에서 "이웃은 번호 순" 같은 조건을 꼭 확인할 것.
+
+== 연산 비용 (p.20) ==
+{|
+! 연산 || 비용
+|-
+| Edge membership $\{v,w\} \in E$? || $O(\deg(v))$ or $O(\deg(w))$ — 짧은 쪽 리스트를 훑음
+|-
+| Neighbor query || $O(\deg(v))$ — 실제 이웃 수만큼만
+|-
+| Space || $O(n+m)$ — 배열 n 칸 + 리스트 노드 $2m$ (또는 $m$)
+|}
+"Generally better for '''sparse''' graphs." 그래프 탐색은 "이웃 나열" 의 반복이므로, 전체 비용이 $\sum_v \deg(v) = O(m)$ 으로 떨어진다 → [[O(n+m)]].
+
+{analogy}
+'''각자의 연락처 목록.''' 표 한 장(행렬) 대신 학생마다 자기 친구 이름만 적은 쪽지를 들고 있다. 친구 목록은 쪽지만 읽으면 끝(deg), 전체 종이 양은 학생 수 + 친구 관계 수. 다만 "철수와 영희가 친구?" 는 철수 쪽지를 끝까지 읽어 봐야 안다.
+{/analogy}
+
+== 관련 문서 ==
+* [[adjacency matrix]] · [[matrix vs list 비교표]] · [[degree]] · [[O(n+m)]] · [[linked list]]

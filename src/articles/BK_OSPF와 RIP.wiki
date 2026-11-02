@@ -1,0 +1,32 @@
+key: OSPF와 RIP
+title: OSPF 와 RIP — 실전 routing protocol 속 Dijkstra 와 Bellman-Ford
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+두 알고리즘은 인터넷 routing 에 실제로 쓰인다. '''OSPF''' (Open Shortest Path First) 는 [[Dijkstra]] 를, '''RIP''' (Routing Information Protocol) 는 [[Bellman-Ford]] 비슷한 것을 쓴다(L11 p.62, p.87). 두 프로토콜의 차이가 곧 두 알고리즘의 장단점이다.
+
+{def}
+"Dijkstra is used in practice: eg, OSPF (Open Shortest Path First), a routing protocol for IP networks, uses Dijkstra." (p.62) "In OSPF, a vertex broadcasts any changes to the network, and then every vertex re-runs Dijkstra's algorithm from scratch." (p.63)
+"Bellman-Ford is also used in practice: eg, Routing Information Protocol (RIP) uses something like Bellman-Ford. Older protocol, not used as much anymore. Each router keeps a table of distances to every other router. Periodically we do a Bellman-Ford update. This means that if there are changes in the network, this will propagate. (maybe slowly…)" (p.87)
+{/def}
+[[img:L11-86.png|L11 p.87 — RIP: 라우터마다 Destination / Cost to get there / Send to whom? 표 (172.16.1.0 34 172.16.1.1 등)|medium]]
+{|
+! || OSPF || RIP
+|-
+| 알고리즘 || [[Dijkstra]] || [[Bellman-Ford]] 비슷
+|-
+| 정보 || 전체 네트워크 지도 (centralized) || 이웃의 거리표만 (distributed)
+|-
+| weight 변경 시 || 변화를 broadcast → 모든 정점이 Dijkstra '''처음부터 다시''' || 주기적 update 를 계속 → 변화가 (천천히) 전파
+|-
+| 현황 || 널리 사용 || 오래된 프로토콜
+|}
+{exam}
+교수(10/29): Dijkstra 는 "'''node ordering 이 정확성에 핵심'''이라 weight 하나만 바뀌어도 rerun from scratch". Bellman-Ford 는 "'''there is no specific ordering''' — just keep updating, one update will eventually propagate to all other nodes" → RIP. 덜 효율적이지만 이것이 장점.
+{/exam}
+{analogy}
+'''본사 vs 지점 연락망.''' OSPF 는 본사가 전국 지도를 다시 그려 모든 지점에 새 경로를 내려보내는 방식, RIP 는 지점끼리 "우리 쪽에서 거기까지 얼마"를 주기적으로 전화로 주고받는 방식이다.
+{/analogy}
+
+== 관련 문서 ==
+* [[Dijkstra]] · [[Bellman-Ford]] · [[single-source shortest path]] · [[최단경로 알고리즘 비교표]]

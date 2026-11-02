@@ -1,0 +1,39 @@
+key: optimal substructure
+title: optimal substructure (최적 부분 구조)
+category: 12강 DP I, 용어
+---
+== 개요 ==
+'''optimal substructure''' 는 [[dynamic programming]] 의 첫 번째 요소다. "큰 문제의 최적해 안에 작은 문제의 최적해가 그대로 들어 있다" — 그래서 큰 문제의 답을 작은 문제 답들로 쓰는 '''점화식'''을 세울 수 있다. DP 알고리즘이 '''옳은'''([[두 가지 질문]] ① Does it work?) 근거가 이것이다.
+
+{def}
+L12 p.28 "Big problems break up into sub-problems. The solution to a problem can be expressed in terms of solutions to smaller sub-problems."
+L12 p.30 "Optimal solutions to sub-problems are sub-solutions to the optimal solution of the original problem."
+→ 부분문제의 최적해가 원래 문제 최적해의 부분해가 된다.
+{/def}
+
+== 예 ==
+{|
+! 문제 || 부분문제 || 큰 답 = 작은 답들의 조합
+|-
+| Fibonacci (p.28) || $F(i)$, $i \le n$ || $F(i+1) = F(i) + F(i-1)$
+|-
+| [[Bellman-Ford]] (p.28) || 간선 ≤ i 개 최단경로 || $d^{(i+1)}[v] = \min\{d^{(i)}[v], \min_u d^{(i)}[u] + w(u,v)\}$
+|-
+| [[Floyd-Warshall]] (p.51) || 중간 정점 ⊆ {1..k−1} 최단경로 || $D^{(k)}[u,v] = \min\{D^{(k-1)}[u,v], D^{(k-1)}[u,k] + D^{(k-1)}[k,v]\}$
+|-
+| [[longest simple path]] (p.59–60) || s→a 최장, a→t 최장 || '''성립 안 함''' — 이어 붙이면 정점이 겹쳐 simple 이 아님
+|}
+최단경로에서 이게 되는 이유는 "'''sub-paths of shortest paths are shortest paths'''"([[최단경로의 부분경로]], L12 p.50) — 최단경로의 한 조각이 더 짧아질 수 있다면 그 조각을 바꿔 전체도 더 짧아지니 모순.
+
+[[img:L12-48.png|L12 p.50 — Floyd-Warshall Case 2: u→k (보라)와 k→v (분홍)이 각각 최단경로 → optimal substructure|medium]]
+
+{analogy}
+'''서울→부산 최단 도로가 대전을 지난다면''', 그 길의 서울→대전 구간은 서울→대전 최단 도로여야 한다(아니면 그 구간만 더 빠른 길로 바꿔 전체가 빨라진다). 반면 "가장 긴 '''중복 없는''' 여행 코스" 는 서울→대전 최장 코스와 대전→부산 최장 코스가 같은 도시를 들를 수 있어서 이어 붙이면 규칙 위반 — 조각의 최선이 전체의 최선이 아니다.
+{/analogy}
+
+{exam}
+(예상) 정의→용어: "Optimal solutions to sub-problems are sub-solutions to the optimal solution of the original problem" → '''optimal substructure'''. 반례 서술: [[longest simple path]] 는 부분문제가 독립이 아니어서(같은 정점 공유) optimal substructure 가 없다.
+{/exam}
+
+== 관련 문서 ==
+* [[overlapping subproblems]] · [[dynamic programming]] · [[최단경로의 부분경로]] · [[longest simple path]] · [[Floyd-Warshall]]

@@ -1,0 +1,45 @@
+key: D^(k)(u,v)
+title: D^(k)[u,v] — 중간 정점이 {1..k} 안인 u→v 최단 비용
+category: 12강 DP I, 용어
+---
+== 개요 ==
+$D^{(k)}[u,v]$ 는 [[Floyd-Warshall]] 의 '''부분문제'''다. 정점에 1…n 번호를 붙였을 때, u 에서 v 로 가는 경로 중 '''중간 정점(internal vertices, 양 끝 u·v 제외)이 모두 {1, …, k} 안에 있는''' 경로들의 최단 비용. k 가 0 이면 직행 간선만, k 가 n 이면 제한이 없으니 진짜 최단거리다.
+
+{def}
+L12 p.44 "Sub-problem(k-1): For all pairs, u,v, find the cost of the shortest path from u to v, so that all the internal vertices on that path are in {1,…,k-1}. Let $D^{(k-1)}[u,v]$ be the solution to Sub-problem(k-1)."
+L12 p.46 "$D^{(k)}[u,v]$ is the cost of the shortest path from u to v so that all internal vertices on that path are in {1, …, k}."
+{/def}
+{warn}
+k 는 '''간선 수가 아니다.''' [[Bellman-Ford]] 의 $d^{(i)}[v]$([[d^(i) 배열]])는 "간선 ≤ i 개", $D^{(k)}[u,v]$ 는 "경유 정점 번호 ≤ k". 위첨자 모양이 비슷해서 섞기 쉽다.
+{/warn}
+
+[[img:L12-45.png|L12 p.47 — 안쪽 타원 = {1..k−1}, 바깥 타원 = {1..k}. Case 1: k 가 필요 없으면 D(k)[u,v] = D(k−1)[u,v]|large]]
+
+== 점화식 ==
+$$D^{(k)}[u,v] = \min\{\ D^{(k-1)}[u,v],\ D^{(k-1)}[u,k] + D^{(k-1)}[k,v]\ \}$$
+{|
+! 경우 || 최단경로 모양 || 값
+|-
+| Case 1 — k 불필요 (p.47) || 중간 정점이 전부 {1..k−1} || $D^{(k-1)}[u,v]$
+|-
+| Case 2 — k 필요 (p.48–50) || u ⇝ k ⇝ v, 두 조각 모두 {1..k−1} 만 경유 ([[simple path]] 라 k 는 한 번) || $D^{(k-1)}[u,k] + D^{(k-1)}[k,v]$
+|}
+{|
+! 칸 || 값
+|-
+| $D^{(k)}[u,u]$ || 0 (p.53, negative cycle 이 없으면)
+|-
+| $D^{(0)}[u,v]$ || $w(u,v)$ (간선 있으면), 없으면 ∞ — "the only path through zero other vertices are edges directly from u to v"
+|-
+| $D^{(n)}[u,v]$ || u→v 진짜 최단거리 (p.54 Theorem)
+|-
+| $D^{(n)}[v,v] < 0$ || [[negative cycle]] 존재 (p.55)
+|}
+[[anim:floyd_k_layers|k 를 하나씩 허용할 때 어떤 칸이 Case 2 로 바뀌는지]]
+
+{analogy}
+'''"k 번 이하 버스 정류장만 경유 가능" 표.''' $D^{(3)}[u,v]$ 는 "1·2·3 번 정류장에서만 갈아탈 수 있을 때 u→v 최단 시간". 4번 정류장이 추가 개방되면, 4번 경유가 이득인 쌍만 값이 내려간다.
+{/analogy}
+
+== 관련 문서 ==
+* [[Floyd-Warshall]] · [[all-pairs shortest path]] · [[d^(i) 배열]] · [[simple path]] · [[optimal substructure]]

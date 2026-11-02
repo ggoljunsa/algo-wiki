@@ -1,0 +1,38 @@
+key: shortest path problem
+title: shortest path problem — cost 가 가장 작은 경로 찾기
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+[[weighted graph]] 에서 '''경로의 cost = 경로 위 weight 의 합''', '''shortest path = cost 가 최소인 경로'''. 그 최소 cost 를 [[d(s,v)|거리 d(u,v)]] 라 부른다. 출발점을 하나 고정하고 모든 도착점까지 구하면 [[single-source shortest path]].
+
+{def}
+"What is the shortest path between u and v in a weighted graph? The cost of a path is the sum of the weights along that path. The shortest path is the one with the minimum cost." "The distance d(u,v) between two vertices u and v is the cost of the shortest path between u and v." (L11 p.8)
+{/def}
+
+[[img:L11-08.png|L11 p.8 — s→t 의 간선 3개 경로는 cost 25, 간선 4개 경로는 cost 5(더 짧다)|medium]]
+<pre class="txt">
+p.8 예:  위쪽 경로   3 + 20 + 2       = 25
+         아래쪽 경로 2 + 1 + 1 + 1    = 5   ← shortest path, d(s,t) = 5
+간선은 더 많지만 cost 는 더 작다.
+</pre>
+
+== 변형과 알고리즘 ==
+{|
+! 변형 || 알고리즘 || 시간
+|-
+| unweighted (모든 weight 같음) || [[BFS]] || $O(n+m)$
+|-
+| single-source, $w \ge 0$ || [[Dijkstra]] || $O(n\log n + m)$
+|-
+| single-source, 음수 허용 || [[Bellman-Ford]] || $O(nm)$
+|-
+| all-pairs || [[Floyd-Warshall]] (L12) || $O(n^3)$
+|}
+→ [[최단경로 알고리즘 비교표]]. 핵심 성질은 [[최단경로의 부분경로]]도 최단경로라는 것. [[negative cycle]] 이 있으면 문제 자체가 정의되지 않는다.
+
+{analogy}
+'''택시 요금 최소화.''' 목적지까지 가는 길은 많고 구간마다 요금이 다르다. 갈아타는 횟수(간선 수)가 아니라 '''요금 합'''이 가장 작은 길을 찾는 문제다.
+{/analogy}
+
+== 관련 문서 ==
+* [[weighted graph]] · [[d(s,v)]] · [[single-source shortest path]] · [[최단경로의 부분경로]] · [[all-pairs shortest path]] · [[L11 Graph Algorithms III]]

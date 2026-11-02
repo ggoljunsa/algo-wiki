@@ -1,0 +1,54 @@
+key: odd cycle
+title: odd cycle — 길이가 홀수인 cycle, two-coloring 이 불가능한 이유
+category: 9강 Graph I, 용어
+---
+== 개요 ==
+'''odd cycle''' 은 간선 수(= 정점 수)가 홀수인 cycle 이다(삼각형, 오각형 …). 두 색으로 번갈아 칠하며 한 바퀴 돌면 출발점으로 돌아올 때 색이 맞지 않으므로 '''절대 two-coloring 할 수 없다'''. 그래서 odd cycle 을 하나라도 품은 그래프는 [[bipartite graph]] 가 아니다. L9 p.112–113 은 [[BFS]] 가 같은 [[layer]] 안 간선을 찾는 순간 odd cycle 이 존재함을 보여, BFS 판정의 "No" 를 정당화한다.
+
+{def}
+L9 p.112: "If BFS colors two neighbors the same color, then it's found a '''cycle of odd length''' in the graph."
+"There must be an even number of these edges." "This one extra makes it odd."
+{/def}
+
+[[img:L9-109.png|L9 p.112 — Some proof required: A–B–C 와 A–E–D (짝수 개) + C–D 한 개 = 5-cycle|large]]
+
+== Claim 1 — 같은 layer 간선 ⇒ odd cycle ==
+<pre class="txt">
+1. x, y 가 같은 색 → layer 홀짝이 같음. 간선은 layer 차 ≤ 1 → 같은 layer L_i.
+2. BFS tree 에서 x, y 의 가장 가까운 공통 조상 z ∈ L_j (j < i).
+3. z ⇝ x 와 z ⇝ y 는 한 층씩 내려가므로 둘 다 길이 k = i − j.   ("even number of these edges": 2k)
+4. z ⇝ x, 간선 x–y, y ⇝ z → cycle 길이 2k + 1 = 홀수.            ("This one extra makes it odd")
+
+p.112 예: x = C, y = D (L2), z = A (L0), k = 2
+   A–B–C (2) + C–D (1) + D–E–A (2) = 5
+</pre>
+
+== Claim 2 — odd cycle 은 two-coloring 불가 (p.113 "Fun exercise!") ==
+<pre class="txt">
+cycle v_0, v_1, ..., v_{2k}, (다시 v_0)        정점 2k+1 개
+v_0 = 색 1 이라 하자. 인접 정점은 색이 달라야 하므로
+  v_1 = 색 2, v_2 = 색 1, ... , v_t = (t 짝수면 색 1, 홀수면 색 2)
+v_{2k} 는 2k 가 짝수 → 색 1
+그런데 v_{2k} 와 v_0 는 인접하고 둘 다 색 1 → 모순.  ∎
+</pre>
+<pre class="ascii">
+  triangle (odd, 3)          square (even, 4)
+        a                       a --- b
+       / \                      |     |
+      b - c                     d --- c
+  a=1, b=2, c=1                a=1, b=2, c=1, d=2
+  c-a 둘 다 색 1, 인접 → 실패   모든 간선 색이 다름 → OK
+</pre>
+
+{analogy}
+'''원탁의 남녀 교대 착석.''' 남–여–남–여 로 번갈아 앉히려면 인원수가 짝수여야 한다. 5 명이 원탁에 앉으면 한 바퀴 돌아 마지막 사람과 첫 사람이 같은 성별로 붙는다. 원탁 = cycle, 인원수 홀수 = odd cycle.
+{/analogy}
+
+{exam}
+교수(10/22): "같은 layer $L_i$ 의 c, d 사이 edge 가 있으면, BFS tree 에서 공통 조상까지의 두 경로 길이가 같으므로 tree 경로 합은 짝수, 여기에 edge (c,d) 1개 → '''odd cycle'''. odd cycle 은 어떤 2-coloring 으로도 칠할 수 없음 → graph 전체가 bipartite 가 아님." p.112 "'''Make this proof sketch formal!'''" — 위 4줄 + Claim 2 를 그대로 쓸 수 있어야 한다.
+{/exam}
+
+정리: '''bipartite ⇔ odd cycle 이 없다.''' BFS 판정 알고리즘이 이 정리의 constructive 증명이다(없으면 coloring 을, 있으면 odd cycle 을 찾아 준다).
+
+== 관련 문서 ==
+* [[bipartite graph]] · [[BFS]] · [[layer]] · [[귀류법]] · [[L9 Graph Algorithms I]]

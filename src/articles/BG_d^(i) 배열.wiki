@@ -1,0 +1,40 @@
+key: d^(i) 배열
+title: d^(i) 배열 — 간선을 최대 i 개 쓰는 경로 중 최단 cost
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+[[Bellman-Ford]] 를 라운드별 배열로 쓴 버전(L11 p.70 "For some reasons which we will see next time — Keep n arrays: $d^{(0)}, d^{(1)}, \dots, d^{(n-1)}$")에서 '''$d^{(i)}[v]$ = s 에서 v 까지 간선을 최대 i 개 쓰는 경로 중 최소 cost'''(없으면 ∞). 이 의미 덕분에 귀납 증명이 깔끔해지고, L12 에서 이 표 채우기가 [[dynamic programming]] 임이 드러난다([[Bellman-Ford는 DP]]).
+
+{def}
+$$d^{(i+1)}[v] \leftarrow \min\big(d^{(i)}[v],\ d^{(i)}[u] + w(u,v)\big)\quad(\text{모든 간선 } (u,v))$$
+"Inductive Hypothesis: $d^{(i)}[v]$ is equal to the cost of the shortest path between s and v with at most i edges." (L11 p.76) "Then dist(s,v) = $d^{(n-1)}[v]$" (p.70)
+{/def}
+[[img:L11-74.png|L11 p.75 — d(0)…d(4) 표: 0 ∞ ∞ ∞ ∞ / 0 1 ∞ ∞ 25 / 0 1 2 45 23 / 0 1 2 6 23 / 0 1 2 6 23|medium]]
+{|
+! 행 || Gates || R1 || E3 || Park || HG || 의미
+|-
+| $d^{(0)}$ || 0 || ∞ || ∞ || ∞ || ∞ || 간선 0개: s 만
+|-
+| $d^{(1)}$ || 0 || 1 || ∞ || ∞ || 25 || 간선 1개: Gates 의 직접 이웃
+|-
+| $d^{(2)}$ || 0 || 1 || 2 || 45 || 23 || Park 는 Gates–HG–Park (25+20)
+|-
+| $d^{(3)}$ || 0 || 1 || 2 || 6 || 23 || 간선 3개: Gates–R1–E3–Park 가 보임
+|-
+| $d^{(4)}$ || 0 || 1 || 2 || 6 || 23 || = $d^{(n-1)}$, 정답
+|}
+* $d^{(i+1)}$ 은 '''$d^{(i)}$ 만''' 읽는다. (같은 배열을 덮어쓰는 p.69 버전은 같은 라운드 안에서 더 빨리 수렴할 수 있지만 결론은 같다.)
+* 각 열은 위에서 아래로 '''증가하지 않는다'''(간선을 더 허용하면 선택지가 늘 뿐).
+
+{analogy}
+'''환승 횟수 제한 검색.''' 지도 앱에 "최대 i 번 이동까지"를 걸고 최저 비용을 찾는 것. i = 1 이면 직행만, i = 2 면 한 번 경유까지 … 제한을 하나씩 풀어 가며 표를 채운다.
+{/analogy}
+{exam}
+교수(10/29): "think about '''what this 0, 1, 2, 3, 4 means''' … the shortest path between source and v with '''at most i edges'''. From $d^{(0)}$ to $d^{(1)}$, only R1 and Halmaegomtang are updated — they have direct edges from the source." "How long? at most n−1 edges from source to destination → repeat to n−1."
+{/exam}
+{warn}
+$d^{(i)}[v]$ 는 "정확히 i 개" 가 아니라 "'''최대''' i 개". 그리고 $d^{(i)}$ 와 [[d(s,v)]] 는 다르다 — 같아지는 것은 $i = n-1$ (negative cycle 없을 때).
+{/warn}
+
+== 관련 문서 ==
+* [[Bellman-Ford]] · [[Bellman-Ford 정확성 증명]] · [[negative cycle]] · [[Bellman-Ford는 DP]] · [[D^(k)(u,v)]] · [[simple path]]

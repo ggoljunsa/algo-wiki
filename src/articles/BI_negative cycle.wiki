@@ -1,0 +1,46 @@
+key: negative cycle
+title: negative cycle — weight 합이 음수인 cycle, 최단경로가 정의되지 않음
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+'''negative cycle''' 은 간선 weight 의 합이 '''0 보다 작은 cycle''' 이다. s 에서 도달 가능한 negative cycle 이 있으면 그 cycle 을 한 바퀴 더 돌 때마다 경로 cost 가 줄어들어 최단경로가 $-\infty$ — "'''Shortest Paths aren't well-defined if there are negative cycles!'''" (L11 p.67). [[Bellman-Ford]] 는 한 라운드 더 돌려 이것을 '''검출'''한다.
+
+[[img:L11-66.png|L11 p.67 — G—R—H—G 를 계속 돌면 cost 가 끝없이 줄어든다. Shortest Paths aren't well-defined if there are negative cycles!|medium]]
+<pre class="txt">
+p.67: G—R—H—G—R—E3—Park = 1 − 2 − 3 + 1 + 1 + 4 = 2   (6 보다 짧다)
+      cycle G—R—H—G = 1 − 2 − 3 = −4 < 0  → 돌 때마다 −4
+</pre>
+
+== 검출 (p.82–85) ==
+[[img:L11-81.png|L11 p.82 — d(4) 다음 d(5) 에서도 값이 바뀜(Some stuff changed!) → negative cycle|medium]]
+{|
+! || Gates || R1 || E3 || Park || HG
+|-
+| $d^{(3)}$ || −4 || −5 || −4 || 6 || −3
+|-
+| $d^{(4)}$ || −4 || −5 || −4 || 0 (슬라이드 6) || −7
+|-
+| $d^{(5)}$ || −4 || −9 || −4 || 0 (슬라이드 3) || −7
+|}
+<pre class="c">
+For i=0,…,n-1:  ... d(i+1)[v] ← min( d(i)[v] , d(i)[u] + edgeWeight(u,v))
+If d(n-1) != d(n) :
+    Return NEGATIVE CYCLE
+Otherwise, dist(s,v) = d(n-1)[v]
+</pre>
+* 없으면: "The algorithm stabilizes after n−1 rounds" → $d^{(n)} = d^{(n-1)}$.
+* 있으면: "The d[v] values will keep changing." → "'''Go one round more and see if things change.'''"
+* (슬라이드 Park 열은 계산 오타 — E3 = −4 에서 E3→Park 4 를 쓰면 0. 결론은 같다.)
+
+{exam}
+교수(10/29): "Look at Gates — '''the source node becomes negative''' → something turned and came back to the source but shrunk → negative cycle. But there could be a negative cycle not through the source → '''only one more outer iteration''', compare $d^{(n-1)}$ and $d^{(n)}$." "Negative edge weight itself is not a problem; negative cycle makes the shortest path undefined."
+{/exam}
+{analogy}
+'''돈이 생기는 순환 환전.''' 원→달러→엔→원 으로 바꿀 때마다 돈이 늘어난다면(음수 비용 cycle), "가장 싸게 원을 얻는 법"은 정의되지 않는다 — 무한히 돌면 되니까. 은행은 한 바퀴 더 돌려 봐서 돈이 또 늘면 "차익거래 고리"라고 판정한다.
+{/analogy}
+{warn}
+"음수 간선이 있으면 최단경로가 정의되지 않는다" → 거짓. 정의되지 않는 것은 '''negative cycle''' 이 있을 때뿐이다. 그리고 검출용 라운드는 n 번째(추가 1번)다.
+{/warn}
+
+== 관련 문서 ==
+* [[Bellman-Ford]] · [[d^(i) 배열]] · [[음수 간선 가중치]] · [[Bellman-Ford 정확성 증명]] · [[simple path]] · [[Floyd-Warshall]]

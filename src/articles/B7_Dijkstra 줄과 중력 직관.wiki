@@ -1,0 +1,56 @@
+key: Dijkstra 줄과 중력 직관
+title: Dijkstra 줄과 중력 직관 — YOINK! 팽팽한 줄 = 최단경로 트리
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+L11 p.16–22 의 직관: 정점을 공, 간선을 '''weight 길이의 줄'''로 만들어 바닥에 놓고 출발점 Gates 를 손으로 집어 올린다("'''YOINK!'''"). 공은 Gates 로부터의 '''거리 순서'''로 바닥에서 떨어지고, 다 들어 올렸을 때 '''팽팽하게 당겨진 줄들이 최단경로 트리'''가 된다. [[Dijkstra]] 는 "줄과 중력 없이" 이것을 흉내 낸 알고리즘이다(p.23).
+
+{def}
+"A vertex is done when it's not on the ground anymore." (p.17) "This also creates a tree structure! The shortest paths are the lengths along this tree." (p.22)
+{/def}
+
+[[img:L11-22.png|L11 p.22 — 다 들어 올린 모습: 팽팽한 줄 Gates–R1(1)–E3(1)–Park(4), R1–Halmae Gomtang(22). 점선 = 느슨한 줄(25, 20)|large]]
+[[anim:dijkstra_yoink|Gates 를 들어 올리면 R1(1) → E3(2) → Park(6) → Halmae Gomtang(23) 순으로 바닥에서 떨어지고, 팽팽한 줄만 남은 것이 최단경로 트리]]
+
+{|
+! 떨어지는 순서 || 높이 (= 거리) || 팽팽해지는 줄 || 느슨한 줄
+|-
+| Gates || 0 || — ||
+|-
+| R1 || 1 || Gates–R1 ||
+|-
+| E3 || 2 || R1–E3 ||
+|-
+| Park || 6 || E3–Park ||
+|-
+| Halmae Gomtang || 23 || R1–HG (1+22) || Gates–HG 25, Park–HG 6+20 = 26
+|}
+
+== 알고리즘과의 대응 ==
+{|
+! 줄과 중력 || [[Dijkstra]]
+|-
+| 공중에 뜬 공 || sure 정점
+|-
+| 바닥의 공 || not-sure 정점
+|-
+| 다음에 떨어질 공 = 가장 가까운 공 || not-sure 중 $d[u]$ 최소인 u
+|-
+| 공이 떨어지면 거기 매달린 줄들이 당겨짐 || u 의 이웃만 [[relaxation]]
+|-
+| "The first path that lifts u off the ground is the shortest one." (p.44) || Claim 2: sure 순간 $d[u] = d(s,u)$
+|}
+
+{analogy}
+'''구슬 목걸이 들어 올리기.''' 엉킨 구슬 목걸이 뭉치를 한 구슬을 잡고 천천히 들면, 손에서 가까운(실 길이가 짧은) 구슬부터 차례로 테이블에서 떨어진다. 다 들었을 때 팽팽한 실만 따라가면 각 구슬까지의 최단 실 길이가 보인다.
+{/analogy}
+
+{exam}
+교수(10/27): "the string becomes very tight, but other strings connected to nodes on the ground will be left flat … the flat-to-tight edges will be the shortest path." 10/29: "'''the node being lifted first will become the shortest path — that's why we pick the node that has the smallest estimate'''." 그리고 Dijkstra 가 카페에서 커피 마시다 금방 만들었다는 일화.
+{/exam}
+{info}
+줄의 길이는 음수일 수 없다 — 이 직관 자체가 '''non-negative weight''' 가정을 품고 있다.
+{/info}
+
+== 관련 문서 ==
+* [[Dijkstra]] · [[Dijkstra 정확성 증명]] · [[d 값과 sure·not-sure]] · [[single-source shortest path]] · [[L11 Graph Algorithms III]]

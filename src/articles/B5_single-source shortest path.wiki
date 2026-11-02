@@ -1,0 +1,38 @@
+key: single-source shortest path
+title: single-source shortest path — 한 출발점에서 모든 정점까지
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+'''single-source shortest-path problem''' 은 출발점 s 하나를 정해 두고 '''모든 다른 정점 v 까지''' 최단경로(와 그 cost $d(s,v)$)를 한꺼번에 구하는 문제다. [[Dijkstra]] 와 [[Bellman-Ford]] 가 푸는 문제가 바로 이것이고, 결과는 s 를 뿌리로 하는 최단경로 트리 하나로 표현된다. 모든 쌍을 구하는 것은 [[all-pairs shortest path]] (L12).
+
+{def}
+"I want to know the shortest path from one vertex (Gates) to all other vertices." "(Not necessarily stored as a table – how this information is represented will depend on the application)" (L11 p.11)
+{/def}
+
+[[img:L11-11.png|L11 p.11 — Gates 에서: R1 1, E3 2, Bus 10, Dormitory 17, Park 6, Stadium 10, Halmae Gomtang 23|medium]]
+{|
+! Destination || Cost || To get there
+|-
+| R1 || 1 || R1
+|-
+| E3 || 2 || R1–E3
+|-
+| Park || 6 || R1–E3–Park
+|-
+| Halmae Gomtang || 23 || R1–Halmae Gomtang
+|-
+| Bus / Stadium / Dormitory || 10 / 10 / 17 || 직행
+|}
+"To get there" 열을 모으면 트리가 된다(각 정점의 마지막 간선 = 부모) — Dijkstra 의 "nice tree", "We could post this tree in Gates!"(p.52).
+
+== 예 (p.12–13, 교수 10/27) ==
+* DGIST 에서 어디든 — Car, Bus, KTX, Flight, Taxi … (weight = 시간, 돈, 교통, 편의)
+* '''Naver 지도, 지하철 경로 찾기'''
+* '''Network routing''' — 내 컴퓨터에서 전 세계로 패킷 보내기 → [[OSPF와 RIP]]
+
+{analogy}
+'''학교 정문에 붙은 안내판.''' "도서관 3분 →, 기숙사 7분 ↗ …" 처럼 정문 한 곳에서 모든 건물까지의 최단 길을 한 판에 적어 둔 것.
+{/analogy}
+
+== 관련 문서 ==
+* [[shortest path problem]] · [[Dijkstra]] · [[Bellman-Ford]] · [[all-pairs shortest path]] · [[L11 Graph Algorithms III]]

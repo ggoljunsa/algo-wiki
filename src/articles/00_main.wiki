@@ -1,8 +1,8 @@
 key: main
-title: 알고위키 — DGIST CSE301 Introduction to Algorithms 중간고사
+title: 알고위키 — DGIST CSE301 Introduction to Algorithms
 category: 안내
 ---
-'''알고위키'''는 DGIST [CSE301] Introduction to Algorithms (Prof. Hoon Sung Chwa, 2026 Fall) 중간고사 범위 — '''L1 Algorithmic Analysis I · L2 Algorithmic Analysis II · L3 Divide and Conquer I · L4 Divide and Conquer II · L5 Linear-Time Sorting · L6 Randomized Algorithms I · L7 Randomized Algorithms II · L8 Tree Algorithms''' — 를 나무위키 스타일로 정리한 학습 위키다. 교재는 [[CLRS]]. 강의는 영어, 문서는 한국어 산문 + 영어 용어 그대로.
+'''알고위키'''는 DGIST [CSE301] Introduction to Algorithms (Prof. Hoon Sung Chwa, 2026 Fall) 중간고사 범위 — '''L1 Algorithmic Analysis I · L2 Algorithmic Analysis II · L3 Divide and Conquer I · L4 Divide and Conquer II · L5 Linear-Time Sorting · L6 Randomized Algorithms I · L7 Randomized Algorithms II · L8 Tree Algorithms''' — 와 기말 범위 '''L9 Graph Algorithms I · L10 Graph Algorithms II · L11 Graph Algorithms III · L12 Dynamic Programming I''' 를 나무위키 스타일로 정리한 학습 위키다. 교재는 [[CLRS]]. 강의는 영어, 문서는 한국어 산문 + 영어 용어 그대로.
 
 해설본(`정리본/L#_해설.md`)이 "그림이 없고, 변수를 그때마다 까먹어서" 안 읽히던 문제를 풀려고 만들었다. 그래서 이 위키는 세 가지를 약속한다.
 # '''기호·용어를 까먹으면 클릭한다.''' $T(n)$, $c$, $n_0$, $a, b, d$, $C$, $k$, $X_{a,b}$, $M$, $p$ … 모든 기호와 용어에 사전 문서가 있고 본문 첫 등장 시 링크돼 있다.
@@ -10,6 +10,10 @@ category: 안내
 # '''보고만 있어도 흐름이 들어온다.''' 두 질문, 카드 끼우기, 줄다리기(master method), 피벗 분할, 결정 트리, 적과 주사위 … '''움직이는 그림 20 종'''과 실제 슬라이드 캡처.
 
 [[anim:two_questions|이 과목의 지도. 모든 알고리즘에 ① Does it work? ② Is it fast? 두 카드가 붙는다. L1~L8 은 이 두 카드에 붙일 도구를 하나씩 늘려 가는 과정이다]]
+
+{exam}
+'''기말 범위 따라잡기 (2026-11-02 추가).''' 중간고사(10/15) 이후 수업은 [[L9 Graph Algorithms I]](10/20·10/22: DFS·BFS·topological sort·bipartite) → [[L10 Graph Algorithms II]](10/27: strongly connected components, DFS 두 번) → [[L11 Graph Algorithms III]](10/27 후반·10/29: Dijkstra, Bellman-Ford) 순서로 나갔다. 다음 수업 11/3(화)은 [[L12 Dynamic Programming I]](Bellman-Ford 를 DP 로 다시 보기 → Fibonacci → Floyd-Warshall). 교수 10/29: '''"Dijkstra 와 Bellman-Ford, 그리고 둘의 차이를 꼭 이해하라 — DP 와 greedy 에서 다시 쓴다."''' 순서는 [[읽는 순서]] 9–12단계.
+{/exam}
 
 == 어디서부터 읽나 ==
 * 처음이면 → [[읽는 순서]] (강의 순서대로, 한 강의 = 메인 문서 1 편 + 사전 문서들)
@@ -48,6 +52,14 @@ category: 안내
 | L7 || [[L7 Randomized Algorithms II]] || [[hash table]] 과 [[chaining]], [[비둘기집 원리|결정론적 해시의 한계]], [[기대 버킷 크기]] ≤ 2, [[universal hash family]] 와 [[h_{a,b}]], $O(\log M)$ 비트 || `hash_chaining` · `universal_hash_check` · `anim:universal_hash_pick`
 |-
 | L8 || [[L8 Tree Algorithms]] || [[binary search tree]] 의 SEARCH/INSERT/DELETE = [[O(height)]], [[rotation]], [[red-black tree]] 규칙 5가지와 [[height ≤ 2 log(n+1) 증명]] || `bst_ops` · `rb_insert_fix` · `anim:rotation_yoink`
+|-
+| L9 || [[L9 Graph Algorithms I]] || [[adjacency list]], [[DFS]] 의 [[start time과 finish time]], 전체 탐색 [[O(n+m)]], [[topological sort]] = finish 내림차순, [[BFS]] [[layer]] = 무가중치 최단거리, [[bipartite graph]] 판별 || `dfs_trace` · `bfs_layers` · `anim:dfs_parenthesis`
+|-
+| L10 || [[L10 Graph Algorithms II]] || [[strongly connected component]] 를 DFS 두 번에: finish time → [[G^T]] → finish 내림차순 DFS. [[SCC graph는 DAG]], [[SCC finish time 보조정리]] || `scc_two_pass` · `anim:scc_reverse_edges`
+|-
+| L11 || [[L11 Graph Algorithms III]] || [[Dijkstra]](음수 없음, 가장 작은 not-sure 를 골라 이웃만 갱신, 정확성 Claim 1·2, heap 별 수행 시간) vs [[Bellman-Ford]](모든 간선 n−1 라운드, $O(nm)$, [[negative cycle]] 검출) || `dijkstra_trace` · `bellman_ford_table` · `anim:dijkstra_yoink`
+|-
+| L12 || [[L12 Dynamic Programming I]] || [[dynamic programming]] = [[optimal substructure]] + [[overlapping subproblems]], [[Fibonacci 수 계산]], [[Floyd-Warshall]] $O(n^3)$ (11/3 수업 전 예습판) || `fib_memo` · `floyd_warshall_table` · `anim:fib_tree_repeat`
 |}
 
 == 시험 대비 ==
@@ -175,4 +187,4 @@ L6–L7 의 확률 증명과 L3–L5 의 점화식·하한 증명에 쓰이는 �
 * [[교수 소개]] · [[CLRS]]
 
 ----
-마지막 갱신: 2026-10-04 (L1–L8 전 문서 221편, 시뮬레이터 21 · 움직이는 그림 25; L8 은 슬라이드 기준, 수업 전)
+마지막 갱신: 2026-11-02 (기말 범위 L9–L11 + L12 예습 추가 — 10/20·10/22·10/27·10/29 녹음 반영)

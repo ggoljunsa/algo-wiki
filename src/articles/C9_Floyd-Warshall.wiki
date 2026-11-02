@@ -1,0 +1,64 @@
+key: Floyd-Warshall
+title: Floyd-Warshall — 경유지를 하나씩 허용하는 O(n³) 모든 쌍 최단경로
+category: 12강 DP I, 용어
+---
+== 개요 ==
+'''Floyd-Warshall''' 은 [[all-pairs shortest path]] 를 $O(n^3)$ 에 푸는 [[bottom-up]] [[dynamic programming]] 알고리즘이다(L12 p.41–56, [[CLRS]] 25.2). 정점에 1…n 번호를 붙이고, "중간에 거쳐 가도 되는 정점" 을 {1}, {1,2}, …, {1..n} 으로 하나씩 늘려 가며 $n \times n$ 표 [[D^(k)(u,v)]] 를 갱신한다. 음수 간선도 되고, [[negative cycle]] 은 대각선 $D^{(n)}[v,v] < 0$ 으로 검출한다.
+
+{def}
+L12 p.51 "$D^{(k)}[u,v] = \min\{\ D^{(k-1)}[u,v],\ D^{(k-1)}[u,k] + D^{(k-1)}[k,v]\ \}$" — Case 1: Cost of shortest path through {1,…,k−1} / Case 2: Cost of shortest path from u to k and then from k to v through {1,…,k−1}.
+L12 p.54 Theorem: "If there are no negative cycles in a weighted directed graph G, then the Floyd-Warshall algorithm, running on G, returns a matrix $D^{(n)}$ so that $D^{(n)}[u,v]$ = distance between u and v in G."
+{/def}
+
+<pre class="c">
+Floyd-Warshall(G):                                   # L12 p.53
+  Initialize n-by-n arrays D(k) for k = 0,…,n
+    D(k)[u,u] = 0 for all u, for all k
+    D(k)[u,v] = ∞ for all u ≠ v, for all k
+    D(0)[u,v] = weight(u,v) for all (u,v) in E
+  For k = 1, …, n:
+    For pairs u,v in V^2:
+      D(k)[u,v] = min{ D(k-1)[u,v], D(k-1)[u,k] + D(k-1)[k,v] }
+  Return D(n)
+</pre>
+{|
+! 변수 || 뜻
+|-
+| k || 바깥 루프: 이번에 '''경유 허용'''에 새로 넣는 정점 번호
+|-
+| u, v || 출발·도착 정점 (모든 $n^2$ 쌍)
+|-
+| $D^{(k)}[u,v]$ || 중간 정점이 모두 {1..k} 안인 u→v 최단 비용
+|}
+[[img:L12-51.png|L12 p.53 — Floyd-Warshall algorithm. "This is a bottom-up Dynamic programming algorithm."|large]]
+[[anim:floyd_k_layers|정점 k 가 경유 허용에 들어오는 순간 u→v 경로가 k 를 거치는 쪽으로 갈아타는 장면(Case 2)]]
+[[sim:floyd_warshall_table]]
+
+== p.42 그래프로 한 번 ==
+정점 s=1, u=2, v=3, t=4, 간선 s→u 2, u→s 1, s→v 5, u→v 2, v→t −2.
+<pre class="txt">
+k=1 (s): 변화 없음
+k=2 (u): D[s,v] = min{5, D[s,u]+D[u,v] = 2+2} = 4
+k=3 (v): D[s,t] = min{∞, 4+(-2)} = 2,  D[u,t] = min{∞, 2+(-2)} = 0
+k=4 (t): 변화 없음 (t 에서 나가는 간선 없음)
+→ D(4) 의 s 행 = [0, 2, 4, 2], u 행 = [1, 0, 2, 0]   (p.42 표와 일치)
+</pre>
+
+== 성질 ==
+* '''시간''' $O(n^3)$: k 가 n 번 × 쌍 $n^2$ 개 × $O(1)$. '''공간''': $n \times n$ 배열 두 개(이전 k, 현재 k)면 충분(p.54).
+* '''negative cycle''' (p.55): negative cycle ⇔ ∃ v, $D^{(n)}[v,v] < 0$.
+* Bellman-Ford × n ($O(n^2 m)$) 보다 낫고, Dijkstra × n 보다 낫지는 않지만 구현이 간단하고 음수 간선을 처리한다(p.54).
+{tip}
+k 단계에서 '''k 행과 k 열은 바뀌지 않는다''': $D[u,k] + D[k,k] = D[u,k] + 0$. 손 계산 때 그 행·열은 그대로 베끼고 나머지 칸만 "u 행의 k 열 값 + k 행의 v 열 값" 과 비교하면 빠르다.
+{/tip}
+
+{analogy}
+'''환승역을 하나씩 개방하는 지하철.''' 처음엔 직통 노선만 탈 수 있다($D^{(0)}$). 1번 역을 환승역으로 개방하면 "1번에서 갈아타는 게 더 빠른 쌍" 만 표가 바뀐다. 2번, 3번 … 역을 차례로 개방할 때마다 각 쌍은 "지금 기록" 과 "새 환승역 경유" 중 빠른 쪽을 고른다. 모든 역을 개방하면 표가 완성된다.
+{/analogy}
+
+{exam}
+(예상) ① 점화식 빈칸과 Case 1/Case 2 설명 ② 4정점 그래프의 $D^{(k)}$ 표 한 단계 채우기 ③ "negative cycle 을 어떻게 검출하나" → 대각선 $D^{(n)}[v,v] < 0$ ④ 시간 $O(n^3)$ vs Bellman-Ford × n $O(n^2 m)$.
+{/exam}
+
+== 관련 문서 ==
+* [[D^(k)(u,v)]] · [[all-pairs shortest path]] · [[Bellman-Ford는 DP]] · [[simple path]] · [[최단경로의 부분경로]] · [[negative cycle]] · [[최단경로 알고리즘 비교표]] · [[L12 Dynamic Programming I]]

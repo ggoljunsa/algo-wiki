@@ -1,0 +1,53 @@
+key: Dijkstra 정확성 증명
+title: Dijkstra 정확성 증명 — Claim 1 (귀납) + Claim 2 (귀류, z 와 z')
+category: 11강 Shortest Path, 용어
+---
+== 개요 ==
+'''Theorem''' (L11 p.40): Run Dijkstra on G = (V,E) starting from s. At the end of the algorithm, the estimate $d[v]$ is the actual distance $d(s,v)$. 증명은 두 Claim 으로 쪼갠다.
+* '''Claim 1''': 모든 v, 언제나 $d[v] \ge d(s,v)$ — [[귀납법 4요소]].
+* '''Claim 2''': v 가 sure 로 표시되는 순간 $d[v] = d(s,v)$ — [[귀류법]].
+* 합치기: sure 순간 정답 + $d[v]$ 는 증가하지 않고 Claim 1 때문에 더 내려갈 수도 없음 → 이후 고정 + 모든 정점이 결국 sure → 끝에 모두 정답.
+
+== Claim 1 (p.41–42) ==
+<pre class="txt">
+'''Inductive hypothesis:''' t 번 반복 후 모든 v 에 대해 d[v] ≥ d(s,v).
+'''Base case''' (t=0): d[s] = 0 = d(s,s), 나머지 ∞ ≥ d(s,v).
+'''Inductive step:''' u 를 골라 d[v] ← min( d[v], d[u] + w(u,v) ).
+    d[v] ≥ d(s,v)                                         (IH)
+    d[u] + w(u,v) ≥ d(s,u) + w(u,v) ≥ d(s,v)              (IH, 그리고 s⇝u→v 도 s→v 경로)
+    → min 도 ≥ d(s,v).
+'''Conclusion:''' 모든 t 에서 성립.
+</pre>
+직관(p.41): $d[v]$ 는 언제나 "머릿속에 있는 실제 경로"의 길이 ≥ 최단경로 길이.
+
+== Claim 2 (p.43–50) ⭐⭐⭐ ==
+[[img:L11-48.png|L11 p.48 — d[z'] ≤ d[z] + w(z,z') = d(s,z') ≤ d[z'] → So everything is equal! z' is good → CONTRADICTION!!|large]]
+"good" = $d[v] = d(s,v)$.
+<pre class="txt">
+u = 지금 sure 로 표시하려는 정점 (not-sure 중 d 최소). s 는 이미 good (d[s]=0).
+BWOC: u 가 good 이 아니라고 하자. s ⇝ u 의 진짜 최단경로 위에서
+  z  = u 이전의 '''마지막 good 정점''' (z = s 일 수 있음, z ≠ u)
+  z' = z 바로 다음 정점 (z' = u 일 수 있음)
+
+(1) d[z] = d(s,z) ≤ d(s,u) ≤ d[u]          [z good] [부분경로·weight ≥ 0] [Claim 1]
+(2) Case A: d[z] = d[u] → (1) 이 모두 등호 → d[u] = d(s,u) → u good. 모순.
+    Case B: d[z] < d[u] → z 는 이미 sure (u 가 not-sure 중 최소이므로)
+(3) z 가 sure 였을 때 z' 을 relax 했다:
+    d[z'] ≤ d[z] + w(z,z') = d(s,z') ≤ d[z']   [update 정의] [부분경로] [Claim 1]
+    → 모두 등호 → z' 도 good → "z 가 마지막 good" 에 모순.
+'''Conclusion:''' u 는 good. ∎
+</pre>
+'''$w \ge 0$ 가 쓰인 곳''': (1) 의 $d(s,z) \le d(s,u)$. 음수 간선이 있으면 경로의 앞쪽 정점이 더 멀 수 있어 깨진다.
+
+{exam}
+교수(10/29): "two cases — d[z] = d[u] → u is good, contradiction; d[z] < d[u] → z is already sure because we always pick the smallest → we already updated z' → everything is equal → z' is good. '''If z' is not u, repeat this reasoning until we meet u'''." Claim 2 는 "the node being lifted first" 직관과 같다. 서술형 1순위.
+{/exam}
+{analogy}
+'''줄 서기 새치기 검사.''' u 가 "내가 지금 제일 가깝다"며 확정되려 한다. 그런데 u 의 진짜 최단 길 위에 아직 정답을 못 받은 정점 z' 이 있다면, 그 앞의 z 는 u 보다 가까워 이미 확정됐을 것이고, 확정될 때 z' 에게 정답을 넘겨줬을 것이다. 그러니 "정답 못 받은 정점" 은 존재할 수 없다.
+{/analogy}
+{warn}
+증명에서 $d[\cdot]$(추정치)과 $d(\cdot,\cdot)$(진짜)를 섞지 말 것. 그리고 "z 가 sure" 의 근거는 '''Dijkstra 가 not-sure 중 최소를 고른다'''는 규칙 — 이 줄이 빠지면 감점.
+{/warn}
+
+== 관련 문서 ==
+* [[Dijkstra]] · [[d(s,v)]] · [[d 값과 sure·not-sure]] · [[최단경로의 부분경로]] · [[귀류법]] · [[귀납법 4요소]] · [[Bellman-Ford 정확성 증명]]
