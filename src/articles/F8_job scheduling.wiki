@@ -18,7 +18,7 @@ Sleep → HW:  8·3 + (10+8)·2  = 24 + 36 = 60     ← 더 싸다
 
 == 두 작업 맞바꾸기 (p.50) ==
 [[img:L14-50.png|L14 p.50 — Head-to-head: A then B 가 나을 조건 w/y ≤ z/x|large]]
-A 는 x 시간·시간당 z, B 는 y 시간·시간당 w.
+작업 A 는 x 시간이 걸리고 시간당 z 를 낸다. 작업 B 는 y 시간이 걸리고 시간당 w 를 낸다.
 <pre class="txt">
 Cost(A then B) = xz + (x+y)w
 Cost(B then A) = yw + (x+y)z
@@ -32,14 +32,14 @@ A then B ≤ B then A
 
 == Lemma 와 알고리즘 (p.51–53) ==
 [[img:L14-51.png|L14 p.51 — 비율 최대인 B 를 앞 작업과 계속 맞바꿔 맨 앞으로|large]]
-Lemma(p.51): 비율 $c_i/t_i$ 가 최대인 작업이 맨 앞인 최적 순서가 있다. 그 작업을 바로 앞 작업과 맞바꾸는 것을 반복한다. 이웃끼리 바꾸면 다른 작업의 완료 시각은 그대로다. p.50 에 의해 비용은 늘지 않는다.
+Lemma(p.51) 의 내용은 비율 $c_i/t_i$ 가 최대인 작업이 맨 앞에 오는 최적 순서가 있다는 것이다. 증명은 그 작업을 바로 앞 작업과 맞바꾸는 일을 반복한다. 이웃한 두 작업만 바꾸니까 다른 작업의 완료 시각은 그대로다. 그리고 p.50 의 계산에 따라 비용은 늘지 않는다.
 <pre class="c">
 scheduleJobs( JOBS ):                  # p.53
   Sort JOBS by the ratio r_i = c_i / t_i
   Say that sorted_JOBS[i] is the job with the i'th biggest r_i
   Return sorted_JOBS
 </pre>
-수행 시간 $O(n \log n)$ (정렬).
+정렬 말고는 하는 일이 없으니 수행 시간은 $O(n \log n)$ 이다.
 
 == 귀납 증명 (p.54) ==
 <pre class="txt">
@@ -48,19 +48,19 @@ scheduleJobs( JOBS ):                  # p.53
 '''Inductive step:'''      sorted_JOBS[t:] 에서 sorted_JOBS[t] 가 맨 앞인 최적 순서가 있다 ← Lemma.
 '''Conclusion:'''          t = n 이면 sorted_JOBS 자체가 최적 순서.
 </pre>
-optimal substructure(p.47): 최적 순서 A, B, C, D 에서 B, C, D 부분은 그 세 작업의 최적 순서다. 그래서 "가장 좋은 것 먼저, 나머지는 같은 방법" 이 된다(p.48).
+이렇게 귀납으로 묶을 수 있는 것은 optimal substructure 덕분이다(p.47). 최적 순서가 A, B, C, D 이면 뒤의 B, C, D 도 그 세 작업만의 최적 순서다. 그래서 가장 좋은 작업을 먼저 하고, 나머지는 같은 방법으로 정하면 된다(p.48).
 
 {analogy}
-마감이 다 지난 숙제들에 하루 벌점이 붙어 있다. 벌점이 크고 금방 끝나는 숙제부터 해치워야 벌점이 덜 쌓인다. "시간당 벌점 ÷ 걸리는 시간" 이 큰 순서다.
+마감이 다 지난 숙제들에 하루 벌점이 붙어 있다. 벌점이 크고 금방 끝나는 숙제부터 해치워야 벌점이 덜 쌓인다. 즉 "시간당 벌점 ÷ 걸리는 시간" 이 큰 순서대로 한다.
 {/analogy}
 
 {quiz}
 작업 P(t=2, c=4), Q(t=3, c=3), R(t=1, c=1). 최적 순서와 총비용은?
 {/quiz}
 {answer}
-비율 P 4/2 = 2, Q 3/3 = 1, R 1/1 = 1. P 먼저, Q 와 R 은 동점이라 아무 순서나 된다.
+비율은 P 4/2 = 2, Q 3/3 = 1, R 1/1 = 1 이다. 그래서 P 를 먼저 하고, Q 와 R 은 비율이 같으니 어느 쪽을 먼저 해도 된다.
 P→Q→R: P 완료 2, Q 완료 5, R 완료 6 → 2·4 + 5·3 + 6·1 = 8 + 15 + 6 = 29.
-P→R→Q: 2·4 + 3·1 + 6·3 = 8 + 3 + 18 = 29. 같다.
+P→R→Q: 2·4 + 3·1 + 6·3 = 8 + 3 + 18 = 29. 두 순서의 비용이 같다.
 {/answer}
 
 == 관련 문서 ==

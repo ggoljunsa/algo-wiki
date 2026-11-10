@@ -3,7 +3,7 @@ title: independent set (독립 집합)
 category: 13강 DP II, 용어
 ---
 == 개요 ==
-[[graph]] 의 정점 집합 중 어떤 두 정점도 간선으로 이어져 있지 않은 것이다(L13 p.94). 정점에 가중치가 있을 때 가중치 합이 최대인 independent set 을 찾는 문제는 일반 그래프에서 NP-complete 다. 그래프가 tree 이면 DP 로 $O(|V|)$ 에 풀린다([[트리의 maximal independent set]]).
+[[graph]] 의 정점들 가운데, 어떤 두 정점도 간선으로 이어져 있지 않게 고른 집합이다(L13 p.94). 정점에 가중치가 있을 때 가중치 합이 최대인 independent set 을 찾는 문제는 일반 그래프에서 NP-complete 다. 하지만 그래프가 tree 이면 DP 로 $O(|V|)$ 에 풀린다([[트리의 maximal independent set]]).
 
 {def}
 L13 p.94 "An independent set is a set of vertices so that no pair has an edge between them."
@@ -13,7 +13,7 @@ L13 p.94 "An independent set is a set of vertices so that no pair has an edge be
 [[img:L13-94.png|L13 p.94 — 정점 가중치가 있는 일반 그래프|medium]]
 
 == 확인 방법 ==
-고른 정점 집합 S 에 대해 모든 간선 (u, v) 를 보고, u 와 v 가 둘 다 S 에 있으면 independent set 이 아니다. 빈 집합과 정점 하나짜리 집합은 항상 independent set 이다.
+고른 정점 집합 S 가 independent set 인지 보려면 모든 간선 (u, v) 를 하나씩 본다. u 와 v 가 둘 다 S 에 들어 있는 간선이 하나라도 있으면 independent set 이 아니다. 빈 집합과 정점 하나짜리 집합은 확인할 간선이 없으니 항상 independent set 이다.
 
 == maximal 과 maximum ==
 {|
@@ -23,10 +23,10 @@ L13 p.94 "An independent set is a set of vertices so that no pair has an edge be
 |-
 | maximum (weight) independent set || 가중치 합(또는 크기)이 가장 큰 independent set
 |}
-L13 슬라이드는 "maximal" 이라는 말을 maximum-weight 뜻으로 쓴다. p.111 표에는 "Maximum Independent Set" 으로 적혀 있다.
+L13 슬라이드는 "maximal" 이라는 말을 maximum-weight 의 뜻으로 쓴다. 실제로 p.111 표에는 "Maximum Independent Set" 으로 적혀 있다.
 
 {analogy}
-파티 초대 명단이다. 간선은 "서로 사이가 나쁜 두 사람" 이다. 사이 나쁜 두 사람을 함께 부르지 않으면서, 즐거움 점수(가중치) 합을 최대로 하는 명단을 고른다. CLRS 문제 15-6 "Planning a company party" 가 바로 이 문제의 tree 버전이다.
+파티 초대 명단을 짜는 것과 같다. 간선은 "서로 사이가 나쁜 두 사람" 이다. 사이 나쁜 두 사람을 함께 부르지 않으면서, 즐거움 점수(가중치) 합이 최대가 되게 명단을 고른다. CLRS 문제 15-6 "Planning a company party" 가 이 문제의 tree 버전이다.
 {/analogy}
 
 == 관련 문서 ==

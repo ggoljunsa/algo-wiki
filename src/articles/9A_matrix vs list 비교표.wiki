@@ -3,7 +3,7 @@ title: matrix vs list 비교표 — L9 p.20 Trade-offs (빈칸 출제 1순위 �
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-L9 p.20 "Trade-offs" 표. [[adjacency matrix]] 와 [[adjacency list]] 를 세 연산(Edge membership / Neighbor query / Space)으로 비교한다. 교수(10/20)가 학생에게 '''한 칸씩 물어보며''' 채운 표라 빈칸 문제로 그대로 나오기 좋다. 결론은 "list 가 sparse graph 에 유리, 앞으로 list 가정".
+L9 p.20 의 "Trade-offs" 표다. [[adjacency matrix]] 와 [[adjacency list]] 를 세 연산(Edge membership / Neighbor query / Space)으로 비교한다. 교수(10/20)가 학생에게 '''한 칸씩 물어보며''' 채운 표라서 빈칸 문제로 그대로 나오기 좋다. 결론은 list 가 sparse graph 에 유리하니 앞으로 list 를 가정한다는 것이다.
 
 [[img:L9-19.png|L9 p.20 — Trade-offs. n: the number of vertices, m: the number of edges|large]]
 
@@ -17,7 +17,7 @@ L9 p.20 "Trade-offs" 표. [[adjacency matrix]] 와 [[adjacency list]] 를 세 �
 |-
 | '''Space requirements''' || $O(n^2)$ || $O(n+m)$
 |}
-슬라이드 메모: list 쪽에 "'''Generally better for sparse graphs'''", 그리고 "'''We'll assume this representation for the rest of the class'''".
+슬라이드의 list 쪽에는 "'''Generally better for sparse graphs'''" 와 "'''We'll assume this representation for the rest of the class'''" 라는 메모가 붙어 있다.
 
 == 왜 그 값인가 ==
 <pre class="txt">
@@ -28,20 +28,20 @@ list    membership : v 의 리스트를 처음부터 훑으며 w 찾기         
 list    neighbors  : v 의 리스트 그대로                                  → O(deg(v))
 list    space      : 정점 배열 n + 리스트 노드 2m (directed 면 m)        → O(n + m)
 </pre>
-그래프 탐색([[DFS]], [[BFS]])은 "모든 정점의 이웃 나열" 이다. matrix 면 $n \times O(n) = O(n^2)$, list 면 $\sum_v O(\deg(v)) = O(m)$ + 정점 $O(n)$ = [[O(n+m)]].
+그래프 탐색([[DFS]], [[BFS]])은 결국 모든 정점의 이웃을 한 번씩 나열하는 일이다. 그래서 matrix 면 $n \times O(n) = O(n^2)$ 이 되고, list 면 $\sum_v O(\deg(v)) = O(m)$ 에 정점 $O(n)$ 을 더해 [[O(n+m)]] 이 된다.
 
 {analogy}
 '''전화번호부와 개인 연락처.''' matrix 는 전 국민 × 전 국민 크기의 표다. "A 와 B 가 아는 사이인가?" 는 칸 하나로 바로 답한다. 하지만 표 크기가 국민 수의 제곱이고, A 의 지인 목록을 뽑으려면 A 행 전체를 읽어야 한다. list 는 각자의 연락처 앱이다. 지인 목록은 바로 나오고 저장 공간은 실제 관계 수만큼 든다. 대신 "B 가 내 연락처에 있나?" 는 목록을 훑어야 한다.
 {/analogy}
 
 {exam}
-교수(10/20) 수업에서 학생 답 "list 의 membership 은 O(n)" 에 "could be, '''more specifically depends on degree'''" 라고 고쳤다. 빈칸에는 $O(n)$ 이 아니라 '''$O(\deg(v))$''' 를 쓸 것. 그리고 "sparse 에는 list".
+교수(10/20) 수업에서 학생이 "list 의 membership 은 O(n)" 이라고 답하자, 교수는 "could be, '''more specifically depends on degree'''" 라고 고쳤다. 그러니 빈칸에는 $O(n)$ 이 아니라 '''$O(\deg(v))$''' 를 쓴다. sparse 에는 list 라는 결론도 함께 기억한다.
 {/exam}
 {quiz}
 Circle all that apply. (a) adjacency list 의 neighbor query 는 $O(\deg(v))$ (b) adjacency matrix 로 BFS 를 하면 $O(n+m)$ (c) undirected 그래프의 adjacency matrix 는 대칭이다 (d) adjacency list 의 공간은 $O(n^2)$
 {/quiz}
 {answer}
-'''(a), (c)''' 만. (b) matrix 면 정점마다 행 n 칸 → $O(n^2)$. (d) list 공간은 $O(n+m)$ — $O(n^2)$ 은 matrix.
+'''(a), (c)''' 만 맞다. (b) matrix 면 정점마다 행 n 칸을 훑으니 $O(n^2)$ 이다. (d) list 공간은 $O(n+m)$ 이고, $O(n^2)$ 은 matrix 의 공간이다.
 {/answer}
 
 == 관련 문서 ==

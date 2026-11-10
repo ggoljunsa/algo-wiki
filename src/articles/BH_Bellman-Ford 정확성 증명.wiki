@@ -3,7 +3,7 @@ title: Bellman-Ford 정확성 증명 — "간선 ≤ i 개" 에 대한 귀납, u
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-L11 p.76–79. "Does it work? Yes. (Base case and inductive step similar to Dijkstra)". [[d^(i) 배열]] 의 의미 "$d^{(i)}[v]$ = 간선 ≤ i 개 s→v 최단 cost" 를 i 에 대한 [[귀납법 4요소|귀납]]으로 보이고, [[simple path]] 의 간선이 최대 n−1 개라는 사실로 마무리한다.
+L11 p.76–79 의 내용이다. 슬라이드는 "Does it work? Yes. (Base case and inductive step similar to Dijkstra)" 라고 시작한다. 증명은 두 단계다. 먼저 [[d^(i) 배열]] 의 뜻, 즉 "$d^{(i)}[v]$ 는 간선을 i 개 이하로 쓰는 s→v 경로 중 최단 cost" 라는 것을 i 에 대한 [[귀납법 4요소|귀납]]으로 보인다. 그다음 [[simple path]] 는 간선을 많아야 n−1 개 쓴다는 사실을 써서 마무리한다.
 
 [[img:L11-77.png|L11 p.78 — Inductive step: s→v 의 간선 ≤ i+1 개 최단경로에서 v 직전 정점 u, s→u 는 간선 ≤ i 개|medium]]
 <pre class="txt">
@@ -24,10 +24,10 @@ L11 p.76–79. "Does it work? Yes. (Base case and inductive step similar to Dijk
 교수(10/29): "$d^{(i+1)}$ has both '''upper bound and lower bound''', so it should be the cost of the shortest path with at most i+1 edges." "after n−1 iterations … '''as long as there is no negative cycle'''."
 {/exam}
 {analogy}
-'''계단 오르기.''' 1층(간선 0개)이 맞고, k 층이 맞으면 k+1 층도 맞다 — 마지막 한 걸음(u→v)만 더 보면 되니까. n−1 층이 꼭대기인 이유는 cycle 없이 갈 수 있는 가장 긴 경로가 간선 n−1 개라서.
+'''계단 오르기.''' 1층(간선 0개)에서 맞고, k 층에서 맞으면 k+1 층에서도 맞다. k+1 층은 k 층에 마지막 한 걸음(u→v)만 더한 것이기 때문이다. 꼭대기가 n−1 층인 이유는 cycle 없이 갈 수 있는 가장 긴 경로가 간선 n−1 개이기 때문이다.
 {/analogy}
 {warn}
-p.83: "'''If there are negative cycles, then non-simple paths matter!'''" — 그러면 Conclusion 의 "simple path 는 ≤ n−1" 이 쓸모없어져 증명이 성립하지 않는다 → [[negative cycle]] 검출이 필요.
+p.83 은 "'''If there are negative cycles, then non-simple paths matter!'''" 라고 경고한다. negative cycle 이 있으면 simple 하지 않은 경로가 더 짧을 수 있다는 뜻이다. 그러면 Conclusion 에서 쓴 "simple path 는 간선이 n−1 개 이하" 라는 사실이 아무 도움이 안 되고, 증명도 성립하지 않는다. 그래서 [[negative cycle]] 이 있는지 따로 확인해야 한다.
 {/warn}
 
 == 관련 문서 ==

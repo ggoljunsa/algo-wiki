@@ -9,7 +9,7 @@ L14 p.9 Input: Activities $a_1, …, a_n$, start times $s_1, …, s_n$, finish t
 [[img:L14-17.png|L14 p.17 — greedy 완성: a2, a5, a3, a7 선택(주황), a1, a4, a6 제외(빗금)|large]]
 
 == greedy 규칙 ==
-p.10: "Pick activity you can add with the smallest finish time. Repeat." 이미 고른 것과 겹치지 않는 활동 중 가장 일찍 끝나는 것을 고른다. 일찍 끝나는 것을 고르면 뒤에 남는 시간이 가장 많다(p.19 "leave lots of room for future choices").
+p.10 의 규칙은 "Pick activity you can add with the smallest finish time. Repeat." 이다. 이미 고른 활동과 겹치지 않는 것 중에서 가장 일찍 끝나는 것을 고른다는 뜻이다. 가장 일찍 끝나는 것을 고르면 뒤에 남는 시간이 가장 많아진다. p.19 의 표현으로는 "leave lots of room for future choices" 다.
 <pre class="c">
 def activity_selection(acts):          # acts: (s, f), f 오름차순
     chosen = []
@@ -20,10 +20,10 @@ def activity_selection(acts):          # acts: (s, f), f 오름차순
             last_finish = f
     return chosen
 </pre>
-(슬라이드에는 규칙이 문장으로만 있다. 위 코드는 그 문장을 옮긴 것이다.)
+슬라이드에는 규칙이 문장으로만 나온다. 위 코드는 그 문장을 코드로 옮긴 것이다.
 
 == 슬라이드 예제 ==
-그림의 끝점 순서는 $a_2 < a_1 < a_5 < a_4 < a_3 < a_6 < a_7$ 이다.
+슬라이드 그림에서 끝나는 순서를 읽으면 $a_2 < a_1 < a_5 < a_4 < a_3 < a_6 < a_7$ 이다.
 <pre class="txt">
 a2 선택 → a1 은 a2 와 겹쳐 제외
 a5 선택 → a4 는 a5 와 겹쳐 제외
@@ -34,12 +34,12 @@ a7 선택
 [[sim:activity_selection]]
 
 == 수행 시간 ==
-p.18: finish time 순으로 정렬돼 있으면 $O(n)$, 정렬부터 하면 $O(n \log n)$.
+p.18 에 따르면, 활동이 finish time 순으로 정렬돼 있으면 한 번 훑기만 하면 되니까 $O(n)$ 이다. 정렬부터 해야 하면 $O(n \log n)$ 이다.
 
 {warn}
-기준을 바꾸면 틀린다.
-* start time 이 가장 이른 것: 0–10 한 개 vs 1–2, 3–4 두 개에서 1 개만 고른다.
-* 길이가 가장 짧은 것: 0–4, 5–9 사이에 3–6 이 있으면 3–6 하나만 고르고 나머지 둘과 겹친다. 정답은 2 개다.
+고르는 기준을 finish time 이 아닌 다른 것으로 바꾸면 틀린다.
+* start time 이 가장 이른 것을 고르는 경우: 0–10 하나와 1–2, 3–4 두 개가 있으면 0–10 을 먼저 골라서 1 개밖에 못 한다.
+* 길이가 가장 짧은 것을 고르는 경우: 0–4, 5–9 사이에 3–6 이 있으면 3–6 을 먼저 고른다. 그런데 3–6 이 나머지 둘과 모두 겹쳐서 1 개만 하게 된다. 정답은 2 개다.
 {/warn}
 
 {analogy}
@@ -53,7 +53,7 @@ p.18: finish time 순으로 정렬돼 있으면 $O(n)$, 정렬부터 하면 $O(n
 `s` (지금 보는 활동의 시작 시각). 마지막으로 고른 활동이 끝난 뒤에 시작해야 겹치지 않는다.
 {/answer}
 
-정확성은 [[activity selection 정확성 증명]] 에서 [[A(i) (activity selection)]] 로 보인다.
+이 greedy 가 맞다는 증명은 [[activity selection 정확성 증명]] 에 있다. 부분 문제 값 [[A(i) (activity selection)]] 를 써서 보인다.
 
 == 관련 문서 ==
 * [[L14 Greedy Algorithms I]] · [[greedy algorithm]] · [[A(i) (activity selection)]] · [[activity selection 정확성 증명]] · [[greedy 증명 전략]] · [[start time과 finish time]]

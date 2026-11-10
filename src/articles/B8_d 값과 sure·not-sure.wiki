@@ -3,10 +3,10 @@ title: d[v] 와 sure·not-sure — Dijkstra 가 줄 대신 들고 다니는 두 
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-p.23 "How do we actually implement this? Without string and gravity?" 의 답. [[Dijkstra]] 는 정점마다
-* '''$d[v]$''' — s→v 거리의 "best '''over-estimate'''" (지금까지 찾은 경로 중 최선의 cost), 그리고
-* '''sure / not-sure''' 표시 — "이 값은 확정(I'm sure)" / "아직 모름(I'm not sure yet)"
-두 가지만 기록한다. 진짜 거리 [[d(s,v)]] 와 구분하는 것이 핵심.
+p.23 은 "How do we actually implement this? Without string and gravity?" 라고 묻는다. 줄과 중력 없이 어떻게 구현하느냐는 질문이다. 답은 정점마다 기록 두 가지만 들고 다니면 된다는 것이다. [[Dijkstra]] 가 기록하는 것은 다음 두 가지다.
+* '''$d[v]$''': s→v 거리의 "best '''over-estimate'''" 다. 지금까지 찾은 경로 중에서 가장 좋은 cost 를 적어 둔다.
+* '''sure / not-sure''' 표시: 이 값이 확정됐으면 sure("I'm sure"), 아직 모르면 not-sure("I'm not sure yet") 다.
+여기서 $d[v]$ 는 추정치일 뿐이다. 진짜 거리 [[d(s,v)]] 와 헷갈리지 않도록 주의한다.
 
 {def}
 "How far is a node from Gates? I'm not sure yet / I'm sure. x = d[v] is my best over-estimate for dist(Gates,v). Initialize d[v] = ∞ for all non-starting vertices v, and d[Gates] = 0." (L11 p.24)
@@ -28,11 +28,11 @@ p.23 "How do we actually implement this? Without string and gravity?" 의 답. [
 "d[v] never increases, so after v is sure, d[v] stops changing." (p.40)
 
 {analogy}
-'''택배 도착 예정 시각.''' 처음엔 "미정(∞)". 경로 정보가 들어올 때마다 예정 시각이 '''당겨지기만''' 한다(over-estimate). "배송 확정" 도장이 찍히는 순간(sure) 예정 시각 = 실제 도착 시각이 되고 그 뒤로는 바뀌지 않는다.
+'''택배 도착 예정 시각.''' 처음에는 "미정(∞)" 이다. 경로 정보가 들어올 때마다 예정 시각은 '''앞으로 당겨지기만''' 한다. 그래서 예정 시각은 늘 실제보다 늦거나 같다(over-estimate). "배송 확정" 도장이 찍히는 순간(sure) 예정 시각이 실제 도착 시각과 같아지고, 그 뒤로는 바뀌지 않는다.
 {/analogy}
 
 {warn}
-"over-estimate" 는 '''진짜 거리 이상'''이라는 뜻이다(under 가 아님). $\infty$ 로 시작해서 내려오는 이유.
+"over-estimate" 는 '''진짜 거리보다 크거나 같다'''는 뜻이다. under 가 아니다. 그래서 $\infty$ 에서 시작해서 값을 내려 가는 것이다.
 {/warn}
 
 == 관련 문서 ==

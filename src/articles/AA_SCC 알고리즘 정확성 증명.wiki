@@ -3,7 +3,11 @@ title: SCC 알고리즘 정확성 증명 — 2차 DFS 의 tree 수 t 에 대한 
 category: 10강 Graph II, 용어
 ---
 == 개요 ==
-L10 p.66–69 의 Theorem 은 "[[SCC 알고리즘]] 은 SCC 를 정확히 찾는다" 이다. [[귀납법 4요소]] 를 그대로 쓰고, 귀납 변수 '''$t$''' 는 2차(reversed) DFS 가 지금까지 만든 tree 의 수다. 쓰는 재료는 [[SCC graph는 DAG]](Lemma 1)와 [[SCC finish time 보조정리]](Corollary 1) 두 개다. 교수는 "just re-write what we saw before, nothing new" 라고 했다. p.55·66 의 "finish 최대에서 시작 → 그 SCC 안에서 끝남 → 지우고 반복" 을 귀납법 형식으로 옮긴 것이다.
+L10 p.66–69 의 Theorem 은 "[[SCC 알고리즘]] 은 SCC 를 정확히 찾는다" 이다. 증명은 [[귀납법 4요소]] 를 그대로 따른다. 귀납 변수 '''$t$''' 는 2차(reversed) DFS 가 지금까지 만든 tree 의 수다.
+
+증명에 쓰는 재료는 두 개다. 하나는 [[SCC graph는 DAG]](Lemma 1)이고, 다른 하나는 [[SCC finish time 보조정리]](Corollary 1)다.
+
+새로운 아이디어가 들어가지는 않는다. p.55·66 에서 본 흐름, 즉 finish 최대에서 시작하면 그 SCC 안에서 끝나고, 그 SCC 를 지우고 반복한다는 설명을 귀납법 형식으로 다시 쓴 것이다. 교수 표현으로는 "just re-write what we saw before, nothing new" 다.
 
 {def}
 L10 p.66 "Theorem: The algorithm we saw before will correctly identify strongly connected components."
@@ -41,11 +45,11 @@ L10 p.66 "Theorem: The algorithm we saw before will correctly identify strongly 
 |}
 
 {analogy}
-'''양파 껍질 벗기기.''' 매번 "가장 바깥 껍질"(남은 것 중 finish 최대 = $G^T$ 의 막다른 SCC)을 한 장 벗긴다. 벗기고 나도 남은 양파는 여전히 양파(DAG)이고, 그 바깥 껍질을 또 벗기면 된다. 껍질 수만큼 반복하면 모든 SCC 가 한 장씩 나온다.
+'''양파 껍질 벗기기.''' 매번 가장 바깥 껍질을 한 장 벗긴다. 여기서 바깥 껍질은 남은 것 중 finish 가 최대인 SCC, 즉 $G^T$ 에서 막다른 SCC 다. 한 장을 벗겨도 남은 것은 여전히 양파(DAG)다. 그러니 다시 바깥 껍질을 벗기면 된다. 껍질 수만큼 반복하면 모든 SCC 가 한 장씩 나온다.
 {/analogy}
 
 {exam}
-교수(10/27): "'''I just re-write what we saw before. Nothing new.'''" 시험에서는 핵심 논리(Corollary 1 → finish 최대 SCC 는 $G^T$ 의 sink → 정확히 그 SCC)를 쓸 수 있으면 충분. 다만 IH 의 '''두 번째 줄(남은 것이 DAG)''' 과 '''not more / not less''' 는 빼먹기 쉬운 칸이다.
+교수(10/27): "'''I just re-write what we saw before. Nothing new.'''" 시험에서는 큰 줄기만 쓸 수 있으면 충분하다. Corollary 1 때문에 finish 최대 SCC 는 $G^T$ 의 sink 이고, 그래서 DFS 가 정확히 그 SCC 만 찾는다는 흐름이다. 다만 IH 의 '''두 번째 줄(남은 것이 DAG)''' 과 '''not more / not less''' 는 빼먹기 쉬운 칸이다.
 {/exam}
 
 == 관련 문서 ==

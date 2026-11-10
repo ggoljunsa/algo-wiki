@@ -2,7 +2,7 @@ key: A(i) (activity selection)
 title: A[i] — activity selection 의 부분 문제 값
 category: 14강 Greedy I, 용어
 ---
-L13 [[트리의 maximal independent set]] 의 $A[u]$ ([[A(u)와 B(u)]]) 와는 이름만 같다. 여기 $A[i]$ 는 activity selection 의 부분 문제 값이다.
+L13 [[트리의 maximal independent set]] 에도 $A[u]$ ([[A(u)와 B(u)]]) 가 나오지만, 이름만 같고 다른 것이다. 이 문서의 $A[i]$ 는 activity selection 의 부분 문제 값이다.
 
 {def}
 L14 p.25 Subproblem i: Solve the activity selection problem after Activity i finishes. A[i] = Number of activities you can do after Activity i finishes.
@@ -13,8 +13,8 @@ $A[i]$ 는 활동 $a_i$ 가 끝난 뒤에 시작하는 활동들만으로 할 �
 == Claim ==
 p.26: $a_k$ 가 $a_i$ 이후 가능한 활동 중 finish time 이 가장 작으면 $A[i] = A[k] + 1$ 이다.
 * $a_i$ 이후 구간에서 $a_k$ 를 하나 하고, 남은 구간($a_k$ 이후)을 최적으로 채우면 $1 + A[k]$ 개다.
-* 그보다 많이 할 수 없다는 것은 [[귀류법]] 으로 보인다. 증명은 [[activity selection 정확성 증명]].
-이 식은 DP 점화식처럼 생겼다. 다른 점은 오른쪽에 부분 문제가 하나($A[k]$)만 있다는 것이다. 그래서 표 없이 앞에서부터 고르기만 하면 된다([[sub-problem graph 비교]]).
+* 그보다 많이 할 수 없다는 것은 [[귀류법]] 으로 보인다. 자세한 증명은 [[activity selection 정확성 증명]] 에 있다.
+이 식은 DP 점화식처럼 생겼다. 그런데 DP 점화식은 오른쪽에 부분 문제 여러 개를 놓고 그중 min 이나 max 를 고른다. 이 식은 오른쪽에 부분 문제가 $A[k]$ 하나뿐이다. 그래서 표를 채울 필요 없이 앞에서부터 하나씩 고르기만 하면 된다([[sub-problem graph 비교]]).
 
 == 예제 값 ==
 p.17 예제에서 맨 앞에 가상의 활동 $a_0$(시각 0 에 끝남)를 두면 $A[0] = 4$ 다.

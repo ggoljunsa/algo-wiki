@@ -3,7 +3,7 @@ title: bottom-up (상향식 DP)
 category: 12강 DP I, 용어
 ---
 == 개요 ==
-'''bottom-up''' 은 [[dynamic programming]] 을 구현하는 두 방식 중 하나로, '''가장 작은 부분문제부터 표를 차례로 채워''' 마지막 칸에서 원래 문제의 답을 얻는다. 재귀가 없고 for 루프만 있다. 슬라이드는 "what we just saw" 라고 부른다 — p.25 fasterFibonacci 와 [[Bellman-Ford]] 가 이미 bottom-up 이었다. [[Floyd-Warshall]] 도 "This is a bottom-up Dynamic programming algorithm."(p.53)
+'''bottom-up''' 은 [[dynamic programming]] 을 구현하는 두 방식 중 하나다. '''가장 작은 부분문제부터 표를 차례로 채워''' 나가고, 마지막 칸에서 원래 문제의 답을 얻는다. 재귀 없이 for 루프만으로 쓸 수 있다. 슬라이드는 이 방식을 "what we just saw" 라고 소개한다. p.25 의 fasterFibonacci 와 [[Bellman-Ford]] 가 이미 bottom-up 이었기 때문이다. [[Floyd-Warshall]] 도 같은 방식이다. p.53 에 "This is a bottom-up Dynamic programming algorithm." 이라고 적혀 있다.
 
 {def}
 L12 p.32 "Solve the small problems first (fill in F[0], F[1]) → Then bigger problems (fill in F[2]) → … → Then finally solve the real problem (fill in F[n])."
@@ -20,13 +20,13 @@ L12 p.32 "Solve the small problems first (fill in F[0], F[1]) → Then bigger pr
 | [[Floyd-Warshall]] (p.53) || $D^{(0)}$ = 간선 가중치 || $D^{(1)}, …$ || $D^{(n)}$
 |}
 [[img:L12-13.png|L12 p.13 — Bellman-Ford 표: d(0) 부터 한 행씩 아래로 채운다 = bottom-up|medium]]
-규칙은 하나: '''어떤 칸을 채울 때, 그 칸이 참조하는 칸은 이미 채워져 있어야 한다.''' Fibonacci 의 $F[i]$ 는 $F[i-1], F[i-2]$ 를, Bellman-Ford 의 $d^{(i+1)}$ 행은 $d^{(i)}$ 행만 참조하므로 위→아래 순서면 된다.
+채우는 순서를 정하는 규칙은 하나다. '''어떤 칸을 채울 때, 그 칸이 참조하는 칸은 이미 채워져 있어야 한다.''' Fibonacci 의 $F[i]$ 는 $F[i-1]$ 과 $F[i-2]$ 를 참조한다. Bellman-Ford 의 $d^{(i+1)}$ 행은 $d^{(i)}$ 행만 참조한다. 둘 다 앞쪽만 보니까 위에서 아래로 채우면 된다.
 {tip}
-공간 절약(p.15, p.54): 다음 행이 바로 앞 행만 참조하면 표 전체 대신 "last round" 와 "this round" '''두 줄'''만 들고 있으면 된다.
+공간을 줄이는 요령도 있다(p.15, p.54). 다음 행이 바로 앞 행만 참조한다면, 표 전체를 들고 있을 필요가 없다. "last round" 와 "this round" '''두 줄'''만 있으면 된다.
 {/tip}
 
 {analogy}
-'''벽돌 쌓기.''' 1층을 다 깐 다음 2층, 그다음 3층. 위층 벽돌은 아래층 벽돌 위에만 놓이니 아래층이 먼저 있어야 한다. 꼭대기(원래 문제)는 마지막에 놓인다.
+'''벽돌 쌓기.''' 1층을 다 깔고 나서 2층을 쌓고, 그다음 3층을 쌓는다. 위층 벽돌은 아래층 벽돌 위에 놓이니까, 아래층이 먼저 있어야 한다. 그래서 꼭대기(원래 문제)는 맨 마지막에 놓인다.
 {/analogy}
 
 == 관련 문서 ==

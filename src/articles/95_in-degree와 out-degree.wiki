@@ -3,7 +3,7 @@ title: in-degree 와 out-degree — directed graph 의 들어오는/나가는 �
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-[[directed graph]] 에서는 간선에 방향이 있어 정점 v 의 [[degree]] 를 둘로 나눈다. '''in-degree''' = v 로 '''들어오는''' 간선 수, '''out-degree''' = v 에서 '''나가는''' 간선 수. 각각에 대응하는 이웃이 incoming neighbors / outgoing neighbors 다.
+[[directed graph]] 에서는 간선에 방향이 있으니 정점 v 의 [[degree]] 를 둘로 나눠 센다. '''in-degree''' 는 v 로 '''들어오는''' 간선 수이고, '''out-degree''' 는 v 에서 '''나가는''' 간선 수다. 각각에 해당하는 이웃을 incoming neighbors, outgoing neighbors 라고 한다.
 
 {def}
 L9 p.14: "The in-degree of vertex 4 is 2. The out-degree of vertex 4 is 1. Vertex 4's incoming neighbors are 2,3. Vertex 4's outgoing neighbor is 3."
@@ -25,16 +25,16 @@ L9 p.14: "The in-degree of vertex 4 is 2. The out-degree of vertex 4 is 1. Verte
 |-
 | 합 || || '''5''' || || '''5'''
 |}
-$\sum \text{in-deg} = \sum \text{out-deg} = m = 5$ — 간선 하나는 꼬리에서 out 1, 머리에서 in 1 로 정확히 한 번씩 세어진다.
+$\sum \text{in-deg} = \sum \text{out-deg} = m = 5$ 다. 간선 하나가 꼬리에서는 out 으로, 머리에서는 in 으로 정확히 한 번씩 세어지기 때문이다.
 
 {analogy}
-'''인스타그램.''' in-degree = 팔로워 수(나를 가리키는 화살표), out-degree = 팔로잉 수(내가 가리키는 화살표). 내가 팔로우한다고 상대가 맞팔하는 건 아니다.
+'''인스타그램.''' in-degree 는 팔로워 수, 즉 나를 가리키는 화살표 수다. out-degree 는 팔로잉 수, 즉 내가 가리키는 화살표 수다. 내가 팔로우한다고 상대가 맞팔하는 건 아니다.
 {/analogy}
 
 == 어디서 쓰이나 ==
-* [[adjacency matrix]]: 행 v 의 1 개수 = out-degree, 열 v 의 1 개수 = in-degree (행 = Source, 열 = Destination, L9 p.17).
-* [[adjacency list]] (directed): 리스트에 '''outgoing neighbor 만''' 저장 → v 리스트 길이 = out-degree. incoming 이 필요하면 따로 둔다(→ L10 [[G^T]]).
-* in-degree 0 인 정점 = 아무 것에도 의존하지 않는 정점 → [[topological ordering]] 의 맨 앞에 올 수 있다. [[DAG]] 에는 반드시 하나 이상 있다.
+* [[adjacency matrix]]: 행이 Source, 열이 Destination 이므로(L9 p.17) 행 v 의 1 개수가 out-degree, 열 v 의 1 개수가 in-degree 다.
+* [[adjacency list]] (directed): 리스트에 '''outgoing neighbor 만''' 저장하니 v 리스트의 길이가 곧 out-degree 다. incoming 이 필요하면 따로 둔다 → L10 [[G^T]].
+* in-degree 가 0 인 정점은 아무것에도 의존하지 않는 정점이다. 그래서 [[topological ordering]] 의 맨 앞에 올 수 있다. [[DAG]] 에는 이런 정점이 반드시 하나 이상 있다.
 
 == 관련 문서 ==
 * [[degree]] · [[directed graph]] · [[DAG]] · [[adjacency list]]

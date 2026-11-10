@@ -3,7 +3,7 @@ title: 무가중치 최단거리 — BFS layer 번호 = 최단 경로 길이 (un
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-간선마다 비용이 모두 같은(unweighted) 그래프에서 두 정점 사이 '''distance''' = 최단 경로의 '''간선 수'''. [[BFS]] 를 w 에서 한 번 돌리면 모든 v 에 대해 $d(w,v)$ 를 얻는다: $v \in L_i$ 이면 $d(w,v)=i$, 그리고 BFS tree 에서 v 의 부모를 따라 올라가는 경로가 최단 경로 중 하나. 한 번도 발견되지 않은 v 는 거리 ∞. 시간 [[O(n+m)]].
+간선마다 비용이 모두 같은(unweighted) 그래프에서는 두 정점 사이의 '''distance''' 가 최단 경로의 '''간선 수'''다. [[BFS]] 를 w 에서 한 번 돌리면 모든 v 에 대해 $d(w,v)$ 가 나온다. $v \in L_i$ 이면 $d(w,v)=i$ 이고, BFS tree 에서 v 의 부모를 따라 올라가는 경로가 최단 경로 중 하나다. 한 번도 발견되지 않은 v 는 거리가 ∞ 다. 시간은 [[O(n+m)]] 이다.
 
 {def}
 L9 p.92: "The '''distance''' between two vertices is the length of the shortest path between them."
@@ -13,7 +13,7 @@ L9 p.92: "The '''distance''' between two vertices is the length of the shortest 
 [[img:L9-91.png|L9 p.92 — BFS tree 에서 v ∈ L3 → distance 3, 트리 경로가 최단 경로. 못 찾은 정점은 ∞|medium]]
 
 == 증명 — layer 에 대한 귀납 ==
-(숨긴 슬라이드 p.93–94 자리. CLRS 22.2 의 요지.)
+숨긴 슬라이드 p.93–94 에 들어갈 내용으로, CLRS 22.2 의 요지를 정리한 것이다.
 <pre class="txt">
 '''Claim:''' v ∈ L_i  ⇔  d(w,v) = i
 '''Inductive hypothesis:''' j ≤ i 인 모든 j 에 대해 v ∈ L_j ⇔ d(w,v) = j
@@ -26,17 +26,17 @@ L9 p.92: "The '''distance''' between two vertices is the length of the shortest 
        이미 visited 였다면 v ∈ L_j (j ≤ i) → (IH) d(w,v) = j ≤ i, 모순 → v ∈ L_{i+1}
 '''Conclusion:''' 모든 i 에서 성립. BFS tree 의 부모는 한 층 위이므로 트리 경로 길이 = 최단 거리.
 </pre>
-→ [[귀납법 4요소]] 그대로. 귀납 대상은 "layer 번호 i".
+→ [[귀납법 4요소]] 형식을 그대로 따랐다. 귀납 대상은 "layer 번호 i" 다.
 
 {analogy}
-'''소문 퍼지기.''' 내가 친구들에게 말하면 1단계, 그 친구들이 자기 친구들에게 말하면 2단계. 누군가 처음 소문을 들은 단계 = 나와의 최소 "몇 다리 건너" 거리. 이미 들은 사람은 다시 세지 않는다.
+'''소문 퍼지기.''' 내가 친구들에게 말하면 1단계, 그 친구들이 자기 친구들에게 말하면 2단계다. 어떤 사람이 소문을 처음 들은 단계가 곧 나와 그 사람이 최소 "몇 다리 건너" 사이인지를 나타낸다. 이미 들은 사람은 다시 세지 않는다.
 {/analogy}
 
 {exam}
-교수(10/22): shortest path 의 '''전제는 "all edges have the same weight"'''. layer 번호 = shortest path 길이, 어느 layer 에도 없으면 distance = ∞ (unreachable). 가중치가 다르면 BFS 로 안 된다 → 나중에 [[Dijkstra]]. 그리고 p.95: u–v 최단 경로를 '''$O(m)$''' 에(connected 면 $n \le m+1$).
+교수(10/22)는 BFS 로 shortest path 를 구하는 '''전제가 "all edges have the same weight"''' 라고 짚었다. 이때 layer 번호가 곧 shortest path 길이이고, 어느 layer 에도 없으면 distance = ∞ (unreachable) 다. 가중치가 다르면 BFS 로는 안 되고, 그때는 나중에 배울 [[Dijkstra]] 를 쓴다. p.95 에 따르면 u–v 최단 경로는 '''$O(m)$''' 에 찾는다. connected 면 $n \le m+1$ 이기 때문이다.
 {/exam}
 {warn}
-'''BFS 는 weighted 최단경로를 주지 않는다.''' 예: A–B 비용 10, A–C–D–B 비용 1+1+1 = 3. BFS 는 간선 1 개짜리 A–B 를 "거리 1" 로 고르지만 실제 최소 비용 경로는 3 짜리다. weighted 는 [[L11 Graph Algorithms III]] 의 [[Dijkstra]] (음수 간선 불가) / [[Bellman-Ford]].
+'''BFS 로는 weighted 최단경로를 구할 수 없다.''' 예를 들어 A–B 비용이 10 이고, A–C–D–B 비용이 1+1+1 = 3 이라고 하자. BFS 는 간선 1 개짜리 A–B 를 "거리 1" 로 고르지만, 실제 최소 비용 경로는 3 짜리다. weighted 그래프는 [[L11 Graph Algorithms III]] 의 [[Dijkstra]] (음수 간선 불가) 나 [[Bellman-Ford]] 로 푼다.
 {/warn}
 
 == 관련 문서 ==

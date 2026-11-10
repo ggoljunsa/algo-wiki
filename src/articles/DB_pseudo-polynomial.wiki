@@ -3,7 +3,7 @@ title: pseudo-polynomial (의사 다항 시간)
 category: 13강 DP II, 용어
 ---
 == 개요 ==
-수행 시간이 입력 '''숫자의 값'''에는 다항식이지만 입력 길이(비트 수)에는 다항식이 아닌 알고리즘을 pseudo-polynomial 이라고 한다. knapsack 의 $O(nW)$ 가 그 예다(L13 p.46).
+수행 시간이 입력 '''숫자의 값'''에 대해서는 다항식이지만, 입력 길이(비트 수)에 대해서는 다항식이 아닌 알고리즘을 pseudo-polynomial 이라고 한다. knapsack 의 $O(nW)$ 가 그런 예다(L13 p.46).
 
 {def}
 L13 p.46 "O(nW): pseudo-polynomial algorithm. Can we have a polynomial time algorithm for Knapsack? Open problem! (But probably the answer is no… otherwise P = NP)"
@@ -12,20 +12,20 @@ L13 p.46 "O(nW): pseudo-polynomial algorithm. Can we have a polynomial time algo
 [[img:L13-46.png|L13 p.46 — Can we do better?|small]]
 
 == 왜 다항이 아닌가 ==
-용량 W 는 입력에서 $b = \log_2 W$ 비트로 적힌다. 그러면 $W = 2^b$ 이다.
+용량 W 는 입력에 $b = \log_2 W$ 비트로 적힌다. 거꾸로 말하면 $W = 2^b$ 이다. 그래서 W 에 비례하는 시간은 비트 수 b 로 보면 지수 시간이 된다.
 <pre class="txt">
 O(nW) = O(n · 2^b)
 W = 1,000          → b ≈ 10 비트,  표 1,001 칸
 W = 1,000,000,000  → b ≈ 30 비트,  표 10억 칸
 입력은 20 비트 늘었을 뿐인데 일은 100만 배
 </pre>
-반면 LCS 의 $O(mn)$ 에서 m, n 은 문자열 길이 자체라서 진짜 다항 시간이다.
+반면 LCS 의 $O(mn)$ 에서 m, n 은 문자열 길이, 즉 입력 크기 그 자체다. 그래서 LCS 는 진짜 다항 시간이다.
 
 == P vs NP 와의 관계 ==
-knapsack 의 결정 버전은 NP-complete 다. 입력 길이에 대한 다항 시간 알고리즘을 찾으면 P = NP 가 된다. 그래서 슬라이드는 "probably the answer is no" 라고 적는다. 트리가 아닌 일반 그래프의 [[independent set]] 문제도 같은 부류다(p.95).
+knapsack 의 결정 버전은 NP-complete 다. 그래서 입력 길이에 대한 다항 시간 알고리즘을 찾으면 P = NP 가 된다. 슬라이드가 "probably the answer is no" 라고 적은 것도 이 때문이다. 트리가 아닌 일반 그래프의 [[independent set]] 문제도 같은 부류다(p.95).
 
 {analogy}
-"전화번호부 페이지 수에 비례하는 시간" 과 "전화번호 숫자 값에 비례하는 시간" 의 차이다. 번호는 몇 자리만 늘어도 값이 열 배, 백 배가 된다.
+"전화번호부 페이지 수에 비례하는 시간" 과 "전화번호 숫자 값에 비례하는 시간" 의 차이와 같다. 번호는 몇 자리만 늘어도 값이 열 배, 백 배로 커진다.
 {/analogy}
 
 == 관련 문서 ==

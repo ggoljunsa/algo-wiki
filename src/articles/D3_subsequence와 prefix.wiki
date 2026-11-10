@@ -3,7 +3,7 @@ title: subsequence 와 prefix ($X_i$ 표기)
 category: 13강 DP II, 용어
 ---
 == 개요 ==
-[[longest common subsequence|LCS]] 를 읽으려면 두 용어가 필요하다. subsequence 는 문제의 대상이고, prefix 는 부분문제를 만드는 도구다.
+[[longest common subsequence|LCS]] 를 이해하려면 용어 두 개가 필요하다. subsequence 는 문제에서 찾는 대상이고, prefix 는 부분문제를 만드는 도구다.
 
 {def}
 '''subsequence''' (L13 p.8): "BDFH is a subsequence of ABCDEFGH." 원래 순서를 지키면서 글자 몇 개를 고른 것. 고른 글자가 붙어 있을 필요는 없다.
@@ -22,7 +22,7 @@ category: 13강 DP II, 용어
 |-
 | prefix || 맨 앞부터 연속 || A, AB, ABC, … (길이 0 인 빈 prefix 도 있음)
 |}
-길이 m 인 문자열의 subsequence 는 $2^m$ 개다. 전부 비교하는 brute force 는 지수 시간이다. prefix 는 $m+1$ 개뿐이라서 prefix 쌍을 부분문제로 잡으면 표가 $(m+1)(n+1)$ 칸이 된다.
+길이 m 인 문자열의 subsequence 는 $2^m$ 개나 된다. 그래서 전부 비교하는 brute force 는 지수 시간이 걸린다. 반면 prefix 는 $m+1$ 개뿐이다. 그래서 prefix 쌍을 부분문제로 잡으면 표가 $(m+1)(n+1)$ 칸으로 끝난다.
 
 == 표기 ==
 * $X_i$ = X 의 앞 i 글자, $X_0$ = 빈 문자열.
@@ -30,7 +30,7 @@ category: 13강 DP II, 용어
 * [[C(i,j) (LCS)|C 표]]: $C[i,j]$ = LCS($X_i$, $Y_j$) 의 길이.
 
 {analogy}
-subsequence 는 노래 가사에서 단어 몇 개를 형광펜으로 칠한 것이다. 순서는 그대로고 사이에 빈 단어가 있어도 된다. prefix 는 노래를 처음부터 i 마디까지만 들은 것이다.
+subsequence 는 노래 가사에서 단어 몇 개를 형광펜으로 칠한 것이다. 순서는 그대로이고, 칠한 단어 사이에 안 칠한 단어가 있어도 된다. prefix 는 노래를 처음부터 i 마디까지만 들은 것이다.
 {/analogy}
 
 == 관련 문서 ==

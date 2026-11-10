@@ -3,7 +3,9 @@ title: strongly connected component (SCC) — 서로 오갈 수 있는 정점들
 category: 10강 Graph II, 용어
 ---
 == 개요 ==
-'''SCC''' 는 [[directed graph]] 에서 [[strongly connected]] 인 정점 집합 중 '''더 키울 수 없는(maximal)''' 것이다. 모든 정점은 '''정확히 하나의''' SCC 에 속하므로 그래프는 SCC 들로 partition 된다. L10 의 문제는 이 분해를 $O(n+m)$ 에 구하는 것이다 → [[SCC 알고리즘]].
+'''SCC''' 는 [[directed graph]] 에서 [[strongly connected]] 인 정점 집합 가운데 더 키울 수 없는(maximal) 것이다. 정점을 하나라도 더 넣으면 strongly connected 가 깨진다는 뜻이다.
+
+모든 정점은 정확히 하나의 SCC 에 들어간다. 그래서 그래프 전체가 SCC 들로 겹치지 않게 나뉜다(partition). L10 에서 푸는 문제는 이 분해를 $O(n+m)$ 에 구하는 것이고, 방법은 [[SCC 알고리즘]] 에 있다.
 
 {def}
 L10 p.6 "We can decompose a graph into strongly connected components (SCCs). At least, we can in theory. How do we do this algorithmically?"
@@ -14,14 +16,14 @@ CLRS: "a maximal set of vertices $C \subseteq V$ such that for every pair $u, v 
 [[img:L10-06.png|L10 p.6 — 빨간 점선이 SCC 3개. SCC 사이 간선은 한 방향뿐이라 합쳐지지 않는다|medium]]
 
 == 왜 partition 이 되나 ==
-관계 $u \sim v \iff (u \rightsquigarrow v$ 이고 $v \rightsquigarrow u)$ 는
+"서로 오갈 수 있다" 를 관계 $u \sim v \iff (u \rightsquigarrow v$ 이고 $v \rightsquigarrow u)$ 로 쓰면, 이 관계는 equivalence relation 의 세 조건을 다 만족한다.
 <pre class="txt">
 reflexive : 길이 0 path 로 u ⇝ u
 symmetric : 정의 자체가 대칭
 transitive: u ~ v, v ~ w 이면 path 를 이어 붙여 u ⇝ v ⇝ w, 반대 방향도 마찬가지
 → equivalence relation → 정점 집합이 equivalence class 로 겹치지 않게 나뉜다 = SCC 들
 </pre>
-교수(10/27): "한 노드가 두 SCC 에 속한다면 두 SCC 는 '''합쳐져야 한다'''." 혼자 있는 정점(예제의 KAIST: 나가기만 하고 들어오는 간선이 없음)도 크기 1 인 SCC 다.
+교수는 10/27 수업에서 이렇게 설명했다. 한 노드가 두 SCC 에 동시에 속한다면, 그 노드를 거쳐 두 SCC 가 서로 오갈 수 있게 된다. 그러면 두 SCC 는 '''합쳐져야 한다'''. 혼자 있는 정점도 크기 1 인 SCC 다. 예제의 KAIST 는 나가는 간선만 있고 들어오는 간선이 없어서 혼자 SCC 가 된다.
 
 == 예제 (L10 p.13–48) ==
 {|
@@ -35,11 +37,11 @@ transitive: u ~ v, v ~ w 이면 path 를 이어 붙여 u ⇝ v ⇝ w, 반대 방
 |}
 
 {analogy}
-'''같은 반 친구 무리.''' "내가 걔한테 연락할 수 있고(직접이든 건너건너든) 걔도 나한테 연락할 수 있다" 를 친구라 하면, 친구의 친구도 친구다(transitive). 그러면 반은 저절로 '''무리'''들로 나뉘고, 한 사람이 두 무리에 동시에 속할 수는 없다 — 그랬다면 두 무리는 사실 한 무리다.
+'''같은 반 친구 무리.''' "내가 걔한테 연락할 수 있고(직접이든 건너건너든) 걔도 나한테 연락할 수 있다" 를 친구라고 하자. 그러면 친구의 친구도 친구다(transitive). 그래서 반은 저절로 몇 개의 무리로 나뉜다. 한 사람이 두 무리에 동시에 속할 수는 없다. 그런 사람이 있다면 두 무리는 사실 한 무리였던 것이다.
 {/analogy}
 
 {warn}
-"SCC = 1차 DFS 의 DFS tree" 가 아니다. DFS tree 는 시작점에서 도달 가능한 전부를 묶으므로 여러 SCC 가 섞일 수 있다(L10 p.11, A 에서 시작). → [[SCC 알고리즘]]
+1차 DFS 의 DFS tree 하나가 곧 SCC 인 것은 아니다. DFS tree 는 시작점에서 도달할 수 있는 정점을 전부 묶기 때문에, 여러 SCC 가 한 트리에 섞일 수 있다. L10 p.11 에서 A 부터 시작한 경우가 그 예다. → [[SCC 알고리즘]]
 {/warn}
 
 == 관련 문서 ==

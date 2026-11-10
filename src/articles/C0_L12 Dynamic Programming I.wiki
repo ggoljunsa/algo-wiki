@@ -5,37 +5,37 @@ category: 12강 DP I, 메인
 == 개요 ==
 같은 작은 문제를 여러 번 풀고 있다면, 한 번 풀어서 표에 적어 두고 다시 꺼내 쓰면 된다. 이 생각을 알고리즘 설계 방법으로 정리한 것이 [[dynamic programming]](DP)이다.
 
-수업 순서는 다음과 같다.
-# L11 의 [[Bellman-Ford]] 를 다시 꺼내 "Bellman-Ford is an example of… Dynamic Programming!"(p.21) 이라고 말한다.
-# [[Fibonacci 수 계산]] 으로 DP 의 두 요소([[optimal substructure]], [[overlapping subproblems]])를 설명한다.
-# 구현 방식 두 가지([[bottom-up]], [[top-down과 memoization]])를 비교한다.
-# 새 DP 알고리즘 [[Floyd-Warshall]](모든 쌍 최단경로, $O(n^3)$)을 만든다.
-# DP 가 안 되는 문제로 [[longest simple path]] 를 보여 준다.
+수업은 이 순서로 진행된다.
+# L11 에서 배운 [[Bellman-Ford]] 를 다시 꺼낸다. p.21 은 이것이 사실 DP 의 한 예라고 밝힌다. 슬라이드 표현으로는 "Bellman-Ford is an example of… Dynamic Programming!" 이다.
+# [[Fibonacci 수 계산]] 을 예로 들어 DP 의 두 요소를 설명한다. 두 요소는 [[optimal substructure]] 와 [[overlapping subproblems]] 다.
+# DP 를 구현하는 두 방식, [[bottom-up]] 과 [[top-down과 memoization]] 을 비교한다.
+# 새 DP 알고리즘 [[Floyd-Warshall]] 을 만든다. 모든 쌍의 최단경로를 $O(n^3)$ 에 구한다.
+# 마지막으로 DP 가 통하지 않는 문제 [[longest simple path]] 를 본다.
 
-[[두 가지 질문]] 으로 나누면 이렇다.
-* ① '''Does it work?''' DP 가 맞는지는 점화식이 맞는지로 정해진다. 점화식의 근거가 [[optimal substructure]] 다(큰 문제의 최적해가 작은 문제의 최적해로 이루어진다). Floyd-Warshall 은 Case 1/Case 2 로, Bellman-Ford 는 "$d^{(i)}[v]$ = 간선 ≤ i 개인 최단경로" 귀납법으로 보인다.
-* ② '''Is it fast?''' 표의 칸 수에 칸 하나 채우는 비용을 곱한다. 순수 재귀 Fibonacci 는 지수 시간 $\approx \varphi^n$ 이고, 표로 채우면 $O(n)$ 이다. Floyd-Warshall 은 $n \times n$ 칸을 $n$ 단계 채우므로 $O(n^3)$ 이다.
+[[두 가지 질문]] 으로 나눠 보면 이렇다.
+* ① '''Does it work?''' DP 가 맞는지는 점화식이 맞는지에 달려 있다. 그리고 점화식이 맞다는 근거가 [[optimal substructure]] 다. 큰 문제의 최적해가 작은 문제의 최적해로 이루어진다는 성질이다. Floyd-Warshall 은 Case 1/Case 2 로 나눠서 이것을 보인다. Bellman-Ford 는 "$d^{(i)}[v]$ = 간선 ≤ i 개인 최단경로" 를 귀납법으로 보인다.
+* ② '''Is it fast?''' 표의 칸 수에 칸 하나를 채우는 비용을 곱하면 된다. 순수 재귀 Fibonacci 는 같은 값을 계속 다시 계산하니까 지수 시간 $\approx \varphi^n$ 이 걸린다. 표에 적어 가며 채우면 $O(n)$ 이다. Floyd-Warshall 은 $n \times n$ 칸을 $n$ 단계에 걸쳐 채우니까 $O(n^3)$ 이다.
 
 * 교재: [[CLRS]] 15.3, 25.2 (p.3).
 * 페이지 번호는 슬라이드에 인쇄된 번호 p.N 이다. p.39–40 은 숨김 슬라이드라 PDF 에 없다. 그래서 p.1–38 은 PNG 번호와 같고, p.41–62 는 PNG 39–60 (p−2) 이다. 예: p.57 비교표 → `L12-55.png`.
 * 순서: Bellman-Ford 복습(p.4–20) → DP 란 무엇인가(Fibonacci, p.21–38) → Floyd-Warshall(p.41–57) → DP 가 안 되는 예(p.58–60) → Recap(p.61).
-* 11/3(화) 수업에서 p.1–62 를 한 번에 끝냈다. 녹음: `1103_21_컴알_L12_DP.txt`. 교수 강조는 각 절의 🎯 박스와 끝의 `🎙 11/3 수업에서` 절에 있다.
+* 11/3(화) 수업 한 번에 p.1–62 를 다 나갔다. 녹음 파일은 `1103_21_컴알_L12_DP.txt` 다. 교수가 강조한 내용은 각 절의 🎯 박스와 맨 끝 `🎙 11/3 수업에서` 절에 모아 두었다.
 
 {info}
-공지(11/3): '''HW3''' 는 11/5–6(목·금)에 나간다. 기간 2주이고 발표가 있다. HW4 는 HW3 직후에 나가서 기말 전에 끝난다. 읽기는 CLRS 의 "Elements of dynamic programming" 절(3판 15.3)이다.
+공지(11/3): '''HW3''' 는 11/5–6(목·금)에 나온다. 기간은 2주이고 발표가 있다. HW4 는 HW3 가 끝나자마자 나오고, 기말 전에 마감된다. 읽을거리는 CLRS 의 "Elements of dynamic programming" 절(3판 15.3)이다.
 {/info}
 
 [[anim:fib_tree_repeat|Fib(8) 재귀 트리에서 같은 색(같은 부분문제)이 여러 번 나온다. memo 를 켜면 트리가 8→0 사슬로 접힌다]]
 
 {analogy}
-'''수학 숙제 노트.''' 30번을 풀다가 17번 답이 필요하면 17번을 다시 풀지 않고 노트에서 찾아 쓴다. 17번은 이미 10번과 12번 답으로 풀어 두었다. 큰 문제의 답이 작은 문제들의 답으로 조립되는 것이 [[optimal substructure]] 다. 같은 작은 답이 여러 번 쓰이는 것이 [[overlapping subproblems]] 다. 이때 노트(표)가 시간을 아껴 준다. 앞 번호부터 차례로 다 풀어 두는 학생은 [[bottom-up]], 필요할 때 풀고 노트에 적어 두는 학생은 [[top-down과 memoization|top-down]] 이다.
+'''수학 숙제 노트.''' 30번을 풀다가 17번 답이 필요해졌다고 하자. 17번은 이미 풀어서 노트에 적어 두었으니, 다시 풀지 않고 노트에서 찾아 쓰면 된다. 17번도 원래 10번과 12번 답을 써서 푼 것이다. 이렇게 큰 문제의 답을 작은 문제들의 답으로 조립할 수 있는 성질이 [[optimal substructure]] 다. 그리고 같은 작은 답이 여러 번 필요해지는 성질이 [[overlapping subproblems]] 다. 같은 답이 여러 번 필요하니까 노트(표)가 시간을 아껴 준다. 노트를 채우는 방식은 학생마다 다르다. 앞 번호부터 차례로 다 풀어 두는 학생은 [[bottom-up]] 이다. 필요해질 때 풀고 그때 노트에 적는 학생은 [[top-down과 memoization|top-down]] 이다.
 {/analogy}
 
 == 0. 이전 강의와의 연결 — Bellman-Ford 복습 (p.4–20) ==
-L9–L11 을 놓쳤다면 이 절만 읽고 넘어가도 된다. 필요한 것은 [[L11 Graph Algorithms III]] 의 마지막 알고리즘 [[Bellman-Ford]] 하나다.
-* 문제: [[weighted graph]] 에서 시작점 s 로부터 모든 정점까지의 최단거리를 구한다([[single-source shortest path]]). 정점 수는 n, 간선 수는 m 이다([[n과 m (그래프)]]).
-* [[Dijkstra]] 는 아직 확정 안 된(not-sure) 정점 중 $d[u]$ 가 가장 작은 u 를 골라서 그 이웃만 갱신한다. [[음수 간선 가중치]] 가 있으면 틀릴 수 있다.
-* Bellman-Ford 는 고르지 않는다. 슬라이드 표현은 "Instead of picking u cleverly, just update for all of the u's."(p.6) 이다. 모든 간선을 n−1 라운드 동안 [[relaxation|갱신]]한다. $O(nm)$ 으로 느리지만 음수 간선을 다룰 수 있고 [[negative cycle]] 도 찾는다.
+L9–L11 을 놓쳤다면 이 절만 읽고 넘어가도 된다. L12 에 필요한 것은 [[L11 Graph Algorithms III]] 의 마지막 알고리즘 [[Bellman-Ford]] 하나뿐이다.
+* 풀려는 문제는 [[weighted graph]] 에서 시작점 s 로부터 모든 정점까지의 최단거리다. 이것을 [[single-source shortest path]] 라고 부른다. 정점 수는 n, 간선 수는 m 으로 쓴다([[n과 m (그래프)]]).
+* [[Dijkstra]] 는 아직 확정되지 않은(not-sure) 정점 가운데 $d[u]$ 가 가장 작은 u 를 하나 고른다. 그리고 그 u 의 이웃만 갱신한다. 이 방식은 [[음수 간선 가중치]] 가 있으면 틀린 답을 낼 수 있다.
+* Bellman-Ford 는 정점을 고르지 않는다. 대신 모든 간선을 한 번씩 다 [[relaxation|갱신]]하고, 이것을 n−1 라운드 반복한다. p.6 의 표현으로는 "Instead of picking u cleverly, just update for all of the u's." 다. 매번 전부 보니까 $O(nm)$ 으로 느리다. 대신 음수 간선이 있어도 답이 맞고, [[negative cycle]] 이 있는지도 알아낼 수 있다.
 
 {|
 ! 무엇을 기억할까 || L11 에서 || L12 에서 쓰는 곳
@@ -51,7 +51,7 @@ L9–L11 을 놓쳤다면 이 절만 읽고 넘어가도 된다. 필요한 것�
 
 === p.6–8 Bellman-Ford 를 n 개의 배열로 다시 쓰기 ===
 [[img:L12-06.png|L12 p.6 — Bellman-Ford vs. Dijkstra: 위는 모든 u 를 갱신, 아래는 not-sure 중 d[u] 최소인 u 하나를 골라 갱신|medium]]
-p.6 은 두 알고리즘의 의사코드를 위아래로 놓고 비교한다. Dijkstra 는 u 를 하나 고르고, Bellman-Ford 는 모든 u 에 대해 갱신한다. p.7–8 은 Bellman-Ford 를 배열 $d^{(0)}, d^{(1)}, …, d^{(n-1)}$ 로 다시 쓴다.
+p.6 은 두 알고리즘의 의사코드를 위아래로 놓고 비교한다. Dijkstra 는 u 를 하나 골라서 갱신한다. Bellman-Ford 는 모든 u 에 대해 갱신한다. p.7–8 에서는 Bellman-Ford 를 라운드마다 배열 하나씩, 즉 $d^{(0)}, d^{(1)}, …, d^{(n-1)}$ 로 다시 쓴다.
 [[img:L12-08.png|L12 p.8 — Another way of writing this: u 에 대한 for 루프가 min 안으로 들어감(주황 메모)|medium]]
 <pre class="c">
 Bellman-Ford*(G,s):              # p.8 "Another way of writing this"
@@ -62,7 +62,7 @@ Bellman-Ford*(G,s):              # p.8 "Another way of writing this"
       d(i+1)[v] ← min( d(i)[v] , min_{u in v.inNbrs} { d(i)[u] + w(u,v) } )
   Then dist(s,v) = d(n-1)[v]
 </pre>
-p.7 은 바깥 루프가 `For u in V: For v in u.outNeighbors` 였다. p.8 은 이것을 "The for loop over u gets picked up in this min." 으로 바꿨다. u 에 대한 루프가 v 로 들어오는 이웃(in-neighbor)에 대한 min 이 된 것이다. 이렇게 쓰면 $d^{(i+1)}$ 의 한 칸을 $d^{(i)}$ 의 칸들만으로 계산한다는 것이 보인다. DP 표가 이런 모양이다.
+p.7 에서는 바깥 루프가 `For u in V: For v in u.outNeighbors` 였다. p.8 은 이 u 루프를 min 안으로 옮긴다. 슬라이드 메모는 "The for loop over u gets picked up in this min." 이다. 즉 u 를 하나씩 도는 대신, v 로 들어오는 이웃(in-neighbor) u 들 중 최솟값을 고르는 식이 된다. 이렇게 쓰면 $d^{(i+1)}$ 의 한 칸이 $d^{(i)}$ 의 칸들만으로 계산된다는 것이 눈에 보인다. 이전 줄만 보고 다음 줄을 채우는 이 모양이 DP 표의 모양이다.
 {|
 ! 기호 || 뜻 || p.9–13 예제에서
 |-
@@ -76,7 +76,9 @@ p.7 은 바깥 루프가 `For u in V: For v in u.outNeighbors` 였다. p.8 은 �
 |}
 
 === p.9–14 Gates 예제 — 표를 한 줄씩 ===
-그래프는 양방향 간선이다. Gates–R1 1, R1–E3 1, E3–Park 4, Park–Halmae Gomtang(HG) 20, R1–HG 22, Gates–HG 25. 시작점은 s = Gates 다.
+그래프의 간선은 모두 양방향이고, 가중치는 다음과 같다. 시작점은 s = Gates 다.
+* Gates–R1 1, R1–E3 1, E3–Park 4
+* Park–Halmae Gomtang(HG) 20, R1–HG 22, Gates–HG 25
 [[img:L12-13.png|L12 p.13 — Bellman-Ford 표 완성: d(0)…d(4). 굵은 칸이 그 라운드에서 바뀐 값. 오른쪽 그래프의 상자가 최종 거리|large]]
 <pre class="txt">
           Gates  R1   E3   Park  HG
@@ -86,22 +88,22 @@ d(2)        0    1    2   45    23      ← E3 = 1+1, Park = 25+20(HG 경유), H
 d(3)        0    1    2    6    23      ← Park = 2+4 (E3 경유) < 45
 d(4)        0    1    2    6    23      ← 변화 없음 = 최종 dist
 </pre>
-p.14 와 p.20("Important thing about B-F for the rest of this lecture")은 같은 문장을 적는다. "$d^{(i)}[v]$ is equal to the cost of the shortest path between s and v with at most i edges." 이 해석 덕분에 [[Bellman-Ford는 DP|Bellman-Ford 를 DP 로 볼 수 있다]].
+p.14 와 p.20 에는 같은 문장이 적혀 있다. "$d^{(i)}[v]$ is equal to the cost of the shortest path between s and v with at most i edges." p.20 의 제목은 "Important thing about B-F for the rest of this lecture" 다. 이렇게 $d^{(i)}[v]$ 를 "간선 i 개까지 쓰는 최단 비용" 으로 읽으면, 각 줄이 작은 문제의 답이 된다. 그래서 [[Bellman-Ford는 DP|Bellman-Ford 를 DP 로 볼 수 있다]].
 [[sim:bellman_ford_table]]
 [[img:L12-15.png|L12 p.15 — Note on implementation: d(0)–d(2) 는 지우고 "last round" d(3) 과 "this round" d(4) 두 줄만 남긴다|medium]]
-p.15 는 구현 이야기다. n 개 배열을 다 들고 있을 필요가 없다. 직전 라운드와 이번 라운드, 배열 두 개만 있으면 된다. Floyd-Warshall 도 같은 방법으로 공간을 줄인다(p.54).
+p.15 는 구현할 때의 요령이다. 다음 줄을 채울 때는 바로 윗줄만 보니까, n 개 배열을 다 들고 있을 필요가 없다. 직전 라운드와 이번 라운드, 배열 두 개면 충분하다. Floyd-Warshall 도 같은 방법으로 공간을 줄인다(p.54).
 {exam}
-🎙 11/3: 교수가 p.11 표를 짚으며 말했다. Gates 의 $d^{(0)}$ 값이 $d^{(1)}$ 의 R1 칸 등 여러 칸 계산에 쓰인다. 이전 부분문제의 해가 여러 번(multiple times) 쓰이는 것이 DP 의 key word 라고 했다.
+🎙 11/3: 교수가 p.11 표를 짚으며 설명했다. Gates 의 $d^{(0)}$ 값 하나가 $d^{(1)}$ 의 R1 칸을 비롯한 여러 칸을 계산하는 데 쓰인다. 이렇게 이전 부분문제의 답이 여러 번(multiple times) 쓰인다는 것이 DP 의 key word 라고 했다.
 {/exam}
 
 === p.16–18 negative cycle 과 최종 알고리즘 ===
 [[img:L12-17.png|L12 p.17 — 음수 간선(HG→R1 −2, Gates→HG −3)이 있는 그래프. d(4) 이후 한 라운드 더 돌린 d(5) 에서 "Some stuff changed!"|large]]
-p.17 그래프에는 Gates→HG(−3)→R1(−2)→Gates(+1), 합 '''−4''' 짜리 [[negative cycle]] 이 있다. 그래서 값이 멈추지 않는다.
+p.17 그래프에는 Gates→HG(−3)→R1(−2)→Gates(+1) 로 도는 cycle 이 있고, 가중치 합이 '''−4''' 다. 즉 [[negative cycle]] 이다. 이 cycle 을 한 바퀴 돌 때마다 비용이 4 씩 줄어드니까, 라운드를 더 돌려도 값이 멈추지 않는다.
 <pre class="txt">
 d(4) = [-4, -5, -4, 6, -7]
 d(5) = [-4, -9, -4, 3, -7]     ← R1 -5 → -9, Park 6 → 3
 </pre>
-negative cycle 이 있으면 최단경로 자체가 정의되지 않는다(p.16 "it couldn't possibly work"). p.16 의 해결책은 "Go one round more and see if things change." 다.
+negative cycle 이 있으면 얼마든지 더 짧아질 수 있으니, 최단경로라는 것 자체가 없다. 그래서 p.16 은 이 경우 알고리즘이 "it couldn't possibly work" 라고 말한다. 대신 p.16 은 negative cycle 이 있는지 알아내는 방법을 준다. 한 라운드 더 돌려 보고 값이 바뀌는지 보는 것이다. 슬라이드 표현으로는 "Go one round more and see if things change." 다.
 <pre class="c">
 Bellman-Ford*(G,s):              # p.18 최종판
   d(0)[v] = ∞ for all v in V
@@ -115,33 +117,36 @@ Bellman-Ford*(G,s):              # p.18 최종판
 Running time: O(mn)
 </pre>
 {warn}
-루프 범위를 헷갈리기 쉽다. 거리만 구할 때는 `i = 0, …, n-2` 로 n−1 라운드다(p.6–8). negative cycle 까지 잡을 때는 `i = 0, …, n-1` 로 n 라운드, $d^{(n)}$ 까지 간다(p.18). 빈칸 문제에서 둘을 섞지 말 것. 수행 시간은 [[O(n+m)]] 이 아니라 $O(nm)$ 이다.
+루프 범위를 헷갈리기 쉽다. 거리만 구할 때는 `i = 0, …, n-2` 이고, n−1 라운드를 돈다(p.6–8). negative cycle 까지 확인할 때는 `i = 0, …, n-1` 이고, n 라운드를 돌아서 $d^{(n)}$ 까지 만든다(p.18). 빈칸 문제에서 둘을 섞지 않도록 한다. 수행 시간은 [[O(n+m)]] 이 아니라 $O(nm)$ 이다.
 {/warn}
 {exam}
-🎙 11/3: 교수는 negative cycle 검출을 이렇게 설명했다. 한 라운드 더 돌렸는데 값이 또 줄면, 간선을 n−1 개보다 많이 쓰는 더 짧은 경로가 있다는 뜻이다. 정점이 n 개인 simple path 는 간선이 최대 n−1 개다. 따라서 negative cycle 이 있다.
+🎙 11/3: 교수는 negative cycle 을 찾는 원리를 이렇게 설명했다. 한 라운드 더 돌렸는데 값이 또 줄었다면, 간선을 n−1 개보다 많이 쓰는 경로가 더 짧다는 뜻이다. 그런데 정점이 n 개면 simple path 의 간선은 많아야 n−1 개다. 그러니 간선을 더 쓴 경로는 같은 정점을 두 번 지나는, cycle 이 들어간 경로다. 그 cycle 을 넣었더니 더 짧아졌으므로 negative cycle 이 있다.
 {/exam}
 [[anim:bellman_ford_rounds|라운드 i 마다 "간선 i 개까지" 경로가 한 겹씩 퍼지며 d 값이 줄어든다. negative cycle 이 있으면 n−1 라운드 뒤에도 계속 줄어든다]]
 
 === p.19 Recap: shortest paths ===
 [[img:L12-19.png|L12 p.19 — Recap: BFS / Dijkstra / Bellman-Ford 의 장단점(+/−)|medium]]
-* [[BFS]]: $O(n+m)$ 이지만 unweighted 그래프만 된다.
-* Dijkstra: $O(n\log n + m)$. 음수 간선이 안 된다. "centralized" 다(모든 정점을 보고 최소를 골라야 한다).
-* Bellman-Ford: 음수 간선도 된다. "distributed" 다. 각 정점이 이웃 정보만으로 갱신할 수 있어서 RIP 같은 라우팅에 쓰인다([[OSPF와 RIP]]). 대신 $O(nm)$ 이다.
+* [[BFS]] 는 $O(n+m)$ 으로 빠르지만, 가중치가 없는(unweighted) 그래프에서만 쓸 수 있다.
+* Dijkstra 는 $O(n\log n + m)$ 이고, 음수 간선이 있으면 쓸 수 없다. 슬라이드는 Dijkstra 를 "centralized" 라고 부른다. 최소인 정점을 고르려면 모든 정점을 한곳에서 봐야 하기 때문이다.
+* Bellman-Ford 는 음수 간선이 있어도 된다. 슬라이드는 이쪽을 "distributed" 라고 부른다. 각 정점이 이웃에게서 받은 정보만으로 자기 값을 갱신할 수 있기 때문이다. 그래서 RIP 같은 라우팅 프로토콜에 쓰인다([[OSPF와 RIP]]). 대신 $O(nm)$ 으로 느리다.
 {exam}
-🎙 11/3 교수 강조: "'''Bellman-Ford is an example of dynamic programming. Dijkstra is an example of greedy algorithm.'''" 두 번 말했다. Dijkstra 는 d 가 가장 작은 not-sure 정점 하나를 골라 그 이웃만 갱신한다. Bellman-Ford 는 고르지 않고 매 라운드 모든 정점을 갱신한다. 이 차이가 곧 greedy 와 DP 의 차이다(greedy 는 L14).
+🎙 11/3 교수 강조: "'''Bellman-Ford is an example of dynamic programming. Dijkstra is an example of greedy algorithm.'''" 이 말을 두 번 했다. Dijkstra 는 d 가 가장 작은 not-sure 정점 하나를 골라서 그 이웃만 갱신한다. Bellman-Ford 는 고르지 않고 매 라운드 모든 정점을 갱신한다. 하나를 골라 믿고 가느냐, 전부 계산해 두느냐가 greedy 와 DP 의 차이다. greedy 는 L14 에서 배운다.
 {/exam}
 {info}
-🎙 11/3: distributed 라서 생기는 장점도 말했다. 간선 비용이 바뀌어도 처음부터 다시 돌릴 필요가 없다. 계속 돌리면 변화가 그래프 전체로 퍼진다.
+🎙 11/3: 교수는 distributed 라서 얻는 장점도 말했다. 간선 비용이 바뀌어도 처음부터 다시 돌릴 필요가 없다. 그냥 계속 돌리면 바뀐 값이 그래프 전체에 차례로 반영된다.
 {/info}
 
 == ① Fibonacci — 왜 DP 가 필요한가 (p.21–25) ==
 [[img:L12-21.png|L12 p.21 — "Bellman-Ford is an example of… Dynamic Programming!" 오늘의 목차|medium]]
-p.21 의 목차: Fibonacci 예제, DP 가 정확히 무엇인가, 왜 이런 이름인가, 그리고 Floyd-Warshall.
+p.21 은 남은 수업의 목차다.
+* Fibonacci 예제
+* DP 가 정확히 무엇인지, 왜 이런 이름이 붙었는지
+* Floyd-Warshall
 {def}
 p.22 "F(n) = F(n-1) + F(n-2), with F(0) = F(1) = 1." → 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, …
 {/def}
 {warn}
-슬라이드 규약은 $F(0) = F(1) = 1$ 이다. 흔히 쓰는 $F(0)=0$ 규약이 아니다. 그래서 $F(8) = 34$ 다. 시험에서 값을 물으면 슬라이드 규약으로 답한다.
+이 슬라이드는 $F(0) = F(1) = 1$ 로 시작한다. 흔히 쓰는 $F(0)=0$ 과 다르니까 값이 한 칸씩 밀린다. 그래서 $F(8) = 34$ 다. 시험에서 값을 물으면 슬라이드 규약으로 답한다.
 {/warn}
 [[img:L12-23.png|L12 p.23 — Candidate algorithm: 순수 재귀 코드와 실행 시간 그래프(n≈25 부터 급격히 증가)|medium]]
 <pre class="c">
@@ -159,9 +164,9 @@ T(n) ≥ T(n-1) + T(n-2)            (n ≥ 2)
 → '''EXPONENTIALLY QUICKLY'''
 </pre>
 [[img:L12-24.png|L12 p.24 — Consider Fib(8): 같은 색 = 같은 부분문제. 6 이 2번, 5 가 3번, 4 가 5번… "That's a lot of repeated computation!"|large]]
-p.24 트리에서 같은 색이 계속 반복된다. Fib(8) 을 순수 재귀로 부르면 함수 호출이 모두 '''67번'''($= 2F(8) - 1$)이다. 서로 다른 가지가 같은 부분문제를 다시 풀기 때문이다. 이것을 [[overlapping subproblems]] 라고 한다.
+p.24 트리를 보면 같은 색이 계속 되풀이된다. 서로 다른 가지가 같은 부분문제를 각자 다시 풀고 있기 때문이다. 그래서 Fib(8) 을 순수 재귀로 부르면 함수 호출이 모두 '''67번'''($= 2F(8) - 1$) 일어난다. 이렇게 같은 부분문제가 여러 번 나오는 성질을 [[overlapping subproblems]] 라고 한다.
 {exam}
-🎙 11/3: 교수는 트리를 보여 주며 "What's the source of inefficiency?" 라고 물었다. 답은 repeated computation 이다. 처방은 "처음 계산할 때 저장하고, 다음에는 다시 계산하지 말고 재사용하라. That's the key of dynamic programming."
+🎙 11/3: 교수는 트리를 보여 주며 "What's the source of inefficiency?" 라고 물었다. 답은 repeated computation, 즉 같은 계산을 반복하는 것이다. 해결책은 처음 계산할 때 저장해 두고, 다음부터는 다시 계산하지 않고 꺼내 쓰는 것이다. 교수는 이것을 "That's the key of dynamic programming." 이라고 했다.
 {/exam}
 [[img:L12-25.png|L12 p.25 — Maybe this would be better: fasterFibonacci 코드, 8→0 사슬 그림, naive(파랑) 대 faster(빨강 점선) 실행 시간|large]]
 <pre class="c">
@@ -172,18 +177,18 @@ def fasterFibonacci(n):         # p.25 "Maybe this would be better"
     return F[n]
 </pre>
 {warn}
-슬라이드 주석 "F has length n" 은 한 칸 모자란다. `F[n]` 을 쓰려면 인덱스가 0…n 이어야 하므로 길이가 '''n+1''' 이다.
+슬라이드 주석 "F has length n" 은 한 칸 모자란다. `F[n]` 에 접근하려면 인덱스가 0…n 까지 있어야 하니까, 길이는 '''n+1''' 이어야 한다.
 {/warn}
-덧셈을 n−1 번 하므로 $O(n)$ 이다("Much better running time!"). p.25 왼쪽 그림은 트리가 아니라 8→7→…→0 한 줄 사슬이다. p.26 은 "This was an example of… Dynamic Programming!" 이다.
+for 루프가 덧셈을 n−1 번 하니까 $O(n)$ 이다. 슬라이드 표현으로는 "Much better running time!" 이다. p.25 왼쪽 그림도 이제 트리가 아니라 8→7→…→0 으로 이어지는 한 줄 사슬이다. 그리고 p.26 은 이것이 바로 DP 였다고 밝힌다("This was an example of… Dynamic Programming!").
 [[sim:fib_memo]]
 
 == ② DP 란 무엇인가 — 두 요소 (p.27–30) ==
 {def}
 p.27 "It is an '''algorithm design paradigm''' — like divide-and-conquer is an algorithm design paradigm. Usually it is for solving '''optimization problems''' (eg, shortest path)."
-→ [[dynamic programming]] 은 특정 알고리즘이 아니다. [[divide and conquer]] 처럼 알고리즘을 설계하는 방법이다. 보통 최적화 문제(최소·최대를 찾는 문제)에 쓴다. Fibonacci 는 최적화 문제는 아니지만 예로 쓰기 좋다.
+→ [[dynamic programming]] 은 어떤 특정한 알고리즘의 이름이 아니다. [[divide and conquer]] 처럼 알고리즘을 설계하는 방법의 이름이다. 주로 최소나 최대를 찾는 최적화 문제에 쓴다. Fibonacci 는 최적화 문제가 아니지만, 구조가 단순해서 예로 들기 좋다.
 {/def}
 [[img:L12-28.png|L12 p.28 — Elements of DP 1. Optimal sub-structure: Fibonacci 와 Bellman-Ford 의 부분문제와 점화식|medium]]
-p.28–30 의 두 요소를 Fibonacci 와 Bellman-Ford 에 각각 대 보면 다음과 같다.
+p.28–30 은 DP 의 두 요소를 Fibonacci 와 Bellman-Ford 에 각각 대 본다. 정리하면 아래 표와 같다.
 {|
 ! 요소 || 뜻 (슬라이드) || Fibonacci || Bellman-Ford
 |-
@@ -191,35 +196,38 @@ p.28–30 의 두 요소를 Fibonacci 와 Bellman-Ford 에 각각 대 보면 다
 |-
 | 2. [[overlapping subproblems]] || "The sub-problems overlap a lot." → 한 번 풀어 저장하면 시간 절약 || 많은 $F[j]$ 가 같은 $F[i]$ 를 쓴다 || $d^{(i+1)}$ 의 많은 칸이 같은 $d^{(i)}[v]$ 를 쓴다
 |}
-p.30 의 정식 문장(정의 문제 대비):
+p.30 에는 두 요소의 정식 문장이 있다. 정의→용어 문제에 그대로 나올 수 있다.
 * '''Optimal substructure''': "Optimal solutions to sub-problems are sub-solutions to the optimal solution of the original problem."
 * '''Overlapping subproblems''': "The subproblems show up again and again."
-* 이 둘로 DP 알고리즘을 설계한다. ① 작은 문제의 해를 표에 저장한다. ② 표의 해로 더 큰 문제를 푼다. ③ 끝에 전체 문제의 해를 얻는다.
+이 두 성질이 있으면 DP 알고리즘을 다음 순서로 만들 수 있다.
+# 작은 문제의 답을 구해서 표에 적어 둔다.
+# 표에 있는 답을 써서 더 큰 문제를 푼다.
+# 이렇게 키워 가다 보면 마지막에 전체 문제의 답이 나온다.
 {exam}
-🎙 11/3 "꼭 기억하라": "'''You should remember those two elements: optimal substructure and overlapping sub-problems.'''" 이 둘을 정의하면 코드는 바로 쓸 수 있다고 했다.
-* optimal substructure 는 큰 문제의 해를 작은 부분문제의 해로 표현하는 관계다. Fibonacci 는 정의 자체가, Bellman-Ford 는 update rule 이 optimal substructure 다. 교수: DP 설계에서 가장 중요하고 가장 어려운 부분이 이것을 정의하는 일이다.
-* overlapping sub-problems: 부분문제가 서로 최대한 겹치게 설계해야 한다. 한 번 풀고 여러 번 재사용하면 시간이 준다.
-* 해를 저장해 두는 표를 교수는 memoization 이라 부르고 "the key idea of DP" 라고 했다.
+🎙 11/3 "꼭 기억하라": "'''You should remember those two elements: optimal substructure and overlapping sub-problems.'''" 교수는 이 둘만 정의하고 나면 코드는 바로 쓸 수 있다고 했다.
+* optimal substructure 는 큰 문제의 답을 작은 부분문제의 답으로 나타내는 관계다. Fibonacci 에서는 정의 자체가 이 관계다. Bellman-Ford 에서는 update rule 이 이 관계다. 교수는 DP 설계에서 가장 중요하고 가장 어려운 일이 이것을 정의하는 것이라고 했다.
+* overlapping sub-problems 를 위해서는 부분문제가 서로 최대한 겹치게 설계해야 한다. 한 번 풀어 둔 답을 여러 번 다시 쓸수록 시간이 줄기 때문이다.
+* 답을 저장해 두는 표를 교수는 memoization 이라고 불렀고, 이것을 "the key idea of DP" 라고 했다.
 정의→용어 대비: "Optimal solutions to sub-problems are sub-solutions to the optimal solution of the original problem" → optimal substructure, "The subproblems show up again and again" → overlapping subproblems.
 {/exam}
 {tip}
-[[divide and conquer]] 와의 차이는 부분문제가 겹치느냐다. D&C 는 부분문제가 겹치지 않는다([[mergesort]] 의 왼쪽 반과 오른쪽 반). 그래서 저장할 이유가 없다. DP 는 부분문제가 겹친다. 겹치는데도 D&C 처럼 재귀만 하면 순수 재귀 Fibonacci 처럼 지수 시간이 된다.
+[[divide and conquer]] 와 DP 를 가르는 기준은 부분문제가 겹치느냐다. D&C 의 부분문제는 겹치지 않는다. [[mergesort]] 의 왼쪽 반과 오른쪽 반이 그 예다. 겹치지 않으니 답을 저장해 둘 이유도 없다. DP 의 부분문제는 겹친다. 겹치는데도 D&C 처럼 재귀만 하면, 순수 재귀 Fibonacci 처럼 같은 계산을 되풀이하다가 지수 시간이 된다.
 {/tip}
 {exam}
-🎙 11/3: 교수가 "D&C 의 세 단계는?" 하고 물었다(divide, conquer, combine). D&C 는 원래 문제를 disjoint(independent) 한 부분문제로 나눈다. DP 는 부분문제가 가능한 한 많이 겹치도록(shared) 설계한다. 겹칠수록 효율이 좋다. 겹침이 많은 전형적인 경우가 최적화 문제다. 최단경로에서는 s→v 경로가 여럿이고 그 부분경로 s→u 들이 서로 겹친다.
+🎙 11/3: 교수가 D&C 의 세 단계를 물었다. 답은 divide, conquer, combine 이다. 교수의 설명은 이랬다. D&C 는 원래 문제를 서로 disjoint(independent) 한 부분문제로 나눈다. DP 는 반대로 부분문제가 가능한 한 많이 겹치도록(shared) 설계한다. 많이 겹칠수록 저장한 답을 많이 다시 쓰니까 효율이 좋아진다. 이렇게 겹침이 많은 전형적인 경우가 최적화 문제다. 예를 들어 최단경로에서는 s→v 경로가 여러 개 있고, 그 경로들이 앞부분 s→u 를 서로 공유한다.
 {/exam}
 
 == ③ 두 가지 구현 — bottom-up 과 top-down (p.31–38) ==
 === Bottom-up (p.32–33) ===
 [[img:L12-33.png|L12 p.33 — Bottom up approach, For Bellman-Ford: d(0) → d(1) → … → d(n-2) → d(n-1)|small]]
-슬라이드 표현은 "what we just saw" 다. 작은 문제부터 표를 채운다.
-* Fibonacci: $F[0], F[1]$ → $F[2]$ → … → $F[n-1]$ → 마지막에 원래 문제 $F[n]$.
-* Bellman-Ford: $d^{(0)}$ → $d^{(1)}$ → … → $d^{(n-2)}$ → $d^{(n-1)}$.
-둘 다 [[bottom-up]] 이다. 교수는 iterative 알고리즘 모양이고 DP 를 설계하는 아주 자연스러운 방법이라고 했다.
+bottom-up 은 지금까지 본 방식이다. 슬라이드도 "what we just saw" 라고 적었다. 가장 작은 문제부터 표를 채워 올라간다.
+* Fibonacci 는 $F[0], F[1]$ → $F[2]$ → … → $F[n-1]$ 순으로 채우고, 마지막에 원래 문제 $F[n]$ 을 구한다.
+* Bellman-Ford 는 $d^{(0)}$ → $d^{(1)}$ → … → $d^{(n-2)}$ → $d^{(n-1)}$ 순으로 채운다.
+둘 다 [[bottom-up]] 이다. 교수는 이 방식이 iterative 알고리즘 모양이라서, DP 를 설계하는 아주 자연스러운 방법이라고 했다.
 
 === Top-down (p.34–37) ===
 [[img:L12-34.png|L12 p.34 — Top down approach: 재귀처럼 생각하되, D&C 와 다른 점은 Memo-ization|medium]]
-"Think of it like a recursive algorithm." 큰 문제에서 재귀로 내려간다. [[divide and conquer]] 와 다른 점은 '''Memo-ization''' 하나다. 슬라이드 정의는 "Keep track of what small problems you've already solved to prevent re-solving the same problem twice." 이다.
+top-down 은 재귀 알고리즘처럼 생각하는 방식이다. 슬라이드 표현은 "Think of it like a recursive algorithm." 이다. 큰 문제에서 시작해서 재귀로 작은 문제로 내려간다. 여기까지는 [[divide and conquer]] 와 같다. 다른 것은 '''Memo-ization''' 하나뿐이다. 이미 푼 작은 문제를 기록해 두고, 같은 문제를 다시 만나면 풀지 않고 기록을 꺼낸다. 슬라이드 정의는 "Keep track of what small problems you've already solved to prevent re-solving the same problem twice." 다.
 <pre class="c">
 define a global list F = [1,1,None, None, …, None]     # p.35
 def Fibonacci(n):
@@ -237,7 +245,7 @@ def Fibonacci(n):
 | F[n] != None || "이미 푼 부분문제인가?" 검사 || Fib(6) 을 두 번째로 부를 때 참 → 바로 13 반환
 |}
 [[img:L12-37.png|L12 p.37 — Memo-ization Visualization ctd: "Collapse repeated nodes and don't do the same work twice!" + "But otherwise treat it like the same old recursive algorithm." 트리가 8→0 사슬로 접힘|large]]
-p.36 은 p.24 와 같은 트리에서 이미 푼 노드를 묶어 표시한 그림이다. p.37 은 그것을 접어서 8→7→…→0 사슬로 만든 그림이다. 호출 수가 67번에서 '''15번'''으로 줄고, 덧셈은 7번이라 $O(n)$ 이다.
+p.36 은 p.24 와 같은 트리에서 이미 푼 노드를 묶어 표시한 그림이다. p.37 은 묶인 노드를 접어서 8→7→…→0 사슬로 만든 그림이다. 같은 노드를 두 번 풀지 않으니까 호출 수가 67번에서 '''15번'''으로 준다. 덧셈은 7번뿐이라 $O(n)$ 이다.
 {|
 ! 방식 || 채우는 순서 || 구현 || Fib(8) 비용
 |-
@@ -248,23 +256,26 @@ p.36 은 p.24 와 같은 트리에서 이미 푼 노드를 묶어 표시한 그�
 | Bottom-up (p.25) || $F[2], F[3], …, F[8]$ 순 || for 루프 + 표 || 덧셈 7번, $O(n)$
 |}
 {info}
-🎙 11/3: p.35 의 실행 시간 그래프에서 초록(top-down)과 빨강(bottom-up)은 "pretty much same" 이다. 교수의 마무리: 두 요소(optimal substructure, overlapping sub-problems)와 key property memoization 이 DP 의 전부라고 했다.
+🎙 11/3: p.35 의 실행 시간 그래프에서 초록(top-down)과 빨강(bottom-up)은 거의 겹친다. 교수 표현으로는 "pretty much same" 이다. 교수는 이 부분을 이렇게 마무리했다. DP 에서 알아야 할 것은 두 요소(optimal substructure, overlapping sub-problems)와 key property 인 memoization 이다.
 {/info}
 [[img:L12-38.png|L12 p.38 — What have we learned? DP 는 "Don't duplicate work if you don't have to!" 라는 상식에 붙인 이름(a fancy name)|medium]]
-p.38 요약: DP 는 설계 paradigm 이다. optimal substructure 와 overlapping subproblems 를 쓰고, bottom-up 또는 top-down 으로 구현한다. 마지막 줄은 "It's a fancy name for a pretty common-sense idea: Don't duplicate work if you don't have to!" 이다.
+p.38 은 지금까지를 정리한다. DP 는 설계 paradigm 이다. optimal substructure 와 overlapping subproblems 를 이용하고, bottom-up 이나 top-down 으로 구현한다. 마지막 줄은 "It's a fancy name for a pretty common-sense idea: Don't duplicate work if you don't have to!" 다. 이름은 거창해 보여도, 결국 같은 일을 두 번 하지 말자는 상식이라는 말이다.
 {exam}
-(예상) 빈칸 의사코드: top-down Fibonacci 에서 `if F[n] != ____:` → `None`, `F[n] = ____` → `Fibonacci(n-1) + Fibonacci(n-2)`, `return ____` → `F[n]`. 또는 bottom-up 의 `for i = ____` → `2, …, n`. 중간고사에서 빈칸 의사코드 설계 감점이 가장 컸으니 두 버전을 손으로 써 볼 것.
+(예상) 빈칸 의사코드 문제가 나올 수 있다.
+* top-down Fibonacci: `if F[n] != ____:` → `None`, `F[n] = ____` → `Fibonacci(n-1) + Fibonacci(n-2)`, `return ____` → `F[n]`.
+* bottom-up: `for i = ____` → `2, …, n`.
+중간고사에서 빈칸 의사코드 설계 감점이 가장 컸다. 그러니 두 버전을 손으로 직접 써 본다.
 {/exam}
 
 == ④ Floyd-Warshall — 모든 쌍 최단경로 (p.41–55) ==
 === 문제와 naive 해법 (p.42–43) ===
 [[img:L12-40.png|L12 p.42 — All-Pairs Shortest Paths: 행 = Source, 열 = Destination. 그래프 s→u 2, u→s 1, s→v 5, u→v 2, v→t −2|large]]
-[[all-pairs shortest path]](APSP)는 모든 정점 쌍의 최단경로를 구하는 문제다. 슬라이드: "I want to know the shortest path from u to v for ALL pairs u,v of vertices in the graph. Not just from a special single source s." 답은 $n \times n$ 표다(행 = source, 열 = destination). p.42 표에서 $s \to v = 4$ 다. s→u→v 가 직행 5 보다 짧기 때문이다. 나머지는 $s \to t = 2$, $u \to t = 0$, $v \to s = \infty$ 이다.
+[[all-pairs shortest path]](APSP)는 모든 정점 쌍 사이의 최단경로를 구하는 문제다. 시작점이 하나로 정해져 있지 않다는 점이 지금까지와 다르다. 슬라이드 문장은 "I want to know the shortest path from u to v for ALL pairs u,v of vertices in the graph. Not just from a special single source s." 다. 그래서 답은 $n \times n$ 표가 된다. 행이 출발점(source), 열이 도착점(destination)이다. 예를 들어 p.42 표에서 $s \to v = 4$ 다. s→v 직행 간선은 5 인데, s→u→v 로 돌아가면 2+2 = 4 로 더 짧기 때문이다. 나머지 칸은 $s \to t = 2$, $u \to t = 0$, $v \to s = \infty$ 다.
 [[img:L12-41.png|L12 p.43 — Naïve solution: 모든 s 에 대해 Bellman-Ford, O(n²m), m=n² 이면 n⁴. "Can we do better?"|medium]]
-p.43 의 naive 방법은 모든 s 에 대해 Bellman-Ford 를 돌리는 것이다(음수 간선 대비). 시간은 $O(n \cdot nm) = O(n^2 m)$ 이고, $m = n^2$ 이면 $n^4$ 까지 간다. Floyd-Warshall 은 이것을 $O(n^3)$ 으로 줄인다.
+가장 쉬운 방법은 시작점 s 를 바꿔 가며 Bellman-Ford 를 n 번 돌리는 것이다(p.43). 음수 간선이 있을 수 있으니 Dijkstra 대신 Bellman-Ford 를 쓴다. 그러면 시간이 $O(n \cdot nm) = O(n^2 m)$ 이고, 간선이 많아 $m = n^2$ 이면 $n^4$ 까지 커진다. Floyd-Warshall 은 이것을 $O(n^3)$ 으로 줄인다.
 
 === 부분문제 정의 (p.44–45) ===
-정점에 번호 1, 2, …, n 을 붙인다.
+먼저 정점에 번호 1, 2, …, n 을 붙인다.
 [[img:L12-43.png|L12 p.45 — Optimal substructure: 파란 타원 = 정점 1…k−1. u→3→1→k−1→v 가 이 집합만 지나는 최단경로이고 길이는 D(k−1)[u,v]. 빨간 질문 "How can we find D(k)[u,v] using D(k−1)?"|large]]
 {def}
 p.44 "Sub-problem(k-1): For all pairs u,v, find the cost of the shortest path from u to v, so that all the '''internal vertices''' on that path are in {1,…,k-1}. Let $D^{(k-1)}[u,v]$ be the solution to Sub-problem(k-1)."
@@ -279,19 +290,19 @@ p.44 "Sub-problem(k-1): For all pairs u,v, find the cost of the shortest path fr
 |-
 | $D^{(n)}[u,v]$ || 모든 정점 경유 허용 = 진짜 최단거리 || 답
 |}
-p.45 의 질문은 "How can we find $D^{(k)}[u,v]$ using $D^{(k-1)}$?" 이다. 정점 k 를 경유 후보에 새로 넣으면 무엇이 바뀌는지 묻는 것이다.
+p.45 는 "How can we find $D^{(k)}[u,v]$ using $D^{(k-1)}$?" 라고 묻는다. 경유해도 되는 정점 목록에 k 를 새로 넣었을 때, 최단경로가 어떻게 달라지는지를 묻는 것이다.
 {exam}
-🎙 11/3: 교수가 "Bellman-Ford 는 간선 수로 부분문제를 나눴다. 다른 방법은?" 하고 묻고 꽤 오래 기다렸다. 답은 '''정점 수로 나눈다'''이다. Bellman-Ford 는 간선 수(i), Floyd-Warshall 은 내부 정점 집합 {1..k} 로 부분문제를 정의한다.
+🎙 11/3: 교수는 "Bellman-Ford 는 간선 수로 부분문제를 나눴다. 다른 방법은?" 하고 묻고 꽤 오래 기다렸다. 답은 '''정점 수로 나눈다'''이다. Bellman-Ford 는 쓸 수 있는 간선 수 i 로 부분문제를 정한다. Floyd-Warshall 은 거쳐 가도 되는 정점 집합 {1..k} 로 부분문제를 정한다.
 {/exam}
 
 === Case 1 / Case 2 (p.46–50) ===
 [[img:L12-45.png|L12 p.47 — Case 1: we don't need vertex k. 안쪽 타원(1…k−1)만 지나는 경로가 여전히 최단 → D(k)[u,v] = D(k−1)[u,v]|large]]
-* '''Case 1: we don't need vertex k.''' (p.47) 최단경로가 k 를 지나지 않으면 중간 정점이 전부 {1,…,k−1} 안에 있다. 슬라이드 문장은 "This path was the shortest before, so it's still the shortest now." 이다. 따라서 $D^{(k)}[u,v] = D^{(k-1)}[u,v]$.
-* '''Case 2: we need vertex k.''' (p.48) 최단경로가 k 를 지난다.
+* '''Case 1: we don't need vertex k.''' (p.47) 최단경로가 k 를 지나지 않는 경우다. 그러면 중간 정점이 전부 {1,…,k−1} 안에 있으니, k 를 넣기 전에 구한 경로가 그대로 최단이다. 슬라이드 문장은 "This path was the shortest before, so it's still the shortest now." 다. 따라서 $D^{(k)}[u,v] = D^{(k-1)}[u,v]$ 다.
+* '''Case 2: we need vertex k.''' (p.48) 최단경로가 k 를 지나는 경우다.
 [[img:L12-47.png|L12 p.49 — Aside: simple paths. 도움이 안 되는 cycle 은 지운다. n 개 정점의 simple path 는 간선이 최대 n−1 개|medium]]
-p.49 는 [[simple path]] 에 대한 보충이다. negative cycle 이 없으면 cycle 은 경로를 짧게 만들지 않으니 지우면 된다("Just get rid of it"). 그래서 항상 simple 한 최단경로가 있다. simple path 는 k 를 딱 한 번 지난다. 또 n 개 정점의 simple path 는 간선이 최대 n−1 개다. Bellman-Ford 가 n−1 라운드로 충분한 이유와 같은 사실이다.
+Case 2 를 계산하기 전에 p.49 가 [[simple path]] 이야기를 잠깐 한다. negative cycle 이 없으면 cycle 을 돌아도 경로가 짧아지지 않는다. 그러니 경로에 cycle 이 있으면 지워 버리면 된다("Just get rid of it"). 그래서 최단경로 중에는 항상 simple 한 것이 있다. simple path 는 같은 정점을 두 번 지나지 않으니, k 도 딱 한 번만 지난다. 또 n 개 정점의 simple path 는 간선이 많아야 n−1 개다. Bellman-Ford 가 n−1 라운드면 충분했던 것도 같은 이유다.
 [[img:L12-48.png|L12 p.50 — Case 2 continued: u→(1…k−1)→k 보라색 + k→(1…k−1)→v 분홍색. 각각이 {1,…,k−1} 만 지나는 최단경로|large]]
-p.50: k 를 한 번 지나는 simple path 는 u → k 구간(보라)과 k → v 구간(분홍)으로 나뉜다. k 가 끝점이 되었으므로 두 구간 모두 중간 정점이 {1,…,k−1} 안에 있다. 또 "sub-paths of shortest paths are shortest paths"([[최단경로의 부분경로]])이므로 각 구간은 그 조건에서의 최단경로다. 그래서 $D^{(k)}[u,v] = D^{(k-1)}[u,k] + D^{(k-1)}[k,v]$ 이다.
+p.50 은 Case 2 를 마저 계산한다. k 를 한 번 지나는 simple path 는 u → k 구간(보라)과 k → v 구간(분홍)으로 나눌 수 있다. 이제 k 는 각 구간의 끝점이니까, 두 구간 모두 중간 정점이 {1,…,k−1} 안에 있다. 그리고 최단경로의 일부분도 최단경로다. 슬라이드 표현으로는 "sub-paths of shortest paths are shortest paths" 다([[최단경로의 부분경로]]). 그래서 각 구간은 {1,…,k−1} 만 거치는 최단경로이고, $D^{(k)}[u,v] = D^{(k-1)}[u,k] + D^{(k-1)}[k,v]$ 가 된다.
 
 === 점화식 (p.51–52) ===
 [[img:L12-49.png|L12 p.51 — D(k)[u,v] = min{ Case 1 , Case 2 } 와 DP 두 요소(optimal substructure, overlapping sub-problems)|medium]]
@@ -307,12 +318,12 @@ $$D^{(k)}[u,v] = \min\{\ D^{(k-1)}[u,v],\ \ D^{(k-1)}[u,k] + D^{(k-1)}[k,v]\ \}$
 5. 둘 중 어느 경우인지 모르니 작은 쪽:
    D(k)[u,v] = min{ D(k-1)[u,v], D(k-1)[u,k] + D(k-1)[k,v] }
 </pre>
-p.51 은 이 식에서 DP 두 요소를 짚는다.
+p.51 은 이 식에 DP 의 두 요소가 다 들어 있다는 것을 보여 준다.
 * Optimal substructure: "We can solve the big problem using smaller problems."
 * Overlapping sub-problems: "$D^{(k-1)}[k,v]$ can be used to help compute $D^{(k)}[u,v]$ for lots of different u's."
-p.52 는 "Using our Dynamic programming paradigm, this immediately gives us an algorithm!" 이다.
+두 요소가 있으니 DP 로 바로 알고리즘을 만들 수 있다. p.52 의 문장이 "Using our Dynamic programming paradigm, this immediately gives us an algorithm!" 이다.
 {exam}
-🎙 11/3: 교수는 Case 1/Case 2 의 min 이 optimal substructure 이고, $D^{(k-1)}[k,v]$ 가 여러 u 의 계산에 반복해서 쓰이는 것이 overlap 이라고 짚었다("That's good").
+🎙 11/3: 교수는 이 식에서 두 요소를 하나씩 짚었다. Case 1 과 Case 2 중 작은 쪽을 고르는 min 이 optimal substructure 다. 그리고 $D^{(k-1)}[k,v]$ 한 칸이 여러 u 의 계산에 반복해서 쓰이는 것이 overlap 이다. 교수는 여기서 "That's good" 이라고 했다.
 {/exam}
 [[anim:floyd_k_layers|정점 k 를 "경유 허용" 에 하나씩 넣을 때 u→v 경로가 k 를 거치는 쪽으로 바뀌는 순간(Case 2)]]
 
@@ -329,11 +340,11 @@ Floyd-Warshall(G):                                   # p.53
       D(k)[u,v] = min{ D(k-1)[u,v], D(k-1)[u,k] + D(k-1)[k,v] }
   Return D(n)
 </pre>
-슬라이드 메모: "The base case checks out: the only path through zero other vertices are edges directly from u to v." $D^{(0)} → D^{(1)} → … → D^{(n)}$ 순으로 채우므로 '''bottom-up''' DP 다.
+초기화가 맞는 이유는 슬라이드 메모에 있다. 다른 정점을 하나도 거치지 않는 경로는 u 에서 v 로 바로 가는 간선뿐이니까, $D^{(0)}$ 은 간선 가중치 그대로다. 메모 원문은 "The base case checks out: the only path through zero other vertices are edges directly from u to v." 다. 그다음 $D^{(0)} → D^{(1)} → … → D^{(n)}$ 순으로 작은 것부터 채우니까, 이 알고리즘은 '''bottom-up''' DP 다.
 
 === 예제 — p.42 그래프로 손 계산 ===
 {info}
-슬라이드에는 Floyd-Warshall 을 단계별로 돌린 수치 예제가 없다. 아래는 p.42 그래프(정점 순서 s=1, u=2, v=3, t=4)로 직접 돌린 것이다. 결과 $D^{(4)}$ 는 p.42 표와 같다. 🎙 11/3 교수도 "I give you an example, you can figure out how to fill the arrays" 라며 이 표를 직접 채워 보라고 했다.
+슬라이드에는 Floyd-Warshall 을 단계별로 돌려 본 수치 예제가 없다. 그래서 아래는 p.42 그래프로 직접 돌려 본 것이다. 정점 순서는 s=1, u=2, v=3, t=4 로 잡았다. 마지막 $D^{(4)}$ 는 p.42 표와 똑같이 나온다. 🎙 11/3 교수도 이 표를 직접 채워 보라고 했다. 교수 표현으로는 "I give you an example, you can figure out how to fill the arrays" 다.
 {/info}
 <pre class="txt">
 D(0) (직행 간선)          k=1 (s 경유 허용)        k=2 (u 경유 허용)
@@ -355,17 +366,17 @@ D(4) = 최종      s  u  v  t
 </pre>
 [[sim:floyd_warshall_table]]
 {exam}
-(예상) 표 채우기: 4정점 그래프의 $D^{(0)}$ 를 주고 $D^{(1)}$, $D^{(2)}$ 를 채우게 하거나, k 단계에서 바뀌는 칸과 그 이유를 묻는다. k 단계에서 k 행과 k 열은 바뀌지 않는다($D[u,k]+D[k,k] = D[u,k]$). 나머지 칸만 "행 u 의 k 열 값 + 열 v 의 k 행 값" 과 비교하면 된다.
+(예상) 표 채우기 문제가 나올 수 있다. 4정점 그래프의 $D^{(0)}$ 를 주고 $D^{(1)}$, $D^{(2)}$ 를 채우게 하거나, k 단계에서 어느 칸이 왜 바뀌는지 묻는 식이다. 손으로 채울 때 요령이 하나 있다. k 단계에서 k 행과 k 열은 바뀌지 않는다. $D[u,k]+D[k,k] = D[u,k]$ 이기 때문이다. 그러니 나머지 칸만 "행 u 의 k 열 값 + 열 v 의 k 행 값" 과 비교하면 된다.
 {/exam}
 {exam}
-(예상) 빈칸 점화식: $D^{(k)}[u,v] = \min\{\ \_\_\_\_,\ \_\_\_\_ + \_\_\_\_\ \}$ 와 각 항이 Case 1/Case 2 중 무엇인지 묻는다. Case 2 에 negative cycle 이 없다는 가정(simple path)이 왜 필요한지도 나올 수 있다. 답: k 를 한 번만 지나야 u~k, k~v 두 조각의 중간 정점이 {1..k−1} 안에 든다.
+(예상) 빈칸 점화식 문제도 나올 수 있다. $D^{(k)}[u,v] = \min\{\ \_\_\_\_,\ \_\_\_\_ + \_\_\_\_\ \}$ 를 채우고, 각 항이 Case 1 과 Case 2 중 어느 것인지 묻는 식이다. Case 2 에서 negative cycle 이 없다는 가정(simple path)이 왜 필요한지도 물을 수 있다. 답은 이렇다. k 를 한 번만 지나야 경로를 u~k 와 k~v 두 조각으로 나눴을 때 각 조각의 중간 정점이 {1..k−1} 안에 든다.
 {/exam}
 
 === 정확성·수행 시간·공간 (p.54) ===
 [[img:L12-52.png|L12 p.54 — We've basically just shown: Theorem, Running time O(n³), Storage 두 개의 n×n 배열|medium]]
 * '''Theorem''': "If there are no negative cycles in a weighted directed graph G, then the Floyd-Warshall algorithm, running on G, returns a matrix $D^{(n)}$ so that $D^{(n)}[u,v]$ = distance between u and v in G."
-* Running time $O(n^3)$: k 루프 n 번 × 쌍 $n^2$ 개 × 칸당 $O(1)$. 슬라이드: "Better than running BF n times! Not really better than running Dijkstra n times. But it's simpler to implement and handles negative weights."
-* Storage: $n \times n$ 배열 두 개와 원래 그래프. "As with Bellman-Ford, we don't really need to store all n of the $D^{(k)}$."
+* Running time 은 $O(n^3)$ 이다. k 루프가 n 번 돌고, 매번 쌍 $n^2$ 개를 칸당 $O(1)$ 에 채우기 때문이다. 슬라이드는 Bellman-Ford 를 n 번 돌리는 것보다 낫고, Dijkstra 를 n 번 돌리는 것과는 비슷하다고 평가한다. 대신 구현이 간단하고 음수 간선이 있어도 된다. 원문은 "Better than running BF n times! Not really better than running Dijkstra n times. But it's simpler to implement and handles negative weights." 다.
+* Storage 는 $n \times n$ 배열 두 개와 원래 그래프면 된다. Bellman-Ford 때처럼 바로 이전 단계만 있으면 다음 단계를 채울 수 있기 때문이다. 원문은 "As with Bellman-Ford, we don't really need to store all n of the $D^{(k)}$." 다.
 {|
 ! APSP 방법 || 시간 || 음수 간선
 |-
@@ -380,9 +391,9 @@ D(4) = 최종      s  u  v  t
 [[img:L12-53.png|L12 p.55 — What if there are negative cycles? D(n)[v,v] < 0 인 v 가 있으면 return negative cycle|medium]]
 * Negative cycle ⇔ ∃ v s.t. "there is a path from v to v that goes through all n vertices that has cost < 0."
 * '''Negative cycle ⇔ ∃ v s.t. $D^{(n)}[v,v] < 0$.'''
-* 알고리즘: Floyd-Warshall 을 그대로 돌리고, 대각선에 음수가 있으면 "return negative cycle".
+* 그래서 알고리즘은 간단하다. Floyd-Warshall 을 그대로 돌린 뒤, 대각선에 음수가 있으면 "return negative cycle" 한다.
 {tip}
-Bellman-Ford 는 한 라운드 더 돌려서 값이 바뀌는지 본다($d^{(n-1)} \ne d^{(n)}$). Floyd-Warshall 은 대각선이 음수인지 본다. 대각선은 처음에 0 이다. v 에서 나가 v 로 돌아오는 음수 cycle 이 있으면, 그 cycle 을 경유하게 되는 순간 0 보다 작아진다.
+두 알고리즘은 negative cycle 을 찾는 방법이 다르다. Bellman-Ford 는 한 라운드 더 돌려서 값이 바뀌는지 본다($d^{(n-1)} \ne d^{(n)}$). Floyd-Warshall 은 대각선이 음수인지 본다. 대각선 $D[v,v]$ 는 처음에 0 이다. 그런데 v 에서 나가 v 로 돌아오는 음수 cycle 이 있으면, 그 cycle 을 경유할 수 있게 되는 순간 값이 0 보다 작아진다.
 {/tip}
 
 == ⑤ 최단경로 알고리즘 비교 (p.57) ==
@@ -398,48 +409,52 @@ Bellman-Ford 는 한 라운드 더 돌려서 값이 바뀌는지 본다($d^{(n-1
 |-
 | Weaknesses || 음수 간선이면 틀릴 수 있음 || --- || ---
 |}
-여기에 [[BFS]](unweighted, $O(n+m)$)를 더한 전체 표는 [[최단경로 알고리즘 비교표]] 에 있다. 교수는 이 표를 "we already know all these parts" 라고 짧게 넘어갔다.
+여기에 [[BFS]](unweighted, $O(n+m)$)까지 넣은 전체 표는 [[최단경로 알고리즘 비교표]] 에 있다. 교수는 이 표를 짧게 넘어갔다. 이미 다 아는 내용이라는 뜻으로 "we already know all these parts" 라고 했다.
 {exam}
-(예상) Circle all / T/F 보기 예:
+(예상) Circle all / T/F 보기로 이런 것이 나올 수 있다.
 * "Dijkstra 는 음수 간선이 있어도 negative cycle 만 없으면 옳다" (F)
 * "Floyd-Warshall 은 single-source 문제다" (F)
 * "Bellman-Ford 와 Floyd-Warshall 은 둘 다 negative cycle 을 검출할 수 있다" (T)
 * "Floyd-Warshall 은 bottom-up DP 다" (T)
 * "Bellman-Ford 수행 시간은 $O(n+m)$" (F, $O(nm)$)
-중간고사에서 Circle all 과잉 선택이 약점이었다. 보기마다 위 표의 칸과 대조할 것.
+중간고사에서는 Circle all 에서 보기를 너무 많이 고른 것이 약점이었다. 보기 하나하나를 위 표의 칸과 맞춰 보고 고른다.
 {/exam}
 
 == ⑥ DP 가 안 되는 예 — longest simple path (p.58–60) ==
-p.58: "Longest simple path (say all edge weights are 1): What is the longest simple path from s to t?" 이것도 최적화 문제다. DP 를 쓸 수 있는지 본다.
+p.58 은 s 에서 t 까지 가장 긴 simple path 를 묻는다. 간선 가중치는 모두 1 이라고 둔다. 원문은 "Longest simple path (say all edge weights are 1): What is the longest simple path from s to t?" 다. 이것도 최적화 문제이니, DP 를 쓸 수 있는지 따져 본다.
 [[img:L12-57.png|L12 p.59 — "Longest path from s to t = longest path from s to a + longest path from a to t?" → NOPE!|medium]]
-p.59 의 시도: s→t 최장 = s→a 최장 + a→t 최장? 답은 NOPE 이다.
+p.59 는 최단경로 때처럼 쪼개 본다. s→t 최장경로가 s→a 최장경로와 a→t 최장경로를 이은 것일까? 슬라이드의 답은 NOPE 이다.
 [[img:L12-58.png|L12 p.60 — This doesn't give optimal sub-structure: s→a 최장(주황)은 t, b 를 쓰고, a→t 최장(파랑)은 b 를 쓴다 → 이어 붙이면 b 를 두 번 지나 simple 이 아니다|large]]
 {def}
 p.60 "Optimal solutions to subproblems don't give us an optimal solution to the big problem. The subproblems we came up with '''aren't independent''': Once we've chosen the longest path from a to t, which uses b, our longest path from s to a shouldn't be allowed to use b, since b was already used."
 {/def}
-* 최단경로는 부분경로도 최단경로라서 조각을 이어 붙여도 된다(Case 2).
-* 최장 simple 경로는 조각마다 최장을 고르면 두 조각이 같은 정점을 쓸 수 있다. 그러면 이어 붙인 경로가 simple 이 아니다.
-* 즉 부분문제가 서로 독립이 아니다. 그래서 [[optimal substructure]] 가 없다.
-* "Actually, the longest simple path problem is NP-complete. We don't know of any polynomial-time algorithms for it, DP or otherwise!"
+* 최단경로는 부분경로도 최단경로다. 그래서 조각마다 최단을 구해 이어 붙여도 된다(Case 2).
+* 최장 simple 경로는 그렇지 않다. 조각마다 최장을 고르면 두 조각이 같은 정점을 쓸 수 있고, 그러면 이어 붙인 경로가 simple 이 아니게 된다.
+* 즉 한 조각의 선택이 다른 조각에 영향을 주니까, 부분문제가 서로 독립이 아니다. 그래서 [[optimal substructure]] 가 성립하지 않는다.
+* 슬라이드는 이 문제가 사실 NP-complete 라고 덧붙인다. DP 든 다른 방법이든 다항 시간 알고리즘이 알려져 있지 않다. 원문은 "Actually, the longest simple path problem is NP-complete. We don't know of any polynomial-time algorithms for it, DP or otherwise!" 다.
 {exam}
-🎙 11/3: 교수는 longest simple path 의 부분문제가 independent 하지 않다고 설명했다. 한쪽에서 b 를 쓰면 다른 쪽은 b 를 쓰면 안 된다. 해 사이에 dependency 가 있으니 optimal substructure 를 정의할 수 없다. 이 문제는 NP-complete 이고, NP-complete 의 뜻은 나중에 다룬다고 했다. "최단경로는 쉬운데 최장경로는 매우 어렵다. Polynomial 알고리즘을 찾으면 P = NP 를 푼 것이다."
-서술 대비 모범 답 3줄: ① s→t 최장을 s→a 최장 + a→t 최장으로 나눠 본다. ② 두 부분해가 같은 정점(p.60 의 b)을 쓸 수 있어서 합친 경로가 simple 이 아니다. ③ 부분문제가 독립이 아니므로 optimal substructure 가 성립하지 않는다(실제로 NP-complete). 비교: 최단경로는 "sub-paths of shortest paths are shortest paths" 라서 된다.
+🎙 11/3: 교수는 longest simple path 의 부분문제가 independent 하지 않다는 점을 설명했다. 한쪽 조각에서 b 를 쓰면 다른 쪽 조각은 b 를 쓰면 안 된다. 이렇게 두 답 사이에 dependency 가 있으니 optimal substructure 를 정의할 수 없다. 이 문제는 NP-complete 이고, NP-complete 가 무슨 뜻인지는 나중에 다룬다고 했다. 교수의 말로는 "최단경로는 쉬운데 최장경로는 매우 어렵다. Polynomial 알고리즘을 찾으면 P = NP 를 푼 것이다."
+서술형 대비 모범 답 3줄:
+# s→t 최장경로를 s→a 최장경로와 a→t 최장경로로 나눠 본다.
+# 두 부분해가 같은 정점(p.60 의 b)을 쓸 수 있어서, 합친 경로가 simple 이 아니다.
+# 부분문제가 독립이 아니므로 optimal substructure 가 성립하지 않는다(실제로 NP-complete 다).
+비교하자면 최단경로는 "sub-paths of shortest paths are shortest paths" 가 성립하니까 같은 방법이 통한다.
 {/exam}
 
 == ⑦ Recap (p.61–62) ==
 [[img:L12-59.png|L12 p.61 — Recap: Bellman-Ford(single-source), Floyd-Warshall(all-pairs), Dynamic programming 은 "a fancy name for" …|medium]]
-* 최단경로 알고리즘 두 개를 더 배웠다. Bellman-Ford(single-source), Floyd-Warshall(all-pairs).
-* p.61 의 DP 설명("a fancy name for"): 최적화 문제를 작은 문제로 나눈다. 부분문제의 최적해가 원래 문제의 부분해가 되게 한다. 부분해 표를 채워 가며 최적해를 반복적으로 만든다. overlapping sub-problems 를 활용한다.
-* Next time(p.62): "More examples of dynamic programming!" → [[L13 Dynamic Programming II]]
+* 최단경로 알고리즘을 두 개 더 배웠다. single-source 용 Bellman-Ford 와 all-pairs 용 Floyd-Warshall 이다.
+* p.61 은 "a fancy name for" 뒤에 DP 가 하는 일을 풀어 쓴다. 먼저 최적화 문제를 작은 문제로 나누는데, 부분문제의 최적해가 원래 문제의 부분해가 되도록 나눈다. 그다음 부분해를 표에 채워 가며 최적해를 차례로 만든다. 이 과정에서 overlapping sub-problems 를 이용한다.
+* 다음 시간(p.62)은 "More examples of dynamic programming!" 이다. → [[L13 Dynamic Programming II]]
 
 == 🎙 11/3 수업에서 ==
-11/3(화) 75분 수업에서 p.1–62 를 모두 다뤘다. 녹음은 `1103_21_컴알_L12_DP.txt`(faster-whisper 전사)다. 교수가 강조한 것은 다섯 가지다.
-# Bellman-Ford 는 DP, Dijkstra 는 greedy 다. 하나를 골라 갱신하느냐, 전부 갱신하느냐의 차이다.
-# DP 의 두 요소 optimal substructure 와 overlapping sub-problems 를 꼭 기억하라. 해를 표에 저장하는 memoization 이 key idea 다.
-# D&C 는 disjoint 한 부분문제, DP 는 겹치는 부분문제를 쓴다.
-# Floyd-Warshall 은 부분문제를 정점 수(내부 정점 {1..k})로 나눈다. Bellman-Ford 는 간선 수로 나눴다. 점화식은 두 case 의 min 이고, $O(n^3)$ 이다. $D^{(n)}[v,v]<0$ 이면 negative cycle 이다.
-# longest simple path 는 부분문제가 독립이 아니어서 optimal substructure 가 없다. NP-complete 이다.
-수업에서 FW 예제 표는 채우지 않았다. ④ 의 p.42 손 계산 예제를 직접 채워 볼 것.
+11/3(화) 75분 수업에서 p.1–62 를 모두 나갔다. 녹음은 `1103_21_컴알_L12_DP.txt`(faster-whisper 전사)다. 교수가 강조한 것은 다섯 가지다.
+# Bellman-Ford 는 DP 이고, Dijkstra 는 greedy 다. 정점 하나를 골라 갱신하느냐, 전부 갱신하느냐가 둘을 가른다.
+# DP 의 두 요소 optimal substructure 와 overlapping sub-problems 를 꼭 기억하라고 했다. 그리고 답을 표에 저장하는 memoization 이 key idea 라고 했다.
+# D&C 는 서로 겹치지 않는(disjoint) 부분문제로 나눈다. DP 는 겹치는 부분문제를 쓴다.
+# Bellman-Ford 는 부분문제를 간선 수로 나눴다. Floyd-Warshall 은 정점 수, 즉 내부 정점 {1..k} 로 나눈다. 점화식은 두 case 중 작은 쪽을 고르는 min 이고, 시간은 $O(n^3)$ 이다. $D^{(n)}[v,v]<0$ 이면 negative cycle 이 있다.
+# longest simple path 는 부분문제가 독립이 아니어서 optimal substructure 가 없다. 이 문제는 NP-complete 다.
+수업에서 FW 예제 표를 직접 채우지는 않았다. 그러니 ④ 의 p.42 손 계산 예제를 직접 채워 본다.
 
 == 공식 모음 ==
 {|
@@ -457,15 +472,15 @@ p.60 "Optimal solutions to subproblems don't give us an optimal solution to the 
 |}
 
 == 시험 대비 핵심 요약 ==
-# [[dynamic programming]] 은 설계 paradigm 이다. 두 요소: [[optimal substructure]](부분문제의 최적해가 원 문제 최적해의 부분해) + [[overlapping subproblems]](같은 부분문제가 반복 등장). "Don't duplicate work if you don't have to!"
-# D&C 와의 차이는 부분문제가 겹치느냐다. 겹치는데 재귀만 하면 Fibonacci 처럼 $\approx \varphi^n$ 지수 시간이 된다.
-# 구현은 두 가지다. [[bottom-up]](작은 것부터 표 채우기: Bellman-Ford, Floyd-Warshall, fasterFibonacci), [[top-down과 memoization|top-down]](재귀 + memo 표, `if F[n] != None: return F[n]`).
-# 슬라이드 Fibonacci 규약은 $F(0) = F(1) = 1$, $F(8) = 34$. 순수 재귀 호출 67번, memo 15번.
-# [[Bellman-Ford는 DP]]: 부분문제 $d^{(i)}[v]$ = 간선 ≤ i 개 최단 비용. n−1 라운드로 답을 얻고, 한 라운드 더($d^{(n)}$) 돌려 바뀌면 [[negative cycle]]. $O(nm)$. Dijkstra 는 greedy(🎙 11/3).
-# [[Floyd-Warshall]]: [[all-pairs shortest path]]. [[D^(k)(u,v)]] = 중간 정점 ⊆ {1..k}. 점화식 $\min\{D^{(k-1)}[u,v], D^{(k-1)}[u,k]+D^{(k-1)}[k,v]\}$. Case 1 은 k 불필요, Case 2 는 k 필요(simple path 라 k 를 한 번 지남). $O(n^3)$, 공간 $n\times n$ 두 개.
-# Floyd-Warshall negative cycle ⇔ ∃ v, $D^{(n)}[v,v] < 0$.
-# 비교표: Dijkstra $O(m + n\log n)$ 음수 불가 / BF $O(nm)$ / FW $O(n^3)$ all-pairs. BF·FW 는 음수 간선 OK, negative cycle 검출.
-# [[longest simple path]] 는 optimal substructure 가 없다. 부분해들이 정점을 공유할 수 있어 독립이 아니다. NP-complete.
+# [[dynamic programming]] 은 알고리즘 설계 paradigm 이다. 두 요소가 있어야 쓸 수 있다. 하나는 [[optimal substructure]] 로, 부분문제의 최적해가 원래 문제 최적해의 일부가 되는 성질이다. 다른 하나는 [[overlapping subproblems]] 로, 같은 부분문제가 되풀이해 나오는 성질이다. 슬라이드의 한 줄 요약은 "Don't duplicate work if you don't have to!" 다.
+# D&C 와 DP 는 부분문제가 겹치느냐로 갈린다. 겹치는데도 재귀만 하면 Fibonacci 처럼 $\approx \varphi^n$ 지수 시간이 된다.
+# 구현 방식은 두 가지다. [[bottom-up]] 은 작은 것부터 표를 채우는 방식이고, Bellman-Ford, Floyd-Warshall, fasterFibonacci 가 여기에 속한다. [[top-down과 memoization|top-down]] 은 재귀로 내려가면서 memo 표를 확인하는 방식이다. 확인하는 줄은 `if F[n] != None: return F[n]` 이다.
+# 슬라이드의 Fibonacci 는 $F(0) = F(1) = 1$ 로 시작하므로 $F(8) = 34$ 다. Fib(8) 호출 수는 순수 재귀가 67번, memo 를 쓰면 15번이다.
+# [[Bellman-Ford는 DP]] 다. 부분문제 $d^{(i)}[v]$ 는 간선 ≤ i 개로 가는 최단 비용이다. n−1 라운드면 답이 나온다. 한 라운드 더 돌려 $d^{(n)}$ 이 바뀌면 [[negative cycle]] 이 있다. 시간은 $O(nm)$ 이다. Dijkstra 는 greedy 다(🎙 11/3).
+# [[Floyd-Warshall]] 은 [[all-pairs shortest path]] 를 푼다. [[D^(k)(u,v)]] 는 중간 정점이 {1..k} 안에 있는 최단 비용이다. 점화식은 $\min\{D^{(k-1)}[u,v], D^{(k-1)}[u,k]+D^{(k-1)}[k,v]\}$ 다. Case 1 은 k 가 필요 없는 경우, Case 2 는 k 가 필요한 경우다. Case 2 에서는 simple path 라서 k 를 한 번만 지난다. 시간은 $O(n^3)$, 공간은 $n\times n$ 배열 두 개다.
+# Floyd-Warshall 에서 negative cycle 이 있다는 것은 $D^{(n)}[v,v] < 0$ 인 v 가 있다는 것과 같다.
+# 비교표: Dijkstra 는 $O(m + n\log n)$ 이고 음수 간선이 안 된다. BF 는 $O(nm)$, FW 는 $O(n^3)$ 이고 FW 만 all-pairs 다. BF 와 FW 는 음수 간선이 있어도 되고, negative cycle 도 찾아낸다.
+# [[longest simple path]] 에는 optimal substructure 가 없다. 부분해들이 같은 정점을 쓸 수 있어서 서로 독립이 아니기 때문이다. 이 문제는 NP-complete 다.
 
 == 관련 문서 ==
 * 이전: [[L11 Graph Algorithms III]] · [[Bellman-Ford]] · [[d^(i) 배열]] · [[negative cycle]] · [[Dijkstra]] · [[최단경로 알고리즘 비교표]]

@@ -3,7 +3,9 @@ title: G^T (transpose / reversed graph) — 모든 간선을 뒤집은 그래프
 category: 10강 Graph II, 용어
 ---
 == 개요 ==
-$G^T$ 는 $G$ 와 정점이 같고 '''모든 간선 $(u, v)$ 를 $(v, u)$ 로 뒤집은''' 그래프다. 슬라이드는 "reverse all the edges", "reversed graph" 라고 부르고, CLRS 는 transpose $G^T$ 라 쓴다. [[SCC 알고리즘]] 2단계에서 만들고, 2차 DFS 를 이 그래프 위에서 돌린다.
+$G^T$ 는 $G$ 와 정점은 같고, 모든 간선 $(u, v)$ 를 $(v, u)$ 로 뒤집은 그래프다. 슬라이드에서는 "reverse all the edges", "reversed graph" 라고 부른다. CLRS 는 transpose 라는 이름으로 $G^T$ 라고 쓴다.
+
+[[SCC 알고리즘]] 은 2단계에서 이 그래프를 만들고, 2차 DFS 를 이 그래프 위에서 돌린다.
 
 {def}
 L10 p.12 "Reverse all the edges in the graph."
@@ -18,9 +20,9 @@ CLRS: $G^T = (V, E^T)$, $E^T = \{(u, v) : (v, u) \in E\}$.
 {|
 ! 성질 || 이유 || L10 에서
 |-
-| $G$ 와 $G^T$ 의 SCC 는 '''같다''' || $u \rightsquigarrow v$ in $G$ ⟺ $v \rightsquigarrow u$ in $G^T$ — "서로 도달 가능" 은 대칭이라 그대로 || p.68 "A is still strongly connected when we reverse all the edges"
+| $G$ 와 $G^T$ 의 SCC 는 '''같다''' || $u \rightsquigarrow v$ in $G$ ⟺ $v \rightsquigarrow u$ in $G^T$. "서로 도달 가능" 은 대칭이라 그대로 남는다 || p.68 "A is still strongly connected when we reverse all the edges"
 |-
-| SCC graph 의 간선도 전부 뒤집힌다 → $G$ 의 source SCC 가 $G^T$ 의 sink SCC || 간선 방향만 바뀌므로 || p.55 "the SCC with the largest finish time has no edges going out"
+| SCC graph 의 간선도 전부 뒤집힌다. 그래서 $G$ 의 source SCC 가 $G^T$ 의 sink SCC 가 된다 || 간선 방향만 바뀌니까 || p.55 "the SCC with the largest finish time has no edges going out"
 |-
 | 만드는 데 $O(n+m)$ || [[adjacency list]] 를 한 번 훑으며 `GT[v].append(u)` || p.70 전체 $O(n+m)$
 |}
@@ -32,14 +34,14 @@ G  : DGIST→{Wiki,Puppy}  Wiki→{DGIST,Puppy,YouTube}  YouTube→{DGIST,Puppy}
 G^T: DGIST→{Wiki,YouTube,KAIST}  Wiki→{DGIST,YouTube}  YouTube→{Wiki}
      KAIST→∅   Puppy→{DGIST,Wiki,YouTube,KAIST,Google}  Google→{Puppy}
 </pre>
-KAIST 는 $G$ 에서 나가기만 했으므로 $G^T$ 에서는 '''나가는 간선이 없다''' → 2차 DFS 를 KAIST 에서 시작하면 {KAIST} 만 나온다.
+KAIST 는 $G$ 에서 나가는 간선만 있었다. 그래서 $G^T$ 에서는 나가는 간선이 하나도 없다. 2차 DFS 를 KAIST 에서 시작하면 어디로도 못 가니까 {KAIST} 하나만 나온다.
 
 {analogy}
-'''모든 일방통행 표지판을 반대로 돌려 꽂기.''' 동네 안에서 서로 오가던 집들(SCC)은 여전히 서로 오갈 수 있다 — 가던 길을 거꾸로 오면 되니까. 바뀌는 것은 동네와 동네 사이의 다리 방향뿐이다. 그래서 "나가는 다리만 있던 동네" 가 "들어오는 다리만 있는 막다른 동네" 가 된다.
+'''모든 일방통행 표지판을 반대로 돌려 꽂기.''' 동네 안에서 서로 오가던 집들(SCC)은 표지판을 돌려도 여전히 서로 오갈 수 있다. 가던 길을 거꾸로 오면 되기 때문이다. 바뀌는 것은 동네와 동네 사이를 잇는 다리의 방향뿐이다. 그래서 나가는 다리만 있던 동네는 들어오는 다리만 있는 막다른 동네가 된다.
 {/analogy}
 
 {warn}
-2차 DFS 를 $G^T$ 가 아니라 $G$ 에서 돌리면 실패한다. 예제에서 finish 최대 KAIST 부터 $G$ 로 DFS 하면 KAIST → DGIST → … 6개 전부 한 tree.
+2차 DFS 를 $G^T$ 가 아니라 $G$ 에서 돌리면 실패한다. 예제에서 finish 가 가장 큰 KAIST 부터 $G$ 로 DFS 하면 KAIST → DGIST → … 로 이어져서 6개가 전부 한 tree 에 들어간다.
 {/warn}
 
 == 관련 문서 ==

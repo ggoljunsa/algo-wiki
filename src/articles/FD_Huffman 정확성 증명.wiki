@@ -2,7 +2,7 @@ key: Huffman 정확성 증명
 title: Huffman 정확성 증명 — Lemma 1, Lemma 2, 귀납법 (L14 p.78–94)
 category: 14강 Greedy I, 용어
 ---
-[[Huffman coding]] 이 [[코드 트리의 cost]] 가 최소인 트리를 만든다는 증명이다. 전략은 [[greedy 증명 전략]] 과 같다. 매 합치기가 최적 트리를 배제하지 않음을 보인다.
+[[Huffman coding]] 이 [[코드 트리의 cost]] 가 최소인 트리를 만든다는 증명이다. 전략은 [[greedy 증명 전략]] 과 같다. 두 노드를 합칠 때마다 그 합치기가 최적 트리를 배제하지 않는다는 것을 보인다.
 
 {def}
 L14 p.78 Lemma (1): Suppose that x and y are the two least-frequent letters. Then there is an optimal tree where x and y are siblings.
@@ -11,7 +11,7 @@ p.85 Lemma 2: We may as well imagine that CURRENT contains only leaves.
 
 == Lemma 1 (p.79–80) ==
 [[img:L14-80.png|L14 p.80 — 가장 깊은 형제 노드 중 적어도 하나는 x, y 가 아니다. 그것과 x 를 맞바꾼다|large]]
-최적 트리 T 를 하나 잡는다. 가장 깊은 층에서 형제인 두 leaf 를 본다. 그중 적어도 하나 a 는 x 도 y 도 아니다. x 와 a 를 맞바꾼다.
+최적 트리 T 를 하나 잡고, 가장 깊은 층에서 형제인 두 leaf 를 본다. 둘 중 적어도 하나는 x 도 y 도 아니다. 그것을 a 라 하고, x 와 a 의 자리를 맞바꾼다.
 <pre class="txt">
 P(a) ≥ P(x)              (x 는 가장 드문 글자)
 depth(a) ≥ depth(x)      (a 는 가장 깊은 층)
@@ -20,11 +20,11 @@ depth(a) ≥ depth(x)      (a 는 가장 깊은 층)
  = (P(a) − P(x))·(depth(x) − depth(a))
  = (≥ 0)·(≤ 0) ≤ 0       → cost 가 늘지 않는다
 </pre>
-y 도 같은 방법으로 x 의 형제 자리로 옮긴다. cost 가 한 번도 늘지 않았으므로 결과 트리도 최적이다. 이 트리에서 x, y 는 형제다.
+y 도 같은 방법으로 x 의 형제 자리로 옮긴다. cost 가 한 번도 늘지 않았으니 결과 트리도 최적이고, 이 트리에서 x 와 y 는 형제다.
 
 == Lemma 2 (p.83–84) ==
 [[img:L14-83.png|L14 p.83 — 왼쪽: {A..F} 트리. 오른쪽: 부분 트리 25, 30 을 글자 G:25, H:30 으로 바꾼 {A, G, H} 트리|large]]
-이미 만든 부분 트리를 "key 를 빈도로 갖는 글자 하나" 로 바꿔도 된다. p.83: 왼쪽이 {A,B,C,D,E,F} 의 최적 트리 ⇔ 오른쪽이 {A,G,H} 의 최적 트리. 엄밀한 증명은 [[CLRS]] Lemma 16.3(p.84).
+이미 만든 부분 트리는 글자 하나로 바꿔 생각해도 된다. 그 글자의 빈도는 부분 트리의 key 다. p.83 그림으로 말하면, 왼쪽이 {A,B,C,D,E,F} 의 최적 트리인 것과 오른쪽이 {A,G,H} 의 최적 트리인 것은 같은 말이다. 엄밀한 증명은 [[CLRS]] Lemma 16.3 에 있다(p.84).
 <pre class="txt">
 p.83 예제로 확인:
 {A,G,H} 트리 cost: 0.45·1 + 0.25·2 + 0.30·2           = 1.55
@@ -48,11 +48,11 @@ H 안쪽 cost (D 깊이 1, E·F 깊이 2): 0.16 + 2·0.14       = 0.44
                     즉 만든 트리가 최적이다.
 </pre>
 {exam}
-(예상) Lemma 1 의 맞바꾸기 부등식 $(P(a) - P(x))(\text{depth}(x) - \text{depth}(a)) \le 0$ 서술, 또는 Inductive step 칸 채우기.
+(예상) Lemma 1 의 맞바꾸기 부등식 $(P(a) - P(x))(\text{depth}(x) - \text{depth}(a)) \le 0$ 을 서술하거나, Inductive step 칸을 채우는 문제가 나올 수 있다.
 {/exam}
 
 {analogy}
-짐 싸기에서 "가장 안 쓰는 물건 두 개는 가방 맨 밑에 같이 넣어도 된다" 를 증명하는 것이다. 맨 밑에 있던 다른 물건과 바꾸면 그 물건은 꺼내기 쉬워지고, 안 쓰는 물건은 어차피 잘 안 꺼낸다. 손해가 없다.
+짐 싸기에서 "가장 안 쓰는 물건 두 개는 가방 맨 밑에 같이 넣어도 된다" 를 증명하는 것이다. 맨 밑에 있던 다른 물건과 바꾸면 그 물건은 꺼내기 쉬워진다. 안 쓰는 물건은 어차피 잘 꺼내지 않으니 밑에 있어도 손해가 없다.
 {/analogy}
 
 == 관련 문서 ==

@@ -3,7 +3,7 @@ title: DP 레시피 4단계 (Recipe for applying Dynamic Programming)
 category: 13강 DP II, 용어
 ---
 == 개요 ==
-L13 슬라이드가 매 예제 앞에 다시 보여 주는 DP 알고리즘 설계 순서다. 슬라이드에는 Step 5 까지 있지만 알고리즘 자체는 Step 1–4 에서 정해진다. Step 5 는 코드로 깔끔하게 옮기는 단계다.
+L13 슬라이드가 예제마다 앞에 다시 보여 주는 DP 알고리즘 설계 순서다. 슬라이드에는 Step 5 까지 적혀 있다. 하지만 알고리즘 자체는 Step 1–4 에서 다 정해지고, Step 5 는 그것을 깔끔한 코드로 옮기는 단계다.
 
 {def}
 L13 p.10, p.39 "Recipe for applying Dynamic Programming"
@@ -41,14 +41,14 @@ Step 5: If needed, code this up like a reasonable person.
 |-
 | [[트리의 maximal independent set|tree independent set]] || subtree || [[A(u)와 B(u)|A, B 배열]] || (슬라이드 생략)
 |}
-L12 의 [[Floyd-Warshall]] 도 같은 틀이다. 부분문제는 "중간 정점이 {1..k} 안에 있는 경로", 점화식은 [[D^(k)(u,v)]] 다.
+L12 의 [[Floyd-Warshall]] 도 같은 틀로 읽을 수 있다. 부분문제는 "중간 정점이 {1..k} 안에 있는 경로", 점화식은 [[D^(k)(u,v)]] 다.
 
 {analogy}
-요리 레시피와 같다. 재료 정하기(Step 1), 조리법 적기(Step 2), 순서대로 조리하기(Step 3), 접시에 담기(Step 4). 재료를 잘못 고르면 뒤 단계가 다 막힌다. 0/1 knapsack 의 첫 시도(L13 p.62–63)가 그런 예다.
+요리 레시피와 같다. Step 1 은 재료를 정하는 일이다. Step 2 는 조리법을 적는 일, Step 3 은 순서대로 조리하는 일, Step 4 는 접시에 담는 일이다. 처음에 재료를 잘못 고르면 뒤 단계가 다 막힌다. 0/1 knapsack 의 첫 시도(L13 p.62–63)가 그런 예다.
 {/analogy}
 
 {exam}
-(예상) 서술형에서 새 DP 문제를 주고 "부분문제, 점화식, 채우는 순서, 수행 시간" 을 쓰게 하면 이 네 칸을 그대로 쓰면 된다. 중간고사의 "분석 템플릿 생략" 감점을 피하려면 칸을 비우지 않는다.
+(예상) 서술형에서 새 DP 문제를 주고 "부분문제, 점화식, 채우는 순서, 수행 시간" 을 쓰라고 하면, 이 네 칸을 그대로 채우면 된다. 중간고사에서는 분석 템플릿을 생략해서 감점된 적이 있다. 그러니 칸을 비워 두지 않는다.
 {/exam}
 
 == 관련 문서 ==

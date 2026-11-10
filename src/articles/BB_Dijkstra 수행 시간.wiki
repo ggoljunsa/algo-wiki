@@ -3,7 +3,7 @@ title: Dijkstra 수행 시간 — n(findMin + removeMin) + m·updateKey
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-"Is it fast? '''Depends on how you implement it.'''" (L11 p.39) while 루프는 정점마다 한 번(n 번), 안쪽 이웃 갱신은 간선마다 한 번(총 m 번)이므로 수행 시간은 not-sure 정점을 담는 자료구조([[priority queue와 heap]])의 세 연산 비용으로 정해진다.
+"Is it fast? '''Depends on how you implement it.'''" (L11 p.39) 슬라이드 표현대로 구현하기 나름이다. while 루프는 정점마다 한 번씩 돌아서 모두 n 번 돈다. 안쪽의 이웃 갱신은 간선마다 한 번씩이라 모두 m 번이다. 그래서 수행 시간은 not-sure 정점을 담아 두는 자료구조([[priority queue와 heap]])가 세 연산을 얼마나 빨리 하느냐로 정해진다.
 
 $$\sum_{u\in V}\Big(T(\text{findMin}) + \sum_{v\in u.\text{neighbors}} T(\text{updateKey}) + T(\text{removeMin})\Big) = n\big(T(\text{findMin}) + T(\text{removeMin})\big) + m\,T(\text{updateKey})$$
 [[img:L11-55.png|L11 p.55 — We need a data structure that: stores unsure vertices, keeps track of d[v], findMin(), removeMin(u), updateKey(v,d). Total = n(T(findMin)+T(removeMin)) + m T(updateKey)|medium]]
@@ -23,17 +23,20 @@ array:   n·(n + n) + m·1          = 2n² + m        = O(n²)        (m ≤ n²
 RB tree: n·(log n + log n) + m·log n               = O((n+m) log n)
 Fib:     n·(1 + log n) + m·1      = n log n + n + m = O(n log n + m)
 </pre>
-* RB tree 는 "'''Better than an array if the graph is sparse''' (m ≪ n²)". dense($m \approx n^2$)면 $O(n^2\log n)$ 이라 array 가 낫다.
-* amortized: "any sequence of d removeMin calls takes time at most $O(d\log n)$" — 개별 호출은 더 느릴 수 있어도 총합 보장.
+* 슬라이드는 RB tree 가 "'''Better than an array if the graph is sparse'''" 라고 적었다. sparse 는 m ≪ n² 이라는 뜻이다. 반대로 dense 해서 $m \approx n^2$ 이면 RB tree 는 $O(n^2\log n)$ 이 되니 array 가 더 낫다.
+* Fibonacci heap 의 시간은 amortized 다. 슬라이드 정의는 "any sequence of d removeMin calls takes time at most $O(d\log n)$" 이다. 호출 하나하나는 더 느릴 수 있지만, 여러 번 부른 총합은 이 값을 넘지 않는다는 보장이다.
 
 {analogy}
-'''대기표 관리 방식.''' 번호표를 종이에 아무렇게나 적어 두면(array) 다음 손님 찾을 때마다 전부 훑어야 한다($O(n)$). 정렬된 장부(RB tree)면 찾기·고치기 모두 $\log n$. Fibonacci heap 은 "고치기(updateKey)"를 거의 공짜로 해 주는 장부라서, 간선이 많을수록(updateKey 가 m 번) 이득이 크다.
+'''대기표 관리 방식.''' 번호표를 종이에 아무렇게나 적어 두면(array) 다음 손님을 찾을 때마다 전부 훑어봐야 한다($O(n)$). 정렬된 장부(RB tree)를 쓰면 찾기와 고치기가 모두 $\log n$ 이다. Fibonacci heap 은 고치기(updateKey)를 거의 공짜로 해 주는 장부다. updateKey 는 간선 수만큼 m 번 불리니까, 간선이 많을수록 이득이 커진다.
 {/analogy}
 {exam}
-교수(10/29): 세 연산이 몇 번씩 불리는지(findMin·removeMin 각 n 번, updateKey m 번) → 공식 → 표 세 줄. "'''amortized, not the worst-case time complexity'''" 를 구분해 말할 것.
+교수(10/29)가 설명한 순서는 이렇다. 먼저 세 연산이 몇 번씩 불리는지 센다. findMin 과 removeMin 은 각각 n 번, updateKey 는 m 번이다. 그 횟수로 공식을 세우고, 자료구조별로 표 세 줄을 채운다. 답안에서는 "'''amortized, not the worst-case time complexity'''" 라는 구분을 꼭 말해야 한다.
 {/exam}
 {warn}
-"Dijkstra = $O(n+m)$" (BFS 와 혼동) / "$O(nm)$" (Bellman-Ford 와 혼동) / "Fibonacci heap 이면 $O((n+m)\log n)$" (RB tree 와 혼동) — 모두 오답.
+다음은 모두 오답이다.
+* "Dijkstra 는 $O(n+m)$": BFS 와 헷갈린 것이다.
+* "Dijkstra 는 $O(nm)$": Bellman-Ford 와 헷갈린 것이다.
+* "Fibonacci heap 을 쓰면 $O((n+m)\log n)$": RB tree 와 헷갈린 것이다.
 {/warn}
 
 == 관련 문서 ==

@@ -3,7 +3,7 @@ title: BFS (Breadth-First Search) — layer L0, L1, L2 … 순서로 넓게, O(n
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-'''BFS''' (너비 우선 탐색)는 시작 정점 w 에서 한 걸음 거리인 정점을 '''전부''', 그다음 두 걸음 거리인 정점을 전부 … 순서로 방문한다. 결과로 정점들이 [[layer]] $L_0, L_1, L_2, \dots$ 로 나뉘고, '''layer 번호가 곧 w 로부터의 거리'''다 → [[무가중치 최단거리]]. layer 를 번갈아 두 색으로 칠하면 [[bipartite graph]] 판정도 된다. 시간은 [[DFS]] 와 같은 [[O(n+m)]].
+'''BFS''' (너비 우선 탐색)는 시작 정점 w 에서 한 걸음 거리인 정점을 '''전부''', 그다음 두 걸음 거리인 정점을 전부 … 순서로 방문한다. 결과로 정점들이 [[layer]] $L_0, L_1, L_2, \dots$ 로 나뉘고, '''layer 번호가 곧 w 로부터의 거리'''다 → [[무가중치 최단거리]]. layer 를 번갈아 두 색으로 칠하면 [[bipartite graph]] 판정도 할 수 있다. 시간은 [[DFS]] 와 같은 [[O(n+m)]] 이다.
 
 {def}
 L9 p.86 의사코드 그대로:
@@ -54,14 +54,14 @@ For i = 0, ..., n-1:
 |}
 
 {analogy}
-'''연못에 돌 던지기.''' 돌이 떨어진 곳(w)에서 물결이 1 겹, 2 겹, 3 겹으로 동심원처럼 퍼진다. 물결이 닿는 순서 = 거리 순서. 한 겹을 다 퍼뜨린 뒤에야 다음 겹이 생긴다.
+'''연못에 돌 던지기.''' 돌이 떨어진 곳(w)에서 물결이 1 겹, 2 겹, 3 겹으로 동심원처럼 퍼진다. 물결이 닿는 순서가 곧 거리 순서다. 한 겹을 다 퍼뜨린 뒤에야 다음 겹이 생긴다.
 {/analogy}
 
 {exam}
-교수(10/22): 학생에게 running time 을 물어 "O(m)? O(n+m)" → 정리: 각 노드 한 번, 모든 노드의 neighbor 합이 m(undirected 는 2m) → '''$O(n+m)$, DFS 와 같다.''' "Like DFS, BFS also works fine on directed graphs." (p.88)
+교수(10/22)는 학생에게 running time 이 "O(m)? O(n+m)?" 인지 물었다. 정리하면 각 노드는 한 번씩 처리하고, 모든 노드의 neighbor 수를 합하면 m(undirected 는 2m)이다. 그래서 '''$O(n+m)$ 으로 DFS 와 같다.''' p.88 에는 "Like DFS, BFS also works fine on directed graphs." 라고 적혀 있다.
 {/exam}
 {warn}
-슬라이드에는 "mark w as visited" 가 빠져 있지만 꼭 필요하다(안 하면 w 가 $L_2$ 에 다시 들어간다). 빈칸 의사코드에서 노리는 줄. 그리고 BFS 는 '''간선 가중치가 모두 같을 때만''' 최단거리를 준다 — weighted 면 [[Dijkstra]].
+슬라이드에는 "mark w as visited" 가 빠져 있지만 꼭 필요하다. 이 줄이 없으면 w 가 $L_2$ 에 다시 들어간다. 빈칸 의사코드 문제에서 노리기 좋은 줄이다. 또 BFS 로 최단거리를 구할 수 있는 것은 '''간선 가중치가 모두 같을 때뿐'''이다. weighted 면 [[Dijkstra]] 를 쓴다.
 {/warn}
 {quiz}
 빈칸: `For u in L_i:` / `For each v which is a neighbor of u:` / `If ________:` / `mark v as visited, and put it in ____`

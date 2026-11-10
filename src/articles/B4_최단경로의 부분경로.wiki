@@ -3,7 +3,10 @@ title: 최단경로의 부분경로 — A sub-path of a shortest path is also a 
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-s→t 최단경로 위의 정점 x 를 잡으면, 그 경로의 '''s→x 부분도 s→x 최단경로'''다. L11 p.10 의 "Warm-up". [[Dijkstra 정확성 증명]] Claim 2, [[Bellman-Ford 정확성 증명]] 의 inductive step, 그리고 L12 [[dynamic programming]] 의 [[optimal substructure]] 가 모두 이 성질 위에 서 있다.
+s→t 최단경로 위에서 정점 x 를 하나 잡으면, 그 경로의 '''s→x 부분도 s→x 최단경로'''다. L11 p.10 에서 "Warm-up" 으로 나오는 성질이다. 짧아 보이지만 뒤에서 여러 번 쓰인다.
+* [[Dijkstra 정확성 증명]] 의 Claim 2
+* [[Bellman-Ford 정확성 증명]] 의 inductive step
+* L12 [[dynamic programming]] 의 [[optimal substructure]]
 
 {def}
 "A sub-path of a shortest path is also a shortest path." (L11 p.10)
@@ -19,18 +22,18 @@ P = s→t 최단경로, x ∈ P.  Claim: P[s..x] 는 s→x 최단경로.
 3. cost(Q) + cost(P[x..t]) < cost(P[s..x]) + cost(P[x..t]) = cost(P)
 4. P 보다 짧은 s→t 경로 → P 가 최단이라는 데 모순.   ("an even shorter path from s to t!") ∎
 </pre>
-p.9 의 질문 "R1→Park 최단경로는?" → Gates–R1–E3–Park 의 부분 R1–E3–Park (cost 5).
+p.9 의 질문은 "R1→Park 최단경로는?" 이었다. Gates–R1–E3–Park 가 최단경로이니, 그 부분인 R1–E3–Park (cost 5) 가 답이다.
 
 {exam}
-교수(10/27): 초록 경로로 갈아 끼우면 보라 경로보다 짧아져 "'''that contradicts'''". 10/29 에 "one property of the shortest path" 로 다시 강조. Claim 2 의 $d(s,z) \le d(s,u)$ 와 $d[z] + w(z,z') = d(s,z')$ 가 이 성질이다.
+교수(10/27): 초록 경로로 갈아 끼우면 보라 경로가 분홍보다 짧아지니 "'''that contradicts'''" 라고 설명했다. 10/29 에도 "one property of the shortest path" 라며 다시 강조했다. Claim 2 에 나오는 $d(s,z) \le d(s,u)$ 와 $d[z] + w(z,z') = d(s,z')$ 가 바로 이 성질을 쓴 것이다.
 {/exam}
 
 {analogy}
-'''서울→부산 최단 경로가 대전을 지난다면, 그 경로의 서울→대전 구간도 서울→대전 최단이다.''' 더 빠른 서울→대전 길이 있다면 그 길로 대전까지 가서 나머지를 그대로 달리면 서울→부산이 더 빨라지니까.
+'''서울→부산 최단 경로가 대전을 지난다면, 그 경로의 서울→대전 구간도 서울→대전 최단 경로다.''' 만약 더 빠른 서울→대전 길이 있다면, 그 길로 대전까지 간 다음 나머지를 그대로 달리면 된다. 그러면 서울→부산이 더 빨라지니까 처음 경로가 최단이라는 말과 맞지 않는다.
 {/analogy}
 
 {info}
-Q 와 P[x..t] 를 이으면 정점이 겹쳐 cycle 이 생길 수 있지만, [[negative cycle]] 이 없으면 cycle 을 잘라내도 cost 가 늘지 않으므로 결론은 같다.
+Q 와 P[x..t] 를 이으면 정점이 겹쳐서 cycle 이 생길 수 있다. 그래도 [[negative cycle]] 이 없으면 그 cycle 을 잘라내도 cost 가 늘지 않으니, 결론은 그대로다.
 {/info}
 
 == 관련 문서 ==

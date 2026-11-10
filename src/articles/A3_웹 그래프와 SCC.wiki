@@ -3,7 +3,9 @@ title: 웹 그래프와 SCC — Why do we care about SCCs?
 category: 10강 Graph II, 용어
 ---
 == 개요 ==
-L10 p.7–8 의 동기 슬라이드. 웹 페이지를 정점, 하이퍼링크를 directed edge 로 보면 인터넷은 거대한 [[directed graph]] 다. 서로 링크를 따라 오갈 수 있는 페이지 묶음이 [[strongly connected component]] 이고, 거대한 그래프를 다룰 때 '''먼저 SCC 로 나누어''' 구조를 파악한다. 이 그림이 그대로 L10 예제 그래프(p.13–48)가 된다.
+L10 p.7–8 은 SCC 를 왜 배우는지 보여 주는 동기 슬라이드다. 웹 페이지를 정점으로, 하이퍼링크를 directed edge 로 보면 인터넷은 거대한 [[directed graph]] 가 된다. 이 그래프에서 링크를 따라 서로 오갈 수 있는 페이지 묶음이 [[strongly connected component]] 다.
+
+그래프가 이렇게 크면 한꺼번에 다루기 어렵다. 그래서 먼저 SCC 로 나눠서 구조를 파악한다. 이 슬라이드의 그림은 그대로 L10 의 예제 그래프(p.13–48)로 쓰인다.
 
 {def}
 L10 p.7 "Why do we care about SCCs? Consider the internet: … Let's ignore this corner of the internet for now… but everything today works fine if the graph is disconnected."
@@ -12,11 +14,11 @@ L10 p.7 "Why do we care about SCCs? Consider the internet: … Let's ignore this
 [[img:L10-07.png|L10 p.7 — dgist.ac.kr, wikipedia.org, youtube.com, kaist.ac.kr, Google image search "puppies", Google terms. 왼쪽 아래 naver.com ⇄ line.me 구석은 나머지와 끊겨 있다|large]]
 
 == 그림 읽기 ==
-* {dgist, wikipedia, youtube}: 서로 링크로 오갈 수 있는 핵심 덩어리.
-* {puppies, Google terms}: 서로 링크. 많은 페이지가 puppies 로 들어오지만 puppies 에서 나가서 돌아오지 못한다.
+* {dgist, wikipedia, youtube}: 서로 링크로 오갈 수 있는 큰 덩어리다.
+* {puppies, Google terms}: 둘이 서로 링크한다. 많은 페이지가 puppies 로 들어오지만, puppies 에서 나가서 원래 페이지로 돌아오는 길은 없다.
 * {kaist}: 다른 곳으로 링크만 걸고, kaist 로 들어오는 링크는 없다.
-* {naver, line}: 따로 떨어진 구석. "works fine if the graph is disconnected" — [[DFS]] 가 재시작하므로 끊긴 그래프도 문제없다. p.8 은 이 구석을 지운 그림.
-교수(10/27): 웹 그림(p.8)의 SCC 는 '''3개'''.
+* {naver, line}: 나머지와 끊긴 구석이다. 슬라이드는 "works fine if the graph is disconnected" 라고 적었다. [[DFS]] 는 방문하지 않은 정점에서 다시 시작하니까 끊긴 그래프여도 문제가 없다. p.8 은 이 구석을 지운 그림이다.
+교수(10/27)는 웹 그림(p.8)의 SCC 가 '''3개'''라고 했다.
 
 == 어디에 쓰나 (교수 10/27) ==
 {|
@@ -28,10 +30,10 @@ L10 p.7 "Why do we care about SCCs? Consider the internet: … Let's ignore this
 |-
 | advertisement || 관심사 그룹(SCC)에 맞춰 광고
 |}
-"아주 큰 그래프에서는 먼저 SCC 를 찾고, 그다음 routing·connectivity 문제를 푼다 → 그래서 '''빠른'''($O(n+m)$) 알고리즘이 필요하다."
+교수 설명을 옮기면 이렇다. 아주 큰 그래프에서는 먼저 SCC 를 찾고, 그다음에 routing 이나 connectivity 문제를 푼다. SCC 찾기가 매번 맨 앞에 붙는 단계라서 '''빠른'''($O(n+m)$) 알고리즘이 필요하다.
 
 {analogy}
-'''쇼핑몰 층별 안내도.''' 거대한 쇼핑몰에서 길을 찾기 전에 "에스컬레이터로 서로 오갈 수 있는 구역" 끼리 먼저 묶어 두면, 구역 사이는 일방통행 통로 몇 개만 보면 된다. 웹 그래프에서 SCC 를 먼저 찾는 것이 바로 그 구역 나누기다.
+'''쇼핑몰 층별 안내도.''' 거대한 쇼핑몰에서 길을 찾기 전에, 에스컬레이터로 서로 오갈 수 있는 구역끼리 먼저 묶어 둔다. 그러면 구역 사이는 일방통행 통로 몇 개만 보면 된다. 웹 그래프에서 SCC 를 먼저 찾는 것이 이 구역 나누기에 해당한다.
 {/analogy}
 
 == 관련 문서 ==

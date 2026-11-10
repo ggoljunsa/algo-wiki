@@ -3,14 +3,14 @@ title: D^(k)[u,v] — 중간 정점이 {1..k} 안인 u→v 최단 비용
 category: 12강 DP I, 용어
 ---
 == 개요 ==
-$D^{(k)}[u,v]$ 는 [[Floyd-Warshall]] 의 '''부분문제'''다. 정점에 1…n 번호를 붙였을 때, u 에서 v 로 가는 경로 중 '''중간 정점(internal vertices, 양 끝 u·v 제외)이 모두 {1, …, k} 안에 있는''' 경로들의 최단 비용. k 가 0 이면 직행 간선만, k 가 n 이면 제한이 없으니 진짜 최단거리다.
+$D^{(k)}[u,v]$ 는 [[Floyd-Warshall]] 의 '''부분문제'''다. 정점에 1…n 번호를 붙였다고 하자. u 에서 v 로 가는 경로 가운데 '''중간에 거치는 정점이 모두 {1, …, k} 안에 있는''' 경로만 따져서, 그중 최단 비용을 적은 것이 $D^{(k)}[u,v]$ 다. 중간 정점(internal vertices)은 양 끝 u, v 를 뺀 정점을 말한다. k 가 0 이면 거쳐 갈 수 있는 정점이 없으니 직행 간선만 남는다. k 가 n 이면 아무 제한이 없으니 진짜 최단거리가 된다.
 
 {def}
 L12 p.44 "Sub-problem(k-1): For all pairs, u,v, find the cost of the shortest path from u to v, so that all the internal vertices on that path are in {1,…,k-1}. Let $D^{(k-1)}[u,v]$ be the solution to Sub-problem(k-1)."
 L12 p.46 "$D^{(k)}[u,v]$ is the cost of the shortest path from u to v so that all internal vertices on that path are in {1, …, k}."
 {/def}
 {warn}
-k 는 '''간선 수가 아니다.''' [[Bellman-Ford]] 의 $d^{(i)}[v]$([[d^(i) 배열]])는 "간선 ≤ i 개", $D^{(k)}[u,v]$ 는 "경유 정점 번호 ≤ k". 위첨자 모양이 비슷해서 섞기 쉽다.
+k 는 '''간선 수가 아니다.''' [[Bellman-Ford]] 의 $d^{(i)}[v]$([[d^(i) 배열]])는 "간선을 i 개까지 쓴다" 는 뜻이다. $D^{(k)}[u,v]$ 는 "번호가 k 이하인 정점만 거쳐 간다" 는 뜻이다. 위첨자 모양이 비슷해서 섞기 쉬우니 주의한다.
 {/warn}
 
 [[img:L12-45.png|L12 p.47 — 안쪽 타원 = {1..k−1}, 바깥 타원 = {1..k}. Case 1: k 가 필요 없으면 D(k)[u,v] = D(k−1)[u,v]|large]]
@@ -38,7 +38,7 @@ $$D^{(k)}[u,v] = \min\{\ D^{(k-1)}[u,v],\ D^{(k-1)}[u,k] + D^{(k-1)}[k,v]\ \}$$
 [[anim:floyd_k_layers|k 를 하나씩 허용할 때 어떤 칸이 Case 2 로 바뀌는지]]
 
 {analogy}
-'''"k 번 이하 버스 정류장만 경유 가능" 표.''' $D^{(3)}[u,v]$ 는 "1·2·3 번 정류장에서만 갈아탈 수 있을 때 u→v 최단 시간". 4번 정류장이 추가 개방되면, 4번 경유가 이득인 쌍만 값이 내려간다.
+'''"k 번 이하 정류장에서만 갈아탈 수 있는" 버스 시간표.''' $D^{(3)}[u,v]$ 는 1·2·3 번 정류장에서만 갈아탈 수 있을 때 u 에서 v 까지 가는 최단 시간이다. 여기에 4번 정류장에서도 갈아탈 수 있게 되면, 4번을 거치는 편이 더 빠른 쌍만 값이 내려간다.
 {/analogy}
 
 == 관련 문서 ==

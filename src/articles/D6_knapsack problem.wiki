@@ -3,7 +3,7 @@ title: knapsack problem (배낭 문제)
 category: 13강 DP II, 용어
 ---
 == 개요 ==
-n 개의 item 에 무게 $w_i$ 와 가치 $v_i$ 가 있고 배낭 용량이 W 일 때, 무게 합이 W 를 넘지 않게 골라 가치 합을 최대로 하는 문제다(L13 p.36–38). item 을 몇 개 쓸 수 있는지에 따라 두 버전이 있다.
+item 이 n 개 있고, 각각 무게 $w_i$ 와 가치 $v_i$ 가 있다. 배낭 용량은 W 다. 무게 합이 W 를 넘지 않게 골라서 가치 합을 최대로 만드는 문제다(L13 p.36–38). item 하나를 몇 개까지 쓸 수 있는지에 따라 두 버전으로 나뉜다.
 
 {def}
 L13 p.37 "Unbounded Knapsack: Suppose I have infinite copies of all of the items. What's the most valuable way to fill the knapsack?"
@@ -20,8 +20,8 @@ L13 p.37 "Unbounded Knapsack: Suppose I have infinite copies of all of the items
 |-
 | value || 20 || 8 || 14 || 13 || 35
 |}
-* [[unbounded knapsack]]: 타코 2 + 전구 2, 무게 10, 가치 42.
-* [[0/1 knapsack]]: 전구 + 수박 + 타코, 무게 9, 가치 35.
+* [[unbounded knapsack]]: 타코 2개와 전구 2개를 넣는다. 무게는 10, 가치는 42 다.
+* [[0/1 knapsack]]: 전구, 수박, 타코를 하나씩 넣는다. 무게는 9, 가치는 35 다.
 
 == 두 버전 비교 ==
 {|
@@ -35,14 +35,14 @@ L13 p.37 "Unbounded Knapsack: Suppose I have infinite copies of all of the items
 |-
 | 수행 시간 || $O(nW)$ || $O(nW)$
 |}
-둘 다 $O(nW)$ 는 [[pseudo-polynomial]] 이다. 다항 시간 알고리즘이 있는지는 open problem 이다(p.46).
+두 버전 모두 $O(nW)$ 인데, 이 시간은 [[pseudo-polynomial]] 이다. knapsack 을 진짜 다항 시간에 푸는 알고리즘이 있는지는 open problem 이다(p.46).
 
 {analogy}
-여행 가방 싸기다. 가방 무게 제한이 있고, 물건마다 무게와 쓸모가 다르다. 편의점에서 사는 물건이면 같은 것을 여러 개 넣을 수 있고(unbounded), 집에 있는 물건이면 하나씩밖에 없다(0/1).
+여행 가방 싸기를 떠올리면 된다. 가방에는 무게 제한이 있고, 물건마다 무게와 쓸모가 다르다. 편의점에서 사 가는 물건이라면 같은 것을 여러 개 넣을 수 있다(unbounded). 집에 있는 물건이라면 하나씩밖에 없다(0/1).
 {/analogy}
 
 {info}
-가치/무게 비율이 큰 것부터 넣는 greedy 는 0/1 knapsack 에서 틀린다. L14 [[greedy가 실패하는 knapsack]] 참고.
+가치/무게 비율이 큰 것부터 넣는 greedy 는 0/1 knapsack 에서 틀린 답을 낸다. 자세한 것은 L14 의 [[greedy가 실패하는 knapsack]] 에 있다.
 {/info}
 
 == 관련 문서 ==

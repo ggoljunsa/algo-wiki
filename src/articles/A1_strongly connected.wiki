@@ -3,7 +3,9 @@ title: strongly connected — 모든 두 정점이 서로 오갈 수 있는 dire
 category: 10강 Graph II, 용어
 ---
 == 개요 ==
-[[directed graph]] 가 '''strongly connected''' 라는 것은 어떤 두 정점을 골라도 '''양쪽 방향 모두''' path 가 있다는 뜻이다. 한 방향만 갈 수 있으면 안 된다. 그래프 전체가 strongly connected 가 아니면, 그래프를 strongly connected 한 최대 조각들로 나눈다 → [[strongly connected component]].
+[[directed graph]] 가 '''strongly connected''' 라는 것은 어떤 두 정점을 골라도 양쪽 방향으로 path 가 있다는 뜻이다. v 에서 w 로 갈 수 있고, w 에서 v 로도 돌아올 수 있어야 한다. 한 방향으로만 갈 수 있으면 strongly connected 가 아니다.
+
+그래프 전체가 strongly connected 가 아닌 경우가 더 흔하다. 그럴 때는 그래프를 strongly connected 한 최대 조각들로 나눠서 본다. 이 조각이 [[strongly connected component]] 다.
 
 {def}
 L10 p.5 "A directed graph G = (V,E) is strongly connected if: for all v,w in V: there is a path from v to w and there is a path from w to v."
@@ -13,9 +15,9 @@ L10 p.5 "A directed graph G = (V,E) is strongly connected if: for all v,w in V: 
 [[img:L10-05.png|L10 p.5 — 왼쪽 strongly connected, 오른쪽 not strongly connected (왼쪽 그림에서 간선 하나가 빠져 맨 왼쪽 정점으로는 들어갈 수 없다)|medium]]
 
 == 이름에서 개념 끌어내기 ==
-* '''connected''' (undirected): 아무 방향으로든 이어져 있으면 된다 → [[connected component]].
-* '''strongly''' connected (directed): 방향을 지키면서 '''가고 또 돌아올''' 수 있어야 한다. 그래서 "strongly".
-* path 는 간선 여러 개를 거쳐도 되고, 가는 길과 오는 길이 같은 간선을 쓸 필요도 없다(교수 10/27). 직접 간선이 없어도 된다.
+* '''connected''' (undirected): 방향이 없으니 이어져 있기만 하면 된다. → [[connected component]].
+* '''strongly''' connected (directed): 간선 방향을 지키면서 갔다가 다시 돌아올 수 있어야 한다. 조건이 더 강해서 "strongly" 라고 부른다.
+* path 는 간선 여러 개를 거쳐도 된다. 가는 길과 오는 길이 같은 간선을 쓸 필요도 없다(교수 10/27). 그러니 두 정점 사이에 직접 간선이 없어도 된다.
 
 == 확인하는 법 ==
 <pre class="txt">
@@ -23,14 +25,14 @@ p.5 오른쪽 그림: 맨 왼쪽 정점 s 는 s → (가운데) 간선 하나뿐
   가운데 ⇝ s ?  들어오는 간선이 없으니 불가능 → not strongly connected
 p.5 왼쪽 그림: 같은 자리에 간선이 양방향 → 어디서든 어디로든 → strongly connected
 </pre>
-빠른 판정: 임의의 정점 $s$ 에서 [[DFS]] 로 모두 도달 + 간선을 뒤집은 [[G^T]] 에서 $s$ 로부터 모두 도달 → strongly connected. DFS 두 번 = [[O(n+m)]].
+빨리 판정하려면 정점 하나만 기준으로 삼으면 된다. 임의의 정점 $s$ 에서 [[DFS]] 를 돌려 모든 정점에 도달하는지 본다. 그다음 간선을 뒤집은 [[G^T]] 에서도 $s$ 로부터 모든 정점에 도달하는지 본다. 둘 다 되면 모든 정점이 $s$ 를 거쳐 서로 오갈 수 있으니 strongly connected 다. DFS 를 두 번 돌리므로 [[O(n+m)]] 이다.
 
 {analogy}
-'''일방통행 골목 동네.''' 동네 어느 집에서 출발해도 일방통행 표지판을 지키며 다른 모든 집에 갔다가 '''다시 돌아올 수 있으면''' strongly connected 다. 막다른 골목 하나가 있어 거기 들어가면 못 나온다면, 그 동네는 strongly connected 가 아니다.
+'''일방통행 골목 동네.''' 동네 어느 집에서 출발해도 일방통행 표지판을 지키며 다른 모든 집에 갔다가 다시 돌아올 수 있으면 strongly connected 다. 들어가면 못 나오는 막다른 골목이 하나라도 있으면, 그 동네는 strongly connected 가 아니다.
 {/analogy}
 
 {warn}
-undirected 의 "connected" 와 헷갈리지 말 것. 한 방향 path 만 있는 경우는 strongly connected 가 아니다(CLRS 용어로는 weakly connected).
+undirected 의 "connected" 와 헷갈리지 말 것. 한 방향 path 만 있는 경우는 strongly connected 가 아니다. CLRS 는 이런 경우를 weakly connected 라고 부른다.
 {/warn}
 
 == 관련 문서 ==

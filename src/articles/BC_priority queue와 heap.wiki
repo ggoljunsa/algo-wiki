@@ -3,7 +3,11 @@ title: priority queue 와 heap — findMin · removeMin · updateKey 를 지원�
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-[[Dijkstra]] 가 필요로 하는 자료구조(L11 p.55)는 not-sure 정점들을 $d[v]$ 를 key 로 저장하고, 최소를 찾고(findMin), 꺼내고(removeMin), key 를 줄이는(updateKey) 것이다. 이런 추상 자료형을 '''priority queue''' 라 부르고, 대표 구현이 heap 이다. 슬라이드: "Not covered in this class – see CLRS! But! We will use them."
+[[Dijkstra]] 에는 not-sure 정점들을 $d[v]$ 를 key 로 담아 두는 자료구조가 필요하다(L11 p.55). 이 자료구조가 해 줘야 하는 일은 세 가지다.
+* 가장 작은 key 찾기 (findMin)
+* 가장 작은 원소 꺼내기 (removeMin)
+* key 줄이기 (updateKey)
+이런 일을 하는 추상 자료형을 '''priority queue''' 라고 부르고, 가장 흔한 구현이 heap 이다. 슬라이드는 heap 의 내부를 수업에서 다루지 않는다고 하면서도 쓰기는 쓴다고 적었다. 원문은 "Not covered in this class – see CLRS! But! We will use them." 이다.
 
 {def}
 "A heap is a tree-based data structure that has the property that every node has a smaller key than its children." (L11 p.59)
@@ -28,13 +32,13 @@ category: 11강 Shortest Path, 용어
 |-
 | [[Fibonacci heap]] || $O(1)$* || $O(\log n)$* || $O(1)$* || $O(n\log n+m)$
 |}
-binary heap 줄은 슬라이드 밖(p.60 "Nice chart on Wikipedia" 의 내용). * = amortized.
+binary heap 줄은 슬라이드에 없는 내용이다. p.60 이 "Nice chart on Wikipedia" 라며 가리킨 표에서 가져왔다. * 는 amortized 라는 표시다.
 
 {analogy}
-'''응급실 트리아지.''' 들어온 순서가 아니라 '''가장 급한 환자(key 최소)'''부터 진료한다(removeMin). 상태가 악화되면 우선순위를 올린다(updateKey). 접수대가 이 일을 빨리 할수록 병원(Dijkstra)이 빨리 돈다.
+'''응급실 트리아지.''' 응급실은 들어온 순서가 아니라 '''가장 급한 환자(key 최소)'''부터 진료한다(removeMin). 환자 상태가 나빠지면 우선순위를 올린다(updateKey). 접수대가 이 일을 빨리 할수록 병원(Dijkstra) 전체가 빨리 돌아간다.
 {/analogy}
 {info}
-L8 의 [[binary search tree]] 와 heap 은 다르다: BST 는 "왼쪽 < 부모 < 오른쪽"(정렬 순회 가능), heap 은 "부모 < 자식"만(최소만 빨리 찾음).
+heap 은 L8 의 [[binary search tree]] 와 다르다. BST 는 "왼쪽 < 부모 < 오른쪽" 을 지키니까 정렬된 순서로 순회할 수 있다. heap 은 "부모 < 자식" 만 지킨다. 그래서 정렬 순회는 안 되고, 대신 최소를 빨리 찾는 데만 쓴다.
 {/info}
 
 == 관련 문서 ==

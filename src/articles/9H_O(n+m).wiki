@@ -3,10 +3,10 @@ title: O(n+m) — DFS·BFS 의 선형 시간, "n plus m, not n times m"
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-[[DFS]] 와 [[BFS]] 는 [[adjacency list]] 위에서 그래프 전체를 $O(n+m)$ 에 탐색한다([[n과 m (그래프)|n = 정점 수, m = 간선 수]]). 그래프를 한 번 읽는 데만도 $n + m$ 이 드니 '''선형 시간'''이고 더 빠를 수 없다. [[topological sort]], [[bipartite graph]] 판정, [[connected component]] 찾기도 같은 $O(n+m)$. 교수가 수업에서 직접 함정으로 낸 개념이다.
+[[DFS]] 와 [[BFS]] 는 [[adjacency list]] 위에서 그래프 전체를 $O(n+m)$ 에 탐색한다([[n과 m (그래프)|n = 정점 수, m = 간선 수]]). 그래프를 한 번 읽는 데만도 $n + m$ 이 드니, 이것은 '''선형 시간'''이고 더 빠를 수는 없다. [[topological sort]], [[bipartite graph]] 판정, [[connected component]] 찾기도 모두 같은 $O(n+m)$ 이다. 교수가 수업에서 직접 함정 문제로 낸 개념이기도 하다.
 
 {def}
-교수(10/20) 핵심 문장: "'''Every node is visited at most once, and each edge will be scanned at most twice''' (undirected) … so it becomes n plus m, '''not n times m'''."
+교수(10/20)의 설명: "'''Every node is visited at most once, and each edge will be scanned at most twice''' (undirected) … so it becomes n plus m, '''not n times m'''."
 L9 p.51 "Explore the connected components one-by-one. This takes time O(n + m)." p.67 "Runtime: O(|V|+|E|)". p.88 BFS: "Same argument as DFS".
 {/def}
 
@@ -19,7 +19,7 @@ L9 p.51 "Explore the connected components one-by-one. This takes time O(n + m)."
 4. 바깥 루프 (모든 정점의 unvisited 확인) O(n)
    → 총 O(n + m)
 </pre>
-핵심은 3번의 [[degree]] 합 $\sum_v \deg(v) = 2m$ — 간선 하나는 양 끝 정점의 리스트에서 한 번씩, 최대 두 번 스캔된다.
+여기서 중요한 줄은 3번의 [[degree]] 합 $\sum_v \deg(v) = 2m$ 이다. 간선 하나는 양 끝 정점의 리스트에서 한 번씩, 최대 두 번 스캔되기 때문이다.
 
 [[img:L9-50.png|L9 p.51 — 간선 많은 그래프는 O(m), 점만 n 개(m = 0)인 그래프도 O(n) → 합쳐서 O(n + m)|medium]]
 
@@ -33,20 +33,20 @@ L9 p.51 "Explore the connected components one-by-one. This takes time O(n + m)."
 |}
 
 {analogy}
-'''건물 점검.''' 방이 n 개, 복도가 m 개인 건물을 점검한다. 방마다 한 번 들어가 문 개수를 세고(n), 복도마다 양쪽 끝에서 한 번씩 확인한다(2m). "방마다 건물 전체 복도를 다시 훑는" 사람만 $n \times m$ 이 걸린다.
+'''건물 점검.''' 방이 n 개, 복도가 m 개인 건물을 점검한다. 방마다 한 번 들어가 문 개수를 세니 n 이 들고, 복도는 양쪽 끝에서 한 번씩 확인하니 2m 이 든다. $n \times m$ 이 걸리는 건 방마다 건물 전체 복도를 다시 훑는 사람뿐이다.
 {/analogy}
 
 {warn}
-'''$O(nm)$ 은 오답.''' 수업에서 학생이 "DFS 한 번 $O(m)$, 그걸 모든 노드에서 반복하니 $O(n \cdot m)$" 이라고 답했다가 교수가 바로잡았다. 이미 방문한 정점에서는 DFS 를 다시 시작하지 않으므로 반복 n 번이 각각 $O(m)$ 이 아니다. 또 '''adjacency matrix''' 면 정점마다 행 n 칸을 훑어 $O(n^2)$ — $O(n+m)$ 은 list 전제.
+'''$O(nm)$ 은 오답이다.''' 수업에서 학생이 "DFS 한 번 $O(m)$, 그걸 모든 노드에서 반복하니 $O(n \cdot m)$" 이라고 답했다가 교수가 바로잡았다. 이미 방문한 정점에서는 DFS 를 다시 시작하지 않으니, n 번의 반복이 각각 $O(m)$ 씩 걸리는 게 아니다. 또 '''adjacency matrix''' 를 쓰면 정점마다 행 n 칸을 훑어야 해서 $O(n^2)$ 이다. $O(n+m)$ 은 list 를 전제로 한 값이다.
 {/warn}
 {warn}
-비슷한 함정: [[topological sort]] 에서 Python list `insert(0, u)` 로 앞에 넣으면 매번 $O(n)$ 이라 총 $O(n^2)$. append 후 한 번 reverse 해야 $O(n+m)$.
+비슷한 함정이 [[topological sort]] 에도 있다. Python list 에 `insert(0, u)` 로 앞에 넣으면 매번 $O(n)$ 이라 총 $O(n^2)$ 이 된다. append 한 뒤 마지막에 한 번 reverse 해야 $O(n+m)$ 이 나온다.
 {/warn}
 {quiz}
 connected undirected 그래프에서 u–v 최단 경로를 BFS 로 구하는 시간을 $O(m)$ 이라고 써도 되는 이유는? (L9 p.95)
 {/quiz}
 {answer}
-connected 면 $m \ge n-1$ 이라 $n = O(m)$ → $O(n+m) = O(m)$. 연결이 보장되지 않으면 $O(n+m)$ 으로 써야 한다.
+connected 면 $m \ge n-1$ 이라 $n = O(m)$ 이다. 그래서 $O(n+m) = O(m)$ 으로 써도 된다. 연결이 보장되지 않으면 $O(n+m)$ 으로 써야 한다.
 {/answer}
 
 == 관련 문서 ==

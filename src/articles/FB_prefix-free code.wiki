@@ -7,12 +7,12 @@ L14 p.62 Try 2: prefix-free coding. Every letter is assigned a binary string. Mo
 어떤 글자의 코드도 다른 글자 코드의 앞부분이 아닌 코드다.
 {/def}
 {info}
-p.62 "Confusingly, prefix-free codes are also sometimes called prefix codes (including in CLRS)." 같은 뜻이다.
+p.62 "Confusingly, prefix-free codes are also sometimes called prefix codes (including in CLRS)." 두 이름은 같은 뜻이다.
 {/info}
 [[img:L14-65.png|L14 p.65 — A=01 B=101 C=110 D=00 E=111 F=100. 10010101 → FBA|large]]
 
 == 왜 필요한가 ==
-p.61 Try 1 은 A=0, B=00, C=01, D=1, E=10, F=11 이다. A 의 코드 0 이 B 의 코드 00 의 앞부분이다. 그래서 000 을 AAA, BA, AB 중 무엇으로 읽을지 정할 수 없다. prefix-free 이면 왼쪽부터 읽다가 코드 하나가 완성되는 순간 바로 끊으면 된다.
+p.61 Try 1 은 A=0, B=00, C=01, D=1, E=10, F=11 이다. A 의 코드 0 이 B 의 코드 00 의 앞부분이다. 그래서 000 을 AAA, BA, AB 중 무엇으로 읽을지 정할 수 없다. prefix-free 이면 이런 문제가 없다. 왼쪽부터 읽다가 코드 하나가 완성되는 순간 바로 끊으면 된다.
 <pre class="txt">
 p.65 코드로 10010101 해독:
   1 → 없음, 10 → 없음, 100 → F
@@ -23,7 +23,7 @@ p.65 코드로 10010101 해독:
 
 == 코드 = 트리 (p.66) ==
 [[img:L14-66.png|L14 p.66 — 왼쪽 간선 0, 오른쪽 간선 1. 글자가 모두 leaf 이면 prefix-free|large]]
-루트에서 leaf 까지 내려가며 간선의 0/1 을 적으면 그 leaf 글자의 코드가 된다. 글자가 모두 leaf 에 있으면, 한 글자의 경로가 다른 글자의 경로 중간에서 끝날 수 없다. 그래서 prefix-free 다. 코드 길이 = leaf 의 깊이다. 좋은 트리의 기준은 [[코드 트리의 cost]] 이다.
+루트에서 leaf 까지 내려가며 간선의 0/1 을 적으면 그 leaf 글자의 코드가 된다. 글자가 모두 leaf 에 있으면, 한 글자의 경로가 다른 글자의 경로 중간에서 끝날 수 없다. 그래서 prefix-free 가 된다. 이때 코드 길이는 leaf 의 깊이와 같다. 어떤 트리가 더 좋은지는 [[코드 트리의 cost]] 로 잰다.
 
 {analogy}
 전화번호부에 119 와 1190 이 같이 있으면 119 를 누르는 순간 바로 연결돼 1190 에 걸 수 없다. 어느 번호도 다른 번호의 앞부분이 아니어야 누르는 대로 바로 연결된다.
@@ -33,7 +33,7 @@ p.65 코드로 10010101 해독:
 코드 {A=0, B=10, C=110, D=111} 은 prefix-free 인가? 1101000111 을 해독하라.
 {/quiz}
 {answer}
-prefix-free 다(어느 코드도 다른 코드의 앞부분이 아님). 110|10|0|0|111 → C B A A D.
+prefix-free 다. 어느 코드도 다른 코드의 앞부분이 아니다. 끊어 읽으면 110|10|0|0|111 → C B A A D 다.
 {/answer}
 
 == 관련 문서 ==

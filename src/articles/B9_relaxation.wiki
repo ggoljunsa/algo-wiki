@@ -3,7 +3,7 @@ title: relaxation — d[v] ← min(d[v], d[u] + w(u,v)), 두 알고리즘의 공
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-'''relaxation''' 은 간선 $(u,v)$ 하나를 보고, u 를 거쳐 v 로 가면 지금 아는 값보다 싸지는지 확인해서 $d[v]$ 를 줄이는 한 줄이다. 슬라이드는 이 이름 없이 식만 쓴다("update"). relaxation 은 [[CLRS]] 24장 용어다. [[Dijkstra]] 와 [[Bellman-Ford]] 는 이 식이 같고, 어느 u 에서 relax 하느냐만 다르다.
+'''relaxation''' 은 간선 $(u,v)$ 하나를 보고 $d[v]$ 를 줄일 수 있는지 확인하는 한 줄짜리 연산이다. u 를 거쳐서 v 로 가는 편이 지금 알고 있는 값보다 싸면, $d[v]$ 를 그 값으로 바꾼다. 슬라이드에는 relaxation 이라는 이름이 나오지 않고 "update" 라는 말과 식만 나온다. relaxation 은 [[CLRS]] 24장에서 쓰는 용어다. [[Dijkstra]] 와 [[Bellman-Ford]] 는 이 식을 똑같이 쓴다. 두 알고리즘은 어느 u 에서 relax 하느냐만 다르다.
 [[img:L11-41.png|L11 p.41 — d[v] ← min( d[v] , d[u] + edgeWeight(u,v) ): 첫째 항은 전에 알던 경로, 둘째 항은 u 까지의 최단경로 + 간선 u→v|medium]]
 
 {def}
@@ -30,7 +30,7 @@ relax(u, v):
 |}
 
 {analogy}
-'''고무줄 풀기.''' $d[v]$ 를 s 에서 v 까지 팽팽하게 당긴 고무줄 길이라고 하면, u 를 거치는 더 짧은 길을 발견할 때마다 고무줄이 느슨해지며(relax) 짧아진다. 절대 길어지지는 않는다.
+'''고무줄 풀기.''' $d[v]$ 를 s 에서 v 까지 팽팽하게 당긴 고무줄의 길이라고 생각해 보자. u 를 거쳐 가는 더 짧은 길을 찾을 때마다 고무줄이 느슨해지면서(relax) 짧아진다. 반대로 길어지는 일은 없다.
 {/analogy}
 {exam}
 교수(10/29): "'''Bellman-Ford's update rule is the same; the only difference is which vertex we pick.'''" p.69 는 "the most important slide in today's lecture".

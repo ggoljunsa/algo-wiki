@@ -3,10 +3,12 @@ title: Kosaraju 알고리즘 — L10 SCC 알고리즘의 고전 이름
 category: 10강 Graph II, 용어
 ---
 == 개요 ==
-L10 의 [[SCC 알고리즘]] (DFS($G$) → [[G^T]] → finish 내림차순으로 DFS($G^T$))은 교과서와 인터넷에서 '''Kosaraju 알고리즘'''(Kosaraju–Sharir)이라고 부른다. CLRS 에서는 STRONGLY-CONNECTED-COMPONENTS 절차(22.5)다. 슬라이드에는 이 이름이 나오지 않는다. 검색하거나 CLRS 를 찾아볼 때 쓰는 이름이다.
+L10 의 [[SCC 알고리즘]] 은 DFS($G$) 를 돌리고, [[G^T]] 를 만든 뒤, finish 내림차순으로 DFS($G^T$) 를 돌리는 방법이다. 교과서와 인터넷에서는 이 알고리즘을 '''Kosaraju 알고리즘'''(Kosaraju–Sharir)이라고 부른다. CLRS 에서는 22.5 절의 STRONGLY-CONNECTED-COMPONENTS 절차다.
+
+슬라이드에는 이 이름이 나오지 않는다. 검색하거나 CLRS 를 찾아볼 때 알아 두면 편한 이름이다.
 
 {info}
-'''슬라이드 밖 용어.''' 시험 답안에는 슬라이드 표현("run DFS, reverse all the edges, run DFS again in decreasing finish time order")으로 쓰는 것이 안전하다.
+'''슬라이드 밖 용어.''' 시험 답안에는 이 이름보다 슬라이드 표현으로 쓰는 것이 안전하다. 슬라이드 표현은 "run DFS, reverse all the edges, run DFS again in decreasing finish time order" 다.
 {/info}
 
 {def}
@@ -29,7 +31,7 @@ CLRS STRONGLY-CONNECTED-COMPONENTS(G):
 |}
 
 {analogy}
-'''같은 요리, 다른 메뉴판 이름.''' 수업에서는 "DFS 두 번 SCC" 라고 부르고 식당(교과서·인터넷)에서는 "Kosaraju" 라고 부른다. 재료(DFS, 간선 뒤집기, finish 순서)와 맛(O(n+m))은 똑같다.
+'''같은 요리, 다른 메뉴판 이름.''' 수업에서는 "DFS 두 번 SCC" 라고 부르고, 다른 식당(교과서·인터넷)에서는 "Kosaraju" 라고 부른다. 이름만 다를 뿐 재료(DFS, 간선 뒤집기, finish 순서)와 맛(O(n+m))은 똑같다.
 {/analogy}
 
 == 관련 문서 ==

@@ -3,7 +3,7 @@ title: longest common subsequence (LCS, 최장 공통 부분 수열)
 category: 13강 DP II, 용어
 ---
 == 개요 ==
-두 문자열 X, Y 에 공통으로 들어 있는 [[subsequence와 prefix|subsequence]] 중 가장 긴 것이다. L13 의 첫 DP 예제(p.5–34)이고 [[CLRS]] 15.4 에 있다. 길이 m, n 인 두 문자열에 대해 $O(mn)$ 에 길이를 구하고, 표를 거꾸로 따라가 실제 LCS 를 $O(m+n)$ 에 복원한다.
+두 문자열 X, Y 에 공통으로 들어 있는 [[subsequence와 prefix|subsequence]] 가운데 가장 긴 것을 말한다. L13 의 첫 DP 예제(p.5–34)이고, [[CLRS]] 15.4 에도 나온다. 길이가 m, n 인 두 문자열이 있으면 LCS 의 길이는 $O(mn)$ 에 구한다. 그다음 표를 거꾸로 따라가면 실제 LCS 를 $O(m+n)$ 에 꺼낼 수 있다.
 
 {def}
 L13 p.8 "If X and Y are sequences, a common subsequence is a sequence which is a subsequence of both." "A longest common subsequence is a common subsequence that is longest."
@@ -23,12 +23,12 @@ Step 4  C[m,n] 에서 거꾸로: 대각선 이동 = LCS 글자 → O(m+n)
 </pre>
 * 점화식 자세히: [[C(i,j) (LCS)]]
 * 복원 자세히: [[LCS 역추적]]
-* 예제 X = ACGGA, Y = ACTG: 길이 3, LCS = ACG.
+* 예제 X = ACGGA, Y = ACTG 에서는 길이가 3 이고 LCS 는 ACG 다.
 [[sim:lcs_table]]
 
 == 응용 (p.9) ==
 * bioinformatics: 두 DNA 서열이 얼마나 비슷한지(p.6–7).
-* unix `diff`: 두 파일에서 바뀌지 않은 줄 = LCS, 나머지가 추가/삭제.
+* unix `diff`: 두 파일에서 바뀌지 않은 줄들이 LCS 이고, 나머지 줄이 추가/삭제된 줄이다.
 * version control(svn, git)의 merge.
 
 {analogy}
@@ -36,7 +36,7 @@ Step 4  C[m,n] 에서 거꾸로: 대각선 이동 = LCS 글자 → O(m+n)
 {/analogy}
 
 {warn}
-subsequence 는 연속일 필요가 없다. 연속이어야 하는 longest common substring 과 헷갈리지 않는다. 길이 $O(mn)$ 보다 다항식만큼 빠른 알고리즘은 open problem 이다(p.33).
+subsequence 는 연속일 필요가 없다. 글자가 연속이어야 하는 longest common substring 과는 다른 문제니까 헷갈리지 않도록 한다. 그리고 $O(mn)$ 보다 다항식만큼 빠른 알고리즘이 있는지는 아직 open problem 이다(p.33).
 {/warn}
 
 == 관련 문서 ==

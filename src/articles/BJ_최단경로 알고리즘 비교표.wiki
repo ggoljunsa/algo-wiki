@@ -3,7 +3,7 @@ title: 최단경로 알고리즘 비교표 — BFS · Dijkstra · Bellman-Ford (
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-L11 p.88 "Recap: shortest paths" 를 표로 확장한 것. 교수(10/29): "'''It is very important to understand both algorithms and the differences between them'''" — 다음 강의 DP(Bellman-Ford)·greedy(Dijkstra)의 출발점.
+L11 p.88 의 "Recap: shortest paths" 를 표로 넓혀 정리한 문서다. 교수(10/29)는 "'''It is very important to understand both algorithms and the differences between them'''" 이라고 했다. 다음 강의에서 Bellman-Ford 는 DP 로, Dijkstra 는 greedy 로 다시 나오기 때문이다.
 
 [[img:L11-87.png|L11 p.88 — Recap: BFS (+)O(n+m) (−)only unweighted / Dijkstra (+)weighted (+)O(nlog(n)+m) (−)no negative (−)very centralized / Bellman-Ford (+)negative weights (+)distributed (−)O(nm)|large]]
 {|
@@ -29,10 +29,17 @@ L11 p.88 "Recap: shortest paths" 를 표로 확장한 것. 교수(10/29): "'''It
 |}
 
 {analogy}
-'''세 가지 길찾기.''' BFS = "몇 정거장?"만 세는 노선도, Dijkstra = 관제탑이 가장 가까운 곳부터 확정하는 내비, Bellman-Ford = 동네 반장들이 매일 이웃과 표를 교환하는 소문망.
+'''세 가지 길찾기.'''
+* BFS 는 "몇 정거장인가" 만 세는 노선도다.
+* Dijkstra 는 관제탑이 가장 가까운 곳부터 하나씩 확정하는 내비게이션이다.
+* Bellman-Ford 는 동네 반장들이 매일 이웃과 거리표를 주고받는 소문망이다.
 {/analogy}
 {warn}
-시간 복잡도 짝 맞추기 함정: $O(n+m)$ = BFS/DFS, $O(n\log n + m)$ = Dijkstra(Fib heap), $O(nm)$ = Bellman-Ford. "Dijkstra 는 $O(nm)$", "Bellman-Ford 는 $O(n+m)$" 은 오답.
+시간 복잡도 짝 맞추기에서 자주 틀린다. 짝은 다음과 같다.
+* $O(n+m)$: BFS/DFS
+* $O(n\log n + m)$: Dijkstra (Fib heap)
+* $O(nm)$: Bellman-Ford
+그래서 "Dijkstra 는 $O(nm)$", "Bellman-Ford 는 $O(n+m)$" 은 오답이다.
 {/warn}
 
 == 관련 문서 ==

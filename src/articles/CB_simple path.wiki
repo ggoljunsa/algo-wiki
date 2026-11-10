@@ -3,7 +3,9 @@ title: simple path (단순 경로)
 category: 12강 DP I, 용어
 ---
 == 개요 ==
-'''simple path''' 는 cycle 이 없는(같은 정점을 두 번 지나지 않는) 경로다. L12 p.49 Aside 에서 두 가지 사실을 준다. ① [[negative cycle]] 이 없으면 항상 simple 한 최단경로가 있다. ② n 개 정점 그래프의 simple path 는 간선이 최대 n−1 개다. ①은 [[Floyd-Warshall]] Case 2(k 를 정확히 한 번 지남)의 근거이고, ②는 [[Bellman-Ford]] 가 n−1 라운드로 충분한 이유다.
+'''simple path''' 는 cycle 이 없는 경로, 즉 같은 정점을 두 번 지나지 않는 경로다. L12 p.49 의 Aside 는 simple path 에 대해 두 가지 사실을 알려 준다.
+# [[negative cycle]] 이 없으면 최단경로 중에 항상 simple 한 것이 있다. 그래서 [[Floyd-Warshall]] Case 2 에서 경로가 k 를 정확히 한 번만 지난다고 둘 수 있다.
+# 정점이 n 개인 그래프에서 simple path 의 간선은 많아야 n−1 개다. 그래서 [[Bellman-Ford]] 는 n−1 라운드만 돌면 충분하다.
 
 {def}
 L12 p.49 "'Simple' means that the path has no cycles in it."
@@ -33,7 +35,7 @@ simple path 는 정점을 최대 n 개 지나므로 간선 ≤ n-1 개
 |}
 
 {analogy}
-'''같은 동네를 두 번 들르는 길 안내.''' 내비가 "A 동 → B 동 → 다시 A 동 → 목적지" 로 안내한다면, 그 고리를 도는 데 비용이 0 이상이니 그냥 고리를 빼고 "A 동 → 목적지" 로 가는 게 같거나 빠르다. 고리를 돌수록 이득인 경우(negative cycle)만 예외 — 그땐 최단경로 자체가 없다.
+'''같은 동네를 두 번 들르는 길 안내.''' 내비가 "A 동 → B 동 → 다시 A 동 → 목적지" 로 안내했다고 하자. A 동에서 출발해 다시 A 동으로 돌아오는 고리는 비용이 0 이상이다. 그러니 고리를 빼고 "A 동 → 목적지" 로 바로 가는 편이 같거나 더 빠르다. 예외는 고리를 돌수록 이득이 되는 경우, 즉 negative cycle 이 있을 때다. 이때는 돌면 돌수록 짧아지니 최단경로라는 것 자체가 없다.
 {/analogy}
 
 == 관련 문서 ==

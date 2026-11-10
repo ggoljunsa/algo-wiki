@@ -3,7 +3,7 @@ title: longest simple path — DP 가 안 되는 최적화 문제
 category: 12강 DP I, 용어
 ---
 == 개요 ==
-'''longest simple path''' 는 s 에서 t 로 가는 [[simple path]] 중 '''가장 긴''' 것을 찾는 문제다(L12 p.58–60, 모든 간선 가중치 1). 최단경로와 모양이 똑같은 최적화 문제인데 [[dynamic programming]] 이 통하지 않는다 — "최장 = 앞 조각 최장 + 뒤 조각 최장" 으로 쪼개면 두 조각이 같은 정점을 써서 합친 경로가 simple 이 아니게 된다. 즉 [[optimal substructure]] 가 없다. 실제로 NP-complete.
+'''longest simple path''' 는 s 에서 t 로 가는 [[simple path]] 중 '''가장 긴''' 것을 찾는 문제다(L12 p.58–60). 간선 가중치는 모두 1 로 둔다. 최단경로와 모양이 똑같은 최적화 문제인데도 [[dynamic programming]] 이 통하지 않는다. 최단경로 때처럼 "최장 = 앞 조각의 최장 + 뒤 조각의 최장" 으로 쪼개 보면 문제가 생긴다. 두 조각이 같은 정점을 쓸 수 있어서, 합친 경로가 simple 이 아니게 되는 것이다. 즉 [[optimal substructure]] 가 없다. 실제로 이 문제는 NP-complete 다.
 
 {def}
 L12 p.59 "Optimal Substructure? Longest path from s to t = longest path from s to a + longest path from a to t? '''NOPE!'''"
@@ -28,15 +28,20 @@ L12 p.60 "Optimal solutions to subproblems don't give us an optimal solution to 
 | 알려진 알고리즘 || 다항 시간 || 다항 시간 알고리즘 모름 (NP-complete)
 |}
 {info}
-최단경로에서는 "정점이 겹치면 그 cycle 을 잘라내면 된다"(cycle 비용 ≥ 0 이니 손해 없음, [[simple path]]). 최장경로에서는 cycle 을 잘라내면 길이가 '''줄어들어''' 최장이 아니게 된다 — 그래서 같은 수법이 안 통한다.
+최단경로에서는 정점이 겹치면 그 사이의 cycle 을 잘라내면 된다. cycle 비용이 0 이상이니 잘라내도 손해가 없기 때문이다([[simple path]]). 최장경로에서는 사정이 반대다. cycle 을 잘라내면 길이가 '''줄어들어서''' 더 이상 최장이 아니다. 그래서 같은 방법을 쓸 수 없다.
 {/info}
 
 {analogy}
-'''조별 과제 분담.''' "가장 많은 장소를 들르는 여행 코스" 를 앞 반·뒤 반으로 나눠 두 사람에게 각자 최장 코스를 짜 오라 하면, 둘 다 경치 좋은 b 마을을 넣어 온다. 합치면 b 를 두 번 들르니 규칙 위반. 한 사람이 b 를 쓰면 다른 사람은 b 를 못 쓴다는 '''의존성''' 때문에 각자의 최선이 합쳐서 최선이 되지 않는다.
+'''조별 과제 분담.''' "가장 많은 장소를 들르는 여행 코스" 를 짜는데, 앞 반과 뒤 반을 두 사람에게 나눠 맡겼다고 하자. 각자 가장 긴 코스를 짜 오라고 하면, 둘 다 경치 좋은 b 마을을 넣어 올 수 있다. 그러면 합친 코스는 b 를 두 번 들르니 규칙에 어긋난다. 한 사람이 b 를 쓰면 다른 사람은 b 를 쓸 수 없다는 '''의존성'''이 있는 것이다. 그래서 각자의 최선을 합쳐도 전체의 최선이 되지 않는다.
 {/analogy}
 
 {exam}
-🎙 11/3 수업에서 "subproblem 이 independent 하지 않다" 로 설명했다. 서술 대비: "longest simple path 에 DP 를 쓸 수 없는 이유" → ① s→a 최장 + a→t 최장으로 쪼개면 ② 두 부분해가 같은 정점(b)을 쓸 수 있어 합친 경로가 simple 이 아님 ③ 부분문제가 독립이 아니라 optimal substructure 가 없음 (NP-complete). T/F: "모든 최적화 문제는 DP 로 다항 시간에 풀 수 있다" → F.
+🎙 11/3 수업에서 교수는 이 문제를 "subproblem 이 independent 하지 않다" 는 말로 설명했다.
+서술 대비로 "longest simple path 에 DP 를 쓸 수 없는 이유" 를 쓰면 이렇다.
+# s→a 최장경로와 a→t 최장경로로 쪼개 본다.
+# 두 부분해가 같은 정점(b)을 쓸 수 있어서, 합친 경로가 simple 이 아니다.
+# 부분문제가 독립이 아니므로 optimal substructure 가 없다(실제로 NP-complete 다).
+T/F 로는 "모든 최적화 문제는 DP 로 다항 시간에 풀 수 있다" → F 가 나올 수 있다.
 {/exam}
 
 == 관련 문서 ==

@@ -3,10 +3,10 @@ title: 트리의 maximal independent set (가중치 최대 independent set, tree
 category: 13강 DP II, 용어
 ---
 == 개요 ==
-정점 가중치가 있는 tree 에서 가중치 합이 최대인 [[independent set]] 을 구하는 DP 다(L13 p.93–108). 각 정점 u 를 루트로 하는 subtree 를 부분문제로 잡고, "u 를 넣는가" 두 경우로 나눈다. 배열 두 개([[A(u)와 B(u)|A, B 배열]])로 top-down 계산하며 $O(|V|)$ 다.
+정점 가중치가 있는 tree 에서 가중치 합이 최대인 [[independent set]] 을 구하는 DP 다(L13 p.93–108). 부분문제는 각 정점 u 를 루트로 하는 subtree 로 잡고, "u 를 집합에 넣는가" 로 두 경우를 나눈다. 계산은 배열 두 개([[A(u)와 B(u)|A, B 배열]])에 값을 적어 가며 top-down 으로 하고, 수행 시간은 $O(|V|)$ 다.
 
 {warn}
-슬라이드는 "maximal independent set" 이라고 쓰지만 뜻은 가중치 합이 '''최대'''인 independent set(maximum-weight independent set)이다. 그래프 이론의 maximal(더 넣을 정점이 없는 집합)과 다르다. p.111 Conclusion 표는 "Maximum Independent Set" 으로 쓴다. 시험 답안에는 maximum-weight 의 뜻으로 쓰되 슬라이드 용어를 그대로 써도 된다.
+슬라이드는 "maximal independent set" 이라고 쓴다. 하지만 뜻은 가중치 합이 '''최대'''인 independent set(maximum-weight independent set)이다. 그래프 이론에서 말하는 maximal(더 넣을 정점이 없는 집합)과는 다르다. p.111 Conclusion 표는 "Maximum Independent Set" 이라고 쓴다. 시험 답안에서는 슬라이드 용어를 그대로 써도 되지만, 뜻은 maximum-weight 로 쓴다.
 {/warn}
 
 {def}
@@ -17,8 +17,8 @@ L13 p.97 "Subtrees are a natural candidate. There are two cases: 1. The root of 
 [[img:L13-95.png|L13 p.95 — 예제 tree. 진한 정점 합 25 가 최적|large]]
 
 == 두 경우 (p.98–99) ==
-* Case 1: 루트 u 가 집합에 없다. 자식 v 들의 subtree 를 각자 최적으로 푼 값($A[v]$)을 더한다.
-* Case 2: 루트 u 가 집합에 있다. 자식은 못 넣는다. 손자들의 subtree 최적값을 더하고 weight(u) 를 더한다.
+* Case 1: 루트 u 가 집합에 없다. 그러면 자식 v 들의 subtree 를 각자 최적으로 푼 값($A[v]$)을 더하면 된다.
+* Case 2: 루트 u 가 집합에 있다. 그러면 자식은 넣을 수 없다. 그래서 손자들의 subtree 최적값을 더하고, 거기에 weight(u) 를 더한다.
 $$A[u] = \max\left\{ \sum_{v \in u.\text{children}} A[v],\ \ \text{weight}(u) + \sum_{v \in u.\text{children}} B[v] \right\}, \quad B[u] = \sum_{v \in u.\text{children}} A[v]$$
 
 == 알고리즘 (p.104) ==
@@ -37,7 +37,7 @@ MIS(T):
   MIS_subtree(T.root)
   return A[T.root]
 </pre>
-정점마다 한 번 방문하고 표 조회만 하므로 $O(|V|)$.
+정점마다 한 번씩만 방문하고, 방문할 때는 표를 조회하기만 한다. 그래서 $O(|V|)$ 다.
 
 == p.95 예제 (가운데 5 를 루트로 잡은 경우) ==
 <pre class="txt">
@@ -50,10 +50,10 @@ MIS(T):
 [[anim:mis_tree_dp|잎에서 루트로 올라가며 A, B 값을 채운다]]
 
 == 표 없이 재귀하면 (p.105–106) ==
-손자 합을 `MIS_subtree` 재호출로 구하면 같은 subtree 를 부모 쪽과 조부모 쪽에서 반복해 부른다. 호출 수가 지수적으로 늘어난다. [[overlapping subproblems]] 를 표로 막는 것이 DP 다.
+손자 합을 표에서 꺼내지 않고 `MIS_subtree` 를 다시 불러서 구하면, 같은 subtree 를 부모 쪽과 조부모 쪽에서 반복해 부르게 된다. 그 결과 호출 수가 지수적으로 늘어난다. 이렇게 겹치는 부분문제([[overlapping subproblems]])를 표에 저장해서 막는 것이 DP 다.
 
 {analogy}
-회사 송년회 초대다. 직속 상사와 부하를 같이 부르면 분위기가 어색하다(간선). 부서장(u)마다 "내가 가면 내 직속 팀장들은 빠지고 그 아래 사원들은 각 팀 사정대로", "내가 안 가면 팀장들 각자 최선" 두 경우만 비교하면 된다.
+회사 송년회 초대를 떠올리면 된다. 직속 상사와 부하를 같이 부르면 분위기가 어색한데, 이것이 간선이다. 부서장(u)마다 두 경우만 비교하면 된다. 내가 가면 내 직속 팀장들은 빠지고, 그 아래 사원들은 각 팀 사정대로 정한다. 내가 안 가면 팀장들이 각자 최선을 고른다.
 {/analogy}
 
 == 관련 문서 ==

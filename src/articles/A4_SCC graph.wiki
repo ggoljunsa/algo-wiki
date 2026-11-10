@@ -3,7 +3,9 @@ title: SCC graph — SCC 하나를 정점 하나로 줄인 그래프
 category: 10강 Graph II, 용어
 ---
 == 개요 ==
-'''SCC graph''' (CLRS 의 component graph $G^{SCC}$)는 각 [[strongly connected component]] 를 정점 하나로 뭉쳐 만든 새 그래프다. SCC $C_i$ 의 어떤 정점에서 $C_j$ 의 어떤 정점으로 가는 원래 간선이 하나라도 있으면 간선 $C_i \to C_j$ 를 둔다. 이 그래프는 항상 [[DAG]] 이고([[SCC graph는 DAG]]), L10 의 정당성 논증은 전부 이 그래프 위에서 한다.
+'''SCC graph''' 는 각 [[strongly connected component]] 를 정점 하나로 뭉쳐서 만든 새 그래프다. CLRS 에서는 component graph $G^{SCC}$ 라고 부른다. 간선은 이렇게 둔다. SCC $C_i$ 의 어떤 정점에서 $C_j$ 의 어떤 정점으로 가는 원래 간선이 하나라도 있으면, 새 그래프에 간선 $C_i \to C_j$ 를 그린다.
+
+이 그래프는 항상 [[DAG]] 다. 이유는 [[SCC graph는 DAG]] 에 있다. cycle 이 없으니 다루기가 쉬워서, L10 의 정당성 논증은 모두 이 그래프 위에서 진행한다.
 
 {def}
 L10 p.50 "The SCC graph — Pretend that each SCC is a vertex in a new graph."
@@ -23,10 +25,12 @@ L10 p.52 "The finishing time of a SCC is the largest finishing time of any eleme
       v          v
    B = {Puppy, Google}  (2 / 5)        ← C → B 간선도 있음
 </pre>
-SCC 의 시각: $C.finish = \max_{v \in C} v.finish$, $C.start = \min_{v \in C} v.start$ — '''1차 DFS 기준'''. 모든 간선이 finish 큰 쪽 → 작은 쪽으로 간다(C 12 → A 10 → B 5). → [[SCC finish time 보조정리]]
+SCC 에도 시각을 붙인다. SCC 의 finish 는 원소들 finish 의 최댓값 $C.finish = \max_{v \in C} v.finish$ 이고, start 는 원소들 start 의 최솟값 $C.start = \min_{v \in C} v.start$ 다. 둘 다 '''1차 DFS 기준'''이다.
+
+이렇게 정하고 예제를 보면, 모든 간선이 finish 가 큰 SCC 에서 작은 SCC 로 간다(C 12 → A 10 → B 5). 이것이 우연이 아니라는 것을 보이는 정리가 [[SCC finish time 보조정리]] 다.
 
 {analogy}
-'''지하철 노선도의 환승역 묶기.''' 한 구역 안에서 자유롭게 오갈 수 있는 역들을 동그라미 하나로 묶고, 구역 사이에는 일방통행 화살표만 그리면 복잡한 노선도가 몇 개의 동그라미와 화살표로 줄어든다. 이렇게 줄인 지도에는 돌아오는 고리가 없다.
+'''지하철 노선도의 환승역 묶기.''' 한 구역 안에서 자유롭게 오갈 수 있는 역들을 동그라미 하나로 묶는다. 구역 사이에는 일방통행 화살표만 그린다. 그러면 복잡한 노선도가 동그라미 몇 개와 화살표 몇 개로 줄어든다. 이렇게 줄인 지도에는 돌아오는 고리가 없다.
 {/analogy}
 
 {warn}

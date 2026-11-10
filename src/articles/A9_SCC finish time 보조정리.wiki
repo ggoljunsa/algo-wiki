@@ -3,7 +3,11 @@ title: SCC finish time 보조정리 (Lemma 2 + Corollary 1) — 간선 A→B 이
 category: 10강 Graph II, 용어
 ---
 == 개요 ==
-L10 의 보조정리(Lemma 2, p.64)다. [[SCC graph]] 에 간선 $A \to B$ 가 있으면 1차 DFS 기준 '''$A.finish > B.finish$''' 다. [[G^T]] 쪽에서 말하면, $G^T$ 에 간선 $B \to A$ 가 있으면 $A.finish > B.finish$ 다. 즉 $G^T$ 의 SCC 간 간선은 항상 finish 가 큰 쪽을 향한다(Corollary 1, p.65). L9 [[topological sort]] 의 "DAG 에서 $u \to v$ 이면 $u.finish > v.finish$" 를 SCC DAG 로 옮긴 것이고, 증명도 같은 두 case 논증이다.
+L10 p.64 의 보조정리(Lemma 2)다. [[SCC graph]] 에 간선 $A \to B$ 가 있으면, 1차 DFS 기준으로 '''$A.finish > B.finish$''' 다. 간선이 나가는 쪽 SCC 가 항상 더 늦게 끝난다는 뜻이다.
+
+같은 내용을 [[G^T]] 쪽에서 보면 Corollary 1(p.65)이 된다. $G^T$ 에 간선 $B \to A$ 가 있으면 $A.finish > B.finish$ 다. 즉 $G^T$ 에서는 SCC 사이 간선이 항상 finish 가 큰 쪽을 향한다.
+
+이 정리는 L9 [[topological sort]] 에서 본 "DAG 에서 $u \to v$ 이면 $u.finish > v.finish$" 와 같은 모양이다. 정점 자리에 SCC 를 넣었을 뿐이라서, 증명도 똑같은 두 case 논증으로 한다.
 
 {def}
 L10 p.64 "Lemma 2: If there is an edge like this: A → B, then A.finish > B.finish."
@@ -34,18 +38,21 @@ L10 p.65 "Corollary 1: If there is an edge like this in the reversed graph: B �
 [[anim:dfs_parenthesis|Case 1 의 도구 — DFS 구간은 중첩 아니면 분리. y 가 z 의 descendant 이므로 y 의 구간이 z 의 구간 안에 들어간다]]
 
 {analogy}
-'''퇴근 시각.''' 상사 A 팀(위층)에서 부하 B 팀(아래층)으로만 내려가는 계단이 있다. 순찰자가 A 팀부터 들르면 계단으로 내려가 B 팀을 다 둘러보고 올라와야 A 팀 순찰이 끝난다 → A 팀이 늦게 끝난다. B 팀부터 들르면 올라가는 계단이 없으니 B 팀만 보고 끝나고, A 팀은 한참 뒤에 따로 들른다 → 역시 A 팀이 늦게 끝난다. '''어느 쪽이든 위층이 늦게 퇴근한다.'''
+'''퇴근 시각.''' 위층 A 팀에서 아래층 B 팀으로 내려가는 계단만 있고, 올라오는 계단은 없다고 하자.
+* 순찰자가 A 팀부터 들르면, 계단으로 내려가 B 팀을 다 둘러보고 올라와야 A 팀 순찰이 끝난다. 그래서 A 팀이 늦게 끝난다.
+* B 팀부터 들르면, 올라가는 계단이 없으니 B 팀만 보고 끝난다. A 팀은 한참 뒤에 따로 들른다. 그래서 이때도 A 팀이 늦게 끝난다.
+어느 쪽이든 위층이 늦게 퇴근한다.
 {/analogy}
 
 {warn}
-'''start 버전은 거짓.''' "$A \to B$ 이면 $A.start < B.start$" 는 Case 2 에서 깨진다(예제: KAIST → {DGIST…} 인데 KAIST.start 11 > 0). 성질은 '''finish''' 에만 있다.
+'''start 버전은 거짓이다.''' "$A \to B$ 이면 $A.start < B.start$" 는 Case 2 에서 깨진다. 예제에서 KAIST → {DGIST…} 간선이 있는데, KAIST.start 는 11 이고 {DGIST…} 의 start 는 0 이다. 이 성질은 '''finish''' 에만 성립한다.
 {/warn}
 {exam}
-교수(10/27): Lemma 2 의 '''두 case — reach A before B / reach B before A'''. p.63 "Notice: this is exactly the same two-case argument that we did earlier, just with the SCC DAG!" → L9 topological sort 증명과 묶어서 외울 것.
+교수(10/27): Lemma 2 의 '''두 case — reach A before B / reach B before A'''. p.63 "Notice: this is exactly the same two-case argument that we did earlier, just with the SCC DAG!" L9 topological sort 증명과 묶어서 외울 것.
 {/exam}
 
 == 예제 확인 ==
-SCC graph: KAIST(12) → {DGIST…}(10) → {Puppy…}(5), KAIST → {Puppy…}. 세 간선 모두 finish 큰 → 작은 ✓. $G^T$ 에서는 세 간선 모두 작은 → 큰 ✓ (p.66 "all blue arrows point towards larger finish times").
+예제의 SCC graph 는 KAIST(12) → {DGIST…}(10) → {Puppy…}(5) 에 KAIST → {Puppy…} 가 더해진 모양이다. 세 간선 모두 finish 가 큰 쪽에서 작은 쪽으로 간다 ✓. $G^T$ 에서는 방향이 뒤집히니 세 간선 모두 작은 쪽에서 큰 쪽으로 간다 ✓. 슬라이드 p.66 표현으로는 "all blue arrows point towards larger finish times" 다.
 
 == 관련 문서 ==
 * [[SCC graph]] · [[SCC graph는 DAG]] · [[parenthesis theorem]] · [[start time과 finish time]] · [[topological sort]] · [[SCC 알고리즘 정확성 증명]] · [[L10 Graph Algorithms II]]

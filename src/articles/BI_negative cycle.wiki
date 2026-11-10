@@ -3,7 +3,7 @@ title: negative cycle — weight 합이 음수인 cycle, 최단경로가 정의�
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-'''negative cycle''' 은 간선 weight 의 합이 0 보다 작은 cycle 이다. s 에서 도달 가능한 negative cycle 이 있으면, 그 cycle 을 한 바퀴 더 돌 때마다 경로 cost 가 줄어든다. 그래서 최단경로가 $-\infty$ 가 된다(L11 p.67 "Shortest Paths aren't well-defined if there are negative cycles!"). [[Bellman-Ford]] 는 한 라운드 더 돌려 이것을 검출한다.
+'''negative cycle''' 은 간선 weight 의 합이 0 보다 작은 cycle 이다. s 에서 갈 수 있는 곳에 negative cycle 이 있으면, 그 cycle 을 한 바퀴 더 돌 때마다 경로 cost 가 줄어든다. 끝없이 줄일 수 있으니 최단경로가 $-\infty$ 가 되어 버린다. 슬라이드 표현으로는 "Shortest Paths aren't well-defined if there are negative cycles!" 다(L11 p.67). [[Bellman-Ford]] 는 한 라운드를 더 돌려서 negative cycle 이 있는지 찾아낸다.
 
 [[img:L11-66.png|L11 p.67 — G—R—H—G 를 계속 돌면 cost 가 끝없이 줄어든다. Shortest Paths aren't well-defined if there are negative cycles!|medium]]
 <pre class="txt">
@@ -28,18 +28,18 @@ If d(n-1) != d(n) :
     Return NEGATIVE CYCLE
 Otherwise, dist(s,v) = d(n-1)[v]
 </pre>
-* 없으면: "The algorithm stabilizes after n−1 rounds" → $d^{(n)} = d^{(n-1)}$.
-* 있으면: "The d[v] values will keep changing." → "'''Go one round more and see if things change.'''"
-* (슬라이드 Park 열은 계산 오타 — E3 = −4 에서 E3→Park 4 를 쓰면 0. 결론은 같다.)
+* negative cycle 이 없으면 n−1 라운드 뒤에 값이 더 바뀌지 않는다. 슬라이드 표현은 "The algorithm stabilizes after n−1 rounds" 이고, 그래서 $d^{(n)} = d^{(n-1)}$ 이다.
+* negative cycle 이 있으면 값이 계속 바뀐다("The d[v] values will keep changing."). 그래서 "'''Go one round more and see if things change.'''" 라고 한다.
+* 슬라이드의 Park 열은 계산 오타다. E3 = −4 에서 E3→Park 4 를 쓰면 0 이 나온다. 결론은 그대로다.
 
 {exam}
 교수(10/29): "Look at Gates — '''the source node becomes negative''' → something turned and came back to the source but shrunk → negative cycle. But there could be a negative cycle not through the source → '''only one more outer iteration''', compare $d^{(n-1)}$ and $d^{(n)}$." "Negative edge weight itself is not a problem; negative cycle makes the shortest path undefined."
 {/exam}
 {analogy}
-'''돈이 생기는 순환 환전.''' 원→달러→엔→원 으로 바꿀 때마다 돈이 늘어난다면(음수 비용 cycle), "가장 싸게 원을 얻는 법"은 정의되지 않는다 — 무한히 돌면 되니까. 은행은 한 바퀴 더 돌려 봐서 돈이 또 늘면 "차익거래 고리"라고 판정한다.
+'''돈이 생기는 순환 환전.''' 원→달러→엔→원 으로 바꿀 때마다 돈이 늘어난다고 해 보자(음수 비용 cycle). 그러면 "가장 싸게 원을 얻는 방법" 은 정할 수가 없다. 계속 돌기만 하면 얼마든지 더 싸지기 때문이다. 은행은 한 바퀴를 더 돌려 보고, 돈이 또 늘면 차익거래 고리가 있다고 판단한다.
 {/analogy}
 {warn}
-"음수 간선이 있으면 최단경로가 정의되지 않는다" → 거짓. 정의되지 않는 것은 '''negative cycle''' 이 있을 때뿐이다. 그리고 검출용 라운드는 n 번째(추가 1번)다.
+"음수 간선이 있으면 최단경로가 정의되지 않는다" 는 거짓이다. 최단경로가 정의되지 않는 것은 '''negative cycle''' 이 있을 때뿐이다. 그리고 negative cycle 을 찾으려고 더 돌리는 라운드는 n 번째, 즉 딱 한 번이다.
 {/warn}
 
 == 관련 문서 ==

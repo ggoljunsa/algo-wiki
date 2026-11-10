@@ -3,7 +3,7 @@ title: top-down 과 memoization (하향식 DP, 메모이제이션)
 category: 12강 DP I, 용어
 ---
 == 개요 ==
-'''top-down''' 은 [[dynamic programming]] 을 재귀로 구현하는 방식이다. 큰 문제에서 시작해 작은 문제로 재귀한다. 한 번 푼 부분문제의 답은 표(memo)에 적어 두고, 다시 만나면 꺼내 쓴다. 이 저장 기법을 '''memo-ization''' 이라 한다(슬라이드 철자). 저장이 없으면 [[divide and conquer]] 식 재귀와 같고, [[overlapping subproblems]] 때문에 지수 시간이 된다.
+'''top-down''' 은 [[dynamic programming]] 을 재귀로 구현하는 방식이다. 큰 문제에서 시작해서 재귀로 작은 문제로 내려간다. 그러다 한 번 푼 부분문제의 답은 표(memo)에 적어 두고, 같은 부분문제를 다시 만나면 풀지 않고 꺼내 쓴다. 이렇게 저장해 두는 기법을 '''memo-ization''' 이라고 한다. 슬라이드는 이 철자로 쓴다. 저장을 빼면 [[divide and conquer]] 식 재귀와 똑같아진다. 그러면 [[overlapping subproblems]] 때문에 같은 계산을 되풀이하게 되고, 지수 시간이 걸린다.
 
 {def}
 L12 p.34 "Think of it like a recursive algorithm. To solve the big problem: Recurse to solve smaller problems. Those recurse to solve smaller problems, etc.. The difference from divide and conquer: '''Memo-ization''' — Keep track of what small problems you've already solved to prevent re-solving the same problem twice."
@@ -38,11 +38,13 @@ def Fibonacci(n):
 |}
 
 {analogy}
-'''시험 공부 중 모르는 단어 찾기.''' 지문을 읽다 모르는 단어가 나오면 그때 사전을 찾고(재귀), 단어장에 적는다(memo). 같은 단어가 다시 나오면 사전 대신 단어장을 본다. 반면 bottom-up 은 시험 전에 단어장 1쪽부터 끝까지 다 외우고 들어가는 방식.
+'''시험 공부 중 모르는 단어 찾기.''' 지문을 읽다가 모르는 단어가 나오면 그때 사전을 찾고(재귀), 단어장에 적어 둔다(memo). 같은 단어가 다시 나오면 사전을 펴지 않고 단어장을 본다. 이것이 top-down 이다. 반면 bottom-up 은 시험 전에 단어장을 1쪽부터 끝까지 다 외우고 들어가는 방식이다.
 {/analogy}
 
 {exam}
-🎙 11/3 교수: top-down 은 모양이 divide and conquer 와 같고 다른 점은 memoization 하나다. 빈칸: `if F[n] != ____:` → `None`. 그리고 "top-down 과 divide and conquer 의 차이" → memo-ization (p.34 문장 그대로).
+🎙 11/3 교수는 top-down 이 모양은 divide and conquer 와 같고, memoization 하나만 다르다고 했다.
+* 빈칸 문제: `if F[n] != ____:` → `None`.
+* "top-down 과 divide and conquer 의 차이는?" → memo-ization 이다. p.34 문장을 그대로 쓰면 된다.
 {/exam}
 
 == 관련 문서 ==

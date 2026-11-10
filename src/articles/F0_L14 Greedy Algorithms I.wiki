@@ -4,22 +4,25 @@ category: 14강 Greedy I, 메인
 ---
 == 개요 ==
 {info}
-슬라이드 기준으로 작성했다. 녹음은 아직 없다. 녹음이 들어오면 🎙 내용을 반영한다. `{exam}` 에서 "(예상)" 이 붙은 것은 교수 강조가 아니라 추론이다.
+이 문서는 슬라이드만 보고 썼다. 아직 수업 녹음이 없어서, 녹음이 들어오면 🎙 내용을 더할 예정이다. `{exam}` 박스에 "(예상)" 이 붙은 항목은 교수가 강조한 것이 아니라 슬라이드를 보고 짐작한 것이다.
 {/info}
-L14 는 [[greedy algorithm]] 을 다룬다. 선택을 하나씩 하고, 되돌아보지 않는 알고리즘이다. 슬라이드는 먼저 greedy 가 틀리는 예([[greedy가 실패하는 knapsack|unbounded knapsack]])를 보이고, greedy 가 맞는 예 세 개를 차례로 다룬다. [[activity selection]], [[job scheduling]], [[Huffman coding]] 이다.
+L14 의 주제는 [[greedy algorithm]] 이다. greedy 는 선택을 하나씩 하면서, 한 번 고른 것은 다시 돌아보지 않는 알고리즘이다. 슬라이드는 먼저 greedy 가 틀리는 예([[greedy가 실패하는 knapsack|unbounded knapsack]])를 보여 준다. 그다음 greedy 로 정답이 나오는 문제 세 개를 차례로 푼다.
+* [[activity selection]]
+* [[job scheduling]]
+* [[Huffman coding]]
 
-세 예제 모두 같은 틀로 정확성을 증명한다. "매 선택이 최적해를 배제하지 않는다(never rule out an optimal solution)" 를 [[귀납법 4요소]] 로 쓰는 방식이다. 이 틀은 [[greedy 증명 전략]] 문서에 따로 정리했다.
+세 문제의 정확성 증명은 모두 같은 틀을 쓴다. 매번 고른 것이 최적해를 배제하지 않는다는 것을 보이고, 이것을 [[귀납법 4요소]] 로 묶는다. 슬라이드 표현으로는 "never rule out an optimal solution" 이다. 이 틀은 [[greedy 증명 전략]] 문서에 따로 정리했다.
 
-[[두 가지 질문]] 으로 보면 다음과 같다.
-* ① Does it work? 세 예제 모두 "선택 하나가 최적해를 배제하지 않는다" 를 보조정리로 보이고, 귀납법으로 묶는다.
-* ② Is it fast? 정렬이 지배한다. activity selection 과 job scheduling 은 $O(n \log n)$ 이다. activity selection 은 이미 finish time 순이면 $O(n)$ 이다.
+[[두 가지 질문]] 에 답해 보면 다음과 같다.
+* ① Does it work? 세 문제 모두 "선택 하나가 최적해를 배제하지 않는다" 를 먼저 보조정리로 보인다. 그다음 그 보조정리를 귀납법으로 이어 붙인다.
+* ② Is it fast? 시간은 대부분 정렬에 든다. 그래서 activity selection 과 job scheduling 은 $O(n \log n)$ 이다. activity selection 은 활동이 이미 finish time 순으로 놓여 있으면 정렬할 필요가 없어서 $O(n)$ 이다.
 
 * 교재: [[CLRS]] 16장 (p.38 "See CLRS 16 (p416)", p.84 "CLRS, Lemma 16.3").
 * 페이지 번호는 슬라이드에 인쇄된 번호이고, L14 는 숨김 슬라이드가 없어서 PNG 번호와 같다.
 * 순서: greedy 정의(p.4) → greedy 가 실패하는 knapsack(p.6–7) → activity selection(p.8–19) → 세 질문(p.20–21) → 정확성 증명(p.22–37) → sub-problem graph(p.38–43) → job scheduling(p.45–55) → Huffman coding(p.56–95) → Recap(p.96–98).
 
 {analogy}
-뷔페에서 접시 하나로 먹는 상황을 생각한다. 매번 지금 보이는 것 중 가장 좋아 보이는 것을 담고, 담은 것은 다시 내려놓지 않는다. 이 방식이 늘 최선은 아니다. 어떤 문제에서는 "지금 가장 좋아 보이는 것" 을 담아도 손해가 없다는 것을 증명할 수 있다. L14 는 그런 문제 세 개와 그 증명 방법을 배운다.
+뷔페에서 접시 하나로 먹는 상황을 생각한다. 매번 지금 보이는 것 중 가장 좋아 보이는 것을 담고, 담은 것은 다시 내려놓지 않는다. 이 방식이 늘 최선은 아니다. 그래도 어떤 문제에서는 지금 가장 좋아 보이는 것을 담아도 손해가 없다는 것을 증명할 수 있다. L14 에서는 그런 문제 세 개와, 그 증명을 쓰는 방법을 배운다.
 {/analogy}
 
 == p.4 — Greedy algorithms 란 ==
@@ -28,13 +31,13 @@ L14 는 [[greedy algorithm]] 을 다룬다. 선택을 하나씩 하고, 되돌�
 p.4 "Make choices one-at-a-time. Never look back. Hope for the best." Advantages: simple to design, often efficient. Disadvantages: difficult to verify correctness or optimality.
 선택을 한 번에 하나씩 한다. 한 번 한 선택은 되돌리지 않는다. 그 결과가 전체 최적이기를 기대한다.
 {/def}
-장점은 설계가 쉽고 대개 빠르다는 것이다. 단점은 맞는지 증명하기 어렵다는 것이다. L14 의 증명 부분이 길어지는 이유가 이 단점이다.
+greedy 는 설계하기 쉽고 대개 빠르다. 대신 정말 맞는지 증명하기가 어렵다. L14 에서 증명 부분이 길어지는 것도 이 때문이다.
 
-p.19 는 activity selection 을 예로 "무엇이 greedy 한가" 를 다시 설명한다. 매 단계에서 활동 집합을 하나 늘리면서, 앞으로의 선택을 위한 공간을 많이 남기는 쪽을 고른다. 그리고 그 국소적 선택이 전체 최적해가 되기를 기대한다.
+p.19 는 activity selection 을 예로 들어 무엇이 greedy 한지 다시 설명한다. 매 단계에서 고른 활동을 하나씩 늘려 가는데, 이때 앞으로 고를 활동을 위해 시간이 많이 남는 쪽을 고른다. 이렇게 그 순간에 좋아 보이는 선택을 이어 가면서, 그 결과가 전체로도 최적이기를 기대하는 것이다.
 
 == p.6–7 — greedy 가 실패하는 예: unbounded knapsack ==
 [[img:L14-07.png|L14 p.7 — Unbounded knapsack. 최적은 taco 2 + 전구 2 (무게 10, 가치 42). Value/Weight 비율로 taco 만 담으면 무게 9, 가치 39|large]]
-L13 의 [[unbounded knapsack]] 예제를 그대로 다시 쓴다. 용량은 10 이고, 각 물건을 무한히 쓸 수 있다.
+L13 에서 본 [[unbounded knapsack]] 예제를 그대로 가져온다. 가방 용량은 10 이고, 같은 물건을 몇 개든 담을 수 있다.
 {|
 ! 물건 || 무게 || 가치 || 가치/무게
 |-
@@ -48,7 +51,7 @@ L13 의 [[unbounded knapsack]] 예제를 그대로 다시 쓴다. 용량은 10 �
 |-
 | 소방차 || 11 || 35 || (용량 초과)
 |}
-"가치/무게 비율이 가장 큰 것을 계속 담는다" 는 greedy 를 돌려 본다.
+여기에 "가치/무게 비율이 가장 큰 물건을 계속 담는다" 는 greedy 를 적용해 본다.
 <pre class="txt">
 taco 비율 4.33 이 최대 → taco 담기    무게 3, 가치 13
 taco 한 번 더                         무게 6, 가치 26
@@ -56,7 +59,7 @@ taco 한 번 더                         무게 9, 가치 39
 남은 용량 1 → 아무것도 안 들어감      greedy 결과: 39
 최적(DP, L13): taco 2 + 전구 2        무게 3+3+2+2 = 10, 가치 13+13+8+8 = 42
 </pre>
-greedy 는 39, 최적은 42 다. 비율이 좋은 taco 를 끝까지 담느라 남은 용량 1 을 버렸다. 이 문제는 [[dynamic programming]] 으로 풀어야 한다. 자세한 것은 [[greedy가 실패하는 knapsack]].
+greedy 는 39 를 얻고, 최적은 42 다. 비율이 좋은 taco 만 계속 담다 보니 마지막에 남은 용량 1 을 쓰지 못했다. 그래서 이 문제는 greedy 로는 안 되고 [[dynamic programming]] 으로 풀어야 한다. 자세한 계산은 [[greedy가 실패하는 knapsack]] 에 있다.
 
 == p.8–17 — Activity selection 과 greedy 알고리즘 ==
 [[img:L14-08.png|L14 p.8 — 하루 활동들. "You can only do one activity at a time, and you want to maximize the number of activities that you do."|medium]]
@@ -64,9 +67,9 @@ greedy 는 39, 최적은 42 다. 비율이 좋은 taco 를 끝까지 담느라 �
 * 입력: 활동 $a_1, …, a_n$, 시작 시각 $s_1, …, s_n$, 끝 시각 $f_1, …, f_n$.
 * 출력: 동시에 두 개를 할 수 없을 때, 할 수 있는 활동의 최대 개수.
 
-greedy 규칙은 p.10 의 두 줄이다. "Pick activity you can add with the smallest finish time. Repeat." 지금까지 고른 것과 겹치지 않는 활동 중에서 가장 일찍 끝나는 것을 고른다.
+greedy 규칙은 p.10 에 두 줄로 적혀 있다. 슬라이드 표현으로는 "Pick activity you can add with the smallest finish time. Repeat." 이다. 즉 지금까지 고른 활동과 겹치지 않는 것 중에서 가장 일찍 끝나는 것을 고르고, 이것을 반복한다.
 
-슬라이드에는 이 규칙이 문장으로만 있다. 아래는 그 문장을 코드로 옮긴 것이다(finish time 으로 정렬돼 있다고 가정).
+슬라이드에는 이 규칙이 문장으로만 나온다. 아래 코드는 그 문장을 옮긴 것이고, 활동이 finish time 순으로 정렬돼 있다고 가정한다.
 <pre class="c">
 def activity_selection(acts):          # acts 는 (s, f) 쌍, f 오름차순 정렬
     chosen = []
@@ -90,7 +93,7 @@ def activity_selection(acts):          # acts 는 (s, f) 쌍, f 오름차순 정
 === p.10–17 예제 따라가기 ===
 [[img:L14-13.png|L14 p.13 — a2 를 고른 직후. a2 와 겹치는 a1 이 빗금(제외). 다음 후보는 a5|large]]
 [[img:L14-17.png|L14 p.17 — 완성. 고른 것(주황) a2, a5, a3, a7. 빗금(제외) a1, a4, a6|large]]
-슬라이드 그림에는 숫자 시각이 없다. 그림에서 끝점의 순서를 읽으면 $a_2 < a_1 < a_5 < a_4 < a_3 < a_6 < a_7$ 이다.
+슬라이드 그림에는 시각이 숫자로 적혀 있지 않다. 대신 그림에서 끝나는 순서를 읽으면 $a_2 < a_1 < a_5 < a_4 < a_3 < a_6 < a_7$ 이다.
 <pre class="txt">
 1단계: 가장 일찍 끝나는 a2 선택                      선택 {a2}
        a1 은 a2 가 끝나기 전에 시작 → 제외
@@ -105,35 +108,35 @@ def activity_selection(acts):          # acts 는 (s, f) 쌍, f 오름차순 정
 
 === p.18 — 수행 시간 ===
 [[img:L14-18.png|L14 p.18 — At least it's fast: 정렬돼 있으면 O(n), 아니면 O(n log n)|medium]]
-활동을 한 번씩만 본다. 이미 finish time 순이면 $O(n)$ 이다. 정렬부터 해야 하면 $O(n \log n)$ 이다.
+알고리즘은 활동을 앞에서부터 한 번씩만 본다. 그래서 활동이 이미 finish time 순이면 $O(n)$ 이다. 정렬부터 해야 하면 정렬 시간이 더 크니까 $O(n \log n)$ 이 된다.
 {warn}
-기준은 finish time 이다. start time 이 가장 이른 것, 길이가 가장 짧은 것을 고르는 greedy 는 틀린다. 예를 들어 0–10 짜리 활동 하나와 1–2, 3–4 두 활동이 있으면, start time 기준은 0–10 하나만 고른다. 정답은 2개다.
+고르는 기준은 finish time 이어야 한다. start time 이 가장 이른 것이나 길이가 가장 짧은 것을 고르면 틀린다. 예를 들어 0–10 짜리 활동 하나와 1–2, 3–4 두 활동이 있다고 하자. start time 으로 고르면 0–10 을 먼저 집게 되고, 이것이 나머지 둘과 겹쳐서 하나밖에 못 한다. 정답은 2개다.
 {/warn}
 
 == p.20–21 — 세 질문 ==
 [[img:L14-21.png|L14 p.21 — Answers. greedy 가 좋은 때: especially nice optimal substructure. 지금 배우는 이유: DP 와 관련, 증명이 쉽지 않음|medium]]
-p.20 은 질문 세 개를 던지고 p.21(= p.43) 에서 답한다.
+p.20 에서 질문 세 개를 묻고, p.21(= p.43) 에서 답한다.
 # 이 greedy 는 맞는가? 맞다. 증명은 p.22–37.
-# greedy 는 언제 좋은가? 문제에 아주 좋은 [[optimal substructure]] 가 있을 때다. "아주 좋은" 의 뜻은 p.42 에서 나온다. 부분 문제가 하나만 남는다는 뜻이다.
-# greedy 는 가장 먼저 떠오르는 방법인데 왜 지금 배우나? [[dynamic programming]] 과 관련이 있고, greedy 가 맞다는 증명이 쉽지 않기 때문이다.
+# greedy 는 언제 잘 맞는가? 문제에 아주 좋은 [[optimal substructure]] 가 있을 때다. 여기서 "아주 좋다" 는 것은 선택을 하나 하고 나면 부분 문제가 하나만 남는다는 뜻이고, p.42 에서 설명한다.
+# greedy 는 가장 먼저 떠오르는 방법인데 왜 이제야 배우나? [[dynamic programming]] 과 관련이 있기 때문이다. 그리고 greedy 가 맞다는 것을 증명하기가 쉽지 않기 때문이다.
 
 == p.22–37 — Activity selection 정확성 증명 ==
 전체 증명은 [[activity selection 정확성 증명]] 에 있다. 여기서는 흐름만 따라간다.
 
 === p.23–24 — 증명의 방향 ===
 [[img:L14-23.png|L14 p.23 — Why does it work? "Whenever we make a choice, we don't rule out an optimal solution." 다음 선택 a5 를 포함하는 최적해가 있다|large]]
-매 선택이 최적해를 배제하지 않는다는 것을 보이면 충분하다(p.24). 알고리즘이 끝나면 해가 하나 남고, 그 해를 포함하는 최적해가 있으므로 그 해가 최적이다.
+p.24 에 따르면, 매번 고른 것이 최적해를 배제하지 않는다는 것만 보이면 된다. 알고리즘이 끝나면 해가 하나 남는다. 그 해를 포함하는 최적해가 여전히 있다면, 더 넣을 활동이 없으니 그 해가 곧 최적해다.
 
 === p.25–26 — 부분 문제 A[i] 와 Claim ===
 [[img:L14-26.png|L14 p.26 — Claim: a_k 가 a_i 이후 가능한 활동 중 가장 일찍 끝나면 A[i] = A[k] + 1|large]]
-부분 문제 i 는 "활동 $a_i$ 가 끝난 뒤에 할 수 있는 활동만으로 activity selection 을 푸는 것" 이다. $A[i]$ 는 그 최대 개수다([[A(i) (activity selection)]]).
+부분 문제 i 는 활동 $a_i$ 가 끝난 뒤에 할 수 있는 활동만 가지고 activity selection 을 푸는 문제다. $A[i]$ 는 그때 할 수 있는 활동의 최대 개수다([[A(i) (activity selection)]]).
 {def}
 p.26 Claim: Let $a_k$ have the smallest finish time among activities do-able after $a_i$ finishes. Then $A[i] = A[k] + 1$.
 {/def}
 
 === p.27–30 — Claim 의 증명 ===
 [[img:L14-29.png|L14 p.29 — 더 좋은 해에서 a_j 를 빼고 a_k 를 넣는다. 크기는 같은데 a_k 를 포함하므로 A[k]+1 이하 → 모순|large]]
-두 방향의 부등식을 따로 보인다.
+등식을 두 방향의 부등식으로 나눠서 하나씩 보인다.
 <pre class="txt">
 (≥) a_k 하나 + 부분 문제 k 의 최적해(A[k] 개)는 부분 문제 i 의 해다.   → A[i] ≥ A[k] + 1
 (≤) 귀류법. A[i] > A[k] + 1 이라 하자.
@@ -145,11 +148,11 @@ p.26 Claim: Let $a_k$ have the smallest finish time among activities do-able aft
     새 해는 a_k 로 시작하므로 크기 ≤ 1 + A[k].                          → 모순
 결론: A[i] = A[k] + 1
 </pre>
-[[귀류법]] 을 쓴다. 핵심 부등식은 $f_k \le f_j$ 다. 이것 때문에 맞바꿔도 뒤가 깨지지 않는다.
+(≤) 방향은 [[귀류법]] 으로 보인다. 이때 쓰는 부등식은 $f_k \le f_j$ 하나다. $a_k$ 가 $a_j$ 보다 늦게 끝나지 않으니까, $a_j$ 자리에 $a_k$ 를 넣어도 뒤에 오는 활동과 겹치지 않는다.
 
 === p.31 — 최적해를 배제하지 않는다 ===
 [[img:L14-31.png|L14 p.31 — We never rule out an optimal solution: X + A[i] 개 = (X+1) + (A[i]−1) 개|large]]
-$a_i$ 까지 X 개를 골랐고, 그 뒤로 A[i] 개를 더 할 수 있는 최적해가 있다고 하자. 총 X + A[i] 개다. 다음에 $a_k$ 를 고르면 Claim 에 의해 $A[k] = A[i] - 1$ 이다. 이제 X+1 개를 골랐고 A[i]−1 개가 남는다. 총 개수는 X + A[i] 로 그대로이므로 여전히 최적이다.
+$a_i$ 까지 X 개를 골랐고, 그 뒤로 A[i] 개를 더 할 수 있는 최적해가 있다고 하자. 총 X + A[i] 개다. 다음에 $a_k$ 를 고르면 Claim 에 의해 $A[k] = A[i] - 1$ 이다. 이제 X+1 개를 골랐고 A[i]−1 개가 남는다. 총 개수는 X + A[i] 로 그대로다. 그래서 지금까지 고른 것을 포함하는 최적해가 여전히 있다.
 
 === p.33–35 — 귀납법 4요소로 정리 ===
 [[img:L14-33.png|L14 p.33 — So the algorithm is correct: Inductive Hypothesis / Base case / Inductive step (TO DO) / Conclusion|large]]
@@ -161,27 +164,30 @@ $a_i$ 까지 X 개를 골랐고, 그 뒤로 A[i] 개를 더 할 수 있는 최�
 '''Conclusion:'''          마지막 활동을 추가한 뒤에도 현재 해를 확장하는 최적해가 있다.
                     현재 해를 확장하는 해는 현재 해 자신뿐이다 → 현재 해가 최적.
 </pre>
-[[귀납법 4요소]] 와 같은 구조다. 결론 부분의 두 번째 줄이 greedy 증명에서 자주 빠진다.
+[[귀납법 4요소]] 와 같은 구조다. greedy 증명을 쓸 때 Conclusion 의 두 번째 줄을 자주 빠뜨리니 주의한다.
 
 === p.36–37 — 공통 전략 ===
 [[img:L14-37.png|L14 p.37 — Common strategy (formally): After greedy choice t, you haven't ruled out success|medium]]
-p.36–37 은 위 증명을 모든 greedy 에 쓸 수 있는 틀로 일반화한다.
+p.36–37 은 위 증명을 다른 greedy 알고리즘에도 쓸 수 있는 틀로 넓힌다.
 * Inductive hypothesis: greedy 선택 t 번 후에도 성공 가능성을 배제하지 않았다.
 * Base case: 아무것도 고르기 전에는 성공이 가능하다.
-* Inductive step: 문제마다 다르다(TODO). 보통 "교환 논증" 보조정리를 쓴다.
+* Inductive step: 문제마다 다르다. 슬라이드에는 TODO 로 비어 있고, 보통 교환 논증 보조정리를 쓴다.
 * Conclusion: 끝까지 와서 성공을 배제하지 않았다면 성공한 것이다.
-이 틀은 job scheduling(p.54), Huffman(p.86) 에서 그대로 다시 나온다. [[greedy 증명 전략]] 참고.
+job scheduling(p.54) 과 Huffman(p.86) 의 증명도 이 틀을 그대로 쓴다. 정리는 [[greedy 증명 전략]] 에 있다.
 {exam}
-(예상) "Inductive step: TO DO" 칸을 채우는 문제. 중간고사의 "증명 4칸" 형식과 같다. 4개 칸을 모두 쓰고, Conclusion 에서 "현재 해를 확장하는 해는 자신뿐 → 최적" 까지 적는다.
+(예상) "Inductive step: TO DO" 칸을 채우는 문제가 나올 수 있다. 중간고사에 나온 "증명 4칸" 형식과 같다. 네 칸을 모두 쓰고, Conclusion 에는 "현재 해를 확장하는 해는 자신뿐 → 최적" 까지 적는다.
 {/exam}
 
 == p.38–43 — sub-problem graph 로 본 D&C, DP, greedy ==
 [[img:L14-39.png|L14 p.39 — Divide-and-conquer: 부분 문제 트리, 겹치지 않는다|medium]]
 [[img:L14-40.png|L14 p.40 — Dynamic Programming: 부분 문제가 여러 부모에게 공유된다(DAG)|medium]]
 [[img:L14-42.png|L14 p.42 — Greedy: 각 문제가 부분 문제 하나에만 의존한다(사슬)|medium]]
-p.38 은 activity selection 을 세 가지로 볼 수 있다고 한다. greedy 로 보면 자연스럽다. [[divide and conquer]] 로 보면 "나누기" 가 없는 D&C 다. [[dynamic programming]] 으로 보면 optimal substructure 를 써서 표를 채우는 것이다(CLRS 16).
+p.38 에 따르면 activity selection 은 세 가지 방식으로 볼 수 있다.
+* greedy 로 보는 것이 가장 자연스럽다.
+* [[divide and conquer]] 로 보면, 문제를 나누는 단계가 없는 D&C 다.
+* [[dynamic programming]] 으로 보면, optimal substructure 를 이용해 표를 채우는 것이다(CLRS 16).
 
-p.39–42 는 부분 문제 사이의 의존을 그래프로 그린다.
+p.39–42 는 어떤 부분 문제가 어떤 부분 문제의 답을 필요로 하는지 그래프로 그린다.
 {|
 ! 방법 || 그래프 모양 || 부분 문제의 관계
 |-
@@ -191,9 +197,9 @@ p.39–42 는 부분 문제 사이의 의존을 그래프로 그린다.
 |-
 | greedy || 사슬 || 부분 문제가 하나만 남는다
 |}
-p.42 의 문장: "Not only there is optimal sub-structure, but each problem depends on only one sub-problem." activity selection 에서 $a_k$ 를 고르면 남는 것은 부분 문제 k 하나다. 그래서 표를 만들 필요가 없다.
+p.42 의 문장은 "Not only there is optimal sub-structure, but each problem depends on only one sub-problem." 이다. activity selection 에서 $a_k$ 를 고르고 나면 남는 것은 부분 문제 k 하나뿐이다. 여러 답을 비교할 일이 없으니 표를 만들 필요도 없다.
 [[anim:subproblem_graph_shapes|D&C 트리, DP DAG, greedy 사슬. 가지 수가 줄어드는 순서로 본다]]
-자세한 비교는 [[sub-problem graph 비교]].
+자세한 비교는 [[sub-problem graph 비교]] 에 있다.
 
 == p.45–55 — Job scheduling ==
 === p.45–46 — 문제 ===
@@ -202,7 +208,7 @@ p.42 의 문장: "Not only there is optimal sub-structure, but each problem depe
 * n 개의 작업이 있다. 작업 i 는 $t_i$ 시간이 걸린다.
 * 모든 작업이 이미 늦었다. 작업 i 가 끝날 때까지 한 시간마다 $c_i$ 를 낸다.
 * 총 비용 $\sum_i c_i \cdot (\text{작업 } i \text{ 의 완료 시각})$ 을 최소로 하는 순서를 찾는다.
-p.46 예제를 계산한다.
+p.46 예제를 직접 계산하면 다음과 같다.
 <pre class="txt">
 HW: t = 10, c = 2      Sleep: t = 8, c = 3
 HW 먼저:    HW 완료 10, Sleep 완료 18 → 10·2 + 18·3 = 20 + 54 = 74
@@ -212,7 +218,7 @@ Sleep 먼저: Sleep 완료 8, HW 완료 18 → 8·3 + 18·2 = 24 + 36 = 60
 
 === p.47–49 — optimal substructure 와 "best" 의 뜻 ===
 [[img:L14-48.png|L14 p.48 — Take the best job first, then solve this problem. 남는 부분 문제가 하나씩 줄어든다|large]]
-최적 순서가 A, B, C, D 라면 B, C, D 부분은 그 세 작업만의 최적 순서다(p.47). 그래서 "가장 좋은 작업을 먼저 하고, 나머지를 같은 방법으로 푼다" 는 greedy 가 가능해 보인다(p.48). p.49 는 "best" 를 "최적해를 배제하지 않는 선택" 으로 정의한다.
+최적 순서가 A, B, C, D 라고 하자. 그러면 뒤의 B, C, D 도 그 세 작업만 놓고 봤을 때 최적 순서다(p.47). 그렇다면 가장 좋은 작업 하나를 먼저 하고, 나머지는 같은 방법으로 풀면 될 것 같다(p.48). 여기서 "best" 가 무슨 뜻인지는 p.49 가 정한다. 최적해를 배제하지 않는 선택이 best 다.
 
 === p.50 — 두 작업 맞바꾸기 (Head-to-head) ===
 [[img:L14-50.png|L14 p.50 — Job A(x 시간, 시간당 z), Job B(y 시간, 시간당 w). A 먼저가 나을 조건 w/y ≤ z/x|large]]
@@ -226,11 +232,11 @@ A then B 가 더 좋다(작거나 같다) ⇔
 ⇔  xw ≤ yz                              ← 양변에서 xz, yw 소거
 ⇔  w/y ≤ z/x                            ← 양변을 xy (> 0) 로 나눔
 </pre>
-$z/x$ 는 A 의 비율, $w/y$ 는 B 의 비율이다. 비율 $\frac{\text{cost of delay}}{\text{time it takes}}$ 가 큰 쪽을 먼저 하면 된다. p.46 예제로 확인하면 HW 는 2/10 = 0.2, Sleep 은 3/8 = 0.375 이므로 Sleep 먼저다. 계산 결과 60 < 74 와 맞는다.
+$z/x$ 는 A 의 비율이고 $w/y$ 는 B 의 비율이다. 즉 비율 $\frac{\text{cost of delay}}{\text{time it takes}}$ 가 큰 쪽을 먼저 하면 된다. p.46 예제에 대 보면 HW 는 2/10 = 0.2, Sleep 은 3/8 = 0.375 다. 그래서 Sleep 을 먼저 하는 것이 맞고, 앞에서 계산한 60 < 74 와도 맞는다.
 [[anim:job_swap|이웃한 두 작업 A, B 를 맞바꾸면 앞뒤 작업의 완료 시각은 그대로고 두 작업의 비용만 바뀐다. w/y ≤ z/x 이면 A 가 앞]]
 이 비율이 [[cost/time 비율]] 이다.
 {warn}
-비용이 큰 것 먼저, 짧은 것 먼저 같은 규칙은 틀린다. 비율 $c_i / t_i$ 로 비교한다. 정렬은 내림차순(큰 비율 먼저)이다.
+비용이 큰 것부터 하거나 짧은 것부터 하는 규칙은 틀린다. 비용과 시간을 같이 봐야 하니까 비율 $c_i / t_i$ 로 비교한다. 정렬 방향은 내림차순, 즉 비율이 큰 것이 먼저다.
 {/warn}
 
 === p.51 — Lemma ===
@@ -238,7 +244,7 @@ $z/x$ 는 A 의 비율, $w/y$ 는 B 의 비율이다. 비율 $\frac{\text{cost o
 {def}
 p.51 Lemma: Given jobs so that Job i takes time $t_i$ with cost $c_i$, there is an optimal schedule so that the first job is the one that maximizes the ratio $c_i/t_i$.
 {/def}
-증명: 비율 최대인 작업 B 가 맨 앞이 아니라고 하자. B 바로 앞 작업을 A 라 하면 $c_A/t_A \le c_B/t_B$ 다. A 와 B 를 바꾼다. 다른 작업들의 완료 시각은 그대로다. p.50 에 의해 비용은 늘지 않는다. B 가 맨 앞에 올 때까지 반복한다. 비용이 한 번도 늘지 않았으므로 결과는 여전히 최적이다.
+증명은 맞바꾸기를 반복하는 방식이다. 비율이 최대인 작업 B 가 맨 앞이 아니라고 하자. B 바로 앞의 작업을 A 라 하면 $c_A/t_A \le c_B/t_B$ 다. 이제 A 와 B 의 자리를 바꾼다. 이웃한 두 작업만 바꿨으니 다른 작업들의 완료 시각은 그대로다. 그리고 p.50 의 계산에 따라 비용은 늘지 않는다. 이것을 B 가 맨 앞에 올 때까지 반복한다. 비용이 한 번도 늘지 않았으니 결과도 여전히 최적이다.
 
 === p.52–53 — 알고리즘 ===
 [[img:L14-53.png|L14 p.53 — scheduleJobs: 비율 r_i = c_i / t_i 로 정렬해 반환. O(n log n)|medium]]
@@ -249,7 +255,7 @@ scheduleJobs( JOBS ):                  # p.53
   Say that sorted_JOBS[i] is the job with the i'th biggest r_i
   Return sorted_JOBS
 </pre>
-수행 시간은 정렬 시간 $O(n \log n)$ 이다.
+정렬 말고는 하는 일이 없으니 수행 시간은 정렬 시간 $O(n \log n)$ 이다.
 
 === p.54 — 귀납법으로 정리 ===
 <pre class="txt">
@@ -259,25 +265,25 @@ scheduleJobs( JOBS ):                  # p.53
                     남은 작업 중 비율 최대가 sorted_JOBS[t] 이므로 Lemma 로 성립.
 '''Conclusion:'''          t = n: 앞의 n 개가 sorted_JOBS 인 최적 순서가 있다. 즉 반환값이 최적.
 </pre>
-p.55 정리: optimal substructure 를 찾고, 최적해를 배제하지 않는 "안전한" 선택(비율 큰 것 먼저)을 찾는다. activity selection 과 같은 흐름이다.
+p.55 는 지금까지의 흐름을 정리한다. 먼저 optimal substructure 를 찾는다. 그다음 최적해를 배제하지 않는 "안전한" 선택을 찾는데, 여기서는 비율이 큰 작업을 먼저 하는 것이다. activity selection 때와 같은 순서다.
 
 == p.56–95 — Huffman coding ==
 === p.56–61 — 왜 ASCII 는 낭비인가 ===
 [[img:L14-60.png|L14 p.60 — Try 0: 모든 글자 3비트. 110, 111 은 안 쓰이고 A 를 더 짧게 쓸 수 있다|medium]]
 [[img:L14-61.png|L14 p.61 — Try 1: 1–2비트. 000 이 AAA 인지 BA 인지 AB 인지 모른다|medium]]
-ASCII 는 모든 글자에 같은 길이(8비트)를 쓴다. e 처럼 자주 나오는 글자가 있으면 낭비다(p.57). 슬라이드는 글자 6개의 빈도를 정해 둔 예제를 쓴다(p.59).
+ASCII 는 모든 글자에 똑같이 8비트를 쓴다. 그런데 e 처럼 유난히 자주 나오는 글자가 있으면, 그 글자를 더 짧게 쓰는 편이 낫다. 그래서 ASCII 는 낭비다(p.57). 슬라이드는 글자 6개와 그 빈도를 정해 두고 예제로 쓴다(p.59).
 {|
 ! 글자 || A || B || C || D || E || F
 |-
 | 빈도(%) || 45 || 13 || 12 || 16 || 9 || 5
 |}
-* Try 0(p.60): 모두 3비트. 기대 길이는 3 이다. 110, 111 이 남는다.
-* Try 1(p.61): A=0, B=00, C=01, D=1, E=10, F=11. 짧지만 000 을 AAA, BA, AB 중 무엇으로 읽어야 할지 모른다.
+* Try 0(p.60): 모든 글자를 3비트로 쓴다. 기대 길이는 3 이다. 그런데 110, 111 은 쓰이지 않고 남는다.
+* Try 1(p.61): A=0, B=00, C=01, D=1, E=10, F=11. 코드는 짧아졌지만, 000 을 받으면 AAA 인지 BA 인지 AB 인지 알 수 없다.
 
 === p.62–66 — prefix-free code 와 트리 ===
 [[img:L14-65.png|L14 p.65 — Try 2: prefix-free. A=01 B=101 C=110 D=00 E=111 F=100. 10010101 = FBA|large]]
 [[img:L14-66.png|L14 p.66 — A prefix-free code is a tree. 글자가 모두 leaf 에 있으면 prefix-free|large]]
-[[prefix-free code]] 는 어떤 코드도 다른 코드의 앞부분(prefix)이 아닌 코드다. 그러면 왼쪽부터 읽으면서 바로 끊을 수 있다.
+[[prefix-free code]] 는 어떤 코드도 다른 코드의 앞부분(prefix)이 아닌 코드다. 이런 코드는 비트열을 왼쪽부터 읽다가 글자 하나가 완성되면 바로 끊어 읽을 수 있다.
 <pre class="txt">
 코드: A=01, B=101, C=110, D=00, E=111, F=100
 10010101 을 왼쪽부터 읽기:
@@ -289,7 +295,7 @@ ASCII 는 모든 글자에 같은 길이(8비트)를 쓴다. e 처럼 자주 나
 {info}
 p.62 "Confusingly, prefix-free codes are also sometimes called prefix codes (including in CLRS)." CLRS 는 같은 것을 prefix code 라 부른다.
 {/info}
-prefix-free code 는 이진 트리로 그릴 수 있다(p.66). 왼쪽 간선이 0, 오른쪽 간선이 1 이다. 글자가 모두 leaf 에 있으면 prefix-free 다. leaf 의 깊이가 코드 길이다.
+p.66 에 따르면 prefix-free code 는 이진 트리로 그릴 수 있다. 왼쪽 간선에 0, 오른쪽 간선에 1 을 붙인다. 글자가 모두 leaf 에 있으면 한 글자로 가는 경로가 다른 글자로 가는 경로 중간에서 끝나지 않으니, prefix-free 가 된다. 이때 leaf 의 깊이가 곧 코드 길이다.
 
 === p.67–68 — 트리의 cost ===
 [[img:L14-67.png|L14 p.67 — Cost = Σ P(x)·depth(x). 이 트리의 기대 길이 2.39|large]]
@@ -303,16 +309,16 @@ cost = 2·(0.45 + 0.16) + 3·(0.05 + 0.13 + 0.12 + 0.09)
      = 1.22 + 1.17
      = 2.39
 </pre>
-p.68 의 문제: 분포 P 가 주어지면 cost 가 가장 작은 트리를 찾는다.
+p.68 은 이제 풀 문제를 정한다. 글자의 분포 P 가 주어졌을 때 cost 가 가장 작은 트리를 찾는 것이다.
 
 === p.69–70 — optimal substructure 와 안전한 선택 ===
 [[img:L14-70.png|L14 p.70 — 아래쪽 부분 트리에 넣기 안전한 것은 빈도가 낮은 글자다. 가능한 한 깊이 둔다|medium]]
-최적 트리의 한쪽 부분 트리는 그 안의 글자들만의 최적 트리다(p.69). 아니라면 그 부분 트리를 바꿔 전체를 더 좋게 만들 수 있다. 빈도가 낮은 글자는 깊이 있어도 cost 에 적게 더해진다. 그래서 빈도가 가장 낮은 글자부터 아래쪽에 묶는다(p.70).
+최적 트리에서 부분 트리 하나를 떼어 보면, 그것은 그 안의 글자들만 놓고 만든 최적 트리다(p.69). 그렇지 않다면 그 부분 트리를 더 좋은 것으로 바꿔서 전체 cost 를 줄일 수 있기 때문이다. 한편 빈도가 낮은 글자는 깊은 곳에 있어도 cost 에 조금만 더해진다. 그래서 빈도가 가장 낮은 글자부터 아래쪽에 묶는다(p.70).
 
 === p.71–76 — 예제로 트리 만들기 ===
 [[img:L14-73.png|L14 p.73 — 세 번째 합치기 직후: 25 = B+C, 30 = D + 14, 14 = E+F|large]]
 [[img:L14-76.png|L14 p.76 — 완성 트리. A=0, B=100, C=101, D=110, E=1110, F=1111. 기대 길이 2.24|large]]
-매번 key(빈도)가 가장 작은 두 개를 합친다.
+매번 key(빈도)가 가장 작은 노드 두 개를 골라 하나로 합친다.
 <pre class="txt">
 시작 CURRENT: A45 B13 C12 D16 E9 F5
 1) 가장 작은 둘 E9, F5   → 14      CURRENT: A45 B13 C12 D16 [14]
@@ -321,7 +327,7 @@ p.68 의 문제: 분포 P 가 주어지면 cost 가 가장 작은 트리를 찾�
 4) 가장 작은 둘 25, 30   → 55      CURRENT: A45 [55]
 5) 가장 작은 둘 A45, 55  → 100     CURRENT: [100]  → 끝 (합치기 n−1 = 5 번)
 </pre>
-p.76 트리에서 코드를 읽는다(왼쪽 0, 오른쪽 1).
+완성된 p.76 트리에서 왼쪽을 0, 오른쪽을 1 로 읽으면 코드가 나온다.
 {|
 ! 글자 || 빈도 || 코드 || 길이 || 빈도 × 길이
 |-
@@ -346,11 +352,11 @@ p.76 식: 1·0.45 + 3·(0.13 + 0.12 + 0.16) + 4·(0.09 + 0.05)
        = 2.24
 검산(내부 노드 key 의 합 / 100): (14 + 25 + 30 + 55 + 100) / 100 = 224 / 100 = 2.24
 </pre>
-검산식이 맞는 이유: 글자 x 는 자기 위의 내부 노드 depth(x) 개에 빈도가 한 번씩 더해진다. 그래서 내부 노드 key 를 모두 더하면 $\sum P(x)\cdot\text{depth}(x)$ 가 된다. Try 2 의 2.39, Try 0 의 3 보다 작다.
+검산식이 맞는 이유는 이렇다. 글자 x 의 빈도는 x 위에 있는 내부 노드 depth(x) 개에 한 번씩 더해져 있다. 그래서 내부 노드의 key 를 모두 더하면 $\sum P(x)\cdot\text{depth}(x)$ 와 같아진다. 결과 2.24 는 Try 2 의 2.39 나 Try 0 의 3 보다 작다.
 [[anim:huffman_merge|가장 작은 두 노드를 골라 합친 노드를 CURRENT 에 다시 넣는 장면. E9+F5 → 14 부터 100 까지]]
 [[sim:huffman_build]]
 {info}
-p.77 코드는 `Z.left = X, Z.right = Y` (X 가 더 작은 쪽)라서 F:5 가 왼쪽(0)이다. p.76 그림은 E:9 를 왼쪽에 그렸다. 0/1 을 어느 쪽에 붙이느냐에 따라 코드 문자열은 달라지지만 각 글자의 길이와 cost 2.24 는 같다. 동점일 때 고르는 순서도 마찬가지다.
+p.77 코드는 `Z.left = X, Z.right = Y` 이고 X 가 더 작은 쪽이다. 그래서 코드대로 하면 F:5 가 왼쪽(0)에 간다. 그런데 p.76 그림은 E:9 를 왼쪽에 그렸다. 이렇게 0/1 을 어느 쪽에 붙이느냐에 따라 코드 문자열은 달라진다. 그래도 각 글자의 코드 길이와 cost 2.24 는 똑같다. 빈도가 같을 때 어느 노드를 먼저 고르느냐도 마찬가지다.
 {/info}
 
 === p.77 — 알고리즘 ===
@@ -376,15 +382,15 @@ return CURRENT[0]
 | Z || X, Y 를 자식으로 하는 새 노드 || key 14
 |}
 {info}
-수행 시간은 슬라이드에 없다. [[CLRS]] 16.3 은 CURRENT 를 min-heap([[priority queue와 heap]])으로 두어 $O(n \log n)$ 이라고 한다. 반복 n−1 번, 매번 extract-min 두 번과 insert 한 번이 $O(\log n)$ 이다.
+슬라이드에는 수행 시간이 나오지 않는다. [[CLRS]] 16.3 은 CURRENT 를 min-heap([[priority queue와 heap]])으로 두면 $O(n \log n)$ 이라고 한다. 반복은 n−1 번이고, 한 번 돌 때마다 extract-min 두 번과 insert 한 번을 하는데 이것이 $O(\log n)$ 이기 때문이다.
 {/info}
 
 === p.78–95 — Huffman 정확성 증명 ===
 [[img:L14-80.png|L14 p.80 — Lemma 1 증명 아이디어: 가장 깊은 형제 노드 자리에 x, y 를 옮겨도 cost 가 늘지 않는다|large]]
 [[img:L14-83.png|L14 p.83 — Lemma 2: 왼쪽이 {A..F} 의 최적 트리 ⇔ 오른쪽이 {A, G:25, H:30} 의 최적 트리|large]]
-전략은 앞과 같다. 매 합치기가 최적 트리를 배제하지 않는다는 것을 보인다. 자세한 것은 [[Huffman 정확성 증명]].
-* Lemma 1(p.78–80): x, y 가 빈도가 가장 낮은 두 글자이면, x 와 y 가 형제인 최적 트리가 있다. 최적 트리의 가장 깊은 형제 쌍에서 x 와 a 를 맞바꾸면 cost 변화는 $(P(a) - P(x))(\text{depth}(x) - \text{depth}(a)) \le 0$ 이다. $P(a) \ge P(x)$, $\text{depth}(a) \ge \text{depth}(x)$ 이기 때문이다.
-* Lemma 2(p.83–84): 이미 만든 부분 트리를 key 를 빈도로 갖는 글자 하나로 봐도 된다. 큰 알파벳의 최적 트리와 줄인 알파벳의 최적 트리가 서로 대응한다. 증명은 CLRS Lemma 16.3.
+증명 전략은 앞의 두 문제와 같다. 이번에는 두 노드를 합칠 때마다 그 합치기가 최적 트리를 배제하지 않는다는 것을 보인다. 자세한 증명은 [[Huffman 정확성 증명]] 에 있다.
+* Lemma 1(p.78–80): x, y 가 빈도가 가장 낮은 두 글자이면, x 와 y 가 형제인 최적 트리가 있다. 증명은 최적 트리의 가장 깊은 형제 쌍에 있는 글자 a 를 x 와 맞바꾸는 것이다. $P(a) \ge P(x)$ 이고 $\text{depth}(a) \ge \text{depth}(x)$ 이니까, cost 변화 $(P(a) - P(x))(\text{depth}(x) - \text{depth}(a))$ 는 0 이하다. 즉 바꿔도 cost 가 늘지 않는다.
+* Lemma 2(p.83–84): 이미 만든 부분 트리는 key 를 빈도로 갖는 글자 하나로 봐도 된다. 원래 알파벳의 최적 트리와, 부분 트리를 글자로 바꿔 줄인 알파벳의 최적 트리가 서로 대응하기 때문이다. 엄밀한 증명은 CLRS Lemma 16.3 에 있다.
 <pre class="txt">
 Lemma 2 를 p.83 예제로 확인:
 줄인 트리 {A45, G25, H30}: A 깊이 1, G·H 깊이 2 → 0.45 + 2·(0.25 + 0.30) = 1.55
@@ -405,35 +411,35 @@ H 안쪽 (D 깊이 1, E·F 깊이 2)                → 0.16 + 2·(0.09 + 0.05) 
 '''Conclusion:'''          마지막 단계 후, 만든 트리 전체를 부분 트리로 갖는 최적 트리가 있다.
                     즉 만든 트리가 최적이다.
 </pre>
-p.95 정리: 글자 분포가 균등하지 않으므로 ASCII 는 최적이 아니다. Huffman coding 이 최적이다. 안전한 선택은 "가장 작은 두 부분 트리를 합치기" 다.
+p.95 는 이렇게 정리한다. 글자 분포가 고르지 않으면 ASCII 는 최적이 아니고, Huffman coding 이 최적이다. 이때 안전한 선택은 "가장 작은 두 부분 트리를 합치기" 다.
 
 == p.96–98 — Recap ==
 [[img:L14-97.png|L14 p.97 — Recap II: greedy 는 쓰기 쉽지만 찾기와 증명이 어렵다. 좋은 후보 = optimal substructure 가 REALLY NICE(부분 문제 하나에만 의존)|medium]]
-* 예제 세 개: Activity Selection, Scheduling Jobs, Huffman Coding(p.96).
-* greedy 는 쓰기는 쉽다. 떠올리기와 정당화가 어렵다.
-* 자연스러워 보이는 greedy 가 틀릴 수 있다(knapsack).
-* greedy 를 쓸 만한 문제: optimal substructure 가 있고, 각 해가 부분 문제 하나에만 의존한다(p.97).
-* 다음 시간(p.98): Minimum Spanning Tree 를 구하는 greedy 알고리즘.
+* p.96 은 예제 세 개를 다시 든다. Activity Selection, Scheduling Jobs, Huffman Coding 이다.
+* greedy 는 코드로 쓰기는 쉽다. 대신 알맞은 규칙을 떠올리고, 그것이 맞다고 증명하기가 어렵다.
+* 그럴듯해 보이는 greedy 도 틀릴 수 있다. knapsack 이 그 예다.
+* greedy 를 쓸 만한 문제는 optimal substructure 가 있고, 각 해가 부분 문제 하나에만 의존하는 문제다(p.97).
+* 다음 시간(p.98)에는 Minimum Spanning Tree 를 구하는 greedy 알고리즘을 배운다.
 
 == 시험 대비 핵심 요약 ==
-# [[greedy algorithm]]: 선택을 하나씩, 되돌아보지 않음(p.4). 장점 설계 쉬움·빠름, 단점 정확성 증명 어려움.
-# unbounded knapsack(용량 10)에서 가치/무게 greedy 는 taco 3개 = 39, 최적은 42(taco 2 + 전구 2). greedy 가 실패하는 예.
-# [[activity selection]]: 가능한 활동 중 finish time 이 가장 작은 것을 고른다. 정렬돼 있으면 $O(n)$, 아니면 $O(n \log n)$. 슬라이드 예제 결과 {a2, a5, a3, a7} 4개.
-# Claim: $a_k$ 가 $a_i$ 이후 가능한 활동 중 가장 일찍 끝나면 $A[i] = A[k] + 1$. (≥) 는 해를 만들어 보임, (≤) 는 귀류법 + $f_k \le f_j$ 로 맞바꾸기.
+# [[greedy algorithm]]: 선택을 하나씩 하고, 고른 것은 되돌아보지 않는다(p.4). 설계가 쉽고 빠르지만, 맞다고 증명하기가 어렵다.
+# unbounded knapsack(용량 10)에서 가치/무게 greedy 는 taco 3개로 39 를 얻지만, 최적은 taco 2 + 전구 2 로 42 다. greedy 가 실패하는 예다.
+# [[activity selection]]: 가능한 활동 중 finish time 이 가장 작은 것을 고른다. 정렬돼 있으면 $O(n)$, 아니면 $O(n \log n)$ 이다. 슬라이드 예제의 답은 {a2, a5, a3, a7}, 4개다.
+# Claim: $a_k$ 가 $a_i$ 이후 가능한 활동 중 가장 일찍 끝나면 $A[i] = A[k] + 1$ 이다. (≥) 는 해를 직접 만들어 보이고, (≤) 는 귀류법을 쓰며 $f_k \le f_j$ 덕분에 맞바꿀 수 있다.
 # [[greedy 증명 전략]]: IH "선택 t 번 후에도 최적해를 배제하지 않았다" / Base "선택 전에는 성공 가능" / Step(문제별 보조정리) / Conclusion "현재 해를 확장하는 해는 자신뿐 → 최적".
-# [[sub-problem graph 비교]]: D&C 트리, DP DAG, greedy 사슬. greedy 는 각 문제가 부분 문제 하나에만 의존한다.
-# [[job scheduling]]: 비용 = $\sum c_i \cdot$ 완료 시각. 비율 $r_i = c_i / t_i$ 가 큰 것부터. 맞바꾸기 부등식 $xz + (x+y)w \le yw + (x+y)z \Leftrightarrow xw \le yz \Leftrightarrow w/y \le z/x$. $O(n \log n)$.
-# p.46 예제: HW(10h, 2) 먼저 74, Sleep(8h, 3) 먼저 60.
-# [[prefix-free code]] = 이진 트리, 글자는 leaf. [[코드 트리의 cost]] $= \sum P(x)\cdot\text{depth}(x)$.
-# [[Huffman coding]]: key 가 가장 작은 두 노드를 합치기를 n−1 번. 예제 A=0, B=100, C=101, D=110, E=1110, F=1111, 기대 길이 2.24 (Try 2 는 2.39, 고정 3비트는 3).
-# [[Huffman 정확성 증명]]: Lemma 1(가장 드문 두 글자가 형제인 최적 트리 존재, 맞바꾸기) + Lemma 2(부분 트리를 글자 하나로 봐도 됨, CLRS 16.3) + 귀납법.
+# [[sub-problem graph 비교]]: D&C 는 트리, DP 는 DAG, greedy 는 사슬 모양이다. greedy 에서는 각 문제가 부분 문제 하나에만 의존한다.
+# [[job scheduling]]: 비용은 $\sum c_i \cdot$ 완료 시각이다. 비율 $r_i = c_i / t_i$ 가 큰 것부터 한다. 맞바꾸기 부등식은 $xz + (x+y)w \le yw + (x+y)z \Leftrightarrow xw \le yz \Leftrightarrow w/y \le z/x$ 이고, 수행 시간은 $O(n \log n)$ 이다.
+# p.46 예제: HW(10h, 2) 를 먼저 하면 74, Sleep(8h, 3) 을 먼저 하면 60 이다.
+# [[prefix-free code]] 는 글자가 모두 leaf 에 있는 이진 트리로 그린다. [[코드 트리의 cost]] 는 $\sum P(x)\cdot\text{depth}(x)$ 다.
+# [[Huffman coding]]: key 가 가장 작은 두 노드를 합치는 일을 n−1 번 한다. 예제 코드는 A=0, B=100, C=101, D=110, E=1110, F=1111 이고 기대 길이는 2.24 다(Try 2 는 2.39, 고정 3비트는 3).
+# [[Huffman 정확성 증명]]: Lemma 1(가장 드문 두 글자가 형제인 최적 트리 존재, 맞바꾸기) + Lemma 2(부분 트리를 글자 하나로 봐도 됨, CLRS 16.3) 를 귀납법으로 묶는다.
 {exam}
 (예상) ① activity selection 그림에서 greedy 순서 적기 ② Claim 또는 job scheduling 귀납 증명의 빈칸 ③ 두 작업 맞바꾸기 부등식 유도 ④ Huffman 트리 만들기와 기대 길이 계산 ⑤ 주어진 코드가 prefix-free 인지 판정, 비트열 해독 ⑥ "greedy 가 항상 맞는가" T/F (knapsack 반례).
 {/exam}
 
 == 공식 모음 ==
 {|
-! 문제 || greedy 규칙 || 수행 시간 || 정확성의 핵심
+! 문제 || greedy 규칙 || 수행 시간 || 정확성의 근거
 |-
 | unbounded knapsack || 가치/무게 최대 || - || 실패(39 vs 42). DP 로 푼다
 |-

@@ -7,7 +7,7 @@ category: 9강 Graph I, 용어
 
 {def}
 "The degree of vertex 4 is 2. There are 2 edges coming out. Vertex 4's neighbors are 2 and 3." (L9 p.13)
-→ $\deg(v)$ = v 에 붙은 간선 수.
+→ $\deg(v)$ 는 v 에 붙은 간선 수다.
 {/def}
 
 [[img:L9-12.png|L9 p.13 — 4 의 degree = 2 (간선 {2,4}, {3,4}), neighbors = 2, 3|medium]]
@@ -22,7 +22,7 @@ deg(4) = 2   (2, 3)
 합 = 1 + 2 + 3 + 2 = 8 = 2m      ← 간선 하나가 양 끝에서 한 번씩, 두 번 세어진다
 </pre>
 $$\sum_{v \in V} \deg(v) = 2m$$
-이것이 "DFS/BFS 에서 간선은 최대 두 번 본다" 의 정체다. directed 는 $\sum \text{in-deg} = \sum \text{out-deg} = m$.
+"DFS/BFS 에서 간선은 최대 두 번 본다" 는 말이 바로 이 공식에서 나온다. directed 에서는 $\sum \text{in-deg} = \sum \text{out-deg} = m$ 이다.
 
 {analogy}
 '''악수 세기.''' 파티가 끝나고 모든 사람에게 "몇 번 악수했어요?" 라고 물어 더하면, 악수 한 번을 두 사람이 각자 세었으니 실제 악수 수의 '''정확히 두 배'''가 나온다.

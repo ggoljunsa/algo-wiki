@@ -3,7 +3,10 @@ title: SCC 알고리즘 — DFS(G) → 간선 뒤집기 → finish 내림차순�
 category: 10강 Graph II, 용어
 ---
 == 개요 ==
-[[strongly connected component]] 를 [[O(n+m)]] 에 찾는 알고리즘. [[DFS]] 를 '''딱 두 번''' 돌린다: $G$ 에서 한 번(finish time 기록), 간선을 뒤집은 [[G^T]] 에서 한 번(finish 큰 순서로 시작점 선택). 두 번째 DFS forest 의 tree 하나하나가 SCC 다. 고전 이름은 [[Kosaraju 알고리즘]].
+[[strongly connected component]] 를 [[O(n+m)]] 에 찾는 알고리즘이다. [[DFS]] 를 '''딱 두 번''' 돌린다.
+* 1차: $G$ 에서 DFS 를 돌리면서 각 정점의 finish time 을 기록한다.
+* 2차: 간선을 뒤집은 [[G^T]] 에서 DFS 를 돌린다. 이때 시작점은 1차 finish 가 큰 정점부터 고른다.
+2차 DFS 가 만든 forest 에서 tree 하나하나가 SCC 하나다. 고전적인 이름은 [[Kosaraju 알고리즘]] 이다.
 
 {def}
 L10 p.12 / p.70 "Algorithm — Running time: O(n + m)
@@ -51,7 +54,7 @@ def scc(G):
 빈칸: `for u in ______(order):` 와 `for v in __[u]:` (dfs2 안). 각각 무엇이고 왜인가?
 {/quiz}
 {answer}
-`reversed`: order 는 finish 된 순서(오름차순)이므로 뒤집어야 finish 내림차순이 된다. `GT`: 2차 DFS 를 뒤집은 그래프에서 해야 finish 최대 SCC 가 sink 가 되고, DFS 가 그 SCC 안에서 끝난다.
+`reversed`: order 에는 정점이 finish 된 순서, 즉 finish 오름차순으로 쌓인다. 그래서 뒤집어야 finish 내림차순이 된다. `GT`: 2차 DFS 는 뒤집은 그래프에서 해야 한다. 그래야 finish 최대 SCC 가 sink 가 되고, DFS 가 그 SCC 밖으로 나가지 못하고 그 안에서 끝난다.
 {/answer}
 
 [[sim:scc_two_pass]]
@@ -60,21 +63,25 @@ def scc(G):
 {|
 ! 선택 || 이유 || 어기면
 |-
-| 2차는 '''$G^T$''' 에서 || $G$ 에서 finish 최대 SCC 는 source(나가기만). 뒤집으면 sink → 거기서 DFS 하면 그 SCC 만 || $G$ 에서 KAIST(12)부터: 6개 전부 한 tree
+| 2차는 '''$G^T$''' 에서 || $G$ 에서 finish 최대 SCC 는 나가는 간선만 있는 source 다. 뒤집으면 sink 가 되니까 거기서 DFS 하면 그 SCC 만 나온다 || $G$ 에서 KAIST(12)부터: 6개 전부 한 tree
 |-
-| 시작점은 '''finish 내림차순''' || Corollary 1: $G^T$ 의 SCC 간 간선은 finish 작은 → 큰. 남은 것 중 최대에서 시작하면 나가는 간선이 이미 찾은 SCC 로만 || 오름차순, Google(4)부터: Google → Puppy → 나머지 전부 한 tree
+| 시작점은 '''finish 내림차순''' || Corollary 1 에 따르면 $G^T$ 에서 SCC 사이 간선은 finish 작은 쪽 → 큰 쪽으로 간다. 그래서 남은 것 중 finish 최대에서 시작하면, 나가는 간선은 이미 찾은 SCC 로만 향한다 || 오름차순, Google(4)부터: Google → Puppy → 나머지 전부 한 tree
 |}
-→ 증명: [[SCC finish time 보조정리]], [[SCC 알고리즘 정확성 증명]].
+두 선택이 왜 맞는지는 [[SCC finish time 보조정리]] 와 [[SCC 알고리즘 정확성 증명]] 에서 증명한다.
 
 {analogy}
-'''사진 두 번 찍기.''' 1차 DFS 는 "누가 가장 늦게까지 남아 있었나" 를 기록하는 정찰이다. 그다음 모든 길의 방향을 뒤집고, 가장 늦게 남아 있던 사람부터 다시 출발시키면 각자 '''자기 섬 안에서만''' 돌다 갇힌다. 섬 하나 = 사진 한 장 = SCC 하나.
+'''사진 두 번 찍기.''' 1차 DFS 는 누가 가장 늦게까지 남아 있었는지 기록하는 정찰이다. 그다음 모든 길의 방향을 뒤집는다. 이제 가장 늦게 남아 있던 사람부터 다시 출발시키면, 각자 자기 섬 안에서만 돌다가 갇힌다. 그 섬 하나를 사진 한 장으로 찍으면 그것이 SCC 하나다.
 {/analogy}
 
 == 수행 시간 ==
-1차 DFS $O(n+m)$ + $G^T$ 만들기 $O(n+m)$ + 2차 DFS $O(n+m)$ = '''$O(n+m)$'''. finish 순서는 정렬하지 않고 finish 순간 list 에 push 한 뒤 거꾸로 읽는다 ([[topological sort]] 와 같은 trick).
+세 단계가 각각 $O(n+m)$ 이다.
+* 1차 DFS: $O(n+m)$
+* $G^T$ 만들기: $O(n+m)$
+* 2차 DFS: $O(n+m)$
+그래서 전체도 '''$O(n+m)$''' 이다. finish 내림차순을 얻으려고 정렬할 필요는 없다. 정점이 finish 되는 순간 list 에 push 해 두고 거꾸로 읽으면 된다. [[topological sort]] 에서 쓴 것과 같은 trick 이다.
 
 {exam}
-교수(10/27): "'''Just run DFS twice''' → $O(n+m)$." "The first step and the second step are the most important." 순진한 방법(정점마다 DFS)은 $O(n(n+m))$ "more than $n^2$".
+교수(10/27): "'''Just run DFS twice''' → $O(n+m)$." "The first step and the second step are the most important." 정점마다 DFS 를 돌리는 순진한 방법은 $O(n(n+m))$ 이고, 교수 표현으로 "more than $n^2$" 이다.
 {/exam}
 
 == 관련 문서 ==
