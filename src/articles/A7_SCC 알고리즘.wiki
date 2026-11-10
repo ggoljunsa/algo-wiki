@@ -51,7 +51,7 @@ def scc(G):
 빈칸: `for u in ______(order):` 와 `for v in __[u]:` (dfs2 안). 각각 무엇이고 왜인가?
 {/quiz}
 {answer}
-`reversed` — order 는 finish 된 순서(오름차순)이므로 뒤집어야 finish '''내림차순'''. `GT` — 2차 DFS 는 '''뒤집은 그래프'''에서 해야 finish 최대 SCC 가 sink 가 되어 DFS 가 그 SCC 에 갇힌다.
+`reversed`: order 는 finish 된 순서(오름차순)이므로 뒤집어야 finish 내림차순이 된다. `GT`: 2차 DFS 를 뒤집은 그래프에서 해야 finish 최대 SCC 가 sink 가 되고, DFS 가 그 SCC 안에서 끝난다.
 {/answer}
 
 [[sim:scc_two_pass]]

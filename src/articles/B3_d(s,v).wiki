@@ -3,7 +3,7 @@ title: d(s,v) — 진짜 최단거리 (알고리즘의 추정치 d[v] 와 구분
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-'''$d(s,v)$''' (소괄호) 는 s 에서 v 까지 최단경로의 cost — '''수학적으로 정해진 정답'''이다. 알고리즘은 이 값을 모른 채 시작해서, 배열 '''$d[v]$''' (대괄호) 에 추정치를 들고 다니며 줄여 나간다([[d 값과 sure·not-sure]]). Dijkstra 증명은 결국 "$d[v]$ 가 언제 $d(s,v)$ 와 같아지나" 의 이야기다.
+'''$d(s,v)$''' (소괄호) 는 s 에서 v 까지 최단경로의 cost 다. 수학적으로 정해진 정답이다. 알고리즘은 이 값을 모른 채 시작해서, 배열 $d[v]$ (대괄호) 에 추정치를 들고 다니며 줄여 나간다([[d 값과 sure·not-sure]]). Dijkstra 증명은 $d[v]$ 가 언제 $d(s,v)$ 와 같아지는지를 보이는 것이다.
 
 {def}
 "The distance d(u,v) between two vertices u and v is the cost of the shortest path between u and v." (L11 p.8)

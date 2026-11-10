@@ -3,7 +3,7 @@ title: Fibonacci heap — updateKey O(1) amortized → Dijkstra O(n log n + m)
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-'''Fibonacci heap''' 은 [[priority queue와 heap|priority queue]] 의 한 구현으로, findMin $O(1)$, removeMin $O(\log n)$, updateKey $O(1)$ — 셋 다 '''amortized''' 다. Dijkstra 에서 updateKey 는 간선마다(m 번) 불리므로, 이것이 $O(1)$ 이 되면 전체가 '''$O(n\log n + m)$''' 로 내려간다. 내부 구조는 수업 범위 밖("See CLRS for more!", [[CLRS]] 19장).
+'''Fibonacci heap''' 은 [[priority queue와 heap|priority queue]] 의 한 구현이다. findMin $O(1)$, removeMin $O(\log n)$, updateKey $O(1)$ 이고, 셋 다 amortized 다. Dijkstra 에서 updateKey 는 간선마다(m 번) 불린다. 이것이 $O(1)$ 이면 전체가 $O(n\log n + m)$ 으로 내려간다. 내부 구조는 수업 범위 밖이다("See CLRS for more!", [[CLRS]] 19장).
 
 {def}
 "Say we use a Fibonacci Heap: T(findMin) = O(1), T(removeMin) = O(log(n)), T(updateKey) = O(1) (amortized time*). Running time of Dijkstra = O(n log(n) + m) (amortized time)." (L11 p.61)
@@ -17,7 +17,7 @@ n(T(findMin) + T(removeMin)) + m T(updateKey)
 </pre>
 
 == amortized 란 ==
-* '''amortized''' = 연산 '''한 번'''이 아니라 '''연속된 여러 번의 총합'''에 대한 보장. "d 번 removeMin 하면 총 $O(d\log n)$" — 그중 몇 번은 $\log n$ 보다 오래 걸리고 몇 번은 짧다.
+* '''amortized''' 는 연산 한 번이 아니라 연속된 여러 번의 총합에 대한 보장이다. d 번 removeMin 하면 총 $O(d\log n)$ 이다. 그중 몇 번은 $\log n$ 보다 오래 걸리고 몇 번은 짧다.
 * expected(확률적 평균, L6)와 다르다: 난수가 없고, '''어떤 연산 순서에서도''' 총합이 보장된다.
 {exam}
 교수(10/29): "'''the important thing is this is the amortized time complexity, not the worst-case time complexity.'''" 판서: "every sequence of d removeMin calls takes at most d log n, but a few of d may take longer than log n."

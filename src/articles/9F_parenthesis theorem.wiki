@@ -3,7 +3,7 @@ title: parenthesis theorem — DFS 구간 [start, finish] 는 포함 또는 서�
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-[[DFS]] 에서 두 정점의 구간 [start, finish] 는 '''한쪽이 다른 쪽 안에 완전히 들어가거나, 완전히 떨어져 있다''' — 엇갈려 겹치는 일은 없다. start 를 "(", finish 를 ")" 로 쓰면 항상 올바른 괄호식이 되므로 parenthesis(괄호) theorem. 슬라이드는 "parentheses theorem in CLRS" 라 부른다(CLRS Thm 22.7). '''cycle 이 있어도 성립'''하며, [[topological sort]] 정당성 증명(p.62 Case 1)의 도구다.
+[[DFS]] 에서 두 정점의 구간 [start, finish] 는 한쪽이 다른 쪽 안에 완전히 들어가거나, 완전히 떨어져 있다. 엇갈려 겹치는 일은 없다. start 를 "(", finish 를 ")" 로 쓰면 항상 올바른 괄호식이 되어서 parenthesis(괄호) theorem 이라 부른다. 슬라이드는 "parentheses theorem in CLRS" 라고 쓴다(CLRS Thm 22.7). '''cycle 이 있어도 성립'''하고, [[topological sort]] 정당성 증명(p.62 Case 1)에 쓰인다.
 
 {def}
 L9 p.61 "A more general statement ('''this holds even if there are cycles'''). This is called the 'parentheses theorem' in CLRS."
@@ -44,7 +44,7 @@ DFS 는 재귀(stack)다. w 가 in progress 인 동안 시작된 v 는 w 의 재
 Circle all that apply. (a) parenthesis theorem 은 DAG 에서만 성립한다 (b) DFS 에서 u.start < v.start < u.finish < v.finish 인 두 정점이 있을 수 있다 (c) v 가 w 의 descendant ⇔ w 구간이 v 구간을 포함한다
 {/quiz}
 {answer}
-'''(c)''' 만. (a) "holds even if there are cycles" — 거짓. (b) 엇갈림은 불가능 — 거짓.
+'''(c)''' 만 맞다. (a) 는 "holds even if there are cycles" 이므로 거짓이다. (b) 엇갈림은 불가능하므로 거짓이다.
 {/answer}
 
 == 관련 문서 ==

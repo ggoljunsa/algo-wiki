@@ -3,7 +3,7 @@ title: adjacency list — 정점마다 이웃 linked list (Option 2, 이 과목�
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-'''adjacency list''' (인접 리스트)는 정점마다 그 정점의 이웃을 담은 [[linked list]] 를 둔다. 공간 $O(n+m)$, v 의 이웃 나열 $O(\deg(v))$. L9 p.20 에서 "'''We'll assume this representation for the rest of the class'''" — 이후 모든 그래프 알고리즘의 수행 시간([[O(n+m)]] 등)은 이 표현이 전제다.
+'''adjacency list''' (인접 리스트)는 정점마다 그 정점의 이웃을 담은 [[linked list]] 를 둔다. 공간은 $O(n+m)$, v 의 이웃 나열은 $O(\deg(v))$ 다. L9 p.20 에 "We'll assume this representation for the rest of the class" 라고 적혀 있다. 이후 그래프 알고리즘의 수행 시간([[O(n+m)]] 등)은 모두 이 표현을 전제로 한다.
 
 {def}
 L9 p.18 "How do we represent graphs? Option 2: linked lists." — 정점 배열의 각 칸에서 이웃 리스트가 매달린다. "4's neighbors are 2 and 3."

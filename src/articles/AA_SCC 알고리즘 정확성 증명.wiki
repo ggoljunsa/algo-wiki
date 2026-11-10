@@ -3,7 +3,7 @@ title: SCC 알고리즘 정확성 증명 — 2차 DFS 의 tree 수 t 에 대한 
 category: 10강 Graph II, 용어
 ---
 == 개요 ==
-L10 p.66–69 의 Theorem: "[[SCC 알고리즘]] 은 SCC 를 정확히 찾는다." [[귀납법 4요소]] 그대로, 귀납 변수는 '''$t$ = 2차(reversed) DFS 가 지금까지 만든 tree 의 수'''. 재료는 [[SCC graph는 DAG]](Lemma 1)와 [[SCC finish time 보조정리]](Corollary 1) 두 개뿐이다. 교수 말로 "just re-write what we saw before, nothing new" — p.55·66 의 "finish 최대에서 시작 → 그 SCC 에 갇힘 → 지우고 반복" 을 귀납법 형식으로 옮긴 것.
+L10 p.66–69 의 Theorem 은 "[[SCC 알고리즘]] 은 SCC 를 정확히 찾는다" 이다. [[귀납법 4요소]] 를 그대로 쓰고, 귀납 변수 '''$t$''' 는 2차(reversed) DFS 가 지금까지 만든 tree 의 수다. 쓰는 재료는 [[SCC graph는 DAG]](Lemma 1)와 [[SCC finish time 보조정리]](Corollary 1) 두 개다. 교수는 "just re-write what we saw before, nothing new" 라고 했다. p.55·66 의 "finish 최대에서 시작 → 그 SCC 안에서 끝남 → 지우고 반복" 을 귀납법 형식으로 옮긴 것이다.
 
 {def}
 L10 p.66 "Theorem: The algorithm we saw before will correctly identify strongly connected components."

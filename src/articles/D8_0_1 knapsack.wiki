@@ -1,0 +1,53 @@
+key: 0/1 knapsack
+title: 0/1 knapsack — item 한 개씩, 2차원 DP
+category: 13강 DP II, 용어
+---
+== 개요 ==
+각 item 이 한 개씩만 있는 [[knapsack problem]] 이다(L13 p.60–92). 넣거나(1) 안 넣거나(0) 둘 중 하나라서 0/1 이다. 부분문제가 "배낭 크기 x" 와 "앞 j 개 item" 두 축이라서 2차원 표 [[K(x,j) (0/1)|K 표]] 를 쓴다. 수행 시간은 $O(nW)$.
+
+{def}
+L13 p.37 "Suppose I have only one copy of each item. What's the most valuable way to fill the knapsack?"
+L13 p.91 "We kept a two-dimensional table, creating smaller problems by restricting the set of allowable items."
+{/def}
+
+[[img:L13-72.png|L13 p.72 — Zero-One-Knapsack 의사코드|medium]]
+
+== 1차원으로는 안 되는 이유 (p.62–63) ==
+[[unbounded knapsack]] 처럼 "더 작은 배낭" 만으로 부분문제를 잡으면, $K[x - w_i]$ 의 최적해가 이미 item i 를 썼는지 알 수 없다. 썼다면 item i 를 또 넣는 것은 규칙 위반이다. "The sub-problem needs to 'know' what items we've used and what we haven't."(p.63)
+그래서 item 을 하나씩 빼는 축 j 를 추가한다(p.64). p.92 의 답: "In 0/1 knapsack, we can only use each item once, so it makes sense to leave out one item at a time."
+
+== 알고리즘 ==
+<pre class="c">
+Zero-One-Knapsack(W, n, w, v):
+  K[x,0] = 0 for all x = 0,…,W
+  K[0,i] = 0 for all i = 0,…,n
+  for x = 1,…,W:
+    for j = 1,…,n:
+      K[x,j] = K[x, j-1]                              # Case 1: item j 안 씀
+      if w_j <= x:
+        K[x,j] = max{ K[x,j], K[x - w_j, j-1] + v_j }   # Case 2: item j 씀
+  return K[W,n]
+</pre>
+
+== 예제 (p.73–89) ==
+item: 거북이 (1, 1), 전구 (2, 4), 수박 (3, 6), 용량 3.
+<pre class="txt">
+        x=0  x=1  x=2  x=3
+  j=0    0    0    0    0
+  j=1    0    1    1    1
+  j=2    0    1    4    5
+  j=3    0    1    4    6     → K[3,3] = 6 (수박 하나)
+</pre>
+[[sim:knapsack_01]]
+p.37 예제(W = 10)는 $K[10,5] = 35$ (전구 + 수박 + 타코).
+
+{warn}
+Case 2 의 j−1 을 j 로 쓰면 item j 를 여러 번 쓰게 되어 unbounded 가 된다.
+{/warn}
+
+{analogy}
+집에서 여행 가방을 싸는 상황이다. 카메라는 한 대뿐이라서 "카메라를 이미 넣었나" 를 기억해야 한다. 물건 목록을 앞에서부터 하나씩 보면서 "이건 넣을까 말까" 를 정하는 것이 j 축이다.
+{/analogy}
+
+== 관련 문서 ==
+* [[K(x,j) (0/1)]] · [[unbounded knapsack]] · [[knapsack problem]] · [[greedy가 실패하는 knapsack]]

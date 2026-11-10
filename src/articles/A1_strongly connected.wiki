@@ -10,7 +10,7 @@ L10 p.5 "A directed graph G = (V,E) is strongly connected if: for all v,w in V: 
 → $\forall v, w \in V$: $v \rightsquigarrow w$ 이고 $w \rightsquigarrow v$.
 {/def}
 
-[[img:L10-05.png|L10 p.5 — 왼쪽 strongly connected, 오른쪽 not strongly connected (간선 하나의 방향이 달라 왼쪽 끝 정점으로는 들어갈 수 없다)|medium]]
+[[img:L10-05.png|L10 p.5 — 왼쪽 strongly connected, 오른쪽 not strongly connected (왼쪽 그림에서 간선 하나가 빠져 맨 왼쪽 정점으로는 들어갈 수 없다)|medium]]
 
 == 이름에서 개념 끌어내기 ==
 * '''connected''' (undirected): 아무 방향으로든 이어져 있으면 된다 → [[connected component]].

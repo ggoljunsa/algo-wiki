@@ -3,7 +3,7 @@ title: SCC graph는 DAG (Lemma 1) — cycle 이 있으면 SCC 가 합쳐진다
 category: 10강 Graph II, 용어
 ---
 == 개요 ==
-L10 Lemma 1. [[SCC graph]] 에는 cycle 이 없다 — 있다면 cycle 위의 SCC 들이 서로 오갈 수 있게 되어 '''하나로 합쳐져야''' 하므로 SCC 의 maximality 에 모순. [[귀류법]] 한 방이다. 이 사실이 [[SCC finish time 보조정리]] Case 2 와 [[SCC 알고리즘 정확성 증명]] base case 에서 쓰인다.
+L10 Lemma 1. [[SCC graph]] 에는 cycle 이 없다. cycle 이 있다면 cycle 위의 SCC 들이 서로 오갈 수 있으므로 하나로 합쳐져야 하고, 이는 SCC 의 maximality 에 모순이다. [[귀류법]] 으로 짧게 증명된다. 이 사실은 [[SCC finish time 보조정리]] Case 2 와 [[SCC 알고리즘 정확성 증명]] base case 에서 쓰인다.
 
 {def}
 L10 p.51 "Lemma 1: The SCC graph is a Directed Acyclic Graph (DAG). Proof idea: if not, then two SCCs would collapse into one."

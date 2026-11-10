@@ -3,7 +3,7 @@ title: connected component — undirected 그래프에서 서로 오갈 수 있�
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-[[undirected graph]] 에서 '''connected component''' (연결 성분)는 서로 경로로 오갈 수 있는 정점들의 최대 집합이다. [[DFS]] 나 [[BFS]] 를 정점 w 에서 한 번 돌리면 정확히 w 가 속한 component 를 얻는다(L9 p.47, p.87). 그래프 전체는 unvisited 정점에서 탐색을 반복해 component 를 하나씩 찾는다(p.48, p.51) — 전부 합쳐 [[O(n+m)]].
+[[undirected graph]] 에서 '''connected component''' (연결 성분)는 서로 경로로 오갈 수 있는 정점들의 최대 집합이다. [[DFS]] 나 [[BFS]] 를 정점 w 에서 한 번 돌리면 w 가 속한 component 를 정확히 얻는다(L9 p.47, p.87). 그래프 전체는 unvisited 정점에서 탐색을 반복해 component 를 하나씩 찾는다(p.48, p.51). 전부 합쳐 [[O(n+m)]] 이다.
 
 {def}
 L9 p.47 "DFS finds all the nodes reachable from the starting point. In an undirected graph, this is called a '''connected component'''." "One application of DFS is finding connected components."

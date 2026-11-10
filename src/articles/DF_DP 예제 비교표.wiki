@@ -1,0 +1,40 @@
+key: DP 예제 비교표
+title: DP 예제 비교표 (L12–L13)
+category: 13강 DP II, 용어
+---
+== 개요 ==
+L12–L13 에서 본 DP 알고리즘을 [[DP 레시피 4단계]] 의 칸으로 비교한다. L13 p.111 Conclusion 표에 L12 예제를 더했다.
+
+[[img:L13-111.png|L13 p.111 — Conclusion 표|large]]
+
+== 비교표 ==
+{|
+! 문제 || 부분문제 || 점화식 || 표 || 채우는 방식 || 수행 시간
+|-
+| Fibonacci (L12) || $F(i)$ || $F(i) = F(i-1) + F(i-2)$ || 1차원 n || bottom-up / top-down || $O(n)$
+|-
+| [[Bellman-Ford는 DP|Bellman-Ford]] (L12) || 간선 ≤ i 개 최단경로 || $d^{(i+1)}[v] = \min\{d^{(i)}[v], \min_u d^{(i)}[u] + w(u,v)\}$ || $n \times n$ || bottom-up || $O(nm)$
+|-
+| [[Floyd-Warshall]] (L12) || 중간 정점 ⊆ {1..k} || [[D^(k)(u,v)]] || $n \times n$ × k || bottom-up || $O(n^3)$
+|-
+| [[longest common subsequence|LCS]] (L13) || prefix 쌍 || [[C(i,j) (LCS)|C 표]] || $(m+1)(n+1)$ || bottom-up || $O(mn)$
+|-
+| [[unbounded knapsack]] (L13) || 더 작은 배낭 || [[K(x) (unbounded)|K 표]] || $W+1$ || bottom-up || $O(nW)$
+|-
+| [[0/1 knapsack]] (L13) || 배낭 + 앞 j 개 item || [[K(x,j) (0/1)|K 표]] || $(W+1)(n+1)$ || bottom-up || $O(nW)$
+|-
+| [[트리의 maximal independent set|tree independent set]] (L13) || subtree || [[A(u)와 B(u)|A, B 배열]] || $2\lvert V \rvert$ || top-down || $O(\lvert V \rvert)$
+|}
+
+== 읽는 법 ==
+* 수행 시간은 대개 "칸 수 × 칸 하나 채우는 비용" 이다. LCS 는 칸당 $O(1)$, unbounded knapsack 은 칸 $W$ 개에 칸당 $O(n)$.
+* 차원 수는 "부분문제가 기억해야 하는 정보" 의 개수다. 0/1 knapsack 은 어떤 item 까지 고려했는지를 하나 더 기억해서 2차원이 됐다.
+* $O(nW)$ 는 [[pseudo-polynomial]] 이다. 나머지는 입력 크기에 대한 다항 시간이다.
+* tree 는 자식을 먼저 계산하는 순서가 재귀로 자연스럽게 맞아서 [[top-down과 memoization|top-down]] 이 편하다(p.108).
+
+{analogy}
+같은 공장의 생산 라인 여러 개를 나란히 적은 표다. 원료(부분문제), 공정(점화식), 창고 크기(표), 작업 시간(수행 시간)을 한 줄에 보면 라인끼리 차이가 바로 보인다.
+{/analogy}
+
+== 관련 문서 ==
+* [[DP 레시피 4단계]] · [[dynamic programming]] · [[L13 Dynamic Programming II]] · [[L12 Dynamic Programming I]] · [[sub-problem graph 비교]]

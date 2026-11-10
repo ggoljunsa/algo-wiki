@@ -3,7 +3,8 @@ title: relaxation — d[v] ← min(d[v], d[u] + w(u,v)), 두 알고리즘의 공
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-'''relaxation''' 은 간선 $(u,v)$ 하나를 보고 "u 를 거쳐 v 로 가면 지금 알고 있는 것보다 싸지나?"를 확인해 $d[v]$ 를 줄이는 한 줄이다. 슬라이드는 이 이름을 쓰지 않고 식만 쓴다("update"); '''relaxation''' 은 [[CLRS]] 24장 용어. [[Dijkstra]] 와 [[Bellman-Ford]] 는 '''이 식이 완전히 같고''', 어느 u 에서 relax 하느냐만 다르다.
+'''relaxation''' 은 간선 $(u,v)$ 하나를 보고, u 를 거쳐 v 로 가면 지금 아는 값보다 싸지는지 확인해서 $d[v]$ 를 줄이는 한 줄이다. 슬라이드는 이 이름 없이 식만 쓴다("update"). relaxation 은 [[CLRS]] 24장 용어다. [[Dijkstra]] 와 [[Bellman-Ford]] 는 이 식이 같고, 어느 u 에서 relax 하느냐만 다르다.
+[[img:L11-41.png|L11 p.41 — d[v] ← min( d[v] , d[u] + edgeWeight(u,v) ): 첫째 항은 전에 알던 경로, 둘째 항은 u 까지의 최단경로 + 간선 u→v|medium]]
 
 {def}
 L11 p.25: "Update all u's neighbors v: d[v] = min( d[v] , d[u] + edgeWeight(u,v))"

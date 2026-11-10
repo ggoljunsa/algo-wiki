@@ -1,0 +1,55 @@
+key: A(u)와 B(u)
+title: A[u] 와 B[u] — tree independent set 의 두 배열
+category: 13강 DP II, 용어
+---
+== 개요 ==
+[[트리의 maximal independent set]] DP 에서 쓰는 전역 배열 두 개다(L13 p.101–104). $A[u]$ 는 u 를 루트로 하는 subtree 의 최대 가중치 independent set 의 가중치다. $B[u]$ 는 u 의 자식들의 A 합이다. L14 의 $A[i]$(activity selection)와는 이름만 같다. (링크 문법 때문에 문서 키는 `A(u)와 B(u)` 로 쓴다.)
+
+{def}
+L13 p.102 "Keep two arrays! Let A[u] be the weight of a maximal independent set in the tree rooted at u. Let $B[u] = \sum_{v \in u.\text{children}} A[v]$."
+{/def}
+
+[[img:L13-102.png|L13 p.102 — try 2: 손자 합 대신 자식의 B 합|medium]]
+
+== 왜 B 가 필요한가 (p.101) ==
+첫 점화식은 Case 2 에서 손자들의 A 를 더한다.
+$$A[u] = \max\left\{ \sum_{v \in u.\text{children}} A[v],\ \text{weight}(u) + \sum_{v \in u.\text{grandchildren}} A[v] \right\}$$
+구현하려면 손자 목록을 따로 찾아야 한다. 슬라이드는 "how do we keep track of this term?" 라고 묻는다. 그런데 u 의 손자들의 A 합은 u 의 각 자식 v 에 대한 "v 의 자식들의 A 합" 을 더한 것이다. 그것이 $B[v]$ 다.
+<pre class="txt">
+Σ_{g in u.grandchildren} A[g] = Σ_{v in u.children} ( Σ_{g in v.children} A[g] ) = Σ_{v in u.children} B[v]
+</pre>
+
+== 두 배열의 의미 ==
+{|
+! 배열 || 뜻 || 잎에서
+|-
+| $A[u]$ || u 의 subtree 에서 최적값(u 를 넣든 안 넣든) || weight(u)
+|-
+| $B[u]$ || u 를 넣지 않을 때의 최적값 = 자식들의 A 합 || 0
+|}
+그래서 $A[u] = \max\{B[u],\ \text{weight}(u) + \sum_{\text{children}} B[v]\}$ 로도 쓸 수 있다.
+
+== 예 (L13 p.95 tree, 가운데 5 루트) ==
+<pre class="txt">
+정점           A    B
+잎들        가중치   0
+가운데 3       7    7
+위쪽 2         3    3
+가운데 1      13   13
+루트 5        25   20
+</pre>
+[[anim:mis_tree_dp|A, B 를 잎에서 루트로 채우는 순서]]
+
+{analogy}
+가계부 칸 두 개다. A 칸은 "이 집안(subtree)에서 낼 수 있는 최대 금액", B 칸은 "가장(u)이 빠졌을 때의 최대 금액". 할아버지는 아들들의 B 칸만 보면 손자 쪽 사정을 다시 계산하지 않아도 된다.
+{/analogy}
+
+{quiz}
+`A[u] = max{ Σ A[v] , weight(u) + Σ ____ }` (v 는 u 의 자식) 의 빈칸은?
+{/quiz}
+{answer}
+`B[v]`. u 를 넣으면 자식은 못 넣고, 자식 v 를 뺀 v 의 subtree 최적값이 $B[v]$ 다.
+{/answer}
+
+== 관련 문서 ==
+* [[트리의 maximal independent set]] · [[independent set]] · [[L14 Greedy Algorithms I]]

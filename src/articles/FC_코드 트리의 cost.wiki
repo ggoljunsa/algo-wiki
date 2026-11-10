@@ -1,0 +1,48 @@
+key: 코드 트리의 cost
+title: 코드 트리의 cost — 기대 코드 길이 Σ P(x)·depth(x)
+category: 14강 Greedy I, 용어
+---
+{def}
+L14 p.67 The cost of a tree is the expected length of the encoding of that letter. $\text{Cost} = \sum_{\text{leaves } x} P(x) \cdot \text{depth}(x)$. P(x) is the probability of letter x. The depth in the tree is the length of the encoding.
+글자를 빈도 분포대로 하나 뽑았을 때 코드 길이의 기댓값이다.
+{/def}
+[[img:L14-67.png|L14 p.67 — 이 트리의 cost 2(0.45 + 0.16) + 3(0.05 + 0.13 + 0.12 + 0.09) = 2.39|large]]
+
+== 기호 ==
+{|
+! 기호 || 뜻
+|-
+| $P(x)$ || 글자 x 의 확률(빈도 %/100). B:13 이면 $P(B) = 0.13$
+|-
+| $\text{depth}(x)$ || 루트에서 leaf x 까지 간선 수 = x 의 코드 길이
+|}
+이것은 [[확률과 기댓값|기댓값]] 이다. 값 depth(x) 에 확률 P(x) 를 곱해 더한다.
+
+== 계산 예 ==
+<pre class="txt">
+Try 0 (모두 3비트):     3·(0.45+0.13+0.12+0.16+0.09+0.05) = 3·1.00 = 3.00
+p.67 트리 (Try 2):      2·(0.45+0.16) + 3·(0.05+0.13+0.12+0.09)
+                      = 1.22 + 1.17 = 2.39
+Huffman (p.76):        1·0.45 + 3·(0.13+0.12+0.16) + 4·(0.09+0.05)
+                      = 0.45 + 1.23 + 0.56 = 2.24
+</pre>
+
+== 빠른 검산: 내부 노드 key 의 합 ==
+글자 x 의 빈도는 x 위에 있는 내부 노드 depth(x) 개의 key 에 한 번씩 들어 있다. 그래서
+$$\sum_{x} P(x)\cdot\text{depth}(x) = \frac{\text{내부 노드 key 의 합}}{100}$$
+이다. Huffman 예제: (14 + 25 + 30 + 55 + 100)/100 = 2.24.
+
+{tip}
+시험에서 Huffman 트리를 그렸으면 두 방법으로 모두 계산해 본다. 값이 다르면 트리나 깊이를 잘못 센 것이다.
+{/tip}
+
+== 성질 ==
+* 빈도가 높은 글자가 얕고, 낮은 글자가 깊을수록 cost 가 작다. 그래서 Huffman 은 빈도 낮은 것부터 아래에 묶는다(p.70).
+* 부분 트리를 key 합을 빈도로 갖는 글자 하나로 바꾸면 cost 는 그 부분 트리 내부 cost 만큼 줄어든다. 이 양은 위쪽 모양과 상관없다. 이것이 [[Huffman 정확성 증명]] 의 Lemma 2 다.
+
+{analogy}
+글자마다 우편 요금이 "코드 길이" 만큼 든다고 하자. 자주 보내는 글자에 싼 요금(짧은 코드)을 매길수록 한 달 평균 요금(cost)이 내려간다.
+{/analogy}
+
+== 관련 문서 ==
+* [[Huffman coding]] · [[prefix-free code]] · [[Huffman 정확성 증명]] · [[확률과 기댓값]] · [[L14 Greedy Algorithms I]]

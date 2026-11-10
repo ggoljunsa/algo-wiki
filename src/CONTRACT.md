@@ -381,3 +381,68 @@ PNG 이름은 `L9-05.png`, `L10-05.png`, `L11-105` 없음(최대 88). 한 자리
 | bellman_ford_rounds | 라운드 i 마다 "간선 i 개까지 쓰는 경로"가 퍼져 나가며 d 값이 줄어듦 → n−1 라운드 후 고정, negative cycle 은 계속 줄어듦 | `Bellman-Ford`, `negative cycle` |
 | fib_tree_repeat | Fib(8) 재귀 트리가 자라며 같은 부분문제(Fib(5), Fib(4)…)가 같은 색으로 여러 번 → memo 를 켜면 가지가 잘려 사슬이 됨 | `overlapping subproblems`, `top-down과 memoization` |
 | floyd_k_layers | 정점 k 를 "중간 경유지 허용"에 하나씩 추가할 때 u→v 경로가 k 를 거치는 쪽으로 바뀌는 순간(Case 2) | `Floyd-Warshall`, `D^(k)(u,v)` |
+
+## 9. L13 · L14 추가 + 문체 정리 (2026-11-10)
+
+### 9.1 슬라이드
+| 덱 | PDF (`_text/` 이름) | PNG 수 | 인쇄 p.N → PNG 번호 | 숨김 | 해설본 |
+|---|---|---|---|---|---|
+| L13 | `L13 _ Dynamic Programming II` | 113 | **슬라이드에 번호가 인쇄돼 있지 않다** → 문서의 p.N = PDF 페이지 = PNG 번호 | 확인 불가(번호 없음) | `L13_해설.md` |
+| L14 | `L14 _ Greedy Algorithms I` | 98 | 전부 같음 (p.1–98) | 없음 | `L14_해설.md` |
+PNG 는 `L13-05.png`, `L13-105.png`, 한 자리는 `L13-5.png` 도 있다. `_slides` 는 `pdftoppm -scale-to-x 900 -scale-to-y 675` 로 다시 만든 것(2026-11-10, 3자리 패딩은 2자리로 바꿈).
+
+녹음: L13(11/5 목 수업 추정)·L14(11/10 화~) 녹음은 아직 없다. 두 메인 문서 맨 위에 `{info}` 로 "슬라이드 기준 작성, 녹음 들어오면 🎙 반영" 을 짧게 적는다. `{exam}` 에서 교수 강조가 아닌 추론은 "(예상)" 을 붙인다.
+L12 는 11/3 녹음(`1103_21_컴알_L12_DP.txt`)이 있고, 정리는 OneDrive `…/기말고사/정리본/L12_해설.md` 의 `🎙 실제 수업 기록` 절에 있다 → L12 메인에 반영하고 "수업 전 작성" 안내는 지운다.
+
+### 9.2 문서 키
+#### 13강 L13 Dynamic Programming II (`13강 DP II`) [D0_–]
+**메인**: `L13 Dynamic Programming II`
+**사전**: `DP 레시피 4단계` · `longest common subsequence` · `subsequence와 prefix` · `C(i,j) (LCS)` · `LCS 역추적` · `knapsack problem` · `unbounded knapsack` · `0/1 knapsack` · `K(x) (unbounded)` · `K(x,j) (0/1)` · `pseudo-polynomial` · `independent set` · `트리의 maximal independent set` · `A(u)와 B(u)` · `DP 예제 비교표`
+#### 14강 L14 Greedy Algorithms I (`14강 Greedy I`) [F0_–]
+**메인**: `L14 Greedy Algorithms I`
+**사전**: `greedy algorithm` · `greedy가 실패하는 knapsack` · `activity selection` · `A(i) (activity selection)` · `activity selection 정확성 증명` · `greedy 증명 전략` · `sub-problem graph 비교` · `job scheduling` · `cost/time 비율` · `Huffman coding` · `prefix-free code` · `코드 트리의 cost` · `Huffman 정확성 증명`
+
+키 메모:
+* 슬라이드는 "maximal independent set" 이라 쓰지만 뜻은 **가중치 합이 최대인** independent set(maximum-weight). `{warn}` 으로 한 줄.
+* `C(i,j) (LCS)` 의 C 는 L12 의 무엇과도 다르다. `K(x) (unbounded)` 는 1차원, `K(x,j) (0/1)` 는 2차원 — 왜 0/1 은 "어떤 item 을 썼는지" 를 j 로 기억해야 하는지(p.63, p.92)가 두 문서의 핵심.
+* `pseudo-polynomial`: $O(nW)$ 는 W 의 **값**에 비례, 입력 길이(비트 수 log W)에는 지수. 다항 시간 knapsack 은 open problem (P vs NP, p.46).
+* `A(i) (activity selection)` 는 L13 의 `A(u)와 B(u)` 와 이름만 같다. 첫 줄에 구분.
+* `greedy 증명 전략` = "매 선택이 최적해를 배제하지 않는다(never rule out an optimal solution)" 를 귀납법 4요소로(L14 p.33–37, p.54, p.86).
+* L14 의 키·비유는 L12·L13 의 DP 문서와 서로 링크(Greedy 는 sub-problem 이 **하나**만 남는 DP, p.39–42).
+
+### 9.3 시뮬레이터 · 움직이는 그림 (§6 · §7 규약 그대로)
+sim: `lcs_table`(X=ACGGA, Y=ACTG: 표 채우기 → 역추적, 답 길이 3 "ACG") · `knapsack_unbounded`(p.50–57 예제) · `knapsack_01`(p.73–89 예제) · `activity_selection`(finish time 순 greedy) · `huffman_build`(A45 B13 C12 D16 E9 F5 → 기대 길이 2.24)
+anim: `mis_tree_dp`(트리 bottom-up 으로 A[u]·B[u] 채우기) · `subproblem_graph_shapes`(D&C 트리 / DP DAG / greedy 사슬, L14 p.39–42) · `huffman_merge`(가장 작은 두 개를 합치는 장면) · `job_swap`(두 job 순서 맞바꾸기, $w/y \le z/x$, L14 p.50)
+
+#### 9.3a sim 기대값
+검산: `python3 src/sims/_check_L13_L14.py > src/sims/_check_L13_L14.txt`. 각 sim 파일 머리 주석에도 같은 값이 있다.
+
+| 이름 | 옵션 | 기대 최종값 | 출처 |
+|---|---|---|---|
+| lcs_table | `ex=slide` X=ACGGA, Y=ACTG | C[5,4] = 3, LCS "ACG". 표 행 = [0,1,1,1,1] [0,1,2,2,2] [0,1,2,2,3] [0,1,2,2,3] [0,1,2,2,3]. 역추적 (5,4)위 → (4,4)대각 G → (3,3)위 → (2,3)왼 → (2,2)대각 C → (1,1)대각 A | L13 p.18, p.23–30 |
+| lcs_table | `ex=clrs` X=ABCBDAB, Y=BDCABA | C[7,6] = 4, LCS "BCBA" (같은 값이면 위 우선) | CLRS 15.4 (슬라이드 밖) |
+| knapsack_unbounded | `ex=slide` 거북이 w1 v1 · 전구 w2 v4 · 수박 w3 v6, W=4 | K = [0,1,4,6,8], ITEMS[4] = {전구, 전구}. K[4] 는 7(ITEMS[3]+거북이) → 8(ITEMS[2]+전구) | L13 p.49–57 |
+| knapsack_unbounded | `ex=p36` w 6,2,4,3,11 · v 20,8,14,13,35, W=10 | K[10] = 42, ITEMS[10] = {item4, item4, item2, item2} (무게 10) | L13 p.36–37 |
+| knapsack_01 | `ex=slide` 같은 3 item, W=3 | 행 j=1 [0,1,1,1], j=2 [0,1,4,5], j=3 [0,1,4,6] → K[3,3] = 6, 고른 item {수박} | L13 p.72–89 |
+| knapsack_01 | `ex=p36` | K[10,5] = 35, 고른 item {2,3,4}, 무게 9 | L13 p.36–37 |
+| activity_selection | (옵션 없음) 그림에서 읽은 시간 a1[2,6) a2[0,5) a3[13,18) a4[8,13) a5[6,12) a6[15,22) a7[19,23) | 선택 a2 → a5 → a3 → a7 (4개), 버림 a1·a4·a6 | L14 p.10–17 |
+| huffman_build | `lr=p76` (p.76 그림 좌우) | 합침 14, 25, 30, 55, 100. A=0, B=100, C=101, D=110, E=1110, F=1111, 기대 길이 2.24 | L14 p.71–76 |
+| huffman_build | `lr=p77` (Z.left = 작은 X) | 합침 순서 같음. A=0, C=100, B=101, F=1100, E=1101, D=111, 기대 길이 2.24 | L14 p.77 |
+
+**링크 키에 `]` 금지** (렌더러 정규식이 깨짐) → 위 다섯 키는 소괄호로 쓴다. 본문 수식은 $C[i,j]$ 그대로.
+
+### 9.4 문체 규칙 (기말 문서 전체 — 사용자 요청 "AI 문체 빼고 읽기 쉽게")
+사용자는 AI 특유의 문체를 싫어한다. 문서는 **조교가 칠판 옆에서 차근차근 설명하는 노트**처럼 쓴다.
+하지 말 것:
+1. 극적인 첫 문장·결론 문장: "X 의 질문은 하나다", "이게 전부다", "이게 핵심이다/열쇠다/요점이다", "거창한 이름", "먼저 10초 —", "놀랍게도", "바로 여기서", "한 문장으로 말하면".
+2. "단순히 A 가 아니라 B 다", "A 도 B 도 아니다, C 다" 같은 대구. 운율을 위한 세 개짜리 나열.
+3. em dash(—)로 문장 잇기. 한 문단에 `—` 가 2개 이상이면 문장을 나눈다. (제목·캡션의 `—` 는 괜찮다.)
+4. 굵은 글씨 남발. 한 문단에 `'''…'''` 은 최대 1–2개(정의된 용어, 최종 결과). 교수 인용 영어 원문만 따옴표로.
+5. 메타 발언: "아래에서 살펴보자", "정리하면", "다시 말해", "주목할 점은", "중요한 것은". 그냥 내용을 쓴다.
+6. 수사 의문문 연발, 과장 형용사("엄청난", "아름다운", "마법 같은").
+할 것:
+1. 한 문장에 한 가지. 짧게. 어미는 "~다" 로 통일.
+2. 순서: 슬라이드 그림 → 이 슬라이드가 하는 일 2–4문장 → 코드/표/계산 → 주의할 점.
+3. 처음 나오는 기호는 바로 뜻을 적는다("$C[i,j]$ 는 X 의 앞 i 글자와 Y 의 앞 j 글자의 LCS 길이다").
+4. 예제는 숫자를 끝까지 따라간다(한 줄 = 한 단계).
+5. 그림을 많이: 메인 문서의 `== p.N ==` 절마다 슬라이드 캡처 1장 이상(그림·표·예제가 있는 슬라이드, 연속 애니메이션 슬라이드는 완성된 마지막 장). 사전 문서도 관련 그림 슬라이드가 있으면 1장.

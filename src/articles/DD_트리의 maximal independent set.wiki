@@ -1,0 +1,60 @@
+key: 트리의 maximal independent set
+title: 트리의 maximal independent set (가중치 최대 independent set, tree DP)
+category: 13강 DP II, 용어
+---
+== 개요 ==
+정점 가중치가 있는 tree 에서 가중치 합이 최대인 [[independent set]] 을 구하는 DP 다(L13 p.93–108). 각 정점 u 를 루트로 하는 subtree 를 부분문제로 잡고, "u 를 넣는가" 두 경우로 나눈다. 배열 두 개([[A(u)와 B(u)|A, B 배열]])로 top-down 계산하며 $O(|V|)$ 다.
+
+{warn}
+슬라이드는 "maximal independent set" 이라고 쓰지만 뜻은 가중치 합이 '''최대'''인 independent set(maximum-weight independent set)이다. 그래프 이론의 maximal(더 넣을 정점이 없는 집합)과 다르다. p.111 Conclusion 표는 "Maximum Independent Set" 으로 쓴다. 시험 답안에는 maximum-weight 의 뜻으로 쓰되 슬라이드 용어를 그대로 써도 된다.
+{/warn}
+
+{def}
+L13 p.95 "Problem: find a maximal independent set in a tree (with vertex weights)."
+L13 p.97 "Subtrees are a natural candidate. There are two cases: 1. The root of this tree is not in a maximal independent set. 2. Or it is."
+{/def}
+
+[[img:L13-95.png|L13 p.95 — 예제 tree. 진한 정점 합 25 가 최적|large]]
+
+== 두 경우 (p.98–99) ==
+* Case 1: 루트 u 가 집합에 없다. 자식 v 들의 subtree 를 각자 최적으로 푼 값($A[v]$)을 더한다.
+* Case 2: 루트 u 가 집합에 있다. 자식은 못 넣는다. 손자들의 subtree 최적값을 더하고 weight(u) 를 더한다.
+$$A[u] = \max\left\{ \sum_{v \in u.\text{children}} A[v],\ \ \text{weight}(u) + \sum_{v \in u.\text{children}} B[v] \right\}, \quad B[u] = \sum_{v \in u.\text{children}} A[v]$$
+
+== 알고리즘 (p.104) ==
+<pre class="c">
+MIS_subtree(u):
+  if u is a leaf:
+    A[u] = weight(u)
+    B[u] = 0
+  else:
+    for v in u.children:
+      MIS_subtree(v)
+    A[u] = max{ Σ_{v in u.children} A[v] , weight(u) + Σ_{v in u.children} B[v] }
+    B[u] = Σ_{v in u.children} A[v]
+
+MIS(T):
+  MIS_subtree(T.root)
+  return A[T.root]
+</pre>
+정점마다 한 번 방문하고 표 조회만 하므로 $O(|V|)$.
+
+== p.95 예제 (가운데 5 를 루트로 잡은 경우) ==
+<pre class="txt">
+가운데 3 (잎 3,2,2):        B = 7,  A = max{7, 3+0} = 7
+위쪽 2 (잎 3):              B = 3,  A = max{3, 2+0} = 3
+가운데 1 (자식 2,5,5):       B = 13, A = max{13, 1+3} = 13
+루트 5 (자식 가운데3, 가운데1): B = 20, A = max{20, 5+7+13} = 25
+답 25
+</pre>
+[[anim:mis_tree_dp|잎에서 루트로 올라가며 A, B 값을 채운다]]
+
+== 표 없이 재귀하면 (p.105–106) ==
+손자 합을 `MIS_subtree` 재호출로 구하면 같은 subtree 를 부모 쪽과 조부모 쪽에서 반복해 부른다. 호출 수가 지수적으로 늘어난다. [[overlapping subproblems]] 를 표로 막는 것이 DP 다.
+
+{analogy}
+회사 송년회 초대다. 직속 상사와 부하를 같이 부르면 분위기가 어색하다(간선). 부서장(u)마다 "내가 가면 내 직속 팀장들은 빠지고 그 아래 사원들은 각 팀 사정대로", "내가 안 가면 팀장들 각자 최선" 두 경우만 비교하면 된다.
+{/analogy}
+
+== 관련 문서 ==
+* [[A(u)와 B(u)]] · [[independent set]] · [[top-down과 memoization]] · [[이진 트리]] · [[L13 Dynamic Programming II]]

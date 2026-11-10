@@ -3,7 +3,7 @@ title: topological sort — DFS 후 finish time 내림차순, O(n+m)
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-'''topological sort''' 는 [[DAG]] 의 [[topological ordering]] 을 구하는 알고리즘이다. 방법은 한 줄: '''[[DFS]] 를 돌리고 finish time 내림차순으로 정점을 나열한다.''' 정점이 all done 이 될 때 리스트에 넣기만 하면 되므로 정렬이 필요 없고 [[O(n+m)]]. 정당성은 "간선 $A \to B$ 이면 A.finish > B.finish" 라는 Claim(L9 p.60–63)이 준다.
+'''topological sort''' 는 [[DAG]] 의 [[topological ordering]] 을 구하는 알고리즘이다. [[DFS]] 를 돌리고 finish time 내림차순으로 정점을 나열한다. 정점이 all done 이 될 때 리스트에 넣기만 하면 되므로 정렬이 필요 없고, 시간은 [[O(n+m)]] 이다. 정당성은 "간선 $A \to B$ 이면 A.finish > B.finish" 라는 Claim(L9 p.60–63)에서 나온다.
 
 {def}
 L9 p.64–65 "In reverse order of finishing time." p.67 코드 (Runtime: O(|V|+|E|)):

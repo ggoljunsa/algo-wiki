@@ -1,0 +1,39 @@
+key: cost/time 비율
+title: cost/time 비율 r_i = c_i / t_i (job scheduling 의 greedy 기준)
+category: 14강 Greedy I, 용어
+---
+{def}
+L14 p.53 $r_i = \frac{c_i}{t_i} = \frac{\text{cost of delaying job } i}{\text{time job } i \text{ takes to complete}}$. p.50 "What matters is the ratio: cost of delay / time it takes. Do the job with the biggest ratio first."
+{/def}
+[[img:L14-53.png|L14 p.53 — scheduleJobs: r_i 내림차순 정렬|medium]]
+
+== 기호 ==
+{|
+! 기호 || 뜻 || p.46 예제
+|-
+| $t_i$ || 작업 i 에 걸리는 시간 || HW 10, Sleep 8
+|-
+| $c_i$ || 작업 i 가 끝날 때까지 시간당 내는 비용 || HW 2, Sleep 3
+|-
+| $r_i$ || $c_i / t_i$ || HW 0.2, Sleep 0.375
+|}
+
+== 왜 비율인가 ==
+이웃한 두 작업 A(x 시간, 시간당 z), B(y 시간, 시간당 w) 만 비교하면 된다(p.50).
+<pre class="txt">
+A 먼저일 때 B 가 x 시간 더 기다린다 → 추가 비용 x·w
+B 먼저일 때 A 가 y 시간 더 기다린다 → 추가 비용 y·z
+A 먼저가 낫다 ⇔ xw ≤ yz ⇔ w/y ≤ z/x ⇔ r_B ≤ r_A
+</pre>
+상대방을 기다리게 하는 비용만 다르다. 그래서 비용만 보거나 시간만 보면 틀린다. 둘의 비율로 비교해야 한다.
+
+{warn}
+정렬 방향은 내림차순(비율 큰 것 먼저)이다. 역수 $t_i/c_i$ 를 쓰면 오름차순이 된다. 시험에서 어느 쪽 비율을 쓰는지 먼저 적는다.
+{/warn}
+
+{analogy}
+고속도로 요금소에서 "급한 정도 ÷ 처리 시간" 이 큰 차를 먼저 보내는 것이다. 많이 급하고 금방 끝나는 차를 먼저 보내면 뒤에 기다리는 차들의 손해가 가장 적다.
+{/analogy}
+
+== 관련 문서 ==
+* [[job scheduling]] · [[greedy algorithm]] · [[L14 Greedy Algorithms I]]

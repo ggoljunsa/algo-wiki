@@ -3,7 +3,7 @@ title: dynamic programming (DP, 동적 계획법)
 category: 12강 DP I, 용어
 ---
 == 개요 ==
-'''dynamic programming'''(DP)은 [[divide and conquer]] 처럼 하나의 '''알고리즘 설계 paradigm''' 이다. 큰 문제를 작은 부분문제로 나누되, 부분문제가 서로 '''겹치므로''' 한 번 푼 답을 표에 적어 두고 다시 쓴다. L12 p.27–38 에서 정의하고, [[Bellman-Ford]] 와 [[Floyd-Warshall]] 이 대표 예다. 교수 요약(p.38): "'''It's a fancy name for a pretty common-sense idea: Don't duplicate work if you don't have to!'''"
+'''dynamic programming'''(DP)은 [[divide and conquer]] 처럼 알고리즘 설계 paradigm 이다. 큰 문제를 작은 부분문제로 나눈다. 부분문제가 서로 겹치므로 한 번 푼 답을 표에 적어 두고 다시 쓴다. L12 p.27–38 에서 정의하고, [[Bellman-Ford]] 와 [[Floyd-Warshall]] 이 대표 예다. 교수 요약(p.38): "It's a fancy name for a pretty common-sense idea: Don't duplicate work if you don't have to!"
 
 {def}
 L12 p.27 "It is an algorithm design paradigm — like divide-and-conquer is an algorithm design paradigm. Usually it is for solving optimization problems (eg, shortest path)."
@@ -33,7 +33,7 @@ L12 p.30 "Using these properties [optimal substructure, overlapping subproblems]
 |}
 
 {analogy}
-'''엑셀 표 채우기.''' 각 칸의 수식이 위쪽·왼쪽 칸을 참조한다. 엑셀은 칸마다 참조 칸을 처음부터 다시 계산하지 않고 이미 계산된 값을 그대로 가져다 쓴다. DP 는 "참조 관계(점화식)를 정하고, 참조되는 칸부터 채운다" 가 전부다.
+'''엑셀 표 채우기.''' 각 칸의 수식이 위쪽·왼쪽 칸을 참조한다. 엑셀은 칸마다 참조 칸을 처음부터 다시 계산하지 않고 이미 계산된 값을 가져다 쓴다. DP 도 참조 관계(점화식)를 정하고, 참조되는 칸부터 채운다.
 {/analogy}
 
 {info}
@@ -41,7 +41,7 @@ L12 p.30 "Using these properties [optimal substructure, overlapping subproblems]
 {/info}
 
 {exam}
-(예상) "DP 와 divide and conquer 의 공통점과 차이점" — 공통: 큰 문제를 부분문제로 나누는 paradigm. 차이: DP 는 부분문제가 겹쳐서(overlapping) 표에 저장해 재사용, D&C 는 부분문제가 겹치지 않아 저장할 필요 없음.
+🎙 11/3 교수가 수업에서 직접 물었다. "DP 와 divide and conquer 의 공통점과 차이점" 공통: 큰 문제를 부분문제로 나누는 paradigm. 차이: DP 는 부분문제가 겹쳐서(overlapping) 표에 저장해 재사용, D&C 는 부분문제가 겹치지 않아 저장할 필요 없음.
 {/exam}
 
 == 관련 문서 ==

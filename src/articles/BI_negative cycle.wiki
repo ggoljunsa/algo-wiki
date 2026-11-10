@@ -3,7 +3,7 @@ title: negative cycle — weight 합이 음수인 cycle, 최단경로가 정의�
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-'''negative cycle''' 은 간선 weight 의 합이 '''0 보다 작은 cycle''' 이다. s 에서 도달 가능한 negative cycle 이 있으면 그 cycle 을 한 바퀴 더 돌 때마다 경로 cost 가 줄어들어 최단경로가 $-\infty$ — "'''Shortest Paths aren't well-defined if there are negative cycles!'''" (L11 p.67). [[Bellman-Ford]] 는 한 라운드 더 돌려 이것을 '''검출'''한다.
+'''negative cycle''' 은 간선 weight 의 합이 0 보다 작은 cycle 이다. s 에서 도달 가능한 negative cycle 이 있으면, 그 cycle 을 한 바퀴 더 돌 때마다 경로 cost 가 줄어든다. 그래서 최단경로가 $-\infty$ 가 된다(L11 p.67 "Shortest Paths aren't well-defined if there are negative cycles!"). [[Bellman-Ford]] 는 한 라운드 더 돌려 이것을 검출한다.
 
 [[img:L11-66.png|L11 p.67 — G—R—H—G 를 계속 돌면 cost 가 끝없이 줄어든다. Shortest Paths aren't well-defined if there are negative cycles!|medium]]
 <pre class="txt">

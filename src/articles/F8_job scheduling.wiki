@@ -1,0 +1,67 @@
+key: job scheduling
+title: Job scheduling — 지연 비용 최소화 (L14 p.45–55)
+category: 14강 Greedy I, 용어
+---
+{def}
+L14 p.46 n tasks. Task i takes $t_i$ hours. Everything is already late! For every hour that passes until task i is done, pay $c_i$.
+작업 i 가 끝날 때까지 한 시간마다 $c_i$ 를 낸다. 총비용 $\sum_i c_i \cdot C_i$ ($C_i$ = 작업 i 의 완료 시각)를 최소로 하는 순서를 찾는다.
+{/def}
+[[img:L14-46.png|L14 p.46 — CSE301 HW(10h, 2) 와 Sleep(8h, 3). HW 먼저 74, Sleep 먼저 60|large]]
+
+== 예제 (p.46) ==
+<pre class="txt">
+HW: t = 10, c = 2       Sleep: t = 8, c = 3
+HW → Sleep:  10·2 + (10+8)·3 = 20 + 54 = 74
+Sleep → HW:  8·3 + (10+8)·2  = 24 + 36 = 60     ← 더 싸다
+비율: HW 2/10 = 0.2,  Sleep 3/8 = 0.375 → 비율 큰 Sleep 먼저
+</pre>
+
+== 두 작업 맞바꾸기 (p.50) ==
+[[img:L14-50.png|L14 p.50 — Head-to-head: A then B 가 나을 조건 w/y ≤ z/x|large]]
+A 는 x 시간·시간당 z, B 는 y 시간·시간당 w.
+<pre class="txt">
+Cost(A then B) = xz + (x+y)w
+Cost(B then A) = yw + (x+y)z
+A then B ≤ B then A
+⇔ xz + xw + yw ≤ yw + xz + yz
+⇔ xw ≤ yz
+⇔ w/y ≤ z/x
+</pre>
+비율 $c/t$ 가 큰 쪽을 앞에 둔다. 이 비율이 [[cost/time 비율]] 이다.
+[[anim:job_swap|이웃한 두 작업을 맞바꾸면 두 작업의 비용만 바뀐다]]
+
+== Lemma 와 알고리즘 (p.51–53) ==
+[[img:L14-51.png|L14 p.51 — 비율 최대인 B 를 앞 작업과 계속 맞바꿔 맨 앞으로|large]]
+Lemma(p.51): 비율 $c_i/t_i$ 가 최대인 작업이 맨 앞인 최적 순서가 있다. 그 작업을 바로 앞 작업과 맞바꾸는 것을 반복한다. 이웃끼리 바꾸면 다른 작업의 완료 시각은 그대로다. p.50 에 의해 비용은 늘지 않는다.
+<pre class="c">
+scheduleJobs( JOBS ):                  # p.53
+  Sort JOBS by the ratio r_i = c_i / t_i
+  Say that sorted_JOBS[i] is the job with the i'th biggest r_i
+  Return sorted_JOBS
+</pre>
+수행 시간 $O(n \log n)$ (정렬).
+
+== 귀납 증명 (p.54) ==
+<pre class="txt">
+'''Inductive hypothesis:''' 앞 t 개가 sorted_JOBS[:t] 인 최적 순서가 있다.
+'''Base case:'''           t = 0 이면 앞 0 개 = [] 이므로 참.
+'''Inductive step:'''      sorted_JOBS[t:] 에서 sorted_JOBS[t] 가 맨 앞인 최적 순서가 있다 ← Lemma.
+'''Conclusion:'''          t = n 이면 sorted_JOBS 자체가 최적 순서.
+</pre>
+optimal substructure(p.47): 최적 순서 A, B, C, D 에서 B, C, D 부분은 그 세 작업의 최적 순서다. 그래서 "가장 좋은 것 먼저, 나머지는 같은 방법" 이 된다(p.48).
+
+{analogy}
+마감이 다 지난 숙제들에 하루 벌점이 붙어 있다. 벌점이 크고 금방 끝나는 숙제부터 해치워야 벌점이 덜 쌓인다. "시간당 벌점 ÷ 걸리는 시간" 이 큰 순서다.
+{/analogy}
+
+{quiz}
+작업 P(t=2, c=4), Q(t=3, c=3), R(t=1, c=1). 최적 순서와 총비용은?
+{/quiz}
+{answer}
+비율 P 4/2 = 2, Q 3/3 = 1, R 1/1 = 1. P 먼저, Q 와 R 은 동점이라 아무 순서나 된다.
+P→Q→R: P 완료 2, Q 완료 5, R 완료 6 → 2·4 + 5·3 + 6·1 = 8 + 15 + 6 = 29.
+P→R→Q: 2·4 + 3·1 + 6·3 = 8 + 3 + 18 = 29. 같다.
+{/answer}
+
+== 관련 문서 ==
+* [[cost/time 비율]] · [[greedy 증명 전략]] · [[greedy algorithm]] · [[optimal substructure]] · [[L14 Greedy Algorithms I]]

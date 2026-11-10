@@ -1,0 +1,43 @@
+key: greedy가 실패하는 knapsack
+title: greedy 가 실패하는 knapsack (L14 p.6–7 Non-example)
+category: 14강 Greedy I, 용어
+---
+{def}
+L14 p.7 "Greedy" algorithm for unbounded knapsack: Tacos have the best Value/Weight ratio! Keep grabbing tacos! → Total weight 9, Total value 39. 최적은 Total weight 10, Total value 42.
+가치/무게 비율이 가장 큰 물건을 계속 담는 greedy 는 [[unbounded knapsack]] 에서 최적이 아니다.
+{/def}
+[[img:L14-07.png|L14 p.7 — 위: 최적 taco 2 + 전구 2 = 42. 아래: greedy taco 3 = 39|large]]
+
+== 계산 ==
+용량 10. 물건은 [[L13 Dynamic Programming II]] 의 예제와 같다.
+{|
+! 물건 || 무게 || 가치 || 가치/무게
+|-
+| 거북이 || 6 || 20 || 3.33
+|-
+| 전구 || 2 || 8 || 4.00
+|-
+| 수박 || 4 || 14 || 3.50
+|-
+| taco || 3 || 13 || 4.33
+|-
+| 소방차 || 11 || 35 || 용량 초과
+|}
+<pre class="txt">
+greedy: 비율 최대 taco 를 들어갈 때까지
+  taco ×3 → 무게 9, 가치 39, 남은 용량 1 → 더 들어가는 물건 없음
+최적:   taco ×2 + 전구 ×2 → 무게 3+3+2+2 = 10, 가치 13+13+8+8 = 42
+차이:   42 − 39 = 3
+</pre>
+greedy 는 비율만 보고 남는 용량을 신경 쓰지 않는다. 마지막에 남은 용량 1 이 버려진다. 최적해는 taco 하나를 전구 두 개로 바꿔 용량을 꽉 채운다. 이 문제는 $K[x]$ 표([[K(x) (unbounded)]])를 채우는 DP 로 푼다([[DP 레시피 4단계]]).
+
+{analogy}
+가성비가 가장 좋은 과자만 가방에 넣다가 가방에 틈이 남는 경우다. 조금 덜 효율적인 작은 과자로 틈을 채우는 편이 전체로는 낫다.
+{/analogy}
+
+{info}
+CLRS 16.2 에는 물건을 쪼갤 수 있는 fractional knapsack 이 있다. 그 경우에는 비율 greedy 가 최적이다. 슬라이드에는 없는 내용이다.
+{/info}
+
+== 관련 문서 ==
+* [[greedy algorithm]] · [[unbounded knapsack]] · [[knapsack problem]] · [[L14 Greedy Algorithms I]] · [[L13 Dynamic Programming II]]

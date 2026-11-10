@@ -3,7 +3,7 @@ title: Dijkstra 줄과 중력 직관 — YOINK! 팽팽한 줄 = 최단경로 트
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-L11 p.16–22 의 직관: 정점을 공, 간선을 '''weight 길이의 줄'''로 만들어 바닥에 놓고 출발점 Gates 를 손으로 집어 올린다("'''YOINK!'''"). 공은 Gates 로부터의 '''거리 순서'''로 바닥에서 떨어지고, 다 들어 올렸을 때 '''팽팽하게 당겨진 줄들이 최단경로 트리'''가 된다. [[Dijkstra]] 는 "줄과 중력 없이" 이것을 흉내 낸 알고리즘이다(p.23).
+L11 p.16–22 의 직관이다. 정점을 공, 간선을 weight 길이의 줄로 만들어 바닥에 놓고 출발점 Gates 를 손으로 집어 올린다("YOINK!"). 공은 Gates 로부터의 거리 순서로 바닥에서 떨어진다. 다 들어 올렸을 때 팽팽하게 당겨진 줄들이 '''최단경로 트리'''다. [[Dijkstra]] 는 이것을 줄과 중력 없이 흉내 낸 알고리즘이다(p.23).
 
 {def}
 "A vertex is done when it's not on the ground anymore." (p.17) "This also creates a tree structure! The shortest paths are the lengths along this tree." (p.22)

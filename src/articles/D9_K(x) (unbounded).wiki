@@ -1,0 +1,44 @@
+key: K(x) (unbounded)
+title: K[x] — unbounded knapsack 의 1차원 표
+category: 13강 DP II, 용어
+---
+== 개요 ==
+$K[x]$ 는 용량 x 인 배낭에 item 을 개수 제한 없이 넣을 때 얻는 최대 가치다(L13 p.43). [[unbounded knapsack]] 의 표이고 1차원이다. 답은 $K[W]$. 2차원인 [[K(x,j) (0/1)|0/1 의 K 표]] 와 이름이 같으니 첨자 개수로 구분한다. (링크 문법 때문에 문서 키는 `K(x) (unbounded)` 로 쓴다.)
+
+{def}
+L13 p.43 "Let K[x] be the optimal value for capacity x."
+$$K[x] = \max_{i:\ w_i \le x} \{\ K[x - w_i] + v_i\ \}$$
+"(And K[x] = 0 if the maximum is empty). That is, there are no i so that $w_i \le x$."
+{/def}
+
+[[img:L13-43.png|L13 p.43 — 작은 배낭을 최적으로 채운 값 + 마지막 item 의 가치|medium]]
+
+== 점화식 읽기 ==
+* $K[x - w_i]$: item i 를 넣을 자리를 비우고 남은 용량을 최적으로 채운 값.
+* $+ v_i$: 거기에 item i 하나를 넣는다.
+* $\max_i$: 마지막에 넣을 item 을 전부 시도한다.
+정확성은 p.41 의 논증에서 온다. 최적해에서 item i 하나를 빼면 용량 $x - w_i$ 의 최적해가 된다. 더 좋은 해가 있다면 거기에 item i 를 더해 원래 해보다 좋아지므로 모순이다([[귀류법]]).
+
+== 예제 (p.50–57, W = 4) ==
+<pre class="txt">
+item: 거북이(1,1), 전구(2,4), 수박(3,6)
+K[1] = K[0]+1 = 1
+K[2] = max{K[1]+1, K[0]+4} = max{2, 4} = 4
+K[3] = max{K[2]+1, K[1]+4, K[0]+6} = max{5, 5, 6} = 6
+K[4] = max{K[3]+1, K[2]+4, K[1]+6} = max{7, 8, 7} = 8
+</pre>
+[[sim:knapsack_unbounded]]
+
+{analogy}
+계단 오르기 문제와 같은 모양이다. x 층에 오르는 최선은 "x − 1층, x − 2층, x − 3층 중 하나에서 한 번 더 오르는 것" 중 최선이다. 여기서는 오르는 보폭이 item 무게, 얻는 점수가 item 가치다.
+{/analogy}
+
+{quiz}
+`K[x] = max{ K[x], ____ }` 의 빈칸은?
+{/quiz}
+{answer}
+`K[x - w_i] + v_i` (단, `w_i <= x` 일 때만)
+{/answer}
+
+== 관련 문서 ==
+* [[unbounded knapsack]] · [[K(x,j) (0/1)]] · [[knapsack problem]]

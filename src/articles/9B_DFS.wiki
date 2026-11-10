@@ -3,7 +3,7 @@ title: DFS (Depth-First Search) — 갈 수 있는 데까지 깊게, start/finis
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-'''DFS''' (깊이 우선 탐색)는 시작 정점에서 아직 안 가 본 이웃으로 '''계속 깊이''' 들어가다가, 더 갈 곳이 없으면 한 칸 되돌아가(backtrack) 다른 길을 찾는 그래프 탐색이다. 재귀(= call stack)로 자연스럽게 쓰인다. 정점마다 [[start time과 finish time]] 을 기록하는데, 이 finish time 이 [[topological sort]] (L9)와 [[SCC 알고리즘]] (L10)의 열쇠다. 시간은 [[adjacency list]] 위에서 [[O(n+m)]].
+'''DFS''' (깊이 우선 탐색)는 시작 정점에서 아직 안 가 본 이웃으로 계속 들어가다가, 더 갈 곳이 없으면 한 칸 되돌아가(backtrack) 다른 길을 찾는 그래프 탐색이다. 재귀(= call stack)로 쓰면 자연스럽다. 정점마다 [[start time과 finish time]] 을 기록하고, 이 finish time 이 [[topological sort]] (L9)와 [[SCC 알고리즘]] (L10)에 쓰인다. 시간은 [[adjacency list]] 위에서 [[O(n+m)]] 이다.
 
 {def}
 L9 p.40 의사코드 그대로:

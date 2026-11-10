@@ -1,0 +1,41 @@
+key: LCS 역추적
+title: LCS 역추적 — 표에서 실제 LCS 꺼내기 (Step 4)
+category: 13강 DP II, 용어
+---
+== 개요 ==
+[[C(i,j) (LCS)|C 표]] 는 LCS 의 길이만 준다. 실제 문자열은 $C[m,n]$ 에서 출발해 각 값이 어디서 왔는지 거꾸로 따라가서 얻는다(L13 p.24–31). [[DP 레시피 4단계]] 의 Step 4 에 해당한다.
+
+{def}
+L13 p.26 "A diagonal jump means that we found an element of the LCS!"
+L13 p.31 "It runs in time O(n + m). We walk up and left in an n-by-m array. We can only do that for n + m steps."
+{/def}
+
+[[img:L13-30.png|L13 p.30 — 역추적 완료. 분홍 칸에서 대각선 이동. 결과 ACG|large]]
+
+== 규칙 ==
+* $X[i] = Y[j]$ 이면 그 칸은 대각선에서 왔다. 글자를 기록하고 $(i-1, j-1)$ 로 간다.
+* 다르면 값이 같은 위 칸 또는 왼쪽 칸으로 간다. 둘 다 같으면 아무 쪽이나 된다(p.27). 그래서 LCS 는 여러 개일 수 있다.
+* 기록한 글자는 뒤에서부터 모은 것이므로 마지막에 뒤집는다.
+
+== 예제 (X = ACGGA, Y = ACTG) ==
+<pre class="txt">
+C[5,4]=3  A≠G  → 위 C[4,4]=3
+C[4,4]=3  G=G  → 대각선, G 기록
+C[3,3]=2  G≠T  → 위 C[2,3]=2 (왼쪽 C[3,2]=2 도 가능)
+C[2,3]=2  C≠T  → 왼쪽 C[2,2]=2
+C[2,2]=2  C=C  → 대각선, C 기록
+C[1,1]=1  A=A  → 대각선, A 기록
+C[0,0]    끝.  G,C,A 뒤집기 → ACG
+</pre>
+[[sim:lcs_table]]
+
+== 수행 시간과 공간 ==
+* 한 걸음마다 i 나 j 가 줄어든다. 걸음 수는 많아야 $m + n$ 이고 $O(m+n)$ 이다. 표 만들기 $O(mn)$ 보다 훨씬 빠르다.
+* 길이만 필요하면 두 행만 저장해도 된다. 역추적하려면 표 전체가 필요하다(p.33).
+
+{analogy}
+등산 후 내려올 때 올라간 발자국을 되짚는 것과 같다. 표를 채울 때 남긴 값이 발자국이고, 대각선 발자국마다 기념품(LCS 글자)을 하나씩 줍는다.
+{/analogy}
+
+== 관련 문서 ==
+* [[C(i,j) (LCS)]] · [[longest common subsequence]] · [[DP 레시피 4단계]]

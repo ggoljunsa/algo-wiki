@@ -3,7 +3,7 @@ title: DFS tree 와 DFS forest — DFS 가 실제로 지나간 간선이 만드�
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-[[DFS]] 가 unvisited 이웃으로 들어갈 때 쓴 간선만 모으면 트리가 된다 — '''DFS tree'''. 시작점이 root, 재귀 호출 관계가 부모–자식이다. 한 번의 DFS 로 다 못 가서 unvisited 정점에서 다시 시작하면(p.48 "Do it repeatedly!") 트리가 여러 개 생기고, 그 모음이 '''DFS forest''' 다. [[parenthesis theorem]] 과 [[topological sort]] 증명은 전부 "DFS tree 에서 descendant 인가?" 로 말한다.
+[[DFS]] 가 unvisited 이웃으로 들어갈 때 쓴 간선만 모으면 트리가 된다. 이것이 '''DFS tree''' 다. 시작점이 root 이고, 재귀 호출 관계가 부모–자식이다. 한 번의 DFS 로 다 못 가서 unvisited 정점에서 다시 시작하면(p.48 "Do it repeatedly!") 트리가 여러 개 생긴다. 그 모음이 '''DFS forest''' 다. [[parenthesis theorem]] 과 [[topological sort]] 증명은 "DFS tree 에서 descendant 인가?" 로 경우를 나눈다.
 
 {def}
 L9 p.49 "Why is it called depth-first? We are implicitly building a tree: … Call this the '''DFS tree'''. And '''first''' we go as '''deep''' as we can."

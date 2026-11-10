@@ -1,5 +1,5 @@
 key: 읽는 순서
-title: 읽는 순서 — L1 → L12, 이 순서로 읽으면 수업이 이해된다
+title: 읽는 순서 — L1 → L14, 이 순서로 읽으면 수업이 이해된다
 category: 안내
 ---
 강의는 앞 강의의 도구를 다음 강의가 그대로 가져다 쓰는 사슬이다(L1 의 귀납법 → L3 의 recursion invariant → L4 의 select 증명, L3 의 치환법 → L4 의 median of medians, L5 의 bucket sort → L7 의 해시 테이블 …). 그래서 '''강의 순서대로''' 읽는 것이 가장 빠르다. 각 단계는 "먼저 볼 사전 문서 → 메인 문서 → 확인용 시뮬레이터" 순서다.
@@ -92,10 +92,29 @@ L8 은 10/1·10/6 수업에서 삽입까지 진행(삭제 생략), 10/6 녹음 �
 확인: `dijkstra_trace`, `bellman_ford_table`
 이 단계가 끝나면: 같은 그래프에서 Dijkstra 표와 Bellman-Ford $d^{(i)}$ 표를 둘 다 채우고, 두 알고리즘의 차이("update rule 은 같고, 어떤 vertex 를 고르느냐만 다르다")를 말할 수 있다.
 
-== 12단계 — L12: Dynamic Programming I (11/3 예습) ==
+== 12단계 — L12: Dynamic Programming I (11/3) ==
 먼저: [[Bellman-Ford는 DP]] · [[optimal substructure]] · [[overlapping subproblems]]
 메인: '''[[L12 Dynamic Programming I]]''' — Fibonacci(순수 재귀 vs memo vs bottom-up), DP 두 요소, Floyd-Warshall 점화식과 $O(n^3)$, longest simple path 가 DP 가 안 되는 이유.
 확인: `fib_memo`, `floyd_warshall_table`
+이 단계가 끝나면: DP 두 요소(optimal substructure, overlapping subproblems)를 말로 설명하고, Floyd-Warshall 표를 한 단계 채울 수 있다.
+
+== 13단계 — L13: Dynamic Programming II ==
+{info}
+슬라이드 기준. 녹음이 들어오면 강조를 덧붙인다.
+{/info}
+먼저: [[DP 레시피 4단계]] · [[subsequence와 prefix]] · [[knapsack problem]]
+메인: '''[[L13 Dynamic Programming II]]''' — 같은 4단계 레시피를 세 문제에 적용한다. LCS 는 2차원 표 $C[i,j]$, unbounded knapsack 은 1차원 $K[x]$, 0/1 knapsack 은 2차원 $K[x,j]$, 트리 independent set 은 $A[u]$·$B[u]$ 두 배열.
+확인: `lcs_table`, `knapsack_unbounded`, `knapsack_01`
+이 단계가 끝나면: 세 문제의 점화식을 백지에 쓰고, 0/1 knapsack 이 왜 j 를 하나 더 들고 다니는지 한 문장으로 말할 수 있다.
+
+== 14단계 — L14: Greedy Algorithms I ==
+{info}
+슬라이드 기준. 녹음이 들어오면 강조를 덧붙인다.
+{/info}
+먼저: [[greedy algorithm]] · [[greedy가 실패하는 knapsack]] · [[greedy 증명 전략]]
+메인: '''[[L14 Greedy Algorithms I]]''' — activity selection(가장 일찍 끝나는 것부터), job scheduling($c_i/t_i$ 큰 순), Huffman coding(가장 드문 두 글자부터 합치기). 세 증명 모두 "이번 선택이 최적해를 배제하지 않는다" 를 귀납법으로 보인다.
+확인: `activity_selection`, `huffman_build`
+이 단계가 끝나면: Huffman 트리를 손으로 만들고 기대 길이(예제 2.24)를 계산할 수 있다. greedy 증명의 귀납 가설을 그대로 쓸 수 있다.
 
 == 시험 3일 전 압축 코스 ==
 메인 문서 7 편의 '''`시험 대비 핵심 요약`''' 절만 순서대로 읽고, 그다음 시험 그룹 세 문서로 마무리한다.

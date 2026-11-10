@@ -2,7 +2,7 @@ key: main
 title: 알고위키 — DGIST CSE301 Introduction to Algorithms
 category: 안내
 ---
-'''알고위키'''는 DGIST [CSE301] Introduction to Algorithms (Prof. Hoon Sung Chwa, 2026 Fall) 중간고사 범위 — '''L1 Algorithmic Analysis I · L2 Algorithmic Analysis II · L3 Divide and Conquer I · L4 Divide and Conquer II · L5 Linear-Time Sorting · L6 Randomized Algorithms I · L7 Randomized Algorithms II · L8 Tree Algorithms''' — 와 기말 범위 '''L9 Graph Algorithms I · L10 Graph Algorithms II · L11 Graph Algorithms III · L12 Dynamic Programming I''' 를 나무위키 스타일로 정리한 학습 위키다. 교재는 [[CLRS]]. 강의는 영어, 문서는 한국어 산문 + 영어 용어 그대로.
+'''알고위키'''는 DGIST [CSE301] Introduction to Algorithms (Prof. Hoon Sung Chwa, 2026 Fall) 중간고사 범위 — '''L1 Algorithmic Analysis I · L2 Algorithmic Analysis II · L3 Divide and Conquer I · L4 Divide and Conquer II · L5 Linear-Time Sorting · L6 Randomized Algorithms I · L7 Randomized Algorithms II · L8 Tree Algorithms''' — 와 기말 범위 '''L9 Graph Algorithms I · L10 Graph Algorithms II · L11 Graph Algorithms III · L12 Dynamic Programming I · L13 Dynamic Programming II · L14 Greedy Algorithms I''' 를 나무위키 스타일로 정리한 학습 위키다. 교재는 [[CLRS]]. 강의는 영어, 문서는 한국어 산문 + 영어 용어 그대로.
 
 해설본(`정리본/L#_해설.md`)이 "그림이 없고, 변수를 그때마다 까먹어서" 안 읽히던 문제를 풀려고 만들었다. 그래서 이 위키는 세 가지를 약속한다.
 # '''기호·용어를 까먹으면 클릭한다.''' $T(n)$, $c$, $n_0$, $a, b, d$, $C$, $k$, $X_{a,b}$, $M$, $p$ … 모든 기호와 용어에 사전 문서가 있고 본문 첫 등장 시 링크돼 있다.
@@ -12,7 +12,14 @@ category: 안내
 [[anim:two_questions|이 과목의 지도. 모든 알고리즘에 ① Does it work? ② Is it fast? 두 카드가 붙는다. L1~L8 은 이 두 카드에 붙일 도구를 하나씩 늘려 가는 과정이다]]
 
 {exam}
-'''기말 범위 따라잡기 (2026-11-02 추가).''' 중간고사(10/15) 이후 수업은 [[L9 Graph Algorithms I]](10/20·10/22: DFS·BFS·topological sort·bipartite) → [[L10 Graph Algorithms II]](10/27: strongly connected components, DFS 두 번) → [[L11 Graph Algorithms III]](10/27 후반·10/29: Dijkstra, Bellman-Ford) 순서로 나갔다. 다음 수업 11/3(화)은 [[L12 Dynamic Programming I]](Bellman-Ford 를 DP 로 다시 보기 → Fibonacci → Floyd-Warshall). 교수 10/29: '''"Dijkstra 와 Bellman-Ford, 그리고 둘의 차이를 꼭 이해하라 — DP 와 greedy 에서 다시 쓴다."''' 순서는 [[읽는 순서]] 9–12단계.
+'''기말 범위 진도 (2026-11-10 갱신).''' 중간고사(10/15) 뒤 수업 순서는 다음과 같다.
+# [[L9 Graph Algorithms I]] (10/20·10/22): DFS, BFS, topological sort, bipartite
+# [[L10 Graph Algorithms II]] (10/27): strongly connected components, DFS 두 번
+# [[L11 Graph Algorithms III]] (10/27 후반·10/29): Dijkstra, Bellman-Ford
+# [[L12 Dynamic Programming I]] (11/3): Bellman-Ford 를 DP 로 보기, Fibonacci, Floyd-Warshall
+# [[L13 Dynamic Programming II]] (11/5 추정): LCS, knapsack 두 가지, 트리의 independent set
+# [[L14 Greedy Algorithms I]] (11/10~): activity selection, job scheduling, Huffman coding
+L13·L14 는 녹음이 아직 없어서 슬라이드 기준으로 썼다. 순서는 [[읽는 순서]] 9–14단계.
 {/exam}
 
 == 어디서부터 읽나 ==
@@ -59,7 +66,11 @@ category: 안내
 |-
 | L11 || [[L11 Graph Algorithms III]] || [[Dijkstra]](음수 없음, 가장 작은 not-sure 를 골라 이웃만 갱신, 정확성 Claim 1·2, heap 별 수행 시간) vs [[Bellman-Ford]](모든 간선 n−1 라운드, $O(nm)$, [[negative cycle]] 검출) || `dijkstra_trace` · `bellman_ford_table` · `anim:dijkstra_yoink`
 |-
-| L12 || [[L12 Dynamic Programming I]] || [[dynamic programming]] = [[optimal substructure]] + [[overlapping subproblems]], [[Fibonacci 수 계산]], [[Floyd-Warshall]] $O(n^3)$ (11/3 수업 전 예습판) || `fib_memo` · `floyd_warshall_table` · `anim:fib_tree_repeat`
+| L12 || [[L12 Dynamic Programming I]] || [[dynamic programming]] = [[optimal substructure]] + [[overlapping subproblems]], [[Fibonacci 수 계산]], [[Floyd-Warshall]] $O(n^3)$ || `fib_memo` · `floyd_warshall_table` · `anim:fib_tree_repeat`
+|-
+| L13 || [[L13 Dynamic Programming II]] || [[DP 레시피 4단계]], [[longest common subsequence]] $O(nm)$, [[unbounded knapsack]] 과 [[0/1 knapsack]] $O(nW)$, [[트리의 maximal independent set]] $O(\lvert V \rvert)$ || `lcs_table` · `knapsack_unbounded` · `knapsack_01` · `anim:mis_tree_dp`
+|-
+| L14 || [[L14 Greedy Algorithms I]] || [[greedy algorithm]], [[activity selection]] (finish time 순), [[job scheduling]] ([[cost/time 비율]] 큰 순), [[Huffman coding]], [[greedy 증명 전략]] || `activity_selection` · `huffman_build` · `anim:huffman_merge`
 |}
 
 == 시험 대비 ==
@@ -187,4 +198,4 @@ L6–L7 의 확률 증명과 L3–L5 의 점화식·하한 증명에 쓰이는 �
 * [[교수 소개]] · [[CLRS]]
 
 ----
-마지막 갱신: 2026-11-02 (기말 범위 L9–L11 + L12 예습 추가 — 10/20·10/22·10/27·10/29 녹음 반영)
+마지막 갱신: 2026-11-10 (L13 DP II · L14 Greedy I 추가, L12 에 11/3 녹음 반영, 기말 문서 문체 정리)

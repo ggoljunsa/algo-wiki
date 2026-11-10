@@ -1,0 +1,37 @@
+key: subsequence와 prefix
+title: subsequence 와 prefix ($X_i$ 표기)
+category: 13강 DP II, 용어
+---
+== 개요 ==
+[[longest common subsequence|LCS]] 를 읽으려면 두 용어가 필요하다. subsequence 는 문제의 대상이고, prefix 는 부분문제를 만드는 도구다.
+
+{def}
+'''subsequence''' (L13 p.8): "BDFH is a subsequence of ABCDEFGH." 원래 순서를 지키면서 글자 몇 개를 고른 것. 고른 글자가 붙어 있을 필요는 없다.
+'''prefix''' (L13 p.11): 앞에서부터 i 글자. "Notation: denote this prefix ACGC by $Y_4$."
+{/def}
+
+[[img:L13-11.png|L13 p.11 — Y = ACGCTTA 의 앞 4글자 ACGC 를 Y₄ 로 쓴다|medium]]
+
+== 비교 ==
+{|
+! 용어 || 조건 || ABCDEFGH 에서 예
+|-
+| subsequence || 순서 유지, 건너뛰기 허용 || BDFH, ACEG, H
+|-
+| substring || 순서 유지, 연속 || CDE (BDF 는 아님)
+|-
+| prefix || 맨 앞부터 연속 || A, AB, ABC, … (길이 0 인 빈 prefix 도 있음)
+|}
+길이 m 인 문자열의 subsequence 는 $2^m$ 개다. 전부 비교하는 brute force 는 지수 시간이다. prefix 는 $m+1$ 개뿐이라서 prefix 쌍을 부분문제로 잡으면 표가 $(m+1)(n+1)$ 칸이 된다.
+
+== 표기 ==
+* $X_i$ = X 의 앞 i 글자, $X_0$ = 빈 문자열.
+* $X[i]$ = X 의 i 번째 글자(1-indexed). $X_i$ 의 마지막 글자다.
+* [[C(i,j) (LCS)|C 표]]: $C[i,j]$ = LCS($X_i$, $Y_j$) 의 길이.
+
+{analogy}
+subsequence 는 노래 가사에서 단어 몇 개를 형광펜으로 칠한 것이다. 순서는 그대로고 사이에 빈 단어가 있어도 된다. prefix 는 노래를 처음부터 i 마디까지만 들은 것이다.
+{/analogy}
+
+== 관련 문서 ==
+* [[longest common subsequence]] · [[C(i,j) (LCS)]] · [[슬라이스 표기]]

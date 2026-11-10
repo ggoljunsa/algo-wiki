@@ -3,7 +3,7 @@ title: simple path (단순 경로)
 category: 12강 DP I, 용어
 ---
 == 개요 ==
-'''simple path''' 는 '''cycle 이 없는'''(같은 정점을 두 번 지나지 않는) 경로다. L12 p.49 Aside 에서 두 가지 사실을 준다: ① [[negative cycle]] 이 없으면 항상 simple 한 최단경로가 있다 ② n 개 정점 그래프의 simple path 는 간선이 '''최대 n−1 개'''다. ①은 [[Floyd-Warshall]] Case 2(k 를 정확히 한 번 지남)의 근거, ②는 [[Bellman-Ford]] 가 n−1 라운드로 충분한 이유다.
+'''simple path''' 는 cycle 이 없는(같은 정점을 두 번 지나지 않는) 경로다. L12 p.49 Aside 에서 두 가지 사실을 준다. ① [[negative cycle]] 이 없으면 항상 simple 한 최단경로가 있다. ② n 개 정점 그래프의 simple path 는 간선이 최대 n−1 개다. ①은 [[Floyd-Warshall]] Case 2(k 를 정확히 한 번 지남)의 근거이고, ②는 [[Bellman-Ford]] 가 n−1 라운드로 충분한 이유다.
 
 {def}
 L12 p.49 "'Simple' means that the path has no cycles in it."

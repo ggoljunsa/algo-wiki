@@ -44,7 +44,7 @@ d(4)        0    1    2    6    23
 {/analogy}
 
 {exam}
-(예상) "Bellman-Ford 가 DP 인 이유를 부분문제·점화식·overlapping 으로 설명하라." 위 표의 세 줄을 그대로 쓰면 된다. 그리고 "n 개 배열을 다 저장해야 하나?" → 아니다, last round / this round 두 개면 된다(p.15).
+🎙 11/3 교수 강조: "Bellman-Ford is an example of dynamic programming. Dijkstra is an example of greedy algorithm." 서술 대비: "Bellman-Ford 가 DP 인 이유를 부분문제·점화식·overlapping 으로 설명하라." 위 표의 세 줄을 그대로 쓰면 된다. 그리고 "n 개 배열을 다 저장해야 하나?" → 아니다, last round / this round 두 개면 된다(p.15).
 {/exam}
 
 == 관련 문서 ==

@@ -3,7 +3,7 @@ title: start time 과 finish time — DFS 가 정점에 찍는 두 timestamp (�
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-[[DFS]] 는 정점 w 에 두 시각을 적는다. '''start time''' = w 에 처음 들어간 시각(in progress 가 된 순간), '''finish time''' = w 의 모든 이웃을 다 보고 all done 이 된 순간. 슬라이드 p.67 코드에서는 `start_time`, `end_time`, p.68–75 예제 그림에서는 "Start", "Leave" 라고 쓴다. p.39: "the bookkeeping will be useful later!" — finish time 이 [[topological sort]] 와 L10 [[SCC 알고리즘]] 의 핵심이 된다.
+[[DFS]] 는 정점 w 에 두 시각을 적는다. '''start time''' 은 w 에 처음 들어간 시각(in progress 가 된 순간)이고, '''finish time''' 은 w 의 모든 이웃을 다 보고 all done 이 된 시각이다. 슬라이드 p.67 코드에서는 `start_time`, `end_time` 이라 쓰고, p.68–75 예제 그림에서는 "Start", "Leave" 라고 쓴다. p.39 에 "the bookkeeping will be useful later!" 라고 적혀 있다. finish time 은 [[topological sort]] 와 L10 [[SCC 알고리즘]] 에 쓰인다.
 
 {def}
 L9 p.40: `w.startTime = currentTime` (들어가자마자) / `w.finishTime = currentTime` (모든 이웃을 끝낸 뒤). 시계는 들어갈 때 1, 자식에서 돌아올 때 1 증가.

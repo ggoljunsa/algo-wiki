@@ -3,7 +3,7 @@ title: Bellman-Ford — 모든 간선을 n−1 라운드 relax, O(nm), negative 
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-'''Bellman-Ford algorithm''' 은 [[Dijkstra]] 와 '''같은 갱신 식'''([[relaxation]])을 쓰되, 정점을 똑똑하게 고르지 않고 "'''just update for all of the u's'''" — 모든 간선을 한 라운드에 다 relax 하는 일을 n−1 번 반복한다. 느리지만($O(nm)$) [[음수 간선 가중치]] 를 처리하고, 한 라운드 더 돌려 [[negative cycle]] 을 검출하며, weight 가 바뀌어도 계속 돌리면 변화가 퍼진다. L12 에서 [[Bellman-Ford는 DP|dynamic programming]] 으로 다시 본다.
+'''Bellman-Ford algorithm''' 은 [[Dijkstra]] 와 같은 갱신 식([[relaxation]])을 쓴다. 다른 점은 정점을 고르지 않는 것이다("just update for all of the u's"). 한 라운드에 모든 간선을 relax 하고, 이것을 n−1 번 반복한다. $O(nm)$ 으로 느리지만 [[음수 간선 가중치]] 를 처리한다. 한 라운드 더 돌려 [[negative cycle]] 을 검출하고, weight 가 바뀌어도 계속 돌리면 변화가 퍼진다. L12 에서 [[Bellman-Ford는 DP|dynamic programming]] 으로 다시 본다.
 
 {def}
 L11 p.69 그대로:

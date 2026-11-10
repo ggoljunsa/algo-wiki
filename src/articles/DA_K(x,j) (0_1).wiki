@@ -1,0 +1,50 @@
+key: K(x,j) (0/1)
+title: K[x,j] — 0/1 knapsack 의 2차원 표
+category: 13강 DP II, 용어
+---
+== 개요 ==
+$K[x,j]$ 는 용량 x 인 배낭에 앞 j 개 item 만, 각각 한 번까지 써서 얻는 최대 가치다(L13 p.70). [[0/1 knapsack]] 의 표이고 답은 $K[W,n]$. 1차원인 [[K(x) (unbounded)|unbounded 의 K 표]] 와 달리 두 번째 첨자 j 가 "어떤 item 까지 고려했는지" 를 기억한다. (링크 문법 때문에 문서 키는 `K(x,j) (0/1)` 로 쓴다.)
+
+{def}
+L13 p.70 "Let K[x,j] be the optimal value for: capacity x, with j items."
+$$K[x,j] = \max\{\ K[x, j-1],\ K[x - w_j, j-1] + v_j\ \}$$
+"(And K[x,0] = 0 and K[0,j] = 0)."
+{/def}
+
+[[img:L13-70.png|L13 p.70 — 빨강 Case 1, 주황 Case 2|medium]]
+
+== 두 경우 (p.66–68) ==
+{|
+! 경우 || 뜻 || 값
+|-
+| Case 1 || 최적해가 item j 를 안 쓴다 || $K[x, j-1]$
+|-
+| Case 2 || 최적해가 item j 를 쓴다 ($w_j \le x$ 일 때만) || $K[x - w_j, j-1] + v_j$
+|}
+Case 2 에서도 j−1 로 내려간다. item j 를 이미 썼으니 남은 부분문제는 item j 를 쓸 수 없어야 한다. 이것이 "한 개씩" 조건을 표에 넣는 방법이다.
+
+[[img:L13-89.png|L13 p.89 — 예제 완성 표. 행 j, 열 x|large]]
+
+== 예제 (p.73–89, W = 3) ==
+<pre class="txt">
+item: 1 거북이(1,1), 2 전구(2,4), 3 수박(3,6)
+K[1,1] = max{K[1,0], K[0,0]+1} = 1
+K[2,2] = max{K[2,1], K[0,1]+4} = max{1, 4} = 4
+K[3,2] = max{K[3,1], K[1,1]+4} = max{1, 5} = 5
+K[3,3] = max{K[3,2], K[0,2]+6} = max{5, 6} = 6
+</pre>
+[[sim:knapsack_01]]
+
+{analogy}
+쇼핑 목록을 위에서부터 한 줄씩 지우는 것과 같다. j 번째 줄에서 "이 물건을 담을까" 를 정하고 나면 그 줄은 다시 보지 않는다. 그래서 담든 안 담든 다음은 j−1 줄까지의 목록이다.
+{/analogy}
+
+{quiz}
+`K[x,j] = max{ K[x,j], K[x - w_j, ____] + v_j }` 의 빈칸은? 왜 그런가?
+{/quiz}
+{answer}
+`j-1`. item j 를 한 번 썼으므로 남은 용량은 item j 없이 채워야 한다. `j` 로 쓰면 unbounded 가 된다.
+{/answer}
+
+== 관련 문서 ==
+* [[0/1 knapsack]] · [[K(x) (unbounded)]] · [[C(i,j) (LCS)]] · [[knapsack problem]]

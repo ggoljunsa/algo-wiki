@@ -36,7 +36,7 @@ L12 p.60 "Optimal solutions to subproblems don't give us an optimal solution to 
 {/analogy}
 
 {exam}
-(예상) 서술: "longest simple path 에 DP 를 쓸 수 없는 이유" → ① s→a 최장 + a→t 최장으로 쪼개면 ② 두 부분해가 같은 정점(b)을 쓸 수 있어 합친 경로가 simple 이 아님 ③ 부분문제가 독립이 아니라 optimal substructure 가 없음 (NP-complete). T/F: "모든 최적화 문제는 DP 로 다항 시간에 풀 수 있다" → F.
+🎙 11/3 수업에서 "subproblem 이 independent 하지 않다" 로 설명했다. 서술 대비: "longest simple path 에 DP 를 쓸 수 없는 이유" → ① s→a 최장 + a→t 최장으로 쪼개면 ② 두 부분해가 같은 정점(b)을 쓸 수 있어 합친 경로가 simple 이 아님 ③ 부분문제가 독립이 아니라 optimal substructure 가 없음 (NP-complete). T/F: "모든 최적화 문제는 DP 로 다항 시간에 풀 수 있다" → F.
 {/exam}
 
 == 관련 문서 ==

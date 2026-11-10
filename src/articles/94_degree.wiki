@@ -3,7 +3,7 @@ title: degree — 정점에 붙은 간선 수, 차수 합 = 2m
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-[[undirected graph]] 에서 정점 v 의 '''degree''' $\deg(v)$ 는 v 에 붙은 간선 수 = v 의 neighbor 수다. [[directed graph]] 에서는 들어오는 쪽과 나가는 쪽을 나눠 [[in-degree와 out-degree]] 로 센다. degree 는 그래프 알고리즘 수행 시간 분석의 기본 단위다 — [[adjacency list]] 에서 v 의 이웃을 훑는 비용이 $O(\deg(v))$ 이고, 그걸 모든 정점에 대해 더한 것이 [[O(n+m)]] 의 m 항이 된다.
+[[undirected graph]] 에서 정점 v 의 '''degree''' $\deg(v)$ 는 v 에 붙은 간선 수이고, v 의 neighbor 수와 같다. [[directed graph]] 에서는 들어오는 쪽과 나가는 쪽을 나눠 [[in-degree와 out-degree]] 로 센다. degree 는 수행 시간 분석에 자주 쓰인다. [[adjacency list]] 에서 v 의 이웃을 훑는 비용이 $O(\deg(v))$ 이고, 이것을 모든 정점에 대해 더하면 [[O(n+m)]] 의 m 항이 된다.
 
 {def}
 "The degree of vertex 4 is 2. There are 2 edges coming out. Vertex 4's neighbors are 2 and 3." (L9 p.13)

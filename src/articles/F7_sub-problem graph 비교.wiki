@@ -1,0 +1,33 @@
+key: sub-problem graph 비교
+title: sub-problem graph 비교 — D&C 트리, DP DAG, greedy 사슬 (L14 p.38–42)
+category: 14강 Greedy I, 용어
+---
+{def}
+L14 p.42 Greedy algorithms: Not only there is optimal sub-structure (optimal solutions to a problem are made up from optimal solutions of sub-problems), but each problem depends on only one sub-problem.
+부분 문제를 노드, "이 문제를 풀려면 저 문제의 답이 필요하다" 를 간선으로 그린 그래프로 세 설계 방법을 비교한다.
+{/def}
+[[img:L14-39.png|L14 p.39 — Divide-and-conquer: 트리|medium]]
+[[img:L14-40.png|L14 p.40 — Dynamic Programming: 부분 문제를 공유하는 DAG|medium]]
+[[img:L14-42.png|L14 p.42 — Greedy: 사슬|medium]]
+
+== 비교 ==
+{|
+! 방법 || 모양 || 특징 || 예
+|-
+| [[divide and conquer]] || 트리 || 부분 문제가 서로 겹치지 않는다 || [[mergesort]]
+|-
+| [[dynamic programming]] || DAG || 부분 문제가 여러 곳에서 쓰인다([[overlapping subproblems]]). 표에 저장 || [[Floyd-Warshall]], [[unbounded knapsack]]
+|-
+| [[greedy algorithm]] || 사슬 || 각 문제가 부분 문제 하나에만 의존한다 || [[activity selection]], [[Huffman coding]]
+|}
+DP 는 여러 부분 문제의 답을 비교해서 고른다(min/max). greedy 는 어떤 부분 문제로 갈지 미리 안다. 그래서 비교할 필요도 표도 필요 없다.
+
+p.38: activity selection 은 세 가지로 다 볼 수 있다. greedy 로 보면 가장 자연스럽다. "나누기" 가 없는 D&C 로 볼 수도 있다. optimal substructure 로 표를 채우는 DP 로 볼 수도 있다([[CLRS]] 16.1).
+[[anim:subproblem_graph_shapes|D&C 트리, DP DAG, greedy 사슬]]
+
+{analogy}
+D&C 는 일을 팀원 여럿에게 나눠 주고 각자 따로 하는 것이다. DP 는 팀원들이 같은 자료를 공유하니 한 번 만든 자료를 게시판에 붙여 두는 것이다. greedy 는 할 일이 줄 하나로 이어져 있어서 다음 사람에게 한 번만 넘기면 되는 것이다.
+{/analogy}
+
+== 관련 문서 ==
+* [[greedy algorithm]] · [[dynamic programming]] · [[divide and conquer]] · [[optimal substructure]] · [[overlapping subproblems]] · [[L14 Greedy Algorithms I]]

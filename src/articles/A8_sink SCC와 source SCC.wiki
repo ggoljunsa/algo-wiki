@@ -3,7 +3,7 @@ title: sink SCC 와 source SCC — 나가는 간선이 없는 덩어리, 들어�
 category: 10강 Graph II, 용어
 ---
 == 개요 ==
-[[SCC graph]] 는 [[DAG]] 이므로 반드시 '''sink'''(다른 SCC 로 나가는 간선이 없음)와 '''source'''(들어오는 간선이 없음)가 하나 이상 있다. L10 의 직관 전체가 이 두 단어로 요약된다: '''DFS 를 sink SCC 에서 시작하면 tree = 그 SCC''' 이고, 1차 DFS 에서 finish 가 가장 큰 SCC 는 $G$ 의 '''source''' → 간선을 뒤집은 [[G^T]] 에서는 '''sink''' 가 된다. (슬라이드는 sink/source 라는 단어 대신 "no edges going out", "all blue arrows lead in" 이라 쓴다.)
+[[SCC graph]] 는 [[DAG]] 이므로 '''sink'''(다른 SCC 로 나가는 간선이 없음)와 '''source'''(들어오는 간선이 없음)가 하나 이상 있다. L10 의 직관은 이 두 단어로 설명된다. DFS 를 sink SCC 에서 시작하면 tree 가 그 SCC 와 같다. 1차 DFS 에서 finish 가 가장 큰 SCC 는 $G$ 의 source 이고, 간선을 뒤집은 [[G^T]] 에서는 sink 가 된다. (슬라이드는 sink/source 라는 단어 대신 "no edges going out", "all blue arrows lead in" 이라 쓴다.)
 
 {def}
 L10 p.55 "Now, the SCC with the largest finish time has no edges going out. So if I run DFS there, I'll find exactly that component. Remove and repeat."

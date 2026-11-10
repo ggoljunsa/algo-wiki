@@ -1,0 +1,46 @@
+key: greedy 증명 전략
+title: greedy 증명 전략 — never rule out an optimal solution
+category: 14강 Greedy I, 용어
+---
+{def}
+L14 p.36 Common strategy for greedy algorithms: Make a series of choices. Show that, at each step, our choice won't rule out an optimal solution at the end of the day. After we've made all our choices, we haven't ruled out an optimal solution, so we must have found one.
+매 선택이 최적해를 배제하지 않는다는 것을 보이면, 선택을 다 마쳤을 때 최적해를 찾은 것이다.
+{/def}
+[[img:L14-37.png|L14 p.37 — Common strategy (formally): IH / Base case / Inductive step(TODO) / Conclusion|large]]
+
+== 귀납법 4요소로 쓰기 (p.37) ==
+<pre class="txt">
+'''Inductive hypothesis:''' greedy 선택 t 번 후, 성공(최적해)을 배제하지 않았다.
+'''Base case:'''           아무것도 고르기 전에는 성공이 가능하다.
+'''Inductive step:'''      문제마다 다르다. 보조정리(교환 논증)를 쓴다.
+'''Conclusion:'''          끝까지 와서 성공을 배제하지 않았다면 성공한 것이다.
+</pre>
+[[귀납법 4요소]] 와 같은 구조다. "성공을 배제하지 않았다" 는 "지금까지 고른 것을 모두 포함하는 최적해가 있다" 와 같은 말이다.
+
+== 세 예제의 Inductive step ==
+{|
+! 문제 || IH 의 구체적 문장 || Step 에 쓰는 보조정리
+|-
+| [[activity selection]] (p.33–34) || t 번째 활동 추가 후, 현재 해를 확장하는 최적해가 있다 || Claim $A[i] = A[k] + 1$
+|-
+| [[job scheduling]] (p.54) || 앞의 t 개가 sorted_JOBS[:t] 인 최적 순서가 있다 || Lemma: 비율 $c_i/t_i$ 최대인 작업이 맨 앞인 최적 순서가 있다
+|-
+| [[Huffman coding]] (p.86–93) || t 단계 후, 현재 부분 트리들을 leaf 로 갖는 최적 트리가 있다 || Lemma 1(가장 드문 두 개가 형제) + Lemma 2(부분 트리를 글자로 취급)
+|}
+세 경우 모두 보조정리는 같은 모양이다. 최적해 하나를 잡고, greedy 선택과 다른 부분을 greedy 선택으로 맞바꿔도 손해가 없음을 보인다.
+
+== 설계 순서 (p.55, p.95) ==
+# optimal substructure 를 찾는다.
+# 최적해를 배제하지 않는 "안전한" 선택을 찾는다.
+# 위 4칸 귀납법으로 묶는다.
+
+{analogy}
+미로에서 "지금 있는 칸에서 출구로 가는 길이 아직 있다" 를 유지하며 한 칸씩 가는 것이다. 처음 칸에서는 당연히 길이 있다. 매 걸음이 그 사실을 깨지 않으면 결국 출구에 닿는다.
+{/analogy}
+
+{warn}
+Conclusion 을 빼먹기 쉽다. "마지막 선택 후에도 최적해를 배제하지 않았다. 현재 해를 확장하는 해는 현재 해뿐이다. 그러므로 현재 해가 최적이다." 까지 써야 증명이 닫힌다.
+{/warn}
+
+== 관련 문서 ==
+* [[greedy algorithm]] · [[activity selection 정확성 증명]] · [[Huffman 정확성 증명]] · [[job scheduling]] · [[귀납법 4요소]] · [[L14 Greedy Algorithms I]]

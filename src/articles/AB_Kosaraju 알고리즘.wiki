@@ -3,7 +3,7 @@ title: Kosaraju 알고리즘 — L10 SCC 알고리즘의 고전 이름
 category: 10강 Graph II, 용어
 ---
 == 개요 ==
-L10 의 [[SCC 알고리즘]] (DFS($G$) → [[G^T]] → finish 내림차순으로 DFS($G^T$))은 교과서와 인터넷에서 '''Kosaraju 알고리즘'''(Kosaraju–Sharir)이라는 이름으로 불린다. CLRS 에서는 STRONGLY-CONNECTED-COMPONENTS 절차(22.5). 슬라이드에는 이 이름이 나오지 않는다 — 검색하거나 CLRS 를 찾아볼 때 쓰는 이름.
+L10 의 [[SCC 알고리즘]] (DFS($G$) → [[G^T]] → finish 내림차순으로 DFS($G^T$))은 교과서와 인터넷에서 '''Kosaraju 알고리즘'''(Kosaraju–Sharir)이라고 부른다. CLRS 에서는 STRONGLY-CONNECTED-COMPONENTS 절차(22.5)다. 슬라이드에는 이 이름이 나오지 않는다. 검색하거나 CLRS 를 찾아볼 때 쓰는 이름이다.
 
 {info}
 '''슬라이드 밖 용어.''' 시험 답안에는 슬라이드 표현("run DFS, reverse all the edges, run DFS again in decreasing finish time order")으로 쓰는 것이 안전하다.

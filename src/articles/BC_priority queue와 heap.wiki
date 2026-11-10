@@ -3,7 +3,7 @@ title: priority queue 와 heap — findMin · removeMin · updateKey 를 지원�
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-[[Dijkstra]] 가 필요로 하는 자료구조(L11 p.55)는 "not-sure 정점들을 $d[v]$ 를 key 로 저장하고, 최소를 찾고(findMin), 꺼내고(removeMin), key 를 줄이는(updateKey)" 것이다. 이런 추상 자료형을 '''priority queue''' 라 부르고, 대표 구현이 '''heap''' 이다. 슬라이드: "'''Not covered in this class – see CLRS! But! We will use them.'''"
+[[Dijkstra]] 가 필요로 하는 자료구조(L11 p.55)는 not-sure 정점들을 $d[v]$ 를 key 로 저장하고, 최소를 찾고(findMin), 꺼내고(removeMin), key 를 줄이는(updateKey) 것이다. 이런 추상 자료형을 '''priority queue''' 라 부르고, 대표 구현이 heap 이다. 슬라이드: "Not covered in this class – see CLRS! But! We will use them."
 
 {def}
 "A heap is a tree-based data structure that has the property that every node has a smaller key than its children." (L11 p.59)

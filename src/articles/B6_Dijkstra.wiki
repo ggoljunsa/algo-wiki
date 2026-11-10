@@ -3,7 +3,7 @@ title: Dijkstra — not-sure 중 d 최소를 골라 이웃만 갱신, 음수 간
 category: 11강 Shortest Path, 용어
 ---
 == 개요 ==
-'''Dijkstra's algorithm''' 은 weight 가 '''모두 0 이상'''인 [[weighted graph]] 에서 [[single-source shortest path]] 를 푼다. 정점마다 추정치 $d[v]$ 를 들고, "아직 확실하지 않은(not-sure) 정점 중 $d$ 가 가장 작은 것"을 골라 그 이웃을 [[relaxation|갱신]]하고 '''sure''' 로 확정하는 일을 n 번 반복한다. 매 순간 가장 좋아 보이는 것을 고르는 '''greedy''' 알고리즘의 원형. 시간은 [[Fibonacci heap]] 으로 $O(n\log n + m)$.
+'''Dijkstra's algorithm''' 은 weight 가 모두 0 이상인 [[weighted graph]] 에서 [[single-source shortest path]] 를 푼다. 정점마다 추정치 $d[v]$ 를 둔다. 아직 확실하지 않은(not-sure) 정점 중 $d$ 가 가장 작은 것을 골라 그 이웃을 [[relaxation|갱신]]하고 sure 로 확정한다. 이것을 n 번 반복한다. 매 순간 가장 좋아 보이는 것을 고르므로 greedy 알고리즘의 원형이다. 시간은 [[Fibonacci heap]] 을 쓰면 $O(n\log n + m)$ 이다.
 
 {def}
 L11 p.38 그대로:

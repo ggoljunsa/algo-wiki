@@ -3,7 +3,7 @@ title: graph — G = (V, E), 정점과 간선으로 만든 abstraction
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-'''graph''' 는 "무엇과 무엇이 연결돼 있다" 만 남기고 나머지를 지운 수학적 모델이다. [[vertex와 edge|정점(vertex)]] 집합 $V$ 와 [[vertex와 edge|간선(edge)]] 집합 $E$ 의 쌍 $G=(V,E)$ 로 쓴다. 기말 범위(L9–L12)의 거의 모든 알고리즘이 graph 위에서 돈다 — 교수(10/20): "second half 의 DP, greedy, advanced algorithms 도 '''대부분이 graph algorithm''' 이다."
+'''graph''' 는 무엇과 무엇이 연결돼 있는지만 남긴 수학적 모델이다. [[vertex와 edge|정점(vertex)]] 집합 $V$ 와 [[vertex와 edge|간선(edge)]] 집합 $E$ 의 쌍 $G=(V,E)$ 로 쓴다. 기말 범위(L9–L12)의 알고리즘은 대부분 graph 위에서 돈다. 교수(10/20)도 "second half 의 DP, greedy, advanced algorithms 도 대부분이 graph algorithm 이다" 라고 했다.
 
 {def}
 "Has vertices and edges. V is the set of vertices. E is the set of edges. Formally, a graph is G = (V,E)." (L9 p.13)

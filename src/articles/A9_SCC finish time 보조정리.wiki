@@ -3,7 +3,7 @@ title: SCC finish time 보조정리 (Lemma 2 + Corollary 1) — 간선 A→B 이
 category: 10강 Graph II, 용어
 ---
 == 개요 ==
-L10 의 핵심 보조정리. [[SCC graph]] 에 간선 $A \to B$ 가 있으면 1차 DFS 기준 '''$A.finish > B.finish$''' (Lemma 2, p.64). 뒤집으면: [[G^T]] 에 간선 $B \to A$ 가 있으면 $A.finish > B.finish$, 즉 '''$G^T$ 의 SCC 간 간선은 항상 finish 가 큰 쪽을 향한다''' (Corollary 1, p.65). L9 [[topological sort]] 의 "DAG 에서 $u \to v$ 이면 $u.finish > v.finish$" 를 SCC DAG 에 그대로 옮긴 것이고, 증명도 같은 두 case 논증이다.
+L10 의 보조정리(Lemma 2, p.64)다. [[SCC graph]] 에 간선 $A \to B$ 가 있으면 1차 DFS 기준 '''$A.finish > B.finish$''' 다. [[G^T]] 쪽에서 말하면, $G^T$ 에 간선 $B \to A$ 가 있으면 $A.finish > B.finish$ 다. 즉 $G^T$ 의 SCC 간 간선은 항상 finish 가 큰 쪽을 향한다(Corollary 1, p.65). L9 [[topological sort]] 의 "DAG 에서 $u \to v$ 이면 $u.finish > v.finish$" 를 SCC DAG 로 옮긴 것이고, 증명도 같은 두 case 논증이다.
 
 {def}
 L10 p.64 "Lemma 2: If there is an edge like this: A → B, then A.finish > B.finish."

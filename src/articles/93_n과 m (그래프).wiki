@@ -3,7 +3,8 @@ title: n 과 m (그래프) — n = |V| 정점 수, m = |E| 간선 수
 category: 9강 Graph I, 용어
 ---
 == 개요 ==
-'''L9 부터 n 은 정점 수, m 은 간선 수다.''' L7 의 [[M과 n]] (M = universe 크기, n = 키 수·버킷 수)과도, L1–L6 의 "입력 배열 크기 n" 과도 다른 뜻이니 헷갈리지 말 것. 그래프 알고리즘의 수행 시간은 늘 이 두 변수로 쓴다: [[O(n+m)]], $O(n^2)$, $O(nm)$ …
+L9 부터 '''n 은 정점 수, m 은 간선 수'''다. L7 의 [[M과 n]] (M = universe 크기, n = 키 수·버킷 수)이나 L1–L6 의 "입력 배열 크기 n" 과는 뜻이 다르다. 그래프 알고리즘의 수행 시간은 이 두 변수로 쓴다. 예: [[O(n+m)]], $O(n^2)$, $O(nm)$.
+[[img:L9-19.png|L9 p.20 — Trade-offs 표 오른쪽 위에 "n: the number of vertices, m: the number of edges". space 는 matrix O(n²), list O(n+m)|medium]]
 
 {def}
 L9 p.20: "Say there are n vertices and m edges." "n: the number of vertices, m: the number of edges."
