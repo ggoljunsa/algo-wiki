@@ -133,7 +133,13 @@ function renderArticle(key) {
   }
   html += "<h1>" + art.title + "</h1>";
   html += '<div class="meta">분류: ' + cats + "</div>";
+  window.__FN = [];
   html += renderWikiText(art.body);
+  if (window.__FN.length) {
+    html += '<div class="fn-list"><div class="fn-title">각주</div><ol>' + window.__FN.map(function (t, k) {
+      return '<li id="fn-' + (k + 1) + '"><a class="fn-back" href="javascript:void(0)" onclick="var e=document.getElementById(\'fnref-' + (k + 1) + '\');if(e)e.scrollIntoView({block:\'center\'})">[' + (k + 1) + ']</a> ' + t + '</li>';
+    }).join("") + "</ol></div>";
+  }
   html += '<div class="categories">분류: ' + cats + "</div>";
 
   area.innerHTML = html;
@@ -247,7 +253,7 @@ function renderWikiText(text) {
     }
 
     // ---- 박스 (한 줄 / 여러 줄 공통) ----
-    var boxStart = line.match(/^\{(info|warn|tip|joke|analogy|def|quiz|exam|answer)\}([\s\S]*)$/);
+    var boxStart = line.match(/^\{(info|warn|tip|joke|analogy|def|quiz|exam|answer|mini)\}([\s\S]*)$/);
     if (boxStart) {
       closeList(); flushTable();
       var cls = boxStart[1];
@@ -410,6 +416,17 @@ function wikiLink(key, label) {
 // ------------------------------------------------------------
 function inlineFormat(text) {
   text = String(text == null ? "" : text);
+
+  // [* 각주] — 나무위키식. 본문엔 [N], 문서 끝 '각주' 목록에 내용. 각주 안에서도 [[링크]]·$수식$ 가능
+  if (typeof window !== "undefined" && window.__FN) {
+    text = text.replace(/\[\*\s*((?:[^\[\]]|\[\[[^\]]*\]\]|\[[^\[\]\*][^\[\]]*\])+)\]/g, function (m, body) {
+      var n = window.__FN.push(inlineFormat(body.trim()));
+      var tip = body.replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, "$1").replace(/'''|''/g, "").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+      return '<sup class="fn" id="fnref-' + n + '"><a href="javascript:void(0)" title="' + tip + '" onclick="var e=document.getElementById(\'fn-' + n + '\');if(e)e.scrollIntoView({block:\'center\'})">[' + n + ']</a></sup>';
+    });
+  }
+  // ~~취소선~~ — 나무위키식 드립용
+  text = text.replace(/~~([^~\n]+)~~/g, '<del>$1</del>');
 
   // [[sim:name]] — 시뮬레이터 자리
   text = text.replace(/\[\[sim:([^\]\|]+)\]\]/g, function (m, name) {
