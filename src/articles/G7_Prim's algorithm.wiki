@@ -61,6 +61,10 @@ B 다음에는 C 와 H 의 key 가 둘 다 8 이다. 슬라이드(p.65)는 C 를
 * 정확성: 매번 고르는 간선은 cut {visited, unvisited} 의 [[light edge]] 다. 그래서 [[MST 보조정리]] 로 안전하다. 귀납법으로 묶은 것이 [[Prim 정확성 증명]] 이다.
 * 수행 시간(p.71): Dijkstra 와 똑같다. [[red-black tree]] 를 priority queue 로 쓰면 $O(m\log n)$ 이다. [[Fibonacci heap]] 을 쓰면 amortized $O(m + n\log n)$ 이다.
 
+{exam}
+교수(11/12)는 MST 를 정의한 뒤 "What's your greedy choice?" 하고 물었다. 한 학생이 정점 하나(A)에서 시작해 이웃 중 가장 가벼운 간선을 붙여 트리를 키우자고 했고, 교수는 이를 "growing tree" 라고 받았다. 이게 Prim 이다. 수업에서는 예제를 A 에서 4, 8, 2, 4, 2, 1, 7, 9 순으로 돌린 뒤 slowPrim 을 읽었다. 그리고 "this is called slow Prim. It is an inefficient algorithm" 이라고 했다. while 문이 n 번 돌고 매번 간선 전체에서 가장 가벼운 것을 찾으니 $O(nm)$ 이다. 빠른 구현은 "pretty similar to Dijkstra" 라며 다음 시간(11/17)으로 넘겼다.
+{/exam}
+
 {analogy}
 얼룩이 번지는 것과 비슷하다. A 에서 시작한 얼룩이 매번 가장 가까이 붙은 정점 하나로 번진다. 얼룩은 언제나 한 덩어리로 유지된다.
 {/analogy}

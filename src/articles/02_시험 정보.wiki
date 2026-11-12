@@ -25,7 +25,9 @@ CSE301 시험에 관해 확인된 사실만 적는다. 아직 공지되지 않�
 |-
 | 11/10 || L13 끝(트리 independent set) + L14 의 activity selection, job scheduling. Huffman 은 다음 시간 || [[L14 Greedy Algorithms I]]
 |-
-| 11/12 이후 || L14 Huffman coding, L15 minimum spanning tree(Prim, Kruskal) || [[L15 Greedy Algorithms II]]
+| 11/12 || L14 Huffman coding 전부 + L15 p.1–44: MST 정의, cut·respect·light edge, MST 보조정리와 증명, slowPrim, Prim 정확성 || [[L14 Greedy Algorithms I]] · [[L15 Greedy Algorithms II]]
+|-
+| 11/17 예정 || L15 나머지: Prim 효율적 구현($k[v]$, $p[v]$, Dijkstra 와 비교), Kruskal, union-find, 비교 || [[L15 Greedy Algorithms II]]
 |}
 
 === 과제 ===

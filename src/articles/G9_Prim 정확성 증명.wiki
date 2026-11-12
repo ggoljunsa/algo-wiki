@@ -34,7 +34,7 @@ Prim 이 다음에 넣는 간선은 visited 에서 unvisited 로 가는 간선 �
 Conclusion 의 마지막 줄이 중요하다. 정점이 n 개인 트리는 간선이 정확히 n−1 개다. 그래서 n−1 개 간선을 "포함하는" spanning tree 는 그 간선들로 이뤄진 트리 하나뿐이다. 슬라이드 표현으로는 "At this point we have a spanning tree, so it better be minimal." 이다.
 
 {exam}
-(예상) 중간고사 오답에서 나온 "증명 4칸" 형식으로 Inductive step 을 채우게 할 수 있다. 쓸 내용은 세 가지다. 쓰는 cut 이 {visited, unvisited} 이고, S 가 그 cut 을 respect 하며, 새 간선이 light edge 라 보조정리로 안전하다는 것이다. [[Kruskal 정확성 증명]] 과 cut 만 다르니 둘을 같이 외운다.
+교수(11/12)는 slowPrim 을 읽은 뒤 바로 예제를 cut 으로 다시 봤다. 지금까지 방문한 {A, B, C} 와 나머지로 나누면, Prim 이 고르는 간선은 이 둘을 잇는 간선 중 가장 가벼운 것, 즉 light edge 다. 그러니 보조정리에 의해 최적해를 배제하지 않는다. p.43 의 formal proof 는 "just a repeat of what I said before" 라며 짧게 넘겼다. 시험에서는 중간고사 오답에서 나온 "증명 4칸" 형식으로 Inductive step 을 채우게 할 수 있다. 쓸 내용은 세 가지다. 쓰는 cut 이 {visited, unvisited} 이고, S 가 그 cut 을 respect 하며, 새 간선이 light edge 라 보조정리로 안전하다는 것이다. [[Kruskal 정확성 증명]] 과 cut 만 다르니 둘을 같이 외운다.
 {/exam}
 
 {analogy}

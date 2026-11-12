@@ -35,7 +35,9 @@ p.18–23 그림에서 x, u 는 cut 왼쪽, y, a, b, v 는 오른쪽이다. T �
 {/analogy}
 
 {exam}
-(예상) "cut 이 S 를 respect 한다" 는 조건이 왜 필요한지 묻기 쉽다. ③ 단계에서 뺀 간선 (x,y) 가 S 에 속하지 않는다는 것을 보장해 주는 것이 이 조건이다. 이 조건이 없으면 S 의 간선을 빼게 되어 "S 를 포함하는 MST" 라는 결론이 깨진다.
+교수(11/12)는 cut, respect, light edge 정의를 마치고 "This is important." 라고 한 뒤 이 보조정리를 꺼냈다. 증명이 끝나자 "So with this lemma, we can prove the rightness. Remember this well." 이라고 했다. 수업에서 설명한 순서는 이렇다. spanning tree 에 (u,v) 를 더하면 cycle 이 생긴다. cycle 은 cut 을 건너갔다가 다시 건너와야 하니("go back and forth in this cut") 다른 crossing edge (x,y) 가 있다. (u,v) 가 light 라서 (x,y) 와 바꿔도 cost 가 늘지 않는다. 교수는 이 증명이 Huffman 의 Lemma 1 과 같은 교환 논증이라고 직접 이었다.
+
+수업에서 말로 짚지 않은 줄이 하나 있다. "cut 이 S 를 respect 한다" 는 조건은 뺀 간선 (x,y) 가 S 에 속하지 않는다는 데 쓰인다. 이 조건이 없으면 S 의 간선을 빼게 되어 "S 를 포함하는 MST" 라는 결론이 깨진다. 서술형으로 쓸 때는 이 줄까지 적는다.
 {/exam}
 
 {quiz}

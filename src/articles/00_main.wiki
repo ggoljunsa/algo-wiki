@@ -20,9 +20,9 @@ category: 안내
 # [[L11 Graph Algorithms III]] (10/27 후반·10/29): Dijkstra, Bellman-Ford
 # [[L12 Dynamic Programming I]] (11/3): Bellman-Ford 를 DP 로 다시 보기, Fibonacci, Floyd-Warshall
 # [[L13 Dynamic Programming II]] (11/5 추정): LCS, knapsack 두 가지, 트리의 independent set
-# [[L14 Greedy Algorithms I]] (11/10~): activity selection, job scheduling, Huffman coding
-# [[L15 Greedy Algorithms II]] (11/12 이후 예정): minimum spanning tree, cut 과 light edge, Prim, Kruskal
-L13 의 트리 independent set 과 L14 의 job scheduling 까지는 11/10 녹음을 반영했다. L14 의 Huffman coding 과 L15 는 아직 수업 전이라 슬라이드를 기준으로 썼다. 처음부터 읽으려면 [[읽는 순서]] 의 기말 부분(9–15단계)을 따라가면 된다.
+# [[L14 Greedy Algorithms I]] (11/10·11/12): activity selection, job scheduling, Huffman coding
+# [[L15 Greedy Algorithms II]] (11/12~): minimum spanning tree, cut 과 light edge, Prim, Kruskal. 11/12 에 p.44(Prim 정확성)까지 나갔고, 효율적인 Prim 구현과 Kruskal 은 다음 시간(11/17)이다
+L14 전체와 L15 앞부분(MST 정의, cut, MST 보조정리, slowPrim, Prim 정확성)은 11/10·11/12 녹음을 반영했다. L15 의 나머지(p.45–, $k[v]$ 로 구현하는 Prim, Kruskal, union-find)는 아직 수업 전이라 슬라이드를 기준으로 썼다. 처음부터 읽으려면 [[읽는 순서]] 의 기말 부분(9–15단계)을 따라가면 된다.
 
 === 강의별 메인 문서 ===
 {|
@@ -127,4 +127,4 @@ L13 의 트리 independent set 과 L14 의 job scheduling 까지는 11/10 녹음
 * [[교수 소개]] · [[CLRS]]
 
 ----
-마지막 갱신: 2026-11-12 (중간·기말 범위 분리, 사이드바 탭, 시뮬레이터·그림 색인 문서 분리, L15 Greedy II 추가, 11/10 녹음 반영)
+마지막 갱신: 2026-11-12 (중간·기말 범위 분리, 사이드바 탭, 시뮬레이터·그림 색인 문서 분리, L15 Greedy II 추가, 11/10·11/12 녹음 반영)

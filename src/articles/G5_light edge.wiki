@@ -29,6 +29,10 @@ light edge 는 cut 마다 따로 정해진다. cut 을 바꾸면 light edge 도 
 그래프 전체에서 가장 가벼운 간선이라는 뜻이 아니다. 그 cut 을 건너는 간선들 사이에서만 비교한다. p.15 에서 그래프 전체 최소는 H–G 1 이지만 H–G 는 cut 을 건너지 않으니 후보가 아니다.
 {/warn}
 
+{exam}
+교수(11/12)의 정의는 이렇다. cut 을 건너는 간선이 여럿 있을 때(p.15 예에서는 여섯 개) 그중 가중치가 가장 작은 것을 "light with respect to this cut" 이라고 한다. "이 cut 에 대해" light 라는 점이 중요하다. 그래프 전체에서 가장 가벼운 간선이라는 뜻이 아니다. 교수는 정의 세 개를 정리한 뒤 "This is important." 라고 했다.
+{/exam}
+
 {quiz}
 p.41 의 Prim 중간 단계에서 visited = {A, B, C, I, F, G} 이다. 다음에 더할 light edge 는?
 {/quiz}
