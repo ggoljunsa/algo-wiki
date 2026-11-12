@@ -5,26 +5,111 @@
 
 var BOX_TYPES = ["info", "warn", "tip", "joke", "analogy", "def", "quiz", "exam"];
 
-function renderNav(active) {
+// 사이드바: [기말 · 중간 · 공통] 탭 + 접히는 강의 그룹.
+// 탭은 현재 문서가 속한 쪽을 따라가고(대문·공통 문서면 마지막으로 고른 탭, 처음엔 기말),
+// 그룹은 현재 문서가 든 것만 펼친다. 사용자가 연 그룹·고른 탭은 localStorage 에 기억한다.
+var NAV_SECTIONS = [
+  { id: "final", label: "기말", tip: "기말고사 범위 L9–" },
+  { id: "mid", label: "중간", tip: "중간고사 범위 L1–L8 · HW1·HW2·모의" },
+  { id: "common", label: "공통", tip: "안내 · 수학 도구" }
+];
+var navTab = null;          // 사용자가 직접 고른 탭 (없으면 문서 기준)
+var navOpenGroups = {};     // 사용자가 펼친 그룹 이름 → true/false
+
+function navLoad() {
+  try {
+    navTab = localStorage.getItem("algo-nav-tab");
+    navOpenGroups = JSON.parse(localStorage.getItem("algo-nav-open") || "{}") || {};
+  } catch (e) { navOpenGroups = {}; }
+}
+function navSave() {
+  try {
+    if (navTab) localStorage.setItem("algo-nav-tab", navTab);
+    localStorage.setItem("algo-nav-open", JSON.stringify(navOpenGroups));
+  } catch (e) {}
+}
+navLoad();
+
+function navGroups() { return typeof NAV_ORDER !== "undefined" ? NAV_ORDER : []; }
+
+function groupOf(key) {
+  var gs = navGroups();
+  for (var i = 0; i < gs.length; i++) if (gs[i].items.indexOf(key) !== -1) return gs[i];
+  return null;
+}
+
+function renderNav(active, chosenTab) {
   var nav = document.getElementById("navList");
   nav.innerHTML = "";
-  (typeof NAV_ORDER !== "undefined" ? NAV_ORDER : []).forEach(function (group) {
-    var groupHeader = document.createElement("li");
-    var gdiv = document.createElement("div");
-    gdiv.style.cssText = "font-weight:700; color:var(--h3); padding:6px 4px 2px; font-size:12px;";
-    gdiv.textContent = group.group;
-    groupHeader.appendChild(gdiv);
-    nav.appendChild(groupHeader);
+  var activeGroup = groupOf(active);
+  // 탭 버튼을 눌렀으면 그 탭, 강의 문서를 보고 있으면 그 문서의 탭,
+  // 대문·안내·용어 문서면 마지막으로 고른 탭(처음이면 기말)
+  var tab = chosenTab ||
+    ((activeGroup && activeGroup.section !== "common") ? activeGroup.section : (navTab || "final"));
+
+  var tabsLi = document.createElement("li");
+  tabsLi.className = "nav-tabs";
+  NAV_SECTIONS.forEach(function (s) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.textContent = s.label;
+    b.title = s.tip;
+    if (s.id === tab) b.classList.add("on");
+    b.addEventListener("click", function () { navTab = s.id; navSave(); renderNav(active, s.id); });
+    tabsLi.appendChild(b);
+  });
+  nav.appendChild(tabsLi);
+  renderNavGroups(nav, active, activeGroup, tab);
+}
+
+function renderNavGroups(nav, active, activeGroup, tab) {
+  navGroups().forEach(function (group) {
+    if (group.section !== tab) return;
+    var isActiveGroup = activeGroup === group;
+    var open = (group.group in navOpenGroups) ? navOpenGroups[group.group] : isActiveGroup;
+    if (isActiveGroup) open = true;
+
+    var head = document.createElement("li");
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "nav-group" + (open ? " open" : "");
+    btn.innerHTML = '<span class="caret">' + (open ? "▾" : "▸") + "</span> " +
+      escapeNav(group.group) + ' <span class="cnt">' + group.items.length + "</span>";
+    head.appendChild(btn);
+    nav.appendChild(head);
+
+    var ul = document.createElement("ul");
+    ul.className = "nav-items";
+    if (!open) ul.hidden = true;
     group.items.forEach(function (key) {
       var li = document.createElement("li");
       var a = document.createElement("a");
       a.href = "#" + encodeURIComponent(key);
-      a.textContent = ARTICLES[key] ? ARTICLES[key].title : key;
+      // 목록에는 제목의 " — " 앞(이름)만, 전체 제목은 툴팁으로
+      var full = ARTICLES[key] ? ARTICLES[key].title : key;
+      a.textContent = full.split(" — ")[0];
+      if (full !== a.textContent) a.title = full;
       if (key === active) a.classList.add("active");
+      // 강의 메인 문서(L# …)는 굵게 — 그룹 안에서 시작점이 바로 보이게
+      if (/^L\d+ /.test(key)) a.classList.add("lecture-main");
       li.appendChild(a);
-      nav.appendChild(li);
+      ul.appendChild(li);
+    });
+    head.appendChild(ul);
+
+    btn.addEventListener("click", function () {
+      var nowOpen = ul.hidden;
+      ul.hidden = !nowOpen;
+      btn.classList.toggle("open", nowOpen);
+      btn.querySelector(".caret").textContent = nowOpen ? "▾" : "▸";
+      navOpenGroups[group.group] = nowOpen;
+      navSave();
     });
   });
+}
+
+function escapeNav(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 function renderArticle(key) {

@@ -151,6 +151,21 @@ document.documentElement.setAttribute("data-theme",t);})();
   aside ul li a:hover { background: #f0f4fa; text-decoration: underline; }
   aside ul li a.active { background: var(--header); color: #fff; font-weight: 600; }
   aside .cat { color: var(--muted); font-size: 11px; margin-top: 10px; }
+  /* 사이드바 탭 [기말 · 중간 · 공통] + 접히는 강의 그룹 */
+  aside ul li.nav-tabs { display: flex; gap: 4px; padding: 0 0 8px; position: sticky; top: -12px;
+    background: var(--paper); z-index: 1; padding-top: 2px; }
+  .nav-tabs button { flex: 1; font: inherit; font-size: 12px; padding: 5px 2px; cursor: pointer;
+    border: 1px solid var(--border); border-radius: 4px; background: transparent; color: var(--muted); }
+  .nav-tabs button.on { background: var(--header); border-color: var(--header); color: #fff; font-weight: 700; }
+  aside ul li .nav-group { display: flex; align-items: center; gap: 4px; width: 100%; text-align: left;
+    font: inherit; font-size: 13px; font-weight: 700; color: var(--h3); background: transparent;
+    border: 0; border-top: 1px solid var(--border); padding: 7px 4px 5px; cursor: pointer; }
+  aside ul li:nth-child(2) > .nav-group { border-top: 0; }
+  .nav-group .caret { width: 12px; color: var(--muted); }
+  .nav-group .cnt { margin-left: auto; font-size: 11px; font-weight: 400; color: var(--muted); }
+  aside ul.nav-items { padding-left: 10px; margin-bottom: 4px; }
+  aside ul.nav-items li { padding: 1px 0; }
+  aside ul li a.lecture-main { font-weight: 700; }
   aside.toc-side .toc-item { padding-left: 0; }
   aside.toc-side .toc-item.l2 { padding-left: 12px; }
   aside.toc-side .toc-item.l3 { padding-left: 24px; }
@@ -792,7 +807,7 @@ document.documentElement.setAttribute("data-theme",t);})();
     <input id="searchBox" type="text" placeholder="문서 검색... (예: master method, loop invariant, quicksort)">
   </div>
   <button class="theme-toggle" id="themeToggle" type="button" aria-label="다크모드 전환">🌙</button>
-  <div class="tagline">DGIST CSE301 Introduction to Algorithms — 중간 L1–L8 · 기말 L9–</div>
+  <div class="tagline">DGIST CSE301 Introduction to Algorithms — 기말 L9–L14 진행 중 · 중간 L1–L8</div>
 </header>
 
 <div class="layout">

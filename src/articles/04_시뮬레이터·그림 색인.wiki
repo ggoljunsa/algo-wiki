@@ -1,0 +1,184 @@
+key: 시뮬레이터·그림 색인
+title: 시뮬레이터·그림 색인
+category: 안내
+---
+위키 전체의 스텝 시뮬레이터와 움직이는 그림을 강의 순서대로 모은 목록이다. 시뮬레이터는 ◀ ▶ 버튼(또는 키보드 ← →)으로 한 단계씩 넘기면서 값이 바뀌는 것을 보는 도구다. 움직이는 그림은 자동으로 재생되고, 슬라이더로 멈춰 놓고 자막을 읽을 수 있다. 이름을 눌러 바로 열 수는 없으니, 오른쪽 "들어 있는 문서" 링크로 들어가면 된다.
+
+이 목록은 문서에 실제로 들어 있는 `[[sim:]]`·`[[anim:]]` 을 훑어서 만든다. 그래서 "강" 칸은 그 도구를 처음 쓰는 강의 번호다.
+
+== 기말고사 범위 (L9–L14) ==
+=== 시뮬레이터 (12종) ===
+{|
+! 강 || 이름 || 무엇을 보여 주나 || 들어 있는 문서
+|-
+| L9 || `bfs_layers` || BFS — layer L₀, L₁, L₂, … 와 bipartite 판별 (L9 p.86, p.100) || [[L9 Graph Algorithms I]] · [[BFS]] · [[bipartite graph]]
+|-
+| L9 || `dfs_trace` || DFS — start/finish 시각과 세 가지 색 (L9 p.67 코드) || [[L9 Graph Algorithms I]] · [[DFS]] · [[topological sort]]
+|-
+| L10 || `scc_two_pass` || SCC 알고리즘 — DFS 두 번 (L10 p.12, 예제 p.13–47) || [[L10 Graph Algorithms II]] · [[SCC 알고리즘]]
+|-
+| L11 || `bellman_ford_table` || Bellman-Ford — d⁽⁰⁾ … d⁽ⁿ⁾ 표를 한 칸씩 (L11 p.70–84, L12 p.8–18) || [[L11 Graph Algorithms III]] · [[L12 Dynamic Programming I]] · [[Bellman-Ford]] · [[Bellman-Ford는 DP]]
+|-
+| L11 || `dijkstra_trace` || Dijkstra — d[v] 표와 sure / not-sure (L11 p.24–38) || [[L11 Graph Algorithms III]] · [[Dijkstra]]
+|-
+| L12 || `fib_memo` || Fibonacci(8) — 순수 재귀 vs memoization vs bottom-up (L12 p.22–37) || [[L12 Dynamic Programming I]] · [[Fibonacci 수 계산]] · [[top-down과 memoization]]
+|-
+| L12 || `floyd_warshall_table` || Floyd-Warshall — k 마다 D⁽ᵏ⁾ 행렬 (L12 p.41–55) || [[L12 Dynamic Programming I]] · [[Floyd-Warshall]]
+|-
+| L13 || `knapsack_01` || 0/1 knapsack — 2차원 표 K[x,j] (L13 p.72–89) || [[L13 Dynamic Programming II]] · [[0/1 knapsack]] · [[K(x,j) (0/1)]]
+|-
+| L13 || `knapsack_unbounded` || Unbounded knapsack — K[x] 와 ITEMS[x] (L13 p.48–57) || [[L13 Dynamic Programming II]] · [[unbounded knapsack]] · [[K(x) (unbounded)]]
+|-
+| L13 || `lcs_table` || LCS 표 채우기와 역추적 (L13 p.18–30) || [[L13 Dynamic Programming II]] · [[longest common subsequence]] · [[C(i,j) (LCS)]] · [[LCS 역추적]]
+|-
+| L14 || `activity_selection` || Activity selection — finish time 이 빠른 것부터 (L14 p.10–17) || [[L14 Greedy Algorithms I]] · [[activity selection]]
+|-
+| L14 || `huffman_build` || Huffman 트리 만들기 — A45 B13 C12 D16 E9 F5 (L14 p.71–77) || [[L14 Greedy Algorithms I]] · [[Huffman coding]]
+|}
+
+=== 움직이는 그림 (12종) ===
+{|
+! 강 || 이름 || 무엇을 보여 주나 || 들어 있는 문서
+|-
+| L9 || `bfs_wave` || BFS — layer 가 물결처럼 퍼진다, 그리고 같은 layer 안 edge (12초) || [[L9 Graph Algorithms I]] · [[BFS]] · [[bipartite graph]]
+|-
+| L9 || `dfs_parenthesis` || DFS 의 start/finish — 괄호처럼 열리고 닫힌다 (14초) || [[L9 Graph Algorithms I]] · [[L10 Graph Algorithms II]] · [[DFS]] · [[parenthesis theorem]] · [[SCC finish time 보조정리]]
+|-
+| L9 || `topo_finish_order` || topological sort — 끝난 정점을 리스트 맨 앞에 (13초) || [[L9 Graph Algorithms I]] · [[DAG]] · [[topological sort]]
+|-
+| L10 || `scc_reverse_edges` || SCC 알고리즘 — 간선을 뒤집고 finish 큰 쪽부터 DFS (14초) || [[L10 Graph Algorithms II]] · [[G^T]] · [[SCC 알고리즘]]
+|-
+| L11 || `bellman_ford_rounds` || Bellman-Ford — 라운드마다 간선 하나씩 더 멀리 (15초) || [[L11 Graph Algorithms III]] · [[L12 Dynamic Programming I]] · [[Bellman-Ford]]
+|-
+| L11 || `dijkstra_yoink` || Dijkstra — YOINK! 들어 올리면 가까운 공부터 뜬다 (14초) || [[L11 Graph Algorithms III]] · [[Dijkstra]] · [[Dijkstra 줄과 중력 직관]]
+|-
+| L12 || `fib_tree_repeat` || Fib(8) 재귀 트리 — 같은 부분문제가 반복된다, memo 로 사슬이 된다 (13초) || [[L12 Dynamic Programming I]] · [[overlapping subproblems]] · [[top-down과 memoization]]
+|-
+| L12 || `floyd_k_layers` || Floyd-Warshall — 경유지를 하나씩 허용할 때 바뀌는 칸 (14초) || [[L12 Dynamic Programming I]] · [[Floyd-Warshall]] · [[D^(k)(u,v)]]
+|-
+| L13 || `mis_tree_dp` || 트리 위 DP — 리프부터 A[u], B[u] 를 채워 올린다 (13초) || [[L13 Dynamic Programming II]] · [[트리의 maximal independent set]] · [[A(u)와 B(u)]]
+|-
+| L14 || `huffman_merge` || Huffman coding — 가장 작은 두 개를 합친다 (14초) || [[L14 Greedy Algorithms I]] · [[Huffman coding]]
+|-
+| L14 || `job_swap` || Job 두 개 맞바꾸기 — 비율 z/x 가 큰 쪽이 먼저 (14초) || [[L14 Greedy Algorithms I]] · [[job scheduling]]
+|-
+| L14 || `subproblem_graph_shapes` || Sub-problem graph — D&C 트리, DP DAG, Greedy 사슬 (13초) || [[L14 Greedy Algorithms I]] · [[sub-problem graph 비교]]
+|}
+
+== 중간고사 범위 (L1–L8, HW) ==
+=== 시뮬레이터 (24종) ===
+{|
+! 강 || 이름 || 무엇을 보여 주나 || 들어 있는 문서
+|-
+| L1 || `insertion_sort_trace` || insertion sort 한 줄씩 || [[L1 Algorithmic Analysis I]] · [[L2 Algorithmic Analysis II]] · [[insertion sort]] · [[삽입 정렬의 worst-case]] · [[삽입 정렬의 best-case]]
+|-
+| L1 || `loop_invariant_check` || loop invariant 를 반복마다 검사 || [[L1 Algorithmic Analysis I]] · [[loop invariant]] · [[귀납법 4요소]] · [[Initialization/Maintenance/Termination]] · [[selection sort]] 외 2
+|-
+| L2 || `bigo_witness` || Big-O 증인 c, n₀ 찾기 || [[L2 Algorithmic Analysis II]] · [[L2 연습 Claim]] · [[Big-O]] · [[Big-Θ]] · [[c와 n₀]] 외 6
+|-
+| L3 || `master_method` || master method 판정기 || [[L3 Divide and Conquer I]] · [[L4 Divide and Conquer II]] · [[master method]] · [[master method 매개변수]] · [[master method 세 케이스]] 외 5
+|-
+| L3 || `merge_step` || merge 한 줄씩 — 두 포인터 || [[L3 Divide and Conquer I]] · [[mergesort]] · [[merge]] · [[merge의 loop invariant]] · [[inversion]] 외 1
+|-
+| L3 || `mergesort_tree` || mergesort 재귀 호출 트리 || [[L3 Divide and Conquer I]] · [[divide and conquer]] · [[mergesort]] · [[recursive algorithm]] · [[recursion invariant]] 외 1
+|-
+| L3 || `recursion_tree_sum` || recursion tree 레벨 합 / iteration 전개 || [[L3 Divide and Conquer I]] · [[T(n)]] · [[closed-form]] · [[점화식 단순화 3단계]] · [[점화식 풀이 4가지]] 외 5
+|-
+| L3 || `substitution_method` || substitution method — C 를 찾아가는 3단계 || [[L3 Divide and Conquer I]] · [[L4 Divide and Conquer II]] · [[master method의 한계]] · [[substitution method]] · [[미정 상수 C]] 외 4
+|-
+| L4 || `median_of_medians` || median of medians — 좋은 pivot 고르기 || [[L4 Divide and Conquer II]] · [[median of medians]] · [[sub-median]] · [[5개씩 그룹]] · [[3n/10 논증]] 외 1
+|-
+| L4 || `select_partition` || select(A, k) — pivot 으로 나누고 한쪽만 || [[L4 Divide and Conquer II]] · [[select]] · [[pivot]] · [[partition_about_pivot]] · [[한쪽만 재귀]] 외 2
+|-
+| L5 || `bucket_sort` || bucket sort — 값 범위를 버킷으로 쪼개기 || [[L5 Linear-Time Sorting]] · [[bucket sort]] · [[get_bucket]] · [[num_buckets와 k]] · [[bucket sort의 최악 케이스]] 외 2
+|-
+| L5 || `counting_sort` || counting sort — 값을 인덱스로 세기 || [[L5 Linear-Time Sorting]] · [[linear-time sorting]] · [[counting sort]] · [[counts 배열]] · [[Θ(n+k)]] 외 1
+|-
+| L5 || `radix_sort` || radix sort — 낮은 자리부터 안정 정렬 || [[L5 Linear-Time Sorting]] · [[stable sort]] · [[radix sort]] · [[least-significant digit]] · [[make_pairs]] 외 2
+|-
+| L6 || `geometric_expectation` || 성공할 때까지 반복 — 기대 시행 횟수 1/p || [[L6 Randomized Algorithms I]] · [[expected running time]] · [[bogosort]] · [[랜덤 majority]] · [[계산·증명 문제 모음]] 외 2
+|-
+| L6 || `majority_dc` || 분할정복 majority element || [[L6 Randomized Algorithms I]] · [[majority element]] · [[equals]] · [[분할정복 majority]] · [[계산·증명 문제 모음]]
+|-
+| L6 || `randomized_quicksort` || randomized quicksort — 비교 횟수와 X_{a,b} || [[L6 Randomized Algorithms I]] · [[quicksort]] · [[randomized quicksort]] · [[비교 횟수 세기]] · [[X_{a,b}]] 외 3
+|-
+| L7 || `hash_chaining` || hash table with chaining — INSERT / SEARCH / DELETE || [[L7 Randomized Algorithms II]] · [[hash table]] · [[hash function]] · [[chaining]] · [[hash collision]] 외 3
+|-
+| L7 || `universal_hash_check` || 기대 버킷 크기와 universal hash family 확인 || [[L7 Randomized Algorithms II]] · [[기대 버킷 크기]] · [[universal hash family]] · [[h_{a,b}]] · [[H의 크기]] 외 4
+|-
+| L8 || `bst_ops` || BST SEARCH / INSERT / DELETE — 슬라이드 트리에서 한 줄씩 || [[L8 Tree Algorithms]] · [[binary search tree]] · [[BST SEARCH]] · [[BST INSERT]] · [[BST DELETE]] 외 1
+|-
+| L8 || `rb_insert_fix` || rb_insert + recolor — 빨강으로 넣고 고친다 || [[L8 Tree Algorithms]] · [[red-black tree]] · [[rb_insert]] · [[recolor]] · [[RB 삽입 세 경우]]
+|-
+| L99 || `close_pair_bucket` || 거리 T 이내 쌍 찾기 — 폭 T 버킷으로 O(n) (HW2 2번) || [[HW2 복기]]
+|-
+| L99 || `collinear_points` || (a) 한 점 고정 + 기울기 정렬 — O(n² log n) || [[HW2 복기]]
+|-
+| L99 || `hb_mod13_check` || HW2 5번 — h_b(x) = (85x + b) mod 13 은 universal 인가? || [[HW2 복기]]
+|-
+| L99 || `toad_algorithms` || Algorithm 1: FindTrustworthyToad1 (HW2 3번) || [[HW2 복기]]
+|}
+
+=== 움직이는 그림 (28종) ===
+{|
+! 강 || 이름 || 무엇을 보여 주나 || 들어 있는 문서
+|-
+| L1 || `insertion_card` || 삽입 정렬 — 카드를 한 장씩 왼손에 끼우기 || [[L1 Algorithmic Analysis I]] · [[insertion sort]] · [[삽입 한 번의 성질]] · [[의사코드 읽는 법]]
+|-
+| L1 || `loop_invariant_flow` || Loop invariant — Initialization → Maintenance → Termination || [[L1 Algorithmic Analysis I]] · [[loop invariant]] · [[귀납법]] · [[귀납법 4요소]] · [[Initialization/Maintenance/Termination]]
+|-
+| L1 || `two_questions` || 두 가지 질문 — Does it work? / Is it fast? || [[L1 Algorithmic Analysis I]] · [[main]] · [[읽는 순서]] · [[두 가지 질문]]
+|-
+| L2 || `bigo_graph` || Big-O · Big-Ω · Big-Θ — c 와 n₀ 를 그래프로 || [[L2 Algorithmic Analysis II]] · [[Big-O]] · [[Big-Ω]] · [[Big-Θ]] · [[c와 n₀]]
+|-
+| L3 || `divide_conquer_flow` || Divide and Conquer — 쪼개고, 풀고, 합치는 3막 || [[L3 Divide and Conquer I]] · [[divide and conquer]] · [[incremental approach와 parallel approach]]
+|-
+| L3 || `master_struggle` || The Eternal Struggle — master method 세 케이스 줄다리기 || [[L3 Divide and Conquer I]] · [[master method]] · [[master method 세 케이스]] · [[eternal struggle]] · [[bushy tree와 tall and skinny tree]] 외 2
+|-
+| L3 || `mergesort_split_merge` || Mergesort — 쪼개며 내려가고 merge 하며 올라오기 || [[L3 Divide and Conquer I]] · [[mergesort]] · [[merge]] · [[recursion invariant]]
+|-
+| L3 || `recursion_tree_levels` || 재귀 트리 — 레벨마다 cn, 레벨 수 log₂n || [[L3 Divide and Conquer I]] · [[T(n)]] · [[점화식]] · [[recursion tree method]] · [[iteration method]]
+|-
+| L4 || `mom_grid` || Median of medians — 5개씩 그룹, sub-median, 3n/10 || [[L4 Divide and Conquer II]] · [[median of medians]] · [[sub-median]] · [[5개씩 그룹]] · [[3n/10 논증]]
+|-
+| L4 || `pivot_partition` || select — 피벗으로 나누고 한쪽만 재귀 || [[L4 Divide and Conquer II]] · [[select]] · [[pivot]] · [[partition_about_pivot]] · [[한쪽만 재귀]] 외 1
+|-
+| L5 || `counting_sort_flow` || Counting sort — counts 칸에 떨어뜨리고 왼쪽부터 풀기 (13초) || [[L5 Linear-Time Sorting]] · [[counting sort]] · [[counts 배열]] · [[Θ(n+k)]]
+|-
+| L5 || `decision_tree_leaves` || Decision tree — 잎 n! 개면 깊이 ≥ log₂(n!) (12초) || [[L5 Linear-Time Sorting]] · [[comparison-based sorting]] · [[decision tree]] · [[리프와 깊이]] · [[Ω(n log n) 하한]] 외 3
+|-
+| L5 || `radix_lsd` || Radix sort — 일의 자리부터 bucket 에 넣고 모으기 (14초) || [[L5 Linear-Time Sorting]] · [[radix sort]] · [[least-significant digit]] · [[make_pairs]]
+|-
+| L5 || `stable_sort` || Stable sort — 같은 값의 순서 유지가 radix sort 를 살린다 (13초) || [[L5 Linear-Time Sorting]] · [[자주 틀리는 함정 모음]] · [[bucket sort]] · [[stable sort]] · [[radix sort]]
+|-
+| L6 || `expected_vs_worst` || 두 시나리오 — expected running time vs worst-case (13초) || [[L6 Randomized Algorithms I]] · [[adversary]] · [[두 시나리오]] · [[expected running time]] · [[randomized worst-case]]
+|-
+| L6 || `harmonic_sum` || 조화급수 — 막대 1/c 의 넓이 ≈ ln n (12초) || [[L6 Randomized Algorithms I]] · [[quicksort 기대 비교 횟수 증명]] · [[조화급수]]
+|-
+| L6 || `majority_random_pick` || 랜덤 majority — 뽑고 세고, 기대 2 번이면 끝 (13초) || [[L6 Randomized Algorithms I]] · [[majority element]] · [[랜덤 majority]] · [[등비급수]] · [[기하분포]]
+|-
+| L6 || `quicksort_random_pivot` || Randomized quicksort — 6 과 10 이 비교될 확률 2/5 (14초) || [[L6 Randomized Algorithms I]] · [[randomized quicksort]] · [[비교 횟수 세기]] · [[X_{a,b}]] · [[P(X_{a,b}=1)]]
+|-
+| L7 || `hash_pigeonhole` || 비둘기집 원리 — 결정론적 해시는 적에게 진다 (13초) || [[L7 Randomized Algorithms II]] · [[결정론적 해시 함수의 한계]] · [[해싱 게임]] · [[비둘기집 원리]]
+|-
+| L7 || `universal_hash_pick` || Universal hash family — a, b 를 뽑아 h 만들기 (14초) || [[L7 Randomized Algorithms II]] · [[hash family]] · [[universal hash family]] · [[h_{a,b}]] · [[소수 p]] 외 1
+|-
+| L8 || `bst_skew_vs_balanced` || 편향 트리 vs 균형 트리 — 넣는 순서가 height 를 정한다 (10초) || [[L8 Tree Algorithms]] · [[height]] · [[O(height)]]
+|-
+| L8 || `rb_height_padding` || red 로 패딩하기 — RB 트리의 height ≤ 2 log(n+1) (12초) || [[L8 Tree Algorithms]] · [[height ≤ 2 log(n+1) 증명]]
+|-
+| L8 || `rb_insert_cases` || RB 삽입 세 경우 — 끝 / 색 뒤집기 / 회전 (14초) || [[L8 Tree Algorithms]] · [[red-black tree]] · [[RB 삽입 세 경우]]
+|-
+| L8 || `rotation_yoink` || rotation — YOINK! Y 를 들어 올리면 B 가 떨어진다 (13초) || [[L8 Tree Algorithms]] · [[self-balancing BST]] · [[rotation]]
+|-
+| L99 || `close_pair_buckets` || 거리 T 이내 쌍 — 폭 T 버킷에 넣고 이웃 칸만 본다 (12초) || [[HW2 복기]]
+|-
+| L99 || `collinear_random_pair` || 최대 collinear 집합 — 랜덤 두 점 다트 (13초) || [[HW2 복기]]
+|-
+| L99 || `hb_shift_only` || h_b(x) = (85x + b) mod 13 — b 는 평행이동만 한다 (12초) || [[HW2 복기]]
+|-
+| L99 || `toad_three_algorithms` || toad 세 알고리즘 — 틀릴 수 있으면 Monte Carlo, 아니면 Las Vegas (14초) || [[HW2 복기]]
+|}
+
+== 관련 문서 ==
+* [[main]] · [[읽는 순서]]

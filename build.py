@@ -38,6 +38,19 @@ ANIM_RE = re.compile(r"\[\[anim:([^\|\]\n]+)(?:\|[^\n]*?)?\]\]")
 LINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
 REQUIRED_KEYS = ("key", "title", "category")
 
+# 사이드바 탭: 'N강 …' 은 L1–L8 이 중간, L9– 가 기말. '시험' 그룹(HW1·HW2·모의 v1 등)은 중간 범위.
+MIDTERM_LAST_LECTURE = 8
+LECTURE_GROUP_RE = re.compile(r"^(\d+)강")
+
+
+def nav_section(group):
+    m = LECTURE_GROUP_RE.match(group)
+    if m:
+        return "mid" if int(m.group(1)) <= MIDTERM_LAST_LECTURE else "final"
+    if group == "시험":
+        return "mid"
+    return "common"
+
 
 def fail(msg):
     print("ERROR: %s" % msg, file=sys.stderr)
@@ -120,7 +133,7 @@ def main():
         g = a["category"][0]
         if g not in index:
             index[g] = len(nav)
-            nav.append({"group": g, "items": []})
+            nav.append({"group": g, "section": nav_section(g), "items": []})
         nav[index[g]]["items"].append(a["key"])
 
     # ---------- 3. 이미지 ----------
@@ -257,4 +270,7 @@ def main():
 
 
 if __name__ == "__main__":
+    # Windows 콘솔(cp949)에서 ←, ₀ 같은 글자를 출력하다 죽지 않도록
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     main()
