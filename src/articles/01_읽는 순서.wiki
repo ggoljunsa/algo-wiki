@@ -68,8 +68,8 @@ L8 은 10/1·10/6 수업에서 삽입까지 진행(삭제 생략), 10/6 녹음 �
 확인: `bst_ops`, `rb_insert_fix`
 이 단계가 끝나면: 규칙 5가지를 영어로 쓰고, "왜 그 규칙이 height $\le 2\log(n+1)$ 을 보장하는가" 를 세 줄 부등식으로 설명할 수 있다.
 
-== 기말고사 범위 (L9–L14) ==
-지금 수업 중인 부분이다. L9–L11 은 그래프, L12–L13 은 dynamic programming, L14 는 greedy 다.
+== 기말고사 범위 (L9–L15) ==
+지금 수업 중인 부분이다. L9–L11 은 그래프, L12–L13 은 dynamic programming, L14–L15 는 greedy 다.
 
 === 9단계 — L9: 그래프 탐색 ===
 {info}
@@ -121,6 +121,15 @@ L8 은 10/1·10/6 수업에서 삽입까지 진행(삭제 생략), 10/6 녹음 �
 메인: '''[[L14 Greedy Algorithms I]]''' — activity selection(가장 일찍 끝나는 것부터), job scheduling($c_i/t_i$ 큰 순), Huffman coding(가장 드문 두 글자부터 합치기). 세 증명 모두 "이번 선택이 최적해를 배제하지 않는다" 를 귀납법으로 보인다.
 확인: `activity_selection`, `huffman_build`
 이 단계가 끝나면: Huffman 트리를 손으로 만들고 기대 길이(예제 2.24)를 계산할 수 있다. greedy 증명의 귀납 가설을 그대로 쓸 수 있다.
+
+=== 15단계 — L15: Minimum spanning tree (Prim, Kruskal) ===
+{info}
+슬라이드 기준. 녹음이 들어오면 강조를 덧붙인다.
+{/info}
+먼저: [[spanning tree]] · [[minimum spanning tree]] · [[cut]] · [[light edge]] · '''[[MST 보조정리]]'''
+메인: '''[[L15 Greedy Algorithms II]]''' — cut 을 건너는 가장 가벼운 간선은 더해도 안전하다는 보조정리 하나로 두 알고리즘을 증명한다. Prim 은 tree 하나를 키우고, Kruskal 은 가벼운 간선부터 보면서 forest 를 합친다.
+확인: `prim_trace`, `kruskal_union_find`
+이 단계가 끝나면: 슬라이드 그래프에서 두 알고리즘이 간선을 넣는 순서를 손으로 쓰고 MST cost 37 을 확인할 수 있다. [[Dijkstra vs Prim]] 의 갱신 식 차이를 한 줄로 말할 수 있다.
 
 == 시험 3일 전 압축 코스 ==
 메인 문서 7 편의 '''`시험 대비 핵심 요약`''' 절만 순서대로 읽고, 그다음 시험 그룹 세 문서로 마무리한다.

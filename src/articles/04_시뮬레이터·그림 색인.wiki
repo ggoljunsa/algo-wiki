@@ -7,7 +7,7 @@ category: 안내
 이 목록은 문서에 실제로 들어 있는 `[[sim:]]`·`[[anim:]]` 을 훑어서 만든다. 그래서 "강" 칸은 그 도구를 처음 쓰는 강의 번호다.
 
 == 기말고사 범위 (L9–L14) ==
-=== 시뮬레이터 (12종) ===
+=== 시뮬레이터 (14종) ===
 {|
 ! 강 || 이름 || 무엇을 보여 주나 || 들어 있는 문서
 |-
@@ -34,9 +34,13 @@ category: 안내
 | L14 || `activity_selection` || Activity selection — finish time 이 빠른 것부터 (L14 p.10–17) || [[L14 Greedy Algorithms I]] · [[activity selection]]
 |-
 | L14 || `huffman_build` || Huffman 트리 만들기 — A45 B13 C12 D16 E9 F5 (L14 p.71–77) || [[L14 Greedy Algorithms I]] · [[Huffman coding]]
+|-
+| L15 || `kruskal_union_find` || Kruskal — 정렬된 간선과 union-find (L15 p.74–105) || [[L15 Greedy Algorithms II]] · [[Kruskal's algorithm]] · [[union-find]]
+|-
+| L15 || `prim_trace` || Prim — key k[x] 와 parent p[x] 표 (L15 p.49–65) || [[L15 Greedy Algorithms II]] · [[Prim's algorithm]] · [[k(v)와 p(v) (Prim)]]
 |}
 
-=== 움직이는 그림 (12종) ===
+=== 움직이는 그림 (14종) ===
 {|
 ! 강 || 이름 || 무엇을 보여 주나 || 들어 있는 문서
 |-
@@ -63,6 +67,10 @@ category: 안내
 | L14 || `job_swap` || Job 두 개 맞바꾸기 — 비율 z/x 가 큰 쪽이 먼저 (14초) || [[L14 Greedy Algorithms I]] · [[job scheduling]]
 |-
 | L14 || `subproblem_graph_shapes` || Sub-problem graph — D&C 트리, DP DAG, Greedy 사슬 (13초) || [[L14 Greedy Algorithms I]] · [[sub-problem graph 비교]]
+|-
+| L15 || `mst_cut_swap` || MST 보조정리 — light edge 로 바꿔 끼우기 (16초) || [[L15 Greedy Algorithms II]] · [[MST 보조정리]]
+|-
+| L15 || `prim_vs_kruskal_grow` || Prim 은 tree 하나, Kruskal 은 forest — 같은 MST 가 자라는 두 방식 (17초) || [[L15 Greedy Algorithms II]] · [[Prim vs Kruskal 비교표]]
 |}
 
 == 중간고사 범위 (L1–L8, HW) ==

@@ -1,0 +1,33 @@
+== prim_trace (start A) ==
+activate A (k=0)  updates B:4 H:8
+activate B (k=4)  updates C:8  MST+= A-B
+activate C (k=8)  updates D:7 F:4 I:2  MST+= B-C
+activate I (k=2)  updates G:6 H:7  MST+= C-I
+activate F (k=4)  updates E:10 G:2  MST+= C-F
+activate G (k=2)  updates H:1  MST+= F-G
+activate H (k=1)  updates -  MST+= G-H
+activate D (k=7)  updates E:9  MST+= C-D
+activate E (k=9)  updates -  MST+= D-E
+reach order: A B C I F G H D E
+MST: A-B 4, B-C 8, C-I 2, C-F 4, F-G 2, G-H 1, C-D 7, D-E 9  cost 37
+final k: {'A': 0, 'B': 4, 'C': 8, 'D': 7, 'E': 9, 'F': 4, 'G': 2, 'H': 1, 'I': 2}
+final p: {'A': None, 'B': 'A', 'C': 'B', 'D': 'C', 'E': 'D', 'F': 'C', 'G': 'F', 'H': 'G', 'I': 'C'}
+
+== kruskal_union_find ==
+H-G  1: add           sets: {A} {B} {C} {D} {E} {F} {GH} {I}
+C-I  2: add           sets: {A} {B} {CI} {D} {E} {F} {GH}
+G-F  2: add           sets: {A} {B} {CI} {D} {E} {FGH}
+A-B  4: add           sets: {AB} {CI} {D} {E} {FGH}
+C-F  4: add           sets: {AB} {CFGHI} {D} {E}
+I-G  6: skip (cycle)  sets: {AB} {CFGHI} {D} {E}
+C-D  7: add           sets: {AB} {CDFGHI} {E}
+H-I  7: skip (cycle)  sets: {AB} {CDFGHI} {E}
+B-C  8: add           sets: {ABCDFGHI} {E}
+A-H  8: skip (cycle)  sets: {ABCDFGHI} {E}
+D-E  9: add           sets: {ABCDEFGHI}
+E-F 10: skip (cycle)  sets: {ABCDEFGHI}
+B-H 11: skip (cycle)  sets: {ABCDEFGHI}
+D-F 14: skip (cycle)  sets: {ABCDEFGHI}
+MST: H-G 1, C-I 2, G-F 2, A-B 4, C-F 4, C-D 7, B-C 8, D-E 9  cost 37
+
+both == p.8 MST (cost 37) OK

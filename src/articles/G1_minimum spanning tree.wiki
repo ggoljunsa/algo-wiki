@@ -1,0 +1,50 @@
+key: minimum spanning tree
+title: minimum spanning tree (MST, 최소 신장 트리)
+category: 15강 Greedy II, 용어
+---
+{def}
+L15 p.7–8 A minimum spanning tree is a spanning tree of minimal cost. (p.5 "The cost of a spanning tree is the sum of the weights on the edges.")
+[[spanning tree]] 중에서 간선 가중치 합(cost)이 가장 작은 것이다. 줄여서 MST 라고 부른다.
+{/def}
+[[img:L15-08.png|L15 p.8 — 주황 간선 8개가 MST, cost 37|medium]]
+
+== 무엇을 구하는 문제인가 ==
+입력은 무방향 [[weighted graph]] 다. 출력은 모든 정점을 잇는 트리 중에서 cost 가 가장 작은 것이다. 정점이 n 개면 트리의 간선은 항상 n−1 개다. 그래서 "간선 n−1 개를 어떻게 골라야 합이 가장 작은가" 를 묻는 문제라고 생각하면 된다.
+
+슬라이드 예제 그래프는 정점 9개(A–I), 간선 14개다. p.5 의 spanning tree 는 cost 가 67 이고, p.6 의 spanning tree 는 cost 가 37 이다. 37 이 가장 작은 값이라서 p.8 의 트리가 MST 다.
+<pre class="txt">
+p.8 의 MST 간선
+H–G 1, C–I 2, G–F 2, A–B 4, C–F 4, C–D 7, B–C 8, D–E 9
+합 = 1 + 2 + 2 + 4 + 4 + 7 + 8 + 9 = 37
+</pre>
+A–H 도 무게가 8 이라서 B–C 대신 A–H 를 넣어도 cost 는 37 이다. 그래서 MST 는 하나가 아닐 수 있다. 슬라이드는 B–C 를 넣은 것을 쓴다.
+
+== 어디에 쓰나 (p.9) ==
+* 네트워크 설계: 도시를 도로·전기·전화선으로 가장 싸게 잇는다.
+* cluster analysis: 예를 들어 유전적 거리로 개체를 묶는다.
+* 이미지 처리: image segmentation.
+* 다른 그래프 알고리즘의 부품으로 쓴다.
+
+== 구하는 방법 ==
+L15 는 greedy 알고리즘 두 개를 배운다.
+* [[Prim's algorithm]]: 한 정점에서 tree 하나를 키운다.
+* [[Kruskal's algorithm]]: 가장 싼 간선부터 넣으며 [[forest]] 를 합친다.
+둘 다 [[MST 보조정리]] 로 "지금 고른 간선이 성공을 배제하지 않는다" 를 보인다. 이 방식은 L14 의 [[greedy 증명 전략]] 과 같다.
+
+{analogy}
+마을 아홉 개를 전선으로 모두 이어야 한다. 어느 마을에서 어느 마을로든 전기가 가기만 하면 되니까 고리(cycle)를 만들 필요는 없다. 공사비 합이 가장 적게 드는 전선 배치가 MST 다.
+{/analogy}
+
+{warn}
+[[shortest path problem]] 과 헷갈리면 안 된다. MST 는 간선 합 전체를 줄이는 문제이고, 출발점이 없다. MST 위에서 두 정점 사이 경로가 최단경로라는 보장도 없다. 예를 들어 슬라이드 MST 안에서 A 에서 H 로 가는 경로는 A–B–C–F–G–H 이고 길이는 4+8+4+2+1 = 19 다. 그런데 그래프에는 A–H 간선 8 이 바로 있으니 최단거리는 8 이다.
+{/warn}
+
+{quiz}
+p.8 그래프에서 MST 의 간선 개수와 cost 는?
+{/quiz}
+{answer}
+정점이 9 개이니 간선은 8 개다. cost 는 37 이다.
+{/answer}
+
+== 관련 문서 ==
+* [[L15 Greedy Algorithms II]] · [[spanning tree]] · [[Prim's algorithm]] · [[Kruskal's algorithm]] · [[MST 보조정리]] · [[Prim vs Kruskal 비교표]] · [[weighted graph]]

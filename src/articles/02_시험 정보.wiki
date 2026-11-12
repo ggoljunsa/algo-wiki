@@ -21,9 +21,11 @@ CSE301 시험에 관해 확인된 사실만 적는다. 아직 공지되지 않�
 |-
 | 11/3 || L12 전체: BF 는 DP, Fibonacci, DP 두 요소, Floyd-Warshall, longest simple path || [[L12 Dynamic Programming I]]
 |-
-| 11/5 (추정) || L13: LCS, knapsack, 트리 independent set || [[L13 Dynamic Programming II]]
+| 11/5 || L13: LCS, knapsack (녹음 없음) || [[L13 Dynamic Programming II]]
 |-
-| 11/10~ || L14: activity selection, job scheduling, Huffman coding || [[L14 Greedy Algorithms I]]
+| 11/10 || L13 끝(트리 independent set) + L14 의 activity selection, job scheduling. Huffman 은 다음 시간 || [[L14 Greedy Algorithms I]]
+|-
+| 11/12 이후 || L14 Huffman coding, L15 minimum spanning tree(Prim, Kruskal) || [[L15 Greedy Algorithms II]]
 |}
 
 === 과제 ===

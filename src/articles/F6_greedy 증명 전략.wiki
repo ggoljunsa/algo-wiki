@@ -42,5 +42,9 @@ L14 p.36 Common strategy for greedy algorithms: Make a series of choices. Show t
 Conclusion 을 빠뜨리기 쉽다. "마지막 선택 후에도 최적해를 배제하지 않았다. 현재 해를 확장하는 해는 현재 해뿐이다. 그러므로 현재 해가 최적이다." 까지 써야 증명이 끝난다.
 {/warn}
 
+{exam}
+교수(11/10)는 greedy 정확성 증명 방법을 여러 번 같은 말로 정리했다. 매번 한 선택이 최적해를 배제하지 않는다는 것을 보인다. 그 선택을 끝까지 반복하면 마지막에 남은 해가 최적해가 된다. activity selection 과 job scheduling 모두 이 틀(IH, Base, Step = 보조정리, Conclusion)로 썼다. 교수는 "greedy 는 생각하기 쉽지만 증명이 어렵다. 증명은 언제나 이 방법으로 한다" 고 강조했다.
+{/exam}
+
 == 관련 문서 ==
 * [[greedy algorithm]] · [[activity selection 정확성 증명]] · [[Huffman 정확성 증명]] · [[job scheduling]] · [[귀납법 4요소]] · [[L14 Greedy Algorithms I]]

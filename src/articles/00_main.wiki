@@ -5,14 +5,14 @@ category: 안내
 '''알고위키'''는 DGIST CSE301 Introduction to Algorithms (Prof. Hoon Sung Chwa, 2026 Fall) 를 나무위키 형식으로 정리한 학습 위키다. 교재는 [[CLRS]] 이다. 강의는 영어로 하고, 문서는 한국어로 쓰되 용어는 영어 그대로 둔다.
 
 위키는 시험 범위에 따라 두 부분으로 나뉜다.
-* '''기말고사 범위 (L9–L14)''': 지금 수업 중인 부분이다. 그래프, 최단경로, dynamic programming, greedy 를 다룬다.
+* '''기말고사 범위 (L9–L15)''': 지금 수업 중인 부분이다. 그래프, 최단경로, dynamic programming, greedy, minimum spanning tree 를 다룬다.
 * '''중간고사 범위 (L1–L8)''': 10/15 시험이 끝난 부분이다. 기말에 다시 쓰이는 도구(귀납법 증명, 점화식, Big-O)가 여기 있다.
 
 왼쪽 문서 목록 맨 위의 '''[기말 L9– · 중간 L1–L8 · 공통]''' 탭으로 두 범위를 오갈 수 있다. 강의 이름을 누르면 그 강의 문서들이 펼쳐진다. 굵게 표시된 문서가 그 강의의 메인 문서다.
 
 [[anim:two_questions|이 과목의 지도. 모든 알고리즘에 ① Does it work? ② Is it fast? 두 카드가 붙는다. 강의가 하나씩 지날 때마다 두 카드에 붙일 도구가 늘어난다]]
 
-== 기말고사 범위 (L9–L14) ==
+== 기말고사 범위 (L9–L15) ==
 === 진도 ===
 중간고사(10/15) 뒤 수업은 이 순서로 나갔다.
 # [[L9 Graph Algorithms I]] (10/20·10/22): DFS, BFS, topological sort, bipartite 판별
@@ -21,7 +21,8 @@ category: 안내
 # [[L12 Dynamic Programming I]] (11/3): Bellman-Ford 를 DP 로 다시 보기, Fibonacci, Floyd-Warshall
 # [[L13 Dynamic Programming II]] (11/5 추정): LCS, knapsack 두 가지, 트리의 independent set
 # [[L14 Greedy Algorithms I]] (11/10~): activity selection, job scheduling, Huffman coding
-L13·L14 는 녹음이 아직 없어서 슬라이드를 기준으로 썼다. 처음부터 읽으려면 [[읽는 순서]] 의 기말 부분(9–14단계)을 따라가면 된다.
+# [[L15 Greedy Algorithms II]] (11/12 이후 예정): minimum spanning tree, cut 과 light edge, Prim, Kruskal
+L13 의 트리 independent set 과 L14 의 job scheduling 까지는 11/10 녹음을 반영했다. L14 의 Huffman coding 과 L15 는 아직 수업 전이라 슬라이드를 기준으로 썼다. 처음부터 읽으려면 [[읽는 순서]] 의 기말 부분(9–15단계)을 따라가면 된다.
 
 === 강의별 메인 문서 ===
 {|
@@ -38,6 +39,8 @@ L13·L14 는 녹음이 아직 없어서 슬라이드를 기준으로 썼다. 처
 | L13 || [[L13 Dynamic Programming II]] || [[DP 레시피 4단계]], [[longest common subsequence]] $O(nm)$, [[unbounded knapsack]] 과 [[0/1 knapsack]] $O(nW)$, [[트리의 maximal independent set]] $O(\lvert V \rvert)$ || `lcs_table` · `knapsack_unbounded` · `knapsack_01` · `anim:mis_tree_dp`
 |-
 | L14 || [[L14 Greedy Algorithms I]] || [[greedy algorithm]], [[activity selection]] (finish time 순), [[job scheduling]] ([[cost/time 비율]] 큰 순), [[Huffman coding]], [[greedy 증명 전략]] || `activity_selection` · `huffman_build` · `anim:huffman_merge`
+|-
+| L15 || [[L15 Greedy Algorithms II]] || [[minimum spanning tree]], [[cut]] 을 건너는 [[light edge]] 는 안전하다([[MST 보조정리]]), [[Prim's algorithm]] (tree 를 키움, Dijkstra 와 갱신 식만 다름), [[Kruskal's algorithm]] (forest 를 합침, [[union-find]]), 둘 다 $O(m\log n)$ || `prim_trace` · `kruskal_union_find` · `anim:mst_cut_swap`
 |}
 
 === 기말 시험 대비 ===
@@ -124,4 +127,4 @@ L13·L14 는 녹음이 아직 없어서 슬라이드를 기준으로 썼다. 처
 * [[교수 소개]] · [[CLRS]]
 
 ----
-마지막 갱신: 2026-11-12 (중간·기말 범위 분리, 사이드바 탭, 시뮬레이터·그림 색인 문서 분리)
+마지막 갱신: 2026-11-12 (중간·기말 범위 분리, 사이드바 탭, 시뮬레이터·그림 색인 문서 분리, L15 Greedy II 추가, 11/10 녹음 반영)

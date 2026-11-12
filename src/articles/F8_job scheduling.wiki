@@ -63,5 +63,9 @@ P→Q→R: P 완료 2, Q 완료 5, R 완료 6 → 2·4 + 5·3 + 6·1 = 8 + 15 + 
 P→R→Q: 2·4 + 3·1 + 6·3 = 8 + 3 + 18 = 29. 두 순서의 비용이 같다.
 {/answer}
 
+{exam}
+교수(11/10)는 숙제(10시간, 시간당 비용 2)와 잠(8시간, 시간당 비용 3) 예로 시작했다. 숙제를 먼저 하면 $10\cdot2 + 18\cdot3 = 74$, 잠을 먼저 자면 $8\cdot3 + 18\cdot2 = 60$ 이다. 그다음 optimal substructure(최적 순서가 A, B, C, D 면 B, C, D 도 최적)를 짚었다. 이어서 두 작업을 맞바꾸는 계산으로 "best" 의 뜻을 정했다. 수행 시간은 정렬 시간 $O(n \log n)$ 이고, 정확성은 activity selection 과 같은 귀납법으로 보인다.
+{/exam}
+
 == 관련 문서 ==
 * [[cost/time 비율]] · [[greedy 증명 전략]] · [[greedy algorithm]] · [[optimal substructure]] · [[L14 Greedy Algorithms I]]

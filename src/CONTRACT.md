@@ -468,3 +468,49 @@ anim: `mis_tree_dp`(트리 bottom-up 으로 A[u]·B[u] 채우기) · `subproblem
 - 사이드바 맨 위에 **[기말 L9– · 중간 L1–L8 · 공통]** 탭. `build.py` 의 `nav_section()` 이 그룹 이름으로 정한다: `N강 …` 은 N ≤ 8 이면 중간, 9 이상이면 기말. `시험` 그룹(HW1·HW2·모의 v1 등)은 중간. 나머지(`안내`, `용어`)는 공통. **L15 이후 그룹도 `15강 …` 처럼 지으면 자동으로 기말 탭에 들어간다.**
 - 그룹은 접혀 있고 현재 문서가 든 그룹만 펼쳐진다. 탭 선택과 펼친 그룹은 localStorage(`algo-nav-tab`, `algo-nav-open`)에 남는다. 강의 메인 문서(`L# …`)는 굵게 보인다.
 - 대문·`읽는 순서`·`시험 정보` 는 `== 기말고사 범위 ==` → `== 중간고사 범위 ==` → `== 공통 ==` 순서의 h2 아래에 h3 로 내용을 둔다. 새 강의를 추가하면 대문 기말 표·진도 목록, `읽는 순서` 기말 단계, `시험 정보` 기말 진도표에 한 줄씩 넣고 `시뮬레이터·그림 색인` 을 다시 생성한다.
+
+## 11. L15 Greedy Algorithms II — MST (2026-11-12)
+
+### 11.1 슬라이드
+| 덱 | PDF (`_text/L15.txt`, PyMuPDF 로 뽑음) | PNG 수 | 인쇄 p.N → PNG 번호 | 숨김 | 해설본 |
+|---|---|---|---|---|---|
+| L15 | `L15 _ Greedy Algorithms II` | 118 | p.1–68 → 같은 번호 · **p.71–118 → PNG = p−2** · p.120–121 → PNG = p−3 | **p.69, 70, 119** | `L15_해설.md` |
+PNG 는 이 Windows PC 에서 PyMuPDF `Matrix(1.25,1.25)` (900×675) 로 만든 `L15-01.png` … `L15-118.png` (2자리 패딩, 100 이상은 3자리). 문서의 p.N 은 **인쇄 번호**, `[[img:]]` 는 PNG 번호 — 예: 인쇄 p.96 Kruskal 의사코드 = `L15-94.png`.
+
+예제 그래프(p.4 이후 전부 같은 그래프, 무방향 9정점 14간선 — CLRS 그림 23.1 과 같은 모양, 이름만 다름):
+A–B 4, A–H 8, B–C 8, B–H 11, C–D 7, C–I 2, C–F 4, D–E 9, D–F 14, E–F 10, H–I 7, I–G 6, H–G 1, G–F 2.
+슬라이드의 MST(p.8, cost 37) = A–B 4, B–C 8, C–I 2, C–D 7, C–F 4, D–E 9, H–G 1, G–F 2. **A–H 8 이 아니라 B–C 8** 이 들어간다. Prim 은 A 에서 시작(p.27, p.50 의 새).
+
+### 11.2 문서 키 — 15강 L15 Greedy Algorithms II (`15강 Greedy II`) [G0_–]
+**메인**: `L15 Greedy Algorithms II`
+**사전**: `minimum spanning tree` · `spanning tree` · `cut` · `cut이 S를 respect` · `light edge` · `MST 보조정리` · `Prim's algorithm` · `k(v)와 p(v) (Prim)` · `Prim 정확성 증명` · `Dijkstra vs Prim` · `Kruskal's algorithm` · `forest` · `union-find` · `inverse Ackermann function` · `Kruskal 정확성 증명` · `Prim vs Kruskal 비교표`
+
+키 메모:
+* `MST 보조정리`(p.16–24): "cut 이 S 를 respect 하고 S ⊆ 어떤 MST 이면, cut 을 건너는 light edge (u,v) 를 더해도 S ∪ {(u,v)} 를 포함하는 MST 가 있다". 증명은 **교환 논증**: (u,v) 를 T 에 넣으면 cycle → cycle 위 다른 crossing edge (x,y) → T' = T − (x,y) + (u,v), $w(u,v) \le w(x,y)$ 라 cost 안 늘어남. L14 의 "never rule out success" 레시피(→ [[greedy 증명 전략]])와 같은 틀이라고 문서에 연결.
+* `Prim 정확성 증명`(p.38–43)과 `Kruskal 정확성 증명`(p.108–114)은 같은 귀납법 4요소(IH: t 번째 간선까지 안전). 다른 점은 쓰는 cut 하나: Prim 은 {visited, unvisited}, Kruskal 은 {T1, V − T1}. 슬라이드도 "This is exactly the same slide that we had for Prim's" (p.114).
+* `Dijkstra vs Prim`(p.66–68, 71–72): 코드가 거의 같고 갱신 식만 다르다. Dijkstra $d[v] = \min(d[v], d[u] + w(u,v))$, Prim $k[v] = \min(k[v], w(u,v))$. p.68 의 S·U·T 세 정점 예가 차이를 보여 준다(그림을 Read 로 보고 숫자를 옮길 것). 수행 시간은 똑같다: RB tree $O(m\log n)$, Fibonacci heap $O(m + n\log n)$ amortized.
+* `k(v)와 p(v) (Prim)`: 키에 `]` 금지라 소괄호. 본문은 $k[v]$, $p[v]$. L11 의 `d 값과 sure·not-sure` 와 짝.
+* `union-find`(p.93–95): makeSet / find / union. Kruskal 수행 시간(p.106): 정렬 $O(m\log n)$(작은 정수면 radixSort 로 $O(m)$) + makeSet n 번 + find 2m 번 + union n−1 번. 각 연산은 amortized $O(\alpha(n))$ → `inverse Ackermann function`(우주의 원자 수보다 작은 n 이면 $\alpha(n) \le 4$).
+* `Prim vs Kruskal 비교표`(p.117–118): tree 를 키움 vs forest 를 키움, dense 에는 Prim, sparse·작은 정수 가중치에는 Kruskal. 둘 다 "optimal substructure: cut 이 만드는 부분 그래프, safe choice = light edge".
+* `forest` 는 L9 의 `DFS tree와 DFS forest` 와 다른 문서. 첫 줄에서 구분하고 서로 링크.
+
+### 11.3 시뮬레이터 · 움직이는 그림 (§6 · §7 규약 그대로)
+sim: `prim_trace` (p.49–65: 정점마다 k[x]·p[x] 표, unreached / active / reached, 매 단계 "가장 작은 key 를 활성화 → 이웃 k 갱신 → reached, (p[u],u) 를 MST 에 추가") · `kruskal_union_find` (p.74–84, p.97–105: 정렬된 간선 목록을 하나씩, find(u)≠find(v) 이면 추가·union, 같으면 cycle 이라 건너뜀; 집합들을 색으로)
+anim: `mst_cut_swap` (보조정리 증명: cut, light edge (u,v), cycle, (x,y) 를 빼고 (u,v) 를 넣는 교환) · `prim_vs_kruskal_grow` (같은 그래프에서 Prim 은 한 덩어리 tree 가 자라고 Kruskal 은 여러 조각 forest 가 합쳐지는 장면을 나란히)
+
+#### 11.3a sim 기대값
+검산: `py -3.12 src/sims/_check_L15.py > src/sims/_check_L15.txt` (sim 작성자가 만든다). **동점 처리**(A–H 8 대 B–C 8, A–B 4 대 C–F 4, H–I 7 대 C–D 7)는 슬라이드 연속 장면(Prim p.28–35·53–65, Kruskal p.75–84·99–105)을 PNG 로 보고 **슬라이드가 고른 순서**를 그대로 따르고, 그 순서를 이 표와 파일 머리 주석에 적는다. 최종 MST 는 반드시 p.8 의 8개 간선, cost 37.
+
+**동점 순서 (슬라이드 PNG 연속 장면을 픽셀 비교로 확인, 2026-11-12):**
+* Prim(p.28–35 = PNG 28–35, p.52–65): A→B 다음 C(8, B 에서) 와 H(8, A 에서) 동점 → **C**. 그 뒤로는 동점 없음. sim 은 "key 같으면 이름 알파벳순" 으로 같은 결과.
+* Kruskal(p.75–84 = PNG 73–82, p.98–105 = PNG 96–103): 2 는 C–I → G–F, 4 는 A–B → C–F, 7 은 C–D → H–I(버림), 8 은 **B–C → A–H(버림)**. p.80(PNG 78)은 I–G 6 을 칠했다가 "!!!!!" 로 cycle 을 보여 주고 버린다.
+* sim 의 Prim 은 **unreached 이웃만** 갱신한다(CLRS 23.2). 슬라이드 코드대로 reached 이웃까지 min 하면 H 활성화 때 reached G 의 key 가 2→1, p[G] 가 F→H 로 바뀌어 기록이 깨진다.
+
+| 이름 | 옵션 | 기대 최종값 | 출처 |
+|---|---|---|---|
+| prim_trace | (옵션 없음) s = A | reached 순서 A B C I F G H D E. MST 추가 순서 A–B 4, B–C 8, C–I 2, C–F 4, F–G 2, G–H 1, C–D 7, D–E 9 → **cost 37**. 최종 k = A0 B4 C8 D7 E9 F4 G2 H1 I2, p = B←A C←B D←C E←D F←C G←F H←G I←C. key 가 여러 번 준 정점: H 8→7→1, G 6→2, E 10→9 | L15 p.49–65 |
+| kruskal_union_find | `stop=all` (p.96 코드) | 추가 H–G 1, C–I 2, G–F 2, A–B 4, C–F 4, C–D 7, B–C 8, D–E 9 → **cost 37**. 버림 I–G 6, H–I 7, A–H 8, E–F 10, B–H 11, D–F 14. 집합 {GH}→{CI}→{FGH}→{AB}→{CFGHI}→{CDFGHI}→{ABCDFGHI}→{ABCDEFGHI} | L15 p.74–105 |
+| kruskal_union_find | `stop=early` (p.105 "Stop when we have one big tree") | 같은 8개 추가, D–E 9 뒤 멈춤(E–F·B–H·D–F 는 안 봄) | L15 p.105 |
+
+anim: `mst_cut_swap`(16초, p.18–23 도식 u·x | y·a·v·b, S = u–x·y–a·v–b, T 에 x–y·a–b 추가, cycle u–x–y–a–b–v–u, (x,y) 를 빼고 (u,v) 를 넣음) · `prim_vs_kruskal_grow`(17초, 위 두 순서를 나란히, Kruskal 버림 간선에 ✕, 정점 색 = Prim 은 tree 에 들어오면 초록 / Kruskal 은 집합 색).
+

@@ -1,0 +1,38 @@
+key: forest
+title: forest (트리 여러 개, L15 p.87–91)
+category: 15강 Greedy II, 용어
+---
+forest 는 서로 겹치지 않는 트리 여러 개를 모은 것이다. [[Kruskal's algorithm]] 이 진행되는 동안 고른 간선들은 항상 forest 를 이룬다. L9 의 [[DFS tree와 DFS forest]] 와 단어는 같지만 쓰임이 다르다. DFS forest 는 DFS 를 여러 번 다시 시작해서 생긴 탐색 트리들이고, 여기의 forest 는 Kruskal 이 MST 로 합쳐 가는 중간 조각들이다.
+
+{def}
+L15 p.87 "A forest is a collection of disjoint trees. At each step of Kruskal's, we are maintaining a forest."
+forest 는 서로 겹치지 않는 트리들의 모음이다. Kruskal 은 매 단계 forest 를 유지한다.
+{/def}
+
+[[img:L15-86.png|L15 p.88 — 다섯 조각의 forest: {A,B}, {C,I}, {D}, {E}, {H,G,F}|large]]
+
+== Kruskal 안에서의 forest ==
+처음에는 정점 하나짜리 트리가 n 개 있다. 간선을 하나 넣을 때마다 두 트리가 하나로 합쳐진다(p.89). 같은 트리 안의 두 정점을 잇는 간선은 넣지 않는다. 그러면 cycle 이 생기기 때문이다(p.91). 그래서 조각 수는 간선 하나에 정확히 하나씩 줄고, n−1 개를 넣으면 트리 하나가 남는다. 그게 MST 다.
+
+p.88 그림의 순간에는 조각이 다섯 개다.
+* {A, B}: A–B 4
+* {C, I}: C–I 2
+* {H, G, F}: H–G 1, G–F 2
+* {D}, {E}: 아직 혼자다
+다음에 C–F 4 가 들어가면 {C,I} 와 {H,G,F} 가 합쳐져 네 조각이 된다.
+
+조각마다 "어느 조각에 속하나" 를 빨리 알아야 cycle 검사를 할 수 있다. 이 일을 [[union-find]] 가 맡는다. 슬라이드는 이 자료구조를 "treehouse" 라는 농담으로 소개한다(p.92).
+
+{analogy}
+처음에는 학생 n 명이 각자 혼자 앉아 있다. 두 무리를 잇는 악수가 한 번 일어날 때마다 무리 두 개가 한 무리가 된다. 이미 같은 무리인 두 사람끼리의 악수는 무리 수를 바꾸지 못하니 세지 않는다. n−1 번 악수하면 반 전체가 한 무리가 된다.
+{/analogy}
+
+{quiz}
+정점이 9 개인 그래프에서 Kruskal 이 간선 5 개를 넣었다. 지금 forest 의 트리는 몇 개인가?
+{/quiz}
+{answer}
+4 개다. 처음 9 개에서 간선 하나마다 하나씩 줄어 9 − 5 = 4 다.
+{/answer}
+
+== 관련 문서 ==
+* [[Kruskal's algorithm]] · [[union-find]] · [[spanning tree]] · [[DFS tree와 DFS forest]] · [[connected component]] · [[L15 Greedy Algorithms II]]

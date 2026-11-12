@@ -1,0 +1,50 @@
+key: union-find
+title: union-find (disjoint-set 자료구조, L15 p.93–95)
+category: 15강 Greedy II, 용어
+---
+union-find 는 서로 겹치지 않는 집합 여러 개를 저장하는 자료구조다. disjoint-set data structure 라고도 부른다. [[Kruskal's algorithm]] 에서 "두 정점이 이미 같은 트리에 있나" 를 빠르게 묻는 데 쓴다.
+
+{def}
+L15 p.93 "Union-find data structure, also called disjoint-set data structure. Used for storing collections of sets. Supports: makeSet(u): create a set {u}. find(u): return the set that u is in. union(u,v): merge the set that u is in with the set that v is in."
+{/def}
+
+[[img:L15-93.png|L15 p.95 — makeSet(x), makeSet(y), makeSet(z) → union(x,y) → find(x) 는 {x,y} 를 가리킨다|large]]
+
+== 세 연산 ==
+{|
+! 연산 || 하는 일 || Kruskal 에서 쓰는 곳
+|-
+| `makeSet(u)` || 원소 u 하나만 든 집합 {u} 를 만든다 || 시작할 때 정점마다 한 번. 모든 정점이 자기만의 트리가 된다
+|-
+| `find(u)` || u 가 든 집합을 돌려준다 || 간선 (u,v) 마다 `find(u)` 와 `find(v)` 를 비교한다. 같으면 cycle 이다
+|-
+| `union(u,v)` || u 의 집합과 v 의 집합을 합친다 || 간선을 넣은 뒤 두 트리를 합친다
+|}
+
+p.93–95 의 예를 따라가면 이렇다.
+<pre class="txt">
+makeSet(x), makeSet(y), makeSet(z)   →  {x} {y} {z}
+union(x,y)                           →  {x,y} {z}
+find(x)                              →  {x,y}   (y 와 같은 집합)
+find(z)                              →  {z}     (x 와 다른 집합)
+</pre>
+[[sim:kruskal_union_find]]
+
+== 얼마나 빠른가 (p.106) ==
+슬라이드 표현으로는 "In practice, each of makeSet, find, and union run in constant time" 이다. 정확히는 각 연산이 amortized $O(\alpha(n))$ 이다. $\alpha(n)$ 은 [[inverse Ackermann function]] 이고, 실제로 쓰는 n 에서는 4 를 넘지 않는다. 구현 방법(트리로 표현하기, 경로 압축 등)은 슬라이드에 없다.
+
+Kruskal 은 makeSet 을 n 번, find 를 2m 번, union 을 n−1 번 부른다. 그래서 정렬을 뺀 나머지는 거의 $O(m)$ 이다.
+
+{analogy}
+반마다 반장이 한 명 있다고 생각한다. find(u) 는 "너희 반 반장이 누구야?" 라고 묻는 것이다. 두 학생의 반장이 같으면 같은 반이다. union(u,v) 는 두 반을 합치고 반장을 한 명으로 정하는 것이다.
+{/analogy}
+
+{quiz}
+Kruskal 에서 `find(u) == find(v)` 인 간선 (u,v) 를 만나면 어떻게 하고, 왜 그런가?
+{/quiz}
+{answer}
+넣지 않고 건너뛴다. u 와 v 가 이미 같은 트리에 있어서 둘을 잇는 길이 있다. 여기에 (u,v) 를 더하면 cycle 이 생긴다.
+{/answer}
+
+== 관련 문서 ==
+* [[Kruskal's algorithm]] · [[forest]] · [[inverse Ackermann function]] · [[Prim vs Kruskal 비교표]] · [[L15 Greedy Algorithms II]]

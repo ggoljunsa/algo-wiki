@@ -4,7 +4,7 @@ category: 14강 Greedy I, 메인
 ---
 == 개요 ==
 {info}
-이 문서는 슬라이드만 보고 썼다. 아직 수업 녹음이 없어서, 녹음이 들어오면 🎙 내용을 더할 예정이다. `{exam}` 박스에 "(예상)" 이 붙은 항목은 교수가 강조한 것이 아니라 슬라이드를 보고 짐작한 것이다.
+p.1–55(greedy 소개, knapsack 반례, activity selection, sub-problem graph, job scheduling)는 11/10 수업 녹음(`1110_23_컴알_L13끝_L14_Greedy.txt`)을 반영했다. Huffman coding(p.56–95)은 교수가 "next time" 이라며 다음 수업으로 넘겼다. 그래서 그 부분은 아직 슬라이드 기준이다. `{exam}` 박스에 "(예상)" 이 붙은 항목은 교수 강조가 아니라 슬라이드를 보고 짐작한 것이다.
 {/info}
 L14 의 주제는 [[greedy algorithm]] 이다. greedy 는 선택을 하나씩 하면서, 한 번 고른 것은 다시 돌아보지 않는 알고리즘이다. 슬라이드는 먼저 greedy 가 틀리는 예([[greedy가 실패하는 knapsack|unbounded knapsack]])를 보여 준다. 그다음 greedy 로 정답이 나오는 문제 세 개를 차례로 푼다.
 * [[activity selection]]
@@ -34,6 +34,10 @@ p.4 "Make choices one-at-a-time. Never look back. Hope for the best." Advantages
 greedy 는 설계하기 쉽고 대개 빠르다. 대신 정말 맞는지 증명하기가 어렵다. L14 에서 증명 부분이 길어지는 것도 이 때문이다.
 
 p.19 는 activity selection 을 예로 들어 무엇이 greedy 한지 다시 설명한다. 매 단계에서 고른 활동을 하나씩 늘려 가는데, 이때 앞으로 고를 활동을 위해 시간이 많이 남는 쪽을 고른다. 이렇게 그 순간에 좋아 보이는 선택을 이어 가면서, 그 결과가 전체로도 최적이기를 기대하는 것이다.
+
+{exam}
+교수(11/10)의 정의는 이렇다. 선택을 하나씩 하고, 뒤를 돌아보지 않고(backtracking 없음), 최선을 바란다. greedy 는 매번 특정한 부분문제 하나만 푼다. 그래서 설계는 쉽고 직관적이다. 대신 맞다는 것을 확인하기가 매우 어렵다. 교수는 "문제를 받으면 가장 먼저 떠오르는 것이 greedy 다. 쉽지만 그 답이 최적이라는 것을 증명하기는 어렵다" 고 했다.
+{/exam}
 
 == p.6–7 — greedy 가 실패하는 예: unbounded knapsack ==
 [[img:L14-07.png|L14 p.7 — Unbounded knapsack. 최적은 taco 2 + 전구 2 (무게 10, 가치 42). Value/Weight 비율로 taco 만 담으면 무게 9, 가치 39|large]]
@@ -105,6 +109,10 @@ def activity_selection(acts):          # acts 는 (s, f) 쌍, f 오름차순 정
 결과: 4개
 </pre>
 [[sim:activity_selection]]
+
+{exam}
+교수(11/10)는 학생들에게 "무엇을 먼저 고르겠나?" 하고 물었다. 나온 후보는 시작이 가장 이른 것, 끝이 가장 이른 것, 길이가 가장 짧은 것이었다. 정답은 finish time 이 가장 작은 것이다. 교수는 "최적해를 배제하지 않는다는 관점에서 생각하면 무엇을 골라야 할지 쉽게 이해된다" 고 했다. 알고리즘 자체는 직관적이고, 어려운 부분은 정확성 증명이라고 강조했다.
+{/exam}
 
 === p.18 — 수행 시간 ===
 [[img:L14-18.png|L14 p.18 — At least it's fast: 정렬돼 있으면 O(n), 아니면 O(n log n)|medium]]
@@ -200,6 +208,9 @@ p.39–42 는 어떤 부분 문제가 어떤 부분 문제의 답을 필요로 �
 p.42 의 문장은 "Not only there is optimal sub-structure, but each problem depends on only one sub-problem." 이다. activity selection 에서 $a_k$ 를 고르고 나면 남는 것은 부분 문제 k 하나뿐이다. 여러 답을 비교할 일이 없으니 표를 만들 필요도 없다.
 [[anim:subproblem_graph_shapes|D&C 트리, DP DAG, greedy 사슬. 가지 수가 줄어드는 순서로 본다]]
 자세한 비교는 [[sub-problem graph 비교]] 에 있다.
+{exam}
+교수(11/10)가 가장 강하게 말한 대목이다. 세 기법은 모두 문제를 작은 부분문제로 쪼갠다. 차이는 부분문제의 모양이다. D&C 는 disjoint 하게 나누고, DP 는 일부러 겹치게 만들고, greedy 는 한 번에 부분문제 하나만 푼다. 교수는 이것을 L11 과 이었다. Dijkstra 는 추정치가 가장 작은 정점 하나를 골라 그 이웃만 갱신하니까 greedy 다. Bellman-Ford 는 모든 정점의 이웃을 갱신하니까 DP 다. 교수는 "이 그림만 기억하면 두 알고리즘의 차이를 분명히 설명할 수 있다. 다른 건 다 잊어도 이건 잘 기억하라" 고 했다. 부분문제 하나만 남는 optimal substructure 를 만들 수 있으면 greedy 로 설계하고, 그렇지 않으면 DP 나 D&C 로 간다.
+{/exam}
 
 == p.45–55 — Job scheduling ==
 === p.45–46 — 문제 ===
@@ -215,6 +226,10 @@ HW 먼저:    HW 완료 10, Sleep 완료 18 → 10·2 + 18·3 = 20 + 54 = 74
 Sleep 먼저: Sleep 완료 8, HW 완료 18 → 8·3 + 18·2 = 24 + 36 = 60
 → Sleep 먼저가 싸다.
 </pre>
+
+{exam}
+교수(11/10)는 숙제(10시간, 시간당 2)와 잠(8시간, 시간당 3) 예를 직접 계산했다. 숙제를 먼저 하면 74, 잠을 먼저 자면 60 이라 잠을 먼저 자는 게 낫다. 이어서 "무엇을 먼저 하겠나? 시간당 비용이 가장 큰 것?" 하고 물은 뒤, 시간과 비용을 같이 봐야 한다는 쪽으로 이끌었다.
+{/exam}
 
 === p.47–49 — optimal substructure 와 "best" 의 뜻 ===
 [[img:L14-48.png|L14 p.48 — Take the best job first, then solve this problem. 남는 부분 문제가 하나씩 줄어든다|large]]
@@ -256,6 +271,9 @@ scheduleJobs( JOBS ):                  # p.53
   Return sorted_JOBS
 </pre>
 정렬 말고는 하는 일이 없으니 수행 시간은 정렬 시간 $O(n \log n)$ 이다.
+{exam}
+교수(11/10)는 job scheduling 을 이렇게 정리했다. 두 작업을 맞바꿔 보면 비교 기준이 $w/y$ 와 $z/x$, 즉 단위 시간당 비용으로 나온다. 이 비율이 가장 큰 작업을 먼저 한다. Lemma 는 귀류법으로 보인다. 비율이 최대인 작업 B 가 맨 앞이 아니면 바로 앞 작업과 맞바꾼다. 비용이 늘지 않으니 B 가 맨 앞에 올 때까지 반복하면 된다. 전체 정확성은 activity selection 과 같은 귀납법으로 쓴다. 교수는 마지막에 "greedy 는 한 번에 특정 부분문제 하나를 풀고 최선을 바라는 것이다. 정확성은 그 선택이 최적해를 배제하지 않는다는 것을 보여서 증명한다" 고 다시 말했다. Huffman coding 은 다음 시간이라고 했다.
+{/exam}
 
 === p.54 — 귀납법으로 정리 ===
 <pre class="txt">

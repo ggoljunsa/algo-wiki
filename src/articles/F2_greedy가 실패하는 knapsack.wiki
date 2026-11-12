@@ -39,5 +39,9 @@ greedy 는 비율만 보고, 용량이 얼마나 남을지는 신경 쓰지 않�
 슬라이드에는 없지만, CLRS 16.2 에는 물건을 쪼개 담을 수 있는 fractional knapsack 이 나온다. 쪼갤 수 있으면 용량이 남을 일이 없으니까, 이 경우에는 비율 greedy 가 최적이다.
 {/info}
 
+{exam}
+교수(11/10)는 이 예에서 greedy 가 왜 실패하는지 설명했다. 용량에 제한이 없다면 비율이 가장 좋은 taco 만 담는 greedy 가 최적이다. 하지만 용량 10 이 있어서 taco 3개(무게 9, 가치 39)를 담으면 1 이 남는다. 이걸 고치려면 "taco 하나를 빼고 다른 걸 넣을까?" 하고 되돌아봐야 하는데, 그건 backtracking 이다. 교수는 그렇게 corner case 를 하나씩 처리하다 보면 결국 dynamic programming 으로 가게 된다고 했다.
+{/exam}
+
 == 관련 문서 ==
 * [[greedy algorithm]] · [[unbounded knapsack]] · [[knapsack problem]] · [[L14 Greedy Algorithms I]] · [[L13 Dynamic Programming II]]

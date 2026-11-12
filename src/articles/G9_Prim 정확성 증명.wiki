@@ -1,0 +1,52 @@
+key: Prim 정확성 증명
+title: Prim 정확성 증명 (L15 p.38–43)
+category: 15강 Greedy II, 용어
+---
+[[Prim's algorithm]] 이 정말 [[minimum spanning tree]] 를 돌려준다는 증명이다. 뼈대는 L14 의 [[greedy 증명 전략]] 과 같다. 매번 고르는 간선이 성공 가능성을 없애지 않는다는 것을 보이고, 그것을 [[귀납법 4요소]] 로 묶는다. "안전하다" 는 판단은 [[MST 보조정리]] 에 맡긴다.
+
+{def}
+L15 p.38 "We need to show that our greedy choices don't rule out success. That is, at every step: There exists an MST that contains all of the edges we have added so far."
+매 단계마다, 지금까지 고른 간선을 모두 포함하는 MST 가 하나는 있다는 것을 보이면 된다.
+{/def}
+
+== 1단계: 다음 간선이 안전하다 (p.40–41) ==
+[[img:L15-41.png|L15 p.41 — cut {visited, unvisited}. S 는 cut 을 건너지 않고, 다음에 넣을 H–G(1) 이 이 cut 의 light edge 다|large]]
+Prim 이 간선을 몇 개 고른 중간 시점을 생각한다. 지금까지 고른 간선 집합을 S 라 하고, S 가 안전하다고 가정한다. 즉 S 를 포함하는 MST 가 있다.
+
+이때 정점을 방문한 쪽(visited)과 아직 안 한 쪽(unvisited)으로 나누는 [[cut]] 을 본다. S 의 간선은 모두 visited 정점끼리 이어져 있다. 그래서 S 의 간선 중 cut 을 건너는 것이 없고, 이것이 [[cut이 S를 respect]] 한다는 뜻이다.
+
+Prim 이 다음에 넣는 간선은 visited 에서 unvisited 로 가는 간선 중 가장 가벼운 것이다. 이는 바로 이 cut 을 건너는 [[light edge]] 다. 그러니 [[MST 보조정리]] 의 조건이 모두 맞고, 보조정리에 따라 이 간선을 넣어도 여전히 S ∪ {새 간선} 을 포함하는 MST 가 있다.
+
+슬라이드 그림(p.41)에서는 A, B, C, I, G, F 가 visited 다. cut 을 건너는 간선 중 H–G(1) 이 가장 가볍고, 그래서 다음에 들어간다.
+
+== 2단계: 귀납법 4요소 (p.43) ==
+[[img:L15-43.png|L15 p.43 — Formal proof: Inductive hypothesis / Base case / Inductive step / Conclusion|large]]
+<pre class="txt">
+'''Inductive hypothesis:''' t 번째 간선을 넣은 뒤, 지금까지 넣은 간선을 모두 포함하는 MST 가 있다.
+'''Base case:'''           간선을 0 개 넣은 뒤. 빈 집합은 어떤 MST 에든 포함되므로 성립한다.
+'''Inductive step:'''      t 에서 성립하면(지금까지의 선택이 안전하면) t+1 에서도 성립한다.
+                    1단계에서 본 것처럼, 다음 간선은 cut {visited, unvisited} 의 light edge 이고
+                    MST 보조정리로 안전하다.
+'''Conclusion:'''          n−1 번째 간선을 넣은 뒤에도 그 간선들을 포함하는 MST 가 있다.
+                    간선 n−1 개는 이미 spanning tree 이므로, 그 MST 는 지금 만든 트리 자신이다.
+                    따라서 Prim 의 결과는 MST 다.
+</pre>
+Conclusion 의 마지막 줄이 중요하다. 정점이 n 개인 트리는 간선이 정확히 n−1 개다. 그래서 n−1 개 간선을 "포함하는" spanning tree 는 그 간선들로 이뤄진 트리 하나뿐이다. 슬라이드 표현으로는 "At this point we have a spanning tree, so it better be minimal." 이다.
+
+{exam}
+(예상) 중간고사 오답에서 나온 "증명 4칸" 형식으로 Inductive step 을 채우게 할 수 있다. 쓸 내용은 세 가지다. 쓰는 cut 이 {visited, unvisited} 이고, S 가 그 cut 을 respect 하며, 새 간선이 light edge 라 보조정리로 안전하다는 것이다. [[Kruskal 정확성 증명]] 과 cut 만 다르니 둘을 같이 외운다.
+{/exam}
+
+{analogy}
+등산로를 한 칸씩 넓혀 가는 것과 비슷하다. 지금까지 깐 길이 어떤 최적 지도 위에 있다면, 길 끝에서 가장 짧게 이어지는 한 칸을 더 깔아도 여전히 어떤 최적 지도 위에 있다. 마지막 칸까지 깔면 모든 마을이 이어지고, 그 길이 곧 최적 지도다.
+{/analogy}
+
+{quiz}
+Prim 의 Inductive step 에서 쓰는 cut 은 무엇이고, 그 cut 이 S 를 respect 하는 이유는?
+{/quiz}
+{answer}
+cut 은 {visited, unvisited} 다. Prim 이 지금까지 넣은 간선 S 는 모두 visited 정점 두 개를 잇는다. 그래서 S 의 어떤 간선도 cut 을 건너지 않는다.
+{/answer}
+
+== 관련 문서 ==
+* [[Prim's algorithm]] · [[MST 보조정리]] · [[cut이 S를 respect]] · [[light edge]] · [[Kruskal 정확성 증명]] · [[greedy 증명 전략]] · [[귀납법 4요소]] · [[L15 Greedy Algorithms II]]

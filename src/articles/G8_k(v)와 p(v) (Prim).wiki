@@ -1,0 +1,61 @@
+key: k(v)와 p(v) (Prim)
+title: k[v] 와 p[v] (Prim 의 key 와 parent)
+category: 15강 Greedy II, 용어
+---
+{def}
+L15 p.49 Every vertex has a key and a parent. k[x] is the distance of x from the growing tree. p[b] = a, meaning that a was the vertex that k[b] comes from.
+$k[x]$ 는 정점 x 에서 지금 자라고 있는 tree 까지의 거리다. $p[b] = a$ 는 $k[b]$ 의 값이 정점 a 에서 왔다는 뜻이다.
+{/def}
+[[img:L15-52.png|L15 p.52 — A 를 reached 로 만든 직후: k[B] = 4, k[H] = 8, 둘 다 p = A|medium]]
+
+== 정점의 세 상태 (p.49 범례) ==
+{|
+! 그림 || 슬라이드 범례 || 뜻
+|-
+| 연한 원 || Can't reach x yet || 아직 tree 에 들어가지 않은 정점(unreached)
+|-
+| 빗금 원 || x is "active" || 이번 단계에 고른 정점. unreached 중 key 가 가장 작다
+|-
+| 진한 원 || Can reach x || tree 에 들어간 정점(reached). key 가 다시 바뀌지 않는다
+|}
+unreached 정점의 key 는 tree 에서 간선 하나로 갈 수 없으면 $\infty$ 이고, 갈 수 있으면 가장 싼 간선의 무게다. 처음에는 시작 정점 A 만 $k[A] = 0$ 이고 나머지는 모두 $\infty$ 다(p.50).
+
+== 갱신 규칙 ==
+<pre class="txt">
+u 를 activate 한 뒤, u 의 이웃 v 마다:
+  k[v] = min( k[v], weight(u,v) )
+  k[v] 가 줄었으면 p[v] = u
+u 를 reached 로 바꾸고 간선 (p[u], u) 를 MST 에 넣는다
+</pre>
+$k[v]$ 는 "tree 안의 어느 정점에서든 v 로 가는 간선 중 가장 싼 것" 의 무게다. tree 가 커질 때마다 새로 들어온 정점 u 에서 나가는 간선만 비교하면 된다. 이전 tree 정점들의 간선은 이미 $k[v]$ 에 반영돼 있기 때문이다.
+
+== 예제 값 ==
+<pre class="txt">
+A reached 후   k: B=4(p=A), H=8(p=A), 나머지 ∞
+B reached 후   k: C=8(p=B)            (B–H 11 은 8 보다 커서 H 그대로)
+C reached 후   k: D=7(p=C), I=2(p=C), F=4(p=C)
+...
+마지막 값     p: B←A, C←B, I←C, F←C, G←F, H←G, D←C, E←D
+</pre>
+p.65 그림에는 중간 상태가 그려져 있다. 그 그림에서 $k[E] = 10$, $p[E] = F$ 이다. 나중에 D 가 reached 되면 D–E 9 가 더 싸서 $k[E] = 9$, $p[E] = D$ 로 바뀐다. 끝까지 남은 p 화살표 8 개가 그대로 MST 의 간선 8 개다.
+[[sim:prim_trace]]
+
+== Dijkstra 의 d[v] 와 비교 ==
+L11 [[Dijkstra]] 의 $d[v]$([[d 값과 sure·not-sure]]) 는 출발점 s 에서 v 까지의 거리 추정치다. Prim 의 $k[v]$ 는 tree 전체에서 v 까지 간선 하나의 거리다. 그래서 갱신 식이 다르다.
+* Dijkstra: $d[v] = \min(d[v],\ d[u] + w(u,v))$
+* Prim: $k[v] = \min(k[v],\ w(u,v))$
+reached 와 sure, unreached 와 not-sure 가 각각 짝을 이룬다. → [[Dijkstra vs Prim]]
+
+{analogy}
+각 정점이 "나는 지금 tree 에서 몇 떨어져 있고, 누구를 통해 붙으면 제일 싸다" 를 적은 쪽지를 들고 있다. p.45 의 말풍선이 그 쪽지다: "I'm 7 away. C is the closest."
+{/analogy}
+
+{quiz}
+C 를 reached 로 만든 직후 k[H] 는 얼마이고 p[H] 는 누구인가? I 를 reached 로 만든 직후에는?
+{/quiz}
+{answer}
+C 직후 $k[H] = 8$, $p[H] = A$ (C 와 H 사이에는 간선이 없다). I 직후에는 I–H 7 이 8 보다 작아서 $k[H] = 7$, $p[H] = I$ 가 된다. 나중에 G 가 reached 되면 G–H 1 로 $k[H] = 1$, $p[H] = G$ 가 된다.
+{/answer}
+
+== 관련 문서 ==
+* [[Prim's algorithm]] · [[Dijkstra vs Prim]] · [[d 값과 sure·not-sure]] · [[relaxation]] · [[L15 Greedy Algorithms II]]

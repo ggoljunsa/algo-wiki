@@ -32,5 +32,9 @@ p.38 에 따르면 activity selection 은 세 가지 방식으로 다 볼 수 �
 D&C 는 일을 팀원 여럿에게 나눠 주고 각자 따로 하게 하는 방식이다. DP 는 팀원들이 같은 자료를 여러 번 쓰니까, 한 번 만든 자료를 게시판에 붙여 두고 같이 보는 방식이다. greedy 는 할 일이 한 줄로 이어져 있어서, 다음 사람에게 한 번만 넘기면 된다.
 {/analogy}
 
+{exam}
+교수(11/10)가 "다른 건 다 잊어도 이건 잘 기억하라" 고 한 그림이다. D&C 는 부분문제가 disjoint 하다. DP 는 부분문제가 겹치도록 만든다. greedy 는 한 번에 부분문제 하나만 푼다. 교수는 이것을 L11 과 이었다. Dijkstra 는 추정치가 가장 작은 정점 하나만 골라 그 이웃을 갱신하니까 greedy 의 예다. Bellman-Ford 는 모든 정점에 대해 이웃을 갱신하니까 DP 의 예다. 이 그림을 기억하면 두 알고리즘의 차이를 분명히 설명할 수 있다고 했다. 부분문제 하나만 남는 optimal substructure 를 만들 수 있으면 greedy 로 설계하고, 그렇지 않으면 DP 나 D&C 를 쓴다.
+{/exam}
+
 == 관련 문서 ==
 * [[greedy algorithm]] · [[dynamic programming]] · [[divide and conquer]] · [[optimal substructure]] · [[overlapping subproblems]] · [[L14 Greedy Algorithms I]]

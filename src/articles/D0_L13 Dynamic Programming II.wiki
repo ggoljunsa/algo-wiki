@@ -4,7 +4,7 @@ category: 13강 DP II, 메인
 ---
 == 개요 ==
 {info}
-슬라이드 기준으로 작성했다. 수업 녹음이 들어오면 🎙 절을 추가한다. `{exam}` 중 "(예상)" 은 교수 강조가 아니라 슬라이드 구조와 중간고사 출제 형식에서 추론한 것이다.
+LCS 와 knapsack(p.5–92)은 11/5 수업에서 나갔는데 녹음이 없다. 11/10 수업 앞부분에서 교수가 LCS 를 짧게 복습했으니 11/5 에 거기까지 한 것으로 본다. 트리 independent set(p.93–112)은 11/10 수업 녹음(`1110_23_컴알_L13끝_L14_Greedy.txt`) 앞 25분에 있고, 그 내용을 `{exam}` 박스로 넣었다. "(예상)" 이 붙은 박스는 교수 강조가 아니라 슬라이드 구조와 중간고사 출제 형식에서 추론한 것이다.
 {/info}
 L13 에서는 새 이론이 나오지 않는다. [[L12 Dynamic Programming I]] 에서 배운 [[dynamic programming]] 을 세 가지 문제에 직접 적용해 보는 예제 강의다. 다루는 문제는 다음과 같다.
 * [[longest common subsequence]](LCS)
@@ -485,6 +485,16 @@ tree 의 최대 가중치 independent set 은 $O(|V|)$ 에 구한다. 이 문제
 {exam}
 (예상) ① 작은 가중치 tree 에서 $A[u]$, $B[u]$ 를 잎부터 채우고 답 쓰기. ② `A[u] = max{ ____ , weight(u) + ____ }` 빈칸. ③ "Case 2 에서 왜 자식이 아니라 손자의 값을 쓰는가".
 {/exam}
+{exam}
+교수(11/10)가 이 예제에서 짚은 순서는 다음과 같다.
+* 이번에는 가중치가 간선이 아니라 정점에 붙는다. 일반 그래프에서는 NP-complete 라서 tree 로 제한한다.
+* DP 설계에서 가장 중요한 것은 optimal substructure 를 찾는 일이다. tree 문제라면 subtree 가 자연스러운 부분문제 후보다("Sub-trees are a natural candidate for sub-problems").
+* 루트가 집합에 들어가는지로 두 case 를 나눈다. 들어가면 자식은 못 들어가니 손자들의 값과 루트 가중치를 더한다.
+* 구현할 때 "손자들의 합을 어떻게 들고 다니나?" 에서 막힌다. 그래서 배열 $B[u]$(자식들의 A 합)를 하나 더 둔다. 자식들의 B 를 더하면 손자들의 A 합이 된다.
+* 정점마다 한 번만 방문하고, 정점 하나에서 하는 계산은 $O(1)$ 이라서 $O(|V|)$ 다. tree 에서만 되고 일반 그래프에서는 안 된다.
+* divide and conquer 와의 차이는 memoization 하나뿐이다. 교수 표현으로는 "Only difference is memoization. But it gives you a lot of difference." 다. 표 A, B 를 버리면 한 정점의 값을 부모 쪽과 조부모 쪽에서 두 번씩 다시 계산하게 된다.
+* 실제 집합을 찾는 Step 4 는 선택 사항이라 각자 해 보라고 했다. tree 에서는 top-down 이 더 자연스럽다고 했다.
+{/exam}
 
 == p.109–112 — Recap 과 비교표 ==
 [[img:L13-111.png|p.111 — Conclusion 표: 네 문제의 수행 시간, 변수, 비고|large]]
@@ -499,6 +509,9 @@ tree 의 최대 가중치 independent set 은 $O(|V|)$ 에 구한다. 이 문제
 |-
 | Maximum Independent Set || $O(\lvert V \rvert)$ worst-case || $\lvert V \rvert$ = tree 정점 수 || 일반 그래프는 NP-complete, tree 에서만. top-down 이 쉬움
 |}
+{exam}
+교수(11/10)는 DP 단원을 이렇게 정리했다. 세 문제를 DP 로 설계해 봤는데, 공통 핵심은 optimal substructure 를 찾는 것이다. DP 를 설계하는 일은 쉽지 않다. 그리고 "dynamic programming 이 무엇인가" 는 대학원 면접에서 아주 자주 나오는 질문이라고 했다. 마지막에 p.111 표(문제별 수행 시간)를 띄워 놓고 "this is the whole dynamic programming" 이라고 마무리했다.
+{/exam}
 p.112 는 이렇게 마무리한다. DP 알고리즘을 만드는 레시피는 있다. 하지만 알맞은 substructure 를 찾는 데는 여전히 창의성이 필요하다. 네 문제를 한 표에 더 자세히 비교한 것은 [[DP 예제 비교표]] 에 있다.
 p.113 은 다음 주 예고다. 다음 주에는 [[greedy algorithm|Greedy algorithms]]([[L14 Greedy Algorithms I]]) 를 배운다. knapsack 을 greedy 로 풀면 왜 틀리는지는 [[greedy가 실패하는 knapsack]] 에 있다.
 

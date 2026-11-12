@@ -1,0 +1,36 @@
+key: cut이 S를 respect
+title: cut 이 S 를 respect 한다
+category: 15강 Greedy II, 용어
+---
+{def}
+L15 p.14 Let S be a set of edges in G. We say a cut respects S if no edges in S cross the cut.
+간선 집합 S 의 어떤 간선도 cut 을 건너지 않으면, 그 cut 이 S 를 respect 한다고 말한다.
+{/def}
+[[img:L15-15.png|L15 p.15 — S = 굵은 주황 간선, cut 은 S 를 respect 한다. C–D 7 이 light edge|medium]]
+
+== 슬라이드 예 ==
+p.14–15 에서 S 는 굵은 주황 간선 다섯 개다. A–B, C–I, C–F, H–G, G–F 이다. cut 은 {A, B, D, E} 와 {C, I, H, G, F} 다.
+* A–B 는 두 끝점이 모두 왼쪽 묶음에 있다.
+* 나머지 네 간선은 두 끝점이 모두 오른쪽 묶음에 있다.
+그래서 S 의 어느 간선도 cut 을 건너지 않는다. 이 cut 은 S 를 respect 한다.
+
+== 왜 필요한가 ==
+greedy 로 간선을 하나씩 더할 때 S 는 "지금까지 고른 간선" 이다. S 를 respect 하는 cut 을 하나 잡으면, cut 을 건너는 간선은 모두 아직 고르지 않은 간선이다. 그 가운데 가장 가벼운 [[light edge]] 를 넣어도 된다는 것이 [[MST 보조정리]] 다.
+
+알고리즘마다 respect 하는 cut 을 쉽게 찾을 수 있다.
+* [[Prim's algorithm]]: S 는 visited 정점들 사이에만 있다. 그래서 cut {visited, unvisited} 는 S 를 respect 한다(p.40).
+* [[Kruskal's algorithm]]: 다음 간선이 트리 T1 과 다른 트리를 잇는다. S 의 간선은 각 트리 안에만 있으니 cut {T1, V − T1} 은 S 를 respect 한다(p.111).
+
+{analogy}
+이미 깔아 둔 전선(S)은 하나도 자르지 않도록 가위질을 하는 것이다. 그런 가위질이면 respect 한다.
+{/analogy}
+
+{quiz}
+Prim 의 중간 단계에서 cut {visited, unvisited} 가 S 를 respect 하는 이유를 한 문장으로 쓰시오.
+{/quiz}
+{answer}
+Prim 이 지금까지 더한 간선은 모두 visited 정점끼리 잇는 간선이라서, unvisited 쪽으로 건너가는 S 의 간선이 없다.
+{/answer}
+
+== 관련 문서 ==
+* [[cut]] · [[light edge]] · [[MST 보조정리]] · [[Prim 정확성 증명]] · [[Kruskal 정확성 증명]]

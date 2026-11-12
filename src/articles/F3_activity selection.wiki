@@ -55,5 +55,9 @@ p.18 에 따르면, 활동이 finish time 순으로 정렬돼 있으면 한 번 
 
 이 greedy 가 맞다는 증명은 [[activity selection 정확성 증명]] 에 있다. 부분 문제 값 [[A(i) (activity selection)]] 를 써서 보인다.
 
+{exam}
+교수(11/10)는 학생들에게 무엇을 먼저 고를지 물었다. 시작이 가장 이른 것, 끝이 가장 이른 것, 길이가 가장 짧은 것이 후보로 나왔다. 답은 finish time 이 가장 작은 것이고, 슬라이드 예제에서는 a2 를 먼저 고른다. 교수는 "이 알고리즘은 직관적이지만 어려운 부분은 정확성이다" 라고 했다. 그리고 "최적해를 배제하지 않는가" 라는 관점으로 보면 왜 finish time 인지 이해된다고 했다.
+{/exam}
+
 == 관련 문서 ==
 * [[L14 Greedy Algorithms I]] · [[greedy algorithm]] · [[A(i) (activity selection)]] · [[activity selection 정확성 증명]] · [[greedy 증명 전략]] · [[start time과 finish time]]

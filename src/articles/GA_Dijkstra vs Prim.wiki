@@ -1,0 +1,69 @@
+key: Dijkstra vs Prim
+title: Dijkstra vs Prim (L15 p.66–72)
+category: 15강 Greedy II, 용어
+---
+[[Prim's algorithm]] 의 효율적인 구현은 L11 의 [[Dijkstra]] 와 코드가 거의 같다. 둘 다 아직 처리하지 않은 정점 중 값이 가장 작은 것을 하나 골라, 그 이웃의 값을 갱신한다. 다른 점은 갱신 식 한 줄이다. 이 한 줄 때문에 Dijkstra 는 최단경로 트리를, Prim 은 최소 신장 트리를 만든다.
+
+{def}
+L15 p.68 "Differences: 1. Keep track of p[v] in order to return a tree at the end. But Dijkstra's can do that too, that's not a big difference. 2. Instead of d[v] which we update by d[v] = min( d[v], d[u] + w(u,v) ), we keep k[v] which we update by k[v] = min( k[v], w(u,v) )."
+p[v] 를 기록하는 것은 Dijkstra 도 할 수 있으니 큰 차이가 아니다. 진짜 차이는 2번, 갱신 식이다.
+{/def}
+
+== 코드 나란히 (p.67) ==
+[[img:L15-67.png|L15 p.67 — Dijkstra(G,s) 와 Prim(G,s) 의사코드를 나란히|large]]
+{|
+! || [[Dijkstra]] (L11) || [[Prim's algorithm]] (L15)
+|-
+| 정점 상태 || not-sure / sure || unreached / reached
+|-
+| 정점 값 || $d[v]$ = s 에서 v 까지 지금까지 찾은 거리 ([[d 값과 sure·not-sure]]) || $k[v]$ = v 에서 지금 자라는 트리까지 간선 한 개 거리 ([[k(v)와 p(v) (Prim)]])
+|-
+| 초기화 || $d[s]=0$, 나머지 ∞ || $k[s]=0$, 나머지 ∞
+|-
+| 고르는 정점 || not-sure 중 $d$ 최소 || unreached 중 $k$ 최소
+|-
+| 갱신 식 || $d[v] = \min(d[v],\ d[u] + w(u,v))$ || $k[v] = \min(k[v],\ w(u,v))$
+|-
+| 결과 || s 에서 모든 정점까지의 최단거리 || 최소 신장 트리
+|-
+| 수행 시간 || 같다 (아래) || 같다 (아래)
+|}
+Dijkstra 는 s 에서 u 까지 온 거리 $d[u]$ 에 간선을 더한다. 출발점에서 얼마나 먼지가 중요하기 때문이다. Prim 은 $w(u,v)$ 만 본다. 트리에 붙이는 비용은 그 간선 하나의 무게뿐이고, 출발점에서 얼마나 먼지는 상관이 없기 때문이다.
+
+== 차이가 드러나는 예 (p.68) ==
+[[img:L15-68.png|L15 p.68 — S–U 2, U–T 2, S–T 3. "Thing 2 is the big difference."|large]]
+정점 S, U, T 와 간선 S–U 2, U–T 2, S–T 3 인 삼각형이다. 둘 다 S 에서 시작한다.
+<pre class="txt">
+처음:  S 를 고른다. 이웃 갱신 → U 는 2, T 는 3 (둘 다 같은 값)
+다음:  U(2) 를 고른다. U 의 이웃 T 를 갱신한다.
+  Dijkstra: d[T] = min(3, d[U] + w(U,T)) = min(3, 2+2) = 3   → 그대로, T 는 S 에서 직접
+  Prim:     k[T] = min(3, w(U,T))        = min(3, 2)   = 2   → 바뀜, T 는 U 에 붙음
+결과
+  Dijkstra 의 트리: S–U, S–T   (무게 합 5, 각 정점까지 거리는 최소)
+  Prim 의 트리:     S–U, U–T   (무게 합 4 = MST)
+</pre>
+Dijkstra 가 만든 트리는 무게 합이 5 라서 MST 가 아니다. 반대로 Prim 의 트리에서 S 에서 T 까지 가는 길은 4 라서 최단경로(3)가 아니다. 두 알고리즘은 목표가 다르다는 것을 이 작은 예가 보여 준다.
+
+== 수행 시간은 똑같다 (p.71–72) ==
+슬라이드 표현으로는 "Exactly the same as Dijkstra" 다. unreached 정점을 [[priority queue와 heap|priority queue]] 에 넣고, 최솟값 꺼내기 n 번과 키 줄이기 최대 m 번을 한다.
+* [[red-black tree]] 를 priority queue 로 쓰면 $O(m\log n)$ 이다.
+* [[Fibonacci heap]] 을 쓰면 amortized $O(m + n\log n)$ 이다.
+계산은 [[Dijkstra 수행 시간]] 과 같다.
+
+{exam}
+(예상) 두 코드 중 한 줄을 비워 두고 채우게 하거나, 위와 같은 작은 그래프에서 두 알고리즘이 만드는 트리를 각각 그리게 하는 문제가 나올 수 있다. 갱신 식에 $d[u]$ 가 들어가는지 아닌지만 정확히 기억하면 된다.
+{/exam}
+
+{analogy}
+마을에 수도관을 까는 상황을 생각한다. Dijkstra 는 "정수장에서 우리 집까지 물이 몇 km 를 달려오나" 를 줄이려 한다. Prim 은 "새 집을 이미 깔린 관 어디든 가장 가까운 곳에 잇는다". 그래서 Prim 은 관 전체 길이가 가장 짧고, Dijkstra 는 집마다 물이 오는 길이 가장 짧다.
+{/analogy}
+
+{quiz}
+빈칸: Prim 의 갱신 식은 `k[v] = min( k[v], ________ )` 이다.
+{/quiz}
+{answer}
+'''w(u,v)'''. Dijkstra 처럼 `d[u] + w(u,v)` 로 쓰면 오답이다. 그렇게 쓰면 최단경로 트리가 나온다.
+{/answer}
+
+== 관련 문서 ==
+* [[Dijkstra]] · [[Prim's algorithm]] · [[k(v)와 p(v) (Prim)]] · [[d 값과 sure·not-sure]] · [[Dijkstra 수행 시간]] · [[Prim vs Kruskal 비교표]] · [[L15 Greedy Algorithms II]] · [[L11 Graph Algorithms III]]

@@ -37,5 +37,9 @@ p.97 에 따르면 greedy 가 잘 맞을 만한 문제는 [[optimal substructure
 "greedy 는 항상 최적해를 준다" 는 거짓이다. knapsack 반례 하나만 들어도 된다. 그래서 greedy 를 쓸 때는 맞다는 증명이 따로 있어야 한다.
 {/warn}
 
+{exam}
+교수(11/10)의 설명은 이렇다. greedy 는 한 번에 하나씩 고르고 되돌아가지 않는다. 매번 특정 부분문제 하나만 풀고, 그 선택들이 모여 최적해가 되기를 바란다. 설계는 단순하고 직관적이지만, 정확성을 확인하기는 매우 어렵다. 교수는 "문제를 받으면 greedy 가 가장 먼저 떠오르지만, 최적임을 증명하기가 어렵다" 고 했다. 그리고 모든 문제를 greedy 로 풀 수 있는 것은 아니라고 덧붙였다.
+{/exam}
+
 == 관련 문서 ==
 * [[L14 Greedy Algorithms I]] · [[greedy 증명 전략]] · [[sub-problem graph 비교]] · [[dynamic programming]] · [[optimal substructure]] · [[greedy가 실패하는 knapsack]]

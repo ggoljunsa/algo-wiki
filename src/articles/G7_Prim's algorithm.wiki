@@ -1,0 +1,76 @@
+key: Prim's algorithm
+title: Prim's algorithm (프림 알고리즘)
+category: 15강 Greedy II, 용어
+---
+{def}
+L15 p.27 Idea 1: Start growing a tree, greedily add the shortest edge we can to grow the tree.
+한 정점에서 tree 를 시작하고, 그 tree 를 키울 수 있는 간선 중 가장 짧은 것을 매번 더한다.
+{/def}
+[[img:L15-35.png|L15 p.35 — A 에서 시작해 tree 를 키운 결과, cost 37 MST|medium]]
+
+== 느린 버전 slowPrim (p.36) ==
+<pre class="c">
+slowPrim( G = (V,E), starting vertex s ):
+  Let (s,u) be the lightest edge coming out of s.
+  MST = { (s,u) }
+  verticesVisited = { s, u }
+  while |verticesVisited| < |V|:
+    find the lightest edge (x,v) in E so that:
+      x is in verticesVisited
+      v is not in verticesVisited
+    add (x,v) to MST
+    add v to verticesVisited
+  return MST
+</pre>
+while 루프는 n−1 번 돈다. 매번 간선 전체를 훑어 가장 가벼운 것을 찾으면 한 번에 $O(m)$ 이 든다. 그래서 이 버전은 $O(nm)$ 이다.
+
+== 빠른 버전 (p.49–65) ==
+정점마다 key $k[v]$ 와 parent $p[v]$([[k(v)와 p(v) (Prim)]]) 를 둔다. $k[v]$ 는 v 에서 지금 자라는 tree 까지의 거리(간선 하나로 갈 때의 가장 싼 값)다. $p[v]$ 는 그 값이 어느 정점에서 왔는지다.
+<pre class="c">
+Prim(G,s):
+  Set all vertices to unreached
+  k[v] = ∞ for all v in V
+  k[s] = 0
+  While there are unreached nodes:
+      Pick the unreached vertex u with the smallest key.   // activate
+      For v in u.neighbors:
+          k[v] = min( k[v], weight(u,v) )
+          if k[v] updated, p[v] = u
+      Mark u as reached, and add (p[u],u) to MST.
+</pre>
+코드 모양은 [[Dijkstra]] 와 거의 같다. 다른 점은 갱신 식 하나다. 자세한 비교는 [[Dijkstra vs Prim]] 에 있다.
+
+== 슬라이드 예제를 A 에서 돌리기 ==
+<pre class="txt">
+reached 순서  더하는 간선(p[u],u)   이웃 key 변화
+A (k=0)       -                     B=4(A), H=8(A)
+B (k=4)       A–B 4                 C=8(B)            (H 는 11 > 8 이라 그대로)
+C (k=8)       B–C 8                 D=7(C), I=2(C), F=4(C)
+I (k=2)       C–I 2                 H=7(I), G=6(I)
+F (k=4)       C–F 4                 G=2(F), E=10(F)   (D 는 14 > 7 이라 그대로)
+G (k=2)       F–G 2                 H=1(G)
+H (k=1)       G–H 1                 -
+D (k=7)       C–D 7                 E=9(D)
+E (k=9)       D–E 9                 -
+합 = 4+8+2+4+2+1+7+9 = 37
+</pre>
+B 다음에는 C 와 H 의 key 가 둘 다 8 이다. 슬라이드(p.65)는 C 를 먼저 고른다. 그래서 MST 에 A–H 가 아니라 B–C 가 들어간다. H 를 먼저 골라도 cost 는 37 로 같다.
+[[sim:prim_trace]]
+
+== 정확성과 수행 시간 ==
+* 정확성: 매번 고르는 간선은 cut {visited, unvisited} 의 [[light edge]] 다. 그래서 [[MST 보조정리]] 로 안전하다. 귀납법으로 묶은 것이 [[Prim 정확성 증명]] 이다.
+* 수행 시간(p.71): Dijkstra 와 똑같다. [[red-black tree]] 를 priority queue 로 쓰면 $O(m\log n)$ 이다. [[Fibonacci heap]] 을 쓰면 amortized $O(m + n\log n)$ 이다.
+
+{analogy}
+얼룩이 번지는 것과 비슷하다. A 에서 시작한 얼룩이 매번 가장 가까이 붙은 정점 하나로 번진다. 얼룩은 언제나 한 덩어리로 유지된다.
+{/analogy}
+
+{quiz}
+코드 빈칸: `k[v] = min( k[v], ________ )` 에 들어갈 것은? Dijkstra 라면 무엇이 들어가는가?
+{/quiz}
+{answer}
+Prim 은 `weight(u,v)` 이다. v 에서 tree 까지의 거리만 필요하기 때문이다. Dijkstra 는 `d[u] + weight(u,v)` 다. Dijkstra 는 출발점 s 에서 v 까지의 전체 거리가 필요하다.
+{/answer}
+
+== 관련 문서 ==
+* [[L15 Greedy Algorithms II]] · [[minimum spanning tree]] · [[k(v)와 p(v) (Prim)]] · [[Prim 정확성 증명]] · [[Dijkstra vs Prim]] · [[Kruskal's algorithm]] · [[Prim vs Kruskal 비교표]] · [[greedy algorithm]]

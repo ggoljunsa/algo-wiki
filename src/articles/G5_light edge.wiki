@@ -1,0 +1,40 @@
+key: light edge
+title: light edge
+category: 15강 Greedy II, 용어
+---
+{def}
+L15 p.14 An edge crossing a cut is called light if it has the smallest weight of any edge crossing the cut.
+cut 을 건너는 간선 중에서 가중치가 가장 작은 간선이다.
+{/def}
+[[img:L15-15.png|L15 p.15 — 분홍 간선 C–D 7 이 이 cut 의 light edge|medium]]
+
+== 슬라이드 예 ==
+p.15 의 cut {A, B, D, E} 와 {C, I, H, G, F} 를 건너는 간선은 여섯 개다.
+<pre class="txt">
+A–H 8, B–C 8, B–H 11, C–D 7, D–F 14, E–F 10
+가장 작은 것: C–D 7  → light edge
+</pre>
+light edge 는 cut 마다 따로 정해진다. cut 을 바꾸면 light edge 도 바뀐다. 가장 작은 값이 둘 이상이면 그중 어느 것이든 light edge 다.
+
+== 어디에 쓰나 ==
+[[MST 보조정리]] 의 핵심 재료다. S 를 respect 하는 cut 에서 light edge 를 더하면 안전하다. "안전하다" 는 S 에 그 간선을 더해도 그것을 포함하는 MST 가 여전히 있다는 뜻이다.
+* [[Prim's algorithm]] 이 매번 고르는 "트리에서 밖으로 나가는 가장 짧은 간선" 은 cut {visited, unvisited} 의 light edge 다(p.41).
+* [[Kruskal's algorithm]] 이 고르는 "cycle 을 만들지 않는 가장 싼 간선" 은 cut {T1, V − T1} 의 light edge 다(p.111).
+
+{analogy}
+강 하나를 사이에 두고 마을이 두 무리로 나뉘어 있다. 강을 건너는 다리 후보 중 가장 싼 것이 light edge 다. 어차피 강을 한 번은 건너야 하니 가장 싼 다리를 놓는 것이 손해가 없다.
+{/analogy}
+
+{warn}
+그래프 전체에서 가장 가벼운 간선이라는 뜻이 아니다. 그 cut 을 건너는 간선들 사이에서만 비교한다. p.15 에서 그래프 전체 최소는 H–G 1 이지만 H–G 는 cut 을 건너지 않으니 후보가 아니다.
+{/warn}
+
+{quiz}
+p.41 의 Prim 중간 단계에서 visited = {A, B, C, I, F, G} 이다. 다음에 더할 light edge 는?
+{/quiz}
+{answer}
+H–G 1. cut {visited, unvisited} 를 건너는 간선은 A–H 8, B–H 11, I–H 7, G–H 1, C–D 7, F–D 14, F–E 10 이고, 가장 작은 것이 G–H 1 이다. p.41 의 "add this one next" 가 이 간선이다.
+{/answer}
+
+== 관련 문서 ==
+* [[cut]] · [[cut이 S를 respect]] · [[MST 보조정리]] · [[Prim's algorithm]] · [[Kruskal's algorithm]]

@@ -1,0 +1,49 @@
+key: MST 보조정리
+title: MST 보조정리 (light edge 는 안전하다)
+category: 15강 Greedy II, 용어
+---
+{def}
+L15 p.16 Lemma: Let S be a set of edges, and consider a cut that respects S. Suppose there is an MST containing S. Let (u,v) be a light edge. Then there is an MST containing S ∪ {(u,v)}.
+간선 집합 S 를 포함하는 MST 가 있고, [[cut]] 이 S 를 respect 한다고 하자. 그 cut 의 [[light edge]] (u,v) 를 S 에 더해도, S ∪ {(u,v)} 를 포함하는 MST 가 여전히 있다.
+{/def}
+[[img:L15-23.png|L15 p.23 — (x,y) 를 빼고 (u,v) 를 넣은 T' 도 MST|medium]]
+
+== 무엇을 말하는가 ==
+p.17 은 이 보조정리를 "It's 'safe' to add this edge!" 라고 요약한다. 풀어 쓰면 "지금까지 성공 가능성을 배제하지 않았다면, light edge 를 더해도 여전히 배제하지 않는다" 이다. L14 의 [[greedy 증명 전략]] 에서 Inductive step 에 들어갈 보조정리가 바로 이것이다. 그래서 [[Prim's algorithm]] 과 [[Kruskal's algorithm]] 의 정확성 증명이 둘 다 이 보조정리 하나로 끝난다.
+
+== 증명 (p.18–23, 교환 논증) ==
+<pre class="txt">
+'''설정:'''  cut 이 S 를 respect 한다. S 는 어떤 MST T 에 들어 있다. (u,v) 는 light edge 다.
+'''경우 1:''' (u,v) 가 이미 T 에 있으면 T 자체가 S ∪ {(u,v)} 를 포함하는 MST 다. 끝.
+'''경우 2:''' (u,v) 가 T 에 없다고 하자.
+  ① T 는 [[spanning tree]] 라서 u 와 v 가 이미 이어져 있다. 그러니 (u,v) 를 넣으면 cycle 이 생긴다.
+  ② u 와 v 는 cut 의 서로 다른 쪽에 있다. cycle 은 한쪽에서 출발해 다시 돌아오니,
+     cut 을 한 번 더 건너는 간선이 cycle 위에 있다. 그것을 (x,y) 라 한다.
+  ③ (x,y) 는 S 에 없다. cut 이 S 를 respect 하니 S 의 간선은 cut 을 건너지 않기 때문이다.
+  ④ T' = T − (x,y) + (u,v) 로 바꾼다. cycle 의 간선 하나를 뺐으니 T' 는 여전히 트리다.
+  ⑤ (u,v) 는 light edge 라서 w(u,v) ≤ w(x,y) 다. 따라서 cost(T') ≤ cost(T) 다.
+  ⑥ T 는 cost 가 최소였으니 T' 도 최소다. 즉 T' 는 MST 다.
+  ⑦ T' 는 S 를 그대로 갖고 있고(③에서 뺀 (x,y) 는 S 밖) (u,v) 도 갖고 있다. ∎
+</pre>
+[[anim:mst_cut_swap|cut 을 건너는 light edge (u,v) 를 넣으면 cycle 이 생기고, cycle 위 다른 crossing edge (x,y) 를 빼면 cost 가 늘지 않는 트리 T' 가 된다]]
+
+== 슬라이드 그림 읽기 ==
+p.18–23 그림에서 x, u 는 cut 왼쪽, y, a, b, v 는 오른쪽이다. T 에서 u 와 v 는 u–x–y–a–b–v 로 이어져 있다. (u,v) 를 넣으면 이 경로와 함께 cycle 이 된다. 이 cycle 에서 cut 을 건너는 다른 간선이 x–y 다. x–y 를 빼고 u–v 를 넣은 것이 T' 다.
+
+{analogy}
+강을 사이에 둔 두 마을 무리를 다리 하나로 잇고 있다고 하자. 지금 다리보다 더 싼 다리 자리가 있으면, 새 다리를 놓고 옛 다리를 허문다. 마을은 여전히 다 이어져 있고 공사비는 줄거나 그대로다.
+{/analogy}
+
+{exam}
+(예상) "cut 이 S 를 respect 한다" 는 조건이 왜 필요한지 묻기 쉽다. ③ 단계에서 뺀 간선 (x,y) 가 S 에 속하지 않는다는 것을 보장해 주는 것이 이 조건이다. 이 조건이 없으면 S 의 간선을 빼게 되어 "S 를 포함하는 MST" 라는 결론이 깨진다.
+{/exam}
+
+{quiz}
+증명에서 cost(T') ≤ cost(T) 가 되는 이유는? 그리고 왜 "<" 가 아니라 "≤" 인가?
+{/quiz}
+{answer}
+(u,v) 는 cut 을 건너는 간선 중 가장 가벼운 light edge 이고 (x,y) 도 cut 을 건너는 간선이라서 w(u,v) ≤ w(x,y) 이다. 가중치가 같을 수도 있으니 "≤" 다. 그래도 T 가 최소였으니 T' 의 cost 는 T 와 같고, T' 도 MST 다.
+{/answer}
+
+== 관련 문서 ==
+* [[cut]] · [[cut이 S를 respect]] · [[light edge]] · [[spanning tree]] · [[greedy 증명 전략]] · [[Prim 정확성 증명]] · [[Kruskal 정확성 증명]] · [[L15 Greedy Algorithms II]]
