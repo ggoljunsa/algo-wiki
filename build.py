@@ -47,6 +47,8 @@ def nav_section(group):
     m = LECTURE_GROUP_RE.match(group)
     if m:
         return "mid" if int(m.group(1)) <= MIDTERM_LAST_LECTURE else "final"
+    if group == "기말 시험":
+        return "final"
     if group == "시험":
         return "mid"
     return "common"

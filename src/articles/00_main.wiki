@@ -44,6 +44,7 @@ L14 전체와 L15 앞부분(MST 정의, cut, MST 보조정리, slowPrim, Prim �
 |}
 
 === 기말 시험 대비 ===
+* 과제: [[HW3 복기]] — 그래프 코딩 과제 5문제(bipartite, 위상 순서, Dijkstra 두 번, DAG 최장 경로, SCC). 문제마다 그림과 새끼문제가 있다.
 * 시험 날짜와 범위는 아직 공지되지 않았다. 공지가 나오면 [[시험 정보]] 에 적는다.
 * 중간고사 실제 형식은 객관식("Circle all that apply")·빈칸 의사코드 설계·증명·그림 판정이었다. 기말도 같은 틀일 가능성이 높다. 자세한 내용은 [[시험 정보]] 의 중간고사 복기에 있다.
 * 기말 범위에서 많이 헷갈리는 쌍은 Dijkstra 와 Bellman-Ford, BF(간선 수로 쪼갬)와 Floyd-Warshall(경유 정점으로 쪼갬), divide and conquer 와 DP 다. 각각 [[최단경로 알고리즘 비교표]], [[Bellman-Ford는 DP]], [[dynamic programming]] 문서에 정리돼 있다.
