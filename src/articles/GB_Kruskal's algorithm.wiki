@@ -67,7 +67,7 @@ kruskal(G = (V,E)):
 정확성은 [[Kruskal 정확성 증명]] 에 있다. Prim 과 비교는 [[Prim vs Kruskal 비교표]] 에 있다.
 
 {exam}
-(예상) 정렬된 간선 목록을 주고 "넣음/버림" 을 순서대로 적게 하거나, 의사코드의 `if find(u) != find(v)` 줄을 비워 두는 빈칸 설계 문제가 나올 수 있다. 버리는 이유는 항상 "두 끝점이 이미 같은 트리" 다.
+교수(11/19)는 예제에서 I–G 를 볼 때 "find I and find G, but it turns out that in the same set, so we will not choose the edge" 라고 짚었고, 수행 시간은 "bounded by sorting" 이라고 정리했다. 정렬된 간선 목록을 주고 "넣음/버림" 을 순서대로 적게 하거나, 의사코드의 `if find(u) != find(v)` 줄을 비워 두는 빈칸 설계 문제가 나올 수 있다. 버리는 이유는 항상 "두 끝점이 이미 같은 트리" 다.
 {/exam}
 
 {analogy}

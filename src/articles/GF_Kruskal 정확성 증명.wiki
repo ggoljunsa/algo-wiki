@@ -44,7 +44,7 @@ p.111 그림에서는 T1 = {C, I}, T2 = {H, G, F} 이고 새 간선은 C–F 4 �
 |}
 
 {exam}
-(예상) 증명 4칸 형식으로 나오면 Inductive step 에 cut 을 정확히 써야 한다. Prim 의 cut 을 그대로 쓰면 틀린다. Kruskal 은 forest 라서 "visited" 라는 개념이 없다.
+교수(11/19): "with the same lemma we can prove both Prim's algorithm and Kruskal's algorithm". 새 간선이 light 인 이유는 "we choose the globally minimum edge" 다. 증명 4칸 형식으로 나오면 Inductive step 에 cut 을 정확히 써야 한다. Prim 의 cut 을 그대로 쓰면 틀린다. Kruskal 은 forest 라서 "visited" 라는 개념이 없다.
 {/exam}
 
 {analogy}

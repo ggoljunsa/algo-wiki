@@ -27,12 +27,14 @@ CSE301 시험에 관해 확인된 사실만 적는다. 아직 공지되지 않�
 |-
 | 11/12 || L14 Huffman coding 전부 + L15 p.1–44: MST 정의, cut·respect·light edge, MST 보조정리와 증명, slowPrim, Prim 정확성 || [[L14 Greedy Algorithms I]] · [[L15 Greedy Algorithms II]]
 |-
-| 11/17 예정 || L15 나머지: Prim 효율적 구현($k[v]$, $p[v]$, Dijkstra 와 비교), Kruskal, union-find, 비교 || [[L15 Greedy Algorithms II]]
+| 11/17 || HW3 팀 발표(7팀) → L15 p.45–79 추정: Prim 효율적 구현($k[v]$, $p[v]$), Dijkstra 와 비교, Kruskal 도입 (녹음 없음) || [[L15 Greedy Algorithms II]] · [[HW3 복기]]
+|-
+| 11/19 || L15 끝: Kruskal 예제, forest, union-find, 수행 시간, 정확성, Prim vs Kruskal, greedy 단원 마무리 → Advanced Algorithms Part 1: global minimum cut, Karger's algorithm || [[L15 Greedy Algorithms II]] · [[Karger's algorithm]]
 |}
 
 === 과제 ===
-* '''HW3''': 11/3 수업 공지로는 그 주 목·금요일에 나오고 기간은 2주다. 팀 발표가 있다.
-* '''HW4''': HW3 바로 뒤에 나오고 기말 전에 끝난다.
+* '''HW3''': Python 그래프 코딩 5문제, 마감 11/15(일) 23:59, 지각 11/17 수업 전. 11/17 에 7팀 발표. 문제별 풀이 방향은 [[HW3 복기]].
+* '''HW4''': Python 코딩 4문제(LCS 복원, 3진 병합, Kruskal, min cut), 마감 '''11/29(일) 23:59'''. 공개 페이지라 풀이는 마감 뒤에 올린다.
 
 === 예상 형식 ===
 공지는 없다. 중간고사 실제 형식은 9문항 125점이었다. 객관식 50점(대부분 "Circle all that apply", 부분 점수 없음), 빈칸 의사코드 설계 2문항×16점, 치환법 증명 5점, 그림 판정 8점으로 구성됐다. 기말도 이 틀을 따를 가능성이 높다고 보고 준비한다.

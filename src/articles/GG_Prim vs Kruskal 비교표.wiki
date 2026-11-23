@@ -39,7 +39,7 @@ dense 그래프에서 Prim 이 유리한 이유는 m 이 $n^2$ 에 가까우면 
 * 증명 틀은 L14 의 [[greedy 증명 전략]] 과 같다. 매 단계 성공 가능성을 없애지 않는다는 것을 귀납법으로 보인다.
 
 {exam}
-(예상) "Circle all that apply" 객관식에서 자주 나올 만한 문장들이다.
+교수(11/19)는 "Prim might be a better idea on dense graph, Kruskal on sparse graph" 와 radix sort 를 짚었다. 아래는 "Circle all that apply" 객관식에서 자주 나올 만한 문장들이다.
 * "Prim 은 매 단계 연결된 트리를 유지한다" 는 참이다.
 * "Kruskal 은 매 단계 연결된 트리를 유지한다" 는 거짓이다. 중간에는 forest 다.
 * "Kruskal 의 시간은 정렬이 정한다" 는 참이다.
