@@ -1,0 +1,12 @@
+min cut size 2 min cuts(ordered sides) 2 [['a', 'b', 'c', 'd'], ['e', 'f', 'g', 'h']]
+Karger success 0.21629
+random cut 0.007874015748031496 1/p 127.0
+lower bound 1/C(8,2) 0.03571428571428571
+(0.8)^5 0.3276800000000001 (0.8)^10 0.10737418240000006
+T for 0.99 with p=1/28: 128.94476520766656
+path sAEt x 4 value 4
+path sCFt x 4 value 8
+path sBEADt x 2 value 10
+path sCFBEADt x 1 value 11
+final flow {('s', 'A'): 4, ('s', 'B'): 2, ('s', 'C'): 5, ('A', 'D'): 3, ('A', 'E'): 1, ('B', 'E'): 3, ('F', 'B'): 1, ('C', 'F'): 5, ('D', 't'): 3, ('E', 't'): 4, ('F', 't'): 4}
+reachable ['B', 'C', 'F', 's'] cut cap 11

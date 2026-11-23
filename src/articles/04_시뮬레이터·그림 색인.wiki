@@ -6,8 +6,8 @@ category: 안내
 
 이 목록은 문서에 실제로 들어 있는 `[[sim:]]`·`[[anim:]]` 을 훑어서 만든다. 그래서 "강" 칸은 그 도구를 처음 쓰는 강의 번호다.
 
-== 기말고사 범위 (L9–L14) ==
-=== 시뮬레이터 (14종) ===
+== 기말고사 범위 (L9–L17) ==
+=== 시뮬레이터 (16종) ===
 {|
 ! 강 || 이름 || 무엇을 보여 주나 || 들어 있는 문서
 |-
@@ -38,6 +38,10 @@ category: 안내
 | L15 || `kruskal_union_find` || Kruskal — 정렬된 간선과 union-find (L15 p.74–105) || [[L15 Greedy Algorithms II]] · [[Kruskal's algorithm]] · [[union-find]]
 |-
 | L15 || `prim_trace` || Prim — key k[x] 와 parent p[x] 표 (L15 p.49–65) || [[L15 Greedy Algorithms II]] · [[Prim's algorithm]] · [[k(v)와 p(v) (Prim)]]
+|-
+| L16 || `karger_contract` || Karger — 간선을 골라 super node 로 합치기 (L16 p.20–43) || [[L16 Advanced Algorithms I]] · [[Karger's algorithm]]
+|-
+| L17 || `ford_fulkerson_trace` || Ford-Fulkerson — augmenting path 와 residual graph (L17 p.43–53) || [[L17 Advanced Algorithms II]] · [[residual graph]] · [[Ford-Fulkerson]]
 |}
 
 === 움직이는 그림 (14종) ===

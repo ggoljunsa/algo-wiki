@@ -1,0 +1,31 @@
+key: Ford-Fulkerson
+title: Ford-Fulkerson — augmenting path 가 없을 때까지 flow 를 늘린다
+category: 17강 Advanced II, 용어
+---
+L17 p.41. 수업 전(11/24 예정) 슬라이드 기준이다.
+<pre class="c">
+Ford-Fulkerson(G):
+    f ← all zero flow.
+    Gf ← G
+    while t is reachable from s in Gf
+        Find a path P from s to t in Gf      // eg, use BFS
+        f ← increaseFlow(P, f)
+        update Gf
+    return f
+</pre>
+* 정확성: 루프가 끝나면 $G_f$ 에 s→t 경로가 없으니 Lemma(p.23)에 의해 max flow 다. 그때 s 에서 닿는 정점 집합이 min cut 의 s 쪽이다. 경로를 어떻게 고르든 끝나기만 하면 맞다(p.42).
+* 수행 시간: 경로를 아무렇게나 고르면 capacity 크기 C 에 비례하는 만큼 걸릴 수 있다(p.55–62, 경로 2C 번). BFS 로 고르면 [[Edmonds-Karp]] 이고 $O(nm^2)$ 이다.
+* capacity 가 모두 정수면 max flow 도 간선마다 정수다(p.64). 0 에서 시작해 정수 x 만 더하고 빼기 때문이다.
+L17 예제(p.43–53)는 경로 s→A→E→t 4, s→C→F→t 4, s→B→E⇢A→D→t 2, s→C→F→B→E⇢A→D→t 1 로 max flow 11 에 이른다.
+[[sim:ford_fulkerson_trace]]
+L. R. Ford Jr. 와 D. R. Fulkerson 이 RAND 연구소에서 1956년에 발표했다.
+
+{mini}
+# while 조건의 빈칸: `while ________ in Gf`.
+{/mini}
+{answer}
+# `t is reachable from s`. s 에서 BFS 나 DFS 를 돌려 t 에 닿는지 본다.
+{/answer}
+
+== 관련 문서 ==
+* [[L17 Advanced Algorithms II]] · [[augmenting path]] · [[residual graph]] · [[Edmonds-Karp]] · [[max-flow min-cut theorem]]

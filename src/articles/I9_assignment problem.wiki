@@ -1,0 +1,19 @@
+key: assignment problem
+title: assignment problem — capacity 를 풀어 준 배정 문제
+category: 17강 Advanced II, 용어
+---
+L17 p.71–75. 수업 전(11/24 예정) 슬라이드 기준이다. [[maximum bipartite matching]] 의 "한 번만" 제약을 숫자로 바꾼 문제다.
+* 집합 X 의 x 는 c(x) 번까지 짝지어질 수 있다. 학생은 4 스쿱까지 먹는다.
+* 집합 Y 의 y 는 c(y) 번까지. 통에는 10 스쿱이 있다.
+* 쌍 (x, y) 는 c(x,y) 번까지. 학생 x 는 맛 y 를 3 스쿱까지만 원한다.
+목표는 짝(스쿱) 수를 최대로 하는 것이다. s→x 의 capacity 를 c(x), x→y 를 c(x,y), y→t 를 c(y) 로 두고 max flow 를 구한다. 정점마다 들어오는 양이 capacity 이하이니 나가는 양도 그 이하다. 그래서 flow 가 배정이고 max flow 가 최대 배정이다(p.75). p.74 의 예에서는 s 에서 4 + 3 + 1 + 7 + 2 = 17 스쿱이 나간다.
+
+{mini}
+# 학생 x 는 3 스쿱까지, 통 y1 에는 2 스쿱, y2 에는 5 스쿱이 있다. x 는 y1 을 2, y2 를 1 스쿱까지 원한다. 최대 몇 스쿱을 줄 수 있나?
+{/mini}
+{answer}
+# 3. s→x 3, x→y1 2, x→y2 1, y1→t 2, y2→t 5 에서 max flow 는 min(3, 2 + 1) = 3 이다.
+{/answer}
+
+== 관련 문서 ==
+* [[maximum bipartite matching]] · [[L17 Advanced Algorithms II]] · [[flow]]

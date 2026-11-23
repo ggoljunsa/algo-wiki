@@ -521,9 +521,32 @@ anim: `mst_cut_swap`(16초, p.18–23 도식 u·x | y·a·v·b, S = u–x·y–a
 ### 11.5 녹음 반영 상태 (2026-11-23)
 11/17 은 HW3 팀 발표 + L15 p.45–79 추정(녹음 없음). 11/19 녹음 `1119_26_컴알_L15끝_Kruskal_Karger.txt` 는 p.80 I–G 장면부터 시작해 L15 끝까지 간 뒤, 23:57 부터 새 단원 "Advanced Algorithms Part 1"(global minimum cut, Karger) 으로 넘어간다. 반영: G0 의 Kruskal·union-find·정확성·비교 `{exam}` 을 "교수(11/19)" 로 바꾸고, p.121 뒤에 `=== 교수의 greedy 단원 마무리 (11/19) ===` 를 추가. GB·GF·GG 의 "(예상)" 도 교수 발언으로. **Dijkstra vs Prim(G0·GA) 은 11/17 이라 "(예상)" 유지.**
 
-## 13. Advanced Algorithms I (Karger) (2026-11-23)
-- `Karger's algorithm` 문서를 `63_`(L6 예고 stub)에서 `I0_` 로 옮겨 새로 썼다. 그룹 `16강 Advanced I`(기말 탭). **슬라이드 PDF 미수령 — 11/19 녹음만으로 씀**, 문서 맨 위 `{warn}`. PDF 가 오면 `_slides/L16-*`, 메인 문서 `L16 …` 를 만들고 이 문서는 용어 문서로 줄인다. 예제 그래프의 간선 이름은 녹음에서 확실하지 않아 쓰지 않았다.
-- `HW3 복기`(`H0_`, 그룹 `기말 시험`, 11/14 커밋 37d275a)는 이미 있다. **HW4 복기는 11/29 마감 뒤에.**
+## 13. L16 Advanced Algorithms I · L17 Advanced Algorithms II (2026-11-23)
+
+### 13.1 슬라이드
+| 덱 | PDF (`_text/L16.txt`, `_text/L17.txt`, PyMuPDF) | PNG 수 | 인쇄 p.N → PNG | 해설본 |
+|---|---|---|---|---|
+| L16 | `L16 _ Advanced Algorithms I` | 77 | p.1–76 → 같은 번호, **마지막 장(Next time)은 인쇄 p.115 = PNG 77** (Karger-Stein p.77–114 는 배포본에 없음) | `L16_해설.md` |
+| L17 | `L17 _ Advanced Algorithms II` | 77 | p.1–77 → 같은 번호 | `L17_해설.md` |
+PNG 는 PyMuPDF `Matrix(1.25,1.25)` 로 `_slides/L16-01.png` … 를 만들었다(2자리 패딩).
+
+### 13.2 문서 키
+* 16강 `16강 Advanced I` [H0_–H5_]: 메인 `L16 Advanced Algorithms I` · `Karger's algorithm`(L6 의 `63_` stub → 11/19 녹음판 `I0_` → 지금 `H1_`) · `global minimum cut` · `super node와 contraction` · `반복으로 성공 확률 올리기` · `Karger 성공 확률 증명`
+* 17강 `17강 Advanced II` [I0_–I9_]: 메인 `L17 Advanced Algorithms II` · `s-t cut` · `flow` · `max-flow min-cut theorem` · `residual graph` · `augmenting path` · `Ford-Fulkerson` · `Edmonds-Karp` · `maximum bipartite matching` · `assignment problem`
+* `HW3 복기` 는 `Y0_`(그룹 `기말 시험`, 11/14 커밋 37d275a, 11/23 오케스트레이터가 `H0_`→`Y0_` 로 옮김 69bc8eb). **HW4 복기는 11/29 마감 뒤에.** L17 문서에도 HW4 4번 풀이는 싣지 않는다.
+
+### 13.3 녹음 반영 상태
+* L16 p.1–57: 11/19 녹음(23:57–70:26) 반영. 시각 ↔ 쪽: 23:57 p.1–3 · 26:24 p.4–10 · 28:18 p.11 · 29:36 p.13–14 · 32:07 p.15–17 · 35:11 p.19–35 · 41:41 p.37–38(45:12 "n−2") · 45:30–48:55 p.40–44 · 49:00 p.45·51 · 53:13–56:22 p.46–48 · 56:30 p.49–50 · 63:15 p.52–55 · 67:25–70:26 p.55–57.
+* L16 p.58–76 과 L17 전체: **11/24 수업 예정, 슬라이드 기준**. 녹음이 오면 `{exam}` 과 "(수업 전)" 표시를 교수 발언으로 바꾼다.
+
+### 13.4 sim 기대값 (`src/sims/_check_L16_L17.py` → `.txt`)
+| 이름 | 옵션 | 기대 최종값 | 출처 |
+|---|---|---|---|
+| karger_contract | `seq=slide` | a–b, e–h, c–d, {a,b}–{c,d}(b–d), {e,h}–g, {e,h,g}–f → {a,b,c,d} \| {e,f,g,h}, cut 2 | L16 p.20–35 |
+| karger_contract | `seq=unlucky` | b–e, a–c, f–g, f–h, c–d, a–b → {a,b,c,d,e} \| {f,g,h}, cut 3 | L16 p.41–42 (뒤 순서는 위키가 정함) |
+| ford_fulkerson_trace | 없음 | 정점 이름 A–F 는 위키가 붙임(왼쪽 열 위→아래 A,B,C, 오른쪽 열 D,E,F). 경로 s→A→E→t 4, s→C→F→t 4, s→B→E⇢A→D→t 2, s→C→F→B→E⇢A→D→t 1 → 11. 최종 f: sA4 sB2 sC5 AD3 AE1 BE3 FB1 CF5 Dt3 Et4 Ft4, s 쪽 {s,B,C,F}, cut 11 | L17 p.43–53 |
+예제 그래프 8정점 Karger 성공률 실측 21.6%(10만 번), 무작위 cut 2/254.
+
 - 헤더에 `📱 한입 학습` 버튼(`duo/index.html`, psy-wiki 의 `.pocket-btn` 과 같은 스타일). `duo/` 는 다른 작업자 담당이라 이 repo 커밋에 넣지 않는다.
 
 ## 12. 메인 문서 전면 재작성 — 나무위키처럼 (2026-11-12)

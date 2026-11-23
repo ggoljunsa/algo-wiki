@@ -29,7 +29,9 @@ CSE301 시험에 관해 확인된 사실만 적는다. 아직 공지되지 않�
 |-
 | 11/17 || HW3 팀 발표(7팀) → L15 p.45–79 추정: Prim 효율적 구현($k[v]$, $p[v]$), Dijkstra 와 비교, Kruskal 도입 (녹음 없음) || [[L15 Greedy Algorithms II]] · [[HW3 복기]]
 |-
-| 11/19 || L15 끝: Kruskal 예제, forest, union-find, 수행 시간, 정확성, Prim vs Kruskal, greedy 단원 마무리 → Advanced Algorithms Part 1: global minimum cut, Karger's algorithm || [[L15 Greedy Algorithms II]] · [[Karger's algorithm]]
+| 11/19 || L15 끝: Kruskal 예제, forest, union-find, 수행 시간, 정확성, Prim vs Kruskal, greedy 단원 마무리 → L16 Advanced Algorithms I p.1–57: global minimum cut, Karger's algorithm, 성공률 20% vs 무작위 cut 0.8%, 반복, Claim $1/\binom{n}{2}$ || [[L15 Greedy Algorithms II]] · [[L16 Advanced Algorithms I]]
+|-
+| 11/24 예정 || L16 p.58–76(반복 횟수 $\binom{n}{2}\ln(1/\delta)$, $O(n^4)$, Claim 증명) → L17 Advanced Algorithms II: min s-t cut, max flow, Ford-Fulkerson, matching || [[L16 Advanced Algorithms I]] · [[L17 Advanced Algorithms II]]
 |}
 
 === 과제 ===

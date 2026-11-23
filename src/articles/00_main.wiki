@@ -5,7 +5,7 @@ category: 안내
 '''알고위키'''는 DGIST CSE301 Introduction to Algorithms (Prof. Hoon Sung Chwa, 2026 Fall) 를 나무위키 형식으로 정리한 학습 위키다. 교재는 [[CLRS]] 이다. 강의는 영어로 하고, 문서는 한국어로 쓰되 용어는 영어 그대로 둔다.
 
 위키는 시험 범위에 따라 두 부분으로 나뉜다.
-* '''기말고사 범위 (L9–)''': 지금 수업 중인 부분이다. 그래프, 최단경로, dynamic programming, greedy, minimum spanning tree, 그리고 11/19 부터 Advanced Algorithms(minimum cut)를 다룬다.
+* '''기말고사 범위 (L9–)''': 지금 수업 중인 부분이다. 그래프, 최단경로, dynamic programming, greedy, minimum spanning tree, 그리고 Advanced Algorithms(L16 Karger 의 global min cut, L17 max flow·min s-t cut)를 다룬다.
 * '''중간고사 범위 (L1–L8)''': 10/15 시험이 끝난 부분이다. 기말에 다시 쓰이는 도구(귀납법 증명, 점화식, Big-O)가 여기 있다.
 
 왼쪽 문서 목록 맨 위의 '''[기말 L9– · 중간 L1–L8 · 공통]''' 탭으로 두 범위를 오갈 수 있다. 강의 이름을 누르면 그 강의 문서들이 펼쳐진다. 굵게 표시된 문서가 그 강의의 메인 문서다.
@@ -22,8 +22,9 @@ category: 안내
 # [[L13 Dynamic Programming II]] (11/5 추정): LCS, knapsack 두 가지, 트리의 independent set
 # [[L14 Greedy Algorithms I]] (11/10·11/12): activity selection, job scheduling, Huffman coding
 # [[L15 Greedy Algorithms II]] (11/12·11/17·11/19): minimum spanning tree, cut 과 light edge, Prim, Kruskal, union-find. 11/17 은 HW3 발표 뒤 p.45–79(녹음 없음), 11/19 에 Kruskal 예제부터 끝까지
-# Advanced Algorithms Part 1 (11/19 후반): global minimum cut 과 [[Karger's algorithm]](Monte Carlo). 슬라이드 PDF 가 아직 없어서 녹음만으로 쓴 문서다. 다음 시간은 Part 2, minimum s–t cut
-L15 는 p.45–79 만 슬라이드 기준이고 나머지는 11/12·11/19 녹음을 반영했다. 과제 복기는 [[HW3 복기]] 에 있다(HW4 는 11/29 마감 뒤에 올린다). 처음부터 읽으려면 [[읽는 순서]] 의 기말 부분(9–16단계)을 따라가면 된다.
+# [[L16 Advanced Algorithms I]] (11/19 후반~): global minimum cut 과 Karger's algorithm(Monte Carlo, 반복으로 성공 확률 올리기). 11/19 에 p.57(성공 확률 Claim)까지 나갔다
+# [[L17 Advanced Algorithms II]] (11/24 예정, 수업 전): min s-t cut, max flow, Ford-Fulkerson, bipartite matching
+L15 는 p.45–79 만 슬라이드 기준이고 나머지는 11/12·11/19 녹음을 반영했다. L16 은 p.1–57 에 11/19 녹음을 반영했고 그 뒤와 L17 은 슬라이드 기준이다. 과제 복기는 [[HW3 복기]] 에 있다(HW4 는 11/29 마감 뒤에 올린다). 처음부터 읽으려면 [[읽는 순서]] 의 기말 부분(9–17단계)을 따라가면 된다.
 
 === 강의별 메인 문서 ===
 {|
@@ -43,7 +44,9 @@ L15 는 p.45–79 만 슬라이드 기준이고 나머지는 11/12·11/19 녹음
 |-
 | L15 || [[L15 Greedy Algorithms II]] || [[minimum spanning tree]], [[cut]] 을 건너는 [[light edge]] 는 안전하다([[MST 보조정리]]), [[Prim's algorithm]] (tree 를 키움, Dijkstra 와 갱신 식만 다름), [[Kruskal's algorithm]] (forest 를 합침, [[union-find]]), 둘 다 $O(m\log n)$ || `prim_trace` · `kruskal_union_find` · `anim:mst_cut_swap`
 |-
-| Adv. I || [[Karger's algorithm]] || global minimum cut, 무작위 간선 contraction, Monte Carlo, 반복으로 성공률 올리기, 성공 확률 $\ge 1/\binom{n}{2}$ (녹음 기준) || —
+| L16 || [[L16 Advanced Algorithms I]] || [[global minimum cut]], [[Karger's algorithm]](무작위 간선 contract, Monte Carlo, 한 번 $O(n^2)$), [[반복으로 성공 확률 올리기]], 성공 확률 $\ge 1/\binom{n}{2}$ ([[Karger 성공 확률 증명]]), 반복 포함 $O(n^4)$ || `karger_contract`
+|-
+| L17 || [[L17 Advanced Algorithms II]] || [[s-t cut]], [[flow]], [[max-flow min-cut theorem]], [[residual graph]] 과 [[augmenting path]], [[Ford-Fulkerson]], [[Edmonds-Karp]] $O(nm^2)$, [[maximum bipartite matching]] (수업 전) || `ford_fulkerson_trace`
 |}
 
 === 기말 시험 대비 ===
@@ -131,4 +134,4 @@ L15 는 p.45–79 만 슬라이드 기준이고 나머지는 11/12·11/19 녹음
 * [[교수 소개]] · [[CLRS]]
 
 ----
-마지막 갱신: 2026-11-23 (11/19 녹음 반영: L15 끝·Karger's algorithm, HW3 복기 추가, 상단 📱 한입 학습 버튼). 이전: 2026-11-12 (중간·기말 범위 분리, 사이드바 탭, 시뮬레이터·그림 색인 문서 분리, L15 Greedy II 추가, 11/10·11/12 녹음 반영)
+마지막 갱신: 2026-11-23 (L16·L17 슬라이드 반영: L16 메인 + 용어 5편 + sim `karger_contract`, L17 메인(수업 전) + 용어 9편 + sim `ford_fulkerson_trace`; 11/19 녹음 반영: L15 끝·L16 앞부분, 상단 📱 한입 학습 버튼). 이전: 2026-11-12 (중간·기말 범위 분리, 사이드바 탭, 시뮬레이터·그림 색인 문서 분리, L15 Greedy II 추가, 11/10·11/12 녹음 반영)

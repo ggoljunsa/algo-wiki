@@ -1,0 +1,37 @@
+key: Karger's algorithm
+title: Karger's algorithm — 무작위 간선 contraction 으로 global minimum cut 찾기
+category: 16강 Advanced I, 용어, 6강 Randomized I
+---
+무방향·무가중치 그래프의 [[global minimum cut]] 을 찾는 [[Las Vegas와 Monte Carlo|Monte Carlo]] randomized algorithm 이다. L6 p.4 에서 "We'll revisit this when we see Karger's algorithm." 이라고 이름만 나왔고, [[L16 Advanced Algorithms I]] 에서 제대로 다룬다.[* David Karger 가 1993년에 발표했다. 교수(11/19)는 "I think it's the most interesting algorithm" 이라며 소개했다.]
+
+== 하는 일 ==
+# 남은 간선 중 하나를 uniformly random 하게 고른다.
+# 그 간선을 contract 한다. 두 끝점을 [[super node와 contraction|super node]] 하나로 합치고, 둘 사이 간선은 지운다.
+# 정점이 2 개 남을 때까지 반복한다(정확히 n − 2 번).
+# 남은 두 super node 가 cut 의 두 편이다.
+[[sim:karger_contract]]
+
+== 성질 ==
+{|
+! 항목 || 내용 || 슬라이드
+|-
+| 한 번 수행 시간 || $O(n^2)$ (merge 한 번 $O(n)$ × n − 2 번). [[union-find]] 로 $O(m\alpha(n))$ || p.37–38
+|-
+| 틀리는 경우 || min cut 을 건너는 간선을 한 번이라도 뽑으면 || p.41–43
+|-
+| 성공 확률 || 예제 그래프에서 실험값 약 20%. 일반 그래프에서 $\ge 1/\binom{n}{2}$ || p.44, p.57
+|-
+| 반복 || $\binom{n}{2}\ln(1/\delta)$ 번 돌려 가장 작은 cut → 성공 $\ge 1 - \delta$, 전체 $O(n^4)$ || p.60–64
+|}
+무작위 cut 보다 훨씬 잘 되는 이유는 두 가지다. min cut 은 간선이 적어서 뽑힐 확률이 작고, Karger 의 두 편은 언제나 연결돼 있어서 쓸모없는 cut 은 아예 나오지 않는다(p.49–50).
+
+{mini}
+# 다음 중 옳은 것을 모두 고르라(Circle all). (a) Karger 는 돌려준 cut 이 min cut 인지 알려 준다. (b) 한 번 실행의 수행 시간은 무작위에 상관없이 $O(n^2)$ 이다. (c) 반복 횟수를 늘리면 실패 확률은 지수적으로 준다.
+{/mini}
+{answer}
+# (b), (c). (a) 는 틀렸다. Monte Carlo 라서 답이 맞는지 스스로 확인하지 못한다. 그래서 여러 번 돌려 가장 작은 것을 고른다.
+{/answer}
+
+== 관련 문서 ==
+* [[L16 Advanced Algorithms I]] · [[반복으로 성공 확률 올리기]] · [[Karger 성공 확률 증명]]
+* [[Las Vegas와 Monte Carlo]] · [[randomized algorithm]]

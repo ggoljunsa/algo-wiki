@@ -1,0 +1,23 @@
+key: maximum bipartite matching
+title: maximum bipartite matching — capacity 1 짜리 max flow
+category: 17강 Advanced II, 용어
+---
+L17 p.66–70. 수업 전(11/24 예정) 슬라이드 기준이다. 학생과 동아리처럼 두 쪽으로 나뉜 [[bipartite graph]] 에서, 정점 하나가 많아야 한 번만 쓰이도록 간선을 최대한 많이 고르는 문제다.
+
+== max flow 로 바꾸기 ==
+s 에서 모든 학생으로, 학생에서 원하는 동아리로, 모든 동아리에서 t 로 간선을 긋고 capacity 를 '''모두 1''' 로 둔다. 그리고 max flow 를 구한다. 왜 되는지는 p.70 이 다섯 단계로 적는다.
+# capacity 가 정수라 flow 도 정수, 즉 0 또는 1 이다.
+# 학생에게 들어오는 양이 1 이하이고 보존 법칙으로 나가는 양도 1 이하다. 그래서 학생마다 동아리 0 개나 1 개에 배정된다. 동아리 쪽도 같다.
+# flow 가 1 인 학생→동아리 간선들이 matching 이다. 거꾸로 matching 하나는 flow 하나를 준다.
+# flow 값 = matching 크기.
+# 그래서 max flow = maximum matching.
+
+{mini}
+# 학생 a, b 는 둘 다 동아리 x 만 원하고, 학생 c 는 x, y 를 원한다. maximum matching 의 크기는?
+{/mini}
+{answer}
+# 2. c–y 와 (a 또는 b)–x. a 와 b 중 한 명은 짝이 없다.
+{/answer}
+
+== 관련 문서 ==
+* [[L17 Advanced Algorithms II]] · [[assignment problem]] · [[bipartite graph]] · [[Ford-Fulkerson]]

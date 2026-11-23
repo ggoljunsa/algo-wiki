@@ -1,0 +1,25 @@
+key: global minimum cut
+title: global minimum cut — 건너는 간선이 가장 적은 cut
+category: 16강 Advanced I, 용어
+---
+{def}
+L16 p.9: "A (global) minimum cut is a cut that has the fewest edges possible crossing it."
+정점을 비어 있지 않은 두 부분으로 나누는 [[cut]] 가운데, 두 부분을 잇는 간선 수가 가장 적은 것.
+{/def}
+"global" 은 특별한 정점이 없다는 뜻이다. 다음 강의의 [[s-t cut]] 은 s 와 t 를 반드시 갈라놓아야 한다는 조건이 붙는다(p.11). global min cut 은 그런 조건 없이 그래프 전체에서 아무 데나 자른다.
+
+L16 예제(p.20)에서는 {a,b,c,d} | {e,f,g,h} 가 min cut 이고 건너는 간선은 b–e, d–e 두 개다. 응용으로 image segmentation 이 나온다(p.13–14). 가중치가 있으면 간선 수 대신 가중치 합을 최소로 한다.
+
+min cut 크기가 k 이면 모든 정점의 차수는 k 이상이다. 차수가 k 보다 작은 정점 하나만 떼어 내면 더 작은 cut 이 되기 때문이다. 이 관찰이 [[Karger 성공 확률 증명]] 의 핵심 단계다.[* 반대로, 차수가 가장 작은 정점 하나를 떼어 내는 cut 은 늘 후보가 된다. 그래서 min cut 크기는 최소 차수 이하다.]
+
+{mini}
+# 완전 그래프 $K_5$ 의 global min cut 크기는?
+# 어떤 그래프의 최소 차수가 3 이다. min cut 크기에 대해 무엇을 말할 수 있나?
+{/mini}
+{answer}
+# 4. 정점 하나를 떼어 내면 간선 4개가 끊긴다. 두 개를 떼어 내면 $2 \times 3 = 6$ 개라 더 크다.
+# min cut 크기 ≤ 3. 최소 차수 정점 하나를 떼어 내는 cut 이 크기 3 이기 때문이다. 같을 수도, 더 작을 수도 있다.
+{/answer}
+
+== 관련 문서 ==
+* [[L16 Advanced Algorithms I]] · [[Karger's algorithm]] · [[cut]] · [[s-t cut]]

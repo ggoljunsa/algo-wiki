@@ -1,0 +1,23 @@
+key: super node와 contraction
+title: super node 와 contraction — 간선 하나로 두 정점을 합치기
+category: 16강 Advanced I, 용어
+---
+간선 (u, v) 를 '''contract''' 한다는 것은 u 와 v 를 새 정점 하나로 합치는 것이다. 합친 정점을 '''super node''' 라 하고, 원래 정점들의 집합으로 생각한다(예: {a,b}). L16 p.19 의 그림은 a, b 가 "New node!" 하나로 바뀌는 장면이다.
+
+합칠 때 간선은 이렇게 바뀐다(p.37 `merge`).
+* u 와 v 사이의 간선은 모두 super node 안으로 들어가 사라진다. Karger 의 후보 F 에서도 지운다.
+* u 나 v 에서 다른 정점 w 로 가던 간선은 새 super node 와 w 사이 간선이 된다. 같은 쌍 사이 간선이 여러 개 생길 수 있고, 이 묶음을 '''super edge''' 라 부른다.
+[[img:L16-26.png|p.26 — a–b, e–h 를 합친 뒤. {a,b}–c 와 {a,b}–d 사이에 간선이 두 개씩 생겼다|large]]
+위 그림에서 {a,b} 에서 c 로 가는 선이 두 줄이다. 원래 a–c, b–c 였던 간선이다. 평행 간선을 지우지 않고 남겨 두는 이유가 있다. Karger 는 간선을 균등하게 뽑으니, 두 super node 사이 간선이 많을수록 그 둘이 합쳐질 확률도 커져야 한다.[* 평행 간선을 하나로 줄여 버리면 확률 계산이 달라지고 [[Karger 성공 확률 증명]] 의 "간선이 $(n-j+1)k/2$ 개 이상" 단계가 깨진다.]
+
+super node 는 늘 원래 그래프에서 연결된 정점들로 이뤄진다. 간선을 따라서만 합쳤기 때문이다. 그래서 Karger 는 한 편이 끊긴 조각으로 된 cut 을 돌려주지 않는다(p.50).
+
+{mini}
+# 정점 n 개 그래프에서 contract 를 한 번 하면 정점은 몇 개가 되나? 간선 수는 어떻게 되나?
+{/mini}
+{answer}
+# n − 1 개. 간선은 합친 두 정점 사이에 있던 개수만큼 준다(평행 간선이 있었다면 그 전부). 나머지 간선은 개수가 그대로다.
+{/answer}
+
+== 관련 문서 ==
+* [[Karger's algorithm]] · [[L16 Advanced Algorithms I]] · [[union-find]]

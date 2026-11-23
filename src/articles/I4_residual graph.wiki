@@ -1,0 +1,22 @@
+key: residual graph
+title: residual graph Gf — 더 보낼 수 있는 양과 되돌릴 수 있는 양
+category: 17강 Advanced II, 용어
+---
+L17 p.21–22. flow f 가 있을 때 residual graph $G_f$ 는 간선마다 "얼마를 더 움직일 수 있나" 를 그린 그래프다. 수업 전(11/24 예정) 슬라이드 기준이다.
+$$c_f(u,v) = \begin{cases} c(u,v) - f(u,v) & (u,v) \in E \\ f(v,u) & (v,u) \in E \\ 0 & \text{otherwise} \end{cases}$$
+* '''forward edge''' $u \to v$: 남은 양 $c - f$. 0 이면 그리지 않는다.
+* '''backward edge''' $v \to u$: 이미 보낸 양 $f$. 이만큼 되돌릴(줄일) 수 있다.
+슬라이드 표현으로는 "Forward edges are the amount that's left. Backwards edges are the amount that's been used."
+
+핵심 Lemma(p.23)는 '''$G_f$ 에서 s 로부터 t 에 갈 수 없다 ⇔ f 는 max flow''' 다. 갈 수 있으면 그 경로가 [[augmenting path]] 이고 flow 를 늘릴 수 있다. 갈 수 없으면 s 에서 닿는 정점들이 min cut 의 s 쪽이 된다.[* backward 간선이 있어서 알고리즘은 예전에 보낸 flow 를 되무를 수 있다. forward 간선만으로 경로를 찾으면 처음 고른 경로 때문에 막혀서 max flow 에 못 갈 수 있다. L17 예제의 세 번째 경로 s→B→E⇢A→D→t 가 backward 간선 E⇢A 를 써야만 찾을 수 있는 경로다.]
+[[sim:ford_fulkerson_trace]]
+
+{mini}
+# 간선 u→v 의 capacity 가 7 이고 flow 도 7 이다. $G_f$ 에는 u, v 사이에 어떤 간선이 있나?
+{/mini}
+{answer}
+# backward v→u 7 하나뿐이다. forward 는 남은 양이 0 이라 없다.
+{/answer}
+
+== 관련 문서 ==
+* [[L17 Advanced Algorithms II]] · [[augmenting path]] · [[Ford-Fulkerson]] · [[max-flow min-cut theorem]]

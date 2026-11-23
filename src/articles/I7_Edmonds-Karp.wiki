@@ -1,0 +1,21 @@
+key: Edmonds-Karp
+title: Edmonds-Karp — BFS 로 경로를 고르는 Ford-Fulkerson, O(nm²)
+category: 17강 Advanced II, 용어
+---
+L17 p.63. [[Ford-Fulkerson]] 에서 augmenting path 를 [[BFS]] 로, 즉 간선 수가 가장 적은 경로로 고르면 $O(nm^2)$ 에 끝난다. 이것을 '''Edmonds-Karp''' 라고 부른다. 수업 전(11/24 예정) 슬라이드 기준이다.
+
+증명은 수업에서 건너뛰고 시험에도 안 나온다("It will not be on the exam"). 슬라이드가 주는 아이디어는 이렇다.
+* residual graph 에서 간선 하나가 사라지는 횟수는 $O(n)$ 이다. 이게 어려운 부분이다.
+* 간선은 m 개뿐이다.
+* 간선이 사라질 때마다 BFS 를 한 번 돌리고, s 에서 닿는 부분만 보면 되니 $O(m)$ 이다.
+곱해서 $O(nm^2)$ 다. 슬라이드의 강조는 "Doesn't have anything to do with the edge weights!" 다. 경로를 아무렇게나 고르면(p.55–62) capacity C 에 비례하는 횟수가 들 수 있었다.[* Jack Edmonds 와 Richard Karp 가 1972년 논문으로 발표했다. p.42 는 "There's another way. (optional)" 이라며 다른 경로 선택법도 있다고만 언급한다.]
+
+{mini}
+# p.55 의 C 예제(s→a C, s→b C, b→a 1, a→t C, b→t C)에서 BFS 가 처음 고르는 경로는? 몇 번 만에 끝나나?
+{/mini}
+{answer}
+# 간선 2개짜리 s→a→t 또는 s→b→t. 두 경로로 C 씩 보내면 끝이라 2 번이다. 간선 3개짜리 s→b→a→t 는 BFS 가 고르지 않는다.
+{/answer}
+
+== 관련 문서 ==
+* [[Ford-Fulkerson]] · [[BFS]] · [[L17 Advanced Algorithms II]]

@@ -1,0 +1,31 @@
+key: max-flow min-cut theorem
+title: max-flow min-cut theorem — 최대로 흘리는 양 = 가장 싸게 끊는 비용
+category: 17강 Advanced II, 증명
+---
+{def}
+L17 p.15: "The value of a max flow from s to t is equal to the cost of a min s-t cut."
+{/def}
+수업 전(11/24 예정) 슬라이드 기준이다. 직관은 "max flow 에서는 min cut 이 꽉 차고, 그곳이 병목" 이다.
+
+== 증명 구조 (p.16) ==
+<pre class="txt">
+Lemma 1: max flow ≤ min cut   (그림 증명: s 에서 나온 x 는 반드시 cut 을 넘는다 → x ≤ cut cost)
+Lemma 2: max flow ≥ min cut   (알고리즘 증명: residual graph Gf)
+  Sub-lemma: Gf 에서 t 도달 불가 ⇔ f 는 max flow
+    ⇐ : augmenting path 가 있으면 flow 를 늘릴 수 있다 (대우)
+    ⇒ : {s 에서 닿는 정점} 으로 만든 cut 은 건너는 간선이 꽉 차 있고 반대 방향 flow 는 0
+         → flow 값 = 이 cut cost ≥ min cut ≥ max flow ≥ flow 값 → 모두 같다
+</pre>
+엄밀한 증명(CLRS Lemma 26.4, Corollary 26.5)은 시험 범위가 아니다. p.18: "You are not responsible for proof-by-proof on the final."
+
+이 정리 덕에 [[Ford-Fulkerson]] 하나로 max flow 와 min cut 을 같이 얻는다. 슬라이드 농담으로는 "The USSR and the USA were trying to solve the same problem…" 이다(p.54).
+
+{mini}
+# 어떤 flow 의 값이 9 이고, 어떤 s-t cut 의 cost 가 9 다. 무엇을 결론 내릴 수 있나?
+{/mini}
+{answer}
+# 그 flow 는 max flow, 그 cut 은 min cut 이다. Lemma 1 에 의해 모든 flow 값 ≤ 모든 cut cost 이니, 둘이 같아지면 둘 다 최적이다.
+{/answer}
+
+== 관련 문서 ==
+* [[L17 Advanced Algorithms II]] · [[s-t cut]] · [[flow]] · [[residual graph]] · [[Ford-Fulkerson]]
