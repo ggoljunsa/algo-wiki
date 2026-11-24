@@ -47,6 +47,8 @@
        ],
        "answer": 3,
        "tol": 0,
+       "img": "duo/img/algo9-gen-u9a-02.png",
+       "imgAlt": "undirected graph: 1–3, 2–4, 3–4, 2–3",
        "introCard": 0
       },
       {
@@ -62,6 +64,8 @@
        ],
        "answer": 2,
        "tol": 0,
+       "img": "duo/img/algo9-gen-u9a-03.png",
+       "imgAlt": "directed graph: 1→3, 2→4, 3→4, 4→3, 3→2",
        "introCard": 0
       },
       {
@@ -428,6 +432,8 @@
        ],
        "answer": 9,
        "tol": 0,
+       "img": "duo/img/algo9-gen-u9b-03.png",
+       "imgAlt": "directed graph: A→B, A→D, B→C, D→C, D→E, F→E",
        "introCard": 1
       },
       {
@@ -443,6 +449,8 @@
        ],
        "answer": 5,
        "tol": 0,
+       "img": "duo/img/algo9-gen-u9b-03.png",
+       "imgAlt": "directed graph: A→B, A→D, B→C, D→C, D→E, F→E",
        "introCard": 1
       },
       {
@@ -458,6 +466,8 @@
        ],
        "answer": 10,
        "tol": 0,
+       "img": "duo/img/algo9-gen-u9b-03.png",
+       "imgAlt": "directed graph: A→B, A→D, B→C, D→C, D→E, F→E",
        "introCard": 1
       },
       {
@@ -478,6 +488,8 @@
         "(1, 4)"
        ],
        "answer": 0,
+       "img": "duo/img/algo9-gen-u9b-03.png",
+       "imgAlt": "directed graph: A→B, A→D, B→C, D→C, D→E, F→E",
        "introCard": 1
       },
       {
@@ -842,6 +854,8 @@
         "B",
         "C"
        ],
+       "img": "duo/img/algo9-gen-u9b-03.png",
+       "imgAlt": "directed graph: A→B, A→D, B→C, D→C, D→E, F→E",
        "introCard": 2
       },
       {
@@ -982,6 +996,8 @@
         "A, B, C, E, D, F"
        ],
        "answer": 3,
+       "img": "duo/img/algo9-gen-u9b-03.png",
+       "imgAlt": "directed graph: A→B, A→D, B→C, D→C, D→E, F→E",
        "introCard": 1
       },
       {
@@ -1188,6 +1204,8 @@
        ],
        "answer": 3,
        "tol": 0,
+       "img": "duo/img/algo9-gen-u9d-03.png",
+       "imgAlt": "undirected graph: s–a, s–b, a–c, b–c, b–d, c–e, d–e",
        "introCard": 0
       },
       {
@@ -1203,6 +1221,8 @@
        ],
        "answer": 2,
        "tol": 0,
+       "img": "duo/img/algo9-gen-u9d-03.png",
+       "imgAlt": "undirected graph: s–a, s–b, a–c, b–c, b–d, c–e, d–e",
        "introCard": 0
       },
       {
@@ -1285,6 +1305,8 @@
         "figure"
        ],
        "answer": true,
+       "img": "duo/img/algo9-gen-u9d-03.png",
+       "imgAlt": "undirected graph: s–a, s–b, a–c, b–c, b–d, c–e, d–e",
        "introCard": 2
       },
       {
@@ -1300,6 +1322,8 @@
        ],
        "answer": 5,
        "tol": 0,
+       "img": "duo/img/algo9-gen-u9d-03.png",
+       "imgAlt": "undirected graph: s–a, s–b, a–c, b–c, b–d, c–e, d–e",
        "introCard": 3
       },
       {
@@ -1838,6 +1862,8 @@
        ],
        "answer": 3,
        "tol": 0,
+       "img": "duo/img/algo10-gen-u10a-14.png",
+       "imgAlt": "directed graph: 1→2, 2→3, 3→1, 3→4, 4→5",
        "introCard": 0
       },
       {
@@ -1967,6 +1993,8 @@
        ],
        "answer": 13,
        "tol": 0,
+       "img": "duo/img/algo10-gen-u10b-03.png",
+       "imgAlt": "directed graph: A→B, B→C, C→A, B→D, D→E, E→D, E→F, F→G, G→F, C→F",
        "introCard": 1
       },
       {
@@ -1982,6 +2010,8 @@
        ],
        "answer": 3,
        "tol": 0,
+       "img": "duo/img/algo10-gen-u10b-03.png",
+       "imgAlt": "directed graph: A→B, B→C, C→A, B→D, D→E, E→D, E→F, F→G, G→F, C→F",
        "introCard": 1
       },
       {
@@ -1997,6 +2027,8 @@
        ],
        "answer": 5,
        "tol": 0,
+       "img": "duo/img/algo10-gen-u10b-03.png",
+       "imgAlt": "directed graph: A→B, B→C, C→A, B→D, D→E, E→D, E→F, F→G, G→F, C→F",
        "introCard": 1
       },
       {
@@ -2017,6 +2049,8 @@
         "{A}"
        ],
        "answer": 0,
+       "img": "duo/img/algo10-gen-u10b-03.png",
+       "imgAlt": "directed graph: A→B, B→C, C→A, B→D, D→E, E→D, E→F, F→G, G→F, C→F",
        "introCard": 0
       },
       {
@@ -2035,6 +2069,8 @@
         "{D,E}",
         "{F,G}"
        ],
+       "img": "duo/img/algo10-gen-u10b-03.png",
+       "imgAlt": "directed graph: A→B, B→C, C→A, B→D, D→E, E→D, E→F, F→G, G→F, C→F",
        "introCard": 2
       },
       {
@@ -2049,6 +2085,8 @@
         "trace"
        ],
        "answer": false,
+       "img": "duo/img/algo10-gen-u10b-03.png",
+       "imgAlt": "directed graph: A→B, B→C, C→A, B→D, D→E, E→D, E→F, F→G, G→F, C→F",
        "introCard": 1
       },
       {
@@ -2350,6 +2388,8 @@
        ],
        "answer": 11,
        "tol": 0,
+       "img": "duo/img/algo10-gen-u10b-03.png",
+       "imgAlt": "directed graph: A→B, B→C, C→A, B→D, D→E, E→D, E→F, F→G, G→F, C→F",
        "introCard": 1
       },
       {
@@ -2544,7 +2584,9 @@
         "figure"
        ],
        "answer": 3,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo10-gen-u10b-03.png",
+       "imgAlt": "directed graph: A→B, B→C, C→A, B→D, D→E, E→D, E→F, F→G, G→F, C→F"
       },
       {
        "id": "u10c-14",
@@ -2863,7 +2905,9 @@
         "trace"
        ],
        "answer": 2,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo10-gen-u10d-10.png",
+       "imgAlt": "directed graph: a→b, b→a, a→c"
       },
       {
        "id": "u10d-11",
@@ -3383,7 +3427,9 @@
         "trace"
        ],
        "answer": 8,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo11-gen-u11b-07.png",
+       "imgAlt": "weighted directed graph: s→a 6, s→b 2, b→a 3, b→c 7, a→c 1, a→d 5, c→d 2, b→d 9"
       },
       {
        "id": "u11b-08",
@@ -3397,7 +3443,9 @@
         "trace"
        ],
        "answer": 11,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo11-gen-u11b-07.png",
+       "imgAlt": "weighted directed graph: s→a 6, s→b 2, b→a 3, b→c 7, a→c 1, a→d 5, c→d 2, b→d 9"
       },
       {
        "id": "u11b-09",
@@ -3411,7 +3459,9 @@
         "trace"
        ],
        "answer": 6,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo11-gen-u11b-07.png",
+       "imgAlt": "weighted directed graph: s→a 6, s→b 2, b→a 3, b→c 7, a→c 1, a→d 5, c→d 2, b→d 9"
       },
       {
        "id": "u11b-10",
@@ -3431,6 +3481,8 @@
         "c",
         "d"
        ],
+       "img": "duo/img/algo11-gen-u11b-07.png",
+       "imgAlt": "weighted directed graph: s→a 6, s→b 2, b→a 3, b→c 7, a→c 1, a→d 5, c→d 2, b→d 9",
        "introCard": 0
       },
       {
@@ -3501,6 +3553,8 @@
        ],
        "answer": 11,
        "tol": 0,
+       "img": "duo/img/algo11-gen-u11b-14.png",
+       "imgAlt": "일방통행 도로: 1→2 2, 2→1 3, 3→2 3, 2→3 4, 4→2 10, 2→4 1",
        "introCard": 3
       },
       {
@@ -3723,7 +3777,9 @@
         "negative"
        ],
        "answer": 3,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo11-gen-u11c-08.png",
+       "imgAlt": "weighted directed graph: s→a 2, s→b 4, b→a −3, a→c 1"
       },
       {
        "id": "u11c-09",
@@ -4040,6 +4096,8 @@
        ],
        "answer": 6,
        "tol": 0,
+       "img": "duo/img/algo11-gen-u11d-06.png",
+       "imgAlt": "weighted directed graph: s→a 4, s→b 3, a→c 2, b→a −2, b→c 6",
        "introCard": 1
       },
       {
@@ -4055,6 +4113,8 @@
        ],
        "answer": 3,
        "tol": 0,
+       "img": "duo/img/algo11-gen-u11d-06.png",
+       "imgAlt": "weighted directed graph: s→a 4, s→b 3, a→c 2, b→a −2, b→c 6",
        "introCard": 1
       },
       {
@@ -4399,6 +4459,8 @@
         "trace"
        ],
        "answer": true,
+       "img": "duo/img/algo11-gen-u11e-07.png",
+       "imgAlt": "weighted directed graph: s→a 2, a→b 1, b→c −3, c→a 1",
        "introCard": 1
       },
       {
@@ -4414,6 +4476,8 @@
        ],
        "answer": 1,
        "tol": 0,
+       "img": "duo/img/algo11-gen-u11e-07.png",
+       "imgAlt": "weighted directed graph: s→a 2, a→b 1, b→c −3, c→a 1",
        "introCard": 1
       },
       {
@@ -5547,6 +5611,8 @@
        ],
        "answer": 5,
        "tol": 0,
+       "img": "duo/img/algo12-p42-graph.png",
+       "imgAlt": "directed graph: s→u 2, u→s 1, s→v 5, u→v 2, v→t −2",
        "introCard": 0
       },
       {
@@ -5613,6 +5679,8 @@
         "trace"
        ],
        "answer": true,
+       "img": "duo/img/algo12-p42-graph.png",
+       "imgAlt": "directed graph: s→u 2, u→s 1, s→v 5, u→v 2, v→t −2",
        "introCard": 0
       },
       {
@@ -5633,6 +5701,8 @@
         "대각선이 0 이라서"
        ],
        "answer": 0,
+       "img": "duo/img/algo12-p42-graph.png",
+       "imgAlt": "directed graph: s→u 2, u→s 1, s→v 5, u→v 2, v→t −2",
        "introCard": 0
       },
       {
@@ -5648,6 +5718,8 @@
        ],
        "answer": 1,
        "tol": 0,
+       "img": "duo/img/algo12-gen-u12d-07.png",
+       "imgAlt": "weighted directed graph: 1→2 3, 2→3 −1, 1→3 4, 3→1 2",
        "introCard": 0
       },
       {
@@ -5763,6 +5835,8 @@
        "answer": 3,
        "tol": 0,
        "explainImg": "duo/img/algo12-p58-longest-ans.png",
+       "img": "duo/img/algo12-gen-u12d-13.png",
+       "imgAlt": "사각형 s–a–b–t–s, 모든 간선 weight 1",
        "introCard": 2
       },
       {
@@ -6096,7 +6170,9 @@
         "trace"
        ],
        "answer": 4,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo13-gen-u13a-13.png",
+       "imgAlt": "X = ABCBDAB(세로), Y = BDCABA(가로) 의 빈 LCS 표"
       },
       {
        "id": "u13a-14",
@@ -6192,6 +6268,8 @@
        ],
        "answer": 3,
        "tol": 0,
+       "img": "duo/img/algo13-p19-lcs-empty.png",
+       "imgAlt": "X = ACGGA(세로), Y = ACTG(가로) LCS 빈 표, 0번 행·열만 0",
        "introCard": 0
       },
       {
@@ -6229,6 +6307,8 @@
         "0"
        ],
        "answer": 1,
+       "img": "duo/img/algo13-p19-lcs-empty.png",
+       "imgAlt": "X = ACGGA(세로), Y = ACTG(가로) LCS 빈 표, 0번 행·열만 0",
        "introCard": 0
       },
       {
@@ -6301,6 +6381,8 @@
        ],
        "answer": 3,
        "tol": 0,
+       "img": "duo/img/algo13-gen-u13b-09.png",
+       "imgAlt": "X = ABCB(세로), Y = BDCAB(가로) 의 빈 LCS 표",
        "introCard": 0
       },
       {
@@ -6321,6 +6403,8 @@
         "CAB"
        ],
        "answer": 0,
+       "img": "duo/img/algo13-gen-u13b-09.png",
+       "imgAlt": "X = ABCB(세로), Y = BDCAB(가로) 의 빈 LCS 표",
        "introCard": 1
       },
       {
@@ -6336,6 +6420,8 @@
        ],
        "answer": 4,
        "tol": 0,
+       "img": "duo/img/algo13-gen-u13b-11.png",
+       "imgAlt": "X = GATTA(세로), Y = ATTAG(가로) 의 빈 LCS 표",
        "introCard": 0
       },
       {
@@ -6459,6 +6545,8 @@
         "35 와 34"
        ],
        "answer": 0,
+       "img": "duo/img/algo13-gen-u13c-01.png",
+       "imgAlt": "knapsack item 표: 무게 6, 2, 4, 3, 11 / 가치 20, 8, 14, 13, 35, 용량 10",
        "introCard": 0
       },
       {
@@ -6498,6 +6586,8 @@
        ],
        "answer": 16,
        "tol": 0,
+       "img": "duo/img/algo13-gen-u13c-01.png",
+       "imgAlt": "knapsack item 표: 무게 6, 2, 4, 3, 11 / 가치 20, 8, 14, 13, 35, 용량 10",
        "introCard": 1
       },
       {
@@ -6513,6 +6603,8 @@
        ],
        "answer": 26,
        "tol": 0,
+       "img": "duo/img/algo13-gen-u13c-01.png",
+       "imgAlt": "knapsack item 표: 무게 6, 2, 4, 3, 11 / 가치 20, 8, 14, 13, 35, 용량 10",
        "introCard": 1
       },
       {
@@ -6528,6 +6620,8 @@
        ],
        "answer": 39,
        "tol": 0,
+       "img": "duo/img/algo13-gen-u13c-01.png",
+       "imgAlt": "knapsack item 표: 무게 6, 2, 4, 3, 11 / 가치 20, 8, 14, 13, 35, 용량 10",
        "introCard": 1
       },
       {
@@ -6543,6 +6637,8 @@
        ],
        "answer": 42,
        "tol": 0,
+       "img": "duo/img/algo13-gen-u13c-01.png",
+       "imgAlt": "knapsack item 표: 무게 6, 2, 4, 3, 11 / 가치 20, 8, 14, 13, 35, 용량 10",
        "introCard": 1
       },
       {
@@ -6562,6 +6658,8 @@
         "item 2 × 5"
        ],
        "answer": 1,
+       "img": "duo/img/algo13-gen-u13c-01.png",
+       "imgAlt": "knapsack item 표: 무게 6, 2, 4, 3, 11 / 가치 20, 8, 14, 13, 35, 용량 10",
        "introCard": 0
       },
       {
@@ -6577,6 +6675,8 @@
        ],
        "answer": 8,
        "tol": 0,
+       "img": "duo/img/algo13-p50-items.png",
+       "imgAlt": "unbounded knapsack: 무게 1, 2, 3 / 가치 1, 4, 6, 용량 4, 빈 K·ITEMS 표",
        "introCard": 1
       },
       {
@@ -6852,6 +6952,8 @@
         "전구 하나"
        ],
        "answer": 1,
+       "img": "duo/img/algo13-p86-01.png",
+       "imgAlt": "0/1 knapsack 표(거북이 1/1, 전구 2/4, 수박 3/6, 용량 3) 채우는 중",
        "introCard": 2
       },
       {
@@ -6866,7 +6968,9 @@
         "trace"
        ],
        "answer": 35,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo13-gen-u13c-01.png",
+       "imgAlt": "knapsack item 표: 무게 6, 2, 4, 3, 11 / 가치 20, 8, 14, 13, 35, 용량 10"
       },
       {
        "id": "u13d-07",
@@ -6880,7 +6984,9 @@
         "trace"
        ],
        "answer": 34,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo13-gen-u13c-01.png",
+       "imgAlt": "knapsack item 표: 무게 6, 2, 4, 3, 11 / 가치 20, 8, 14, 13, 35, 용량 10"
       },
       {
        "id": "u13d-08",
@@ -6899,7 +7005,9 @@
         "{4, 4, 2, 2}",
         "{5}"
        ],
-       "answer": 1
+       "answer": 1,
+       "img": "duo/img/algo13-gen-u13c-01.png",
+       "imgAlt": "knapsack item 표: 무게 6, 2, 4, 3, 11 / 가치 20, 8, 14, 13, 35, 용량 10"
       },
       {
        "id": "u13d-09",
@@ -6913,6 +7021,8 @@
         "trace"
        ],
        "answer": true,
+       "img": "duo/img/algo13-gen-u13c-01.png",
+       "imgAlt": "knapsack item 표: 무게 6, 2, 4, 3, 11 / 가치 20, 8, 14, 13, 35, 용량 10",
        "introCard": 3
       },
       {
@@ -7011,7 +7121,9 @@
         "trace"
        ],
        "answer": 21,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo13-gen-u13c-01.png",
+       "imgAlt": "knapsack item 표: 무게 6, 2, 4, 3, 11 / 가치 20, 8, 14, 13, 35, 용량 10"
       },
       {
        "id": "u13d-15",
@@ -7427,6 +7539,8 @@
        ],
        "answer": 39,
        "tol": 0,
+       "img": "duo/img/algo13-gen-u13c-01.png",
+       "imgAlt": "knapsack item 표: 무게 6, 2, 4, 3, 11 / 가치 20, 8, 14, 13, 35, 용량 10",
        "introCard": 1
       },
       {
@@ -7447,6 +7561,8 @@
         "item 5 (35/11)"
        ],
        "answer": 2,
+       "img": "duo/img/algo13-gen-u13c-01.png",
+       "imgAlt": "knapsack item 표: 무게 6, 2, 4, 3, 11 / 가치 20, 8, 14, 13, 35, 용량 10",
        "introCard": 1
       },
       {
@@ -7752,6 +7868,8 @@
         "a8",
         "a11"
        ],
+       "img": "duo/img/algo14-gen-u14b-03.png",
+       "imgAlt": "활동 a1~a11 의 (start, finish) 막대 그림",
        "introCard": 0
       },
       {
@@ -7767,6 +7885,8 @@
        ],
        "answer": 4,
        "tol": 0,
+       "img": "duo/img/algo14-gen-u14b-03.png",
+       "imgAlt": "활동 a1~a11 의 (start, finish) 막대 그림",
        "introCard": 0
       },
       {
@@ -7956,6 +8076,8 @@
        ],
        "answer": 4,
        "tol": 0,
+       "img": "duo/img/algo14-gen-u14b-14.png",
+       "imgAlt": "활동 b1~b9 의 (start, finish) 막대 그림",
        "introCard": 0
       },
       {
@@ -8136,6 +8258,8 @@
        ],
        "answer": 46,
        "tol": 0,
+       "img": "duo/img/algo14-gen-u14c-06.png",
+       "imgAlt": "job 표: A(t 2, c 6), B(1, 2), C(4, 4)",
        "introCard": 1
       },
       {
@@ -8155,6 +8279,8 @@
         "P",
         "R"
        ],
+       "img": "duo/img/algo14-gen-u14c-07.png",
+       "imgAlt": "job 표: P(t 3, c 6), Q(2, 8), R(5, 5), S(1, 3)",
        "introCard": 1
       },
       {
@@ -8170,6 +8296,8 @@
        ],
        "answer": 116,
        "tol": 0,
+       "img": "duo/img/algo14-gen-u14c-07.png",
+       "imgAlt": "job 표: P(t 3, c 6), Q(2, 8), R(5, 5), S(1, 3)",
        "introCard": 1
       },
       {
@@ -8641,6 +8769,8 @@
         "100"
        ],
        "explainImg": "duo/img/algo14-p76-huff-ans.png",
+       "img": "duo/img/algo14-gen-u14e-01.png",
+       "imgAlt": "빈도 표: A 45, B 13, C 12, D 16, E 9, F 5",
        "introCard": 1
       },
       {
@@ -8717,6 +8847,8 @@
        ],
        "answer": 2.1,
        "tol": 0.001,
+       "img": "duo/img/algo14-gen-u14e-05.png",
+       "imgAlt": "빈도 표: a 40, b 25, c 20, d 10, e 5",
        "introCard": 1
       },
       {
@@ -8733,6 +8865,8 @@
        "answer": 4,
        "unit": "bit",
        "tol": 0,
+       "img": "duo/img/algo14-gen-u14e-05.png",
+       "imgAlt": "빈도 표: a 40, b 25, c 20, d 10, e 5",
        "introCard": 1
       },
       {
@@ -9152,6 +9286,8 @@
         "A–B 4"
        ],
        "answer": 1,
+       "img": "duo/img/algo15-gen-u15a-09.png",
+       "imgAlt": "undirected weighted graph: B–C 1, B–D 2, A–C 3, A–B 4, C–D 5, C–E 6, D–F 7, D–E 8, E–F 9",
        "introCard": 1
       },
       {
@@ -9249,6 +9385,8 @@
        ],
        "answer": 19,
        "tol": 0,
+       "img": "duo/img/algo15-gen-u15a-09.png",
+       "imgAlt": "undirected weighted graph: B–C 1, B–D 2, A–C 3, A–B 4, C–D 5, C–E 6, D–F 7, D–E 8, E–F 9",
        "introCard": 0
       },
       {
@@ -9582,6 +9720,8 @@
         "D–F 7"
        ],
        "answer": 1,
+       "img": "duo/img/algo15-gen-u15a-09.png",
+       "imgAlt": "undirected weighted graph: B–C 1, B–D 2, A–C 3, A–B 4, C–D 5, C–E 6, D–F 7, D–E 8, E–F 9",
        "introCard": 0
       }
      ],
@@ -9646,6 +9786,8 @@
         "C–E",
         "D–F"
        ],
+       "img": "duo/img/algo15-gen-u15a-09.png",
+       "imgAlt": "undirected weighted graph: B–C 1, B–D 2, A–C 3, A–B 4, C–D 5, C–E 6, D–F 7, D–E 8, E–F 9",
        "introCard": 0
       },
       {
@@ -9778,6 +9920,8 @@
        ],
        "answer": 2,
        "tol": 0,
+       "img": "duo/img/algo15-gen-u15a-09.png",
+       "imgAlt": "undirected weighted graph: B–C 1, B–D 2, A–C 3, A–B 4, C–D 5, C–E 6, D–F 7, D–E 8, E–F 9",
        "introCard": 0
       },
       {
@@ -9831,6 +9975,8 @@
         "B–C 1"
        ],
        "answer": 0,
+       "img": "duo/img/algo15-gen-u15a-09.png",
+       "imgAlt": "undirected weighted graph: B–C 1, B–D 2, A–C 3, A–B 4, C–D 5, C–E 6, D–F 7, D–E 8, E–F 9",
        "introCard": 0
       },
       {
@@ -10009,6 +10155,8 @@
        ],
        "answer": 5,
        "tol": 0,
+       "img": "duo/img/algo15-gen-u15d-07.png",
+       "imgAlt": "삼각형 S–U 2, U–T 2, S–T 3",
        "introCard": 1
       },
       {
@@ -10104,6 +10252,8 @@
        ],
        "answer": 5,
        "tol": 0,
+       "img": "duo/img/algo15-gen-u15a-09.png",
+       "imgAlt": "undirected weighted graph: B–C 1, B–D 2, A–C 3, A–B 4, C–D 5, C–E 6, D–F 7, D–E 8, E–F 9",
        "introCard": 0
       },
       {
@@ -10119,6 +10269,8 @@
        ],
        "answer": 2,
        "tol": 0,
+       "img": "duo/img/algo15-gen-u15a-09.png",
+       "imgAlt": "undirected weighted graph: B–C 1, B–D 2, A–C 3, A–B 4, C–D 5, C–E 6, D–F 7, D–E 8, E–F 9",
        "introCard": 0
       },
       {
@@ -10203,6 +10355,8 @@
         "C–E",
         "D–F"
        ],
+       "img": "duo/img/algo15-gen-u15a-09.png",
+       "imgAlt": "undirected weighted graph: B–C 1, B–D 2, A–C 3, A–B 4, C–D 5, C–E 6, D–F 7, D–E 8, E–F 9",
        "introCard": 0
       },
       {
@@ -10223,6 +10377,8 @@
         "C–E 6"
        ],
        "answer": 1,
+       "img": "duo/img/algo15-gen-u15a-09.png",
+       "imgAlt": "undirected weighted graph: B–C 1, B–D 2, A–C 3, A–B 4, C–D 5, C–E 6, D–F 7, D–E 8, E–F 9",
        "introCard": 0
       },
       {
@@ -10790,6 +10946,8 @@
        ],
        "answer": 0.75,
        "tol": 0.001,
+       "img": "duo/img/algo16-gen-u16a-13.png",
+       "imgAlt": "삼각형 a–b–c 에 c–d 가 붙은 그래프",
        "introCard": 3
       },
       {
@@ -11480,6 +11638,8 @@
        "answer": 9,
        "tol": 0,
        "wiki": "s-t cut",
+       "img": "duo/img/algo17-gen-u17a-03.png",
+       "imgAlt": "flow network: s→a 4, s→b 2, a→b 3, a→t 1, b→t 5 (capacity)",
        "introCard": 0
       },
       {
@@ -11496,6 +11656,8 @@
        "answer": 6,
        "tol": 0,
        "wiki": "s-t cut",
+       "img": "duo/img/algo17-gen-u17a-03.png",
+       "imgAlt": "flow network: s→a 4, s→b 2, a→b 3, a→t 1, b→t 5 (capacity)",
        "introCard": 0
       },
       {
@@ -11617,6 +11779,8 @@
        "answer": 6,
        "tol": 0,
        "wiki": "max-flow min-cut theorem",
+       "img": "duo/img/algo17-gen-u17a-03.png",
+       "imgAlt": "flow network: s→a 4, s→b 2, a→b 3, a→t 1, b→t 5 (capacity)",
        "introCard": 1
       },
       {
@@ -11879,6 +12043,8 @@
        "answer": 5,
        "tol": 0,
        "wiki": "Ford-Fulkerson",
+       "img": "duo/img/algo17-gen-u17b-11.png",
+       "imgAlt": "flow network: s→a 3, s→b 2, a→b 1, a→t 2, b→t 3 (capacity)",
        "introCard": 3
       },
       {
