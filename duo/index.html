@@ -324,6 +324,32 @@ body.bed .selfans b { color: var(--acc); }
   .x:hover, .link:hover, .back:hover, .wlink:hover, .wback:hover { text-decoration: underline; }
 }
 
+/* ---------- question images ---------- */
+.qimg { position: relative; margin: 4px 0 12px; border-radius: 12px; background: #f4f4f1; border: 1px solid var(--line); padding: 6px; text-align: center; }
+.qimg img { display: block; margin: 0 auto; max-width: 100%; max-height: 42vh; object-fit: contain; border-radius: 8px; cursor: zoom-in; }
+.qimg .zoomhint { position: absolute; right: 8px; bottom: 8px; font-size: 14px; background: rgba(0,0,0,.45); color: #f5f5f5; border-radius: 99px; padding: 1px 7px; pointer-events: none; }
+.qimg.exp { margin: 6px 0 10px; }
+.qimg.exp img { max-height: 32vh; }
+.qimg.thumb { display: inline-block; padding: 3px; margin: 0 0 8px; }
+.qimg.thumb img { max-height: 18vh; }
+.qimg.broken { background: var(--card); }
+.imgalt { padding: 14px 10px; font-size: 14px; color: var(--muted); text-align: left; }
+@media (prefers-color-scheme: dark) { .qimg { background: #e9e9e4; border-color: transparent; } .qimg img { filter: brightness(.92); } }
+body.bed .qimg { background: #c9c2b4; border-color: transparent; }
+body.bed .qimg img { max-height: 35vh; filter: brightness(.8) sepia(.25); }
+body.bed .qimg.thumb img { max-height: 16vh; }
+body.bed .qimg.broken { background: var(--card); }
+.cfbody .qimg { margin-bottom: 10px; }
+#zoom { position: fixed; inset: 0; z-index: 60; background: rgba(8,8,8,.94); display: flex; flex-direction: column; }
+#zoom .zbar { display: flex; align-items: center; gap: 8px; padding: calc(6px + var(--sa-t)) 10px 6px; color: #ddd; }
+#zoom .zalt { flex: 1; min-width: 0; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#zoom .zbtn { min-height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid #555; background: #222; color: #eee; font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; }
+#zoom .zwrap { flex: 1; overflow: auto; touch-action: pinch-zoom pan-x pan-y; -webkit-overflow-scrolling: touch; padding: 8px; }
+#zoom .zwrap img { display: block; max-width: none; margin: 0 auto; background: #f4f4f1; border-radius: 6px; }
+#zoom.fit .zwrap img { max-width: 100%; max-height: 100%; object-fit: contain; }
+body.bed #zoom .zwrap img { filter: brightness(.8) sepia(.25); background: #c9c2b4; }
+.sheet { -webkit-overflow-scrolling: touch; }
+
 </style>
 </head>
 <body>
@@ -653,7 +679,7 @@ body.bed .selfans b { color: var(--acc); }
     var meta = {};
     flatItems(content).forEach(function (it) {
       if (onlyIds && !onlyIds[it.id]) return;
-      meta[it.id] = { type: it.type, q: it.q, answer: answerText(it), explain: it.explain, src: it.src, tags: it.tags || [], prof: !!it.prof, wiki: it.wiki, unit: it._u, lesson: it._l };
+      meta[it.id] = { type: it.type, q: it.q, answer: answerText(it), explain: it.explain, src: it.src, tags: it.tags || [], prof: !!it.prof, wiki: it.wiki, img: !!(it.img || it.explainImg), unit: it._u, lesson: it._l };
     });
     return meta;
   }
@@ -744,7 +770,7 @@ body.bed .selfans b { color: var(--acc); }
     missed.slice(0, top).forEach(function (p, i) {
       var m = meta[p.id] || {};
       L.push('');
-      L.push('### ' + (i + 1) + '. `' + p.id + '`' + (m.prof ? ' 🎙' : '') + ' — ' + p.w + '/' + p.n + '회 틀림' + (p.tap ? ' (그중 탭 모드 시도 ' + p.tap + '회)' : '') + (p.lastOk ? ' (마지막 시도는 정답)' : ''));
+      L.push('### ' + (i + 1) + '. `' + p.id + '`' + (m.prof ? ' 🎙' : '') + (m.img ? ' [그림 있음]' : '') + ' — ' + p.w + '/' + p.n + '회 틀림' + (p.tap ? ' (그중 탭 모드 시도 ' + p.tap + '회)' : '') + (p.lastOk ? ' (마지막 시도는 정답)' : ''));
       if (m.q) L.push('- 문제 (' + (TYPE_KO[m.type] || m.type) + '): ' + m.q);
       L.push('- 내 오답: ' + (p.givens.length ? p.givens.slice(-4).map(function (x) { return '「' + x + '」'; }).join(', ') : '(기록 없음)'));
       if (m.answer != null) L.push('- 정답: ' + m.answer);
@@ -897,6 +923,20 @@ body.bed .selfans b { color: var(--acc); }
           if (it.diff != null && [1, 2, 3].indexOf(it.diff) < 0) err(p, 'diff 는 1/2/3');
           if (it.prof != null && typeof it.prof !== 'boolean') err(p, 'prof 는 boolean');
           if (it.tags != null && !(Array.isArray(it.tags) && it.tags.every(isStr))) err(p, 'tags 는 문자열 배열');
+          ['img', 'explainImg'].forEach(function (f) {
+            var v = it[f];
+            if (v == null) return;
+            if (!isStr(v)) return err(p, f + ' 는 문자열 경로');
+            if (/(^|\/)\.\.(\/|$)/.test(v) || /^[a-z]+:|^\//i.test(v)) return err(p, f + ' 는 repo 루트 기준 상대경로여야 함: ' + v);
+            if (!/^duo\/img\//.test(v)) warn(p, f + ' 가 duo/img/ 아래가 아님: ' + v);
+            if (opts.fileInfo) {
+              var fi = opts.fileInfo(v);
+              if (!fi) err(p, f + ' 그림 파일 없음: ' + v);
+              else if (fi.size > 200 * 1024) warn(p, f + ' 가 ' + Math.round(fi.size / 1024) + 'KB (200KB 넘음): ' + v);
+            }
+          });
+          if (it.img && !isStr(it.imgAlt)) warn(p, 'img 에 imgAlt(그림 설명)가 없음');
+          if (it.imgAlt != null && typeof it.imgAlt !== 'string') err(p, 'imgAlt 는 문자열');
           if (it.wiki != null) {
             if (!isStr(it.wiki)) err(p, 'wiki 는 문자열');
             else if (keys && !keys[it.wiki]) (unknownWiki[it.wiki] = unknownWiki[it.wiki] || []).push(it.id);
@@ -1148,6 +1188,59 @@ body.bed .selfans b { color: var(--acc); }
     return box;
   }
   function closeModal() { $modal.classList.remove('show'); $modal.innerHTML = ''; }
+
+  /* ---------- question images ---------- */
+  function figure(src, alt, cls) {
+    if (!src) return null;
+    var box = h('div', { class: 'qimg' + (cls ? ' ' + cls : '') });
+    var im = h('img', { src: src, alt: alt || '', loading: 'lazy', decoding: 'async' });
+    im.addEventListener('error', function () {
+      box.innerHTML = ''; box.classList.add('broken');
+      box.appendChild(h('div', { class: 'imgalt' }, '🖼 ' + (alt || '그림을 불러오지 못했어요') + (navigator.onLine === false ? ' (오프라인 — 한 번 본 그림만 저장됩니다)' : '')));
+    });
+    im.addEventListener('click', function (e) { e.stopPropagation(); openZoom(src, alt); });
+    box.appendChild(im);
+    if (cls !== 'thumb') box.appendChild(h('span', { class: 'zoomhint', 'aria-hidden': 'true' }, '🔍'));
+    return box;
+  }
+  var $zoom = null;
+  function openZoom(src, alt) {
+    closeZoom();
+    var fit = false;
+    var im = h('img', { src: src, alt: alt || '' });
+    var wrap = h('div', { class: 'zwrap' }, im);
+    var fitBtn = h('button', { class: 'zbtn', onclick: function () { fit = !fit; $zoom.classList.toggle('fit', fit); fitBtn.textContent = fit ? '원래 크기' : '화면에 맞추기'; } }, '화면에 맞추기');
+    $zoom = h('div', { id: 'zoom', role: 'dialog', 'aria-label': alt || '그림 크게 보기' },
+      h('div', { class: 'zbar' }, h('span', { class: 'zalt' }, alt || ''), fitBtn, h('button', { class: 'zbtn close', onclick: closeZoom, 'aria-label': '닫기' }, '✕ 닫기')),
+      wrap);
+    document.body.appendChild($zoom);
+  }
+  function closeZoom() { if ($zoom) { $zoom.remove(); $zoom = null; } }
+  function imageUrls(cds) {
+    var out = [];
+    cds.forEach(function (cd) { cd.items.forEach(function (it) { if (it.img) out.push(it.img); if (it.explainImg) out.push(it.explainImg); }); });
+    return out.filter(function (u, i) { return out.indexOf(u) === i; });
+  }
+  function prefetchImages(btn) {
+    var urls = imageUrls(HUB ? ORDER.map(function (c) { return DATA[c]; }) : [CUR]);
+    if (!urls.length) return toast('그림이 있는 문항이 없어요');
+    if (!window.caches) return toast('이 브라우저는 미리 받기를 지원하지 않아요 (한 번 본 그림은 그래도 저장됩니다)');
+    var done = 0, fail = 0;
+    btn.disabled = true;
+    caches.open('duo-img').then(function (c) {
+      return urls.reduce(function (p, u) {
+        return p.then(function () {
+          return c.match(u).then(function (hit) {
+            if (hit) return;
+            return fetch(u).then(function (r) { if (r.ok) return c.put(u, r); throw new Error(r.status); });
+          }).then(function () { done++; }, function () { fail++; }).then(function () { btn.textContent = '받는 중… ' + (done + fail) + '/' + urls.length; });
+        });
+      }, Promise.resolve());
+    }).then(function () {
+      btn.disabled = false; btn.textContent = '🖼 그림 미리 받기 (' + urls.length + '장)';
+      toast(fail ? '그림 ' + done + '장 저장, ' + fail + '장 실패' : '✓ 그림 ' + done + '장 모두 오프라인 저장');
+    }).catch(function () { btn.disabled = false; toast('미리 받기 실패'); });
+  }
   function tile(k, v) { return h('div', { class: 'tile' }, h('div', { class: 'tk' }, k), h('div', { class: 'tv' }, String(v))); }
   function fmtDur(ms) { var s = Math.round(ms / 1000); return Math.floor(s / 60) + '분 ' + (s % 60) + '초'; }
   function mmss(ms) { var s = Math.max(0, Math.round(ms / 1000)); return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
@@ -1292,7 +1385,7 @@ body.bed .selfans b { color: var(--acc); }
     }));
   }
   function go(s) {
-    current = s; closeModal(); hideSheet(); closeWiki();
+    current = s; closeModal(); hideSheet(); closeWiki(); closeZoom();
     document.body.classList.remove('insession');
     if (BED && s !== 'bed') { /* leaving bed via tabs is not possible (tabs hidden) */ }
     ({ today: renderToday, path: renderPath, review: renderReview, stats: renderStats, settings: renderSettings, mistakes: renderMistakes, wiki: renderWikiTab, focus: renderFocusStart })[s]();
@@ -1517,7 +1610,7 @@ body.bed .selfans b { color: var(--acc); }
     nextQuestion();
   }
   function nextQuestion() {
-    hideSheet();
+    hideSheet(); closeZoom();
     if (!S.queue.length) return finishSession();
     S.cur = S.queue.shift(); S.itemT0 = Date.now();
     renderQuestion();
@@ -1554,6 +1647,7 @@ body.bed .selfans b { color: var(--acc); }
       S.combo >= 3 ? h('span', { class: 'combo' }, '🔥 ' + S.combo + '연속') : null,
       S.first[it.id + '' + it._c] === false ? h('span', { class: 'again' }, '다시 한 번') : null);
     body.appendChild(tagline);
+    add(body, figure(it.img, it.imgAlt));
     function onChange() { check.disabled = !Q.ready(); }
     Q = RENDER[it.type](it, body, onChange);
     check.addEventListener('click', function () { if (!check.disabled) submit(Q.getGiven()); });
@@ -1766,6 +1860,7 @@ body.bed .selfans b { color: var(--acc); }
       !ok ? h('div', { class: 'sans' }, h('b', null, '정답 '), h('span', { html: md(D.answerText(it)) })) : null,
       !ok && gs ? h('div', { class: 'sgiven' }, h('b', null, '내 답 '), h('span', { html: md(gs.indexOf('(self:') === 0 ? '스스로 채점 — 틀렸다' : gs) })) : null,
       h('div', { class: 'sexp', html: md(it.explain || '') }),
+      figure(it.explainImg, (it.imgAlt ? it.imgAlt + ' — ' : '') + '해설 그림', 'exp'),
       h('div', { class: 'smeta' }, it.src ? h('span', null, '📖 ' + it.src) : null, it.prof ? h('span', { class: 'prof' }, '🎙 교수 강조') : null,
         hasWiki ? h('button', { class: 'wlink', onclick: function () { openWiki(it._c, it.wiki); } }, '위키에서 보기 ›') : null),
       h('button', { class: 'btn ' + (ok ? 'primary' : 'danger'), onclick: afterFeedback }, '계속')
@@ -2110,6 +2205,12 @@ body.bed .selfans b { color: var(--acc); }
       h('div', { class: 'card' }, h('b', null, 'ℹ️ 과목'),
         courseChips(renderSettings),
         h('p', { class: 'small' }, CUR.C.course.title + (CUR.C.course.subtitle ? ' · ' + CUR.C.course.subtitle : '')),
+        (function () {
+          var n = imageUrls(HUB ? ORDER.map(function (c) { return DATA[c]; }) : [CUR]).length;
+          if (!n) return null;
+          var b = h('button', { class: 'btn', onclick: function () { prefetchImages(b); } }, '🖼 그림 미리 받기 (' + n + '장)');
+          return [b, h('p', { class: 'muted small' }, '오프라인(비행기·지하철)에서도 그림이 보이게 미리 저장합니다. 한 번 본 그림은 자동으로 저장됩니다.')];
+        })(),
         CUR.C.course.exam ? h('p', { class: 'muted small' }, CUR.C.course.exam) : null,
         wikiUrl(CUR.id) ? h('button', { class: 'btn', onclick: function () { openWiki(CUR.id, ''); } }, '📚 위키 열기') : null,
         h('a', { class: 'btn ghost danger', href: '?reset=1&course=' + encodeURIComponent(CUR.id) }, '「' + CUR.name + '」 기록 초기화')),
@@ -2258,7 +2359,7 @@ body.bed .selfans b { color: var(--acc); }
     if (bar) { bar.style.transition = 'none'; bar.style.width = '0%'; void bar.offsetWidth; bar.style.transition = 'width ' + ms + 'ms linear'; bar.style.width = '100%'; }
   }
   function cardFront(it) {
-    var el = h('div', { class: 'cffront' }, M('div', 'cfq', it.q));
+    var el = h('div', { class: 'cffront' }, figure(it.img, it.imgAlt, CF && CF.listen ? 'thumb' : null), M('div', 'cfq', it.q));
     if (it.type === 'mc') el.appendChild(h('ol', { class: 'cflist' }, it.choices.map(function (c) { return h('li', { html: md(c) }); })));
     if (it.type === 'tf') el.appendChild(h('div', { class: 'muted' }, 'O 일까 X 일까?'));
     if (it.type === 'match') el.appendChild(h('div', { class: 'muted' }, it.pairs.map(function (p) { return p[0]; }).join(' · ') + ' — 각각의 짝은?'));
@@ -2392,13 +2493,14 @@ body.bed .selfans b { color: var(--acc); }
   function demoScreen(scr) {
     var type = P.get('type'), ok = P.get('ok') === '1';
     var cd = CUR;
-    var it0 = type ? cd.items.filter(function (x) { return x.type === type; })[0] : cd.items[0];
+    var it0 = P.get('item') ? cd.byId[P.get('item')] : type ? cd.items.filter(function (x) { return x.type === type; })[0] : cd.items[0];
     var L = it0 && cd.lessons.filter(function (x) { return x.l.id === it0._l; })[0];
     if (scr === 'lesson' || scr === 'feedback') {
       if (!L) return go('path');
       startLesson(L, it0);
       if (scr === 'feedback') submit(makeGiven(it0, ok));
       else if (P.get('self')) selfReveal();
+      if (P.get('zoom') && it0.img) openZoom(it0.img, it0.imgAlt);
     } else if (scr === 'result') {
       renderResult({ xp: 22, base: 10, done: 5, combo: 2, perfect: 0, acc: 10 / 12, ms: 254000, maxCombo: 6, crownUp: 2, refill: false, lesson: true, leaves: 1, title: cd.lessons[0].l.title, goalHit: true });
     } else if (scr === 'hearts0') {
@@ -2408,6 +2510,7 @@ body.bed .selfans b { color: var(--acc); }
     else if (scr === 'bed') { enterBed(); setTimer(30); bedMenu(); }
     else if (scr === 'cards' || scr === 'listen') {
       enterBed(); setTimer(30); bedFlow(scr === 'listen');
+      if (it0 && P.get('item')) { CF.deck.unshift(it0); CF.i = 0; BED.seen--; cfShow(); }
       if (P.get('phase') === 'a') cfReveal();
       cfPause();
     } else if (scr === 'sleep') {
@@ -2468,6 +2571,7 @@ body.bed .selfans b { color: var(--acc); }
   document.addEventListener('keydown', function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     var tag = (e.target && e.target.tagName) || '', typing = tag === 'INPUT' || tag === 'TEXTAREA';
+    if ($zoom) { if (e.key === 'Escape') closeZoom(); return; }
     if ($modal.classList.contains('show') || $wiki.classList.contains('show')) return;
     if ($sheet.classList.contains('show')) {
       if (e.key === 'Enter' || e.key === ' ') { var cb = $sheet.querySelector('.btn'); if (cb) { e.preventDefault(); cb.click(); } }
@@ -2500,7 +2604,7 @@ body.bed .selfans b { color: var(--acc); }
   var scr = P.get('screen');
   if (scr) demoScreen(scr); else go(current);
   if (P.has('probe')) setTimeout(function () {
-    var info = { sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, screen: scr, auto: window.__autoplay || null };
+    var info = { sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, screen: scr, auto: window.__autoplay || null, imgOk: [].filter.call(document.images, function (i) { return i.complete && i.naturalWidth > 0; }).length, imgBroken: document.querySelectorAll('.qimg.broken').length };
     var pr = document.createElement('pre'); pr.id = 'probe'; pr.textContent = JSON.stringify(info);
     document.body.appendChild(pr);
     try { if (window.parent !== window) window.parent.postMessage({ duoProbe: info }, '*'); } catch (e) { /* ignore */ }
