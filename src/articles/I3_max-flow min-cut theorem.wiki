@@ -5,7 +5,7 @@ category: 17강 Advanced II, 증명
 {def}
 L17 p.15: "The value of a max flow from s to t is equal to the cost of a min s-t cut."
 {/def}
-수업 전(11/24 예정) 슬라이드 기준이다. 직관은 "max flow 에서는 min cut 이 꽉 차고, 그곳이 병목" 이다.
+11/24 수업에서 다뤘다. ⇒ 방향 증명(cut 선 긋기)은 [[max-flow min-cut 증명 (cut 선 긋기)]] 에 따로 천천히 풀어 두었다. 직관은 "max flow 에서는 min cut 이 꽉 차고, 그곳이 병목" 이다.
 
 == 증명 구조 (p.16) ==
 <pre class="txt">
@@ -28,4 +28,4 @@ Lemma 2: max flow ≥ min cut   (알고리즘 증명: residual graph Gf)
 {/answer}
 
 == 관련 문서 ==
-* [[L17 Advanced Algorithms II]] · [[s-t cut]] · [[flow]] · [[residual graph]] · [[Ford-Fulkerson]]
+* [[max-flow min-cut 증명 (cut 선 긋기)]] · [[L17 Advanced Algorithms II]] · [[s-t cut]] · [[flow]] · [[residual graph]] · [[Ford-Fulkerson]]

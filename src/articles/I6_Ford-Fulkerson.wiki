@@ -2,7 +2,7 @@ key: Ford-Fulkerson
 title: Ford-Fulkerson — augmenting path 가 없을 때까지 flow 를 늘린다
 category: 17강 Advanced II, 용어
 ---
-L17 p.41. 수업 전(11/24 예정) 슬라이드 기준이다.
+L17 p.41. 11/24 수업에서 다뤘다. 끝난 뒤 min cut 을 꺼내는 법은 [[max-flow min-cut 증명 (cut 선 긋기)]].
 <pre class="c">
 Ford-Fulkerson(G):
     f ← all zero flow.

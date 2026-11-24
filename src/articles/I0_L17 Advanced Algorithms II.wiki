@@ -3,7 +3,7 @@ title: L17 Advanced Algorithms II — s 에서 t 로 최대한 많이 흘려보�
 category: 17강 Advanced II, 메인
 ---
 {warn}
-'''수업 전(11/24 예정) 문서다.''' 슬라이드만 보고 썼다. 수업 녹음이 들어오면 교수 강조와 실제 나간 범위를 덧붙인다. HW4 4번(정점 분할 min cut)과 같은 주제지만, HW4 마감(11/29) 전이라 이 문서에는 HW4 풀이를 싣지 않는다.
+11/24 수업에서 '''p.1–53'''(Ford-Fulkerson 예제 끝, max flow = min cut = 11)까지 나갔고 그 녹음을 반영했다. '''p.54–77'''(경로를 아무렇게나 고를 때의 C 예제, Edmonds-Karp 정리, 정수성, matching, assignment)은 다음 수업 예정이라 아직 슬라이드 기준이다. HW4 4번(정점 분할 min cut)과 같은 주제지만, HW4 마감(11/29) 전이라 이 문서에는 HW4 풀이를 싣지 않는다.
 {/warn}
 
 == 개요 ==
@@ -25,7 +25,7 @@ L17 p.5–8: "An s-t cut is a cut which separates s from t." 간선이 s 쪽에�
 p.9 는 더 싼 cut 을 보여 준다. s 쪽이 {s, B, C, F} 일 때 건너는 간선은 s→A 4, B→E 3, F→t 4 이고 cost 는 '''4 + 3 + 4 = 11''' 이다. 이것이 이 그래프의 '''minimum s-t cut''' 이다. 슬라이드는 여기서 묻는다. "Question: how do we find a minimum s-t cut?"
 
 === 냉전 시대의 철도 지도 ===
-p.10 은 이 문제가 실제로 어디서 나왔는지 보여 준다. 1955년, 소련에서 동유럽으로 가는 철도망 지도다(1999년 기밀 해제). 미국은 러시아의 보급로를 가장 효율적으로 끊고 싶었다. 같은 해 RAND 연구소의 Ford 와 Fulkerson 이 최적의 s-t cut 을 찾는 알고리즘을 내놓았다. 지도에는 "the bottleneck" 이라는 글씨가 적혀 있다.[* 출처는 Schrijver 의 2002년 논문 "On the history of the transportation and maximum flow problems" 다. 슬라이드에는 "Schriver 2002" 로 철자가 조금 다르게 적혀 있다. 이 지도는 T. E. Harris 와 F. S. Ross 가 1955년에 작성한 RAND 보고서에 실린 것이다.]
+p.10 은 이 문제가 실제로 어디서 나왔는지 보여 준다. 1955년, 소련에서 동유럽으로 가는 철도망 지도다(1999년 기밀 해제). 미국은 러시아의 보급로를 가장 효율적으로 끊고 싶었다. 같은 해 RAND 연구소의 Ford 와 Fulkerson 이 최적의 s-t cut 을 찾는 알고리즘을 내놓았다. 지도에는 "the bottleneck" 이라는 글씨가 적혀 있다. 교수(11/24)는 이걸 "which road we should cut in an efficient way to stop the supply of food, water, missiles" 라고 풀었고, 비록 전쟁에서 나왔지만 쓸모 있는 응용이 많다고 덧붙였다.[* 출처는 Schrijver 의 2002년 논문 "On the history of the transportation and maximum flow problems" 다. 슬라이드에는 "Schriver 2002" 로 철자가 조금 다르게 적혀 있다. 이 지도는 T. E. Harris 와 F. S. Ross 가 1955년에 작성한 RAND 보고서에 실린 것이다.]
 
 {mini}
 # p.8 그림에서 s 쪽을 {s, A} 로 잡으면 cost 는? (그래프 간선: s→A 4, s→B 2, s→C 6, A→D 3, A→B 2, A→E 6, B→E 3, B→C 2, D→E 6, D→t 4, E→t 4, E→F 6, F→B 3, C→F 10, F→t 4)
@@ -52,7 +52,7 @@ p.13 의 flow 는 값이 4 다. 슬라이드도 "This example flow is pretty was
 {def}
 '''Max-flow min-cut theorem''' (L17 p.15). s 에서 t 로 가는 max flow 의 값은 min s-t cut 의 cost 와 같다.
 {/def}
-직관은 이렇다. 흐름을 최대로 채우면 어딘가 병목이 꽉 막힌다. 그 병목이 min cut 이다("in a max flow, the min cut better fill up, and this is the bottleneck"). 증명 계획(p.16)은 두 부분이다.
+교수(11/24)는 간선을 물 파이프, flow 를 그 파이프로 흐르는 물의 양으로 비유했다. 직관은 이렇다. 흐름을 최대로 채우면 어딘가 병목이 꽉 막힌다. 그 병목이 min cut 이다("in a max flow, the min cut better fill up, and this is the bottleneck"). 증명 계획(p.16)은 두 부분이다.
 * Lemma 1: max flow ≤ min cut. 그림으로 증명한다.
 * Lemma 2: max flow ≥ min cut. 알고리즘으로 증명한다.
 
@@ -117,6 +117,13 @@ x 는 경로 위 residual 값의 최솟값, 즉 이 경로의 병목이다. forw
 * s 쪽에서 t 쪽으로 가는 원래 간선은 모두 '''꽉 차 있다'''. 남은 양이 있었다면 $G_f$ 에 파란 간선이 있어서 건너편 정점에 닿았을 것이다.
 * t 쪽에서 s 쪽으로 오는 원래 간선은 flow 가 0 이다. flow 가 있었다면 초록 간선이 있어서 역시 닿았을 것이다.
 그러니 flow 값 = 이 cut 의 cost 다. 그리고 이 cut 의 cost ≥ min cut ≥ max flow(Lemma 1) ≥ 이 flow 값. 양 끝이 같으니 전부 같다. f 는 max flow 이고, 덤으로 이 cut 은 min cut 이다.
+
+이 증명은 수업 끝에 몇 줄로 지나가서 놓치기 쉽다. 슬라이드 p.39 그림 그대로 $G_f$ 를 만들고, BFS 로 S 를 칠하고, 선을 긋고, 선을 넘는 간선을 하나씩 확인하는 과정을 '''[[max-flow min-cut 증명 (cut 선 긋기)]]''' 문서에 여섯 단계로 아주 천천히 풀어 두었다. 슬라이드가 적지 않은 둘째 사실(T 쪽에서 S 쪽으로 오는 간선의 flow 는 0)도 거기서 설명한다.
+[[sim:cut_from_residual]]
+
+{exam}
+교수(11/24, 녹음 60:05–64:30): $G_f$ 에서 s 가 닿는 정점 / 못 닿는 정점으로 cut 을 잡으면, 그 cut 의 간선은 "full because they don't exist in $G_f$" 이고(꽉 차 있지 않으면 남은 capacity 로 가는 path 가 생겨 reachable 이 된다), flow 값 = cut cost ≥ min cut ≥ max flow ≥ flow 값이라 모두 같다. 자세한 단계는 [[max-flow min-cut 증명 (cut 선 긋기)]].
+{/exam}
 
 === Ford-Fulkerson ===
 p.41 이 증명에서 알고리즘을 꺼낸다.

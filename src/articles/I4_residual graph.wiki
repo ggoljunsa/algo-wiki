@@ -2,7 +2,7 @@ key: residual graph
 title: residual graph Gf — 더 보낼 수 있는 양과 되돌릴 수 있는 양
 category: 17강 Advanced II, 용어
 ---
-L17 p.21–22. flow f 가 있을 때 residual graph $G_f$ 는 간선마다 "얼마를 더 움직일 수 있나" 를 그린 그래프다. 수업 전(11/24 예정) 슬라이드 기준이다.
+L17 p.21–22. flow f 가 있을 때 residual graph $G_f$ 는 간선마다 "얼마를 더 움직일 수 있나" 를 그린 그래프다. 11/24 수업에서 다뤘다.
 $$c_f(u,v) = \begin{cases} c(u,v) - f(u,v) & (u,v) \in E \\ f(v,u) & (v,u) \in E \\ 0 & \text{otherwise} \end{cases}$$
 * '''forward edge''' $u \to v$: 남은 양 $c - f$. 0 이면 그리지 않는다.
 * '''backward edge''' $v \to u$: 이미 보낸 양 $f$. 이만큼 되돌릴(줄일) 수 있다.

@@ -2,7 +2,7 @@ key: augmenting path
 title: augmenting path — residual graph 위의 s→t 경로
 category: 17강 Advanced II, 용어
 ---
-L17 p.28. [[residual graph]] $G_f$ 에서 s 에서 t 로 가는 경로다. 이 경로를 따라 flow 를 늘릴 수 있다. 수업 전(11/24 예정) 슬라이드 기준이다.
+L17 p.28. [[residual graph]] $G_f$ 에서 s 에서 t 로 가는 경로다. 이 경로를 따라 flow 를 늘릴 수 있다. 11/24 수업에서 다뤘다.
 
 늘리는 양은 경로 위 residual 값의 최솟값 x(병목)다. 늘리는 방법은 p.35 의 `increaseFlow` 다.
 <pre class="c">

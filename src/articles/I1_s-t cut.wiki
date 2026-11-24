@@ -5,7 +5,7 @@ category: 17강 Advanced II, 용어
 {def}
 L17 p.5–8: "An s-t cut is a cut which separates s from t." 간선이 s 쪽에서 t 쪽으로 가면 cut 을 건넌다. cut 의 cost(capacity)는 건너는 간선들의 capacity 합이다.
 {/def}
-수업 전(11/24 예정) 슬라이드 기준이다. L16 의 [[global minimum cut]] 과 달리 방향 있는 그래프이고, s 와 t 를 반드시 다른 편에 둬야 한다. cost 를 셀 때는 '''방향'''이 중요하다. t 쪽에서 s 쪽으로 들어오는 간선은 점선을 넘어도 세지 않는다(p.8 "it's going in the wrong direction").
+11/24 수업에서 다뤘다. 교수는 "important thing is there is a direction in the edge" 라며 방향을 두 번 강조했다. L16 의 [[global minimum cut]] 과 달리 방향 있는 그래프이고, s 와 t 를 반드시 다른 편에 둬야 한다. cost 를 셀 때는 '''방향'''이 중요하다. t 쪽에서 s 쪽으로 들어오는 간선은 점선을 넘어도 세지 않는다(p.8 "it's going in the wrong direction").
 
 L17 예제에서 s 쪽을 {s, C} 로 잡으면 cost 는 4 + 2 + 10 = 16(p.8), {s, B, C, F} 로 잡으면 4 + 3 + 4 = 11(p.9)이다. 11 이 '''minimum s-t cut''' 이다. min s-t cut 의 cost 는 max flow 의 값과 같다([[max-flow min-cut theorem]]).[* 1955년 소련에서 동유럽으로 가는 철도망을 가장 싸게 끊는 문제가 이 모양이었다(p.10). 같은 해 Ford 와 Fulkerson 이 이 문제를 푸는 알고리즘을 냈다.]
 

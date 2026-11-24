@@ -5,7 +5,7 @@ category: 16강 Advanced I, 증명
 {def}
 '''Claim''' (L16 p.57, p.65). [[Karger's algorithm]] 이 minimum cut 을 돌려줄 확률은 적어도 $1/\binom{n}{2} = \frac{2}{n(n-1)}$ 이다.
 {/def}
-11/19 수업은 이 Claim 을 말하고 끝났다. 증명(p.66–72)은 11/24 수업 예정이라 슬라이드 기준이다.
+11/19 수업은 이 Claim 을 말하고 끝났고, 증명(p.66–72)은 11/24 수업(녹음 12:22–21:29)에서 했다. 교수는 4번의 차수 논증에서 "What happens if it's smaller than k? … Otherwise we have a smaller cut." 을 짚고, 간선 수를 2 로 나누는 이유를 "double count" 라고 설명했다.
 
 == 증명 ==
 <pre class="txt">

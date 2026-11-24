@@ -2,7 +2,7 @@ key: assignment problem
 title: assignment problem — capacity 를 풀어 준 배정 문제
 category: 17강 Advanced II, 용어
 ---
-L17 p.71–75. 수업 전(11/24 예정) 슬라이드 기준이다. [[maximum bipartite matching]] 의 "한 번만" 제약을 숫자로 바꾼 문제다.
+L17 p.71–75. 11/24 수업에서는 아직 안 나갔다(다음 수업 예정, 슬라이드 기준). [[maximum bipartite matching]] 의 "한 번만" 제약을 숫자로 바꾼 문제다.
 * 집합 X 의 x 는 c(x) 번까지 짝지어질 수 있다. 학생은 4 스쿱까지 먹는다.
 * 집합 Y 의 y 는 c(y) 번까지. 통에는 10 스쿱이 있다.
 * 쌍 (x, y) 는 c(x,y) 번까지. 학생 x 는 맛 y 를 3 스쿱까지만 원한다.

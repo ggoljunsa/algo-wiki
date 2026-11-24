@@ -1,0 +1,187 @@
+key: max-flow min-cut 증명 (cut 선 긋기)
+title: max-flow min-cut 증명 — residual graph 에서 cut 선 긋기, 아주 천천히 (L17 p.38–40)
+category: 17강 Advanced II, 증명
+---
+[[L17 Advanced Algorithms II]] 수업 끝(11/24, 녹음 60:05–64:30)에 나온 증명이다. 슬라이드 p.38–40 세 장이 "$G_f$ 에서 t 에 갈 수 없으면 f 는 max flow 다" 를 보여 주는데, 선 하나 긋고 몇 줄 만에 끝나서 무엇을 왜 하는지 놓치기 쉽다. 이 문서는 그 세 장을 여섯 단계로 쪼개서, 슬라이드의 그림 그대로 한 단계씩 손으로 따라간다. 단계마다 새끼문제가 있다.
+
+== 0. 무엇을 증명하려는가 ==
+=== 결론: 두 값이 같다 ===
+[[max-flow min-cut theorem]] 은 "max flow 의 값 = min s-t cut 의 cost" 다. 같다는 걸 보이는 정석은 '''양쪽에서 조이는 것'''이다.
+* (≤) max flow ≤ min cut. 이건 Lemma 1 로 이미 끝났다. '''어떤''' flow 의 값도 '''어떤''' s-t cut 의 cost 를 넘을 수 없다. s 에서 나온 물건은 t 에 가려면 cut 을 한 번은 넘어야 하고, cut 을 넘는 파이프들의 굵기 합이 cost 이니까(p.17).
+* (≥) 남은 건 반대쪽이다. 그런데 "max flow ≥ min cut" 을 직접 보이기는 막막하다. 그래서 슬라이드는 꾀를 쓴다. '''어떤 flow f 와 어떤 cut 을 하나씩 찾아서, 둘의 값이 정확히 같다'''는 것만 보이면 된다.
+
+왜 그걸로 충분한가. 값이 같은 flow f 와 cut 이 있다고 하자.
+<pre class="txt">
+value(f) ≤ max flow            (max flow 는 모든 flow 중 최대니까)
+max flow ≤ min cut             (Lemma 1)
+min cut  ≤ cost(그 cut)        (min cut 은 모든 cut 중 최소니까)
+cost(그 cut) = value(f)         (← 이것만 보이면 된다)
+</pre>
+네 줄을 이으면 value(f) ≤ max flow ≤ min cut ≤ value(f) 라서 '''넷이 모두 같다'''. 덤으로 그 f 는 max flow 이고 그 cut 은 min cut 이다.
+
+=== 그 f 와 그 cut 은 어디서 오나 ===
+f 는 "$G_f$ 에서 s 에서 t 로 가는 길이 없는 flow" 다. [[Ford-Fulkerson]] 이 끝났을 때의 flow 가 바로 그렇다. cut 은 '''$G_f$ 에서 s 가 갈 수 있는 정점들'''을 한 편, 나머지를 다른 편으로 나눈 것이다(p.38 "{things reachable from s}, {things not reachable from s}"). 이 문서의 나머지는 전부 "이 cut 의 cost 가 value(f) 와 같다" 를 보이는 일이다.
+
+{mini}
+# 다음 중 옳은 것을 모두 고르라(Circle all). (a) Lemma 1 은 아무 flow 와 아무 cut 에 대해 성립한다. (b) 값이 같은 flow 와 cut 을 하나 찾으면 그 flow 는 max flow 다. (c) max flow ≤ min cut 만으로 두 값이 같다는 결론이 나온다.
+# 어떤 flow 의 값이 7 이고 어떤 s-t cut 의 cost 가 9 다. max flow 에 대해 무엇을 말할 수 있나?
+{/mini}
+{answer}
+# (a), (b). (c) 는 틀렸다. 부등식 하나로는 같다는 결론이 안 나온다. 같은 값을 갖는 짝을 찾아야 반대쪽이 닫힌다.
+# 7 ≤ max flow ≤ 9. 이 둘만으로는 더 좁힐 수 없다.
+{/answer}
+
+== 1단계: 지금 flow 로 residual graph 를 그린다 ==
+슬라이드 p.39 의 그림을 그대로 쓴다. 왼쪽이 원래 그래프 G 와 flow f 다(네모 안 숫자가 flow, 옆 숫자가 capacity).
+[[img:L17-39.png|p.39 — 왼쪽 G 와 flow f(값 5), 오른쪽 Gf. 주황 정점이 s 에서 갈 수 있는 쪽, 빨간 점선이 cut|large]]
+<pre class="txt">
+간선    capacity  flow   →  Gf 의 forward (c − f)   Gf 의 backward (f)
+s→a       4        4         없음 (꽉 참)               a→s 4
+s→b       8        1         s→b 7                     b→s 1
+a→b       6        2         a→b 4                     b→a 2
+a→t       2        2         없음 (꽉 참)               t→a 2
+b→t       3        3         없음 (꽉 참)               t→b 3
+</pre>
+flow 의 값은 s 에서 나가는 양 4 + 1 = 5 다. [[residual graph]] 규칙은 두 줄이다. forward 간선은 "아직 더 보낼 수 있는 양", backward 간선은 "이미 보내서 되돌릴 수 있는 양" 이다. 꽉 찬 간선은 forward 가 없고, flow 가 0 인 간선은 backward 가 없다.[* 슬라이드 p.39 오른쪽 Gf 에는 a–b 사이가 파랑 5, 초록 1 로 적혀 있다. 그건 p.22 의 옛 flow(a→b 가 1)에서 계산한 값이 그대로 남은 것이다. 왼쪽 그림의 지금 flow(a→b 가 2)로 계산하면 a→b 4, b→a 2 가 맞다. 아래 결론(S = {s, a, b})은 어느 쪽으로 계산해도 같다.]
+
+{mini}
+# capacity 10, flow 10 인 간선 u→v 는 $G_f$ 에서 어떤 간선이 되나? capacity 10, flow 0 이면?
+# 위 표에서 $G_f$ 에 s 에서 나가는 간선은 몇 개인가?
+{/mini}
+{answer}
+# flow 10 이면 backward v→u 10 하나만. flow 0 이면 forward u→v 10 하나만.
+# 하나(s→b 7). s→a 는 꽉 차서 forward 가 없다. a→s, b→s 는 s 로 '''들어오는''' 간선이다.
+{/answer}
+
+== 2단계: $G_f$ 에서 s 부터 갈 수 있는 곳을 칠한다 ==
+이제 $G_f$ 위에서 s 부터 [[BFS]](DFS 도 된다)를 돌려, 화살표를 따라 갈 수 있는 정점을 전부 칠한다. 칠한 집합을 S 라 하자.
+<pre class="txt">
+S = {s}
+s 에서: s→b 7 이 있다                 → b 를 칠한다.   S = {s, b}
+b 에서: b→a 2 (backward) 가 있다      → a 를 칠한다.   S = {s, a, b}
+        b→s 1 은 이미 칠한 s
+a 에서: a→b 4, a→s 4 는 이미 칠한 정점
+더 갈 곳이 없다.  t 는 못 칠했다.
+</pre>
+t 를 못 칠한 건 우연이 아니다. 출발 가정이 "$G_f$ 에 s→t 경로가 없다" 였다. 그러니 t 는 반드시 칠하지 않은 쪽 T 에 남는다. 슬라이드의 "t lives here" 가 그 말이다.
+
+여기서 a 에 어떻게 닿았는지 보자. 원래 그래프에서 s→a 는 꽉 차 있어서 직접은 못 간다. 대신 b 에서 '''backward 간선''' b→a 를 탔다. 원래 a→b 로 2 를 보내고 있으니 그 2 를 되돌릴 수 있고, 그래서 $G_f$ 에서는 b 에서 a 로 갈 수 있다. 이렇게 S 는 원래 그래프의 모양이 아니라 '''$G_f$ 의 화살표'''로 정해진다.
+[[sim:cut_from_residual]]
+
+{mini}
+# 어떤 flow 에서 $G_f$ 에 s 에서 나가는 간선이 하나도 없다. S 는 무엇이고, 그때 cut 의 cost 는 무엇과 같은가?
+# "S = 원래 그래프 G 에서 s 와 이어진 정점들" 로 정하면 왜 안 되나? 한 문장으로.
+{/mini}
+{answer}
+# S = {s}. s 에서 나가는 원래 간선이 모두 꽉 차 있다는 뜻이고(forward 가 없으니), cut 의 cost 는 s 에서 나가는 capacity 합이다. 이것이 flow 값과 같으니 그 flow 는 max flow 다.
+# G 에서는 거의 모든 정점이 s 와 이어져 있다(t 까지 포함). "flow 를 더 보낼 수 있는 길이 있나" 를 담은 것은 G 가 아니라 $G_f$ 다.
+{/answer}
+
+== 3단계: S 와 T 사이에 선을 긋는다 ==
+칠한 정점들 S = {s, a, b} 를 한쪽, 칠하지 않은 정점들 T = {t} 를 다른 쪽에 두고, 그 사이에 선을 긋는다. 위 그림의 빨간 점선이다. s 는 S 에, t 는 T 에 있으니 이 선은 정당한 [[s-t cut]] 이다.
+
+선이 어디로 지나가는지 "예쁘게" 보일 필요는 없다. cut 은 '''정점을 두 편으로 나눈 것'''이지 그림 위의 곡선이 아니다. 선은 S 와 T 를 가르는 표시일 뿐이고, 중요한 건 어떤 간선이 S 와 T 사이를 오가느냐다. 큰 그래프에서는 S 가 여기저기 흩어져 보여서 선이 구불구불해지는데, 그래도 상관없다.
+
+== 4단계: 선을 넘는 간선은 두 종류뿐이고, 둘 다 값이 정해져 있다 ==
+선을 넘는 원래 간선은 방향에 따라 두 종류다.
+* '''앞으로 넘는 간선''' S → T. cut 의 cost 에 들어가는 간선이다.
+* '''거꾸로 넘는 간선''' T → S. cut 의 cost 에는 안 들어가지만(방향이 반대), flow 계산에는 등장한다.
+
+=== 사실 A: S → T 간선은 꽉 차 있다 (f = c) ===
+위 예에서 S → T 간선은 a→t(2/2)와 b→t(3/3)이고 둘 다 꽉 차 있다. 우연이 아니다. 귀류로 보자. S→T 간선 u→v 가 꽉 차지 않았다고, 즉 $f(u,v) < c(u,v)$ 라고 하자.
+# 그러면 남은 양 $c - f > 0$ 이니 $G_f$ 에 forward 간선 u→v 가 있다.
+# u 는 S 에 있다. 즉 BFS 가 u 에 도착했다.
+# 그러면 BFS 는 u→v 를 타고 v 에도 도착했을 것이다. 그래서 v 도 S 에 있어야 한다.
+# 그런데 v 는 T 에 있다. 모순이다.
+그래서 S→T 간선은 전부 꽉 차 있다. 슬라이드 문장 "The edges in the cut are full because they don't exist in $G_f$" 가 이 뜻이다. 꽉 찬 간선은 $G_f$ 에 forward 로 존재하지 않는다.
+
+=== 사실 B: T → S 간선은 flow 가 0 이다 ===
+슬라이드는 이 사실을 글로 적지 않는다. 하지만 5단계에서 꼭 필요하다. 위 예에는 T→S 간선이 없어서(t 는 들어오는 간선만 있다) 티가 안 났을 뿐이다. 같은 방식으로 귀류한다. T→S 간선 x→y(x ∈ T, y ∈ S)에 flow 가 있다고, 즉 $f(x,y) > 0$ 이라 하자.
+# 그러면 $G_f$ 에 backward 간선 y→x 가 있다(값 $f(x,y)$).
+# y 는 S 에 있다. BFS 가 y 에 도착했다.
+# 그러면 BFS 는 y→x 를 타고 x 에도 도착했을 것이다. 그래서 x 도 S 에 있어야 한다.
+# 그런데 x 는 T 에 있다. 모순이다.
+그래서 T→S 간선은 전부 flow 가 0 이다.
+
+이 둘을 눈으로 보려면 시뮬레이터 옵션을 "p.4 그래프의 max flow" 로 바꾸면 된다. 거기서는 S = {s, B, C, F} 이고, S→T 간선 s→A 4/4, B→E 3/3, F→t 4/4 는 모두 꽉 차 있고, T→S 간선 A→B 0/2, E→F 0/6 은 모두 0 이다.[* 두 사실의 증명은 똑같은 모양이다. "S 에서 T 로 가는 $G_f$ 간선이 하나라도 있으면 BFS 가 T 로 넘어갔을 것" 이라는 한 문장이, forward 쪽으로 읽으면 사실 A, backward 쪽으로 읽으면 사실 B 가 된다. 즉 '''S 에서 T 로 가는 $G_f$ 간선은 하나도 없다'''가 바탕이고, 두 사실은 그걸 원래 그래프 말로 옮긴 것이다.]
+
+{mini}
+# S→T 간선 u→v 의 flow 가 3, capacity 가 5 라고 하자. $G_f$ 에 무엇이 있고, 그러면 S 에 대해 무엇이 틀려지나?
+# T→S 간선 x→y 의 flow 가 2 라고 하자. $G_f$ 에 무엇이 있고, 무엇이 틀려지나?
+# 다음 중 옳은 것을 모두 고르라(Circle all). (a) T→S 간선은 cut 의 cost 에 들어간다. (b) S→T 간선이 꽉 찬 이유는 그 간선이 $G_f$ 에 forward 로 없어서다. (c) T→S 간선의 flow 가 0 인 이유는 그 간선의 backward 가 $G_f$ 에 없어서다.
+{/mini}
+{answer}
+# $G_f$ 에 forward u→v 2 가 있다. u 가 S 에 있으니 BFS 가 v 에도 갔을 것이고, v 가 T 에 있다는 게 틀려진다.
+# $G_f$ 에 backward y→x 2 가 있다. y 가 S 에 있으니 BFS 가 x 에도 갔을 것이고, x 가 T 에 있다는 게 틀려진다.
+# (b), (c). (a) 는 틀렸다. cost 는 S 쪽에서 T 쪽으로 가는 간선만 센다(p.8).
+{/answer}
+
+== 5단계: 선을 넘는 순수한 양이 곧 flow 값이다 ==
+이제 "flow 값 = 이 cut 의 cost" 를 보인다. 슬라이드는 "All of the stuff has to cross the cut" 한 줄로 넘어가는데, 풀어 쓰면 이렇다.
+
+s 에서 나온 물건은 t 로 가야 하고, s 는 S 에, t 는 T 에 있다. 그러니 물건은 결국 선을 S→T 방향으로 넘어간다. 다만 어떤 물건은 S→T 로 넘었다가 T→S 로 되돌아온 뒤 다시 넘어갈 수도 있다. 그래서 정확히 세면
+$$\text{value}(f) = \underbrace{\sum_{S \to T} f}_{\text{앞으로 넘는 양}} - \underbrace{\sum_{T \to S} f}_{\text{되돌아오는 양}}.$$
+[* 이 식을 엄밀하게 보이려면 S 안의 정점마다 "나가는 flow − 들어오는 flow" 를 더한다. s 는 value(f), 나머지 정점은 보존 법칙 때문에 0 이라 합은 value(f) 다. 한편 S 안끼리 오가는 간선은 한쪽에서 나감, 다른 쪽에서 들어옴으로 한 번씩 세져 지워지고, 남는 건 S→T 간선(나감)과 T→S 간선(들어옴)뿐이다. CLRS Lemma 26.4 가 이 계산이다. 슬라이드 p.18 대로 이 엄밀한 형태는 시험 범위가 아니다.]
+4단계의 두 사실을 넣으면
+$$\text{value}(f) = \sum_{S \to T} c \;-\; 0 = \text{cost(이 cut)}.$$
+위 예에서는 a→t 2 + b→t 3 = 5 이고, flow 값도 5 다. p.4 그래프 예에서는 4 + 3 + 4 − 0 = 11 이고 flow 값도 11 이다.
+
+사실 B 가 왜 필요한지 여기서 보인다. T→S 간선에 flow 가 있었다면 그만큼을 빼야 해서, flow 값이 cut 의 cost 보다 작아졌을 것이다. Lemma 1 의 "≤" 가 대개 등호가 아닌 이유도 같다. 아무 cut 이나 잡으면 앞으로 넘는 간선이 꽉 차지 않았거나 되돌아오는 flow 가 있다.
+
+{mini}
+# 어떤 cut 에서 S→T 간선 flow 합이 9, T→S 간선 flow 합이 2 다. flow 값은? 이 cut 의 cost 에 대해 무엇을 말할 수 있나?
+# 위 p.39 예에서 S 를 {s, a} 로(b 를 빼고) 잡으면, 앞으로 넘는 간선, 되돌아오는 간선, cost, flow 값은?
+{/mini}
+{answer}
+# value = 9 − 2 = 7. cost 는 S→T capacity 합이라 9 이상이다. 그래서 이 cut 은 flow 값보다 비싸다(min cut 이 아닐 수도 있다).
+# 앞으로: s→b 1/8, a→b 2/6, a→t 2/2. 되돌아오는 간선: 없음. flow 값 = 1 + 2 + 2 − 0 = 5(맞다). cost = 8 + 6 + 2 = 16. s→b 와 a→b 가 꽉 차지 않아서 cost 가 flow 값보다 크다. $G_f$ 로 고른 S 가 아니라서 사실 A 가 성립하지 않는다.
+{/answer}
+
+== 6단계: 부등식 사슬로 끝낸다 ==
+이제 0단계의 사슬에 넣기만 하면 된다. p.39 의 초록 글씨가 이 줄이다.
+$$\text{value}(f) = \text{cost(이 cut)} \;\ge\; \text{min cut} \;\ge\; \text{max flow} \;\ge\; \text{value}(f)$$
+* 첫 등호는 5단계.
+* 첫 ≥ 는 min cut 이 모든 cut 중 최소라서.
+* 둘째 ≥ 는 Lemma 1.
+* 마지막 ≥ 는 max flow 가 모든 flow 중 최대라서. 슬라이드 p.40 의 "But this flow value ≤ max flow value, so they must be equal!" 이다.
+맨 왼쪽과 맨 오른쪽이 같으니 사이의 모든 값이 같다. 결론이 세 개 나온다.
+* '''f 는 max flow 다.''' Lemma 의 ⇒ 방향이 증명됐다.
+* '''이 cut 은 min cut 이다.'''
+* '''max flow = min cut.''' 정리의 ≥ 쪽이 닫혔다.
+
+=== 알고리즘으로 쓰면: min cut 을 공짜로 얻는다 ===
+[[Ford-Fulkerson]] 은 $G_f$ 에 s→t 경로가 없을 때 멈춘다. 그 순간의 flow 는 위 증명의 f 그 자체다. 그러니 멈춘 뒤 $G_f$ 에서 s 부터 BFS 를 '''한 번 더''' 돌려 닿는 정점을 S 로 잡으면, 그게 min cut 이다. L17 예제(p.53)의 짙은 정점 {s, B, C, F} 와 빨간 점선이 바로 이렇게 얻은 것이다.
+
+{mini}
+# 사슬의 네 부등호 각각의 근거를 한 단어씩 적어라.
+# Ford-Fulkerson 이 끝난 뒤 min cut 을 찾는 방법을 한 문장으로.
+{/mini}
+{answer}
+# 5단계(사실 A·B) / min cut 의 정의(최소) / Lemma 1 / max flow 의 정의(최대).
+# 마지막 $G_f$ 에서 s 부터 BFS(또는 DFS)를 돌려 닿는 정점 집합 S 와 나머지로 나눈다. 시간은 BFS 한 번 $O(n+m)$.
+{/answer}
+
+== 자주 헷갈리는 것 ==
+* '''왜 "이어져 있지 않다" 가 아니라 "갈 수 없다(reachable)" 인가.''' 방향 그래프라서 화살표 방향이 중요하다. $G_f$ 에서 t→s 쪽 화살표(backward)가 있어도 s 에서 t 로 '''갈''' 수 없으면 된다. 위 예의 Gf 에서 t 에서는 t→a, t→b 로 나가는 간선이 있지만 t 로 들어오는 간선이 없다. 그래서 s 에서 t 로는 못 간다.
+* '''왜 원래 그래프가 아니라 residual graph 인가.''' 원래 그래프에서는 s 에서 t 로 가는 길이 거의 항상 있다. 우리가 알고 싶은 건 "flow 를 '''더''' 보낼 수 있는 길" 이고, 그 정보는 남은 양(forward)과 되돌릴 수 있는 양(backward)을 담은 $G_f$ 에만 있다.
+* '''backward 간선을 타고 S 에 들어온 정점도 S 다.''' p.39 의 a 가 그렇다. s→a 는 꽉 찼지만 b→a backward 로 들어왔다.
+* '''선 모양이 이상해 보여도 된다.''' cut 은 정점 집합의 분할이다. 그림 위 곡선은 표시일 뿐이다.
+* '''min cut 이 여러 개일 수 있다.''' 이 방법은 그중 "s 쪽이 가장 작은" min cut 하나를 준다. 다른 min cut 이 있어도 cost 는 같다.
+* '''이 증명은 어떤 flow 에서 출발해도 된다.''' "$G_f$ 에 s→t 경로가 없다" 만 성립하면 된다. Ford-Fulkerson 이 그런 flow 를 만들어 줄 뿐이다.
+
+== 교수 설명 (11/24 녹음) ==
+* 60:05 "We proved this only if part. Now we focus on this if part." 앞에서 ⇐ 방향(augmenting path 가 있으면 늘릴 수 있다)을 끝내고 이 방향으로 넘어왔다.
+* 60:34–61:11 "Suppose there is not a path from S to T. … we can consider a valid cut … reachable from S and not reachable from S."
+* 61:40 "The flow from S to T is equal to the cost of this cut." 예제 값으로 "The flow of this cut is 5. The cost of the cut is 5."
+* 62:24–63:25 "the edges in the cut are full because they don't exist in $G_f$." 그리고 이유를 한국어로 덧붙였다. 꽉 차 있지 않으면 남은 capacity 가 있고, 그러면 그쪽으로 가는 길(path)이 생겨서 reachable 이 되어 버린다. "The remaining capacity of the edges that cross the cut is 0."
+* 63:27–64:30 "This flow value is equal to the cost of this cut … larger than or equal to the cost of minimum cut … by lemma 1, larger than or equal to maximum flow." 이어서 "any flow value should be less than or equal to maximum flow value. This is trivial." 그래서 "all these values should be the same."
+* 70:04–70:31 예제를 끝내며 "There is no path from S to T … we can find a cut: nodes reachable from S and not reachable from S, minimum s-t cut. The value was 11 and the maximum flow is also 11." 그리고 물 파이프 비유로 마무리했다. 물을 최대로 흘렸을 때 가장 막히는 곳(bottleneck)이 min s-t cut 이고, 그보다 더 흘릴 수는 없다.
+교수도 사실 B(T→S 간선의 flow 0)는 따로 말하지 않았다. p.39 예제에 그런 간선이 없어서다.
+
+{exam}
+교수(11/24)가 증명 끝에 강조한 흐름: $G_f$ 에서 s 가 닿는 정점 / 못 닿는 정점으로 cut 을 잡는다 → 그 cut 의 간선은 꽉 차 있다($G_f$ 에 없으니까) → flow 값 = cut cost ≥ min cut ≥ max flow ≥ flow 값. 엄밀한 증명은 시험 범위가 아니지만(p.18) 이 사슬과 "왜 꽉 찼나" 는 말로 쓸 수 있어야 한다. 빈칸이나 Circle all 로 "S 를 어떻게 정하나(원래 그래프가 아니라 $G_f$ 에서 reachable)" 를 묻기 좋다.
+{/exam}
+
+== 관련 문서 ==
+* [[L17 Advanced Algorithms II]] · [[max-flow min-cut theorem]] · [[residual graph]] · [[augmenting path]] · [[Ford-Fulkerson]] · [[s-t cut]] · [[flow]]
+* 도구: [[BFS]] · [[귀류법]]

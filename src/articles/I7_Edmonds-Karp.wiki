@@ -2,7 +2,7 @@ key: Edmonds-Karp
 title: Edmonds-Karp — BFS 로 경로를 고르는 Ford-Fulkerson, O(nm²)
 category: 17강 Advanced II, 용어
 ---
-L17 p.63. [[Ford-Fulkerson]] 에서 augmenting path 를 [[BFS]] 로, 즉 간선 수가 가장 적은 경로로 고르면 $O(nm^2)$ 에 끝난다. 이것을 '''Edmonds-Karp''' 라고 부른다. 수업 전(11/24 예정) 슬라이드 기준이다.
+L17 p.63. [[Ford-Fulkerson]] 에서 augmenting path 를 [[BFS]] 로, 즉 간선 수가 가장 적은 경로로 고르면 $O(nm^2)$ 에 끝난다. 이것을 '''Edmonds-Karp''' 라고 부른다. 11/24 수업에서는 이름만 나왔고("just using BFS to choose the path, we call it as Edmonds-Karp algorithm", 이유는 다음에 설명), p.55–63 은 다음 수업 예정이라 슬라이드 기준이다.
 
 증명은 수업에서 건너뛰고 시험에도 안 나온다("It will not be on the exam"). 슬라이드가 주는 아이디어는 이렇다.
 * residual graph 에서 간선 하나가 사라지는 횟수는 $O(n)$ 이다. 이게 어려운 부분이다.

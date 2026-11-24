@@ -2,7 +2,7 @@ key: maximum bipartite matching
 title: maximum bipartite matching — capacity 1 짜리 max flow
 category: 17강 Advanced II, 용어
 ---
-L17 p.66–70. 수업 전(11/24 예정) 슬라이드 기준이다. 학생과 동아리처럼 두 쪽으로 나뉜 [[bipartite graph]] 에서, 정점 하나가 많아야 한 번만 쓰이도록 간선을 최대한 많이 고르는 문제다.
+L17 p.66–70. 11/24 수업에서는 아직 안 나갔다(다음 수업 예정, 슬라이드 기준). 학생과 동아리처럼 두 쪽으로 나뉜 [[bipartite graph]] 에서, 정점 하나가 많아야 한 번만 쓰이도록 간선을 최대한 많이 고르는 문제다.
 
 == max flow 로 바꾸기 ==
 s 에서 모든 학생으로, 학생에서 원하는 동아리로, 모든 동아리에서 t 로 간선을 긋고 capacity 를 '''모두 1''' 로 둔다. 그리고 max flow 를 구한다. 왜 되는지는 p.70 이 다섯 단계로 적는다.

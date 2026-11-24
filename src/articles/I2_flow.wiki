@@ -2,7 +2,7 @@ key: flow
 title: flow — 간선마다 보내는 양, 그리고 flow 의 값
 category: 17강 Advanced II, 용어
 ---
-L17 p.11–12. capacity 가 있는 방향 그래프에서 간선마다 "보내는 양" $f(u,v)$ 를 정한 것이 '''flow''' 다. 수업 전(11/24 예정) 슬라이드 기준이다.
+L17 p.11–12. capacity 가 있는 방향 그래프에서 간선마다 "보내는 양" $f(u,v)$ 를 정한 것이 '''flow''' 다. 11/24 수업에서 다뤘다.
 * capacity 제약: $0 \le f(u,v) \le c(u,v)$.
 * 보존(conservation): s, t 를 뺀 정점마다 들어오는 flow 합 = 나가는 flow 합. 슬라이드 예로 "4 units in, 1+1+2 = 4 units out."
 flow 의 '''값'''은 s 에서 나가는 양이고, t 로 들어가는 양이기도 하다. 보존 법칙 때문에 둘이 같다(p.12). 값이 가장 큰 flow 가 '''maximum flow''' 다(p.13). L17 예제의 max flow 는 11 이다(p.14).
