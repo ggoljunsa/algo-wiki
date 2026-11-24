@@ -279,6 +279,48 @@
         "undirected",
         "sorted"
        ]
+      },
+      {
+       "id": "u9a-16",
+       "type": "mc",
+       "q": "그림은 p.17 의 directed graph 와 adjacency matrix 다 (row = Source, column = Destination). 가린 칸 ①(2행 4열)과 ②(4행 2열)의 값은?",
+       "explain": "①은 간선 $(2,4)$ 가 있느냐다. $E$ 에 $(2,4)$ 가 있으니 1. ②는 $(4,2)$ 인데, 4 에서 나가는 간선은 $(4,3)$ 하나뿐이라 0이다. directed 행렬은 대칭이 아니어서 ①과 ②가 다르다. 둘 다 1로 고르면 undirected 처럼 읽은 것이다.",
+       "src": "9강 p.17",
+       "wiki": "adjacency matrix",
+       "tags": [
+        "matrix",
+        "directed",
+        "그림"
+       ],
+       "img": "duo/img/algo9-p17-matrix.png",
+       "imgAlt": "p.17 directed graph(1,2,3,4)와 4×4 adjacency matrix, 두 칸이 ①② 로 가려져 있다",
+       "explainImg": "duo/img/algo9-p17-matrix-ans.png",
+       "choices": [
+        "① 1, ② 0",
+        "① 1, ② 1",
+        "① 0, ② 1",
+        "① 0, ② 0"
+       ],
+       "answer": 0
+      },
+      {
+       "id": "u9a-17",
+       "type": "mc",
+       "q": "[Circle all 형식] adjacency **list** ($n$ 정점, $m$ 간선) 에 대해 옳은 것을 **모두** 고른 조합은? (1) space 는 $O(n+m)$ (2) edge membership 은 $O(1)$ (3) neighbor query 는 $O(\\deg(v))$ (4) undirected 면 리스트 길이 합은 $2m$ (5) 이 표현 위 DFS 는 $O(n^2)$",
+       "explain": "(1) 참: 정점 배열 $n$ + 리스트 원소 $2m$. (2) 거짓: $\\{v,w\\}$ 를 찾으려면 $v$ 의 리스트를 훑어야 해서 $O(\\deg(v))$. $O(1)$ 은 matrix 다. (3) 참. (4) 참: 간선 하나가 양쪽 리스트에 한 번씩. (5) 거짓: list 위 DFS 는 $O(n+m)$, $O(n^2)$ 은 matrix 위 DFS. 중간고사 1번처럼 부분점수가 없으니 (2) 같은 matrix 쪽 사실을 하나 더 고르면 0점이다.",
+       "src": "9강 p.18–20 · 중간 1번 형식",
+       "wiki": "matrix vs list 비교표",
+       "tags": [
+        "list",
+        "circle-all"
+       ],
+       "choices": [
+        "(1)(3)(4)",
+        "(1)(2)(3)(4)",
+        "(1)(3)",
+        "(3)(4)(5)"
+       ],
+       "answer": 0
       }
      ]
     },
@@ -554,6 +596,67 @@
        ],
        "answer": 13,
        "tol": 0
+      },
+      {
+       "id": "u9b-17",
+       "type": "num",
+       "q": "그림은 p.59 의 패키지 의존 그래프에 DFS(dpkg 에서 시작)를 돌린 결과다. 가려진 coreutils 의 finish time 은?",
+       "explain": "coreutils 는 start 9 에 들어간다. 그 이웃(libbz2, libselinux1)은 이미 all done 이라 재귀 호출이 없다. 그래서 `currentTime++` 한 번 뒤 바로 끝나 finish = 9 + 1 = 10 이다. 그다음 dpkg 로 돌아와 finish 11. 새 이웃이 없는 정점은 finish = start + 1 이다.",
+       "src": "9강 p.59",
+       "wiki": "start time과 finish time",
+       "tags": [
+        "DFS",
+        "그림"
+       ],
+       "img": "duo/img/algo9-p59-dpkg.png",
+       "imgAlt": "p.59 dpkg 의존 그래프와 정점별 start/finish, coreutils 의 finish 가 가려져 있다",
+       "explainImg": "duo/img/algo9-p59-dpkg-ans.png",
+       "answer": 10,
+       "tol": 0
+      },
+      {
+       "id": "u9b-18",
+       "type": "mc",
+       "q": "[Circle all 형식] DFS 에 대해 옳은 것을 **모두** 고른 조합은? (1) 같은 그래프의 DFS tree 는 하나로 정해진다 (2) parenthesis theorem 은 cycle 이 있어도 성립한다 (3) 그래프 전체를 탐색하는 DFS 는 $O(n+m)$ (4) directed graph 에서 DFS(w) 한 번이면 모든 정점을 방문한다 (5) 새 이웃이 없는 정점은 finish = start + 1",
+       "explain": "(1) 거짓: 이웃을 보는 순서·시작점에 따라 tree 가 달라진다. (2) 참: p.61 빨간 글씨 '(this holds even if there are cycles)'. (3) 참: component 마다 다시 시작해도 $O(n+m)$. (4) 거짓: DFS(w) 는 w 에서 **도달 가능한** 정점만 본다(p.52 'Only walk to C, not to B'). (5) 참: `startTime = t; t++` 뒤 재귀 없이 `finishTime = t`. 함정은 (1)과 (4)다.",
+       "src": "9강 p.40–52, 61 · 중간 1번 형식",
+       "wiki": "parenthesis theorem",
+       "tags": [
+        "DFS",
+        "circle-all"
+       ],
+       "choices": [
+        "(2)(3)(5)",
+        "(1)(2)(3)(5)",
+        "(2)(3)",
+        "(3)(4)(5)"
+       ],
+       "answer": 0
+      },
+      {
+       "id": "u9b-19",
+       "type": "cloze",
+       "q": "[분석 템플릿 칸] undirected graph 에서 DFS 전체 수행 시간: Each vertex is processed ___ time(s), each edge is scanned ___ time(s) → $O(n+m)$. 그래서 $n$ 번 DFS 를 '반복' 하는 것처럼 보여도 ___ 이 아니다.",
+       "explain": "정점은 unvisited 일 때만 DFS 가 불리니 한 번. 간선 $\\{u,v\\}$ 는 $u$ 의 리스트에서 한 번, $v$ 의 리스트에서 한 번 해서 두 번 본다. 합치면 $n + 2m = O(n+m)$. 교수가 'not n times m, n plus m' 이라고 고친 지점이다. 중간 8b·9b 에서 이런 분석 줄을 안 써서 4점씩 잃었다. 그래프 설계 문제에서는 이 문장이 master method 자리를 대신한다.",
+       "src": "9강 p.50–51 · 주간문제집 TEMPLATE §0-5",
+       "wiki": "O(n+m)",
+       "tags": [
+        "DFS",
+        "running time",
+        "analysis"
+       ],
+       "answer": [
+        "1",
+        "2",
+        "O(nm)"
+       ],
+       "bank": [
+        "1",
+        "2",
+        "O(nm)",
+        "0",
+        "O(n)"
+       ]
       }
      ]
     },
@@ -824,7 +927,62 @@
         "1 2 4 3 8 7 5",
         "1 2 4 3 7 8 5"
        ],
-       "answer": 2
+       "answer": 2,
+       "img": "duo/img/algo9-p77-bst.png",
+       "imgAlt": "p.77 BST: 5 아래 3·7, 3 아래 2·4, 2 아래 1, 7 아래 8"
+      },
+      {
+       "id": "u9c-16",
+       "type": "num",
+       "q": "그림(p.56)의 여섯 그래프 중 DAG(directed cycle 이 없는 directed graph) 는 몇 개인가?",
+       "explain": "화살표를 따라가다 제자리로 돌아오는 경로가 있으면 DAG 가 아니다. 위 줄 셋은 화살표를 따라가도 출발점으로 돌아오지 않는다. 아래 줄 셋은 둘레를 한 방향으로 돌거나 두 정점이 서로를 가리켜(2-cycle) directed cycle 이 생긴다. 방향을 무시했을 때 보이는 고리는 상관없다. p.57 에서 위 줄 셋에 동그라미가 쳐졌다.",
+       "src": "9강 p.56–57",
+       "wiki": "DAG",
+       "tags": [
+        "DAG",
+        "그림"
+       ],
+       "img": "duo/img/algo9-p56-dags.png",
+       "imgAlt": "p.56 작은 directed graph 여섯 개 (위 3개, 아래 3개)",
+       "explainImg": "duo/img/algo9-p57-dags-ans.png",
+       "answer": 3,
+       "tol": 0
+      },
+      {
+       "id": "u9c-17",
+       "type": "order",
+       "q": "그림(p.75)은 A 에서 시작한 DFS 의 start time 만 남기고 Leave(finish) 를 가렸다. 간선은 A→C, C→D, C→B, D→B 다. finish 를 채워 topological order 를 만드시오.",
+       "explain": "start 가 A0, C1, D2, B3 이니 방문 순서는 A→C→D→B 다. B 는 나가는 간선이 없어 바로 끝나 finish 4. 돌아가며 D 5, C 6, A 7. finish 내림차순이 A(7), C(6), D(5), B(4) 다. 슬라이드의 'Do them in this order: A C D B' 다.",
+       "src": "9강 p.68–75",
+       "wiki": "topological sort",
+       "tags": [
+        "topo",
+        "그림"
+       ],
+       "img": "duo/img/algo9-p75-topo.png",
+       "imgAlt": "p.75 A,B,C,D 그래프와 start time, Leave 값은 가려져 있다",
+       "explainImg": "duo/img/algo9-p75-topo-ans.png",
+       "answer": [
+        "A",
+        "C",
+        "D",
+        "B"
+       ]
+      },
+      {
+       "id": "u9c-18",
+       "type": "sa",
+       "q": "그림(p.59)의 DFS 결과로 finish time 내림차순 목록(=topological order)을 만들 때 **세 번째** 패키지는?",
+       "explain": "finish 를 큰 순서로 놓으면 dpkg 11, coreutils 10, tar 8, libbz2 6, libselinux1 5, multiarch-support 4 다. 세 번째는 tar. p.65 처럼 'all done 이 될 때마다 리스트 맨 앞에 넣는' 방식과 결과가 같다.",
+       "src": "9강 p.59, 65",
+       "wiki": "topological sort",
+       "tags": [
+        "topo",
+        "그림"
+       ],
+       "img": "duo/img/algo9-p59-dpkg-ans.png",
+       "imgAlt": "p.59 dpkg 의존 그래프와 정점별 start/finish time",
+       "answer": "tar"
       }
      ]
     },
@@ -1103,6 +1261,121 @@
         "running time"
        ],
        "answer": true
+      },
+      {
+       "id": "u9d-17",
+       "type": "tf",
+       "q": "그림(p.101)의 그래프는 bipartite 다. (start 에서 BFS 를 돌려 layer 를 번갈아 칠해 보라.)",
+       "explain": "start 가 $L_0$, 그 두 이웃이 $L_1$, 그다음 셋이 $L_2$, 오른쪽 아래 하나가 $L_3$ 이다. 같은 layer 끼리 잇는 간선이 하나도 없어서 짝수·홀수 layer 두 색으로 나뉜다. 슬라이드가 'CLEARLY BIPARTITE!' 라고 쓴 그림이다.",
+       "src": "9강 p.101–105",
+       "wiki": "bipartite graph",
+       "tags": [
+        "bipartite",
+        "그림"
+       ],
+       "img": "duo/img/algo9-p101-g1.png",
+       "imgAlt": "p.101 정점 7개 그래프와 start 정점",
+       "explainImg": "duo/img/algo9-p105-g1-ans.png",
+       "answer": true
+      },
+      {
+       "id": "u9d-18",
+       "type": "tf",
+       "q": "그림(p.106)의 그래프는 bipartite 다. (p.101 그래프에 간선 하나가 더 있다.)",
+       "explain": "BFS layer 를 칠하면 왼쪽 위 정점과 왼쪽 아래 정점이 둘 다 $L_2$ 인데 그 둘을 잇는 간선이 있다. 같은 layer 안 간선이 있으니 odd cycle(길이 5)이 있고 bipartite 가 아니다. 슬라이드 p.110 'WHOA NOT BIPARTITE!'.",
+       "src": "9강 p.106–110",
+       "wiki": "bipartite graph",
+       "tags": [
+        "bipartite",
+        "그림"
+       ],
+       "img": "duo/img/algo9-p106-g2.png",
+       "imgAlt": "p.106 정점 7개 그래프와 start 정점",
+       "explainImg": "duo/img/algo9-p110-g2-ans.png",
+       "answer": false
+      },
+      {
+       "id": "u9d-19",
+       "type": "num",
+       "q": "그림(p.81)의 그래프에서 start 로 BFS 를 돌리면 가장 큰 layer 번호 $i$ (마지막으로 채워지는 $L_i$) 는?",
+       "explain": "$L_0$ = start. $L_1$ = start 의 두 이웃(오른쪽 위, 가운데). $L_2$ = 그 이웃들(왼쪽 위, 오른쪽, 왼쪽 아래). 오른쪽 아래 정점은 $L_2$ 정점들을 거쳐야 닿아서 $L_3$ 이다. 슬라이드 p.85 의 초록 정점이다. start 에서 가장 먼 거리가 3이라는 뜻이기도 하다.",
+       "src": "9강 p.81–85",
+       "wiki": "layer",
+       "tags": [
+        "BFS",
+        "그림"
+       ],
+       "img": "duo/img/algo9-p81-bfs.png",
+       "imgAlt": "p.81 정점 7개 그래프, 왼쪽에 start 정점",
+       "explainImg": "duo/img/algo9-p85-bfs-ans.png",
+       "answer": 3,
+       "tol": 0
+      },
+      {
+       "id": "u9d-20",
+       "type": "num",
+       "q": "그림(p.106) 그래프에서 같은 layer($L_2$) 의 두 정점을 잇는 간선을 찾았다. BFS tree 에서 두 정점의 LCA 를 이용해 만든 odd cycle 의 길이는?",
+       "explain": "두 정점의 BFS 부모를 따라 올라가면 둘 다 2단계 만에 start 에 닿는다. 그래서 LCA 는 start, 각 경로 길이 $k=2$. 두 경로와 같은 layer 간선을 합치면 $2k+1 = 5$ 다.",
+       "src": "9강 p.110–113",
+       "wiki": "odd cycle",
+       "tags": [
+        "bipartite",
+        "그림",
+        "proof"
+       ],
+       "img": "duo/img/algo9-p106-g2.png",
+       "imgAlt": "p.106 정점 7개 그래프와 start 정점",
+       "explainImg": "duo/img/algo9-p110-g2-ans.png",
+       "answer": 5,
+       "tol": 0
+      },
+      {
+       "id": "u9d-21",
+       "type": "cloze",
+       "q": "[빈칸 의사코드] bipartite test: BFS 로 layer 를 구한 뒤 `color[v] = ` ___ ` % 2` 로 칠한다. 모든 간선 $(u,v)$ 에 대해 `if color[u]` ___ `color[v]: return False` 를 검사하고, 연결 안 된 그래프면 ___ 마다 BFS 를 새로 시작한다.",
+       "explain": "layer 를 번갈아 칠하는 것이 p.100 의 'Color the levels of the BFS tree in alternating colors' 다. 실패 조건은 같은 색(==)끼리 이어진 간선이고, 그런 간선은 같은 layer 안에만 생긴다. HW3 Problem 1 처럼 그래프가 끊겨 있을 수 있으니 component 마다 다시 시작해야 한다. `!=` 를 넣으면 bipartite 그래프를 거꾸로 판정한다.",
+       "src": "9강 p.100 · HW3 Problem 1",
+       "wiki": "bipartite graph",
+       "tags": [
+        "bipartite",
+        "빈칸"
+       ],
+       "answer": [
+        "layer[v]",
+        "==",
+        "component"
+       ],
+       "bank": [
+        "layer[v]",
+        "==",
+        "component",
+        "start[v]",
+        "!=",
+        "edge"
+       ]
+      },
+      {
+       "id": "u9d-22",
+       "type": "cloze",
+       "q": "[2025 중간 7번 형식] not bipartite 인 그래프에서 **가장 짧은** odd cycle 길이를 구하려면 ___ 정점 $s$ 에서 BFS 를 돌려, 같은 layer $k$ 에 있는 두 정점을 잇는 간선마다 $2k+1$ 을 후보로 두고 최솟값을 고른다. 수행 시간은 ___ 이다.",
+       "explain": "BFS 한 번은 시작점 근처의 odd cycle 만 정확히 잡는다. 가장 짧은 odd cycle 위의 정점에서 BFS 를 돌리면 그 cycle 이 잡히는데, 그 정점이 어디인지 모르니 모든 정점에서 돌린다. BFS 한 번이 $O(n+m)$ 이고 $n$ 번이니 $O(n(n+m))$. 2025 중간 7번이 'Not bipartite 가정하고 최소 odd length circuit 구하는 알고리즘' 이었다.",
+       "src": "9강 p.111–113 · 2025 중간 7번",
+       "wiki": "odd cycle",
+       "tags": [
+        "bipartite",
+        "족보"
+       ],
+       "answer": [
+        "모든",
+        "O(n(n+m))"
+       ],
+       "bank": [
+        "모든",
+        "O(n(n+m))",
+        "한",
+        "O(n+m)",
+        "O(n^2 m)"
+       ]
       }
      ]
     }
@@ -1218,7 +1491,10 @@
         "SCC"
        ],
        "answer": 3,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo10-p13-web.png",
+       "imgAlt": "p.13 웹 그래프: DGIST, Wikipedia, YouTube, KAIST, Puppy, Google 사이 directed edge",
+       "explainImg": "duo/img/algo10-p14-web-ans.png"
       },
       {
        "id": "u10a-07",
@@ -1354,6 +1630,42 @@
        ],
        "answer": 3,
        "tol": 0
+      },
+      {
+       "id": "u10a-15",
+       "type": "num",
+       "q": "그림(p.13) 웹 그래프의 SCC 를 정점 하나로 줄인 SCC graph 에는 간선이 몇 개인가? (같은 SCC 쌍 사이 여러 간선은 하나로 센다)",
+       "explain": "SCC 는 {DGIST, Wiki, YouTube}, {Puppy, Google}, {KAIST} 셋이다. SCC 사이 간선은 큰 SCC → {Puppy, Google}, KAIST → 큰 SCC, KAIST → {Puppy, Google} 세 개다. 반대 방향 간선은 하나도 없다. 하나라도 있었다면 두 SCC 가 합쳐졌을 것이다(Lemma 1).",
+       "src": "10강 p.13–14, 51",
+       "wiki": "SCC graph",
+       "tags": [
+        "SCC",
+        "그림"
+       ],
+       "img": "duo/img/algo10-p13-web.png",
+       "imgAlt": "p.13 웹 그래프: DGIST, Wikipedia, YouTube, KAIST, Puppy, Google 사이 directed edge",
+       "explainImg": "duo/img/algo10-p51-sccgraph-ans.png",
+       "answer": 3,
+       "tol": 0
+      },
+      {
+       "id": "u10a-16",
+       "type": "mc",
+       "q": "[Circle all 형식] 옳은 것을 **모두** 고른 조합은? (1) SCC 들은 $V$ 의 partition 이다 (2) SCC graph 는 DAG 다 (3) strongly connected 인 그래프는 방향을 무시해도 connected 다 (4) 간선을 하나 추가하면 SCC 개수가 늘 수 있다 (5) $G^T$ 의 SCC 는 $G$ 의 SCC 와 다를 수 있다",
+       "explain": "(1) 참: '서로 도달 가능' 이 equivalence relation 이라 겹치지 않게 나뉜다. (2) 참: Lemma 1. (3) 참: 양방향 path 가 있으면 방향을 무시해도 당연히 이어져 있다. 반대는 거짓이다. (4) 거짓: 간선을 더하면 SCC 가 합쳐질 수만 있고 쪼개지지는 않는다. (5) 거짓: $u\\rightsquigarrow v$, $v\\rightsquigarrow u$ 를 모두 뒤집어도 두 path 가 그대로 있어 SCC 가 똑같다. 2차 DFS 를 $G^T$ 에서 돌려도 되는 근거가 이것이다.",
+       "src": "10강 p.5–6, 30, 51 · 중간 1번 형식",
+       "wiki": "strongly connected component",
+       "tags": [
+        "SCC",
+        "circle-all"
+       ],
+       "choices": [
+        "(1)(2)(3)",
+        "(1)(2)",
+        "(1)(2)(3)(5)",
+        "(2)(3)(4)"
+       ],
+       "answer": 0
       }
      ]
     },
@@ -1607,6 +1919,87 @@
         "SCC"
        ],
        "answer": false
+      },
+      {
+       "id": "u10b-16",
+       "type": "num",
+       "q": "그림(p.28)은 웹 그래프의 1차 DFS 결과다. DGIST 에서 시작한 DFS 가 finish 10 으로 끝난 뒤, 아직 unvisited 인 KAIST 에서 다시 시작한다. 가려진 KAIST 의 start time 은?",
+       "explain": "재시작 정점의 start 는 직전 finish + 1 이다(L9 p.48 'Do it repeatedly!'). DGIST 가 10 에 끝났으니 KAIST 는 11 에 시작한다. KAIST 의 이웃(DGIST, Puppy)은 모두 all done 이라 바로 finish 12 가 된다. KAIST 는 들어오는 간선이 없어서 DGIST 에서는 닿을 수 없었고, 그래서 따로 시작해야 했다.",
+       "src": "10강 p.26–28",
+       "wiki": "start time과 finish time",
+       "tags": [
+        "SCC",
+        "DFS",
+        "그림"
+       ],
+       "img": "duo/img/algo10-p28-dfs1.png",
+       "imgAlt": "p.28 웹 그래프 1차 DFS 의 start/finish time, KAIST 의 값이 가려져 있다",
+       "explainImg": "duo/img/algo10-p28-dfs1-ans.png",
+       "answer": 11,
+       "tol": 0
+      },
+      {
+       "id": "u10b-17",
+       "type": "num",
+       "q": "그림(p.28)의 1차 DFS forest 는 tree 가 몇 개인가?",
+       "explain": "DGIST 에서 시작한 DFS 가 Wiki, Puppy, Google, YouTube 까지 닿아 tree 하나가 된다. KAIST 는 들어오는 간선이 없어서 닿지 못해 두 번째 tree 가 된다. 1차 DFS tree 는 SCC 와 상관없다. 첫 tree 에 SCC 두 개가 섞여 있다. 이 tree 들은 SCC 를 직접 주지 않고 finish time 만 남긴다.",
+       "src": "10강 p.26–28",
+       "wiki": "DFS tree와 DFS forest",
+       "tags": [
+        "SCC",
+        "DFS",
+        "그림"
+       ],
+       "img": "duo/img/algo10-p28-dfs1-ans.png",
+       "imgAlt": "p.28 웹 그래프 1차 DFS 의 정점별 start/finish time",
+       "answer": 2,
+       "tol": 0
+      },
+      {
+       "id": "u10b-18",
+       "type": "mc",
+       "q": "그림(p.30)은 간선을 모두 뒤집은 $G^T$ 에 1차 finish time 을 적어 둔 것이다. 2차 DFS 는 KAIST(12) 에서 시작해 {KAIST} 만 얻는다. **그다음** 시작점이 되는 정점은?",
+       "explain": "남은 unvisited 정점 중 1차 finish 가 가장 큰 것을 고른다. DGIST 10, Wiki 9, YouTube 8, Puppy 5, Google 4 이니 DGIST 다. $G^T$ 에서 DGIST 의 DFS 는 Wiki, YouTube 까지만 가고 Puppy 로는 못 간다(원래 간선이 Puppy 쪽으로 들어갔으니 뒤집으면 나가는 간선이 없다). 그래서 두 번째 tree 가 {DGIST, Wiki, YouTube} 로 정확히 SCC 하나가 된다.",
+       "src": "10강 p.30–48",
+       "wiki": "Kosaraju 알고리즘",
+       "tags": [
+        "SCC",
+        "그림"
+       ],
+       "img": "duo/img/algo10-p30-rev.png",
+       "imgAlt": "p.30 간선을 뒤집은 웹 그래프와 1차 start/finish time",
+       "explainImg": "duo/img/algo10-p48-dfs2-ans.png",
+       "choices": [
+        "DGIST",
+        "Wikipedia",
+        "Google",
+        "YouTube"
+       ],
+       "answer": 0
+      },
+      {
+       "id": "u10b-19",
+       "type": "cloze",
+       "q": "[분석 템플릿 칸] SCC 알고리즘: 1차 DFS, $G^T$ 만들기, 2차 DFS 가 각각 ___ 이다. 2차 DFS 의 시작 순서는 정렬하지 않고 1차에서 finish 순으로 쌓은 list 를 ___ 얻는다. 그래서 전체가 $O(n+m)$ 이다.",
+       "explain": "DFS 는 정점마다 한 번, 간선마다 상수 번이다. $G^T$ 도 간선마다 한 번 뒤집어 넣으면 된다. finish 내림차순을 sort 로 만들면 $O(n\\log n)$ 이 붙지만, finish 되는 순간 append 한 list 를 역순으로 읽으면 공짜다(L9 topological sort 와 같은 trick).",
+       "src": "10강 p.12, 70",
+       "wiki": "SCC 알고리즘",
+       "tags": [
+        "SCC",
+        "running time",
+        "analysis"
+       ],
+       "answer": [
+        "O(n+m)",
+        "뒤집어서"
+       ],
+       "bank": [
+        "O(n+m)",
+        "뒤집어서",
+        "O(n log n)",
+        "O(nm)",
+        "정렬해서"
+       ]
       }
      ]
     },
@@ -1868,6 +2261,87 @@
         "DAG"
        ],
        "answer": true
+      },
+      {
+       "id": "u10c-15",
+       "type": "mc",
+       "q": "그림(p.52)의 SCC 는 원소가 DGIST(0, 10), Wiki(1, 9), YouTube(7, 8) 다. 가려진 SCC 의 (start, finish) 는?",
+       "explain": "SCC 의 start 는 원소 start 의 **최솟값**, finish 는 원소 finish 의 **최댓값** 이다(p.52). 그래서 start = min(0,1,7) = 0, finish = max(10,9,8) = 10. 모든 시각은 1차 DFS 기준이다.",
+       "src": "10강 p.52",
+       "wiki": "SCC finish time 보조정리",
+       "tags": [
+        "SCC",
+        "그림"
+       ],
+       "img": "duo/img/algo10-p52-scctime.png",
+       "imgAlt": "p.52 SCC 하나(DGIST, Wiki, YouTube)와 원소별 start/finish, SCC 의 값은 가려져 있다",
+       "explainImg": "duo/img/algo10-p52-scctime-ans.png",
+       "choices": [
+        "(0, 10)",
+        "(7, 10)",
+        "(0, 8)",
+        "(1, 9)"
+       ],
+       "answer": 0
+      },
+      {
+       "id": "u10c-16",
+       "type": "mc",
+       "q": "그림(p.54)은 웹 예제의 SCC graph 와 각 SCC 의 (start, finish) 다. 모든 간선을 뒤집었을 때 **나가는 간선이 없는** SCC 는? (2차 DFS 는 여기서 시작한다)",
+       "explain": "원래 그래프에서 KAIST 는 나가는 간선만 있다(source). 뒤집으면 들어오는 간선만 남아 sink 가 된다. 이 SCC 가 finish 최대(12)라는 것이 Lemma 2 의 결과다. sink SCC 에서 DFS 를 하면 밖으로 새지 않으니 정확히 그 SCC 만 얻는다. 뒤집어도 DAG 는 DAG 다.",
+       "src": "10강 p.53–55",
+       "wiki": "sink SCC와 source SCC",
+       "tags": [
+        "SCC",
+        "그림"
+       ],
+       "img": "duo/img/algo10-p54-dag.png",
+       "imgAlt": "p.54 웹 예제 SCC graph: 세 SCC 와 각각의 start/finish, 간선은 원래 방향",
+       "explainImg": "duo/img/algo10-p55-revdag-ans.png",
+       "choices": [
+        "KAIST (finish 12)",
+        "{DGIST, Wiki, YouTube} (finish 10)",
+        "{Google, Puppy} (finish 5)",
+        "없다. 뒤집으면 cycle 이 생긴다"
+       ],
+       "answer": 0
+      },
+      {
+       "id": "u10c-17",
+       "type": "order",
+       "q": "[증명 칸 채우기] Lemma 1 'SCC graph 는 DAG 다' 의 귀류법 증명을 순서대로",
+       "explain": "p.51 'Proof idea: if not, then two SCCs would collapse into one.' 을 네 칸으로 늘린 것이다. 핵심은 maximality 다. SCC 는 '더 키울 수 없는' strongly connected 집합인데 cycle 이 있으면 더 키울 수 있다.",
+       "src": "10강 p.51 · 10/27 녹음",
+       "wiki": "SCC graph는 DAG",
+       "tags": [
+        "SCC",
+        "proof"
+       ],
+       "answer": [
+        "SCC graph 에 directed cycle 이 있다고 가정한다",
+        "cycle 위의 두 SCC A, B 에 대해 A 의 정점과 B 의 정점은 서로 왕복하는 path 가 있다",
+        "그러면 A ∪ B 도 strongly connected 다",
+        "SCC 는 maximal 이어야 하므로 모순이다. 따라서 SCC graph 는 DAG 다"
+       ]
+      },
+      {
+       "id": "u10c-18",
+       "type": "mc",
+       "q": "[Circle all 형식] 1차 DFS 기준 finish time 에 대해 옳은 것을 **모두** 고른 조합은? (1) SCC graph 에 A→B 가 있으면 A.finish > B.finish (2) SCC graph 에 A→B 가 있으면 A.start < B.start (3) $G^T$ 의 SCC 간 간선은 모두 finish 가 큰 SCC 쪽을 향한다 (4) finish 가 가장 큰 SCC 는 $G$ 에서 source 다 (5) finish 가 가장 작은 정점에서 $G$ 로 DFS 하면 항상 sink SCC 하나만 얻는다",
+       "explain": "(1) 참: Lemma 2. (2) 거짓: start 버전은 성립하지 않는다. B 를 먼저 탐색하면 B.start 가 더 작다(Case 2). (3) 참: Corollary 1. 2차 DFS 가 finish 최대에서 시작하면 들어오는 간선만 남는 이유다. (4) 참: 들어오는 간선이 있다면 그 출발 SCC 의 finish 가 더 커야 한다. (5) 거짓: a⇄b, a→c 에서 finish 최소인 b 에서 $G$ 로 DFS 하면 a 를 거쳐 c 까지 가서 {a,b,c} 가 한 tree 가 된다. 정점 하나의 finish 최소는 SCC 의 finish 최소를 보장하지 않는다.",
+       "src": "10강 p.60–65 · 중간 1번 형식",
+       "wiki": "SCC finish time 보조정리",
+       "tags": [
+        "SCC",
+        "circle-all"
+       ],
+       "choices": [
+        "(1)(3)(4)",
+        "(1)(2)(3)(4)",
+        "(1)(4)",
+        "(1)(3)(4)(5)"
+       ],
+       "answer": 0
       }
      ]
     },
@@ -2108,6 +2582,24 @@
         "proof"
        ],
        "answer": true
+      },
+      {
+       "id": "u10d-14",
+       "type": "order",
+       "q": "[증명 칸 채우기] SCC 알고리즘 정확성 귀납의 Inductive step 을 순서대로",
+       "explain": "p.68 의 두 화살표 'not fewer'(2번째 칸)와 'not more'(3번째 칸)가 핵심이다. 귀납 가설은 '처음 t 개 tree 가 finish 큰 t 개 SCC' 다. 중간 4번처럼 IH 를 결론과 같은 문장으로 쓰지 말고 t 에 대한 진술로 둘 것.",
+       "src": "10강 p.67–69",
+       "wiki": "SCC 알고리즘 정확성 증명",
+       "tags": [
+        "SCC",
+        "proof"
+       ],
+       "answer": [
+        "(t+1)번째 tree 의 root x 는 남은 정점 중 finish 최대이므로, x 가 속한 SCC A 는 남은 SCC 중 finish 최대다",
+        "A 는 $G^T$ 에서도 strongly connected 라 DFS(x) 가 A 전부를 방문한다",
+        "Corollary 1 에 의해 $G^T$ 에서 A 밖으로 나가는 간선은 finish 가 더 큰 SCC, 즉 이미 방문한 SCC 로만 간다",
+        "그래서 (t+1)번째 tree 는 정확히 A 이고, 남은 SCC 들은 여전히 DAG 를 이룬다"
+       ]
       }
      ]
     }
@@ -2165,7 +2657,9 @@
         "shortest path"
        ],
        "answer": 6,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo11-p15-graph.png",
+       "imgAlt": "p.15 Gates, R1, E3, Park, Halmae Gomtang 과 간선 weight 1, 1, 4, 25, 20, 22"
       },
       {
        "id": "u11a-04",
@@ -2299,7 +2793,9 @@
         "Dijkstra",
         "intuition"
        ],
-       "answer": true
+       "answer": true,
+       "img": "duo/img/algo11-p22-tree.png",
+       "imgAlt": "p.22 Gates 를 들어 올린 줄 그림: 팽팽한 줄이 shortest-path tree 를 이룬다"
       },
       {
        "id": "u11a-12",
@@ -2422,7 +2918,10 @@
         "trace"
        ],
        "answer": 23,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo11-p28-dij-r1.png",
+       "imgAlt": "p.28 Dijkstra 진행: R1 이 current node, d 값 Gates 0, R1 1, E3 ∞, Park ∞, HG 25",
+       "explainImg": "duo/img/algo11-p29-dij-r1-ans.png"
       },
       {
        "id": "u11b-05",
@@ -2455,7 +2954,9 @@
         "Dijkstra",
         "trace"
        ],
-       "answer": false
+       "answer": false,
+       "img": "duo/img/algo11-p34-dij-park.png",
+       "imgAlt": "p.34 Dijkstra 진행: Park 가 current node, d 값 Park 6, HG 23"
       },
       {
        "id": "u11b-07",
@@ -2595,6 +3096,23 @@
         "Dijkstra"
        ],
        "answer": true
+      },
+      {
+       "id": "u11b-16",
+       "type": "num",
+       "q": "그림(p.31)은 Gates 에서 시작한 Dijkstra 의 한 장면이다. 지금 current node 는 E3 다. E3 의 이웃을 update 한 직후 $d[\\text{Park}]$ 는?",
+       "explain": "$d[\\text{Park}] = \\min(\\infty,\\ d[\\text{E3}] + w(\\text{E3},\\text{Park})) = \\min(\\infty, 2 + 4) = 6$. 이 6 은 다음 iteration 에 Park 가 sure 가 될 때 그대로 $d(\\text{Gates},\\text{Park})$ 가 된다. HG 는 23 그대로다($2 + \\infty$ 쪽 길은 없다).",
+       "src": "11강 p.31–32",
+       "wiki": "relaxation",
+       "tags": [
+        "Dijkstra",
+        "그림"
+       ],
+       "img": "duo/img/algo11-p31-dij-e3.png",
+       "imgAlt": "p.31 Dijkstra 진행: E3 가 current node, d 값 Gates 0, R1 1, E3 2, Park ∞, HG 23",
+       "explainImg": "duo/img/algo11-p32-dij-e3-ans.png",
+       "answer": 6,
+       "tol": 0
       }
      ]
     },
@@ -2705,7 +3223,9 @@
         "$d[z] = d(s,z) \\le d(s,u) \\le d[u]$",
         "$d[z] = d[u]$ 이면 u 가 good → 모순",
         "$d[z] < d[u]$ 이면 z 는 이미 sure, z' 를 갱신했으므로 z' 가 good → 모순"
-       ]
+       ],
+       "img": "duo/img/algo11-p47-claim2.png",
+       "imgAlt": "p.47 Claim 2 증명 그림: s ⇝ z → z' ⇝ u 의 true shortest path 와 부등식"
       },
       {
        "id": "u11c-06",
@@ -2882,6 +3402,43 @@
        "alts": [
         "Open Shortest Path First"
        ]
+      },
+      {
+       "id": "u11c-16",
+       "type": "mc",
+       "q": "[Circle all 형식] Dijkstra(슬라이드 p.38 버전)에 대해 옳은 것을 **모두** 고른 조합은? (1) Claim 1 ($d[v] \\ge d(s,v)$) 은 음수 간선이 있어도 성립한다 (2) 음수 간선이 하나라도 있으면 항상 틀린 답을 낸다 (3) array 로 구현하면 $O(n^2)$ (4) 실행 중 $d[v]$ 는 늘어나지 않는다 (5) Fibonacci heap 의 updateKey $O(1)$ 은 worst-case bound 다",
+       "explain": "(1) 참: Claim 1 은 '지금 생각하는 path 의 길이 ≥ 최단경로' 일 뿐 weight 부호를 안 쓴다. 음수 가정이 쓰이는 곳은 Claim 2 의 $d(s,z) \\le d(s,u)$ 다. (2) 거짓: 운 좋게 맞는 그래프도 있다. '항상 맞는다는 보장이 없다' 가 정확한 말이다. (3) 참: $n(O(n)+O(n)) + m\\cdot O(1)$. (4) 참: 자기 자신과의 min 이다. (5) 거짓: amortized 다(교수 10/29). 함정은 (2)와 (5)다.",
+       "src": "11강 p.40–61 · 중간 1번 형식",
+       "wiki": "Dijkstra 정확성 증명",
+       "tags": [
+        "Dijkstra",
+        "circle-all"
+       ],
+       "choices": [
+        "(1)(3)(4)",
+        "(1)(2)(3)(4)",
+        "(3)(4)",
+        "(1)(3)(4)(5)"
+       ],
+       "answer": 0
+      },
+      {
+       "id": "u11c-17",
+       "type": "order",
+       "q": "[증명 칸 채우기] Claim 1 '모든 $v$ 에 대해 $d[v] \\ge d(s,v)$' 를 귀납으로 증명하시오",
+       "explain": "p.42 의 틀이다. Step 의 두 부등식 중 첫째가 IH, 둘째가 'shortest path 보다 짧은 path 는 없다' 는 삼각부등식이다. 중간 4번에서 IH 를 결론과 같은 문장으로 써서 0점이었다. 여기서는 IH 가 t 에 대한 진술이고 결론은 '모든 t' 라는 점이 다르다.",
+       "src": "11강 p.42",
+       "wiki": "Dijkstra 정확성 증명",
+       "tags": [
+        "Dijkstra",
+        "proof"
+       ],
+       "answer": [
+        "IH: t 번째 iteration 뒤 모든 v 에 대해 $d[v] \\ge d(s,v)$",
+        "Base (t = 0): $d[s] = 0 = d(s,s)$, 나머지는 $\\infty \\ge d(s,v)$",
+        "Step: 새 값 $d[u] + w(u,v) \\ge d(s,u) + w(u,v) \\ge d(s,v)$ (IH 와 삼각부등식), 안 바뀐 값은 IH 그대로",
+        "Conclusion: 모든 iteration 뒤에도 $d[v] \\ge d(s,v)$"
+       ]
       }
      ]
     },
@@ -2958,7 +3515,10 @@
         "trace"
        ],
        "answer": 45,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo11-p74-bf.png",
+       "imgAlt": "p.74 Bellman-Ford d(0)~d(3) 표와 그래프, d(2)[Park] 칸이 ① 로 가려져 있다",
+       "explainImg": "duo/img/algo11-p74-bf-ans.png"
       },
       {
        "id": "u11d-05",
@@ -3138,6 +3698,57 @@
        ],
        "answer": 4,
        "tol": 0
+      },
+      {
+       "id": "u11d-16",
+       "type": "num",
+       "q": "그림(p.74)은 p.15 그래프의 Bellman-Ford* 표다. 가린 ② $d^{(3)}[\\text{Park}]$ 는?",
+       "explain": "$d^{(3)}[\\text{Park}] = \\min(d^{(2)}[\\text{Park}],\\ d^{(2)}[\\text{E3}] + 4,\\ d^{(2)}[\\text{HG}] + 20) = \\min(45,\\ 2+4,\\ 23+20) = 6$. 오른쪽 항은 모두 **이전 행** $d^{(2)}$ 값이다. 간선 3개(Gates–R1–E3–Park)를 써야 6 이 나오니 $d^{(3)}$ 에서 처음 나타난다.",
+       "src": "11강 p.73–74",
+       "wiki": "d^(i) 배열",
+       "tags": [
+        "BF",
+        "그림"
+       ],
+       "img": "duo/img/algo11-p74-bf.png",
+       "imgAlt": "p.74 Bellman-Ford d(0)~d(3) 표와 그래프, d(2)[Park] 은 ①, d(3)[Park] 은 ② 로 가려져 있다",
+       "explainImg": "duo/img/algo11-p74-bf-ans.png",
+       "answer": 6,
+       "tol": 0
+      },
+      {
+       "id": "u11d-17",
+       "type": "mc",
+       "q": "[Circle all 형식] Bellman-Ford* 에 대해 옳은 것을 **모두** 고른 조합은? (1) 수행 시간 $O(nm)$ (2) 음수 간선이 있어도 된다 (3) negative cycle 이 없으면 $n-1$ 라운드로 충분하다 (4) 그래프 안의 모든 negative cycle 을 검출한다 (5) $d^{(i)}[v]$ 는 간선을 정확히 $i$ 개 쓰는 최단경로 cost 다",
+       "explain": "(1) 참: 라운드 $n-1$ 번 × 간선 $m$ 개. (2) 참: 음수 간선은 괜찮고 문제는 negative cycle 이다. (3) 참: 최단경로를 simple path 로 잡을 수 있고 simple path 는 간선이 $n-1$ 개 이하다. (4) 거짓: $s$ 에서 **도달 가능한** negative cycle 만 $d$ 값을 바꾼다. (5) 거짓: '**at most** $i$ edges' 다. $d^{(i+1)}[v]$ 가 $d^{(i)}[v]$ 와의 min 이라 개수가 적은 path 도 포함한다.",
+       "src": "11강 p.76–86 · 중간 1번 형식",
+       "wiki": "Bellman-Ford",
+       "tags": [
+        "BF",
+        "circle-all"
+       ],
+       "choices": [
+        "(1)(2)(3)",
+        "(1)(2)(3)(4)",
+        "(1)(3)(5)",
+        "(2)(3)"
+       ],
+       "answer": 0
+      },
+      {
+       "id": "u11d-18",
+       "type": "num",
+       "q": "[분석 템플릿 칸] 정점 5개, directed 간선 7개 그래프에서 Bellman-Ford* 를 $d^{(n-1)}$ 까지 돌리면 `d(i+1)[v] ← min(...)` 갱신을 총 몇 번 하나?",
+       "explain": "바깥 루프가 $i = 0, \\dots, n-2$ 로 $n-1 = 4$ 라운드, 한 라운드에 모든 $u$ 의 모든 out-edge 를 한 번씩 보니 $m = 7$ 번. $4 \\times 7 = 28$. 이 곱이 $O(nm)$ 의 정체다. Dijkstra 처럼 'u 하나를 고르는' 단계가 없어서 매 라운드 간선 전체를 본다.",
+       "src": "11강 p.69, 80",
+       "wiki": "Bellman-Ford",
+       "tags": [
+        "BF",
+        "running time",
+        "analysis"
+       ],
+       "answer": 28,
+       "tol": 0
       }
      ]
     },
@@ -3201,7 +3812,9 @@
         "negative"
        ],
        "answer": -4,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo11-p67-negcycle.png",
+       "imgAlt": "p.67 negative weight 그래프와 G—R—H—G 를 반복하는 경로들"
       },
       {
        "id": "u11e-05",
@@ -3279,7 +3892,9 @@
         "trace"
        ],
        "answer": 0,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo11-p82-bfneg5.png",
+       "imgAlt": "p.82 음수 예제의 d(0)~d(5) 표, d(4)[Park] 칸에 6 이 적혀 있다"
       },
       {
        "id": "u11e-10",
@@ -3373,6 +3988,29 @@
         "negative"
        ],
        "answer": true
+      },
+      {
+       "id": "u11e-15",
+       "type": "mc",
+       "q": "그림(p.81)은 음수 weight 그래프의 Bellman-Ford* 표다. 가린 ① $d^{(2)}[\\text{R1}]$ 과 ② $d^{(3)}[\\text{Gates}]$ 는?",
+       "explain": "① $d^{(1)}[\\text{HG}] = -3$ (Gates→HG −3) 이고 HG→R1 이 −2 라서 $d^{(2)}[\\text{R1}] = \\min(1, -3-2) = -5$. ② $d^{(3)}[\\text{Gates}] = \\min(0,\\ d^{(2)}[\\text{R1}] + 1) = -5 + 1 = -4$. source 의 값이 0 아래로 내려갔다는 것은 Gates 를 지나는 negative cycle(Gates→HG→R1→Gates, cost −4)이 있다는 뜻이다. 슬라이드가 'This is not looking good!' 이라고 쓴 장면이다.",
+       "src": "11강 p.81",
+       "wiki": "negative cycle",
+       "tags": [
+        "BF",
+        "negative cycle",
+        "그림"
+       ],
+       "img": "duo/img/algo11-p81-bfneg.png",
+       "imgAlt": "p.81 음수 weight 그래프와 Bellman-Ford d(0)~d(3) 표, 두 칸이 ①② 로 가려져 있다",
+       "explainImg": "duo/img/algo11-p81-bfneg-ans.png",
+       "choices": [
+        "① −5, ② −4",
+        "① −2, ② −4",
+        "① −5, ② 0",
+        "① −2, ② −3"
+       ],
+       "answer": 0
       }
      ]
     }
@@ -3532,7 +4170,9 @@
         "Fibonacci"
        ],
        "answer": 5,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo12-p24-fibtree.png",
+       "imgAlt": "p.24 naive Fib(8) 재귀 호출 tree (아래쪽은 etc 로 생략)"
       },
       {
        "id": "u12a-10",
@@ -3613,6 +4253,23 @@
         "DP",
         "동적 계획법"
        ]
+      },
+      {
+       "id": "u12a-15",
+       "type": "num",
+       "q": "그림(p.24)은 naive `Fibonacci(8)` 의 재귀 tree 다. 이 tree 전체에서 `Fibonacci(5)` 는 몇 번 호출되나? (그림 아래쪽은 생략돼 있으니 규칙으로 세라)",
+       "explain": "Fib(8) 은 Fib(7), Fib(6) 을 부른다. Fib(5) 는 Fib(7) 안에서 한 번, Fib(6) 안에서 한 번, 그리고 Fib(7) 이 부른 Fib(6) 안에서 또 한 번 불린다. 일반적으로 Fib(n) 안에서 Fib(k) 의 호출 횟수는 $F(n-k)$ 다 ($F(0)=F(1)=1$ convention). $F(3) = 3$. 같은 방식으로 Fib(4) 는 $F(4)=5$ 번이다. 이 중복이 'repeated computation' 이다.",
+       "src": "12강 p.24",
+       "wiki": "overlapping subproblems",
+       "tags": [
+        "Fibonacci",
+        "그림"
+       ],
+       "img": "duo/img/algo12-p24-fibtree.png",
+       "imgAlt": "p.24 naive Fib(8) 재귀 호출 tree (아래쪽은 etc 로 생략)",
+       "explainImg": "duo/img/algo12-p37-memo-ans.png",
+       "answer": 3,
+       "tol": 0
       }
      ]
     },
@@ -3842,7 +4499,10 @@
         "cycle",
         "forest"
        ],
-       "answer": 1
+       "answer": 1,
+       "img": "duo/img/algo12-p24-fibtree.png",
+       "imgAlt": "p.24 naive Fib(8) 재귀 호출 tree",
+       "explainImg": "duo/img/algo12-p37-memo-ans.png"
       },
       {
        "id": "u12b-13",
@@ -3874,6 +4534,25 @@
         "DP"
        ],
        "answer": true
+      },
+      {
+       "id": "u12b-15",
+       "type": "mc",
+       "q": "[Circle all 형식] 옳은 것을 **모두** 고른 조합은? (1) DP 가 통하려면 optimal substructure 와 overlapping subproblems 가 있어야 한다 (2) divide-and-conquer 의 subproblem 도 많이 겹친다 (3) memo 를 쓰는 top-down Fibonacci 는 $O(n)$ (4) bottom-up 은 필요한 칸이 먼저 채워지는 순서로 채워야 한다 (5) naive 재귀 Fibonacci 는 $\\Theta(n^2)$",
+       "explain": "(1) 참: p.30 'You should remember those two elements.' (2) 거짓: D&C 는 disjoint(independent) 하게 나눈다. 겹치면 DP 를 써야 한다. (3) 참: F[k] 마다 한 번만 계산한다. (4) 참: 의존 관계의 topological order 다. (5) 거짓: $\\Theta(\\varphi^n)$ 지수 시간이다. $T(n) \\ge T(n-1)+T(n-2)$ 라서 Fibonacci 수만큼 빨리 자란다.",
+       "src": "12강 p.23–35 · 중간 1번 형식",
+       "wiki": "dynamic programming",
+       "tags": [
+        "DP",
+        "circle-all"
+       ],
+       "choices": [
+        "(1)(3)(4)",
+        "(1)(2)(3)(4)",
+        "(1)(4)",
+        "(1)(3)(4)(5)"
+       ],
+       "answer": 0
       }
      ]
     },
@@ -4020,7 +4699,9 @@
         "Dijkstra 를 쓰려고",
         "표 크기 때문에"
        ],
-       "answer": 1
+       "answer": 1,
+       "img": "duo/img/algo12-p50-case2.png",
+       "imgAlt": "p.50 Case 2: u ⇝ k ⇝ v 가 {1..k} 를 지나는 simple shortest path 그림"
       },
       {
        "id": "u12c-08",
@@ -4145,6 +4826,31 @@
         "$O(m)$"
        ],
        "answer": 1
+      },
+      {
+       "id": "u12c-15",
+       "type": "cloze",
+       "q": "[분석 템플릿 칸] Floyd-Warshall: 바깥 루프 $k$ 가 ___ 번, 각 $k$ 마다 $(u,v)$ 쌍이 ___ 개, 칸 하나는 min 한 번 $O(1)$ → $\\Theta($___$)$.",
+       "explain": "$k = 1..n$, $(u,v) \\in V^2$ 라 $n \\cdot n^2 \\cdot O(1) = \\Theta(n^3)$. 간선 수 $m$ 과 무관하다. 그래서 dense 에서는 BF 를 $n$ 번($O(n^2 m) = O(n^4)$) 돌리는 것보다 낫고, sparse·음수 없음이면 Dijkstra 를 $n$ 번 돌리는 쪽이 나을 수 있다.",
+       "src": "12강 p.53–54",
+       "wiki": "Floyd-Warshall",
+       "tags": [
+        "FW",
+        "running time",
+        "analysis"
+       ],
+       "answer": [
+        "n",
+        "n^2",
+        "n^3"
+       ],
+       "bank": [
+        "n",
+        "n^2",
+        "n^3",
+        "m",
+        "n^4"
+       ]
       }
      ]
     },
@@ -4179,7 +4885,9 @@
         "trace"
        ],
        "answer": 4,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo12-p42-graph.png",
+       "imgAlt": "p.42 directed graph: s→u 2, u→s 1, s→v 5, u→v 2, v→t −2"
       },
       {
        "id": "u12d-03",
@@ -4193,7 +4901,9 @@
         "trace"
        ],
        "answer": 2,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo12-fw-D2.png",
+       "imgAlt": "p.42 그래프의 D(2) 표: s 행 0 2 4 ∞, u 행 1 0 2 ∞, v 행 ∞ ∞ 0 −2, t 행 ∞ ∞ ∞ 0"
       },
       {
        "id": "u12d-04",
@@ -4207,7 +4917,9 @@
         "trace"
        ],
        "answer": 0,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo12-fw-D2.png",
+       "imgAlt": "p.42 그래프의 D(2) 표: s 행 0 2 4 ∞, u 행 1 0 2 ∞, v 행 ∞ ∞ 0 −2, t 행 ∞ ∞ ∞ 0"
       },
       {
        "id": "u12d-05",
@@ -4361,7 +5073,8 @@
         "longest path"
        ],
        "answer": 3,
-       "tol": 0
+       "tol": 0,
+       "explainImg": "duo/img/algo12-p58-longest-ans.png"
       },
       {
        "id": "u12d-14",
@@ -4396,6 +5109,47 @@
         "longest simple path 는 NP-complete 라 지수 시간이 필요하다"
        ],
        "answer": 1
+      },
+      {
+       "id": "u12d-16",
+       "type": "mc",
+       "q": "그림(p.42)은 APSP 결과 표와 그래프다. 가린 ① $D[s,v]$ 와 ② $D[v,s]$ 는?",
+       "explain": "① s→v 직접 간선은 5지만 s→u→v 가 $2+2=4$ 로 더 짧다. FW 로는 $k=u$ 단계에서 $D^{(2)}[s,v] = \\min(5,\\ 2+2)$ 로 바뀐다. ② v 에서 나가는 간선은 v→t 하나뿐이고 t 에서는 나가는 간선이 없다. 그래서 v 에서 s 로 돌아오는 path 가 없어 ∞ 다. directed graph 의 APSP 표는 대칭이 아니다. 대칭처럼 읽으면 ②를 틀린다.",
+       "src": "12강 p.42",
+       "wiki": "all-pairs shortest path",
+       "tags": [
+        "FW",
+        "그림"
+       ],
+       "img": "duo/img/algo12-p42-apsp.png",
+       "imgAlt": "p.42 APSP 결과 표(행 source, 열 destination)와 그래프, 두 칸이 ①② 로 가려져 있다",
+       "explainImg": "duo/img/algo12-p42-apsp-ans.png",
+       "choices": [
+        "① 4, ② ∞",
+        "① 5, ② ∞",
+        "① 4, ② 2",
+        "① 5, ② 6"
+       ],
+       "answer": 0
+      },
+      {
+       "id": "u12d-17",
+       "type": "mc",
+       "q": "[Circle all 형식] 옳은 것을 **모두** 고른 조합은? (1) Floyd-Warshall 은 $O(n^3)$ (2) Floyd-Warshall 은 음수 간선이 있어도 된다 (3) $D^{(n)}[v,v] < 0$ 인 $v$ 가 있으면 negative cycle 이 있다 (4) 세 겹 루프에서 $k$ 를 가장 안쪽에 둬도 된다 (5) longest simple path 도 같은 방식의 DP 로 polynomial 시간에 풀린다",
+       "explain": "(1) 참. (2) 참: negative cycle 만 없으면 된다. (3) 참: p.55 'Negative cycle ⇔ ∃v s.t. $D^{(n)}[v,v] < 0$'. (4) 거짓: $D^{(k)}$ 는 $D^{(k-1)}$ 전체가 끝나야 계산할 수 있다. $k$ 가 안쪽이면 아직 덜 채워진 값을 쓴다. (5) 거짓: subproblem 이 independent 하지 않아(한쪽이 쓴 정점을 다른 쪽이 못 쓴다) optimal substructure 가 깨진다. NP-complete 다.",
+       "src": "12강 p.53–60 · 중간 1번 형식",
+       "wiki": "Floyd-Warshall",
+       "tags": [
+        "FW",
+        "circle-all"
+       ],
+       "choices": [
+        "(1)(2)(3)",
+        "(1)(2)(3)(4)",
+        "(1)(3)",
+        "(1)(2)(3)(5)"
+       ],
+       "answer": 0
       }
      ]
     }
@@ -4613,6 +5367,25 @@
        ],
        "answer": 4,
        "tol": 0
+      },
+      {
+       "id": "u13a-14",
+       "type": "mc",
+       "q": "[Circle all 형식] 옳은 것을 **모두** 고른 조합은? (1) LCS 길이 DP 는 $O(mn)$ (2) 표가 있으면 LCS 하나를 $O(m+n)$ 에 복원한다 (3) knapsack 의 $O(nW)$ 는 polynomial time 이다 (4) unbounded knapsack 은 1차원 표 $K[x]$ 로 충분하다 (5) 트리 MIS 점화식을 memo 없이 재귀로만 돌려도 $O(|V|)$ 다",
+       "explain": "(1) 참: 칸 $mn$ 개, 칸마다 $O(1)$. (2) 참: 한 걸음마다 $i$ 나 $j$ 가 줄어든다. (3) 거짓: $W$ 는 $\\log W$ 비트로 적히니 입력 길이에 대해 지수다(pseudo-polynomial). (4) 참: 이미 쓴 item 을 기억할 필요가 없다. (5) 거짓: $A[u]$ 가 손자들의 $A$ 를 다시 부르며 같은 subtree 를 여러 번 계산해 지수 시간이 될 수 있다. 교수 11/10: 'Only difference is memoization. But it gives you a lot of difference.'",
+       "src": "13강 p.18–34, 46, 92, 105 · 중간 1번 형식",
+       "wiki": "longest common subsequence",
+       "tags": [
+        "DP",
+        "circle-all"
+       ],
+       "choices": [
+        "(1)(2)(4)",
+        "(1)(2)(3)(4)",
+        "(1)(4)",
+        "(1)(2)(4)(5)"
+       ],
+       "answer": 0
       }
      ]
     },
@@ -4632,7 +5405,10 @@
         "trace"
        ],
        "answer": 2,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo13-p19-lcs-empty.png",
+       "imgAlt": "p.19 X = ACGGA(세로), Y = ACTG(가로) LCS 빈 표, 0번 행·열만 0",
+       "explainImg": "duo/img/algo13-p20-lcs-ans.png"
       },
       {
        "id": "u13b-02",
@@ -4646,7 +5422,10 @@
         "trace"
        ],
        "answer": 3,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo13-p19-lcs-empty.png",
+       "imgAlt": "p.19 X = ACGGA(세로), Y = ACTG(가로) LCS 빈 표, 0번 행·열만 0",
+       "explainImg": "duo/img/algo13-p20-lcs-ans.png"
       },
       {
        "id": "u13b-03",
@@ -4673,7 +5452,10 @@
         "LCS",
         "trace"
        ],
-       "answer": "ACG"
+       "answer": "ACG",
+       "img": "duo/img/algo13-p24-lcs-back.png",
+       "imgAlt": "p.24 다 채운 LCS 표, 오른쪽 아래 칸(3)에서 거슬러 올라가기 시작",
+       "explainImg": "duo/img/algo13-p30-lcs-back-ans.png"
       },
       {
        "id": "u13b-05",
@@ -4812,7 +5594,8 @@
         "C[3,3] → 위 C[2,3] → 왼쪽 C[2,2]",
         "C[2,2]: C = C 대각선, C 확보 → C[1,1]: A = A 대각선, A 확보",
         "뒤에서부터 모은 글자를 뒤집어 ACG"
-       ]
+       ],
+       "explainImg": "duo/img/algo13-p30-lcs-back-ans.png"
       },
       {
        "id": "u13b-13",
@@ -4838,7 +5621,32 @@
         "trace"
        ],
        "answer": 2,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo13-p19-lcs-empty.png",
+       "imgAlt": "p.19 X = ACGGA(세로), Y = ACTG(가로) LCS 빈 표, 0번 행·열만 0",
+       "explainImg": "duo/img/algo13-p20-lcs-ans.png"
+      },
+      {
+       "id": "u13b-15",
+       "type": "mc",
+       "q": "그림(p.20)은 X = ACGGA(세로), Y = ACTG(가로)의 LCS 표다. 가린 ① $C[3,4]$, ② $C[4,2]$, ③ $C[5,4]$ 는?",
+       "explain": "① $X_3 = $ G, $Y_4 = $ G 로 같으니 대각선 $C[2,3] + 1 = 2 + 1 = 3$. ② $X_4 = $ G, $Y_2 = $ C 는 다르니 $\\max(C[4,1], C[3,2]) = \\max(1, 2) = 2$. ③ $X_5 = $ A, $Y_4 = $ G 는 다르니 $\\max(C[5,3], C[4,4]) = \\max(2, 3) = 3$. 같을 때만 대각선 +1, 다를 때는 왼쪽·위 중 큰 값이다.",
+       "src": "13강 p.19–20",
+       "wiki": "C(i,j) (LCS)",
+       "tags": [
+        "LCS",
+        "그림"
+       ],
+       "img": "duo/img/algo13-p20-lcs.png",
+       "imgAlt": "p.20 X = ACGGA, Y = ACTG 의 LCS 표, 세 칸이 ①②③ 으로 가려져 있다",
+       "explainImg": "duo/img/algo13-p20-lcs-ans.png",
+       "choices": [
+        "① 3, ② 2, ③ 3",
+        "① 3, ② 2, ③ 2",
+        "① 2, ② 2, ③ 3",
+        "① 3, ② 1, ③ 3"
+       ],
+       "answer": 0
       }
      ]
     },
@@ -4992,7 +5800,10 @@
         "{item 1 × 4}",
         "{item 3}"
        ],
-       "answer": 1
+       "answer": 1,
+       "img": "duo/img/algo13-p50-items.png",
+       "imgAlt": "p.50 unbounded knapsack 예제: 무게 1, 2, 3 / 가치 1, 4, 6, 용량 4, 빈 K·ITEMS 표",
+       "explainImg": "duo/img/algo13-p57-items-ans.png"
       },
       {
        "id": "u13c-10",
@@ -5071,6 +5882,46 @@
         "pseudo polynomial",
         "pseudopolynomial"
        ]
+      },
+      {
+       "id": "u13c-15",
+       "type": "num",
+       "q": "그림(p.54)은 unbounded knapsack(무게 1, 2, 3 / 가치 1, 4, 6) 표를 채우는 중이다. $x = 3$ 에서 item 1, 2 까지 보고 $K[3] = 5$ 를 적었다. 안쪽 루프가 item 3(수박)까지 돌고 나면 $K[3]$ 은?",
+       "explain": "코드는 `K[x] = max{K[x], K[x − w_i] + v_i}` 를 item 마다 갱신한다. item 3 은 $w_3 = 3 \\le 3$ 이라 $K[0] + 6 = 6 > 5$ 로 바뀐다. 그래서 ITEMS[3] = ITEMS[0] ∪ {수박} 이 된다(p.55). 5 는 아직 안쪽 루프가 끝나지 않은 중간값이다.",
+       "src": "13강 p.54–55",
+       "wiki": "K(x) (unbounded)",
+       "tags": [
+        "knapsack",
+        "그림"
+       ],
+       "img": "duo/img/algo13-p54-unb.png",
+       "imgAlt": "p.54 unbounded knapsack 표 진행: K = 0, 1, 4, 5, (빈칸), ITEMS[3] = ITEMS[2] + 거북이",
+       "explainImg": "duo/img/algo13-p55-unb-ans.png",
+       "answer": 6,
+       "tol": 0
+      },
+      {
+       "id": "u13c-16",
+       "type": "cloze",
+       "q": "[빈칸 의사코드] 해까지 복원하는 UnboundedKnapsack: `if w_i ≤ x:` `K[x] = max{K[x], K[x − w_i] + v_i}` / `if K[x] was updated: ITEMS[x] = ITEMS[` ___ `] ∪ {item i}` / 마지막에 `return` ___",
+       "explain": "$K[x]$ 를 $K[x-w_i] + v_i$ 로 갱신했다면, 그 해는 '용량 $x-w_i$ 의 최적해에 item $i$ 를 하나 더 넣은 것' 이다. 그래서 ITEMS 도 같은 칸 $x - w_i$ 에서 가져온다. `x − 1` 은 용량을 1씩 줄이는 착각이다. 값이 아니라 해를 돌려주므로 ITEMS[W] 를 반환한다(Recipe Step 4).",
+       "src": "13강 p.49–57",
+       "wiki": "unbounded knapsack",
+       "tags": [
+        "knapsack",
+        "빈칸"
+       ],
+       "answer": [
+        "x − w_i",
+        "ITEMS[W]"
+       ],
+       "bank": [
+        "x − w_i",
+        "ITEMS[W]",
+        "x − 1",
+        "K[W]",
+        "x"
+       ]
       }
      ]
     },
@@ -5131,7 +5982,10 @@
         "trace"
        ],
        "answer": 5,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo13-p86-01.png",
+       "imgAlt": "p.86 0/1 knapsack 표(거북이 1/1, 전구 2/4, 수박 3/6, 용량 3), K[3,2] 칸이 가려져 있다",
+       "explainImg": "duo/img/algo13-p86-01-ans.png"
       },
       {
        "id": "u13d-04",
@@ -5145,7 +5999,10 @@
         "trace"
        ],
        "answer": 6,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo13-p87-01.png",
+       "imgAlt": "p.87 0/1 knapsack 표, current entry K[3,3] 에 K[3,2] 를 복사한 5 가 들어 있다",
+       "explainImg": "duo/img/algo13-p88-01-ans.png"
       },
       {
        "id": "u13d-05",
@@ -5318,6 +6175,39 @@
        ],
        "answer": 21,
        "tol": 0
+      },
+      {
+       "id": "u13d-15",
+       "type": "order",
+       "q": "[증명 칸 채우기] 0/1 knapsack Case 2 (최적해가 item $j$ 를 쓴다)의 optimal substructure 를 귀류법으로",
+       "explain": "p.68 Case 2 그림을 네 칸으로 쓴 것이다. 'item $1..j-1$' 로 줄이는 것이 핵심이다. 용량만 줄이면(unbounded 방식) item $j$ 를 또 쓸 수 있어서 0/1 조건이 깨진다.",
+       "src": "13강 p.67–70",
+       "wiki": "K(x,j) (0/1)",
+       "tags": [
+        "knapsack",
+        "proof"
+       ],
+       "answer": [
+        "용량 $x$, item $1..j$ 의 최적해 $S$ 가 item $j$ 를 쓴다고 하자",
+        "$S$ 에서 item $j$ 를 빼면 용량 $x - w_j$, item $1..j-1$ 의 해 $S'$ 이 남는다",
+        "$S'$ 보다 가치가 큰 해 $T$ 가 있다면 $T \\cup \\{j\\}$ 는 용량 $x$ 안에 들어가고 $S$ 보다 가치가 크다",
+        "$S$ 의 최적성에 모순이므로 $S'$ 은 최적이고 $K[x,j] = K[x-w_j,\\ j-1] + v_j$"
+       ]
+      },
+      {
+       "id": "u13d-16",
+       "type": "num",
+       "q": "[분석 템플릿 칸] 0/1 knapsack, item $n = 5$, 용량 $W = 10$. 표 $K[x, j]$ ($x = 0..W$, $j = 0..n$) 의 칸 수는?",
+       "explain": "$(W+1)(n+1) = 11 \\times 6 = 66$. 칸마다 max 한 번 $O(1)$ 이니 $O(nW)$. 이 '칸 수 × 칸당 일' 이 DP 수행 시간 분석의 기본 틀이다. LCS 는 $(m+1)(n+1)$ 칸 × $O(1)$, FW 는 $n$ 개 표 × $n^2$ 칸 × $O(1)$ 이다.",
+       "src": "13강 p.72, 90",
+       "wiki": "K(x,j) (0/1)",
+       "tags": [
+        "knapsack",
+        "running time",
+        "analysis"
+       ],
+       "answer": 66,
+       "tol": 0
       }
      ]
     },
@@ -5422,7 +6312,10 @@
         "trace"
        ],
        "answer": 12,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo13-p95-tree.png",
+       "imgAlt": "p.95 트리: r(1) 의 자식 a(5), t(2), 5, 5 / a 의 자식 c(3) / c 의 자식 3, 2, 2 / t 의 자식 3",
+       "explainImg": "duo/img/algo13-p95-mis-ans.png"
       },
       {
        "id": "u13e-07",
@@ -5436,7 +6329,10 @@
         "trace"
        ],
        "answer": 25,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo13-p95-tree.png",
+       "imgAlt": "p.95 트리: r(1) 의 자식 a(5), t(2), 5, 5 / a 의 자식 c(3) / c 의 자식 3, 2, 2 / t 의 자식 3",
+       "explainImg": "duo/img/algo13-p95-mis-ans.png"
       },
       {
        "id": "u13e-08",
@@ -5455,7 +6351,10 @@
         "동률이라 둘 다 된다",
         "알 수 없다"
        ],
-       "answer": 1
+       "answer": 1,
+       "img": "duo/img/algo13-p95-tree.png",
+       "imgAlt": "p.95 트리: r(1) 의 자식 a(5), t(2), 5, 5 / a 의 자식 c(3) / c 의 자식 3, 2, 2 / t 의 자식 3",
+       "explainImg": "duo/img/algo13-p95-mis-ans.png"
       },
       {
        "id": "u13e-09",
@@ -5469,7 +6368,9 @@
         "trace"
        ],
        "answer": 11,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo13-tree2.png",
+       "imgAlt": "연습 트리: r(6) 의 자식 x(3), y(5) / x 의 자식 p(2), q(2) / y 의 자식 z(1)"
       },
       {
        "id": "u13e-10",
@@ -5545,8 +6446,8 @@
       {
        "id": "u13e-14",
        "type": "mc",
-       "q": "교수가 11/10 에 'dynamic programming 이 무엇인가' 는 어디서 아주 자주 나오는 질문이라고 했나?",
-       "explain": "말로 설명할 수 있어야 한다: optimal substructure + overlapping sub-problems + memoization.",
+       "q": "교수 11/10: 'dynamic programming 이 무엇인가' 는 대학원 면접에서 아주 자주 나오는 질문이다. divide-and-conquer·greedy 와 구별되게 한 문장으로 답하면?",
+       "explain": "DP = optimal substructure + overlapping subproblems + 표(memo) 재사용. 둘째 보기는 D&C(subproblem 이 disjoint), 셋째는 greedy(subproblem 하나에만 의존), 넷째는 randomized 다. 트리 MIS 에서 A, B 표를 버리면 같은 점화식이라도 D&C 가 되어 지수 시간이 될 수 있다는 것이 11/10 의 요지였다.",
        "src": "11/10 녹음",
        "wiki": "dynamic programming",
        "prof": true,
@@ -5555,12 +6456,12 @@
         "DP"
        ],
        "choices": [
-        "기업 코딩 테스트",
-        "대학원 면접",
-        "정보처리기사",
-        "수업 퀴즈"
+        "subproblem 이 겹칠 때, 각 subproblem 을 한 번만 풀어 표에 저장하고 재사용해 큰 문제를 푼다",
+        "문제를 겹치지 않는 부분으로 나눠 재귀로 풀고 합친다",
+        "매 단계 가장 좋아 보이는 선택을 하고 되돌아보지 않는다",
+        "무작위 선택으로 기대 수행 시간을 줄인다"
        ],
-       "answer": 1
+       "answer": 0
       }
      ]
     }
@@ -5810,6 +6711,48 @@
         "trap"
        ],
        "answer": false
+      },
+      {
+       "id": "u14a-14",
+       "type": "mc",
+       "q": "그림(p.40)의 subproblem 그래프는 어떤 설계 기법의 모양인가? (설명 글자는 가렸다)",
+       "explain": "같은 sub-sub-problem 에 위쪽 subproblem 여러 개가 선을 잇고 있다. subproblem 이 **겹치는** DAG 이니 DP 다. D&C 는 겹치지 않는 tree(p.39), greedy 는 각 문제가 subproblem **하나**에만 의존하는 사슬(p.41–42)이다. 교수가 '다른 건 잊어도 이 그림은 기억하라' 고 한 세 장 중 하나다.",
+       "src": "14강 p.39–42 · 11/10 녹음",
+       "wiki": "sub-problem graph 비교",
+       "prof": true,
+       "tags": [
+        "greedy",
+        "그림"
+       ],
+       "img": "duo/img/algo14-p40-spg.png",
+       "imgAlt": "p.40 Big problem 아래 sub-problem 3개, 그 아래 sub-sub-problem 4개가 여러 선으로 겹쳐 이어진 그래프",
+       "explainImg": "duo/img/algo14-p40-spg-ans.png",
+       "choices": [
+        "Dynamic programming",
+        "Divide-and-conquer",
+        "Greedy",
+        "Randomized"
+       ],
+       "answer": 0
+      },
+      {
+       "id": "u14a-15",
+       "type": "mc",
+       "q": "[Circle all 형식] 최적해를 **보장하는** greedy 규칙을 **모두** 고른 조합은? (1) activity selection: 끝나는 시각이 가장 빠른 것 (2) activity selection: 시작 시각이 가장 빠른 것 (3) Huffman: 빈도가 가장 작은 두 노드를 합친다 (4) 0/1 knapsack: 가치/무게 비율이 큰 것 (5) job scheduling: $c_i/t_i$ 가 큰 것부터",
+       "explain": "(1) 참: 남은 시간을 가장 많이 남긴다. (2) 거짓: 일찍 시작해 아주 길게 이어지는 활동 하나가 여러 개를 막는다. (3) 참: Lemma 1(교환)과 Lemma 2. (4) 거짓: L13 예제에서 비율 greedy 는 39, 최적은 42(unbounded)였다. 용량을 낭비한다. (5) 참: 인접 교환 비용 변화가 $c_A t_B - c_B t_A \\le 0$. 함정은 '자연스러워 보이는' (2)(4)다.",
+       "src": "14강 p.6–7, 10, 50, 71 · 중간 1번 형식",
+       "wiki": "greedy algorithm",
+       "tags": [
+        "greedy",
+        "circle-all"
+       ],
+       "choices": [
+        "(1)(3)(5)",
+        "(1)(3)(4)(5)",
+        "(1)(5)",
+        "(1)(2)(3)(5)"
+       ],
+       "answer": 0
       }
      ]
     },
@@ -6012,7 +6955,10 @@
         "a3",
         "a1"
        ],
-       "answer": 1
+       "answer": 1,
+       "img": "duo/img/algo14-p12-act.png",
+       "imgAlt": "p.12 활동 a1~a7 막대: a2 가 선택됨(주황), a1 은 겹쳐서 제외(빗금)",
+       "explainImg": "duo/img/algo14-p17-act-ans.png"
       },
       {
        "id": "u14b-12",
@@ -6057,6 +7003,46 @@
        ],
        "answer": 4,
        "tol": 0
+      },
+      {
+       "id": "u14b-15",
+       "type": "num",
+       "q": "그림(p.10)은 활동 $a_1 \\sim a_7$ 을 시간축 위 막대로 그린 것이다. 'Pick activity you can add with the smallest finish time' 을 반복하면 몇 개를 고르나?",
+       "explain": "가장 먼저 끝나는 $a_2$ 를 고르면 겹치는 $a_1$ 이 빠진다. 다음으로 끝나는 $a_5$ 를 고르면 $a_4$ 가 빠지고, 이어서 $a_3$ 를 고르면 $a_6$ 이 빠지고, 마지막에 $a_7$ 을 고른다. $a_2, a_5, a_3, a_7$ 로 4개(p.17). 막대의 **오른쪽 끝**(finish)만 보고 고른다. 왼쪽 끝(start)이나 길이를 보면 틀린다.",
+       "src": "14강 p.10–17",
+       "wiki": "activity selection",
+       "tags": [
+        "activity",
+        "그림"
+       ],
+       "img": "duo/img/algo14-p10-act.png",
+       "imgAlt": "p.10 시간축 위 활동 막대 a1~a7",
+       "explainImg": "duo/img/algo14-p17-act-ans.png",
+       "answer": 4,
+       "tol": 0
+      },
+      {
+       "id": "u14b-16",
+       "type": "cloze",
+       "q": "[빈칸 의사코드] activity selection: 활동을 ___ 시각 순으로 정렬한다. 차례로 보며 `if a.start ≥` ___ `:` a 를 고르고 lastFinish = a.finish 로 바꾼다.",
+       "explain": "정렬 기준은 finish 다(start 로 정렬하면 p.10 의 반례 구조에 걸린다). 고를 수 있는지는 '직전에 고른 활동이 끝난 뒤 시작하는가' 로 본다. 정렬 $O(n\\log n)$ 뒤 한 번 훑기 $O(n)$ 이라, 이미 정렬돼 있으면 $O(n)$ (p.18).",
+       "src": "14강 p.10–18",
+       "wiki": "activity selection",
+       "tags": [
+        "activity",
+        "빈칸"
+       ],
+       "answer": [
+        "finish",
+        "lastFinish"
+       ],
+       "bank": [
+        "finish",
+        "lastFinish",
+        "start",
+        "lastStart",
+        "length"
+       ]
       }
      ]
     },
@@ -6322,6 +7308,24 @@
         "scheduling"
        ],
        "answer": true
+      },
+      {
+       "id": "u14c-16",
+       "type": "order",
+       "q": "[증명 칸 채우기] job scheduling Lemma '비율 $c_i/t_i$ 최대 job B 가 첫째인 최적 순서가 있다' 의 교환 증명을 순서대로",
+       "explain": "p.50 의 'swap adjacent jobs' 논증이다. A 가 $t_B$ 만큼 늦게 끝나고($+c_A t_B$) B 가 $t_A$ 만큼 일찍 끝난다($-c_B t_A$). 앞뒤 job 들의 완료 시각은 두 job 의 길이 합만 보니 변하지 않는다. Huffman Lemma 1 과 같은 교환 기법이다.",
+       "src": "14강 p.49–51",
+       "wiki": "job scheduling",
+       "tags": [
+        "job",
+        "proof"
+       ],
+       "answer": [
+        "최적 순서에서 B 가 첫째가 아니라고 하자",
+        "B 바로 앞의 job A 와 B 의 자리를 맞바꾼다",
+        "두 job 의 비용 변화는 $c_A t_B - c_B t_A \\le 0$ ($c_B/t_B \\ge c_A/t_A$), 나머지 job 의 완료 시각은 그대로다",
+        "비용이 늘지 않으니 여전히 최적이다. 반복하면 B 가 첫째인 최적 순서를 얻는다"
+       ]
       }
      ]
     },
@@ -6398,7 +7402,9 @@
         "Huffman",
         "trace"
        ],
-       "answer": "FBA"
+       "answer": "FBA",
+       "img": "duo/img/algo14-p66-codetree.png",
+       "imgAlt": "p.66 Try 2 코드 트리: A 00, D 01, F 100, B 101, C 110, E 111"
       },
       {
        "id": "u14d-05",
@@ -6411,7 +7417,9 @@
         "Huffman",
         "trace"
        ],
-       "answer": "DEA"
+       "answer": "DEA",
+       "img": "duo/img/algo14-p66-codetree.png",
+       "imgAlt": "p.66 Try 2 코드 트리: A 00, D 01, F 100, B 101, C 110, E 111"
       },
       {
        "id": "u14d-06",
@@ -6425,7 +7433,10 @@
         "trace"
        ],
        "answer": 2.39,
-       "tol": 0.001
+       "tol": 0.001,
+       "img": "duo/img/algo14-p67-cost.png",
+       "imgAlt": "p.67 Try 2 코드 트리와 cost 식, 기대 길이 계산 줄이 가려져 있다",
+       "explainImg": "duo/img/algo14-p67-cost-ans.png"
       },
       {
        "id": "u14d-07",
@@ -6577,7 +7588,8 @@
         "30",
         "55",
         "100"
-       ]
+       ],
+       "explainImg": "duo/img/algo14-p76-huff-ans.png"
       },
       {
        "id": "u14e-02",
@@ -6592,7 +7604,10 @@
         "trace"
        ],
        "answer": 2.24,
-       "tol": 0.001
+       "tol": 0.001,
+       "img": "duo/img/algo14-p76-huff.png",
+       "imgAlt": "p.76 Huffman 트리(왼쪽 0, 오른쪽 1), codeword 와 기대 길이 계산이 가려져 있다",
+       "explainImg": "duo/img/algo14-p76-huff-ans.png"
       },
       {
        "id": "u14e-03",
@@ -6611,7 +7626,10 @@
         "1111",
         "100"
        ],
-       "answer": 1
+       "answer": 1,
+       "img": "duo/img/algo14-p76-huff.png",
+       "imgAlt": "p.76 Huffman 트리(왼쪽 0, 오른쪽 1), E 의 codeword 칸이 E 로 표시돼 가려져 있다",
+       "explainImg": "duo/img/algo14-p76-huff-ans.png"
       },
       {
        "id": "u14e-04",
@@ -6819,6 +7837,54 @@
         "t 단계 후 cost 가 감소한다"
        ],
        "answer": 1
+      },
+      {
+       "id": "u14e-16",
+       "type": "mc",
+       "q": "그림(p.73)은 Huffman 이 E+F → 14, 14+D → 30, B+C → 25 까지 합친 상태다. 다음에 합쳐지는 두 노드와 새 노드의 key 는?",
+       "explain": "CURRENT 에 남은 노드는 A:45, 25, 30 세 개다. key 가 가장 작은 둘은 25 와 30 이라 55 를 만든다(p.74). 마지막에 A:45 + 55 = 100 이 root 가 된다. 가장 큰 A 가 마지막까지 남아 depth 1 이 되는 이유다.",
+       "src": "14강 p.73–75",
+       "wiki": "Huffman coding",
+       "tags": [
+        "Huffman",
+        "그림"
+       ],
+       "img": "duo/img/algo14-p73-huff.png",
+       "imgAlt": "p.73 Huffman 진행: A:45 와 subtree 25(B,C), 30(D, 14(E,F))",
+       "explainImg": "duo/img/algo14-p74-huff-ans.png",
+       "choices": [
+        "25 와 30 → 55",
+        "A:45 와 25 → 70",
+        "A:45 와 30 → 75",
+        "D:16 과 14 → 30"
+       ],
+       "answer": 0
+      },
+      {
+       "id": "u14e-17",
+       "type": "cloze",
+       "q": "[분석 템플릿 칸] heap 으로 구현한 Huffman ($n$ 글자): merge 를 ___ 번 하고, merge 마다 removeMin 두 번과 insert 한 번이 각각 $O($___$)$ → 전체 $O($___$)$.",
+       "explain": "노드가 $n$ 개에서 1개가 될 때까지 merge 한 번에 하나씩 줄어드니 $n-1$ 번. heap 연산은 $O(\\log n)$. 처음 heap 을 만드는 데 $O(n)$ (또는 $O(n\\log n)$). 합쳐서 $O(n\\log n)$. 매번 배열에서 최솟값을 찾으면 $O(n^2)$ 이 된다.",
+       "src": "14강 p.77",
+       "wiki": "Huffman coding",
+       "tags": [
+        "Huffman",
+        "running time",
+        "analysis"
+       ],
+       "answer": [
+        "n−1",
+        "log n",
+        "n log n"
+       ],
+       "bank": [
+        "n−1",
+        "log n",
+        "n log n",
+        "n",
+        "1",
+        "n^2"
+       ]
       }
      ]
     }
@@ -6875,7 +7941,8 @@
         "MST"
        ],
        "answer": 37,
-       "tol": 0
+       "tol": 0,
+       "explainImg": "duo/img/algo15-p84-mst-ans.png"
       },
       {
        "id": "u15a-04",
@@ -6946,7 +8013,10 @@
         "figure"
        ],
        "answer": 7,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo15-p12-cut.png",
+       "imgAlt": "p.12 9정점 그래프와 cut {A,B,D,E} / {C,I,H,G,F} (빨간 점선)",
+       "explainImg": "duo/img/algo15-p15-light-ans.png"
       },
       {
        "id": "u15a-08",
@@ -6994,7 +8064,9 @@
         "cut"
        ],
        "answer": 6,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo15-p12-cut.png",
+       "imgAlt": "p.12 9정점 그래프와 cut {A,B,D,E} / {C,I,H,G,F} (빨간 점선)"
       },
       {
        "id": "u15a-11",
@@ -7071,6 +8143,59 @@
        ],
        "answer": 19,
        "tol": 0
+      },
+      {
+       "id": "u15a-15",
+       "type": "num",
+       "q": "그림(p.13)의 cut 은 {B, C, E, G, H} / {A, D, I, F} 다(양쪽 다 끊겨 있어도 cut 이다). 이 cut 의 light edge 는 몇 개인가?",
+       "explain": "건너는 간선은 A–B 4, A–H 8, C–I 2, C–D 7, C–F 4, D–E 9, E–F 10, F–G 2, G–I 6, H–I 7 이다. 최소 weight 는 2 이고 C–I 와 F–G 두 개가 동점이다. light edge 는 '건너는 간선 중 weight 가 최소인 것' 이라 동점이면 여러 개일 수 있고, 보조정리는 그중 아무거나 써도 된다.",
+       "src": "15강 p.13–14",
+       "wiki": "light edge",
+       "tags": [
+        "MST",
+        "cut",
+        "그림"
+       ],
+       "img": "duo/img/algo15-p13-cut2.png",
+       "imgAlt": "p.13 9정점 그래프와 cut {B,C,E,G,H} / {A,D,I,F} (빨간 점선 여러 조각)",
+       "answer": 2,
+       "tol": 0
+      },
+      {
+       "id": "u15a-16",
+       "type": "tf",
+       "q": "그림(p.14)에서 주황색 굵은 간선이 S 다. 빨간 점선 cut {A, B, D, E} / {C, I, H, G, F} 는 S 를 respect 한다.",
+       "explain": "S = {A–B, C–I, C–F, H–G, G–F}. A–B 는 둘 다 왼쪽, 나머지 넷은 둘 다 오른쪽이다. cut 을 건너는 S 간선이 없으니 respect 한다. 이 cut 의 light edge 는 C–D 7 이라(p.15) 보조정리로 S ∪ {C–D} 를 포함하는 MST 가 있다.",
+       "src": "15강 p.14–15",
+       "wiki": "cut이 S를 respect",
+       "tags": [
+        "MST",
+        "cut",
+        "그림"
+       ],
+       "img": "duo/img/algo15-p14-respect.png",
+       "imgAlt": "p.14 9정점 그래프, 주황 굵은 간선 S, 빨간 점선 cut",
+       "explainImg": "duo/img/algo15-p15-light-ans.png",
+       "answer": true
+      },
+      {
+       "id": "u15a-17",
+       "type": "mc",
+       "q": "[Circle all 형식] 옳은 것을 **모두** 고른 조합은? (1) cut 의 두 부분은 끊겨 있어도 된다 (2) 간선 weight 가 모두 다르면 MST 는 유일하다 (3) cut 을 건너는 간선이면 무엇이든 안전하게 더할 수 있다 (4) S 를 respect 하는 cut 의 light edge 는 안전하다 (S 를 포함하는 MST 가 있을 때) (5) 정점 $n$ 개 그래프의 spanning tree 는 간선이 $n$ 개다",
+       "explain": "(1) 참: p.13 'One or both of the two parts might be disconnected.' (2) 참. (3) 거짓: light 한 간선이어야 한다. 무거운 crossing edge 를 넣으면 cost 가 커질 수 있다. (4) 참: MST 보조정리. (5) 거짓: tree 는 간선 $n-1$ 개.",
+       "src": "15강 p.4–17 · 중간 1번 형식",
+       "wiki": "MST 보조정리",
+       "tags": [
+        "MST",
+        "circle-all"
+       ],
+       "choices": [
+        "(1)(2)(4)",
+        "(1)(2)(3)(4)",
+        "(2)(4)",
+        "(1)(4)(5)"
+       ],
+       "answer": 0
       }
      ]
     },
@@ -7625,7 +8750,10 @@
         "trace"
        ],
        "answer": 2,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo15-p57-prim.png",
+       "imgAlt": "p.57 효율적 Prim 진행: A, B reached, C active, I 의 key 가 가려져 있다",
+       "explainImg": "duo/img/algo15-p57-prim-ans.png"
       },
       {
        "id": "u15d-05",
@@ -7639,7 +8767,10 @@
         "trace"
        ],
        "answer": 2,
-       "tol": 0
+       "tol": 0,
+       "img": "duo/img/algo15-p62-prim.png",
+       "imgAlt": "p.62 효율적 Prim 진행: F 가 active, G 의 key 는 아직 6",
+       "explainImg": "duo/img/algo15-p63-prim-ans.png"
       },
       {
        "id": "u15d-06",
@@ -7658,7 +8789,10 @@
         "G",
         "D"
        ],
-       "answer": 1
+       "answer": 1,
+       "img": "duo/img/algo15-p61-prim.png",
+       "imgAlt": "p.61 효율적 Prim 진행: A, B, C, I reached, 나머지 key D 7, H 7, G 6, F 4, E ∞",
+       "explainImg": "duo/img/algo15-p62-prim.png"
       },
       {
        "id": "u15d-07",
@@ -8088,6 +9222,54 @@
         "DP"
        ],
        "answer": true
+      },
+      {
+       "id": "u15e-17",
+       "type": "mc",
+       "q": "그림(p.87)은 Kruskal 이 G–H 1, C–I 2, G–F 2, A–B 4 까지 더한 상태다(주황 간선). 정렬 순서상 다음 두 간선 C–F 4 와 I–G 6 은 각각 어떻게 되나?",
+       "explain": "C–F 는 tree {C, I} 와 tree {H, G, F} 를 잇는다. 서로 다른 tree 라 더하고 두 tree 를 merge 한다(p.90). 그러면 I 와 G 가 같은 tree 에 들어가서, I–G 를 더하면 cycle 이 생겨 건너뛴다. 이후 H–I 7, A–H 8 도 같은 이유로 건너뛴다. 판단은 union-find 의 `find(u) != find(v)` 한 줄이다.",
+       "src": "15강 p.87–90",
+       "wiki": "Kruskal's algorithm",
+       "tags": [
+        "Kruskal",
+        "그림"
+       ],
+       "img": "duo/img/algo15-p87-kruskal.png",
+       "imgAlt": "p.87 9정점 그래프, Kruskal 이 고른 주황 간선 A–B, C–I, H–G, G–F",
+       "explainImg": "duo/img/algo15-p90-kruskal-ans.png",
+       "choices": [
+        "C–F 더함, I–G 건너뜀",
+        "C–F 더함, I–G 더함",
+        "C–F 건너뜀, I–G 더함",
+        "둘 다 건너뜀"
+       ],
+       "answer": 0
+      },
+      {
+       "id": "u15e-18",
+       "type": "cloze",
+       "q": "[분석 템플릿 칸] Kruskal: 간선 정렬 $O($___$)$, find 는 ___ 번, union 은 ___ 번 이하이고 각각 amortized $O(\\alpha(n))$ → 정렬이 지배한다.",
+       "explain": "정렬은 $O(m\\log m) = O(m\\log n)$ ($m \\le n^2$ 라 $\\log m \\le 2\\log n$). 간선마다 양 끝 find 두 번이라 $2m$. union 은 tree 둘을 합칠 때만, 즉 MST 간선 수 $n-1$ 번. union-find 부분이 $O(m\\,\\alpha(n))$ 이라 정렬 $O(m\\log n)$ 이 전체를 정한다. 정수 weight 를 radix sort 하면 사실상 $O(m)$.",
+       "src": "15강 p.106–107",
+       "wiki": "union-find",
+       "tags": [
+        "Kruskal",
+        "running time",
+        "analysis"
+       ],
+       "answer": [
+        "m log n",
+        "2m",
+        "n−1"
+       ],
+       "bank": [
+        "m log n",
+        "2m",
+        "n−1",
+        "n log n",
+        "m",
+        "n^2"
+       ]
       }
      ]
     }
@@ -8242,7 +9424,7 @@
        "q": "Karger's algorithm 의 동작을 순서대로",
        "explain": "p.19 'Pick a random edge. Contract it. Repeat until you only have two vertices left.'",
        "src": "16강 p.19–34 · 11/19 녹음",
-       "wiki": "super node와 contraction",
+       "wiki": "Karger's algorithm",
        "tags": [
         "Karger"
        ],
@@ -8251,7 +9433,9 @@
         "그 간선을 contract 해 두 끝점을 supernode 하나로 합친다 (사이 간선은 지우고 나머지는 superedge 로)",
         "supernode 가 2개 남을 때까지 반복한다",
         "남은 두 supernode 가 주는 cut 을 돌려준다"
-       ]
+       ],
+       "img": "duo/img/algo16-p19-contract.png",
+       "imgAlt": "p.19 간선 a–b 를 골라(주사위) contract 해 supernode 하나로 합치는 그림"
       },
       {
        "id": "u16a-09",
@@ -8284,7 +9468,7 @@
        "q": "Karger 한 번 실행의 수행 시간 (naive 구현) 은?",
        "explain": "union-find 로 $O(m\\cdot\\alpha(n))$ 까지 줄일 수 있지만 오늘은 $O(n^2)$ 로 충분.",
        "src": "16강 p.37–39",
-       "wiki": "super node와 contraction",
+       "wiki": "Karger's algorithm",
        "tags": [
         "Karger",
         "running time"
@@ -8307,7 +9491,8 @@
        "tags": [
         "Karger"
        ],
-       "answer": true
+       "answer": true,
+       "explainImg": "duo/img/algo16-p42-bad.png"
       },
       {
        "id": "u16a-13",
@@ -8322,6 +9507,58 @@
        ],
        "answer": 0.75,
        "tol": 0.001
+      },
+      {
+       "id": "u16a-14",
+       "type": "tf",
+       "q": "그림(p.6)처럼 간선 하나 위에 빨간 점선을 그었다. 이것은 (L16 의 정의로) cut 이다.",
+       "explain": "L16 의 cut 은 **정점** 집합을 nonempty 한 두 부분으로 나눈 partition 이다. 점선이 간선 하나를 자른다고 정점이 두 무리로 나뉘지 않는다. p.6 제목이 'This is not a cut' 이다. p.7 처럼 정점 두 개를 한쪽, 나머지를 다른 쪽으로 묶어야 cut 이다.",
+       "src": "16강 p.4–7",
+       "wiki": "global minimum cut",
+       "tags": [
+        "Karger",
+        "cut",
+        "그림"
+       ],
+       "img": "duo/img/algo16-p6-notcut.png",
+       "imgAlt": "p.6 8정점 그래프, 간선 하나 위에 짧은 빨간 점선",
+       "explainImg": "duo/img/algo16-p7-cut.png",
+       "answer": false
+      },
+      {
+       "id": "u16a-15",
+       "type": "num",
+       "q": "그림(p.7)의 cut 은 진한 두 정점 / 나머지 여섯 정점이다. 이 cut 을 건너는 간선은 몇 개인가?",
+       "explain": "진한 두 정점(아래 가운데 d, 위 f)에서 나가는 간선을 센다. d 는 a, b, c, e 와 이어져 4개, f 는 e, g, h 와 이어져 3개다. 두 정점 사이에는 간선이 없으니 7개가 모두 cut 을 건넌다(p.8 주황 간선).",
+       "src": "16강 p.7–8",
+       "wiki": "global minimum cut",
+       "tags": [
+        "Karger",
+        "cut",
+        "그림"
+       ],
+       "img": "duo/img/algo16-p7-cut.png",
+       "imgAlt": "p.7 8정점 그래프, 정점 두 개가 빨간 점선으로 묶여 있다",
+       "explainImg": "duo/img/algo16-p8-cross-ans.png",
+       "answer": 7,
+       "tol": 0
+      },
+      {
+       "id": "u16a-16",
+       "type": "num",
+       "q": "그림(p.20)은 Karger 예제 그래프다. global minimum cut 의 크기(건너는 간선 수)는?",
+       "explain": "{a, b, c, d} / {e, f, g, h} 로 나누면 b–e, d–e 두 간선만 건넌다. 모든 정점의 degree 가 3 이상이라 정점 하나만 떼어 내는 cut 은 3 이상이고, 다른 분할도 2 보다 작을 수 없다. p.35 'The minimum cut is given by {a,b,c,d} and {e,h,f,g}'.",
+       "src": "16강 p.20, 34–35",
+       "wiki": "global minimum cut",
+       "tags": [
+        "Karger",
+        "그림"
+       ],
+       "img": "duo/img/algo16-p20-karger.png",
+       "imgAlt": "p.20 정점 a~h, 간선 14개 그래프",
+       "explainImg": "duo/img/algo16-p35-mincut-ans.png",
+       "answer": 2,
+       "tol": 0
       }
      ]
     },
@@ -8535,6 +9772,39 @@
         "randomized"
        ],
        "answer": true
+      },
+      {
+       "id": "u16b-14",
+       "type": "num",
+       "q": "그림(p.20) 그래프(간선 14개, min cut 간선 b–e, d–e)에서 Karger 의 **첫** contraction 이 min cut 간선을 피할 확률은? (소수 셋째 자리)",
+       "explain": "간선을 uniformly random 하게 하나 고르니 $\\Pr = \\frac{14-2}{14} = \\frac{12}{14} \\approx 0.857$. 일반 하한 식 $1 - \\frac{k}{nk/2} = 1 - \\frac{2}{n} = \\frac{6}{8} = 0.75$ 보다 크다. 이 그래프의 간선 수 14 가 하한에 쓴 $nk/2 = 8$ 보다 많기 때문이다. 하한은 '최악의 그래프에서도' 성립하는 값이다.",
+       "src": "16강 p.20, 66–69",
+       "wiki": "Karger 성공 확률 증명",
+       "tags": [
+        "Karger",
+        "그림"
+       ],
+       "img": "duo/img/algo16-p20-karger.png",
+       "imgAlt": "p.20 정점 a~h, 간선 14개 그래프",
+       "answer": 0.857,
+       "tol": 0.002
+      },
+      {
+       "id": "u16b-15",
+       "type": "num",
+       "q": "그림(p.21)에서 random edge 로 a–b 가 뽑혔다. contract 한 뒤 그래프에 남는 간선(superedge 안의 원래 간선을 하나씩 셈)은 몇 개인가?",
+       "explain": "a 와 b 사이 간선은 a–b 하나뿐이라 그것만 사라지고 나머지 13 개는 superedge 로 묶여 남는다. 예를 들어 {a,b}–d 사이 superedge 에는 {d,a}, {d,b} 두 간선이 들어간다(p.23). 두 supernode 사이 간선이 여러 개였다면 그 전부가 지워진다(self-loop 를 남기지 않는다).",
+       "src": "16강 p.21–23, 37",
+       "wiki": "super node와 contraction",
+       "tags": [
+        "Karger",
+        "그림"
+       ],
+       "img": "duo/img/algo16-p21-random.png",
+       "imgAlt": "p.21 Karger 예제 그래프에서 a–b 간선이 random edge 로 표시됨",
+       "explainImg": "duo/img/algo16-p23-super-ans.png",
+       "answer": 13,
+       "tol": 0
       }
      ]
     },
@@ -8724,6 +9994,49 @@
         "Karger"
        ],
        "answer": true
+      },
+      {
+       "id": "u16c-12",
+       "type": "mc",
+       "q": "[Circle all 형식] 옳은 것을 **모두** 고른 조합은? (1) Karger 는 Monte Carlo 알고리즘이다 (2) QuickSort 는 Las Vegas 알고리즘이다 (3) Karger 한 번이 min cut 을 돌려줄 확률은 적어도 $1/\\binom{n}{2}$ (4) Karger 를 $\\binom{n}{2}\\ln(1/\\delta)$ 번 반복하면 실패 확률이 $\\delta$ 이하다 (5) Karger 는 weighted directed graph 의 min s–t cut 을 구한다",
+       "explain": "(1) 참: 항상 빠르고 틀릴 수 있다. (2) 참: 항상 맞고 느릴 수 있다. (3) 참: Claim. (4) 참: $(1-p)^T \\le e^{-pT} = \\delta$. (5) 거짓: L16 은 undirected·unweighted 의 **global** min cut 이다. s–t cut 은 L17(max flow)에서 다룬다. 중간 i.i 처럼 '확률 $p$' 와 '반복 횟수 $1/p$' 를 섞지 않도록 조심.",
+       "src": "16강 p.4, 15–17, 57–64 · 중간 1번 형식",
+       "wiki": "Karger 성공 확률 증명",
+       "tags": [
+        "Karger",
+        "circle-all"
+       ],
+       "choices": [
+        "(1)(2)(3)(4)",
+        "(1)(2)(3)",
+        "(1)(3)(4)",
+        "(1)(2)(3)(4)(5)"
+       ],
+       "answer": 0
+      },
+      {
+       "id": "u16c-13",
+       "type": "cloze",
+       "q": "[분석 템플릿 칸] 반복 Karger: 반복 횟수 ___ × 한 번 실행 ___ $= O(n^4)$ (δ 는 상수).",
+       "explain": "$\\binom{n}{2} = O(n^2)$ 번 반복하고, 한 번은 contraction $n-2$ 번 × merge $O(n)$ 이라 $O(n^2)$. 곱해서 $O(n^4)$. union-find 를 쓰면 한 번 실행을 더 줄일 수 있다(p.63). 중간 i.i 의 '$E[\\text{시행 횟수}] = 1/p$' 와 같은 계산이 여기서는 $1/p = \\binom{n}{2}$ 이다.",
+       "src": "16강 p.60–64",
+       "wiki": "반복으로 성공 확률 올리기",
+       "tags": [
+        "Karger",
+        "running time",
+        "analysis"
+       ],
+       "answer": [
+        "C(n,2)·ln(1/δ)",
+        "O(n^2)"
+       ],
+       "bank": [
+        "C(n,2)·ln(1/δ)",
+        "O(n^2)",
+        "n",
+        "O(n)",
+        "1/δ"
+       ]
       }
      ]
     }
@@ -8773,7 +10086,7 @@
         "건너는 간선 수"
        ],
        "answer": 1,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "s-t cut"
       },
       {
        "id": "u17a-03",
@@ -8788,7 +10101,7 @@
        ],
        "answer": 9,
        "tol": 0,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "s-t cut"
       },
       {
        "id": "u17a-04",
@@ -8803,7 +10116,7 @@
        ],
        "answer": 6,
        "tol": 0,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "s-t cut"
       },
       {
        "id": "u17a-05",
@@ -8816,7 +10129,7 @@
         "trap"
        ],
        "answer": false,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "s-t cut"
       },
       {
        "id": "u17a-06",
@@ -8838,7 +10151,7 @@
         "들어오는",
         "weight 합"
        ],
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "flow"
       },
       {
        "id": "u17a-07",
@@ -8856,7 +10169,7 @@
         "가장 큰 간선 flow"
        ],
        "answer": 1,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "flow"
       },
       {
        "id": "u17a-08",
@@ -8887,20 +10200,23 @@
         "flow"
        ],
        "answer": true,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "max-flow min-cut theorem"
       },
       {
        "id": "u17a-10",
        "type": "num",
-       "q": "슬라이드 예제 그래프의 max flow value 는? (min cut 4 + 3 + 4)",
-       "explain": "p.9 의 cut 4 + 3 + 4 = 11 이 min cut 이고, p.14 의 maximal flow 도 11.",
+       "q": "그림(p.5)의 예제 그래프에서 s 에서 t 로의 max flow value 는?",
+       "explain": "Ford-Fulkerson 을 끝까지 돌리면 value 11 이 나오고(p.52–53), 마지막 residual graph 에서 s 로부터 도달 가능한 정점을 한쪽으로 묶은 cut 의 cost 가 $4 + 3 + 4 = 11$ 이다. max flow = min cut 이 실제로 확인된다. t 로 들어가는 간선 capacity 합 $4+4+4 = 12$ 는 상한일 뿐 답이 아니다.",
        "src": "17강 p.9, 14, 53",
        "tags": [
         "flow"
        ],
        "answer": 11,
        "tol": 0,
-       "wiki": "L17 Advanced Algorithms II"
+       "explainImg": "duo/img/algo17-p53-ff-ans.png",
+       "img": "duo/img/algo17-p5-graph.png",
+       "imgAlt": "p.5 s–t 예제 그래프: 정점 8개, 간선 capacity 표시",
+       "wiki": "max-flow min-cut theorem"
       },
       {
        "id": "u17a-11",
@@ -8914,7 +10230,43 @@
        ],
        "answer": 6,
        "tol": 0,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "max-flow min-cut theorem"
+      },
+      {
+       "id": "u17a-12",
+       "type": "num",
+       "q": "그림(p.21)은 capacity(숫자)와 현재 flow(네모 안 숫자)다. 이 그래프의 max flow value 는?",
+       "explain": "지금 flow 의 value 는 s 에서 나가는 $3 + 1 = 4$. residual graph 에 s→a→b→t (residual 1, 5, 1) 가 남아 있어 1 을 더 보낼 수 있다(p.24). 보내고 나면 a→t, b→t 가 포화돼 s 에서 t 로 갈 수 없다. cut {s, a, b} / {t} 의 cost 가 $2 + 3 = 5$ 라 max flow = min cut = 5.",
+       "src": "17강 p.21–26",
+       "wiki": "max-flow min-cut theorem",
+       "tags": [
+        "flow",
+        "그림"
+       ],
+       "img": "duo/img/algo17-p21-flow.png",
+       "imgAlt": "p.21 s, a, b, t 그래프: capacity s→a 4, s→b 8, a→b 6, a→t 2, b→t 3 와 flow 3, 1, 1, 2, 2",
+       "explainImg": "duo/img/algo17-p26-final-ans.png",
+       "answer": 5,
+       "tol": 0
+      },
+      {
+       "id": "u17a-13",
+       "type": "mc",
+       "q": "[Circle all 형식] 옳은 것을 **모두** 고른 조합은? (1) max flow value = min s–t cut cost (2) s–t cut 의 cost 에는 t 쪽 → s 쪽 간선의 capacity 도 더한다 (3) BFS 로 path 를 고르는 Ford-Fulkerson 은 $O(nm^2)$ (4) capacity 가 모두 정수면 정수 max flow 가 있다 (5) residual graph 의 backward 간선 weight 는 $c - f$ 다",
+       "explain": "(1) 참: max-flow min-cut theorem. (2) 거짓: s 쪽에서 t 쪽으로 가는 간선만 센다(p.8). (3) 참: Edmonds-Karp(증명은 시험 범위 밖). (4) 참: Ford-Fulkerson 의 update 가 정수끼리 더하고 빼기만 한다(p.64). (5) 거짓: forward 가 남은 양 $c - f$, backward 가 쓴 양 $f$ 다.",
+       "src": "17강 p.8, 15, 21, 63–64 · 중간 1번 형식",
+       "wiki": "max-flow min-cut theorem",
+       "tags": [
+        "flow",
+        "circle-all"
+       ],
+       "choices": [
+        "(1)(3)(4)",
+        "(1)(2)(3)(4)",
+        "(1)(4)",
+        "(1)(3)(4)(5)"
+       ],
+       "answer": 0
       }
      ]
     },
@@ -8939,7 +10291,7 @@
         "flow 는 cut 을 한 번만 건넌다"
        ],
        "answer": 0,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "max-flow min-cut theorem"
       },
       {
        "id": "u17b-02",
@@ -8953,7 +10305,7 @@
         "exam"
        ],
        "answer": true,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "max-flow min-cut theorem"
       },
       {
        "id": "u17b-03",
@@ -8971,7 +10323,7 @@
         "forward 만 c − f"
        ],
        "answer": 1,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "residual graph"
       },
       {
        "id": "u17b-04",
@@ -8985,7 +10337,7 @@
        ],
        "answer": 3,
        "tol": 0,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "residual graph"
       },
       {
        "id": "u17b-05",
@@ -9008,7 +10360,7 @@
         "shortest",
         "Hamiltonian"
        ],
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "augmenting path"
       },
       {
        "id": "u17b-06",
@@ -9026,7 +10378,7 @@
         "(v,u) 가 원래 간선(즉 backward)이면 f'(v,u) = f(v,u) − x",
         "f' 를 돌려주고 $G_f$ 를 갱신한다"
        ],
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "augmenting path"
       },
       {
        "id": "u17b-07",
@@ -9044,7 +10396,7 @@
         "알고리즘을 멈춘다"
        ],
        "answer": 1,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "augmenting path"
       },
       {
        "id": "u17b-08",
@@ -9063,7 +10415,7 @@
         "{V − t}, {t}"
        ],
        "answer": 1,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "max-flow min-cut theorem"
       },
       {
        "id": "u17b-09",
@@ -9080,7 +10432,7 @@
         "s→t path P 를 찾는다 (예: BFS)",
         "f ← increaseFlow(P, f) 하고 $G_f$ 를 갱신"
        ],
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "Ford-Fulkerson"
       },
       {
        "id": "u17b-10",
@@ -9092,7 +10444,7 @@
         "Ford-Fulkerson"
        ],
        "answer": true,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "Ford-Fulkerson"
       },
       {
        "id": "u17b-11",
@@ -9106,7 +10458,103 @@
        ],
        "answer": 5,
        "tol": 0,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "Ford-Fulkerson"
+      },
+      {
+       "id": "u17b-12",
+       "type": "mc",
+       "q": "그림(p.21)의 오른쪽은 왼쪽 flow 로 만든 residual graph $G_f$ 다. 가린 ① s→b (forward), ② b→s (backward), ③ a→b (forward) 의 weight 는?",
+       "explain": "원래 간선 (u,v) 에 capacity $c$, flow $f$ 가 있으면 forward u→v 는 남은 양 $c - f$, backward v→u 는 쓴 양 $f$ 다. ① s→b: $8 - 1 = 7$. ② b→s: $f(s,b) = 1$. ③ a→b: $6 - 1 = 5$. ①과 ②를 더하면 항상 capacity 8 이 된다.",
+       "src": "17강 p.21–22",
+       "wiki": "residual graph",
+       "tags": [
+        "residual",
+        "그림"
+       ],
+       "img": "duo/img/algo17-p21-residual.png",
+       "imgAlt": "p.21 왼쪽 flow 그래프와 오른쪽 residual graph, 세 weight 가 ①②③ 으로 가려져 있다",
+       "explainImg": "duo/img/algo17-p21-residual-ans.png",
+       "choices": [
+        "① 7, ② 1, ③ 5",
+        "① 8, ② 1, ③ 6",
+        "① 1, ② 7, ③ 1",
+        "① 7, ② 8, ③ 5"
+       ],
+       "answer": 0
+      },
+      {
+       "id": "u17b-13",
+       "type": "tf",
+       "q": "그림(p.26)은 augmenting path 로 1 을 더 보낸 뒤의 flow(왼쪽)와 residual graph(오른쪽)다. 이 residual graph 에서 s 로부터 t 에 도달할 수 있다.",
+       "explain": "s 에서 나가는 residual 간선은 s→b (7) 뿐이다(s→a 는 포화돼 backward 만 남았다). b 에서는 b→a (2) 와 b→s 만 있고 b→t 는 포화됐다. a 에서는 a→b, a→s 뿐이고 a→t 도 포화됐다. 그래서 t 에 닿지 못한다. Lemma 에 의해 지금 flow(value 5)는 max flow 이고, {s, a, b} / {t} 가 min cut 이다.",
+       "src": "17강 p.23–26",
+       "wiki": "augmenting path",
+       "tags": [
+        "residual",
+        "그림"
+       ],
+       "img": "duo/img/algo17-p26-final.png",
+       "imgAlt": "p.26 갱신된 flow 그래프와 residual graph, 결론 문장이 가려져 있다",
+       "explainImg": "duo/img/algo17-p26-final-ans.png",
+       "answer": false
+      },
+      {
+       "id": "u17b-14",
+       "type": "num",
+       "q": "그림(p.46)은 Ford-Fulkerson 첫 단계의 residual graph(처음엔 G 와 같다)와 고른 augmenting path(노란 선)다. 이 path 로 보낼 수 있는 양 x 는?",
+       "explain": "increaseFlow 의 첫 줄 'x = min weight on any edge in P'. 노란 path 는 s→(아래) 6, 10, 4→t 를 지나니 $x = \\min(6, 10, 4) = 4$. 그다음 path 위 원래 간선의 flow 를 4 씩 늘리고 residual 을 다시 만든다(p.47).",
+       "src": "17강 p.43–47",
+       "wiki": "Ford-Fulkerson",
+       "tags": [
+        "FF",
+        "그림"
+       ],
+       "img": "duo/img/algo17-p46-ff.png",
+       "imgAlt": "p.46 Ford-Fulkerson 예제 residual graph 와 노란 augmenting path",
+       "explainImg": "duo/img/algo17-p47-ff-ans.png",
+       "answer": 4,
+       "tol": 0
+      },
+      {
+       "id": "u17b-15",
+       "type": "cloze",
+       "q": "[빈칸 의사코드] increaseFlow(P, f): `x =` ___ `weight on any edge in P` / `for (u,v) in P:` `if (u,v) in E: f'(u,v) ← f(u,v) + x` / `else: f'(v,u) ← f(v,u)` ___ `x`",
+       "explain": "path 의 bottleneck 만큼만 보낼 수 있으니 min. (u,v) 가 원래 간선이 아니면 residual 의 backward 간선이고, 원래 간선 (v,u) 로 보냈던 flow 를 x 만큼 되돌린다(빼기). 여기서 + 를 쓰면 capacity 를 넘거나 flow 보존이 깨진다.",
+       "src": "17강 p.35",
+       "wiki": "augmenting path",
+       "tags": [
+        "FF",
+        "빈칸"
+       ],
+       "answer": [
+        "min",
+        "−"
+       ],
+       "bank": [
+        "min",
+        "−",
+        "max",
+        "+",
+        "sum"
+       ]
+      },
+      {
+       "id": "u17b-16",
+       "type": "order",
+       "q": "[증명 칸 채우기] Lemma 의 ⇐ 방향 '$G_f$ 에서 t 에 도달 불가 ⇒ f 는 max flow' 를 순서대로",
+       "explain": "p.38–40 의 논증이다. 덤으로 이 A, B 가 min cut 이다. Ford-Fulkerson 이 끝나면 min cut 도 함께 얻는 이유가 이것이다. Lemma 1 자체의 엄밀한 증명(p.18)은 시험 범위 밖이니 '결과로 인용' 만 하면 된다.",
+       "src": "17강 p.38–40",
+       "wiki": "max-flow min-cut theorem",
+       "tags": [
+        "FF",
+        "proof"
+       ],
+       "answer": [
+        "$G_f$ 에서 s 로부터 도달 가능한 정점 집합 A, 나머지 B 로 cut 을 잡는다 (t ∈ B)",
+        "A→B 원래 간선은 포화(flow = capacity)다. 아니면 forward residual 간선으로 B 에 닿았을 것이다",
+        "B→A 원래 간선의 flow 는 0 이다. 아니면 backward residual 간선으로 B 에 닿았을 것이다",
+        "그래서 flow value = 이 cut 의 cost 이고, Lemma 1 (flow ≤ cut) 에 의해 f 는 max flow 다"
+       ]
       }
      ]
     },
@@ -9130,7 +10578,9 @@
         "틀린 답을 낸다"
        ],
        "answer": 1,
-       "wiki": "L17 Advanced Algorithms II"
+       "img": "duo/img/algo17-p55-bad.png",
+       "imgAlt": "p.55 s, a, b, t 그래프: 바깥 네 간선 capacity C, 가운데 a–b 간선 capacity 1",
+       "wiki": "Edmonds-Karp"
       },
       {
        "id": "u17c-02",
@@ -9149,7 +10599,7 @@
         "Karger, $O(n^4)$"
        ],
        "answer": 1,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "Edmonds-Karp"
       },
       {
        "id": "u17c-03",
@@ -9163,26 +10613,25 @@
         "exam"
        ],
        "answer": false,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "Edmonds-Karp"
       },
       {
        "id": "u17c-04",
        "type": "mc",
-       "q": "Edmonds-Karp $O(nm^2)$ 의 아이디어 구성으로 맞는 것은?",
-       "explain": "'The number of times you remove an edge from the residual graph is O(n). This is the hard part.'",
-       "src": "17강 p.63",
+       "q": "Edmonds-Karp 는 Ford-Fulkerson 에서 augmenting path 를 BFS 로 고른다. 이것은 residual graph 에서 어떤 path 를 고른다는 뜻인가? ($O(nm^2)$ 증명 자체는 시험 범위 밖, p.63)",
+       "explain": "BFS 는 unweighted 최단경로, 즉 **간선 수**가 가장 적은 path 를 준다(L9). residual capacity 는 보지 않는다. 이렇게 고르면 p.55 처럼 가운데 1짜리 간선을 오가며 $2C$ 번 도는 일이 없고 $O(nm^2)$ 이 보장된다. 그 증명(CLRS 26.2)은 슬라이드에 'not on the exam' 이라 적혀 있다.",
+       "src": "17강 p.55–63",
        "tags": [
-        "Edmonds-Karp",
-        "running time"
+        "Edmonds-Karp"
        ],
        "choices": [
-        "각 간선이 residual graph 에서 지워지는 횟수 O(n) × 간선 m 개 × BFS 한 번 O(m)",
-        "정점 n 개 × heap",
-        "capacity 합 × m",
-        "m log n 정렬"
+        "간선 수가 가장 적은 s→t path",
+        "bottleneck(최소 residual capacity)이 가장 큰 path",
+        "capacity 합이 가장 작은 path",
+        "아무 s→t path"
        ],
        "answer": 0,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "Edmonds-Karp"
       },
       {
        "id": "u17c-05",
@@ -9194,7 +10643,7 @@
         "flow"
        ],
        "answer": true,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "Ford-Fulkerson"
       },
       {
        "id": "u17c-06",
@@ -9202,7 +10651,7 @@
        "q": "bipartite matching 을 max flow 로 푸는 구성은?",
        "explain": "정수성 때문에 flow 는 0 또는 1, 보존 법칙 때문에 학생마다 최대 하나 → flow 가 있는 간선이 matching, value = matching 크기.",
        "src": "17강 p.66–70",
-       "wiki": "bipartite graph",
+       "wiki": "maximum bipartite matching",
        "tags": [
         "matching",
         "flow"
@@ -9213,7 +10662,8 @@
         "s → 동아리 → 학생 → t, capacity = 인원",
         "MST 를 구한다"
        ],
-       "answer": 0
+       "answer": 0,
+       "explainImg": "duo/img/algo17-p69-match-ans.png"
       },
       {
        "id": "u17c-07",
@@ -9221,7 +10671,7 @@
        "q": "학생 x1, x2, x3, 동아리 y1, y2, y3. x1 은 y1·y2 를, x2 와 x3 은 y1 만 원한다. 최대 matching 크기(= max flow)는?",
        "explain": "y1 은 한 명만 받을 수 있다. x1–y2, x2–y1 (또는 x3–y1) 로 2. x2, x3 이 둘 다 y1 만 원하니 3 은 불가.",
        "src": "17강 p.66–70 (연습)",
-       "wiki": "bipartite graph",
+       "wiki": "maximum bipartite matching",
        "tags": [
         "matching",
         "trace"
@@ -9235,7 +10685,7 @@
        "q": "'max flow = maximum matching' 논증을 순서대로",
        "explain": "p.70 슬라이드의 1–5 번.",
        "src": "17강 p.70",
-       "wiki": "bipartite graph",
+       "wiki": "maximum bipartite matching",
        "tags": [
         "matching",
         "proof"
@@ -9263,7 +10713,7 @@
         "x→t 에 c(x)"
        ],
        "answer": 0,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "assignment problem"
       },
       {
        "id": "u17c-10",
@@ -9275,7 +10725,7 @@
         "Ford-Fulkerson"
        ],
        "answer": true,
-       "wiki": "L17 Advanced Algorithms II"
+       "wiki": "Ford-Fulkerson"
       },
       {
        "id": "u17c-11",
@@ -9289,6 +10739,32 @@
         "trap"
        ],
        "answer": false
+      },
+      {
+       "id": "u17c-12",
+       "type": "cloze",
+       "q": "[분석 템플릿 칸] bipartite matching 을 max flow 로 풀 때 capacity 가 모두 1 이면, augment 한 번에 flow value 가 정확히 ___ 늘고 max flow ≤ n 이라 반복은 n 번 이하, BFS 한 번 ___ → 전체 ___.",
+       "explain": "정수 capacity 라 x 는 1 이상인데 모든 capacity 가 1 이라 x = 1. value 는 학생 수(또는 동아리 수) 이하라 n 번 안에 끝난다. 한 번은 residual 에서 BFS $O(n+m)$ 이니 전체 $O(nm)$. Edmonds-Karp 일반 bound $O(nm^2)$ 보다 작다.",
+       "src": "17강 p.64–70",
+       "wiki": "maximum bipartite matching",
+       "tags": [
+        "flow",
+        "running time",
+        "analysis"
+       ],
+       "answer": [
+        "1",
+        "O(m)",
+        "O(nm)"
+       ],
+       "bank": [
+        "1",
+        "O(m)",
+        "O(nm)",
+        "C",
+        "O(n)",
+        "O(nm^2)"
+       ]
       }
      ]
     }
