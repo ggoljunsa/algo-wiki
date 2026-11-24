@@ -11579,7 +11579,7 @@
   {
    "id": "u17",
    "title": "17강 Advanced II (Max flow)",
-   "desc": "min s–t cut · max flow · residual graph · Ford-Fulkerson · 응용 (11/24 수업 전, 슬라이드 기준)",
+   "desc": "min s–t cut · max flow · residual graph · Ford-Fulkerson · 응용 (11/24 수업: p.1–53, 그 뒤는 슬라이드 기준)",
    "lessons": [
     {
      "id": "u17a",
@@ -12423,6 +12423,318 @@
        "title": "min cut 두 종류",
        "body": "Ford-Fulkerson 은 max flow 와 함께 min **s–t** cut 을 준다(directed, capacity). Karger 는 undirected·unweighted 의 **global** min cut. 서로 다른 문제다.",
        "src": "16강 p.11 · 17강 p.53"
+      }
+     ]
+    },
+    {
+     "id": "u17d",
+     "title": "min cut 증명: cut 선 긋기",
+     "items": [
+      {
+       "id": "u17d-01",
+       "type": "order",
+       "q": "[증명 칸 채우기] '$G_f$ 에 s→t 경로가 없으면 f 는 max flow' 의 증명을 순서대로",
+       "explain": "L17 p.38–40 의 ⇒ 방향. 교수(11/24)는 '선을 넘는 간선은 $G_f$ 에 없으니 full', 그리고 마지막 부등식 사슬을 짚었다. 셋째 줄의 'T→S 는 0' 은 슬라이드가 글로 적지 않은 부분이다.",
+       "src": "17강 p.38–40 · 11/24 녹음 60:05–64:30",
+       "wiki": "max-flow min-cut 증명 (cut 선 긋기)",
+       "prof": true,
+       "tags": [
+        "proof",
+        "cut"
+       ],
+       "answer": [
+        "f 로 residual graph $G_f$ 를 만든다",
+        "$G_f$ 에서 s 부터 BFS 해서 닿는 정점을 S, 나머지를 T 로 둔다 (t ∈ T)",
+        "S→T 원래 간선은 꽉 차 있고, T→S 원래 간선은 flow 가 0 이다",
+        "그래서 flow 값 = (S→T flow) − (T→S flow) = 이 cut 의 cost",
+        "value(f) = cost ≥ min cut ≥ max flow ≥ value(f) 이라 모두 같다"
+       ],
+       "introCard": 0
+      },
+      {
+       "id": "u17d-02",
+       "type": "mc",
+       "q": "max-flow min-cut 증명에서 cut 의 s 쪽 S 는 어떻게 정하나?",
+       "explain": "'{things reachable from s in $G_f$}'. G 에서는 거의 모든 정점이 이어져 있어서 아무 정보가 없다. '더 보낼 수 있는 길' 은 남은 양(forward)과 되돌릴 수 있는 양(backward)을 담은 $G_f$ 에만 있다.",
+       "src": "17강 p.38",
+       "wiki": "max-flow min-cut 증명 (cut 선 긋기)",
+       "prof": true,
+       "tags": [
+        "cut",
+        "residual"
+       ],
+       "choices": [
+        "원래 그래프 G 에서 s 와 이어진 정점들",
+        "residual graph $G_f$ 에서 s 로부터 화살표를 따라 갈 수 있는(reachable) 정점들",
+        "flow 가 0 인 간선으로만 갈 수 있는 정점들",
+        "t 에서 출발해 갈 수 없는 정점들"
+       ],
+       "answer": 1,
+       "introCard": 1
+      },
+      {
+       "id": "u17d-03",
+       "type": "mc",
+       "q": "그림 위쪽은 flow f(값 5)이고 아래쪽은 그 residual graph $G_f$ 다. $G_f$ 에서 s 부터 갈 수 있는 정점 집합 S 는?",
+       "explain": "s 에서 나가는 $G_f$ 간선은 s→b (7) 뿐이라 b 에 간다. b 에서 backward b→a (2) — 원래 a→b 로 2 를 보내고 있어서 되돌릴 수 있다 — 로 a 에 간다. a 에서는 a→b, a→s 뿐이고 a→t, b→t 는 꽉 차서 forward 가 없다. 그래서 S = {s, a, b}, t 는 못 간다.",
+       "src": "17강 p.39",
+       "wiki": "max-flow min-cut 증명 (cut 선 긋기)",
+       "tags": [
+        "cut",
+        "residual",
+        "그림"
+       ],
+       "img": "duo/img/algo17-cut-gf.png",
+       "imgAlt": "위: s→a 4/4, s→b 1/8, a→b 2/6, a→t 2/2, b→t 3/3. 아래: residual graph (forward 파랑, backward 초록)",
+       "explainImg": "duo/img/algo17-cut-line.png",
+       "choices": [
+        "{s}",
+        "{s, b}",
+        "{s, a, b}",
+        "{s, a, b, t}"
+       ],
+       "answer": 2,
+       "introCard": 1
+      },
+      {
+       "id": "u17d-04",
+       "type": "num",
+       "q": "같은 그림에서 S = {s, a, b}, T = {t} 로 나눈 s–t cut 의 cost 는?",
+       "explain": "S→T 로 건너는 간선은 a→t (capacity 2) 와 b→t (capacity 3). cost = 2 + 3 = 5. flow 값도 s 에서 나가는 4 + 1 = 5 라 같다. 그래서 이 flow 는 max flow 이고 이 cut 은 min cut 이다.",
+       "src": "17강 p.39–40",
+       "wiki": "max-flow min-cut 증명 (cut 선 긋기)",
+       "tags": [
+        "cut",
+        "그림"
+       ],
+       "img": "duo/img/algo17-cut-gf.png",
+       "imgAlt": "p.39 flow 와 residual graph",
+       "explainImg": "duo/img/algo17-cut-sum.png",
+       "answer": 5,
+       "tol": 0,
+       "introCard": 3
+      },
+      {
+       "id": "u17d-05",
+       "type": "tf",
+       "q": "$G_f$ 에서 s 가 닿는 집합 S 로 cut 을 잡으면, S 쪽 → T 쪽으로 건너는 원래 간선은 모두 꽉 차 있다(flow = capacity).",
+       "explain": "꽉 차지 않았다면 남은 양 c − f > 0 이라 $G_f$ 에 forward 간선이 있고, 꼬리가 S 에 있으니 BFS 가 머리까지 갔을 것이다. 그런데 머리는 T 에 있다 — 모순. 슬라이드: 'The edges in the cut are full because they don't exist in $G_f$.'",
+       "src": "17강 p.39 · 11/24 녹음 62:24–63:25",
+       "wiki": "max-flow min-cut 증명 (cut 선 긋기)",
+       "prof": true,
+       "tags": [
+        "cut",
+        "proof"
+       ],
+       "answer": true,
+       "introCard": 2
+      },
+      {
+       "id": "u17d-06",
+       "type": "tf",
+       "q": "같은 cut 에서 T 쪽 → S 쪽으로 거꾸로 건너는 원래 간선에는 flow 가 남아 있을 수 있다.",
+       "explain": "flow 가 0 보다 컸다면 $G_f$ 에 backward 간선(S 쪽 → T 쪽 방향)이 있고, 그 꼬리가 S 에 있으니 BFS 가 T 쪽 정점까지 갔을 것이다 — 모순. 그래서 flow 는 0 이다. 슬라이드는 이 사실을 글로 적지 않았지만, flow 값 = cut cost 가 되려면 꼭 필요하다(거꾸로 오는 flow 가 있으면 그만큼 빼야 한다).",
+       "src": "17강 p.39–40 (슬라이드 생략분)",
+       "wiki": "max-flow min-cut 증명 (cut 선 긋기)",
+       "tags": [
+        "cut",
+        "proof"
+       ],
+       "answer": false,
+       "introCard": 2
+      },
+      {
+       "id": "u17d-07",
+       "type": "mc",
+       "q": "S→T 원래 간선 u→v 가 flow 3 / capacity 5 라고 하자. 이게 불가능한 이유는?",
+       "explain": "S 는 '$G_f$ 에서 s 가 닿는 정점 전부' 라서, S 에서 $G_f$ 간선 하나로 갈 수 있는 정점은 모두 S 에 있어야 한다. 남은 양 2 짜리 forward 간선이 있으면 v 도 S 다. v ∈ T 와 모순.",
+       "src": "17강 p.39",
+       "wiki": "max-flow min-cut 증명 (cut 선 긋기)",
+       "tags": [
+        "cut",
+        "proof"
+       ],
+       "choices": [
+        "capacity 제약을 어겨서",
+        "$G_f$ 에 forward u→v (2) 가 생기고, u 가 S 에 있으니 v 도 S 에 들어갔어야 해서",
+        "flow 보존 법칙을 어겨서",
+        "Lemma 1 에 어긋나서"
+       ],
+       "answer": 1,
+       "introCard": 2
+      },
+      {
+       "id": "u17d-08",
+       "type": "mc",
+       "q": "그림은 L17 p.4 그래프의 max flow(값 11)와 그 residual graph 다(정점 이름 A–F 는 임의로 붙임). $G_f$ 에서 s 부터 갈 수 있는 정점 집합 S 는?",
+       "explain": "s→A, s→B 는 꽉 차 있어 forward 가 없고 s→C 만 1 남았다 → C. C→F (5 남음) → F. F→B (2 남음) → B. B 에서 B→E 는 꽉 찼고, B→A 는 원래 A→B 에 flow 가 0 이라 backward 가 없다. 그래서 S = {s, B, C, F}.",
+       "src": "17강 p.14, 53",
+       "wiki": "max-flow min-cut 증명 (cut 선 긋기)",
+       "tags": [
+        "cut",
+        "residual",
+        "그림"
+       ],
+       "img": "duo/img/algo17-cut2-gf.png",
+       "imgAlt": "p.4 그래프의 flow/capacity 와 residual graph",
+       "explainImg": "duo/img/algo17-cut2-line.png",
+       "choices": [
+        "{s, A, B, C}",
+        "{s, B, C, F}",
+        "{s, C}",
+        "{s, A, D, E}"
+       ],
+       "answer": 1,
+       "introCard": 1
+      },
+      {
+       "id": "u17d-09",
+       "type": "num",
+       "q": "같은 그림에서 S = {s, B, C, F} 로 잡은 s–t cut 의 cost 는?",
+       "explain": "S→T 로 건너는 간선: s→A 4, B→E 3, F→t 4 → 4 + 3 + 4 = 11. 모두 꽉 차 있다. T→S 로 거꾸로 건너는 A→B, E→F 는 cost 에 안 넣는다(그리고 flow 0).",
+       "src": "17강 p.9, 53",
+       "wiki": "max-flow min-cut 증명 (cut 선 긋기)",
+       "tags": [
+        "cut",
+        "그림"
+       ],
+       "img": "duo/img/algo17-cut2-gf.png",
+       "imgAlt": "p.4 그래프의 flow/capacity 와 residual graph",
+       "explainImg": "duo/img/algo17-cut2-sum.png",
+       "answer": 11,
+       "tol": 0,
+       "introCard": 3
+      },
+      {
+       "id": "u17d-10",
+       "type": "mc",
+       "q": "같은 예(S = {s, B, C, F})에서 T 쪽 → S 쪽으로 거꾸로 건너는 원래 간선과 그 flow 는?",
+       "explain": "T = {A, D, E, t}. 원래 간선 중 T→S 는 A→B (0/2), E→F (0/6). 둘 다 flow 0 이다 — 0 이 아니었다면 $G_f$ 에 B→A 또는 F→E backward 간선이 생겨 A 나 E 가 S 에 들어왔을 것이다. F→B 는 F, B 모두 S 라 선을 넘지 않는다.",
+       "src": "17강 p.14 (슬라이드 생략분)",
+       "wiki": "max-flow min-cut 증명 (cut 선 긋기)",
+       "tags": [
+        "cut",
+        "그림"
+       ],
+       "img": "duo/img/algo17-cut2-line.png",
+       "imgAlt": "S 와 T 로 칠하고 cut 을 그은 그림",
+       "explainImg": "duo/img/algo17-cut2-back.png",
+       "choices": [
+        "A→B, E→F — 둘 다 flow 0",
+        "F→B — flow 1",
+        "A→B — flow 2",
+        "거꾸로 건너는 간선은 없다"
+       ],
+       "answer": 0,
+       "introCard": 2
+      },
+      {
+       "id": "u17d-11",
+       "type": "cloze",
+       "q": "[빈칸] value(f) = cost(이 cut) ≥ ___ ≥ ___ ≥ value(f). 양 끝이 같으니 모두 같다.",
+       "explain": "첫 ≥: min cut 은 모든 cut 중 최소. 둘째 ≥: Lemma 1(어떤 flow ≤ 어떤 cut). 셋째 ≥: max flow 는 모든 flow 중 최대. 교수(11/24): 'larger than or equal to the cost of minimum cut, and by lemma 1, larger than or equal to maximum flow.'",
+       "src": "17강 p.39–40 · 11/24 녹음 63:27",
+       "wiki": "max-flow min-cut 증명 (cut 선 긋기)",
+       "prof": true,
+       "tags": [
+        "proof",
+        "빈칸"
+       ],
+       "answer": [
+        "min cut",
+        "max flow"
+       ],
+       "bank": [
+        "min cut",
+        "max flow",
+        "max cut",
+        "min flow",
+        "cost(G)"
+       ],
+       "introCard": 0
+      },
+      {
+       "id": "u17d-12",
+       "type": "mc",
+       "q": "capacity/flow 가 s→x 3/3, s→y 1/2, x→y 0/1, x→t 3/4, y→t 1/1 이다(값 4). $G_f$ 에서 s 부터 갈 수 있는 집합 S 는?",
+       "explain": "$G_f$: s→x 는 꽉 차서 forward 없음, s→y 1 남음 → y. y 에서 y→t 는 꽉 참, y→x 는 원래 x→y 의 flow 0 이라 backward 없음, y→s(backward)는 이미 S. 그래서 S = {s, y}. x→t 에 1 이 남았지만 x 에 못 가니 상관없다.",
+       "src": "17강 p.38–40 응용",
+       "wiki": "max-flow min-cut 증명 (cut 선 긋기)",
+       "tags": [
+        "cut",
+        "residual"
+       ],
+       "choices": [
+        "{s}",
+        "{s, y}",
+        "{s, x, y}",
+        "{s, x, y, t}"
+       ],
+       "answer": 1,
+       "introCard": 1
+      },
+      {
+       "id": "u17d-13",
+       "type": "num",
+       "q": "바로 앞 문제(S = {s, y})의 s–t cut cost 는?",
+       "explain": "S→T 간선: s→x 3 (꽉 참), y→t 1 (꽉 참) → 3 + 1 = 4. T→S 간선 x→y 는 flow 0 이고 cost 에 안 넣는다. flow 값 4 와 같으니 max flow = 4, 이 cut 이 min cut.",
+       "src": "17강 p.38–40 응용",
+       "wiki": "max-flow min-cut 증명 (cut 선 긋기)",
+       "tags": [
+        "cut"
+       ],
+       "answer": 4,
+       "tol": 0,
+       "introCard": 3
+      },
+      {
+       "id": "u17d-14",
+       "type": "mc",
+       "q": "Ford-Fulkerson 이 끝난 뒤 min s–t cut 을 얻는 방법은?",
+       "explain": "끝난 순간 $G_f$ 에 s→t 경로가 없으니 위 증명 그대로다. BFS 한 번 $O(n+m)$ 으로 min cut 이 나온다. p.53 의 짙은 정점 {s, B, C, F} 가 이렇게 얻은 S 다. bottleneck 간선을 모으는 방법은 일반적으로 cut 이 되지 않는다.",
+       "src": "17강 p.53 · 11/24 녹음 69:45",
+       "wiki": "max-flow min-cut 증명 (cut 선 긋기)",
+       "prof": true,
+       "tags": [
+        "cut",
+        "FF"
+       ],
+       "choices": [
+        "마지막 $G_f$ 에서 s 부터 BFS(또는 DFS)해 닿는 정점을 S 로 잡는다",
+        "capacity 가 가장 작은 간선들을 고른다",
+        "원래 그래프에서 s 에 붙은 간선을 모두 자른다",
+        "augmenting path 마다 bottleneck 간선을 모아 둔다"
+       ],
+       "answer": 0,
+       "introCard": 3
+      }
+     ],
+     "intro": [
+      {
+       "title": "무엇을 증명하나",
+       "body": "Lemma 1 로 '아무 flow ≤ 아무 cut' 은 끝났다. 이제 **값이 같은 flow f 와 cut 하나**를 찾으면 value(f) ≤ max flow ≤ min cut ≤ cost(cut) = value(f) 라서 넷이 모두 같다. f 는 '$G_f$ 에 s→t 경로가 없는 flow'(Ford-Fulkerson 이 끝난 flow), cut 은 아래 방법으로 만든다.",
+       "src": "17강 p.16, 38"
+      },
+      {
+       "title": "1. $G_f$ 그리기 2. s 부터 칠하기",
+       "body": "f 로 residual graph 를 만든다(forward = 남은 양 c−f, backward = 보낸 양 f). 그 위에서 s 부터 BFS 해서 **화살표를 따라 갈 수 있는** 정점을 모두 칠한다 = S. backward 간선도 길이다. t 는 못 칠한다(가정).",
+       "img": "duo/img/algo17-cut-gf.png",
+       "imgAlt": "p.39: 위 flow(값 5), 아래 residual graph",
+       "src": "17강 p.38–39"
+      },
+      {
+       "title": "3. 선 긋기 4. 선을 넘는 간선",
+       "body": "S 와 나머지 T 사이에 선을 긋는다. **S→T 원래 간선은 꽉 찼다**(아니면 forward 로 T 에 닿았을 것). **T→S 원래 간선은 flow 0**(아니면 backward 로 T 에 닿았을 것). 둘 다 'S 에서 T 로 가는 $G_f$ 간선은 없다' 의 다른 표현.",
+       "img": "duo/img/algo17-cut-line.png",
+       "imgAlt": "S = {s, a, b} 를 칠하고 cut 을 그은 그림",
+       "src": "17강 p.39–40"
+      },
+      {
+       "title": "5. flow 값 = cut cost 6. 사슬",
+       "body": "flow 값 = (S→T flow) − (T→S flow) = Σ capacity(S→T) − 0 = cut cost. 그래서 value(f) = cost ≥ min cut ≥ max flow ≥ value(f) → f 는 max flow, 이 cut 은 min cut. Ford-Fulkerson 이 끝나면 BFS 한 번으로 min cut 이 나온다.",
+       "img": "duo/img/algo17-cut-sum.png",
+       "imgAlt": "cut cost 2 + 3 = 5 = flow 값",
+       "src": "17강 p.39–40, 53"
       }
      ]
     }
