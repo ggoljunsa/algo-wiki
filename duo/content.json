@@ -594,8 +594,8 @@
       {
        "id": "u9b-13",
        "type": "match",
-       "q": "DFS 가 간선 (u,v) 를 처음 볼 때 v 의 상태와 간선 종류를 연결하시오 (CLRS 22.3)",
-       "explain": "back edge 만 $v$.finish ≥ $u$.finish 이고 나머지는 $v$.finish < $u$.finish. directed graph 가 acyclic ⇔ back edge 없음.",
+       "q": "그림의 directed graph 를 A 에서 시작해 DFS 했다(이웃은 알파벳 순, 숫자는 start/finish). 각 간선이 처음 검사될 때의 종류를 연결하시오 (CLRS 22.3)",
+       "explain": "간선 (u,v) 를 볼 때 v 의 상태로 판정한다. **A→B**: B 가 unvisited → tree. **C→A**: A 는 아직 in progress(스택에 있음, C 의 조상) → back. **A→C**: C 는 B 를 거쳐 이미 done, A.start 0 < C.start 2 → A 의 자손으로 가는 지름길 = forward. **D→C**: C 는 done, C.start 2 < D.start 5 → 조상도 자손도 아님 = cross. 괄호 (A (B (C C) B) (D D) A) 로 보면 C 는 A 안(forward), D 와는 옆 괄호(cross).",
        "src": "9강 보충 (CLRS 22.3)",
        "wiki": "DFS tree와 DFS forest",
        "tags": [
@@ -603,23 +603,26 @@
        ],
        "pairs": [
         [
-         "tree edge",
-         "v 가 unvisited"
+         "A→B",
+         "tree edge"
         ],
         [
-         "back edge",
-         "v 가 in progress (u 의 ancestor)"
+         "C→A",
+         "back edge"
         ],
         [
-         "forward edge",
-         "v 가 done 이고 u.start < v.start"
+         "A→C",
+         "forward edge"
         ],
         [
-         "cross edge",
-         "v 가 done 이고 v.start < u.start"
+         "D→C",
+         "cross edge"
         ]
        ],
-       "introCard": 0
+       "img": "duo/img/algo9-gen-u9b13-graph.png",
+       "imgAlt": "A→B, A→C, A→D, B→C, C→A, D→C 그래프. start/finish A 0/7, B 1/4, C 2/3, D 5/6",
+       "explainImg": "duo/img/algo9-gen-u9b13-graph-ans.png",
+       "introCard": 1
       },
       {
        "id": "u9b-14",
