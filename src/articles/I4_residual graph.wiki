@@ -9,6 +9,8 @@ $$c_f(u,v) = \begin{cases} c(u,v) - f(u,v) & (u,v) \in E \\ f(v,u) & (v,u) \in E
 슬라이드 표현으로는 "Forward edges are the amount that's left. Backwards edges are the amount that's been used."
 
 핵심 Lemma(p.23)는 '''$G_f$ 에서 s 로부터 t 에 갈 수 없다 ⇔ f 는 max flow''' 다. 갈 수 있으면 그 경로가 [[augmenting path]] 이고 flow 를 늘릴 수 있다. 갈 수 없으면 s 에서 닿는 정점들이 min cut 의 s 쪽이 된다.[* backward 간선이 있어서 알고리즘은 예전에 보낸 flow 를 되무를 수 있다. forward 간선만으로 경로를 찾으면 처음 고른 경로 때문에 막혀서 max flow 에 못 갈 수 있다. L17 예제의 세 번째 경로 s→B→E⇢A→D→t 가 backward 간선 E⇢A 를 써야만 찾을 수 있는 경로다.]
+[[anim:residual_build|왼쪽 G 의 간선 다섯 개를 하나씩 집어 오른쪽 Gf 로 옮긴다. 간선마다 파랑(같은 방향, c − f)이 먼저, 연두(반대 방향, f)가 나중에 생긴다. a→t 는 꽉 차서 파랑이 "0 → 안 그림" 으로 사라진다]]
+위 그림에서 간선 하나가 $G_f$ 에서는 화살표 두 개가 되는 것을 보라. s→a(capacity 4, flow 3)는 파랑 s→a 1 과 연두 a→s 3 이 된다. 교수는 "forward edge is divided as capacity minus flow, in this case 1 … backward edge is the current flow" 라고 읽었다(녹음 46:20–47:14). 마지막 장면처럼 이 $G_f$ 에는 파랑만 따라가는 s→a→b→t(1, 5, 1)가 있어서 1 을 더 보낼 수 있다(p.24). 1 을 보내고 다시 그리면 s 에서 t 로 가는 길이 없어진다(p.26).
 [[sim:ford_fulkerson_trace]]
 
 {mini}

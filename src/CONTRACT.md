@@ -551,6 +551,23 @@ PNG 는 PyMuPDF `Matrix(1.25,1.25)` 로 `_slides/L16-01.png` … 를 만들었�
 
 - 헤더에 `📱 한입 학습` 버튼(`duo/index.html`, psy-wiki 의 `.pocket-btn` 과 같은 스타일). `duo/` 는 다른 작업자 담당이라 이 repo 커밋에 넣지 않는다.
 
+### 13.5 L17 움직이는 그림 11 개 (2026-11-26, 사용자 "17단원 이해 1도 안 됨, 연두색 자르는 부분, 움직이는 그림 많이")
+공용 그리기 도구 `src/anims/_flow_kit.js`(`FLOWKIT(D, 접두어)`, ANIMS 등록 없음; 정점 색 S = 짙은 초록 + **연두 동그라미 배경**, T = 연한 민트, Gf forward 파랑 / backward 연두). 숫자 검산 `src/sims/_check_L17_anims.py` → `.txt` (64 개 cut 중 min 11 이 {s,B,C,F}·{s,A,B,C,E,F} 둘).
+| 이름 | 내용 | 문서 |
+|---|---|---|
+| flow_fill_conservation | p.11 flow(4) 가 파이프를 흐르고 A·E 보존 확인 → p.14 max flow 11 | `flow`, `L17 …` |
+| st_cut_sweep | cut 4 개 {s} 12 / {s,C} 16 / t 뺀 전부 12 / {s,B,C,F} 11, S→T 만 주황으로 더하고 T→S 는 회색 ✗ | `s-t cut`, `L17 …` |
+| flow_across_any_cut | Lemma 1: p.11 flow 를 {s,A} 19 / {s,B,C} 17 / {s,B,C,F} 11 에서 "넘어감 − 되돌아옴 = 4 ≤ cost" | `max-flow min-cut 증명 …`, `L17 …` |
+| residual_build | p.22 G(값 4) → Gf 를 간선마다 파랑 c−f · 연두 f, a→t 는 파랑 없음 | `residual graph`, `L17 …` |
+| augment_backward | p.30–34: 경로 s→a⇢b→t x=1, 모두 +1 하면 보존 깨짐, 맞게는 +1/−1/+1 → 값 3 | `augmenting path`, `L17 …` |
+| ff_full_run | p.43–53 경로 4·4·2·1, E⇢A 로 A→E 4→2→1, 끝에 BFS S={s,C,F,B}, cut 11 | `Ford-Fulkerson`, `L17 …` |
+| cut_proof_reachable | p.39 Gf(맞는 값 a→b 4, b→a 2)에서 s→b→a 칠하기, t 못 감, 선, G 에서 a→t 2/2·b→t 3/3, "b→t 2/3 이었다면" 모순, 5 = 5 | `max-flow min-cut 증명 …`, `L17 …` |
+| cut_proof_two_facts | p.14 max flow 에서 S={s,B,C,F}: S→T 꽉(s→A, B→E, F→t), T→S 0(A→B, E→F), 각각 "아니었다면 E 가 칠해짐" | `max-flow min-cut 증명 …` |
+| inequality_squeeze | 수직선: min cut ≤ 5, max flow ≥ 5, Lemma 1 로 둘이 5 에서 만남, 사슬의 ≥ 가 = 로 | `max-flow min-cut 증명 …`, `max-flow min-cut theorem` |
+| bad_path_zigzag | C 예제: 운 나쁜 경로 6 번(가운데 0/1↔1/1) vs BFS 2 번 | `Edmonds-Karp`, `L17 …` |
+| matching_as_flow | p.68 학생 5·동아리 5, 경로 4 개(둘째가 backward 로 학생 1 을 가→나), 학생 5 막힘, 크기 4 | `maximum bipartite matching`, `L17 …` |
+AnimEngine 에 운체위키의 「⛶ 크게」(`toggleBig`, 전체 화면 + 세로 폰이면 90° 회전, Esc 닫기)와 `head.html` 의 `.anim.anim-full` CSS 를 옮겼다.
+
 ## 12. 메인 문서 전면 재작성 — 나무위키처럼 (2026-11-12)
 
 사용자 피드백(그대로 옮김): "재미없다. 내용도 영양가 없다. ppt 수업자료는 동기 같은 걸 잘 설명해서 차라리 ppt 를 그대로 읽는 게 더 도움이 된다. ① 요약을 너무 많이 한다 ② 설명을 너무 못 쓴다 ③ 눈에 안 읽히고 재미가 없다. 섹션마다 ppt 그림을 돌려막기 해서 이해가 더 어렵고, 흐름도 이상하다." 참고로 든 것은 나무위키 문서(예: irasutoya 문서) — 이야기하듯 풀어 가고, 각주에 여담·뒷얘기가 붙고, 읽다 보면 다음 문단이 궁금해지는 글.

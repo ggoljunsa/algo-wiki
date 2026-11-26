@@ -18,6 +18,18 @@ Lemma 2: max flow ≥ min cut   (알고리즘 증명: residual graph Gf)
 </pre>
 엄밀한 증명(CLRS Lemma 26.4, Corollary 26.5)은 시험 범위가 아니다. p.18: "You are not responsible for proof-by-proof on the final."
 
+== 왜 "같다" 가 되나: 사슬이 접힌다 ==
+⇒ 방향 증명의 마지막 줄은 부등식 넷을 잇는 것이다. $G_f$ 로 그은 cut 은 flow 값과 cost 가 같고, 그 값을 v 라 하면 v = cost ≥ min cut ≥ max flow ≥ v 가 되어 모두 같아진다.
+[[anim:inequality_squeeze|p.39 예(v = 5)로 수직선 위에서 본다. min cut 은 5 이하, max flow 는 5 이상인데 Lemma 1 이 max flow ≤ min cut 이라고 하니 둘 다 5 로 몰린다]]
+위 그림에서 보라 삼각형(min cut)은 왼쪽에서, 파란 삼각형(max flow)은 오른쪽에서 출발한다. Lemma 1 은 파랑이 보라보다 오른쪽에 있으면 안 된다고 한다. 둘이 만날 수 있는 자리는 5 하나다. 각 부등호의 근거와 p.39 의 cut 을 어떻게 긋는지는 [[max-flow min-cut 증명 (cut 선 긋기)]] 에 단계별로 있다.
+
+{mini}
+# v = cost(이 cut) ≥ min cut ≥ max flow ≥ v 에서 둘째 ≥ 의 근거는?
+{/mini}
+{answer}
+# Lemma 1. 아무 flow 의 값도 아무 cut 의 cost 를 넘을 수 없으니 max flow ≤ min cut 이다.
+{/answer}
+
 이 정리 덕에 [[Ford-Fulkerson]] 하나로 max flow 와 min cut 을 같이 얻는다. 슬라이드 농담으로는 "The USSR and the USA were trying to solve the same problem…" 이다(p.54).
 
 {mini}

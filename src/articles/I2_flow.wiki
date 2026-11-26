@@ -6,6 +6,8 @@ L17 p.11–12. capacity 가 있는 방향 그래프에서 간선마다 "보내�
 * capacity 제약: $0 \le f(u,v) \le c(u,v)$.
 * 보존(conservation): s, t 를 뺀 정점마다 들어오는 flow 합 = 나가는 flow 합. 슬라이드 예로 "4 units in, 1+1+2 = 4 units out."
 flow 의 '''값'''은 s 에서 나가는 양이고, t 로 들어가는 양이기도 하다. 보존 법칙 때문에 둘이 같다(p.12). 값이 가장 큰 flow 가 '''maximum flow''' 다(p.13). L17 예제의 max flow 는 11 이다(p.14).
+[[anim:flow_fill_conservation|p.11 의 flow(값 4)가 파이프를 따라 흐른다. 정점 A(들어옴 4, 나감 2 + 1 + 1)와 E(들어옴 1 + 1, 나감 2)에서 보존을 확인한 뒤, p.14 의 max flow 11 로 바뀌는 장면을 보라]]
+교수(11/24)는 간선을 물 파이프, flow 를 그 파이프로 흐르는 물의 양으로 비유했다("think about this edge is a water pipe, and then flow is the amount of water going through the pipe", 녹음 32:53). 위 그림의 주황 점이 그 물이다. 중간 정점에서 물이 새거나 생기지 않으니, s 에서 나간 4 가 그대로 t 로 들어간다.[* p.14 의 max flow 에서 주황 네모(꽉 찬 간선)는 s→A, B→E, F→t 를 포함한다. 이 셋이 바로 min cut 11 의 간선이다. [[max-flow min-cut theorem]] 이 "max flow 에서는 min cut 이 꽉 찬다" 고 말하는 장면이다.]
 
 {mini}
 # 정점 v 로 s→v 3, u→v 2 가 들어오고, v→t 의 capacity 는 4 다. 보존 법칙을 지키려면 v 의 다른 출구 v→w 로 최소 얼마를 보내야 하나?

@@ -646,6 +646,19 @@ document.documentElement.setAttribute("data-theme",t);})();
     margin: 0 auto;
     font-family: -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
   }
+  .anim.anim-full {
+    position: fixed; top: 0; left: 0; z-index: 10000; margin: 0; border-radius: 0; border: 0;
+    width: 100vw; height: 100vh; max-width: none !important; display: flex; flex-direction: column; background: #fbfbfd;
+  }
+  .anim.anim-full .anim-head { padding: 4px 10px; }
+  .anim.anim-full .anim-subtitle, .anim.anim-full .anim-caption { display: none; }
+  .anim.anim-full .anim-stage { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 4px; }
+  .anim.anim-full .anim-stage svg { max-width: none; width: 100%; height: 100%; }
+  @media (orientation: portrait) {
+    .anim.anim-full { width: 100vh; height: 100vw; transform: rotate(90deg) translateY(-100%); transform-origin: top left; }
+  }
+  html.anim-full-open, html.anim-full-open body { overflow: hidden; }
+  .anim .anim-btn.anim-big { font-weight: 700; }
   .anim .anim-stage.anim-missing { color: #b32741; font-weight: 700; padding: 14px; }
   .anim .anim-ctrl {
     display: flex;
@@ -3484,15 +3497,15 @@ const ARTICLES = {
    "17강 Advanced II",
    "메인"
   ],
-  "body": "{warn}\n11/24 수업에서 '''p.1–53'''(Ford-Fulkerson 예제 끝, max flow = min cut = 11)까지 나갔고 그 녹음을 반영했다. '''p.54–77'''(경로를 아무렇게나 고를 때의 C 예제, Edmonds-Karp 정리, 정수성, matching, assignment)은 다음 수업 예정이라 아직 슬라이드 기준이다. HW4 4번(정점 분할 min cut)과 같은 주제지만, HW4 마감(11/29) 전이라 이 문서에는 HW4 풀이를 싣지 않는다.\n{/warn}\n\n== 개요 ==\n[[L16 Advanced Algorithms I]] 은 그래프를 아무 데나 잘라도 되는 global min cut 이었다. L17 은 조건을 바꾼다. 간선에 방향과 용량(capacity)이 있고, 출발점 s 와 도착점 t 가 정해져 있다. 질문은 둘이다. s 와 t 를 갈라놓는 가장 싼 cut 은 무엇인가([[s-t cut|min s-t cut]]). s 에서 t 로 한 번에 얼마나 많이 흘려보낼 수 있나([[flow|max flow]]). 이 강의의 결론은 '''두 값이 같다'''는 것이다([[max-flow min-cut theorem]]). 그리고 그 증명이 그대로 알고리즘([[Ford-Fulkerson]])이 된다.\n\n페이지 번호는 슬라이드에 인쇄된 번호이고 그림 파일 번호와 같다(p.1–77). 예제 그래프의 정점에는 슬라이드가 이름을 붙이지 않았다. 이 문서는 설명하려고 왼쪽 열을 위에서부터 A, B, C, 오른쪽 열을 D, E, F 라고 부른다.\n\n== s 와 t 를 갈라놓는 cut ==\n=== 오늘의 그래프 ===\np.4 가 조건을 바꾼다. 그래프는 방향이 있고, 간선마다 capacity(가중치)가 붙는다. 특별한 정점 s(source)와 t(sink)가 있다. 이 수업에서는 s 에서는 나가는 간선만, t 로는 들어오는 간선만 있다고 가정한다.[* p.4 각주 \"at least for this class\". 일반적인 flow 이론에서는 이 가정이 필요 없다. p.20 에도 \"두 정점 사이에 양방향 간선이 둘 다 있는 경우는 없다고 가정한다(필요한 건 아니지만)\" 라는 단서가 붙는다.]\n\n=== cut 의 비용은 s 쪽에서 t 쪽으로 가는 간선만 센다 ===\n{def}\nL17 p.5–8: \"An s-t cut is a cut which separates s from t.\" 간선이 s 쪽에서 t 쪽으로 가면 cut 을 건넌다. cut 의 cost(capacity)는 건너는 간선들의 capacity 합이다.\n{/def}\n[[img:L17-08.png|p.8 — 빨간 점선 cut 의 cost 는 4 + 2 + 10 = 16. 아래쪽 2 짜리 간선은 방향이 반대라 세지 않는다|large]]\n위 그림에서 s 쪽(짙은 색)은 s 와 C 다. s 쪽에서 t 쪽으로 나가는 주황 간선 세 개(s→A 4, s→B 2, C→F 10)만 센다. B→C 2 는 점선을 건너긴 하지만 t 쪽에서 s 쪽으로 들어오는 방향이라 빠진다. 슬라이드 표현으로는 \"this edge does not cross the cut; it's going in the wrong direction.\" 이다. 그래서 cost 는 16 이다.\n\np.9 는 더 싼 cut 을 보여 준다. s 쪽이 {s, B, C, F} 일 때 건너는 간선은 s→A 4, B→E 3, F→t 4 이고 cost 는 '''4 + 3 + 4 = 11''' 이다. 이것이 이 그래프의 '''minimum s-t cut''' 이다. 슬라이드는 여기서 묻는다. \"Question: how do we find a minimum s-t cut?\"\n\n=== 냉전 시대의 철도 지도 ===\np.10 은 이 문제가 실제로 어디서 나왔는지 보여 준다. 1955년, 소련에서 동유럽으로 가는 철도망 지도다(1999년 기밀 해제). 미국은 러시아의 보급로를 가장 효율적으로 끊고 싶었다. 같은 해 RAND 연구소의 Ford 와 Fulkerson 이 최적의 s-t cut 을 찾는 알고리즘을 내놓았다. 지도에는 \"the bottleneck\" 이라는 글씨가 적혀 있다. 교수(11/24)는 이걸 \"which road we should cut in an efficient way to stop the supply of food, water, missiles\" 라고 풀었고, 비록 전쟁에서 나왔지만 쓸모 있는 응용이 많다고 덧붙였다.[* 출처는 Schrijver 의 2002년 논문 \"On the history of the transportation and maximum flow problems\" 다. 슬라이드에는 \"Schriver 2002\" 로 철자가 조금 다르게 적혀 있다. 이 지도는 T. E. Harris 와 F. S. Ross 가 1955년에 작성한 RAND 보고서에 실린 것이다.]\n\n{mini}\n# p.8 그림에서 s 쪽을 {s, A} 로 잡으면 cost 는? (그래프 간선: s→A 4, s→B 2, s→C 6, A→D 3, A→B 2, A→E 6, B→E 3, B→C 2, D→E 6, D→t 4, E→t 4, E→F 6, F→B 3, C→F 10, F→t 4)\n# 다음 중 옳은 것을 모두 고르라(Circle all). (a) t 쪽에서 s 쪽으로 가는 간선도 cut 의 cost 에 더한다. (b) s-t cut 은 s 와 t 를 반드시 다른 편에 둔다. (c) s 쪽을 {s} 하나로 잡은 cut 의 cost 는 s 에서 나가는 capacity 합이다.\n{/mini}\n{answer}\n# s→B 2, s→C 6, A→D 3, A→B 2, A→E 6 → 19.\n# (b), (c). (a) 는 틀렸다. s 쪽에서 t 쪽으로 가는 간선만 센다. {s} 만 떼면 cost 는 4 + 2 + 6 = 12 이고, min cut 11 보다 크다.\n{/answer}\n\n== 흐름: flow ==\n=== 간선마다 얼마나 보내나 ===\np.11 은 간선에 capacity 말고 숫자를 하나 더 붙인다. '''flow''' 다. \"send 2 units of stuff along this edge\" 처럼, 그 간선으로 물건을 얼마나 보내는지다. 규칙은 두 개다.\n* 간선의 flow 는 capacity 를 넘을 수 없다.\n* s, t 가 아닌 정점마다 들어오는 flow 합 = 나가는 flow 합. 슬라이드 예로는 \"4 units in, 1+1+2 = 4 units out.\" 이다.\np.12 는 flow 의 '''값'''을 정한다. s 에서 나오는 양이고, t 로 들어가는 양이기도 하다. 중간 정점마다 들어온 만큼 나가니 둘은 같다.\n\n=== 가장 많이: max flow ===\np.13 의 flow 는 값이 4 다. 슬라이드도 \"This example flow is pretty wasteful\" 이라고 인정한다.\n[[img:L17-14.png|p.14 — 값 11 인 max flow. 네모 안 숫자가 flow, 옆 숫자가 capacity|large]]\n위 그림은 값 11 인 flow 다. s 에서 4, 2, 5 를 내보내 합이 11 이다. 그런데 11 은 방금 p.9 에서 구한 min cut 의 cost 와 같다. 슬라이드 오른쪽 위 고양이가 \"COINCIDENCE? I THINK NOT!\" 이라고 외친다.\n\n=== max-flow min-cut theorem ===\n{def}\n'''Max-flow min-cut theorem''' (L17 p.15). s 에서 t 로 가는 max flow 의 값은 min s-t cut 의 cost 와 같다.\n{/def}\n교수(11/24)는 간선을 물 파이프, flow 를 그 파이프로 흐르는 물의 양으로 비유했다. 직관은 이렇다. 흐름을 최대로 채우면 어딘가 병목이 꽉 막힌다. 그 병목이 min cut 이다(\"in a max flow, the min cut better fill up, and this is the bottleneck\"). 증명 계획(p.16)은 두 부분이다.\n* Lemma 1: max flow ≤ min cut. 그림으로 증명한다.\n* Lemma 2: max flow ≥ min cut. 알고리즘으로 증명한다.\n\n{mini}\n# p.14 의 flow 에서 정점 E(가운데 오른쪽)로 들어오는 flow 와 나가는 flow 를 확인하라. (들어옴: A→E 1, B→E 3. 나감: E→t 4)\n# flow 값이 \"s 에서 나가는 양\" 과 \"t 로 들어가는 양\" 으로 두 번 정의돼도 되는 이유는?\n{/mini}\n{answer}\n# 들어옴 1 + 3 = 4, 나감 4. 보존된다.\n# s, t 를 뺀 모든 정점에서 들어온 양 = 나간 양이라, s 에서 나온 것은 중간에서 생기거나 사라지지 않고 전부 t 로 들어간다.\n{/answer}\n\n== 쉬운 쪽: flow 는 어떤 cut 보다도 작다 ==\np.17 의 Lemma 1 은 '''아무''' flow 와 '''아무''' s-t cut 에 대해, flow 값 ≤ cut 의 cost 라는 것이다. 그림 한 장으로 끝난다. s 에서 x 만큼 나온 물건은 t 에 가려면 언젠가 cut 을 넘어야 한다. cut 을 넘는 간선들은 capacity 합만큼만 실어 나를 수 있다. 그러니 x ≤ cut 의 cost 다. 이것이 모든 flow, 모든 cut 에 대해 성립하니 max flow ≤ min cut 이다.[* p.18: \"You are not responsible for proof-by-proof on the final.\" 엄밀한 증명(CLRS Lemma 26.4, Corollary 26.5)은 기말에 안 나온다고 슬라이드가 못 박았다. 그림 수준의 논리만 알면 된다.]\n\np.19 가 남은 일을 적는다. 정리는 이보다 강한 \"같다\" 이므로, max flow ≥ min cut 을 보여야 한다. \"Next: Proof by algorithm!\"\n\n== 남은 여유를 그린 그래프: residual graph ==\n=== 앞으로 보낼 수 있는 양, 되돌릴 수 있는 양 ===\np.20 은 순서를 뒤집는다. 보통은 알고리즘을 먼저 말하고 증명하지만, 오늘은 증명부터 하고 거기서 알고리즘이 나온다. 그 증명의 도구가 [[residual graph]] $G_f$ 다(p.21).\n$$c_f(u,v) = \\begin{cases} c(u,v) - f(u,v) & (u,v) \\in E \\\\ f(v,u) & (v,u) \\in E \\\\ 0 & \\text{otherwise} \\end{cases}$$\n[[img:L17-22.png|p.22 — 왼쪽은 flow f 가 있는 G, 오른쪽은 그 residual graph Gf. 파랑은 남은 양, 초록은 쓴 양|large]]\n위 그림 왼쪽의 G 에서 s→a 는 capacity 4 중 3 을 쓰고 있다. 오른쪽 $G_f$ 에는 이 간선이 두 개로 바뀐다. 파란 s→a 1 은 아직 더 보낼 수 있는 양이다(\"Forward edges are the amount that's left\"). 초록 a→s 3 은 이미 보낸 양이다(\"Backwards edges are the amount that's been used\"). 이미 보낸 3 은 되돌릴 수 있다는 뜻이다. a→t 는 2 를 다 써서 파란 간선이 없고 초록 t→a 2 만 남는다.\n\n=== Lemma: $G_f$ 에서 t 에 못 가면 max flow ===\np.23–26 이 핵심 Lemma 를 예로 보여 준다.\n{def}\nL17 p.23: t 가 $G_f$ 에서 s 로부터 도달 불가능하다 ⇔ f 는 max flow 다.\n{/def}\np.22 의 flow(값 4)에서는 $G_f$ 에 s→a→b→t 경로가 있다(파랑 1, 5, 1). 이 길로 1 을 더 보내면 s→a 가 4, a→b 가 2, b→t 가 3 이 되고 값은 5 가 된다(p.24). 다시 $G_f$ 를 그리면 s 에서 t 로 가는 길이 없다(p.26). Lemma 에 따르면 이제 max flow 다.[* 마지막 $G_f$ 에서 s 가 닿는 정점은 s, b, 그리고 b→a 초록 간선을 타고 a 까지다. 그 셋과 t 를 가르는 cut 은 a→t 2, b→t 3 으로 cost 5 = flow 값이다. 아래 증명의 ⇒ 방향이 바로 이 관찰이다.]\n\n{mini}\n# p.22 의 G: s→a 4(flow 3), s→b 8(flow 1), a→b 6(flow 1), a→t 2(flow 2), b→t 3(flow 2). $G_f$ 의 간선과 값을 모두 적어라.\n# $c_f$ 정의의 빈칸: (u,v) ∈ E 이면 $c_f(u,v) = $ ____, (v,u) ∈ E 이면 $c_f(u,v) = $ ____.\n{/mini}\n{answer}\n# 파랑(forward): s→a 1, s→b 7, a→b 5, b→t 1. a→t 는 꽉 차서 없다. 초록(backward): a→s 3, b→s 1, b→a 1, t→a 2, t→b 2.\n# $c(u,v) - f(u,v)$, $f(v,u)$. 두 번째를 $c(v,u) - f(v,u)$ 로 쓰면 틀린다. 되돌릴 수 있는 양은 이미 보낸 양이다.\n{/answer}\n\n== Lemma 증명, 그리고 알고리즘이 나온다 ==\n=== ⇐ 방향: augmenting path 가 있으면 더 보낼 수 있다 ===\n$G_f$ 에 s 에서 t 로 가는 경로가 있다고 하자. 이 경로를 [[augmenting path]] 라고 한다(p.28). 이 경로를 따라 flow 를 늘릴 수 있으면, 처음 flow 는 max 가 아니었다. 대우로 ⇐ 방향이 증명된다.\n\n경로가 모두 파란(forward) 간선이면 쉽다. 경로 위 간선의 flow 를 다 같이 늘리면 된다(p.29). 문제는 초록(backward) 간선이 섞인 경우다.\n[[img:L17-32.png|p.32 — 경로가 가운데 간선을 거꾸로 지난다. 양 끝 간선에는 flow 를 더하고, 거꾸로 지나는 간선에서는 flow 를 뺀다|large]]\n위 그림의 노란 경로는 s→(위)→(아래)→t 인데, 가운데 세로 간선은 원래 아래에서 위로 가는 간선이다. 경로가 그 간선을 거꾸로 탄다. 이때 모든 간선의 flow 를 늘리면 가운데 정점에서 보존 법칙이 깨진다(p.31). 그래서 거꾸로 탄 간선에서는 flow 를 '''뺀다'''(p.32 \"We will remove flow here\"). 위 정점은 s 에서 1 을 더 받고, 아래에서 오던 1 을 덜 받으니 들어오는 양이 그대로다. 아래 정점은 위로 보내던 1 을 t 로 돌려 보내니 나가는 양이 그대로다. 결과는 값 2 → 3 인 정상적인 flow 다(p.34 \"Still a legit flow, but with a bigger value!\").\n\np.35 가 이걸 함수로 적는다.\n<pre class=\"c\">\nincreaseFlow(path P in Gf, flow f):\n    x = min weight on any edge in P\n    for (u,v) in P:\n        if (u,v) in E,  f'(u,v) ← f(u,v) + x\n        if (v,u) in E,  f'(v,u) ← f(v,u) − x\n    return f'\n<\/pre>\nx 는 경로 위 residual 값의 최솟값, 즉 이 경로의 병목이다. forward 간선이면 원래 간선에 x 를 더하고, backward 간선이면 반대 방향 원래 간선에서 x 를 뺀다.\n\n=== ⇒ 방향: 못 가면 그 자리가 min cut 이다 ===\n반대로 $G_f$ 에 s→t 경로가 없다고 하자(p.38–40). s 에서 닿는 정점들과 못 닿는 정점들로 cut 을 만든다.\n* s 쪽에서 t 쪽으로 가는 원래 간선은 모두 '''꽉 차 있다'''. 남은 양이 있었다면 $G_f$ 에 파란 간선이 있어서 건너편 정점에 닿았을 것이다.\n* t 쪽에서 s 쪽으로 오는 원래 간선은 flow 가 0 이다. flow 가 있었다면 초록 간선이 있어서 역시 닿았을 것이다.\n그러니 flow 값 = 이 cut 의 cost 다. 그리고 이 cut 의 cost ≥ min cut ≥ max flow(Lemma 1) ≥ 이 flow 값. 양 끝이 같으니 전부 같다. f 는 max flow 이고, 덤으로 이 cut 은 min cut 이다.\n\n이 증명은 수업 끝에 몇 줄로 지나가서 놓치기 쉽다. 슬라이드 p.39 그림 그대로 $G_f$ 를 만들고, BFS 로 S 를 칠하고, 선을 긋고, 선을 넘는 간선을 하나씩 확인하는 과정을 '''[[max-flow min-cut 증명 (cut 선 긋기)]]''' 문서에 여섯 단계로 아주 천천히 풀어 두었다. 슬라이드가 적지 않은 둘째 사실(T 쪽에서 S 쪽으로 오는 간선의 flow 는 0)도 거기서 설명한다.\n[[sim:cut_from_residual]]\n\n{exam}\n교수(11/24, 녹음 60:05–64:30): $G_f$ 에서 s 가 닿는 정점 / 못 닿는 정점으로 cut 을 잡으면, 그 cut 의 간선은 \"full because they don't exist in $G_f$\" 이고(꽉 차 있지 않으면 남은 capacity 로 가는 path 가 생겨 reachable 이 된다), flow 값 = cut cost ≥ min cut ≥ max flow ≥ flow 값이라 모두 같다. 자세한 단계는 [[max-flow min-cut 증명 (cut 선 긋기)]].\n{/exam}\n\n=== Ford-Fulkerson ===\np.41 이 증명에서 알고리즘을 꺼낸다.\n<pre class=\"c\">\nFord-Fulkerson(G):\n    f ← all zero flow.\n    Gf ← G\n    while t is reachable from s in Gf\n        Find a path P from s to t in Gf      // eg, use BFS\n        f ← increaseFlow(P, f)\n        update Gf\n    return f\n<\/pre>\nLemma 덕에 루프가 끝났을 때 f 는 max flow 이고, 마지막 $G_f$ 에서 s 가 닿는 정점들이 min cut 의 s 쪽이다. 하나의 알고리즘이 max flow 와 min cut 을 같이 준다.\n\n{mini}\n# `increaseFlow` 빈칸: `x = ________`, backward 간선이면 `f'(v,u) ← ________`.\n# 다음 중 옳은 것을 모두 고르라(Circle all). (a) augmenting path 는 원래 그래프 G 의 경로다. (b) backward 간선을 지날 때는 그 원래 간선의 flow 를 줄인다. (c) 루프가 끝난 뒤 s 에서 닿는 정점 집합이 min cut 의 s 쪽이다.\n{/mini}\n{answer}\n# `min weight on any edge in P`, `f(v,u) − x`.\n# (b), (c). (a) 는 틀렸다. augmenting path 는 residual graph $G_f$ 의 경로다. backward 간선을 지날 수 있어서 G 에는 없는 방향으로 갈 수도 있다.\n{/answer}\n\n== 손으로 돌려 보기 ==\np.43–53 은 p.4 와 비슷하지만 간선 몇 개를 뺀 그래프로 Ford-Fulkerson 을 끝까지 돌린다.[* p.43 의 그래프는 p.4 그래프에서 A→B 2, B→C 2, D→E 6, E→F 6 네 간선이 빠진 11개 간선짜리다. 그래도 max flow 와 min cut 은 똑같이 11 이다. p.9 의 min cut 간선 s→A, B→E, F→t 가 그대로 남아 있기 때문이다.] 간선은 s→A 4, s→B 2, s→C 6, A→D 3, A→E 6, B→E 3, F→B 3, C→F 10, D→t 4, E→t 4, F→t 4 다.\n<pre class=\"txt\">\n슬라이드     augmenting path (Gf)              병목 x   flow 값\np.44–45     s→A→E→t                            4        4\np.46–47     s→C→F→t                            4        8\np.48–49     s→B→E⇢A→D→t   (E⇢A 는 backward)     2        10    A→E 의 flow 4 → 2\np.50–51     s→C→F→B→E⇢A→D→t                    1        11    A→E 의 flow 2 → 1 (\"AGAIN\")\np.53        s 에서 닿는 정점 {s,B,C,F}, t 못 감    -        11    cut s→A 4 + B→E 3 + F→t 4 = 11\n<\/pre>\n세 번째 경로가 재미있다. 첫 경로에서 A→E 로 4 를 보냈는데, 지금 보니 A 의 물건 일부는 A→D→t 로 돌리는 게 낫다. 그래서 B 에서 온 물건을 E 로 보내 E→t 를 채우고, 그만큼 A→E 를 줄여 A 의 물건을 D 쪽으로 돌린다. backward 간선은 \"예전 결정을 되무르는 길\" 이다. 슬라이드 문장으로는 \"Notice that we're going back along one of the backwards edges we added.\" 다.\n[[sim:ford_fulkerson_trace]]\n[[img:L17-53.png|p.53 — 끝. 아래 Gf 에서 s 가 닿는 짙은 정점 {s, B, C, F} 와 나머지를 빨간 점선이 가른다. max flow 와 min cut 이 둘 다 11|large]]\n위 그림의 주황 간선 셋(s→A, B→E, F→t)이 점선을 건너는 간선이고 모두 꽉 차 있다. 고양이의 대사가 바뀌었다. \"I KNEW IT! DEFINITELY NOT A COINCIDENCE.\"\n\np.54 가 정리한다. max s-t flow = min s-t cut. 슬라이드의 농담으로는 \"The USSR and the USA were trying to solve the same problem…\" 다. 한쪽은 최대한 많이 보내려 했고 다른 쪽은 가장 싸게 끊으려 했는데, 둘이 같은 문제였다.\n\n{mini}\n# 첫 경로 s→A→E→t 로 4 를 보낸 직후, $G_f$ 에서 A 와 E 사이 간선 두 개의 값은?\n# 위 표의 세 번째 경로에서 x = 2 가 되는 병목 간선은 어디인가?\n# 마지막 cut 이 min cut 이라는 근거를 두 문장으로.\n{/mini}\n{answer}\n# forward A→E 2 (6 − 4), backward E→A 4.\n# s→B(남은 양 2). 나머지 B→E 3, E⇢A 4, A→D 3, D→t 4 는 모두 2 이상이다.\n# 건너는 간선 s→A, B→E, F→t 가 모두 꽉 차 있고, t 쪽에서 s 쪽으로 들어오는 간선은 없다(F→B 는 두 끝이 모두 s 쪽). 그래서 flow 값 11 = 이 cut 의 cost 11 이다. Lemma 1 에 의해 어떤 cut 도 flow 값 11 보다 쌀 수 없으니 이 cut 은 min cut 이다.\n{/answer}\n\n== 경로를 아무렇게나 고르면 ==\n=== C 번 왔다 갔다 ===\np.42 는 경고한다. 위 분석은 경로를 어떻게 고르든 맞다. 즉 '''끝나기만 하면''' 정답이다. 하지만 경로를 잘못 고르면 아주 오래 걸릴 수 있다.\n[[img:L17-57.png|p.57 — s→b→a→t 로 1 을 보낸 뒤. 가운데 1 짜리 간선이 꽉 차서 Gf 에서는 b→a 가 사라지고 a→b 가 생겼다|large]]\np.55–62 의 그래프는 s→a, s→b, a→t, b→t 가 모두 아주 큰 수 C 이고, 가운데 b→a 만 1 이다. max flow 는 2C 다. s→a→t 와 s→b→t 로 C 씩 보내면 경로 두 번에 끝난다. 그런데 운 나쁘게 위 그림처럼 s→b→a→t 를 고르면 1 만 보낸다. 다음에 s→a⇢b→t(가운데를 거꾸로)를 고르면 또 1 만 보내고, b→a 가 다시 살아난다(p.59 \"re-appeared\"). 이걸 되풀이하면 가운데 간선을 1 씩 더했다 뺐다 하면서 경로를 2C 번 찾아야 한다. 슬라이드 표현으로는 \"This will go on for C steps, adding flow along (b,a) and then subtracting it again.\" 이다. 수행 시간이 그래프 크기가 아니라 capacity 값 C 에 매달린다.\n\n=== BFS 로 고르면: Edmonds-Karp ===\np.63 의 정리다. augmenting path 를 [[BFS]] 로 찾으면(간선 수가 가장 적은 경로) Ford-Fulkerson 은 $O(nm^2)$ 에 끝난다. 이 방식을 [[Edmonds-Karp]] 라고 부른다. 증명은 수업에서 건너뛰고 시험에도 안 나온다(\"It will not be on the exam\"). 슬라이드가 주는 기본 아이디어는 이렇다.\n* residual graph 에서 간선 하나가 사라지는 횟수는 $O(n)$ 이다(어려운 부분).\n* 간선은 m 개뿐이다.\n* 간선이 사라질 때마다 BFS 를 한 번 돌리고, BFS 는 $O(m)$ 이다.\n곱하면 $O(n \\cdot m \\cdot m)$. 슬라이드가 강조한다. \"Doesn't have anything to do with the edge weights!\"[* 위 C 예제에 BFS 를 쓰면 첫 경로로 간선 2개짜리 s→a→t 나 s→b→t 를 고른다. 간선 3개짜리 s→b→a→t 는 BFS 가 고르지 않는다. 그래서 경로 두 번에 끝난다. Edmonds 와 Karp 의 논문은 1972년에 나왔다.]\n\n=== 정수 capacity 면 정수 flow ===\np.64 의 \"One more useful thing\". capacity 가 모두 정수면 Ford-Fulkerson 이 찾는 max flow 도 모든 간선이 정수다. 0 에서 시작해 정수(병목 x)만 더하고 빼기 때문이다. 다음 절의 matching 이 이 성질에 기댄다.\n\n{mini}\n# C 예제에서 경로를 운 나쁘게 고를 때 Ford-Fulkerson 이 찾는 augmenting path 수는? BFS 라면?\n# 다음 중 옳은 것을 모두 고르라(Circle all). (a) Ford-Fulkerson 은 어떤 경로 선택 규칙으로도 끝나면 정답이다. (b) Edmonds-Karp 의 수행 시간은 capacity 의 크기와 무관하다. (c) capacity 가 정수면 max flow 의 값만 정수이고 간선별 flow 는 분수일 수 있다.\n{/mini}\n{answer}\n# 2C 번(한 번에 1 씩, max flow 2C). BFS 면 2 번.\n# (a), (b). (c) 는 틀렸다. Ford-Fulkerson 이 찾은 max flow 는 간선별 flow 까지 모두 정수다(p.64).\n{/answer}\n\n== 어디에 쓰나: matching 과 배정 ==\n=== 학생과 동아리: maximum bipartite matching ===\np.65 는 min cut·max flow 가 \"an important algorithmic primitive\" 라고 한다. 첫 예는 [[maximum bipartite matching]] 이다(p.66–70). DGIST 학생들이 각자 들어가고 싶은 동아리가 몇 개씩 있다. 학생 한 명은 동아리 하나에만, 동아리 하나는 학생 한 명만 받는다고 할 때, 최대한 많은 학생을 만족시키려면?\n\n풀이는 그래프를 하나 만드는 것이다. s 에서 모든 학생으로, 학생에서 원하는 동아리로, 모든 동아리에서 t 로 간선을 긋고 capacity 를 '''모두 1''' 로 둔다. 그리고 max flow 를 구한다.\n[[img:L17-70.png|p.70 — 왜 되나 다섯 단계. flow 가 1 인 간선(네모 1)이 고른 짝이다. 이 flow 의 값은 4|large]]\n위 그림의 빨간 글씨 다섯 개가 이유다.\n# capacity 가 정수라 flow 도 정수, 즉 0 아니면 1 이다(p.64).\n# 학생에게 들어오는 양은 s 에서 오는 1 이하이고, 들어온 만큼 나가니 학생 한 명은 동아리 0 개나 1 개에 배정된다. 동아리 쪽도 마찬가지다.\n# 그래서 flow 가 1 인 학생→동아리 간선들은 matching 이다. 거꾸로 matching 하나는 flow 하나를 준다.\n# flow 의 값이 matching 의 크기다.\n# 따라서 max flow 가 maximum matching 이다.\n[[bipartite graph]] 는 L9 에서 BFS 로 판별했던 그 그래프다.\n\n=== 학생과 아이스크림: assignment problem ===\np.71–75 는 capacity 를 1 보다 크게 풀어 준다([[assignment problem]]). 학생 x 는 최대 c(x) 스쿱만 먹는다. 아이스크림 통 y 에는 c(y) 스쿱만 있다. 학생 x 는 맛 y 를 c(x,y) 스쿱까지만 원한다. 가능한 한 많이 퍼 주려면? 같은 그래프에서 s→학생 capacity 를 c(x), 학생→통을 c(x,y), 통→t 를 c(y) 로 두고 max flow 를 구하면 된다.[* p.72 의 사연: 한 학생은 4 스쿱을 먹고 싶지만 초콜릿은 1 스쿱, 커피는 3 스쿱까지만. 다른 학생은 \"vegan and not that hungry\" 라서 셔벗 두 스쿱만 원한다. p.74 의 최종 flow 값은 s 에서 나가는 4 + 3 + 1 + 7 + 2 = 17 스쿱이다.] 학생 노드에서 들어오는 양이 c(x) 이하라 나가는 양도 c(x) 이하이고, 통 쪽도 같다(p.75). flow 가 배정이고 max flow 가 최대 배정이다.\n\np.77 Recap 이 강의를 묶는다. s-t cut 과 s-t flow, 둘이 같다는 정리, Ford-Fulkerson(augmenting path 를 찾아 늘리고, 더 없을 때까지 반복), 그리고 배정 문제 같은 응용.\n\n{mini}\n# 학생 3명(x1, x2, x3)과 동아리 3개(y1, y2, y3). x1 은 y1, x2 는 y1·y2, x3 은 y1 만 원한다. max flow 그래프를 그리고 maximum matching 크기를 구하라.\n# matching 을 flow 로 바꿀 때 s→학생 capacity 를 2 로 두면 무엇이 달라지나?\n{/mini}\n{answer}\n# s→x1, x2, x3 (1), x1→y1, x2→y1, x2→y2, x3→y1 (1), y1, y2, y3→t (1). 최대 2: x2–y2 와 (x1 또는 x3)–y1. x1 과 x3 은 둘 다 y1 만 원해서 한 명은 짝이 없다. y3 를 원하는 학생은 없다.\n# 학생 한 명이 동아리 두 개까지 배정될 수 있다. 더 이상 matching 이 아니고, assignment problem 에서 c(x) = 2 인 경우가 된다.\n{/answer}\n\n== 시험 직전 체크 ==\n# s-t cut 의 cost 는 s 쪽 → t 쪽 간선의 capacity 합. 반대 방향은 안 센다.\n# flow: capacity 이하, 정점마다 들어옴 = 나감. 값 = s 에서 나가는 양.\n# max-flow min-cut: max flow 값 = min s-t cut cost. Lemma 1(≤)은 그림 증명, 엄밀 증명은 시험 범위 아님(p.18).\n# $G_f$: forward $c - f$ (남은 양), backward $f$ (쓴 양, 되돌릴 수 있는 양).\n# $G_f$ 에 s→t 경로 없음 ⇔ max flow. 그때 s 가 닿는 집합이 min cut 의 s 쪽.\n# increaseFlow: x = 경로 최소 residual, forward +x, backward 원래 간선 −x.\n# 예제 경로 4 → 4 → 2 → 1, max flow = min cut = 11 (s→A 4, B→E 3, F→t 4).\n# 경로를 아무렇게나 고르면 C 예제처럼 2C 번. BFS(Edmonds-Karp) $O(nm^2)$, capacity 와 무관. 증명은 시험 범위 아님.\n# 정수 capacity → 정수 flow → bipartite matching(capacity 1), assignment(일반 capacity).\n\n== 관련 문서 ==\n* 이 강의: [[s-t cut]] · [[flow]] · [[max-flow min-cut theorem]] · [[residual graph]] · [[augmenting path]] · [[Ford-Fulkerson]] · [[Edmonds-Karp]] · [[maximum bipartite matching]] · [[assignment problem]]\n* 이전에 본 것: [[L16 Advanced Algorithms I]] · [[global minimum cut]] · [[cut]] · [[BFS]] · [[bipartite graph]] · [[directed graph]]"
+  "body": "{warn}\n11/24 수업에서 '''p.1–53'''(Ford-Fulkerson 예제 끝, max flow = min cut = 11)까지 나갔고 그 녹음을 반영했다. '''p.54–77'''(경로를 아무렇게나 고를 때의 C 예제, Edmonds-Karp 정리, 정수성, matching, assignment)은 다음 수업 예정이라 아직 슬라이드 기준이다. HW4 4번(정점 분할 min cut)과 같은 주제지만, HW4 마감(11/29) 전이라 이 문서에는 HW4 풀이를 싣지 않는다.\n{/warn}\n\n== 개요 ==\n[[L16 Advanced Algorithms I]] 은 그래프를 아무 데나 잘라도 되는 global min cut 이었다. L17 은 조건을 바꾼다. 간선에 방향과 용량(capacity)이 있고, 출발점 s 와 도착점 t 가 정해져 있다. 질문은 둘이다. s 와 t 를 갈라놓는 가장 싼 cut 은 무엇인가([[s-t cut|min s-t cut]]). s 에서 t 로 한 번에 얼마나 많이 흘려보낼 수 있나([[flow|max flow]]). 이 강의의 결론은 '''두 값이 같다'''는 것이다([[max-flow min-cut theorem]]). 그리고 그 증명이 그대로 알고리즘([[Ford-Fulkerson]])이 된다.\n\n페이지 번호는 슬라이드에 인쇄된 번호이고 그림 파일 번호와 같다(p.1–77). 예제 그래프의 정점에는 슬라이드가 이름을 붙이지 않았다. 이 문서는 설명하려고 왼쪽 열을 위에서부터 A, B, C, 오른쪽 열을 D, E, F 라고 부른다.\n\n== s 와 t 를 갈라놓는 cut ==\n=== 오늘의 그래프 ===\np.4 가 조건을 바꾼다. 그래프는 방향이 있고, 간선마다 capacity(가중치)가 붙는다. 특별한 정점 s(source)와 t(sink)가 있다. 이 수업에서는 s 에서는 나가는 간선만, t 로는 들어오는 간선만 있다고 가정한다.[* p.4 각주 \"at least for this class\". 일반적인 flow 이론에서는 이 가정이 필요 없다. p.20 에도 \"두 정점 사이에 양방향 간선이 둘 다 있는 경우는 없다고 가정한다(필요한 건 아니지만)\" 라는 단서가 붙는다.]\n\n=== cut 의 비용은 s 쪽에서 t 쪽으로 가는 간선만 센다 ===\n{def}\nL17 p.5–8: \"An s-t cut is a cut which separates s from t.\" 간선이 s 쪽에서 t 쪽으로 가면 cut 을 건넌다. cut 의 cost(capacity)는 건너는 간선들의 capacity 합이다.\n{/def}\n[[img:L17-08.png|p.8 — 빨간 점선 cut 의 cost 는 4 + 2 + 10 = 16. 아래쪽 2 짜리 간선은 방향이 반대라 세지 않는다|large]]\n위 그림에서 s 쪽(짙은 색)은 s 와 C 다. s 쪽에서 t 쪽으로 나가는 주황 간선 세 개(s→A 4, s→B 2, C→F 10)만 센다. B→C 2 는 점선을 건너긴 하지만 t 쪽에서 s 쪽으로 들어오는 방향이라 빠진다. 슬라이드 표현으로는 \"this edge does not cross the cut; it's going in the wrong direction.\" 이다. 그래서 cost 는 16 이다.\n\n[[anim:st_cut_sweep|cut 을 네 번 바꿔 그으며 cost 를 센다. 연두 배경이 s 쪽(S)이다. 주황으로 깜빡이는 S→T 간선만 더하고, 회색 ✗ 는 선을 넘어도 T→S 라 안 센다]]\n위 그림처럼 s 쪽을 어떻게 칠하느냐에 따라 cost 가 12, 16, 12, 11 로 바뀐다. 색 읽는 법과 \"왜 반대 방향은 안 세나\" 는 [[s-t cut]] 문서에 자세히 풀어 두었다.\n\np.9 는 더 싼 cut 을 보여 준다. s 쪽이 {s, B, C, F} 일 때 건너는 간선은 s→A 4, B→E 3, F→t 4 이고 cost 는 '''4 + 3 + 4 = 11''' 이다. 이것이 이 그래프의 '''minimum s-t cut''' 이다. 슬라이드는 여기서 묻는다. \"Question: how do we find a minimum s-t cut?\"\n\n=== 냉전 시대의 철도 지도 ===\np.10 은 이 문제가 실제로 어디서 나왔는지 보여 준다. 1955년, 소련에서 동유럽으로 가는 철도망 지도다(1999년 기밀 해제). 미국은 러시아의 보급로를 가장 효율적으로 끊고 싶었다. 같은 해 RAND 연구소의 Ford 와 Fulkerson 이 최적의 s-t cut 을 찾는 알고리즘을 내놓았다. 지도에는 \"the bottleneck\" 이라는 글씨가 적혀 있다. 교수(11/24)는 이걸 \"which road we should cut in an efficient way to stop the supply of food, water, missiles\" 라고 풀었고, 비록 전쟁에서 나왔지만 쓸모 있는 응용이 많다고 덧붙였다.[* 출처는 Schrijver 의 2002년 논문 \"On the history of the transportation and maximum flow problems\" 다. 슬라이드에는 \"Schriver 2002\" 로 철자가 조금 다르게 적혀 있다. 이 지도는 T. E. Harris 와 F. S. Ross 가 1955년에 작성한 RAND 보고서에 실린 것이다.]\n\n{mini}\n# p.8 그림에서 s 쪽을 {s, A} 로 잡으면 cost 는? (그래프 간선: s→A 4, s→B 2, s→C 6, A→D 3, A→B 2, A→E 6, B→E 3, B→C 2, D→E 6, D→t 4, E→t 4, E→F 6, F→B 3, C→F 10, F→t 4)\n# 다음 중 옳은 것을 모두 고르라(Circle all). (a) t 쪽에서 s 쪽으로 가는 간선도 cut 의 cost 에 더한다. (b) s-t cut 은 s 와 t 를 반드시 다른 편에 둔다. (c) s 쪽을 {s} 하나로 잡은 cut 의 cost 는 s 에서 나가는 capacity 합이다.\n{/mini}\n{answer}\n# s→B 2, s→C 6, A→D 3, A→B 2, A→E 6 → 19.\n# (b), (c). (a) 는 틀렸다. s 쪽에서 t 쪽으로 가는 간선만 센다. {s} 만 떼면 cost 는 4 + 2 + 6 = 12 이고, min cut 11 보다 크다.\n{/answer}\n\n== 흐름: flow ==\n=== 간선마다 얼마나 보내나 ===\np.11 은 간선에 capacity 말고 숫자를 하나 더 붙인다. '''flow''' 다. \"send 2 units of stuff along this edge\" 처럼, 그 간선으로 물건을 얼마나 보내는지다. 규칙은 두 개다.\n* 간선의 flow 는 capacity 를 넘을 수 없다.\n* s, t 가 아닌 정점마다 들어오는 flow 합 = 나가는 flow 합. 슬라이드 예로는 \"4 units in, 1+1+2 = 4 units out.\" 이다.\n[[anim:flow_fill_conservation|파이프(간선)에 flow 를 흘린다. 정점 A 와 E 에서 들어온 양과 나간 양이 같은지 오른쪽 판으로 확인하고, 마지막에 p.14 의 max flow 11 로 바뀌는 것을 보라]]\np.12 는 flow 의 '''값'''을 정한다. s 에서 나오는 양이고, t 로 들어가는 양이기도 하다. 중간 정점마다 들어온 만큼 나가니 둘은 같다.\n\n=== 가장 많이: max flow ===\np.13 의 flow 는 값이 4 다. 슬라이드도 \"This example flow is pretty wasteful\" 이라고 인정한다.\n[[img:L17-14.png|p.14 — 값 11 인 max flow. 네모 안 숫자가 flow, 옆 숫자가 capacity|large]]\n위 그림은 값 11 인 flow 다. s 에서 4, 2, 5 를 내보내 합이 11 이다. 그런데 11 은 방금 p.9 에서 구한 min cut 의 cost 와 같다. 슬라이드 오른쪽 위 고양이가 \"COINCIDENCE? I THINK NOT!\" 이라고 외친다.\n\n=== max-flow min-cut theorem ===\n{def}\n'''Max-flow min-cut theorem''' (L17 p.15). s 에서 t 로 가는 max flow 의 값은 min s-t cut 의 cost 와 같다.\n{/def}\n교수(11/24)는 간선을 물 파이프, flow 를 그 파이프로 흐르는 물의 양으로 비유했다. 직관은 이렇다. 흐름을 최대로 채우면 어딘가 병목이 꽉 막힌다. 그 병목이 min cut 이다(\"in a max flow, the min cut better fill up, and this is the bottleneck\"). 증명 계획(p.16)은 두 부분이다.\n* Lemma 1: max flow ≤ min cut. 그림으로 증명한다.\n* Lemma 2: max flow ≥ min cut. 알고리즘으로 증명한다.\n\n{mini}\n# p.14 의 flow 에서 정점 E(가운데 오른쪽)로 들어오는 flow 와 나가는 flow 를 확인하라. (들어옴: A→E 1, B→E 3. 나감: E→t 4)\n# flow 값이 \"s 에서 나가는 양\" 과 \"t 로 들어가는 양\" 으로 두 번 정의돼도 되는 이유는?\n{/mini}\n{answer}\n# 들어옴 1 + 3 = 4, 나감 4. 보존된다.\n# s, t 를 뺀 모든 정점에서 들어온 양 = 나간 양이라, s 에서 나온 것은 중간에서 생기거나 사라지지 않고 전부 t 로 들어간다.\n{/answer}\n\n== 쉬운 쪽: flow 는 어떤 cut 보다도 작다 ==\np.17 의 Lemma 1 은 '''아무''' flow 와 '''아무''' s-t cut 에 대해, flow 값 ≤ cut 의 cost 라는 것이다. 그림 한 장으로 끝난다. s 에서 x 만큼 나온 물건은 t 에 가려면 언젠가 cut 을 넘어야 한다. cut 을 넘는 간선들은 capacity 합만큼만 실어 나를 수 있다. 그러니 x ≤ cut 의 cost 다. 이것이 모든 flow, 모든 cut 에 대해 성립하니 max flow ≤ min cut 이다.[* p.18: \"You are not responsible for proof-by-proof on the final.\" 엄밀한 증명(CLRS Lemma 26.4, Corollary 26.5)은 기말에 안 나온다고 슬라이드가 못 박았다. 그림 수준의 논리만 알면 된다.]\n\n[[anim:flow_across_any_cut|값 4 인 flow 하나를 세 cut 에서 잰다. S→T 로 넘은 flow 에서 T→S 로 되돌아온 flow 를 빼면 언제나 4 이고, 4 는 cut 의 cost 를 넘지 못한다]]\n위 그림의 두 번째 cut(S = {s, B, C})에서 A→B 의 1 은 T 쪽에서 S 쪽으로 되돌아온 flow 다. 그래서 넘어간 5 에서 1 을 빼야 flow 값 4 가 나온다. 이 \"넘어간 양 − 되돌아온 양\" 셈은 뒤의 ⇒ 방향 증명에서 다시 쓴다.\n\np.19 가 남은 일을 적는다. 정리는 이보다 강한 \"같다\" 이므로, max flow ≥ min cut 을 보여야 한다. \"Next: Proof by algorithm!\"\n\n== 남은 여유를 그린 그래프: residual graph ==\n=== 앞으로 보낼 수 있는 양, 되돌릴 수 있는 양 ===\np.20 은 순서를 뒤집는다. 보통은 알고리즘을 먼저 말하고 증명하지만, 오늘은 증명부터 하고 거기서 알고리즘이 나온다. 그 증명의 도구가 [[residual graph]] $G_f$ 다(p.21).\n$$c_f(u,v) = \\begin{cases} c(u,v) - f(u,v) & (u,v) \\in E \\\\ f(v,u) & (v,u) \\in E \\\\ 0 & \\text{otherwise} \\end{cases}$$\n[[img:L17-22.png|p.22 — 왼쪽은 flow f 가 있는 G, 오른쪽은 그 residual graph Gf. 파랑은 남은 양, 초록은 쓴 양|large]]\n위 그림 왼쪽의 G 에서 s→a 는 capacity 4 중 3 을 쓰고 있다. 오른쪽 $G_f$ 에는 이 간선이 두 개로 바뀐다. 파란 s→a 1 은 아직 더 보낼 수 있는 양이다(\"Forward edges are the amount that's left\"). 초록 a→s 3 은 이미 보낸 양이다(\"Backwards edges are the amount that's been used\"). 이미 보낸 3 은 되돌릴 수 있다는 뜻이다. a→t 는 2 를 다 써서 파란 간선이 없고 초록 t→a 2 만 남는다.\n[[anim:residual_build|왼쪽 G 의 간선을 하나씩 집어 오른쪽 Gf 에 파랑(c − f)과 연두(f) 두 화살표로 옮긴다. a→t 처럼 꽉 찬 간선은 파랑이 없어지는 것을 보라]]\n\n=== Lemma: $G_f$ 에서 t 에 못 가면 max flow ===\np.23–26 이 핵심 Lemma 를 예로 보여 준다.\n{def}\nL17 p.23: t 가 $G_f$ 에서 s 로부터 도달 불가능하다 ⇔ f 는 max flow 다.\n{/def}\np.22 의 flow(값 4)에서는 $G_f$ 에 s→a→b→t 경로가 있다(파랑 1, 5, 1). 이 길로 1 을 더 보내면 s→a 가 4, a→b 가 2, b→t 가 3 이 되고 값은 5 가 된다(p.24). 다시 $G_f$ 를 그리면 s 에서 t 로 가는 길이 없다(p.26). Lemma 에 따르면 이제 max flow 다.[* 마지막 $G_f$ 에서 s 가 닿는 정점은 s, b, 그리고 b→a 초록 간선을 타고 a 까지다. 그 셋과 t 를 가르는 cut 은 a→t 2, b→t 3 으로 cost 5 = flow 값이다. 아래 증명의 ⇒ 방향이 바로 이 관찰이다.]\n\n{mini}\n# p.22 의 G: s→a 4(flow 3), s→b 8(flow 1), a→b 6(flow 1), a→t 2(flow 2), b→t 3(flow 2). $G_f$ 의 간선과 값을 모두 적어라.\n# $c_f$ 정의의 빈칸: (u,v) ∈ E 이면 $c_f(u,v) = $ ____, (v,u) ∈ E 이면 $c_f(u,v) = $ ____.\n{/mini}\n{answer}\n# 파랑(forward): s→a 1, s→b 7, a→b 5, b→t 1. a→t 는 꽉 차서 없다. 초록(backward): a→s 3, b→s 1, b→a 1, t→a 2, t→b 2.\n# $c(u,v) - f(u,v)$, $f(v,u)$. 두 번째를 $c(v,u) - f(v,u)$ 로 쓰면 틀린다. 되돌릴 수 있는 양은 이미 보낸 양이다.\n{/answer}\n\n== Lemma 증명, 그리고 알고리즘이 나온다 ==\n=== ⇐ 방향: augmenting path 가 있으면 더 보낼 수 있다 ===\n$G_f$ 에 s 에서 t 로 가는 경로가 있다고 하자. 이 경로를 [[augmenting path]] 라고 한다(p.28). 이 경로를 따라 flow 를 늘릴 수 있으면, 처음 flow 는 max 가 아니었다. 대우로 ⇐ 방향이 증명된다.\n\n경로가 모두 파란(forward) 간선이면 쉽다. 경로 위 간선의 flow 를 다 같이 늘리면 된다(p.29). 문제는 초록(backward) 간선이 섞인 경우다.\n[[img:L17-32.png|p.32 — 경로가 가운데 간선을 거꾸로 지난다. 양 끝 간선에는 flow 를 더하고, 거꾸로 지나는 간선에서는 flow 를 뺀다|large]]\n위 그림의 노란 경로는 s→(위)→(아래)→t 인데, 가운데 세로 간선은 원래 아래에서 위로 가는 간선이다. 경로가 그 간선을 거꾸로 탄다. 이때 모든 간선의 flow 를 늘리면 가운데 정점에서 보존 법칙이 깨진다(p.31). 그래서 거꾸로 탄 간선에서는 flow 를 '''뺀다'''(p.32 \"We will remove flow here\"). 위 정점은 s 에서 1 을 더 받고, 아래에서 오던 1 을 덜 받으니 들어오는 양이 그대로다. 아래 정점은 위로 보내던 1 을 t 로 돌려 보내니 나가는 양이 그대로다. 결과는 값 2 → 3 인 정상적인 flow 다(p.34 \"Still a legit flow, but with a bigger value!\").\n\n[[anim:augment_backward|p.30–34 의 예를 그대로 움직인다. 모든 간선에 +1 하면 a 에서 보존이 깨지는 장면, 그리고 연두로 지난 b→a 에서는 1 을 빼서 값 2 → 3 이 되는 장면을 차례로 보라]]\np.35 가 이걸 함수로 적는다.\n<pre class=\"c\">\nincreaseFlow(path P in Gf, flow f):\n    x = min weight on any edge in P\n    for (u,v) in P:\n        if (u,v) in E,  f'(u,v) ← f(u,v) + x\n        if (v,u) in E,  f'(v,u) ← f(v,u) − x\n    return f'\n<\/pre>\nx 는 경로 위 residual 값의 최솟값, 즉 이 경로의 병목이다. forward 간선이면 원래 간선에 x 를 더하고, backward 간선이면 반대 방향 원래 간선에서 x 를 뺀다.\n\n=== ⇒ 방향: 못 가면 그 자리가 min cut 이다 ===\n반대로 $G_f$ 에 s→t 경로가 없다고 하자(p.38–40). s 에서 닿는 정점들과 못 닿는 정점들로 cut 을 만든다.\n* s 쪽에서 t 쪽으로 가는 원래 간선은 모두 '''꽉 차 있다'''. 남은 양이 있었다면 $G_f$ 에 파란 간선이 있어서 건너편 정점에 닿았을 것이다.\n* t 쪽에서 s 쪽으로 오는 원래 간선은 flow 가 0 이다. flow 가 있었다면 초록 간선이 있어서 역시 닿았을 것이다.\n그러니 flow 값 = 이 cut 의 cost 다. 그리고 이 cut 의 cost ≥ min cut ≥ max flow(Lemma 1) ≥ 이 flow 값. 양 끝이 같으니 전부 같다. f 는 max flow 이고, 덤으로 이 cut 은 min cut 이다.\n\n[[anim:cut_proof_reachable|p.39 의 Gf 에서 s 부터 칠한다(s → b → a). t 에 들어가는 화살표가 없어 멈추면 그 경계가 cut 이고, 오른쪽 G 에서 경계를 넘는 a→t, b→t 가 꽉 차 있다]]\n이 증명은 수업 끝에 몇 줄로 지나가서 놓치기 쉽다. 그림의 초록 세 가지(짙은 초록 = S, 연한 민트 = T, 연두 화살표 = backward)를 읽는 법부터, $G_f$ 를 만들고, BFS 로 S 를 칠하고, 선을 긋고, 선을 넘는 간선을 하나씩 확인하고, 부등식 사슬이 접히는 데까지를 '''[[max-flow min-cut 증명 (cut 선 긋기)]]''' 문서에 움직이는 그림 넷과 함께 한 걸음씩 풀어 두었다. 슬라이드가 적지 않은 둘째 사실(T 쪽에서 S 쪽으로 오는 간선의 flow 는 0)도 거기서 설명한다.\n[[sim:cut_from_residual]]\n\n{exam}\n교수(11/24, 녹음 60:05–64:30): $G_f$ 에서 s 가 닿는 정점 / 못 닿는 정점으로 cut 을 잡으면, 그 cut 의 간선은 \"full because they don't exist in $G_f$\" 이고(꽉 차 있지 않으면 남은 capacity 로 가는 path 가 생겨 reachable 이 된다), flow 값 = cut cost ≥ min cut ≥ max flow ≥ flow 값이라 모두 같다. 자세한 단계는 [[max-flow min-cut 증명 (cut 선 긋기)]].\n{/exam}\n\n=== Ford-Fulkerson ===\np.41 이 증명에서 알고리즘을 꺼낸다.\n<pre class=\"c\">\nFord-Fulkerson(G):\n    f ← all zero flow.\n    Gf ← G\n    while t is reachable from s in Gf\n        Find a path P from s to t in Gf      // eg, use BFS\n        f ← increaseFlow(P, f)\n        update Gf\n    return f\n<\/pre>\nLemma 덕에 루프가 끝났을 때 f 는 max flow 이고, 마지막 $G_f$ 에서 s 가 닿는 정점들이 min cut 의 s 쪽이다. 하나의 알고리즘이 max flow 와 min cut 을 같이 준다.\n\n{mini}\n# `increaseFlow` 빈칸: `x = ________`, backward 간선이면 `f'(v,u) ← ________`.\n# 다음 중 옳은 것을 모두 고르라(Circle all). (a) augmenting path 는 원래 그래프 G 의 경로다. (b) backward 간선을 지날 때는 그 원래 간선의 flow 를 줄인다. (c) 루프가 끝난 뒤 s 에서 닿는 정점 집합이 min cut 의 s 쪽이다.\n{/mini}\n{answer}\n# `min weight on any edge in P`, `f(v,u) − x`.\n# (b), (c). (a) 는 틀렸다. augmenting path 는 residual graph $G_f$ 의 경로다. backward 간선을 지날 수 있어서 G 에는 없는 방향으로 갈 수도 있다.\n{/answer}\n\n== 손으로 돌려 보기 ==\np.43–53 은 p.4 와 비슷하지만 간선 몇 개를 뺀 그래프로 Ford-Fulkerson 을 끝까지 돌린다.[* p.43 의 그래프는 p.4 그래프에서 A→B 2, B→C 2, D→E 6, E→F 6 네 간선이 빠진 11개 간선짜리다. 그래도 max flow 와 min cut 은 똑같이 11 이다. p.9 의 min cut 간선 s→A, B→E, F→t 가 그대로 남아 있기 때문이다.] 간선은 s→A 4, s→B 2, s→C 6, A→D 3, A→E 6, B→E 3, F→B 3, C→F 10, D→t 4, E→t 4, F→t 4 다.\n<pre class=\"txt\">\n슬라이드     augmenting path (Gf)              병목 x   flow 값\np.44–45     s→A→E→t                            4        4\np.46–47     s→C→F→t                            4        8\np.48–49     s→B→E⇢A→D→t   (E⇢A 는 backward)     2        10    A→E 의 flow 4 → 2\np.50–51     s→C→F→B→E⇢A→D→t                    1        11    A→E 의 flow 2 → 1 (\"AGAIN\")\np.53        s 에서 닿는 정점 {s,B,C,F}, t 못 감    -        11    cut s→A 4 + B→E 3 + F→t 4 = 11\n<\/pre>\n세 번째 경로가 재미있다. 첫 경로에서 A→E 로 4 를 보냈는데, 지금 보니 A 의 물건 일부는 A→D→t 로 돌리는 게 낫다. 그래서 B 에서 온 물건을 E 로 보내 E→t 를 채우고, 그만큼 A→E 를 줄여 A 의 물건을 D 쪽으로 돌린다. backward 간선은 \"예전 결정을 되무르는 길\" 이다. 슬라이드 문장으로는 \"Notice that we're going back along one of the backwards edges we added.\" 다.\n[[anim:ff_full_run|노란 띠가 이번 augmenting path, 오른쪽이 경로 위 residual 값과 병목 x 다. 세 번째·네 번째 경로의 연두 점선(E⇢A)에서 A→E 의 flow 가 줄어드는 것을 보고, 끝에서 칠해지는 S = {s, C, F, B} 를 확인하라]]\n[[sim:ford_fulkerson_trace]]\n[[img:L17-53.png|p.53 — 끝. 아래 Gf 에서 s 가 닿는 짙은 정점 {s, B, C, F} 와 나머지를 빨간 점선이 가른다. max flow 와 min cut 이 둘 다 11|large]]\n위 그림의 주황 간선 셋(s→A, B→E, F→t)이 점선을 건너는 간선이고 모두 꽉 차 있다. 고양이의 대사가 바뀌었다. \"I KNEW IT! DEFINITELY NOT A COINCIDENCE.\"\n\np.54 가 정리한다. max s-t flow = min s-t cut. 슬라이드의 농담으로는 \"The USSR and the USA were trying to solve the same problem…\" 다. 한쪽은 최대한 많이 보내려 했고 다른 쪽은 가장 싸게 끊으려 했는데, 둘이 같은 문제였다.\n\n{mini}\n# 첫 경로 s→A→E→t 로 4 를 보낸 직후, $G_f$ 에서 A 와 E 사이 간선 두 개의 값은?\n# 위 표의 세 번째 경로에서 x = 2 가 되는 병목 간선은 어디인가?\n# 마지막 cut 이 min cut 이라는 근거를 두 문장으로.\n{/mini}\n{answer}\n# forward A→E 2 (6 − 4), backward E→A 4.\n# s→B(남은 양 2). 나머지 B→E 3, E⇢A 4, A→D 3, D→t 4 는 모두 2 이상이다.\n# 건너는 간선 s→A, B→E, F→t 가 모두 꽉 차 있고, t 쪽에서 s 쪽으로 들어오는 간선은 없다(F→B 는 두 끝이 모두 s 쪽). 그래서 flow 값 11 = 이 cut 의 cost 11 이다. Lemma 1 에 의해 어떤 cut 도 flow 값 11 보다 쌀 수 없으니 이 cut 은 min cut 이다.\n{/answer}\n\n== 경로를 아무렇게나 고르면 ==\n=== C 번 왔다 갔다 ===\np.42 는 경고한다. 위 분석은 경로를 어떻게 고르든 맞다. 즉 '''끝나기만 하면''' 정답이다. 하지만 경로를 잘못 고르면 아주 오래 걸릴 수 있다.\n[[img:L17-57.png|p.57 — s→b→a→t 로 1 을 보낸 뒤. 가운데 1 짜리 간선이 꽉 차서 Gf 에서는 b→a 가 사라지고 a→b 가 생겼다|large]]\np.55–62 의 그래프는 s→a, s→b, a→t, b→t 가 모두 아주 큰 수 C 이고, 가운데 b→a 만 1 이다. max flow 는 2C 다. s→a→t 와 s→b→t 로 C 씩 보내면 경로 두 번에 끝난다. 그런데 운 나쁘게 위 그림처럼 s→b→a→t 를 고르면 1 만 보낸다. 다음에 s→a⇢b→t(가운데를 거꾸로)를 고르면 또 1 만 보내고, b→a 가 다시 살아난다(p.59 \"re-appeared\"). 이걸 되풀이하면 가운데 간선을 1 씩 더했다 뺐다 하면서 경로를 2C 번 찾아야 한다. 슬라이드 표현으로는 \"This will go on for C steps, adding flow along (b,a) and then subtracting it again.\" 이다. 수행 시간이 그래프 크기가 아니라 capacity 값 C 에 매달린다.\n[[anim:bad_path_zigzag|왼쪽은 가운데 1 짜리 간선을 오가는 경로만 골라 한 번에 1 씩 보낸다. 오른쪽 BFS 는 간선 2 개짜리 경로 둘로 끝난다]]\n\n=== BFS 로 고르면: Edmonds-Karp ===\np.63 의 정리다. augmenting path 를 [[BFS]] 로 찾으면(간선 수가 가장 적은 경로) Ford-Fulkerson 은 $O(nm^2)$ 에 끝난다. 이 방식을 [[Edmonds-Karp]] 라고 부른다. 증명은 수업에서 건너뛰고 시험에도 안 나온다(\"It will not be on the exam\"). 슬라이드가 주는 기본 아이디어는 이렇다.\n* residual graph 에서 간선 하나가 사라지는 횟수는 $O(n)$ 이다(어려운 부분).\n* 간선은 m 개뿐이다.\n* 간선이 사라질 때마다 BFS 를 한 번 돌리고, BFS 는 $O(m)$ 이다.\n곱하면 $O(n \\cdot m \\cdot m)$. 슬라이드가 강조한다. \"Doesn't have anything to do with the edge weights!\"[* 위 C 예제에 BFS 를 쓰면 첫 경로로 간선 2개짜리 s→a→t 나 s→b→t 를 고른다. 간선 3개짜리 s→b→a→t 는 BFS 가 고르지 않는다. 그래서 경로 두 번에 끝난다. Edmonds 와 Karp 의 논문은 1972년에 나왔다.]\n\n=== 정수 capacity 면 정수 flow ===\np.64 의 \"One more useful thing\". capacity 가 모두 정수면 Ford-Fulkerson 이 찾는 max flow 도 모든 간선이 정수다. 0 에서 시작해 정수(병목 x)만 더하고 빼기 때문이다. 다음 절의 matching 이 이 성질에 기댄다.\n\n{mini}\n# C 예제에서 경로를 운 나쁘게 고를 때 Ford-Fulkerson 이 찾는 augmenting path 수는? BFS 라면?\n# 다음 중 옳은 것을 모두 고르라(Circle all). (a) Ford-Fulkerson 은 어떤 경로 선택 규칙으로도 끝나면 정답이다. (b) Edmonds-Karp 의 수행 시간은 capacity 의 크기와 무관하다. (c) capacity 가 정수면 max flow 의 값만 정수이고 간선별 flow 는 분수일 수 있다.\n{/mini}\n{answer}\n# 2C 번(한 번에 1 씩, max flow 2C). BFS 면 2 번.\n# (a), (b). (c) 는 틀렸다. Ford-Fulkerson 이 찾은 max flow 는 간선별 flow 까지 모두 정수다(p.64).\n{/answer}\n\n== 어디에 쓰나: matching 과 배정 ==\n=== 학생과 동아리: maximum bipartite matching ===\np.65 는 min cut·max flow 가 \"an important algorithmic primitive\" 라고 한다. 첫 예는 [[maximum bipartite matching]] 이다(p.66–70). DGIST 학생들이 각자 들어가고 싶은 동아리가 몇 개씩 있다. 학생 한 명은 동아리 하나에만, 동아리 하나는 학생 한 명만 받는다고 할 때, 최대한 많은 학생을 만족시키려면?\n\n풀이는 그래프를 하나 만드는 것이다. s 에서 모든 학생으로, 학생에서 원하는 동아리로, 모든 동아리에서 t 로 간선을 긋고 capacity 를 '''모두 1''' 로 둔다. 그리고 max flow 를 구한다.\n[[img:L17-70.png|p.70 — 왜 되나 다섯 단계. flow 가 1 인 간선(네모 1)이 고른 짝이다. 이 flow 의 값은 4|large]]\n위 그림의 빨간 글씨 다섯 개가 이유다.\n# capacity 가 정수라 flow 도 정수, 즉 0 아니면 1 이다(p.64).\n# 학생에게 들어오는 양은 s 에서 오는 1 이하이고, 들어온 만큼 나가니 학생 한 명은 동아리 0 개나 1 개에 배정된다. 동아리 쪽도 마찬가지다.\n# 그래서 flow 가 1 인 학생→동아리 간선들은 matching 이다. 거꾸로 matching 하나는 flow 하나를 준다.\n# flow 의 값이 matching 의 크기다.\n# 따라서 max flow 가 maximum matching 이다.\n[[bipartite graph]] 는 L9 에서 BFS 로 판별했던 그 그래프다.\n[[anim:matching_as_flow|p.68 의 학생·동아리 그래프에서 Ford-Fulkerson 을 돌린다. 두 번째 경로가 연두(backward)를 타서 학생 1 을 다른 동아리로 옮기는 장면을 보라]]\n위 그림의 두 번째 경로처럼, matching 에서 backward 간선은 \"이미 짝지은 사람을 다른 짝으로 옮기는\" 길이 된다. 그래서 먼저 고른 짝이 나빠도 max flow 는 결국 최대 matching 에 닿는다.\n\n=== 학생과 아이스크림: assignment problem ===\np.71–75 는 capacity 를 1 보다 크게 풀어 준다([[assignment problem]]). 학생 x 는 최대 c(x) 스쿱만 먹는다. 아이스크림 통 y 에는 c(y) 스쿱만 있다. 학생 x 는 맛 y 를 c(x,y) 스쿱까지만 원한다. 가능한 한 많이 퍼 주려면? 같은 그래프에서 s→학생 capacity 를 c(x), 학생→통을 c(x,y), 통→t 를 c(y) 로 두고 max flow 를 구하면 된다.[* p.72 의 사연: 한 학생은 4 스쿱을 먹고 싶지만 초콜릿은 1 스쿱, 커피는 3 스쿱까지만. 다른 학생은 \"vegan and not that hungry\" 라서 셔벗 두 스쿱만 원한다. p.74 의 최종 flow 값은 s 에서 나가는 4 + 3 + 1 + 7 + 2 = 17 스쿱이다.] 학생 노드에서 들어오는 양이 c(x) 이하라 나가는 양도 c(x) 이하이고, 통 쪽도 같다(p.75). flow 가 배정이고 max flow 가 최대 배정이다.\n\np.77 Recap 이 강의를 묶는다. s-t cut 과 s-t flow, 둘이 같다는 정리, Ford-Fulkerson(augmenting path 를 찾아 늘리고, 더 없을 때까지 반복), 그리고 배정 문제 같은 응용.\n\n{mini}\n# 학생 3명(x1, x2, x3)과 동아리 3개(y1, y2, y3). x1 은 y1, x2 는 y1·y2, x3 은 y1 만 원한다. max flow 그래프를 그리고 maximum matching 크기를 구하라.\n# matching 을 flow 로 바꿀 때 s→학생 capacity 를 2 로 두면 무엇이 달라지나?\n{/mini}\n{answer}\n# s→x1, x2, x3 (1), x1→y1, x2→y1, x2→y2, x3→y1 (1), y1, y2, y3→t (1). 최대 2: x2–y2 와 (x1 또는 x3)–y1. x1 과 x3 은 둘 다 y1 만 원해서 한 명은 짝이 없다. y3 를 원하는 학생은 없다.\n# 학생 한 명이 동아리 두 개까지 배정될 수 있다. 더 이상 matching 이 아니고, assignment problem 에서 c(x) = 2 인 경우가 된다.\n{/answer}\n\n== 시험 직전 체크 ==\n# s-t cut 의 cost 는 s 쪽 → t 쪽 간선의 capacity 합. 반대 방향은 안 센다.\n# flow: capacity 이하, 정점마다 들어옴 = 나감. 값 = s 에서 나가는 양.\n# max-flow min-cut: max flow 값 = min s-t cut cost. Lemma 1(≤)은 그림 증명, 엄밀 증명은 시험 범위 아님(p.18).\n# $G_f$: forward $c - f$ (남은 양), backward $f$ (쓴 양, 되돌릴 수 있는 양).\n# $G_f$ 에 s→t 경로 없음 ⇔ max flow. 그때 s 가 닿는 집합이 min cut 의 s 쪽.\n# increaseFlow: x = 경로 최소 residual, forward +x, backward 원래 간선 −x.\n# 예제 경로 4 → 4 → 2 → 1, max flow = min cut = 11 (s→A 4, B→E 3, F→t 4).\n# 경로를 아무렇게나 고르면 C 예제처럼 2C 번. BFS(Edmonds-Karp) $O(nm^2)$, capacity 와 무관. 증명은 시험 범위 아님.\n# 정수 capacity → 정수 flow → bipartite matching(capacity 1), assignment(일반 capacity).\n\n== 관련 문서 ==\n* 이 강의: [[s-t cut]] · [[flow]] · [[max-flow min-cut theorem]] · [[residual graph]] · [[augmenting path]] · [[Ford-Fulkerson]] · [[Edmonds-Karp]] · [[maximum bipartite matching]] · [[assignment problem]]\n* 이전에 본 것: [[L16 Advanced Algorithms I]] · [[global minimum cut]] · [[cut]] · [[BFS]] · [[bipartite graph]] · [[directed graph]]"
  },
  "s-t cut": {
-  "title": "s-t cut — s 와 t 를 갈라놓는 cut 과 그 cost",
+  "title": "s-t cut — 정점을 두 편으로 칠하고, s 편에서 t 편으로 나가는 파이프만 센다",
   "category": [
    "17강 Advanced II",
    "용어"
   ],
-  "body": "{def}\nL17 p.5–8: \"An s-t cut is a cut which separates s from t.\" 간선이 s 쪽에서 t 쪽으로 가면 cut 을 건넌다. cut 의 cost(capacity)는 건너는 간선들의 capacity 합이다.\n{/def}\n11/24 수업에서 다뤘다. 교수는 \"important thing is there is a direction in the edge\" 라며 방향을 두 번 강조했다. L16 의 [[global minimum cut]] 과 달리 방향 있는 그래프이고, s 와 t 를 반드시 다른 편에 둬야 한다. cost 를 셀 때는 '''방향'''이 중요하다. t 쪽에서 s 쪽으로 들어오는 간선은 점선을 넘어도 세지 않는다(p.8 \"it's going in the wrong direction\").\n\nL17 예제에서 s 쪽을 {s, C} 로 잡으면 cost 는 4 + 2 + 10 = 16(p.8), {s, B, C, F} 로 잡으면 4 + 3 + 4 = 11(p.9)이다. 11 이 '''minimum s-t cut''' 이다. min s-t cut 의 cost 는 max flow 의 값과 같다([[max-flow min-cut theorem]]).[* 1955년 소련에서 동유럽으로 가는 철도망을 가장 싸게 끊는 문제가 이 모양이었다(p.10). 같은 해 Ford 와 Fulkerson 이 이 문제를 푸는 알고리즘을 냈다.]\n\n{mini}\n# s→a 3, s→b 2, a→b 1, b→a 5, a→t 2, b→t 4 인 그래프에서 s 쪽이 {s, a} 인 cut 의 cost 는? {s, b} 는?\n{/mini}\n{answer}\n# {s,a}: s→b 2, a→b 1, a→t 2 → 5. b→a 5 는 방향이 반대라 안 센다. {s,b}: s→a 3, b→a 5, b→t 4 → 12.\n{/answer}\n\n== 관련 문서 ==\n* [[L17 Advanced Algorithms II]] · [[global minimum cut]] · [[flow]] · [[max-flow min-cut theorem]]"
+  "body": "{def}\nL17 p.5–8: \"An s-t cut is a cut which separates s from t.\" 정점 전체를 s 가 있는 편 S 와 t 가 있는 편 T 로 나눈 것이다. 간선이 S 에서 T 로 가면 \"cut 을 건넌다(crosses the cut)\". cut 의 '''cost'''(또는 capacity)는 건너는 간선들의 capacity 합이다.\n{/def}\n11/24 수업 후반(녹음 27:20–30:10)에 나왔다. 이 문서는 L17 의 첫 단추다. 뒤에 나오는 [[max-flow min-cut theorem]] 과 그 증명([[max-flow min-cut 증명 (cut 선 긋기)]])이 전부 \"정점을 두 편으로 칠하고, 경계를 넘는 간선을 센다\" 는 이 동작 위에 서 있다. 그래서 여기서 칠하는 법과 세는 법을 손에 익혀 두면 증명이 훨씬 덜 낯설다.\n\n== 그림의 색부터 읽자 ==\nL17 슬라이드는 같은 그래프를 계속 다시 쓰면서 정점 색을 바꾼다. 색이 무엇을 뜻하는지 모르면 그림이 그냥 초록 동그라미 모음으로 보인다.\n[[img:L17-08.png|p.8 — 짙은 초록 정점(s 와 맨 아래 왼쪽)이 S, 연한 민트색 정점이 T. 빨간 점선이 둘의 경계이고, 주황 간선 셋이 S 에서 T 로 건너는 간선이다|large]]\n위 그림을 정점부터 보자.\n* '''짙은 초록 정점'''은 s 편, 즉 S 에 넣기로 한 정점이다. 여기서는 s 와 맨 아래 왼쪽 정점 둘이다.\n* '''연한 민트(연두빛) 정점'''은 t 편, 즉 T 다. 나머지 여섯 개가 여기 있다.\n* '''빨간 점선'''은 S 와 T 의 경계를 그려 놓은 것이다. 선 모양 자체에는 뜻이 없다. 어느 정점이 어느 편이냐만 중요하다.\n* '''주황 간선'''은 S 에서 T 로 건너가는 간선이다. cost 를 셀 때 더하는 간선이 바로 이것들이다.\nresidual graph 가 나오는 p.21 부터는 '''연두색 화살표'''가 하나 더 나온다. 그건 정점의 편이 아니라 \"이미 보낸 양을 되돌릴 수 있다\" 는 backward 간선이다([[residual graph]]). 이 위키의 움직이는 그림은 헷갈리지 않게 S 편 정점 뒤에 '''연두색 동그라미 배경'''을 깔아서, \"연두 배경 = S\" 로 읽을 수 있게 했다.[* 슬라이드 원본에서 정점 기본색이 연한 민트이고, S 로 칠하면 s 와 같은 짙은 초록이 된다. p.5–7 은 cut 을 그리는 애니메이션 슬라이드라 같은 그림이 여러 장이다. 이 위키는 그중 결정적인 p.8 과 p.9 만 실었다.]\n\n{mini}\n# p.8 그림에서 S 에 든 정점은 몇 개이고, T 에 든 정점은 몇 개인가?\n# 다음 중 옳은 것을 모두 고르라(Circle all). (a) 빨간 점선이 지나가는 모양을 바꾸면 cut 의 cost 가 바뀔 수 있다. (b) 정점 하나를 S 에서 T 로 옮기면 cost 가 바뀔 수 있다. (c) p.21 이후 그림의 연두색 화살표는 S 쪽 정점을 뜻한다.\n{/mini}\n{answer}\n# S 2 개(s 와 맨 아래 왼쪽), T 6 개(t 포함). 정점은 모두 8 개다.\n# (b) 만. (a) 점선은 표시일 뿐이고, 정점을 어느 편에 두느냐가 같으면 cost 도 같다. (c) 연두색 화살표는 residual graph 의 backward 간선이다.\n{/answer}\n\n== 오늘의 그래프: 방향과 capacity ==\nL16 의 [[global minimum cut]] 은 방향 없는 그래프를 아무 데나 두 쪽으로 나누는 문제였다. L17 은 조건이 셋 바뀐다(p.4).\n* 간선에 '''방향'''이 있다.\n* 간선마다 숫자가 붙는다. 교수 표현으로는 \"edge has a weight, we call it as a capacity\" 다. 파이프 굵기라고 생각하면 된다.\n* 특별한 정점 둘이 있다. 물건이 나오는 '''s'''(source)는 나가는 간선만, 물건이 들어가는 '''t'''(sink)는 들어오는 간선만 있다.[* p.4 의 별표 각주 \"at least for this class\". 일반적인 flow 이론에는 이 제한이 없다. 수업을 단순하게 하려는 가정이다.]\n그래프의 정점은 s, t 와 가운데 여섯 개다. 슬라이드는 가운데 정점에 이름을 붙이지 않았다. 이 위키는 왼쪽 열을 위에서부터 A, B, C, 오른쪽 열을 D, E, F 라고 부른다. 간선은 s→A 4, s→B 2, s→C 6, A→D 3, A→B 2, A→E 6, B→E 3, B→C 2, F→B 3, D→E 6, E→F 6, C→F 10, D→t 4, E→t 4, F→t 4 의 15 개다.\n\n== s-t cut: s 와 t 만 다른 편이면 된다 ==\ns-t cut 의 조건은 하나다. '''s 는 S 에, t 는 T 에.''' 나머지 여섯 정점은 어느 편에 둬도 된다. 교수는 점선 하나를 가리키며 \"this separates S from T, this is the valid s-t cut\" 이라고 확인하고 넘어갔다.[* 11/24 녹음 27:32–27:57. 전사에는 \"STCut\", \"SD cut\" 처럼 찍혀 있는데 모두 s-t cut 이다.] 가운데 정점 여섯 개가 각각 두 편 중 하나를 고르니, 이 그래프의 s-t cut 은 $2^6 = 64$ 개다.\n\nL16 과 다른 점이 하나 더 있다. L16 은 두 쪽이 모두 비어 있지만 않으면 됐다. 여기서는 s 와 t 를 반드시 갈라놓아야 한다. s 와 t 가 같은 편이면 아무리 싸게 잘라도 s 에서 t 로 가는 길을 끊은 게 아니다.\n\n{mini}\n# 정점이 s, t 포함 10 개인 그래프에는 s-t cut 이 몇 개 있나?\n# S = {s, A, t} 는 s-t cut 인가?\n{/mini}\n{answer}\n# 가운데 정점이 8 개이니 $2^8 = 256$ 개.\n# 아니다. t 가 S 에 들어가 있다. s 와 t 는 반드시 다른 편이어야 한다.\n{/answer}\n\n== cost: S 에서 T 로 가는 간선만 센다 ==\n=== 슬라이드의 예: 16 ===\np.8 의 cut 은 S = {s, C} 다(위 그림). 점선을 넘는 간선을 모두 찾으면 네 개다.\n<pre class=\"txt\">\ns→A  4    S 에서 T 로    → 센다\ns→B  2    S 에서 T 로    → 센다\nC→F 10    S 에서 T 로    → 센다\nB→C  2    T 에서 S 로    → 안 센다  (\"it's going in the wrong direction\")\ncost = 4 + 2 + 10 = 16\n<\/pre>\n교수는 여기서 방향을 두 번 짚었다. \"There are four edges that cross this cut, but three edges' direction goes from S. This edge has a direction from T to S. So we said that this edge does not cross the cut. Only these three edges can cross this s-t cut. That's one of the important parts.\"[* 11/24 녹음 28:00–29:19. 바로 뒤 29:28 에 cost 를 \"6 plus 10 is 16\" 비슷하게 읽었는데, 전사가 \"60\" 으로 잘못 받아 적었다. 슬라이드 숫자는 4 + 2 + 10 = 16 이다.]\n\n=== 왜 반대 방향은 안 세나 ===\ncut 을 \"s 에서 t 로 가는 물건을 막으려고 자르는 파이프 묶음\" 이라고 생각하면 이유가 바로 보인다. B→C 파이프는 T 쪽(B)에서 S 쪽(C)으로 흐른다. 이 파이프를 잘라도 S 에서 T 로 넘어가는 물건은 하나도 줄지 않는다. 오히려 T 쪽에 있던 물건이 S 쪽으로 돌아오는 길일 뿐이다. 그래서 막을 필요가 없고, 비용에도 넣지 않는다.\n\np.10 의 이야기로 바꾸면 더 분명하다. 미국은 러시아에서 동유럽으로 가는 보급 철도를 끊고 싶었다. 동유럽에서 러시아 쪽으로만 다니는 선로를 폭파해 봐야 보급은 그대로 간다. 끊어야 할 것은 러시아 쪽(S)에서 동유럽 쪽(T)으로 가는 선로뿐이다.[* 교수는 이 지도를 \"which road we should cut in an efficient way to stop the supply of food, water, missiles\" 라고 소개했다(녹음 31:25–31:53). 1955 년 RAND 보고서의 지도이고 1999 년에 기밀이 풀렸다. 슬라이드 출처 표기는 \"Schriver 2002\" 인데 저자 이름은 Schrijver 다.]\n\n이 \"S→T 만 센다\" 는 규칙은 뒤에서 그대로 다시 쓰인다. flow 가 어떤 cut 의 cost 를 넘을 수 없다는 Lemma 1 이 \"S→T 파이프 굵기 합만큼만 넘어갈 수 있다\" 는 말이고, 증명의 마지막 단계도 S→T 간선과 T→S 간선을 따로 본다.\n\n=== 여러 번 그어 보기 ===\n[[anim:st_cut_sweep|cut 을 네 번 바꿔 긋는다. 연두 배경이 S 다. 주황으로 깜빡이는 간선만 더하고, 회색 ✗ 간선은 선을 넘어도 T→S 방향이라 안 센다. 오른쪽 점수판에서 가장 작은 값을 찾아라]]\n위 그림은 네 가지 cut 의 cost 를 차례로 센다.\n<pre class=\"txt\">\nS = {s}                 s→A 4 + s→B 2 + s→C 6        = 12\nS = {s, C}              s→A 4 + s→B 2 + C→F 10       = 16   (B→C 는 T→S)\nS = {s, A, …, F}        D→t 4 + E→t 4 + F→t 4        = 12\nS = {s, B, C, F}        s→A 4 + B→E 3 + F→t 4        = 11   (A→B, E→F 는 T→S)\n<\/pre>\n마지막 cut 이 p.9 의 그림이다.\n[[img:L17-09.png|p.9 — S = {s, B, C, F}(짙은 초록). 주황 간선 s→A 4, B→E 3, F→t 4 만 세서 11. 이 그래프의 minimum s-t cut 이다|large]]\n위 그림에서 점선을 넘는 간선은 다섯 개다. 주황 셋(s→A, B→E, F→t)은 짙은 초록에서 민트로 나가서 센다. 나머지 둘인 A→B 와 E→F 는 민트에서 짙은 초록으로 들어오니 안 센다. 교수는 \"this cut separates S from T with the capacity of 11, 4 plus 3 plus 4. This is the minimum cost.\" 라고 했다(녹음 29:49).[* 64 개를 모두 세어 보면(위키 검산 `src/sims/_check_L17_anims.py`) cost 11 인 cut 이 두 개 있다. 위의 {s, B, C, F} 와, S = {s, A, B, C, E, F} 다. 뒤쪽은 A→D 3 + E→t 4 + F→t 4 = 11 이다. min cut 은 값이 하나지만 그 값을 내는 cut 은 여럿일 수 있다.]\n\n=== minimum s-t cut ===\n{def}\nL17 p.9: \"A minimum s-t cut is a cut which separates s from t with minimum capacity.\" 그리고 슬라이드가 묻는다. \"Question: how do we find a minimum s-t cut?\"\n{/def}\n64 개를 다 세는 건 정점이 많아지면 불가능하다(정점 n 개면 $2^{n-2}$ 개). 답은 뜻밖의 곳에서 온다. s 에서 t 로 물을 최대한 흘려 보는 것이다([[flow]]). 최대로 흘린 양이 min cut 의 cost 와 같고([[max-flow min-cut theorem]]), 최대로 흘리고 나면 막힌 자리가 바로 min cut 으로 드러난다([[max-flow min-cut 증명 (cut 선 긋기)]]).\n\n{mini}\n# p.4 그래프에서 S = {s, B} 의 cost 는? 점선을 넘지만 안 세는 간선은?\n# p.4 그래프에서 S = {s, C, F} 의 cost 는?\n# s→a 3, s→b 2, a→b 1, b→a 5, a→t 2, b→t 4 인 그래프에서 S = {s, a} 인 cut 의 cost 는? S = {s, b} 는?\n# 다음 중 옳은 것을 모두 고르라(Circle all). (a) T→S 간선도 cut 의 cost 에 더한다. (b) S = {s} 인 cut 의 cost 는 s 에서 나가는 capacity 합이다. (c) min cut 의 값을 내는 cut 은 하나뿐이다.\n{/mini}\n{answer}\n# s→A 4 + s→C 6 + B→E 3 + B→C 2 = 15. A→B 와 F→B 는 T 에서 B 로 들어오니 안 센다.\n# s→A 4 + s→B 2 + F→B 3 + F→t 4 = 13. B→C, E→F 는 T→S 라 안 센다. C→F 는 둘 다 S 안이라 선을 안 넘는다.\n# {s, a}: s→b 2 + a→b 1 + a→t 2 = 5. b→a 5 는 T→S 라 빠진다. {s, b}: s→a 3 + b→a 5 + b→t 4 = 12.\n# (b) 만. (a) 는 방향이 반대라 안 센다(p.8). (c) 는 p.4 그래프에서도 11 짜리가 둘이다.\n{/answer}\n\n{exam}\n교수(11/24, 녹음 28:00–29:19)가 \"one of the important parts\" 라고 한 것: cut 을 건너는 간선은 '''S 에서 T 방향만'''이다. 점선 위 간선 네 개 중 하나가 T→S 라서 셋만 센다. cost 계산 문제에서 반대 방향 간선을 더하는 실수를 노리기 좋다.\n{/exam}\n\n== 관련 문서 ==\n* [[L17 Advanced Algorithms II]] · [[flow]] · [[max-flow min-cut theorem]] · [[max-flow min-cut 증명 (cut 선 긋기)]]\n* 이전에 본 것: [[global minimum cut]] · [[cut]] · [[directed graph]]"
  },
  "flow": {
   "title": "flow — 간선마다 보내는 양, 그리고 flow 의 값",
@@ -3500,7 +3513,7 @@ const ARTICLES = {
    "17강 Advanced II",
    "용어"
   ],
-  "body": "L17 p.11–12. capacity 가 있는 방향 그래프에서 간선마다 \"보내는 양\" $f(u,v)$ 를 정한 것이 '''flow''' 다. 11/24 수업에서 다뤘다.\n* capacity 제약: $0 \\le f(u,v) \\le c(u,v)$.\n* 보존(conservation): s, t 를 뺀 정점마다 들어오는 flow 합 = 나가는 flow 합. 슬라이드 예로 \"4 units in, 1+1+2 = 4 units out.\"\nflow 의 '''값'''은 s 에서 나가는 양이고, t 로 들어가는 양이기도 하다. 보존 법칙 때문에 둘이 같다(p.12). 값이 가장 큰 flow 가 '''maximum flow''' 다(p.13). L17 예제의 max flow 는 11 이다(p.14).\n\n{mini}\n# 정점 v 로 s→v 3, u→v 2 가 들어오고, v→t 의 capacity 는 4 다. 보존 법칙을 지키려면 v 의 다른 출구 v→w 로 최소 얼마를 보내야 하나?\n{/mini}\n{answer}\n# 들어오는 5 중 v→t 로는 많아야 4 를 보내니, v→w 로 최소 1 을 보내야 한다.\n{/answer}\n\n== 관련 문서 ==\n* [[L17 Advanced Algorithms II]] · [[s-t cut]] · [[max-flow min-cut theorem]] · [[Ford-Fulkerson]]"
+  "body": "L17 p.11–12. capacity 가 있는 방향 그래프에서 간선마다 \"보내는 양\" $f(u,v)$ 를 정한 것이 '''flow''' 다. 11/24 수업에서 다뤘다.\n* capacity 제약: $0 \\le f(u,v) \\le c(u,v)$.\n* 보존(conservation): s, t 를 뺀 정점마다 들어오는 flow 합 = 나가는 flow 합. 슬라이드 예로 \"4 units in, 1+1+2 = 4 units out.\"\nflow 의 '''값'''은 s 에서 나가는 양이고, t 로 들어가는 양이기도 하다. 보존 법칙 때문에 둘이 같다(p.12). 값이 가장 큰 flow 가 '''maximum flow''' 다(p.13). L17 예제의 max flow 는 11 이다(p.14).\n[[anim:flow_fill_conservation|p.11 의 flow(값 4)가 파이프를 따라 흐른다. 정점 A(들어옴 4, 나감 2 + 1 + 1)와 E(들어옴 1 + 1, 나감 2)에서 보존을 확인한 뒤, p.14 의 max flow 11 로 바뀌는 장면을 보라]]\n교수(11/24)는 간선을 물 파이프, flow 를 그 파이프로 흐르는 물의 양으로 비유했다(\"think about this edge is a water pipe, and then flow is the amount of water going through the pipe\", 녹음 32:53). 위 그림의 주황 점이 그 물이다. 중간 정점에서 물이 새거나 생기지 않으니, s 에서 나간 4 가 그대로 t 로 들어간다.[* p.14 의 max flow 에서 주황 네모(꽉 찬 간선)는 s→A, B→E, F→t 를 포함한다. 이 셋이 바로 min cut 11 의 간선이다. [[max-flow min-cut theorem]] 이 \"max flow 에서는 min cut 이 꽉 찬다\" 고 말하는 장면이다.]\n\n{mini}\n# 정점 v 로 s→v 3, u→v 2 가 들어오고, v→t 의 capacity 는 4 다. 보존 법칙을 지키려면 v 의 다른 출구 v→w 로 최소 얼마를 보내야 하나?\n{/mini}\n{answer}\n# 들어오는 5 중 v→t 로는 많아야 4 를 보내니, v→w 로 최소 1 을 보내야 한다.\n{/answer}\n\n== 관련 문서 ==\n* [[L17 Advanced Algorithms II]] · [[s-t cut]] · [[max-flow min-cut theorem]] · [[Ford-Fulkerson]]"
  },
  "max-flow min-cut theorem": {
   "title": "max-flow min-cut theorem — 최대로 흘리는 양 = 가장 싸게 끊는 비용",
@@ -3508,15 +3521,15 @@ const ARTICLES = {
    "17강 Advanced II",
    "증명"
   ],
-  "body": "{def}\nL17 p.15: \"The value of a max flow from s to t is equal to the cost of a min s-t cut.\"\n{/def}\n11/24 수업에서 다뤘다. ⇒ 방향 증명(cut 선 긋기)은 [[max-flow min-cut 증명 (cut 선 긋기)]] 에 따로 천천히 풀어 두었다. 직관은 \"max flow 에서는 min cut 이 꽉 차고, 그곳이 병목\" 이다.\n\n== 증명 구조 (p.16) ==\n<pre class=\"txt\">\nLemma 1: max flow ≤ min cut   (그림 증명: s 에서 나온 x 는 반드시 cut 을 넘는다 → x ≤ cut cost)\nLemma 2: max flow ≥ min cut   (알고리즘 증명: residual graph Gf)\n  Sub-lemma: Gf 에서 t 도달 불가 ⇔ f 는 max flow\n    ⇐ : augmenting path 가 있으면 flow 를 늘릴 수 있다 (대우)\n    ⇒ : {s 에서 닿는 정점} 으로 만든 cut 은 건너는 간선이 꽉 차 있고 반대 방향 flow 는 0\n         → flow 값 = 이 cut cost ≥ min cut ≥ max flow ≥ flow 값 → 모두 같다\n<\/pre>\n엄밀한 증명(CLRS Lemma 26.4, Corollary 26.5)은 시험 범위가 아니다. p.18: \"You are not responsible for proof-by-proof on the final.\"\n\n이 정리 덕에 [[Ford-Fulkerson]] 하나로 max flow 와 min cut 을 같이 얻는다. 슬라이드 농담으로는 \"The USSR and the USA were trying to solve the same problem…\" 이다(p.54).\n\n{mini}\n# 어떤 flow 의 값이 9 이고, 어떤 s-t cut 의 cost 가 9 다. 무엇을 결론 내릴 수 있나?\n{/mini}\n{answer}\n# 그 flow 는 max flow, 그 cut 은 min cut 이다. Lemma 1 에 의해 모든 flow 값 ≤ 모든 cut cost 이니, 둘이 같아지면 둘 다 최적이다.\n{/answer}\n\n== 관련 문서 ==\n* [[max-flow min-cut 증명 (cut 선 긋기)]] · [[L17 Advanced Algorithms II]] · [[s-t cut]] · [[flow]] · [[residual graph]] · [[Ford-Fulkerson]]"
+  "body": "{def}\nL17 p.15: \"The value of a max flow from s to t is equal to the cost of a min s-t cut.\"\n{/def}\n11/24 수업에서 다뤘다. ⇒ 방향 증명(cut 선 긋기)은 [[max-flow min-cut 증명 (cut 선 긋기)]] 에 따로 천천히 풀어 두었다. 직관은 \"max flow 에서는 min cut 이 꽉 차고, 그곳이 병목\" 이다.\n\n== 증명 구조 (p.16) ==\n<pre class=\"txt\">\nLemma 1: max flow ≤ min cut   (그림 증명: s 에서 나온 x 는 반드시 cut 을 넘는다 → x ≤ cut cost)\nLemma 2: max flow ≥ min cut   (알고리즘 증명: residual graph Gf)\n  Sub-lemma: Gf 에서 t 도달 불가 ⇔ f 는 max flow\n    ⇐ : augmenting path 가 있으면 flow 를 늘릴 수 있다 (대우)\n    ⇒ : {s 에서 닿는 정점} 으로 만든 cut 은 건너는 간선이 꽉 차 있고 반대 방향 flow 는 0\n         → flow 값 = 이 cut cost ≥ min cut ≥ max flow ≥ flow 값 → 모두 같다\n<\/pre>\n엄밀한 증명(CLRS Lemma 26.4, Corollary 26.5)은 시험 범위가 아니다. p.18: \"You are not responsible for proof-by-proof on the final.\"\n\n== 왜 \"같다\" 가 되나: 사슬이 접힌다 ==\n⇒ 방향 증명의 마지막 줄은 부등식 넷을 잇는 것이다. $G_f$ 로 그은 cut 은 flow 값과 cost 가 같고, 그 값을 v 라 하면 v = cost ≥ min cut ≥ max flow ≥ v 가 되어 모두 같아진다.\n[[anim:inequality_squeeze|p.39 예(v = 5)로 수직선 위에서 본다. min cut 은 5 이하, max flow 는 5 이상인데 Lemma 1 이 max flow ≤ min cut 이라고 하니 둘 다 5 로 몰린다]]\n위 그림에서 보라 삼각형(min cut)은 왼쪽에서, 파란 삼각형(max flow)은 오른쪽에서 출발한다. Lemma 1 은 파랑이 보라보다 오른쪽에 있으면 안 된다고 한다. 둘이 만날 수 있는 자리는 5 하나다. 각 부등호의 근거와 p.39 의 cut 을 어떻게 긋는지는 [[max-flow min-cut 증명 (cut 선 긋기)]] 에 단계별로 있다.\n\n{mini}\n# v = cost(이 cut) ≥ min cut ≥ max flow ≥ v 에서 둘째 ≥ 의 근거는?\n{/mini}\n{answer}\n# Lemma 1. 아무 flow 의 값도 아무 cut 의 cost 를 넘을 수 없으니 max flow ≤ min cut 이다.\n{/answer}\n\n이 정리 덕에 [[Ford-Fulkerson]] 하나로 max flow 와 min cut 을 같이 얻는다. 슬라이드 농담으로는 \"The USSR and the USA were trying to solve the same problem…\" 이다(p.54).\n\n{mini}\n# 어떤 flow 의 값이 9 이고, 어떤 s-t cut 의 cost 가 9 다. 무엇을 결론 내릴 수 있나?\n{/mini}\n{answer}\n# 그 flow 는 max flow, 그 cut 은 min cut 이다. Lemma 1 에 의해 모든 flow 값 ≤ 모든 cut cost 이니, 둘이 같아지면 둘 다 최적이다.\n{/answer}\n\n== 관련 문서 ==\n* [[max-flow min-cut 증명 (cut 선 긋기)]] · [[L17 Advanced Algorithms II]] · [[s-t cut]] · [[flow]] · [[residual graph]] · [[Ford-Fulkerson]]"
  },
  "max-flow min-cut 증명 (cut 선 긋기)": {
-  "title": "max-flow min-cut 증명 — residual graph 에서 cut 선 긋기, 아주 천천히 (L17 p.38–40)",
+  "title": "max-flow min-cut 증명 — residual graph 에서 연두로 칠하고 선 긋기, 0단계부터 (L17 p.38–40)",
   "category": [
    "17강 Advanced II",
    "증명"
   ],
-  "body": "[[L17 Advanced Algorithms II]] 수업 끝(11/24, 녹음 60:05–64:30)에 나온 증명이다. 슬라이드 p.38–40 세 장이 \"$G_f$ 에서 t 에 갈 수 없으면 f 는 max flow 다\" 를 보여 주는데, 선 하나 긋고 몇 줄 만에 끝나서 무엇을 왜 하는지 놓치기 쉽다. 이 문서는 그 세 장을 여섯 단계로 쪼개서, 슬라이드의 그림 그대로 한 단계씩 손으로 따라간다. 단계마다 새끼문제가 있다.\n\n== 0. 무엇을 증명하려는가 ==\n=== 결론: 두 값이 같다 ===\n[[max-flow min-cut theorem]] 은 \"max flow 의 값 = min s-t cut 의 cost\" 다. 같다는 걸 보이는 정석은 '''양쪽에서 조이는 것'''이다.\n* (≤) max flow ≤ min cut. 이건 Lemma 1 로 이미 끝났다. '''어떤''' flow 의 값도 '''어떤''' s-t cut 의 cost 를 넘을 수 없다. s 에서 나온 물건은 t 에 가려면 cut 을 한 번은 넘어야 하고, cut 을 넘는 파이프들의 굵기 합이 cost 이니까(p.17).\n* (≥) 남은 건 반대쪽이다. 그런데 \"max flow ≥ min cut\" 을 직접 보이기는 막막하다. 그래서 슬라이드는 꾀를 쓴다. '''어떤 flow f 와 어떤 cut 을 하나씩 찾아서, 둘의 값이 정확히 같다'''는 것만 보이면 된다.\n\n왜 그걸로 충분한가. 값이 같은 flow f 와 cut 이 있다고 하자.\n<pre class=\"txt\">\nvalue(f) ≤ max flow            (max flow 는 모든 flow 중 최대니까)\nmax flow ≤ min cut             (Lemma 1)\nmin cut  ≤ cost(그 cut)        (min cut 은 모든 cut 중 최소니까)\ncost(그 cut) = value(f)         (← 이것만 보이면 된다)\n<\/pre>\n네 줄을 이으면 value(f) ≤ max flow ≤ min cut ≤ value(f) 라서 '''넷이 모두 같다'''. 덤으로 그 f 는 max flow 이고 그 cut 은 min cut 이다.\n\n=== 그 f 와 그 cut 은 어디서 오나 ===\nf 는 \"$G_f$ 에서 s 에서 t 로 가는 길이 없는 flow\" 다. [[Ford-Fulkerson]] 이 끝났을 때의 flow 가 바로 그렇다. cut 은 '''$G_f$ 에서 s 가 갈 수 있는 정점들'''을 한 편, 나머지를 다른 편으로 나눈 것이다(p.38 \"{things reachable from s}, {things not reachable from s}\"). 이 문서의 나머지는 전부 \"이 cut 의 cost 가 value(f) 와 같다\" 를 보이는 일이다.\n\n{mini}\n# 다음 중 옳은 것을 모두 고르라(Circle all). (a) Lemma 1 은 아무 flow 와 아무 cut 에 대해 성립한다. (b) 값이 같은 flow 와 cut 을 하나 찾으면 그 flow 는 max flow 다. (c) max flow ≤ min cut 만으로 두 값이 같다는 결론이 나온다.\n# 어떤 flow 의 값이 7 이고 어떤 s-t cut 의 cost 가 9 다. max flow 에 대해 무엇을 말할 수 있나?\n{/mini}\n{answer}\n# (a), (b). (c) 는 틀렸다. 부등식 하나로는 같다는 결론이 안 나온다. 같은 값을 갖는 짝을 찾아야 반대쪽이 닫힌다.\n# 7 ≤ max flow ≤ 9. 이 둘만으로는 더 좁힐 수 없다.\n{/answer}\n\n== 1단계: 지금 flow 로 residual graph 를 그린다 ==\n슬라이드 p.39 의 그림을 그대로 쓴다. 왼쪽이 원래 그래프 G 와 flow f 다(네모 안 숫자가 flow, 옆 숫자가 capacity).\n[[img:L17-39.png|p.39 — 왼쪽 G 와 flow f(값 5), 오른쪽 Gf. 주황 정점이 s 에서 갈 수 있는 쪽, 빨간 점선이 cut|large]]\n<pre class=\"txt\">\n간선    capacity  flow   →  Gf 의 forward (c − f)   Gf 의 backward (f)\ns→a       4        4         없음 (꽉 참)               a→s 4\ns→b       8        1         s→b 7                     b→s 1\na→b       6        2         a→b 4                     b→a 2\na→t       2        2         없음 (꽉 참)               t→a 2\nb→t       3        3         없음 (꽉 참)               t→b 3\n<\/pre>\nflow 의 값은 s 에서 나가는 양 4 + 1 = 5 다. [[residual graph]] 규칙은 두 줄이다. forward 간선은 \"아직 더 보낼 수 있는 양\", backward 간선은 \"이미 보내서 되돌릴 수 있는 양\" 이다. 꽉 찬 간선은 forward 가 없고, flow 가 0 인 간선은 backward 가 없다.[* 슬라이드 p.39 오른쪽 Gf 에는 a–b 사이가 파랑 5, 초록 1 로 적혀 있다. 그건 p.22 의 옛 flow(a→b 가 1)에서 계산한 값이 그대로 남은 것이다. 왼쪽 그림의 지금 flow(a→b 가 2)로 계산하면 a→b 4, b→a 2 가 맞다. 아래 결론(S = {s, a, b})은 어느 쪽으로 계산해도 같다.]\n\n{mini}\n# capacity 10, flow 10 인 간선 u→v 는 $G_f$ 에서 어떤 간선이 되나? capacity 10, flow 0 이면?\n# 위 표에서 $G_f$ 에 s 에서 나가는 간선은 몇 개인가?\n{/mini}\n{answer}\n# flow 10 이면 backward v→u 10 하나만. flow 0 이면 forward u→v 10 하나만.\n# 하나(s→b 7). s→a 는 꽉 차서 forward 가 없다. a→s, b→s 는 s 로 '''들어오는''' 간선이다.\n{/answer}\n\n== 2단계: $G_f$ 에서 s 부터 갈 수 있는 곳을 칠한다 ==\n이제 $G_f$ 위에서 s 부터 [[BFS]](DFS 도 된다)를 돌려, 화살표를 따라 갈 수 있는 정점을 전부 칠한다. 칠한 집합을 S 라 하자.\n<pre class=\"txt\">\nS = {s}\ns 에서: s→b 7 이 있다                 → b 를 칠한다.   S = {s, b}\nb 에서: b→a 2 (backward) 가 있다      → a 를 칠한다.   S = {s, a, b}\n        b→s 1 은 이미 칠한 s\na 에서: a→b 4, a→s 4 는 이미 칠한 정점\n더 갈 곳이 없다.  t 는 못 칠했다.\n<\/pre>\nt 를 못 칠한 건 우연이 아니다. 출발 가정이 \"$G_f$ 에 s→t 경로가 없다\" 였다. 그러니 t 는 반드시 칠하지 않은 쪽 T 에 남는다. 슬라이드의 \"t lives here\" 가 그 말이다.\n\n여기서 a 에 어떻게 닿았는지 보자. 원래 그래프에서 s→a 는 꽉 차 있어서 직접은 못 간다. 대신 b 에서 '''backward 간선''' b→a 를 탔다. 원래 a→b 로 2 를 보내고 있으니 그 2 를 되돌릴 수 있고, 그래서 $G_f$ 에서는 b 에서 a 로 갈 수 있다. 이렇게 S 는 원래 그래프의 모양이 아니라 '''$G_f$ 의 화살표'''로 정해진다.\n[[sim:cut_from_residual]]\n\n{mini}\n# 어떤 flow 에서 $G_f$ 에 s 에서 나가는 간선이 하나도 없다. S 는 무엇이고, 그때 cut 의 cost 는 무엇과 같은가?\n# \"S = 원래 그래프 G 에서 s 와 이어진 정점들\" 로 정하면 왜 안 되나? 한 문장으로.\n{/mini}\n{answer}\n# S = {s}. s 에서 나가는 원래 간선이 모두 꽉 차 있다는 뜻이고(forward 가 없으니), cut 의 cost 는 s 에서 나가는 capacity 합이다. 이것이 flow 값과 같으니 그 flow 는 max flow 다.\n# G 에서는 거의 모든 정점이 s 와 이어져 있다(t 까지 포함). \"flow 를 더 보낼 수 있는 길이 있나\" 를 담은 것은 G 가 아니라 $G_f$ 다.\n{/answer}\n\n== 3단계: S 와 T 사이에 선을 긋는다 ==\n칠한 정점들 S = {s, a, b} 를 한쪽, 칠하지 않은 정점들 T = {t} 를 다른 쪽에 두고, 그 사이에 선을 긋는다. 위 그림의 빨간 점선이다. s 는 S 에, t 는 T 에 있으니 이 선은 정당한 [[s-t cut]] 이다.\n\n선이 어디로 지나가는지 \"예쁘게\" 보일 필요는 없다. cut 은 '''정점을 두 편으로 나눈 것'''이지 그림 위의 곡선이 아니다. 선은 S 와 T 를 가르는 표시일 뿐이고, 중요한 건 어떤 간선이 S 와 T 사이를 오가느냐다. 큰 그래프에서는 S 가 여기저기 흩어져 보여서 선이 구불구불해지는데, 그래도 상관없다.\n\n== 4단계: 선을 넘는 간선은 두 종류뿐이고, 둘 다 값이 정해져 있다 ==\n선을 넘는 원래 간선은 방향에 따라 두 종류다.\n* '''앞으로 넘는 간선''' S → T. cut 의 cost 에 들어가는 간선이다.\n* '''거꾸로 넘는 간선''' T → S. cut 의 cost 에는 안 들어가지만(방향이 반대), flow 계산에는 등장한다.\n\n=== 사실 A: S → T 간선은 꽉 차 있다 (f = c) ===\n위 예에서 S → T 간선은 a→t(2/2)와 b→t(3/3)이고 둘 다 꽉 차 있다. 우연이 아니다. 귀류로 보자. S→T 간선 u→v 가 꽉 차지 않았다고, 즉 $f(u,v) < c(u,v)$ 라고 하자.\n# 그러면 남은 양 $c - f > 0$ 이니 $G_f$ 에 forward 간선 u→v 가 있다.\n# u 는 S 에 있다. 즉 BFS 가 u 에 도착했다.\n# 그러면 BFS 는 u→v 를 타고 v 에도 도착했을 것이다. 그래서 v 도 S 에 있어야 한다.\n# 그런데 v 는 T 에 있다. 모순이다.\n그래서 S→T 간선은 전부 꽉 차 있다. 슬라이드 문장 \"The edges in the cut are full because they don't exist in $G_f$\" 가 이 뜻이다. 꽉 찬 간선은 $G_f$ 에 forward 로 존재하지 않는다.\n\n=== 사실 B: T → S 간선은 flow 가 0 이다 ===\n슬라이드는 이 사실을 글로 적지 않는다. 하지만 5단계에서 꼭 필요하다. 위 예에는 T→S 간선이 없어서(t 는 들어오는 간선만 있다) 티가 안 났을 뿐이다. 같은 방식으로 귀류한다. T→S 간선 x→y(x ∈ T, y ∈ S)에 flow 가 있다고, 즉 $f(x,y) > 0$ 이라 하자.\n# 그러면 $G_f$ 에 backward 간선 y→x 가 있다(값 $f(x,y)$).\n# y 는 S 에 있다. BFS 가 y 에 도착했다.\n# 그러면 BFS 는 y→x 를 타고 x 에도 도착했을 것이다. 그래서 x 도 S 에 있어야 한다.\n# 그런데 x 는 T 에 있다. 모순이다.\n그래서 T→S 간선은 전부 flow 가 0 이다.\n\n이 둘을 눈으로 보려면 시뮬레이터 옵션을 \"p.4 그래프의 max flow\" 로 바꾸면 된다. 거기서는 S = {s, B, C, F} 이고, S→T 간선 s→A 4/4, B→E 3/3, F→t 4/4 는 모두 꽉 차 있고, T→S 간선 A→B 0/2, E→F 0/6 은 모두 0 이다.[* 두 사실의 증명은 똑같은 모양이다. \"S 에서 T 로 가는 $G_f$ 간선이 하나라도 있으면 BFS 가 T 로 넘어갔을 것\" 이라는 한 문장이, forward 쪽으로 읽으면 사실 A, backward 쪽으로 읽으면 사실 B 가 된다. 즉 '''S 에서 T 로 가는 $G_f$ 간선은 하나도 없다'''가 바탕이고, 두 사실은 그걸 원래 그래프 말로 옮긴 것이다.]\n\n{mini}\n# S→T 간선 u→v 의 flow 가 3, capacity 가 5 라고 하자. $G_f$ 에 무엇이 있고, 그러면 S 에 대해 무엇이 틀려지나?\n# T→S 간선 x→y 의 flow 가 2 라고 하자. $G_f$ 에 무엇이 있고, 무엇이 틀려지나?\n# 다음 중 옳은 것을 모두 고르라(Circle all). (a) T→S 간선은 cut 의 cost 에 들어간다. (b) S→T 간선이 꽉 찬 이유는 그 간선이 $G_f$ 에 forward 로 없어서다. (c) T→S 간선의 flow 가 0 인 이유는 그 간선의 backward 가 $G_f$ 에 없어서다.\n{/mini}\n{answer}\n# $G_f$ 에 forward u→v 2 가 있다. u 가 S 에 있으니 BFS 가 v 에도 갔을 것이고, v 가 T 에 있다는 게 틀려진다.\n# $G_f$ 에 backward y→x 2 가 있다. y 가 S 에 있으니 BFS 가 x 에도 갔을 것이고, x 가 T 에 있다는 게 틀려진다.\n# (b), (c). (a) 는 틀렸다. cost 는 S 쪽에서 T 쪽으로 가는 간선만 센다(p.8).\n{/answer}\n\n== 5단계: 선을 넘는 순수한 양이 곧 flow 값이다 ==\n이제 \"flow 값 = 이 cut 의 cost\" 를 보인다. 슬라이드는 \"All of the stuff has to cross the cut\" 한 줄로 넘어가는데, 풀어 쓰면 이렇다.\n\ns 에서 나온 물건은 t 로 가야 하고, s 는 S 에, t 는 T 에 있다. 그러니 물건은 결국 선을 S→T 방향으로 넘어간다. 다만 어떤 물건은 S→T 로 넘었다가 T→S 로 되돌아온 뒤 다시 넘어갈 수도 있다. 그래서 정확히 세면\n$$\\text{value}(f) = \\underbrace{\\sum_{S \\to T} f}_{\\text{앞으로 넘는 양}} - \\underbrace{\\sum_{T \\to S} f}_{\\text{되돌아오는 양}}.$$\n[* 이 식을 엄밀하게 보이려면 S 안의 정점마다 \"나가는 flow − 들어오는 flow\" 를 더한다. s 는 value(f), 나머지 정점은 보존 법칙 때문에 0 이라 합은 value(f) 다. 한편 S 안끼리 오가는 간선은 한쪽에서 나감, 다른 쪽에서 들어옴으로 한 번씩 세져 지워지고, 남는 건 S→T 간선(나감)과 T→S 간선(들어옴)뿐이다. CLRS Lemma 26.4 가 이 계산이다. 슬라이드 p.18 대로 이 엄밀한 형태는 시험 범위가 아니다.]\n4단계의 두 사실을 넣으면\n$$\\text{value}(f) = \\sum_{S \\to T} c \\;-\\; 0 = \\text{cost(이 cut)}.$$\n위 예에서는 a→t 2 + b→t 3 = 5 이고, flow 값도 5 다. p.4 그래프 예에서는 4 + 3 + 4 − 0 = 11 이고 flow 값도 11 이다.\n\n사실 B 가 왜 필요한지 여기서 보인다. T→S 간선에 flow 가 있었다면 그만큼을 빼야 해서, flow 값이 cut 의 cost 보다 작아졌을 것이다. Lemma 1 의 \"≤\" 가 대개 등호가 아닌 이유도 같다. 아무 cut 이나 잡으면 앞으로 넘는 간선이 꽉 차지 않았거나 되돌아오는 flow 가 있다.\n\n{mini}\n# 어떤 cut 에서 S→T 간선 flow 합이 9, T→S 간선 flow 합이 2 다. flow 값은? 이 cut 의 cost 에 대해 무엇을 말할 수 있나?\n# 위 p.39 예에서 S 를 {s, a} 로(b 를 빼고) 잡으면, 앞으로 넘는 간선, 되돌아오는 간선, cost, flow 값은?\n{/mini}\n{answer}\n# value = 9 − 2 = 7. cost 는 S→T capacity 합이라 9 이상이다. 그래서 이 cut 은 flow 값보다 비싸다(min cut 이 아닐 수도 있다).\n# 앞으로: s→b 1/8, a→b 2/6, a→t 2/2. 되돌아오는 간선: 없음. flow 값 = 1 + 2 + 2 − 0 = 5(맞다). cost = 8 + 6 + 2 = 16. s→b 와 a→b 가 꽉 차지 않아서 cost 가 flow 값보다 크다. $G_f$ 로 고른 S 가 아니라서 사실 A 가 성립하지 않는다.\n{/answer}\n\n== 6단계: 부등식 사슬로 끝낸다 ==\n이제 0단계의 사슬에 넣기만 하면 된다. p.39 의 초록 글씨가 이 줄이다.\n$$\\text{value}(f) = \\text{cost(이 cut)} \\;\\ge\\; \\text{min cut} \\;\\ge\\; \\text{max flow} \\;\\ge\\; \\text{value}(f)$$\n* 첫 등호는 5단계.\n* 첫 ≥ 는 min cut 이 모든 cut 중 최소라서.\n* 둘째 ≥ 는 Lemma 1.\n* 마지막 ≥ 는 max flow 가 모든 flow 중 최대라서. 슬라이드 p.40 의 \"But this flow value ≤ max flow value, so they must be equal!\" 이다.\n맨 왼쪽과 맨 오른쪽이 같으니 사이의 모든 값이 같다. 결론이 세 개 나온다.\n* '''f 는 max flow 다.''' Lemma 의 ⇒ 방향이 증명됐다.\n* '''이 cut 은 min cut 이다.'''\n* '''max flow = min cut.''' 정리의 ≥ 쪽이 닫혔다.\n\n=== 알고리즘으로 쓰면: min cut 을 공짜로 얻는다 ===\n[[Ford-Fulkerson]] 은 $G_f$ 에 s→t 경로가 없을 때 멈춘다. 그 순간의 flow 는 위 증명의 f 그 자체다. 그러니 멈춘 뒤 $G_f$ 에서 s 부터 BFS 를 '''한 번 더''' 돌려 닿는 정점을 S 로 잡으면, 그게 min cut 이다. L17 예제(p.53)의 짙은 정점 {s, B, C, F} 와 빨간 점선이 바로 이렇게 얻은 것이다.\n\n{mini}\n# 사슬의 네 부등호 각각의 근거를 한 단어씩 적어라.\n# Ford-Fulkerson 이 끝난 뒤 min cut 을 찾는 방법을 한 문장으로.\n{/mini}\n{answer}\n# 5단계(사실 A·B) / min cut 의 정의(최소) / Lemma 1 / max flow 의 정의(최대).\n# 마지막 $G_f$ 에서 s 부터 BFS(또는 DFS)를 돌려 닿는 정점 집합 S 와 나머지로 나눈다. 시간은 BFS 한 번 $O(n+m)$.\n{/answer}\n\n== 자주 헷갈리는 것 ==\n* '''왜 \"이어져 있지 않다\" 가 아니라 \"갈 수 없다(reachable)\" 인가.''' 방향 그래프라서 화살표 방향이 중요하다. $G_f$ 에서 t→s 쪽 화살표(backward)가 있어도 s 에서 t 로 '''갈''' 수 없으면 된다. 위 예의 Gf 에서 t 에서는 t→a, t→b 로 나가는 간선이 있지만 t 로 들어오는 간선이 없다. 그래서 s 에서 t 로는 못 간다.\n* '''왜 원래 그래프가 아니라 residual graph 인가.''' 원래 그래프에서는 s 에서 t 로 가는 길이 거의 항상 있다. 우리가 알고 싶은 건 \"flow 를 '''더''' 보낼 수 있는 길\" 이고, 그 정보는 남은 양(forward)과 되돌릴 수 있는 양(backward)을 담은 $G_f$ 에만 있다.\n* '''backward 간선을 타고 S 에 들어온 정점도 S 다.''' p.39 의 a 가 그렇다. s→a 는 꽉 찼지만 b→a backward 로 들어왔다.\n* '''선 모양이 이상해 보여도 된다.''' cut 은 정점 집합의 분할이다. 그림 위 곡선은 표시일 뿐이다.\n* '''min cut 이 여러 개일 수 있다.''' 이 방법은 그중 \"s 쪽이 가장 작은\" min cut 하나를 준다. 다른 min cut 이 있어도 cost 는 같다.\n* '''이 증명은 어떤 flow 에서 출발해도 된다.''' \"$G_f$ 에 s→t 경로가 없다\" 만 성립하면 된다. Ford-Fulkerson 이 그런 flow 를 만들어 줄 뿐이다.\n\n== 교수 설명 (11/24 녹음) ==\n* 60:05 \"We proved this only if part. Now we focus on this if part.\" 앞에서 ⇐ 방향(augmenting path 가 있으면 늘릴 수 있다)을 끝내고 이 방향으로 넘어왔다.\n* 60:34–61:11 \"Suppose there is not a path from S to T. … we can consider a valid cut … reachable from S and not reachable from S.\"\n* 61:40 \"The flow from S to T is equal to the cost of this cut.\" 예제 값으로 \"The flow of this cut is 5. The cost of the cut is 5.\"\n* 62:24–63:25 \"the edges in the cut are full because they don't exist in $G_f$.\" 그리고 이유를 한국어로 덧붙였다. 꽉 차 있지 않으면 남은 capacity 가 있고, 그러면 그쪽으로 가는 길(path)이 생겨서 reachable 이 되어 버린다. \"The remaining capacity of the edges that cross the cut is 0.\"\n* 63:27–64:30 \"This flow value is equal to the cost of this cut … larger than or equal to the cost of minimum cut … by lemma 1, larger than or equal to maximum flow.\" 이어서 \"any flow value should be less than or equal to maximum flow value. This is trivial.\" 그래서 \"all these values should be the same.\"\n* 70:04–70:31 예제를 끝내며 \"There is no path from S to T … we can find a cut: nodes reachable from S and not reachable from S, minimum s-t cut. The value was 11 and the maximum flow is also 11.\" 그리고 물 파이프 비유로 마무리했다. 물을 최대로 흘렸을 때 가장 막히는 곳(bottleneck)이 min s-t cut 이고, 그보다 더 흘릴 수는 없다.\n교수도 사실 B(T→S 간선의 flow 0)는 따로 말하지 않았다. p.39 예제에 그런 간선이 없어서다.\n\n{exam}\n교수(11/24)가 증명 끝에 강조한 흐름: $G_f$ 에서 s 가 닿는 정점 / 못 닿는 정점으로 cut 을 잡는다 → 그 cut 의 간선은 꽉 차 있다($G_f$ 에 없으니까) → flow 값 = cut cost ≥ min cut ≥ max flow ≥ flow 값. 엄밀한 증명은 시험 범위가 아니지만(p.18) 이 사슬과 \"왜 꽉 찼나\" 는 말로 쓸 수 있어야 한다. 빈칸이나 Circle all 로 \"S 를 어떻게 정하나(원래 그래프가 아니라 $G_f$ 에서 reachable)\" 를 묻기 좋다.\n{/exam}\n\n== 관련 문서 ==\n* [[L17 Advanced Algorithms II]] · [[max-flow min-cut theorem]] · [[residual graph]] · [[augmenting path]] · [[Ford-Fulkerson]] · [[s-t cut]] · [[flow]]\n* 도구: [[BFS]] · [[귀류법]]"
+  "body": "11/24 수업의 마지막 30분(녹음 45:33–70:40)은 residual graph 를 만들고, augmenting path 로 flow 를 늘리고, 마지막에 \"더 늘릴 길이 없으면 그게 max flow 다\" 를 증명하고, 예제를 끝까지 돌리는 순서로 지나갔다. 그중 증명(녹음 60:05–64:30)은 슬라이드 p.38–40 세 장이고, 선 하나 긋고 몇 줄 만에 끝난다. 이 문서는 그 4분을 아무것도 모르는 상태에서 출발해 한 걸음씩 다시 밟는다. 순서는 교수가 말한 순서를 따랐고, 단계마다 움직이는 그림과 새끼문제가 있다.\n\n먼저 알고 오면 좋은 것은 두 가지뿐이다. 정점을 두 편으로 나누고 S→T 간선만 세는 [[s-t cut]], 그리고 간선마다 보내는 양인 [[flow]]. 둘 다 모르겠으면 그 문서의 움직이는 그림 하나씩만 보고 오면 된다.\n\n== 0. 그림의 색 ==\n증명 그림(p.39)에는 초록 계열이 세 가지 나온다. 이게 섞여서 \"연두색이 뭘 자르는 건지\" 안 보이는 경우가 많다.\n[[img:L17-39.png|p.39 — 왼쪽은 원래 그래프 G 와 flow f, 오른쪽은 residual graph Gf. 짙은 초록 정점 = s 에서 Gf 로 갈 수 있는 정점(S), 연한 민트 정점 t = 못 가는 정점(T), 연두 화살표 = Gf 의 backward 간선. 빨간 점선이 S 와 T 의 경계(cut)|large]]\n{|\n! 그림에서 보이는 것 || 뜻\n|-\n| 짙은 초록 정점 (s, a, b) || $G_f$ 에서 s 부터 화살표를 따라 '''갈 수 있는''' 정점. 이게 S 다\n|-\n| 연한 민트 정점 (t) || 못 가는 정점. 이게 T 다. 슬라이드의 \"t lives here\"\n|-\n| 오른쪽 그림의 연두색 화살표 || $G_f$ 의 '''backward''' 간선. \"이미 보낸 양을 이만큼 되돌릴 수 있다\" 는 뜻. 정점의 편과는 상관없다\n|-\n| 오른쪽 그림의 파란 화살표 || $G_f$ 의 '''forward''' 간선. \"아직 이만큼 더 보낼 수 있다\"\n|-\n| 빨간 점선 || S 와 T 의 경계. 증명에서 \"그은 cut\" 이 이것이다\n|}\n이 위키의 움직이는 그림은 S 정점 뒤에 '''연두색 동그라미 배경'''을 깐다. 그림에서 연두 배경을 보면 \"S 에 들어갔다\" 고 읽으면 된다.\n\n{mini}\n# p.39 오른쪽 그림에서 연두색 화살표는 무엇을 뜻하나? 그것이 가리키는 방향은 원래 간선과 같은가 반대인가?\n# 짙은 초록 정점은 무엇으로 정해지나? (a) 원래 그래프 G 에서 s 와 이어진 정점 (b) $G_f$ 에서 s 부터 화살표를 따라 갈 수 있는 정점 (c) flow 가 0 이 아닌 간선의 끝점\n{/mini}\n{answer}\n# backward 간선, 즉 이미 보낸 flow 를 되돌릴 수 있는 양이다. 방향은 원래 간선과 반대다(원래 a→t 면 연두는 t→a).\n# (b). G 에서는 t 까지 거의 모든 정점이 s 와 이어져 있어서 아무것도 못 가른다.\n{/answer}\n\n== 1. 지금 무엇을 증명하는 중인가 ==\n=== 큰 그림 ===\n[[max-flow min-cut theorem]] 은 \"max flow 의 값 = min s-t cut 의 cost\" 다. 교수는 이걸 두 부분으로 나눴다(녹음 37:21).\n* '''Lemma 1: max flow ≤ min cut.''' 그림으로 증명하고 끝났다(아래 1.2).\n* '''Lemma 2: max flow ≥ min cut.''' 이게 남았다. 그리고 이걸 증명하는 과정에서 [[Ford-Fulkerson]] 알고리즘이 나온다. 교수 말로는 \"usually we state the algorithm first and then prove its correctness. But at this time, opposite way.\"[* 녹음 43:46–44:21. 보통은 알고리즘을 먼저 보이고 정리로 정확성을 증명하는데, 이번에는 정리를 증명하다 보니 알고리즘이 나온다는 뜻이다.]\nLemma 2 는 다시 이 Lemma 하나로 바뀐다(p.23).\n{def}\n'''Lemma (p.23).''' t 가 $G_f$ 에서 s 로부터 도달 불가능하다 ⇔ f 는 max flow 다.\n{/def}\n⇐ 방향(augmenting path 가 있으면 flow 를 늘릴 수 있다)은 수업에서 먼저 했다([[augmenting path]]). 이 문서가 다루는 건 남은 ⇒ 방향이다. 교수가 60:05 에 \"Now, we focus on this part\" 라며 넘어간 부분이다.\n<pre class=\"txt\">\n가정:  Gf 에서 s 로부터 t 에 갈 수 없다.\n결론:  f 는 max flow 다.\n<\/pre>\n\n=== Lemma 1 을 다시 한 번 ===\n증명 끝에서 Lemma 1 을 쓰니 먼저 확실히 해 두자. Lemma 1 은 '''아무''' flow 와 '''아무''' s-t cut 을 가져와도 flow 값 ≤ cut 의 cost 라는 것이다. 교수의 그림 설명은 이랬다. s 에서 나온 물건은 t 로 가려면 cut 을 건너는 간선 중 하나를 꼭 지나야 한다. 그 간선들은 capacity 합 이상은 못 실어 나른다. \"Minimum cut means the pipe is the thinnest. That's a bottleneck.\"[* 녹음 40:18–42:31. 교수는 이 부분을 한국어로 길게 풀었고 전사는 그걸 영어로 옮긴 것이라 문장이 조금 어색하다. 엄밀한 증명은 CLRS Lemma 26.4 이고 시험 범위가 아니다(p.18 \"You are not responsible for proof-by-proof on the final\").]\n[[anim:flow_across_any_cut|값 4 인 flow 를 그대로 두고 cut 만 세 번 바꾼다. 주황(S→T 로 넘은 flow)에서 파랑(T→S 로 되돌아온 flow)을 빼면 언제나 4. 그리고 그 4 는 cut 의 cost 19, 17, 11 을 넘지 못한다]]\n위 그림이 보여 주는 것은 두 가지다. 첫째, 어느 cut 에서 재도 \"넘어간 flow − 되돌아온 flow\" 는 flow 의 값과 같다. 둘째, 넘어간 flow 는 넘어가는 간선의 capacity 합, 즉 cut 의 cost 를 넘을 수 없다. 이 두 줄이 이 증명의 5단계에서 그대로 다시 나온다.\n\n{mini}\n# 어떤 flow 의 값이 7 이고 어떤 s-t cut 의 cost 가 9 다. max flow 에 대해 무엇을 말할 수 있나?\n# 다음 중 옳은 것을 모두 고르라(Circle all). (a) Lemma 1 은 아무 flow 와 아무 cut 에 대해 성립한다. (b) Lemma 1 만으로 max flow = min cut 이 나온다. (c) 값이 같은 flow 와 cut 을 하나 찾으면, 그 flow 는 max flow 다.\n{/mini}\n{answer}\n# 7 ≤ max flow ≤ 9. 앞은 max flow 가 모든 flow 중 최대라서, 뒤는 Lemma 1 이라서다. 이 둘만으로는 더 좁힐 수 없다.\n# (a), (c). (b) 는 틀렸다. 부등식 하나로는 같다는 결론이 안 나온다. (c) 는 6단계에서 보는 부등식 사슬 때문에 맞다.\n{/answer}\n\n== 2. 먼저 비유로 ==\n{analogy}\n파이프망에 물을 흘리고 있다. 더 이상 s 에서 t 로 물을 더 밀어 넣을 길이 없다고 하자. 이제 s 에서 출발해 \"아직 물을 더 밀어 넣을 수 있는 곳\" 을 전부 연두로 칠한다. 남는 파이프가 있으면 그쪽으로 더 밀 수 있으니 칠하고, 거꾸로 흐르고 있는 파이프가 있으면 그 물을 덜 보내는 식으로 밀 수 있으니 또 칠한다. 칠하다 보면 더 못 가는 경계가 나온다. 그 경계에서 바깥으로 나가는 파이프는 '''꽉 차 있다'''(안 찼으면 더 칠했을 테니까). 바깥에서 안으로 들어오는 파이프는 '''비어 있다'''(물이 흐르고 있었다면 그걸 줄이는 식으로 더 칠했을 테니까). 그러면 경계를 넘는 물의 양은 정확히 바깥으로 나가는 파이프 굵기의 합이다. 즉 '''지금 흘리는 양 = 이 경계(cut)의 cost''' 다.\n{/analogy}\n교수도 예제를 끝내며 같은 그림을 그렸다. \"In the end, the flow is like this. It's spilling the pipe water. Where do you find the most bottleneck? That's the minimum s-t cut. You can never spill the flow more than that.\"(녹음 70:19–70:31)\n\n== 3. 1단계: 지금 flow 로 $G_f$ 를 그린다 ==\n슬라이드 p.39 의 그림을 쓴다. 왼쪽 G 에서 네모 안 숫자가 flow, 옆 숫자가 capacity 다.\n<pre class=\"txt\">\n간선    capacity  flow   →  Gf 의 파랑 forward (c − f)   Gf 의 연두 backward (f)\ns→a       4        4         없음 (꽉 참)                  a→s 4\ns→b       8        1         s→b 7                        b→s 1\na→b       6        2         a→b 4                        b→a 2\na→t       2        2         없음 (꽉 참)                  t→a 2\nb→t       3        3         없음 (꽉 참)                  t→b 3\n<\/pre>\nflow 의 값은 s 에서 나가는 양 4 + 1 = 5 다. [[residual graph]] 의 규칙은 두 줄이다. 파랑 forward 는 \"아직 더 보낼 수 있는 양\" 이라 $c - f$, 연두 backward 는 \"이미 보내서 되돌릴 수 있는 양\" 이라 $f$ 다. 꽉 찬 간선은 파랑이 없고, flow 가 0 인 간선은 연두가 없다. 교수도 \"Forward edge means remaining capacity … backward edge is the current flow\" 라고 읽었다(녹음 46:35–47:14).[* 슬라이드 p.39 오른쪽 Gf 에는 a–b 사이가 파랑 5, 연두 1 로 적혀 있다. 그건 p.22 의 옛 flow(a→b 가 1)로 계산한 값이 남은 것이다. 지금 flow(a→b 가 2)로 계산하면 파랑 a→b 4, 연두 b→a 2 가 맞다. 이 문서와 그림은 맞는 값을 쓴다. 아래 결론(S = {s, a, b})은 어느 값으로 해도 같다.]\n\n{mini}\n# capacity 10, flow 10 인 간선 u→v 는 $G_f$ 에서 어떤 화살표가 되나? flow 0 이면?\n# 위 표에서 $G_f$ 에 s 에서 '''나가는''' 화살표는 몇 개인가?\n{/mini}\n{answer}\n# flow 10 이면 연두 v→u 10 하나만. flow 0 이면 파랑 u→v 10 하나만.\n# 하나(파랑 s→b 7). s→a 는 꽉 차서 파랑이 없다. a→s, b→s 는 s 로 '''들어오는''' 화살표다.\n{/answer}\n\n== 4. 2단계: $G_f$ 에서 s 부터 칠한다 ==\n가정은 \"$G_f$ 에 s 에서 t 로 가는 경로가 없다\" 였다(녹음 60:34 \"Suppose there is not a path from S to T\"). 그러면 $G_f$ 위에서 s 부터 [[BFS]](DFS 도 된다)를 돌려, '''화살표 방향으로''' 갈 수 있는 정점을 모두 칠해 본다.\n[[anim:cut_proof_reachable|왼쪽 Gf 에서 s 부터 칠하는 순서(s → b → a)를 보고, t 에 들어가는 화살표가 없어서 멈추는 장면을 확인한 뒤, 오른쪽 G 에서 선을 넘는 간선이 꽉 찬 것을 보라]]\n<pre class=\"txt\">\nS = {s}\ns 에서: 파랑 s→b 7                     → b 를 칠한다.   S = {s, b}\nb 에서: 연두 b→a 2 (backward)           → a 를 칠한다.   S = {s, a, b}\n        연두 b→s 1 은 이미 칠한 s\na 에서: 파랑 a→b 4, 연두 a→s 4 는 이미 칠한 정점\n더 갈 곳이 없다.  t 로 '들어가는' 화살표는 Gf 에 하나도 없다.\n<\/pre>\na 에 어떻게 닿았는지가 중요하다. 원래 그래프에서 s→a 는 꽉 차서 직접은 못 간다. 대신 b 에서 연두 backward 화살표 b→a 를 탔다. 원래 a→b 로 2 를 보내고 있으니 \"그 2 를 덜 보내는\" 식으로 a 쪽에 여유를 만들 수 있다는 뜻이다. 그래서 S 는 원래 그래프 모양이 아니라 '''$G_f$ 의 화살표'''로 정해진다.\n\nt 를 못 칠한 건 우연이 아니다. 가정이 \"s 에서 t 로 가는 $G_f$ 경로가 없다\" 였으니 t 는 반드시 칠하지 않은 쪽에 남는다. p.39 의 \"t lives here\" 가 그 말이다.\n[[sim:cut_from_residual]]\n\n{mini}\n# 위 예에서 BFS 가 a 에 처음 도착할 때 탄 화살표는 무엇이고, 그 화살표는 파랑인가 연두인가?\n# 어떤 flow 에서 $G_f$ 에 s 에서 나가는 화살표가 하나도 없다. S 는 무엇이고, 이 cut 의 cost 는 무엇과 같은가?\n# \"S = 원래 그래프 G 에서 s 와 이어진 정점들\" 로 정하면 왜 안 되나? 한 문장으로.\n{/mini}\n{answer}\n# 연두 b→a 2 (backward). 원래 간선 a→b 의 flow 2 를 되돌릴 수 있다는 화살표다.\n# S = {s}. s 에서 나가는 원래 간선이 모두 꽉 차 있다는 뜻이다. cost 는 s 에서 나가는 capacity 합이고, 그게 flow 값과 같다.\n# G 에서는 t 까지 거의 모든 정점이 s 와 이어져 있다. \"flow 를 더 보낼 수 있나\" 를 담은 것은 G 가 아니라 $G_f$ 다.\n{/answer}\n\n== 5. 3단계: 칠한 곳과 안 칠한 곳 사이에 선을 긋는다 ==\n칠한 정점 S = {s, a, b} 를 한쪽, 칠하지 않은 T = {t} 를 다른 쪽에 두고 그 사이에 선을 긋는다. 교수 말로 \"the cut that [is] reachable from S and not reachable from S\"(녹음 60:44–61:11)이다. s 는 S, t 는 T 에 있으니 정당한 [[s-t cut]] 이다. 위 움직이는 그림 8초쯤에 양쪽 그림에 빨간 점선이 같이 그어진다.\n\n선이 어디로 지나가는지는 신경 쓰지 않아도 된다. cut 은 정점을 두 편으로 나눈 것이고 선은 표시일 뿐이다. 큰 그래프에서는 S 가 흩어져 있어서 선이 구불구불해지는데(p.53), 그래도 상관없다.\n\n== 6. 교수가 먼저 던진 결론: \"flow 값 = 이 cut 의 cost\" ==\n선을 긋자마자 교수는 결론부터 말했다. \"Just like the lemma that we proved at the beginning, the flow from S to T is equal to the cost of this cut. … The flow of this cut is 5. The cost of the cut is 5.\"(녹음 61:32–62:04) 슬라이드 p.39 의 \"The flow from s to t is '''equal''' to the cost of this cut.\" 이 줄이다. Lemma 1 에서는 \"≤\" 였는데 여기서는 \"=\" 다. 왜 이번에는 등호인지가 다음 두 단계의 내용이다.\n\n숫자로 먼저 맞춰 보자. 이 cut 에서 S→T 로 넘는 원래 간선은 a→t(2/2) 와 b→t(3/3) 둘이다. cost 는 2 + 3 = 5 이고 flow 값도 5 다.\n\n{mini}\n# 위 예의 cut 에서 T→S 로 넘는 원래 간선은 몇 개인가? 왜 그런가?\n# Lemma 1 은 \"≤\", 이 단계는 \"=\" 다. 등호가 되려면 S→T 간선과 T→S 간선이 각각 어떤 상태여야 하나? (5단계를 보기 전에 짐작해 보라)\n{/mini}\n{answer}\n# 0 개. T = {t} 이고 t 에서 나가는 원래 간선이 없다(p.4 가정: t 는 들어오는 간선만).\n# S→T 간선은 꽉 차 있어야 하고(f = c), T→S 간선은 비어 있어야 한다(f = 0). 그래야 \"넘어간 양 − 되돌아온 양\" 이 정확히 capacity 합이 된다.\n{/answer}\n\n== 7. 4단계: 선을 넘는 간선의 두 사실 ==\n선을 넘는 원래 간선은 방향에 따라 두 종류다.\n* '''앞으로 넘는 간선''' S → T. cost 에 들어가는 간선이다.\n* '''거꾸로 넘는 간선''' T → S. cost 에는 안 들어가지만(방향이 반대), flow 를 계산할 때는 나온다.\n[[anim:cut_proof_two_facts|p.14 의 max flow 에서 S = {s, B, C, F}. 앞으로 넘는 s→A, B→E, F→t 가 꽉 찬 것과, 거꾸로 넘는 A→B, E→F 가 0 인 것을 확인하라. 중간에 \"만약 아니었다면\" 장면에서 E 가 칠해져 버리는 모순을 본다]]\n\n=== 사실 A: S → T 간선은 꽉 차 있다 (f = c) ===\n슬라이드 문장은 \"The edges in the cut are '''full''' because they don't exist in $G_f$\" 다. 교수는 이걸 한국어로 이렇게 풀었다. 선을 넘는 간선이 꽉 차 있지 않으면 남은 capacity 가 있고, 그러면 그쪽으로 가는 길(path)이 생겨서 reachable 이 되어 버린다. \"The remaining capacity of the edges that cross the cut is 0. If it's not 0, it means that it's reachable.\"(녹음 62:24–63:25)\n\n한 줄씩 쓰면 [[귀류법]]이다. S→T 간선 u→v 가 꽉 차지 않았다고, 즉 $f(u,v) < c(u,v)$ 라고 하자.\n# 남은 양 $c - f > 0$ 이니 $G_f$ 에 파랑 forward 화살표 u→v 가 있다.\n# u 는 S 에 있다. 즉 BFS 가 u 에 도착했다.\n# 그러면 BFS 는 u→v 를 타고 v 에도 도착했을 것이다. v 도 S 여야 한다.\n# 그런데 v 는 T 에 있다. 모순이다.\np.39 예에서는 a→t 2/2, b→t 3/3 이 둘 다 꽉 찼다. 위 움직이는 그림 12초쯤의 \"만약 b→t 가 2/3 이었다면\" 장면이 이 귀류를 그대로 그린 것이다. 남은 1 때문에 $G_f$ 에 파랑 b→t 1 이 생기고, BFS 가 t 까지 칠해 버린다.\n\n=== 사실 B: T → S 간선은 flow 가 0 이다 ===\n슬라이드도 교수도 이 사실은 따로 말하지 않았다. p.39 예에는 T→S 간선이 아예 없어서다. 하지만 큰 그래프에서는 꼭 필요하다. 같은 방식으로 귀류한다. T→S 간선 x→y(x ∈ T, y ∈ S)에 flow 가 있다고, 즉 $f(x,y) > 0$ 이라 하자.\n# 그러면 $G_f$ 에 연두 backward 화살표 y→x 가 있다(값 $f(x,y)$).\n# y 는 S 에 있다. BFS 가 y 에 도착했다.\n# 그러면 BFS 는 y→x 를 타고 x 에도 도착했을 것이다. x 도 S 여야 한다.\n# 그런데 x 는 T 에 있다. 모순이다.\np.14 그래프의 max flow 에서 S = {s, B, C, F} 로 칠하면 T→S 간선은 A→B 0/2, E→F 0/6 이고 둘 다 0 이다. 위 그림 13초쯤에 E→F 에 1 을 흘려 보면, $G_f$ 에 연두 F→E 1 이 생겨서 E 가 칠해져 버린다.[* 두 사실의 증명은 똑같은 모양이다. 바탕에 있는 문장은 하나다. '''$G_f$ 에서 S 의 정점이 T 의 정점으로 가는 화살표는 하나도 없다.''' 있었다면 BFS 가 그걸 타고 T 로 넘어갔을 것이다. 이 문장을 파랑 forward 쪽으로 읽으면 사실 A, 연두 backward 쪽으로 읽으면 사실 B 가 된다.]\n\n{mini}\n# S→T 간선 u→v 의 flow 가 3, capacity 가 5 라고 하자. $G_f$ 에 무엇이 있고, 그러면 무엇이 틀려지나?\n# T→S 간선 x→y 의 flow 가 2 라고 하자. $G_f$ 에 무엇이 있고, 무엇이 틀려지나?\n# 다음 중 옳은 것을 모두 고르라(Circle all). (a) T→S 간선은 cut 의 cost 에 들어간다. (b) S→T 간선이 꽉 찬 이유는 그 간선의 파랑 forward 가 $G_f$ 에 없어서다. (c) T→S 간선의 flow 가 0 인 이유는 그 간선의 연두 backward 가 $G_f$ 에 없어서다.\n{/mini}\n{answer}\n# $G_f$ 에 파랑 u→v 2 가 있다. u 가 S 에 있으니 BFS 가 v 에도 갔을 것이고, \"v 는 T\" 가 틀려진다.\n# $G_f$ 에 연두 y→x 2 가 있다. y 가 S 에 있으니 BFS 가 x 에도 갔을 것이고, \"x 는 T\" 가 틀려진다.\n# (b), (c). (a) 는 틀렸다. cost 는 S 쪽에서 T 쪽으로 가는 간선만 센다(p.8).\n{/answer}\n\n== 8. 5단계: 그래서 flow 값 = cost ==\n슬라이드의 \"All of the stuff has to cross the cut\" 을 숫자로 쓰면 이렇다. s 에서 나온 물건은 t 로 가야 하고, s 는 S 에, t 는 T 에 있다. 그러니 결국 선을 S→T 방향으로 넘는다. 다만 어떤 물건은 S→T 로 넘었다가 T→S 로 되돌아온 뒤 다시 넘을 수도 있다. 그래서 정확히 세면\n$$\\text{value}(f) = \\underbrace{\\sum_{S \\to T} f}_{\\text{넘어간 양}} - \\underbrace{\\sum_{T \\to S} f}_{\\text{되돌아온 양}}$$\n이다. 2절의 움직이는 그림(flow 값 4 를 세 cut 에서 잰 것)이 이 식을 보여 준다.[* 엄밀하게는 S 안의 정점마다 \"나가는 flow − 들어오는 flow\" 를 더한다. s 는 value(f), 나머지 정점은 보존 법칙 때문에 0 이라 합은 value(f) 다. S 안끼리 오가는 간선은 한쪽에서 나감, 다른 쪽에서 들어옴으로 한 번씩 세져 지워지고, S→T 간선(나감)과 T→S 간선(들어옴)만 남는다. CLRS Lemma 26.4 다. 시험 범위는 아니다(p.18).]\n여기에 4단계의 두 사실을 넣는다.\n$$\\text{value}(f) = \\sum_{S \\to T} c \\;-\\; 0 = \\text{cost(이 cut)}$$\np.39 예: 2 + 3 − 0 = 5. p.14 예: 4 + 3 + 4 − 0 = 11.\n\n사실 B 가 왜 필요한지 여기서 보인다. T→S 간선에 flow 가 있었다면 그만큼 빼야 해서 flow 값이 cost 보다 작아졌을 것이다. Lemma 1 의 \"≤\" 가 보통 등호가 아닌 이유도 같다. 아무 cut 이나 잡으면 앞으로 넘는 간선이 덜 찼거나 되돌아오는 flow 가 있다. 2절 그림에서 cost 19, 17 인 cut 이 그런 예다.\n\n{mini}\n# 어떤 cut 에서 S→T 간선 flow 합이 9, T→S 간선 flow 합이 2 다. flow 값은? 이 cut 의 cost 에 대해 무엇을 말할 수 있나?\n# p.39 예에서 S 를 {s, a} 로(b 를 빼고) 잡으면, 앞으로 넘는 간선, 되돌아오는 간선, flow 값, cost 는?\n{/mini}\n{answer}\n# value = 9 − 2 = 7. cost 는 S→T capacity 합이라 9 이상이다. flow 값보다 2 이상 비싸다.\n# 앞으로: s→b 1/8, a→b 2/6, a→t 2/2. 되돌아오는 간선: 없음. flow 값 = 1 + 2 + 2 − 0 = 5(맞다). cost = 8 + 6 + 2 = 16. s→b, a→b 가 덜 차서 cost 가 크다. $G_f$ 로 칠한 S 가 아니라 사실 A 가 안 맞는다.\n{/answer}\n\n== 9. 6단계: 부등식 사슬이 접힌다 ==\n마지막은 p.39 의 초록 줄과 p.40 의 덧붙임이다. 교수는 이렇게 이었다. \"This flow value is equal to the cost of this cut. And then this is a certain cut, so it should be larger than or equal to the cost of minimum cut. And then by lemma 1, it's larger than or equal to maximum flow. … At the same time, any flow value should be less than or equal to maximum flow value. This is trivial.\"(녹음 63:27–64:12)\n$$\\text{value}(f) = \\text{cost(이 cut)} \\;\\ge\\; \\text{min cut} \\;\\ge\\; \\text{max flow} \\;\\ge\\; \\text{value}(f)$$\n[[anim:inequality_squeeze|수직선 위에 5 를 박아 두고, min cut 은 5 이하 영역, max flow 는 5 이상 영역에 놓는다. Lemma 1(max flow ≤ min cut) 때문에 둘이 5 로 몰리는 것을 보라]]\n* 첫 등호는 5단계.\n* 첫 ≥ 는 min cut 이 모든 cut 중 최소라서.\n* 둘째 ≥ 는 Lemma 1.\n* 마지막 ≥ 는 max flow 가 모든 flow 중 최대라서. p.40 \"But this flow value ≤ max flow value, so they must be equal!\"\n맨 왼쪽과 맨 오른쪽이 같은 값이니 가운데도 전부 같다. 교수 말로 \"So all these values should be the same.\"(녹음 64:23) 결론은 세 개다.\n* '''f 는 max flow 다.''' Lemma 의 ⇒ 방향이 끝났다.\n* '''이 cut 은 min cut 이다.'''\n* '''max flow = min cut.''' 정리가 끝났다.\n\n{mini}\n# 사슬의 네 부등호 각각의 근거를 한 단어씩 적어라.\n# value(f) = 8 이고, 이 방법으로 그은 cut 의 cost 도 8 이다. min cut 과 max flow 는?\n{/mini}\n{answer}\n# 5단계(사실 A·B) / min cut 의 정의(최소) / Lemma 1 / max flow 의 정의(최대).\n# 둘 다 8.\n{/answer}\n\n== 10. 알고리즘으로 보면: min cut 이 덤으로 나온다 ==\n[[Ford-Fulkerson]] 은 $G_f$ 에 s→t 경로가 없을 때 멈춘다. 그 순간의 flow 가 이 증명의 f 다. 그러니 멈춘 뒤 $G_f$ 에서 s 부터 BFS 를 '''한 번 더''' 돌려 닿는 정점을 S 로 잡으면 그게 min cut 이다. 교수가 예제를 끝내며 한 말도 이것이다. \"There is no path from S to T, right? And then we can find a cut: nodes reachable from S and not reachable from S, minimum s-t cut. The value was 11 and the maximum flow is also 11.\"(녹음 69:40–70:10)\n[[img:L17-53.png|p.53 — Ford-Fulkerson 이 끝난 뒤의 Gf(아래). s 에서 닿는 짙은 초록 정점 {s, B, C, F} 와 나머지를 빨간 점선이 가른다. 위 G 에서 점선을 넘는 주황 간선 셋이 모두 꽉 찼고, max flow 와 min cut 이 둘 다 11|large]]\n위 그림 아래쪽 $G_f$ 에서 s 를 출발하면 파랑 s→C 1 로 C, 파랑 C→F 5 로 F, 파랑 F→B 2 로 B 까지 칠해진다. B 에서는 연두 B→s, B→F 만 있어서 더 못 간다. 그렇게 칠한 {s, B, C, F} 가 p.9 에서 손으로 찾은 min cut 과 같다. 과정 전체는 [[Ford-Fulkerson]] 문서의 움직이는 그림에 있다.\n\n{mini}\n# Ford-Fulkerson 이 끝난 뒤 min cut 을 찾는 방법을 한 문장으로. 시간은?\n# p.53 의 $G_f$ 에서 BFS 가 B 에 도착할 때 탄 화살표는?\n{/mini}\n{answer}\n# 마지막 $G_f$ 에서 s 부터 BFS(또는 DFS)를 돌려 닿는 정점 집합 S 와 나머지로 나눈다. BFS 한 번이라 $O(n+m)$.\n# 파랑 F→B 2. 원래 간선 F→B 는 capacity 3 에 flow 1 이라 2 가 남아 있다.\n{/answer}\n\n== 자주 헷갈리는 것 ==\n* '''\"이어져 있다\" 가 아니라 \"갈 수 있다(reachable)\" 다.''' 화살표 방향이 중요하다. p.39 의 $G_f$ 에서 t 에서는 t→a, t→b 로 나가는 화살표가 있지만 t 로 들어가는 화살표는 없다. 그래서 s 에서 t 로는 못 간다.\n* '''원래 그래프가 아니라 residual graph 에서 칠한다.''' 알고 싶은 건 \"flow 를 더 보낼 수 있는 길\" 이고, 그 정보는 남은 양(파랑)과 되돌릴 수 있는 양(연두)을 담은 $G_f$ 에만 있다.\n* '''연두(backward)를 타고 들어온 정점도 S 다.''' p.39 의 a 가 그렇다.\n* '''선 모양이 이상해 보여도 된다.''' cut 은 정점 집합의 분할이다.\n* '''min cut 이 여러 개일 수 있다.''' 이 방법은 그중 S 가 가장 작은 것 하나를 준다. p.4 그래프에는 cost 11 인 cut 이 {s, B, C, F} 와 {s, A, B, C, E, F} 둘 있다.\n* '''이 증명은 어떤 flow 에서 출발해도 된다.''' \"$G_f$ 에 s→t 경로가 없다\" 만 맞으면 된다. Ford-Fulkerson 이 그런 flow 를 만들어 줄 뿐이다.\n\n{exam}\n교수(11/24, 녹음 60:05–64:30)가 증명 끝에 짚은 흐름: $G_f$ 에서 s 가 닿는 정점 / 못 닿는 정점으로 cut 을 잡는다 → 그 cut 의 간선은 꽉 차 있다(\"full because they don't exist in $G_f$\", 꽉 차 있지 않으면 남은 capacity 로 path 가 생겨 reachable 이 된다) → flow 값 = cut cost ≥ min cut ≥ max flow ≥ flow 값. 엄밀한 증명은 시험 범위가 아니지만(p.18) 이 사슬과 \"왜 꽉 찼나\" 는 말로 쓸 수 있어야 한다. 빈칸이나 Circle all 로 \"S 를 어떻게 정하나(원래 그래프가 아니라 $G_f$ 에서 reachable)\" 를 묻기 좋다.\n{/exam}\n\n== 시험 직전 체크 ==\n# 가정: $G_f$ 에 s→t 경로 없음.\n# S = $G_f$ 에서 s 부터 BFS 로 닿는 정점. T = 나머지(t 포함).\n# S→T 원래 간선은 꽉 참(파랑이 있으면 넘어갔다), T→S 원래 간선은 0(연두가 있으면 넘어갔다).\n# value(f) = (넘어간 flow) − (되돌아온 flow) = Σc − 0 = cost.\n# value(f) = cost ≥ min cut ≥ max flow ≥ value(f) → 전부 같다.\n# p.39 예: S = {s, a, b}, cut a→t 2 + b→t 3 = 5. p.53 예: S = {s, B, C, F}, cut 4 + 3 + 4 = 11.\n\n== 관련 문서 ==\n* [[L17 Advanced Algorithms II]] · [[max-flow min-cut theorem]] · [[residual graph]] · [[augmenting path]] · [[Ford-Fulkerson]] · [[s-t cut]] · [[flow]]\n* 도구: [[BFS]] · [[귀류법]]"
  },
  "residual graph": {
   "title": "residual graph Gf — 더 보낼 수 있는 양과 되돌릴 수 있는 양",
@@ -3524,7 +3537,7 @@ const ARTICLES = {
    "17강 Advanced II",
    "용어"
   ],
-  "body": "L17 p.21–22. flow f 가 있을 때 residual graph $G_f$ 는 간선마다 \"얼마를 더 움직일 수 있나\" 를 그린 그래프다. 11/24 수업에서 다뤘다.\n$$c_f(u,v) = \\begin{cases} c(u,v) - f(u,v) & (u,v) \\in E \\\\ f(v,u) & (v,u) \\in E \\\\ 0 & \\text{otherwise} \\end{cases}$$\n* '''forward edge''' $u \\to v$: 남은 양 $c - f$. 0 이면 그리지 않는다.\n* '''backward edge''' $v \\to u$: 이미 보낸 양 $f$. 이만큼 되돌릴(줄일) 수 있다.\n슬라이드 표현으로는 \"Forward edges are the amount that's left. Backwards edges are the amount that's been used.\"\n\n핵심 Lemma(p.23)는 '''$G_f$ 에서 s 로부터 t 에 갈 수 없다 ⇔ f 는 max flow''' 다. 갈 수 있으면 그 경로가 [[augmenting path]] 이고 flow 를 늘릴 수 있다. 갈 수 없으면 s 에서 닿는 정점들이 min cut 의 s 쪽이 된다.[* backward 간선이 있어서 알고리즘은 예전에 보낸 flow 를 되무를 수 있다. forward 간선만으로 경로를 찾으면 처음 고른 경로 때문에 막혀서 max flow 에 못 갈 수 있다. L17 예제의 세 번째 경로 s→B→E⇢A→D→t 가 backward 간선 E⇢A 를 써야만 찾을 수 있는 경로다.]\n[[sim:ford_fulkerson_trace]]\n\n{mini}\n# 간선 u→v 의 capacity 가 7 이고 flow 도 7 이다. $G_f$ 에는 u, v 사이에 어떤 간선이 있나?\n{/mini}\n{answer}\n# backward v→u 7 하나뿐이다. forward 는 남은 양이 0 이라 없다.\n{/answer}\n\n== 관련 문서 ==\n* [[L17 Advanced Algorithms II]] · [[augmenting path]] · [[Ford-Fulkerson]] · [[max-flow min-cut theorem]]"
+  "body": "L17 p.21–22. flow f 가 있을 때 residual graph $G_f$ 는 간선마다 \"얼마를 더 움직일 수 있나\" 를 그린 그래프다. 11/24 수업에서 다뤘다.\n$$c_f(u,v) = \\begin{cases} c(u,v) - f(u,v) & (u,v) \\in E \\\\ f(v,u) & (v,u) \\in E \\\\ 0 & \\text{otherwise} \\end{cases}$$\n* '''forward edge''' $u \\to v$: 남은 양 $c - f$. 0 이면 그리지 않는다.\n* '''backward edge''' $v \\to u$: 이미 보낸 양 $f$. 이만큼 되돌릴(줄일) 수 있다.\n슬라이드 표현으로는 \"Forward edges are the amount that's left. Backwards edges are the amount that's been used.\"\n\n핵심 Lemma(p.23)는 '''$G_f$ 에서 s 로부터 t 에 갈 수 없다 ⇔ f 는 max flow''' 다. 갈 수 있으면 그 경로가 [[augmenting path]] 이고 flow 를 늘릴 수 있다. 갈 수 없으면 s 에서 닿는 정점들이 min cut 의 s 쪽이 된다.[* backward 간선이 있어서 알고리즘은 예전에 보낸 flow 를 되무를 수 있다. forward 간선만으로 경로를 찾으면 처음 고른 경로 때문에 막혀서 max flow 에 못 갈 수 있다. L17 예제의 세 번째 경로 s→B→E⇢A→D→t 가 backward 간선 E⇢A 를 써야만 찾을 수 있는 경로다.]\n[[anim:residual_build|왼쪽 G 의 간선 다섯 개를 하나씩 집어 오른쪽 Gf 로 옮긴다. 간선마다 파랑(같은 방향, c − f)이 먼저, 연두(반대 방향, f)가 나중에 생긴다. a→t 는 꽉 차서 파랑이 \"0 → 안 그림\" 으로 사라진다]]\n위 그림에서 간선 하나가 $G_f$ 에서는 화살표 두 개가 되는 것을 보라. s→a(capacity 4, flow 3)는 파랑 s→a 1 과 연두 a→s 3 이 된다. 교수는 \"forward edge is divided as capacity minus flow, in this case 1 … backward edge is the current flow\" 라고 읽었다(녹음 46:20–47:14). 마지막 장면처럼 이 $G_f$ 에는 파랑만 따라가는 s→a→b→t(1, 5, 1)가 있어서 1 을 더 보낼 수 있다(p.24). 1 을 보내고 다시 그리면 s 에서 t 로 가는 길이 없어진다(p.26).\n[[sim:ford_fulkerson_trace]]\n\n{mini}\n# 간선 u→v 의 capacity 가 7 이고 flow 도 7 이다. $G_f$ 에는 u, v 사이에 어떤 간선이 있나?\n{/mini}\n{answer}\n# backward v→u 7 하나뿐이다. forward 는 남은 양이 0 이라 없다.\n{/answer}\n\n== 관련 문서 ==\n* [[L17 Advanced Algorithms II]] · [[augmenting path]] · [[Ford-Fulkerson]] · [[max-flow min-cut theorem]]"
  },
  "augmenting path": {
   "title": "augmenting path — residual graph 위의 s→t 경로",
@@ -3532,7 +3545,7 @@ const ARTICLES = {
    "17강 Advanced II",
    "용어"
   ],
-  "body": "L17 p.28. [[residual graph]] $G_f$ 에서 s 에서 t 로 가는 경로다. 이 경로를 따라 flow 를 늘릴 수 있다. 11/24 수업에서 다뤘다.\n\n늘리는 양은 경로 위 residual 값의 최솟값 x(병목)다. 늘리는 방법은 p.35 의 `increaseFlow` 다.\n<pre class=\"c\">\nx = min weight on any edge in P\nfor (u,v) in P:\n    if (u,v) in E,  f'(u,v) ← f(u,v) + x      // forward: 더 보낸다\n    if (v,u) in E,  f'(v,u) ← f(v,u) − x      // backward: 원래 간선의 flow 를 줄인다\n<\/pre>\nbackward 간선에서 flow 를 '''빼는''' 것이 중요하다. 모든 간선에 x 를 더하면 경로가 거꾸로 지나는 정점에서 보존 법칙이 깨진다(p.31). 더하고 빼면 정점마다 들어옴 = 나감이 유지되고, flow 값은 정확히 x 만큼 는다(p.34 \"Still a legit flow, but with a bigger value!\").\n\n{mini}\n# 경로 s→a⇢b→t 의 residual 값이 s→a 5, a⇢b(backward) 2, b→t 4 다. x 와 원래 간선들의 변화는?\n{/mini}\n{answer}\n# x = 2. f(s,a) 는 +2, 원래 간선 b→a 의 flow 는 −2, f(b,t) 는 +2. flow 값은 2 늘어난다.\n{/answer}\n\n== 관련 문서 ==\n* [[residual graph]] · [[Ford-Fulkerson]] · [[L17 Advanced Algorithms II]]"
+  "body": "L17 p.28. [[residual graph]] $G_f$ 에서 s 에서 t 로 가는 경로다. 이 경로를 따라 flow 를 늘릴 수 있다. 11/24 수업에서 다뤘다.\n\n늘리는 양은 경로 위 residual 값의 최솟값 x(병목)다. 늘리는 방법은 p.35 의 `increaseFlow` 다.\n<pre class=\"c\">\nx = min weight on any edge in P\nfor (u,v) in P:\n    if (u,v) in E,  f'(u,v) ← f(u,v) + x      // forward: 더 보낸다\n    if (v,u) in E,  f'(v,u) ← f(v,u) − x      // backward: 원래 간선의 flow 를 줄인다\n<\/pre>\nbackward 간선에서 flow 를 '''빼는''' 것이 중요하다. 모든 간선에 x 를 더하면 경로가 거꾸로 지나는 정점에서 보존 법칙이 깨진다(p.31). 더하고 빼면 정점마다 들어옴 = 나감이 유지되고, flow 값은 정확히 x 만큼 는다(p.34 \"Still a legit flow, but with a bigger value!\").\n\n[[anim:augment_backward|p.30–34 의 예. Gf 의 경로 s→a⇢b→t 는 가운데를 연두로 지난다. 모든 간선에 +1 하면 a 에서 보존이 깨지고, 연두로 지난 원래 간선 b→a 에서 1 을 빼면 a·b 모두 들어옴 = 나감이 맞고 값이 2 → 3 이 된다]]\n교수(11/24)는 이 장면에서 학생들에게 물었다. \"Can you increase the flow? … For the forward edge, add the flow. For the backward edge, subtract the flow.\"(녹음 55:57–56:13) 그리고 바뀐 flow 가 정상인지 정점마다 들어온 양과 나간 양을 짚어 확인했다(56:49–57:10).[* 위 그림 a 정점을 보면, 연두로 거꾸로 지난다는 것은 \"b 에서 a 로 보내던 1 을 그만 보내고, 그 1 을 a 가 s 에서 새로 받는다\" 는 뜻이다. b 쪽은 a 로 보내던 1 을 t 로 돌린다. 그래서 두 정점 모두 들어오고 나가는 양이 그대로다.]\n\n{mini}\n# 경로 s→a⇢b→t 의 residual 값이 s→a 5, a⇢b(backward) 2, b→t 4 다. x 와 원래 간선들의 변화는?\n{/mini}\n{answer}\n# x = 2. f(s,a) 는 +2, 원래 간선 b→a 의 flow 는 −2, f(b,t) 는 +2. flow 값은 2 늘어난다.\n{/answer}\n\n== 관련 문서 ==\n* [[residual graph]] · [[Ford-Fulkerson]] · [[L17 Advanced Algorithms II]]"
  },
  "Ford-Fulkerson": {
   "title": "Ford-Fulkerson — augmenting path 가 없을 때까지 flow 를 늘린다",
@@ -3540,7 +3553,7 @@ const ARTICLES = {
    "17강 Advanced II",
    "용어"
   ],
-  "body": "L17 p.41. 11/24 수업에서 다뤘다. 끝난 뒤 min cut 을 꺼내는 법은 [[max-flow min-cut 증명 (cut 선 긋기)]].\n<pre class=\"c\">\nFord-Fulkerson(G):\n    f ← all zero flow.\n    Gf ← G\n    while t is reachable from s in Gf\n        Find a path P from s to t in Gf      // eg, use BFS\n        f ← increaseFlow(P, f)\n        update Gf\n    return f\n<\/pre>\n* 정확성: 루프가 끝나면 $G_f$ 에 s→t 경로가 없으니 Lemma(p.23)에 의해 max flow 다. 그때 s 에서 닿는 정점 집합이 min cut 의 s 쪽이다. 경로를 어떻게 고르든 끝나기만 하면 맞다(p.42).\n* 수행 시간: 경로를 아무렇게나 고르면 capacity 크기 C 에 비례하는 만큼 걸릴 수 있다(p.55–62, 경로 2C 번). BFS 로 고르면 [[Edmonds-Karp]] 이고 $O(nm^2)$ 이다.\n* capacity 가 모두 정수면 max flow 도 간선마다 정수다(p.64). 0 에서 시작해 정수 x 만 더하고 빼기 때문이다.\nL17 예제(p.43–53)는 경로 s→A→E→t 4, s→C→F→t 4, s→B→E⇢A→D→t 2, s→C→F→B→E⇢A→D→t 1 로 max flow 11 에 이른다.\n[[sim:ford_fulkerson_trace]]\nL. R. Ford Jr. 와 D. R. Fulkerson 이 RAND 연구소에서 1956년에 발표했다.\n\n{mini}\n# while 조건의 빈칸: `while ________ in Gf`.\n{/mini}\n{answer}\n# `t is reachable from s`. s 에서 BFS 나 DFS 를 돌려 t 에 닿는지 본다.\n{/answer}\n\n== 관련 문서 ==\n* [[L17 Advanced Algorithms II]] · [[augmenting path]] · [[residual graph]] · [[Edmonds-Karp]] · [[max-flow min-cut theorem]]"
+  "body": "L17 p.41. 11/24 수업에서 다뤘다. 끝난 뒤 min cut 을 꺼내는 법은 [[max-flow min-cut 증명 (cut 선 긋기)]].\n<pre class=\"c\">\nFord-Fulkerson(G):\n    f ← all zero flow.\n    Gf ← G\n    while t is reachable from s in Gf\n        Find a path P from s to t in Gf      // eg, use BFS\n        f ← increaseFlow(P, f)\n        update Gf\n    return f\n<\/pre>\n* 정확성: 루프가 끝나면 $G_f$ 에 s→t 경로가 없으니 Lemma(p.23)에 의해 max flow 다. 그때 s 에서 닿는 정점 집합이 min cut 의 s 쪽이다. 경로를 어떻게 고르든 끝나기만 하면 맞다(p.42).\n* 수행 시간: 경로를 아무렇게나 고르면 capacity 크기 C 에 비례하는 만큼 걸릴 수 있다(p.55–62, 경로 2C 번). BFS 로 고르면 [[Edmonds-Karp]] 이고 $O(nm^2)$ 이다.\n* capacity 가 모두 정수면 max flow 도 간선마다 정수다(p.64). 0 에서 시작해 정수 x 만 더하고 빼기 때문이다.\nL17 예제(p.43–53)는 경로 s→A→E→t 4, s→C→F→t 4, s→B→E⇢A→D→t 2, s→C→F→B→E⇢A→D→t 1 로 max flow 11 에 이른다.\n[[anim:ff_full_run|경로 네 번(4 → 4 → 2 → 1)을 한 바퀴씩 본다. 빨간 네모가 방금 바뀐 flow 다. 세 번째와 네 번째 경로의 연두 점선(E⇢A)에서 A→E 가 4 → 2 → 1 로 줄어드는 것, 끝에서 s 가 닿는 {s, C, F, B} 가 연두로 칠해지고 cut 11 이 나오는 것을 보라]]\n교수(11/24)는 이 예제를 이렇게 읽었다. \"Initialize the flow all zero and then we calculate the corresponding residual graph … Using BFS, we find this path and then find the minimum weight along this path.\"(녹음 67:38–68:14) 세 번째 경로에서는 \"This one is backward edge, so we decrease this value by 2 … other edges increase by 2\" 라고 짚었다(69:08–69:23).\n[[sim:ford_fulkerson_trace]]\nL. R. Ford Jr. 와 D. R. Fulkerson 이 RAND 연구소에서 1956년에 발표했다.\n\n{mini}\n# while 조건의 빈칸: `while ________ in Gf`.\n{/mini}\n{answer}\n# `t is reachable from s`. s 에서 BFS 나 DFS 를 돌려 t 에 닿는지 본다.\n{/answer}\n\n== 관련 문서 ==\n* [[L17 Advanced Algorithms II]] · [[augmenting path]] · [[residual graph]] · [[Edmonds-Karp]] · [[max-flow min-cut theorem]]"
  },
  "Edmonds-Karp": {
   "title": "Edmonds-Karp — BFS 로 경로를 고르는 Ford-Fulkerson, O(nm²)",
@@ -3548,7 +3561,7 @@ const ARTICLES = {
    "17강 Advanced II",
    "용어"
   ],
-  "body": "L17 p.63. [[Ford-Fulkerson]] 에서 augmenting path 를 [[BFS]] 로, 즉 간선 수가 가장 적은 경로로 고르면 $O(nm^2)$ 에 끝난다. 이것을 '''Edmonds-Karp''' 라고 부른다. 11/24 수업에서는 이름만 나왔고(\"just using BFS to choose the path, we call it as Edmonds-Karp algorithm\", 이유는 다음에 설명), p.55–63 은 다음 수업 예정이라 슬라이드 기준이다.\n\n증명은 수업에서 건너뛰고 시험에도 안 나온다(\"It will not be on the exam\"). 슬라이드가 주는 아이디어는 이렇다.\n* residual graph 에서 간선 하나가 사라지는 횟수는 $O(n)$ 이다. 이게 어려운 부분이다.\n* 간선은 m 개뿐이다.\n* 간선이 사라질 때마다 BFS 를 한 번 돌리고, s 에서 닿는 부분만 보면 되니 $O(m)$ 이다.\n곱해서 $O(nm^2)$ 다. 슬라이드의 강조는 \"Doesn't have anything to do with the edge weights!\" 다. 경로를 아무렇게나 고르면(p.55–62) capacity C 에 비례하는 횟수가 들 수 있었다.[* Jack Edmonds 와 Richard Karp 가 1972년 논문으로 발표했다. p.42 는 \"There's another way. (optional)\" 이라며 다른 경로 선택법도 있다고만 언급한다.]\n\n{mini}\n# p.55 의 C 예제(s→a C, s→b C, b→a 1, a→t C, b→t C)에서 BFS 가 처음 고르는 경로는? 몇 번 만에 끝나나?\n{/mini}\n{answer}\n# 간선 2개짜리 s→a→t 또는 s→b→t. 두 경로로 C 씩 보내면 끝이라 2 번이다. 간선 3개짜리 s→b→a→t 는 BFS 가 고르지 않는다.\n{/answer}\n\n== 관련 문서 ==\n* [[Ford-Fulkerson]] · [[BFS]] · [[L17 Advanced Algorithms II]]"
+  "body": "L17 p.63. [[Ford-Fulkerson]] 에서 augmenting path 를 [[BFS]] 로, 즉 간선 수가 가장 적은 경로로 고르면 $O(nm^2)$ 에 끝난다. 이것을 '''Edmonds-Karp''' 라고 부른다. 11/24 수업에서는 이름만 나왔고(\"just using BFS to choose the path, we call it as Edmonds-Karp algorithm\", 이유는 다음에 설명), p.55–63 은 다음 수업 예정이라 슬라이드 기준이다.\n\n증명은 수업에서 건너뛰고 시험에도 안 나온다(\"It will not be on the exam\"). 슬라이드가 주는 아이디어는 이렇다.\n* residual graph 에서 간선 하나가 사라지는 횟수는 $O(n)$ 이다. 이게 어려운 부분이다.\n* 간선은 m 개뿐이다.\n* 간선이 사라질 때마다 BFS 를 한 번 돌리고, s 에서 닿는 부분만 보면 되니 $O(m)$ 이다.\n곱해서 $O(nm^2)$ 다. 슬라이드의 강조는 \"Doesn't have anything to do with the edge weights!\" 다. 경로를 아무렇게나 고르면(p.55–62) capacity C 에 비례하는 횟수가 들 수 있었다.[* Jack Edmonds 와 Richard Karp 가 1972년 논문으로 발표했다. p.42 는 \"There's another way. (optional)\" 이라며 다른 경로 선택법도 있다고만 언급한다.]\n\n[[anim:bad_path_zigzag|왼쪽은 운 나쁘게 s→b→a→t 와 s→a⇢b→t 를 번갈아 골라 가운데 간선이 0/1 ↔ 1/1 을 오간다. 오른쪽 BFS 는 간선 2 개짜리 경로 둘로 끝난다]]\n위 그림 왼쪽에서 가운데 간선 b→a 의 flow 가 1 이 됐다가(p.57, $G_f$ 에서 b→a 가 사라짐) 다시 0 이 되는(p.59, 다시 생김) 것을 보라. 한 번에 1 씩만 보내니 max flow 2C 를 채우려면 경로가 2C 번 필요하다.\n\n{mini}\n# p.55 의 C 예제(s→a C, s→b C, b→a 1, a→t C, b→t C)에서 BFS 가 처음 고르는 경로는? 몇 번 만에 끝나나?\n{/mini}\n{answer}\n# 간선 2개짜리 s→a→t 또는 s→b→t. 두 경로로 C 씩 보내면 끝이라 2 번이다. 간선 3개짜리 s→b→a→t 는 BFS 가 고르지 않는다.\n{/answer}\n\n== 관련 문서 ==\n* [[Ford-Fulkerson]] · [[BFS]] · [[L17 Advanced Algorithms II]]"
  },
  "maximum bipartite matching": {
   "title": "maximum bipartite matching — capacity 1 짜리 max flow",
@@ -3556,7 +3569,7 @@ const ARTICLES = {
    "17강 Advanced II",
    "용어"
   ],
-  "body": "L17 p.66–70. 11/24 수업에서는 아직 안 나갔다(다음 수업 예정, 슬라이드 기준). 학생과 동아리처럼 두 쪽으로 나뉜 [[bipartite graph]] 에서, 정점 하나가 많아야 한 번만 쓰이도록 간선을 최대한 많이 고르는 문제다.\n\n== max flow 로 바꾸기 ==\ns 에서 모든 학생으로, 학생에서 원하는 동아리로, 모든 동아리에서 t 로 간선을 긋고 capacity 를 '''모두 1''' 로 둔다. 그리고 max flow 를 구한다. 왜 되는지는 p.70 이 다섯 단계로 적는다.\n# capacity 가 정수라 flow 도 정수, 즉 0 또는 1 이다.\n# 학생에게 들어오는 양이 1 이하이고 보존 법칙으로 나가는 양도 1 이하다. 그래서 학생마다 동아리 0 개나 1 개에 배정된다. 동아리 쪽도 같다.\n# flow 가 1 인 학생→동아리 간선들이 matching 이다. 거꾸로 matching 하나는 flow 하나를 준다.\n# flow 값 = matching 크기.\n# 그래서 max flow = maximum matching.\n\n{mini}\n# 학생 a, b 는 둘 다 동아리 x 만 원하고, 학생 c 는 x, y 를 원한다. maximum matching 의 크기는?\n{/mini}\n{answer}\n# 2. c–y 와 (a 또는 b)–x. a 와 b 중 한 명은 짝이 없다.\n{/answer}\n\n== 관련 문서 ==\n* [[L17 Advanced Algorithms II]] · [[assignment problem]] · [[bipartite graph]] · [[Ford-Fulkerson]]"
+  "body": "L17 p.66–70. 11/24 수업에서는 아직 안 나갔다(다음 수업 예정, 슬라이드 기준). 학생과 동아리처럼 두 쪽으로 나뉜 [[bipartite graph]] 에서, 정점 하나가 많아야 한 번만 쓰이도록 간선을 최대한 많이 고르는 문제다.\n\n== max flow 로 바꾸기 ==\ns 에서 모든 학생으로, 학생에서 원하는 동아리로, 모든 동아리에서 t 로 간선을 긋고 capacity 를 '''모두 1''' 로 둔다. 그리고 max flow 를 구한다. 왜 되는지는 p.70 이 다섯 단계로 적는다.\n# capacity 가 정수라 flow 도 정수, 즉 0 또는 1 이다.\n# 학생에게 들어오는 양이 1 이하이고 보존 법칙으로 나가는 양도 1 이하다. 그래서 학생마다 동아리 0 개나 1 개에 배정된다. 동아리 쪽도 같다.\n# flow 가 1 인 학생→동아리 간선들이 matching 이다. 거꾸로 matching 하나는 flow 하나를 준다.\n# flow 값 = matching 크기.\n# 그래서 max flow = maximum matching.\n\n[[anim:matching_as_flow|p.68 의 학생 5 명·동아리 5 개에 s, t 를 붙이고 capacity 를 모두 1 로 둔 뒤 경로를 하나씩 찾는다. 두 번째 경로가 연두(backward) 간선을 타서 학생 1 을 '가' 에서 '나' 로 옮기는 장면을 보라. 끝의 matching 크기 4 가 flow 값이다]]\n위 그림의 두 번째 경로 s→2→가⇢1→나→t 는 matching 말로 바꾸면 \"학생 2 가 동아리 가 를 원하는데 이미 학생 1 이 차지했다. 학생 1 은 나 도 괜찮으니 나 로 옮기고, 가 를 학생 2 에게 준다\" 이다. 연두 간선 가⇢1 이 \"학생 1 의 배정을 취소한다\" 를 뜻한다. 처음에 고른 짝이 나빠도 Ford-Fulkerson 이 이렇게 고쳐 나가니 결국 최대 matching 에 닿는다.[* 슬라이드 p.70 의 답(학생1–가, 학생3–라, 학생4–마, 학생5–나)과 위 그림의 답(학생1–나, 학생2–가, 학생3–라, 학생4–다)은 짝이 다르지만 크기는 둘 다 4 다. 학생 1, 2, 5 가 원하는 동아리가 가·나 둘뿐이라 그중 한 명은 반드시 빠지므로 5 는 불가능하다.]\n\n{mini}\n# 학생 a, b 는 둘 다 동아리 x 만 원하고, 학생 c 는 x, y 를 원한다. maximum matching 의 크기는?\n{/mini}\n{answer}\n# 2. c–y 와 (a 또는 b)–x. a 와 b 중 한 명은 짝이 없다.\n{/answer}\n\n== 관련 문서 ==\n* [[L17 Advanced Algorithms II]] · [[assignment problem]] · [[bipartite graph]] · [[Ford-Fulkerson]]"
  },
  "assignment problem": {
   "title": "assignment problem — capacity 를 풀어 준 배정 문제",
@@ -13110,6 +13123,12 @@ window.SIMS = window.SIMS || {};
     this.btnReset.title = "처음부터";
     ctrl.appendChild(this.btnPlay);
     ctrl.appendChild(this.btnReset);
+    // 폰에서 글자가 작으니: 화면 전체 + 세로 폰이면 90° 돌려 긴 변으로 보기 (운체위키에서 이식)
+    this.btnBig = el("button", "anim-btn anim-big", "⛶ 크게");
+    this.btnBig.type = "button";
+    this.btnBig.title = "화면 가득 (세로 폰은 가로로 돌려서)";
+    ctrl.appendChild(this.btnBig);
+    this.btnBig.addEventListener("click", function () { self.toggleBig(); });
 
     var speedSel = el("select", "anim-speed");
     SPEEDS.forEach(function (s) {
@@ -13147,6 +13166,19 @@ window.SIMS = window.SIMS || {};
 
     this.btnPlay.addEventListener("click", function () { self.playing ? self.pause() : self.play(); });
     this.btnReset.addEventListener("click", function () { self.seek(0); if (!self.playing) self.play(); });
+  };
+
+  Anim.prototype.toggleBig = function (force) {
+    var on = force != null ? force : !this.root.classList.contains("anim-full");
+    this.root.classList.toggle("anim-full", on);
+    document.documentElement.classList.toggle("anim-full-open", on);
+    this.btnBig.textContent = on ? "✕ 닫기" : "⛶ 크게";
+    var self = this;
+    if (on) {
+      this._esc = function (ev) { if (ev.key === "Escape") self.toggleBig(false); };
+      document.addEventListener("keydown", this._esc);
+      if (!this.playing) this.play();
+    } else if (this._esc) { document.removeEventListener("keydown", this._esc); this._esc = null; }
   };
 
   Anim.prototype.mountSvg = function () {
@@ -13260,6 +13292,377 @@ window.SIMS = window.SIMS || {};
 
   global.AnimEngine = AnimEngine;
 })(typeof window !== "undefined" ? window : globalThis);
+
+// ===== anims/_flow_kit.js =====
+// ============================================================
+// _flow_kit.js — L17 (max flow / min cut) 움직이는 그림들이 같이 쓰는 그리기 도구.
+//   ANIMS 를 등록하지 않는다. build() 안에서 FLOWKIT(D, "접두어") 로 부른다 (순수 문자열만 만든다, DOM 없음).
+//   쓰는 곳: flow_fill_conservation, st_cut_sweep, flow_across_any_cut, residual_build, augment_backward,
+//            ff_full_run, cut_proof_reachable, cut_proof_two_facts, inequality_squeeze, bad_path_zigzag, matching_as_flow
+//   색은 슬라이드 그대로: S 쪽 정점 = 짙은 초록, T 쪽 정점 = 연한 민트, Gf 의 forward = 파랑, backward = 연두.
+//   S 쪽 영역은 연두색 배경으로 칠한다.
+// ============================================================
+(function (global) {
+  "use strict";
+  function FLOWKIT(D, pre) {
+    var K = {};
+    var C = K.C = {
+      blue: "#1d65b3", blueL: "#dbe8f7", lime: "#7cb82f", limeL: "#e6f5cf", or: "#e0892a", orL: "#fdeec2",
+      sNode: "#1d9a76", tNode: "#d4f5e8", tStroke: "#5aa58a", src: "#e0892a", sink: "#1f5fe0",
+      red: "#d6465f", grey: "#9aa1ab", muted: "#777", ink: "#222", pur: "#3b2f4a", green: "#2e9e4f", greenL: "#dff3e4"
+    };
+    function r4(v) { return Math.round(v * 10000) / 10000; }
+    K.r4 = r4;
+    function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+    K.esc = esc;
+    K.txt = function (x, y, s, size, fill, extra) {
+      extra = extra || "";
+      return '<text x="' + r4(x) + '" y="' + r4(y) + '" font-size="' + (size || 13) + '" fill="' + (fill || C.ink) + '"' +
+        (/text-anchor/.test(extra) ? "" : ' text-anchor="middle"') + extra + '>' + s + '</text>';
+    };
+    // from~to 초에만 보이기 (to ≥ D 면 끝까지)
+    K.show = function (from, to) {
+      var f = 0.12 / D, a = r4(Math.max(0, from) / D), b = r4(Math.min(from / D + f, (from + to) / 2 / D));
+      if (from <= 0) {
+        if (to >= D) return '<set attributeName="opacity" to="1" begin="0s" dur="' + D + 's" fill="freeze"/>';
+        var c0 = r4(to / D - f), d0 = r4(to / D);
+        return '<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;' + c0 + ';' + d0 + ';1" dur="' + D + 's" fill="freeze"/>';
+      }
+      if (to >= D) return '<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;' + a + ';' + b + ';1" dur="' + D + 's" fill="freeze"/>';
+      var c = r4(Math.max(b, to / D - f)), d = r4(to / D);
+      if (d <= c) d = r4(c + 0.0001);
+      return '<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;' + a + ';' + b + ';' + c + ';' + d + ';1" dur="' + D + 's" fill="freeze"/>';
+    };
+    K.vis = function (from, to, inner) {
+      if (from <= 0 && to >= D) return inner;
+      return '<g opacity="0">' + inner + K.show(from, to) + '</g>';
+    };
+    // from~to 동안 깜빡이다가 to 이후 계속 보임(stay) 또는 사라짐
+    K.blink = function (from, to, stay, n) {
+      n = n || 3;
+      var ks = [0], vs = [0], step = (to - from) / (2 * n);
+      if (from > 0.02) { ks.push(r4((from - 0.01) / D)); vs.push(0); }
+      ks.push(r4(from / D)); vs.push(1);
+      for (var i = 1; i <= 2 * n; i++) { ks.push(r4((from + i * step) / D)); vs.push(i % 2 ? 0.2 : 1); }
+      if (stay) { ks.push(1); vs.push(1); }
+      else { var e = Math.min(D, to + 0.15); if (e < D) { ks.push(r4(e / D)); vs.push(0); } ks.push(1); vs.push(0); }
+      // keyTimes 단조 보정
+      for (var j = 1; j < ks.length; j++) if (ks[j] <= ks[j - 1]) ks[j] = r4(ks[j - 1] + 0.0001);
+      if (ks[ks.length - 1] > 1) ks[ks.length - 1] = 1;
+      return '<animate attributeName="opacity" values="' + vs.join(";") + '" keyTimes="' + ks.join(";") + '" dur="' + D + 's" fill="freeze"/>';
+    };
+    K.blinkG = function (from, to, stay, inner, n) { return '<g opacity="0">' + inner + K.blink(from, to, stay, n) + '</g>'; };
+    // 값이 시간에 따라 계단식으로 바뀜: pairs = [[0, v0], [t1, v1], ...]
+    K.disc = function (attr, pairs) {
+      var ks = [], vs = [];
+      pairs.forEach(function (p) { ks.push(r4(p[0] / D)); vs.push(p[1]); });
+      ks[0] = 0;
+      ks.push(1); vs.push(pairs[pairs.length - 1][1]);
+      for (var j = 1; j < ks.length; j++) if (ks[j] <= ks[j - 1]) ks[j] = r4(Math.min(1, ks[j - 1] + 0.0001));
+      return '<animate attributeName="' + attr + '" calcMode="discrete" values="' + vs.join(";") + '" keyTimes="' + ks.join(";") + '" dur="' + D + 's" fill="freeze"/>';
+    };
+    // 글자가 시간에 따라 바뀜: pairs = [[t, "글"], ...] (각 글은 다음 t 까지)
+    K.seq = function (x, y, pairs, size, fill, extra) {
+      var s = "";
+      pairs.forEach(function (p, i) {
+        var to = i + 1 < pairs.length ? pairs[i + 1][0] : D;
+        var f = p[2] || fill;
+        if (p[1] === null || p[1] === "") return;
+        s += K.vis(p[0], to, K.txt(x, y, p[1], size, f, extra));
+      });
+      return s;
+    };
+    // 자막(맨 위) / 요점(맨 아래)
+    K.captions = function (caps, y, size) {
+      var s = "";
+      caps.forEach(function (c) { s += K.vis(c[0], c[1], K.txt(380, y || 24, c[2], size || 14, c[3] || C.ink, ' font-weight="700"')); });
+      return s;
+    };
+
+    // ---- 화살표 ----
+    var MK = { blue: C.blue, lime: C.lime, or: C.or, grey: C.grey, red: C.red, ink: C.ink, green: C.green, pur: C.pur };
+    K.defs = function () {
+      var s = "<defs>";
+      Object.keys(MK).forEach(function (k) {
+        s += '<marker id="' + pre + '_m_' + k + '" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto">' +
+          '<path d="M0,0 L10,5 L0,10 z" fill="' + MK[k] + '"/></marker>';
+      });
+      return s + "</defs>";
+    };
+    K.mk = function (color) { return ' marker-end="url(#' + pre + '_m_' + color + ')"'; };
+
+    // 두 정점 사이 선분 (반지름 r 만큼 줄이고, 수직으로 off 만큼 평행 이동)
+    K.seg = function (P, a, b, off, r) {
+      r = r === undefined ? 17 : r;
+      var x1 = P[a][0], y1 = P[a][1], x2 = P[b][0], y2 = P[b][1];
+      var dx = x2 - x1, dy = y2 - y1, L = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / L, uy = dy / L;
+      var nx = -uy, ny = ux; off = off || 0;
+      return { x1: r4(x1 + ux * r + nx * off), y1: r4(y1 + uy * r + ny * off), x2: r4(x2 - ux * (r + 2) + nx * off), y2: r4(y2 - uy * (r + 2) + ny * off),
+        ux: ux, uy: uy, nx: nx, ny: ny, L: L };
+    };
+    K.at = function (P, a, b, t, perp, off) {
+      var g = K.seg(P, a, b, off || 0);
+      return [r4(g.x1 + (g.x2 - g.x1) * t + g.nx * (perp || 0)), r4(g.y1 + (g.y2 - g.y1) * t + g.ny * (perp || 0))];
+    };
+    // opts: color(마커 이름), w, off, dash, extra, r, noArrow
+    K.edge = function (P, a, b, o) {
+      o = o || {};
+      var g = K.seg(P, a, b, o.off, o.r), col = MK[o.color || "blue"] || o.color;
+      return '<line x1="' + g.x1 + '" y1="' + g.y1 + '" x2="' + g.x2 + '" y2="' + g.y2 + '" stroke="' + col + '" stroke-width="' + (o.w || 2.5) + '"' +
+        (o.dash ? ' stroke-dasharray="' + o.dash + '"' : "") + (o.noArrow ? "" : K.mk(o.color || "blue")) + ' stroke-linecap="round"' + (o.extra || "") + '/>';
+    };
+    // 간선 위 두꺼운 반투명 띠 (강조)
+    K.halo = function (P, a, b, color, w, off) {
+      var g = K.seg(P, a, b, off || 0, 14);
+      return '<line x1="' + g.x1 + '" y1="' + g.y1 + '" x2="' + g.x2 + '" y2="' + g.y2 + '" stroke="' + color + '" stroke-width="' + (w || 12) + '" stroke-linecap="round" opacity="0.45"/>';
+    };
+    // 동그라미 정점. fillPairs 가 있으면 시간에 따라 색이 바뀜 [[t, fill, stroke, textFill], …]
+    K.node = function (P, k, label, fill, stroke, tfill, pairs, r) {
+      r = r || 16;
+      var s = '<circle cx="' + P[k][0] + '" cy="' + P[k][1] + '" r="' + r + '" fill="' + fill + '" stroke="' + stroke + '" stroke-width="2">';
+      if (pairs) {
+        s += K.disc("fill", pairs.map(function (p) { return [p[0], p[1]]; }));
+        s += K.disc("stroke", pairs.map(function (p) { return [p[0], p[2]]; }));
+      }
+      s += '</circle><text x="' + P[k][0] + '" y="' + (P[k][1] + 5) + '" font-size="14" text-anchor="middle" font-weight="700" fill="' + tfill + '">';
+      if (pairs) s += K.disc("fill", pairs.map(function (p) { return [p[0], p[3]]; }));
+      return s + esc(label) + '</text>';
+    };
+    // 상태 이름 → [fill, stroke, text]
+    K.ST = {
+      t: [C.tNode, C.tStroke, C.ink],      // T 쪽 (연한 민트)
+      s: [C.sNode, "#127158", "#fff"],     // S 쪽 (짙은 초록)
+      src: [C.src, "#b86a14", "#fff"],     // source (주황)
+      sink: [C.sink, "#163f9a", "#fff"],   // sink (파랑)
+      srcS: [C.sNode, C.or, "#fff"]        // S 로 칠해진 source
+    };
+    // 상태 변화: K.nodeSt(P, k, label, [[0,"t"],[3,"s"]])
+    K.nodeSt = function (P, k, label, pairs, r) {
+      var p0 = K.ST[pairs[0][1]];
+      var pp = pairs.length > 1 ? pairs.map(function (p) { var st = K.ST[p[1]]; return [p[0], st[0], st[1], st[2]]; }) : null;
+      return K.node(P, k, label, p0[0], p0[1], p0[2], pp, r);
+    };
+    // 작은 라벨 (흰 배경 알약)
+    K.pill = function (x, y, s, fill, stroke, size, w) {
+      size = size || 12;
+      w = w || Math.max(18, String(s).replace(/<[^>]+>/g, "").length * size * 0.62 + 8);
+      return '<rect x="' + r4(x - w / 2) + '" y="' + r4(y - size * 0.85) + '" width="' + r4(w) + '" height="' + r4(size * 1.35) + '" rx="4" fill="' + (fill || "#fff") + '" stroke="' + (stroke || "#b9c4d8") + '" stroke-width="1"/>' +
+        K.txt(x, y + size * 0.3, s, size, C.ink, ' font-weight="700"');
+    };
+    // 시간에 따라 값이 바뀌는 알약: pairs [[t, "글", fill, stroke], …]
+    K.pillSeq = function (x, y, pairs, size, w) {
+      var s = "";
+      pairs.forEach(function (p, i) {
+        var to = i + 1 < pairs.length ? pairs[i + 1][0] : D;
+        if (p[1] === null) return;
+        s += K.vis(p[0], to, K.pill(x, y, p[1], p[2], p[3], size, w));
+      });
+      return s;
+    };
+    // 슬라이드식 flow 상자 (진한 파랑 네모 + 흰 글씨). fill 을 바꾸면 강조색
+    K.fbox = function (x, y, v, fill) {
+      var w = String(v).length > 1 ? 24 : 18;
+      return '<rect x="' + r4(x - w / 2) + '" y="' + r4(y - 9) + '" width="' + w + '" height="18" rx="3" fill="' + (fill || C.blue) + '" stroke="#fff" stroke-width="1"/>' +
+        K.txt(x, y + 4.5, v, 12.5, "#fff", ' font-weight="700"');
+    };
+    // pairs [[t, 값 또는 null, fill], …]
+    K.fboxSeq = function (x, y, pairs) {
+      var s = "";
+      pairs.forEach(function (p, i) {
+        var to = i + 1 < pairs.length ? pairs[i + 1][0] : D;
+        if (p[1] === null || p[1] === undefined) return;
+        s += K.vis(p[0], to, K.fbox(x, y, p[1], p[2]));
+      });
+      return s;
+    };
+    // 점이 간선을 따라 흐른다 (from~to 동안, n 개)
+    K.dots = function (P, a, b, from, to, n, color, off, period) {
+      var g = K.seg(P, a, b, off || 0, 18);
+      var path = "M" + g.x1 + "," + g.y1 + " L" + g.x2 + "," + g.y2;
+      var per = period || 1.4, s = "";
+      n = Math.max(1, Math.min(5, n));
+      for (var i = 0; i < n; i++) {
+        var b0 = r4(from + i * per / n);
+        if (b0 + per > D) continue;
+        s += '<circle r="4" fill="' + (color || C.or) + '" opacity="0.9"><animateMotion path="' + path + '" begin="' + b0 + 's" dur="' + per + 's" repeatCount="indefinite"/></circle>';
+      }
+      return K.vis(from, to, s);
+    };
+    // 그래프 배치: cols/rows 격자 → 좌표
+    K.grid = function (ox, oy, sx, sy, map) {
+      var P = {};
+      Object.keys(map).forEach(function (k) { P[k] = [r4(ox + map[k][0] * sx), r4(oy + map[k][1] * sy)]; });
+      return P;
+    };
+    return K;
+  }
+
+  // L17 p.4 그래프 (정점 이름은 위키가 붙임: 왼쪽 열 A,B,C / 오른쪽 열 D,E,F)
+  FLOWKIT.BIG = { s: [0, 1], A: [1, 0], B: [1, 1], C: [1, 2], D: [2, 0], E: [2, 1], F: [2, 2], t: [3, 1] };
+  // [u, v, capacity, 라벨 위치(0~1), 라벨 수직 오프셋]
+  FLOWKIT.E14 = [
+    ["s", "A", 4, 0.45, -13], ["s", "B", 2, 0.5, -11], ["s", "C", 6, 0.45, 13],
+    ["A", "D", 3, 0.5, -11], ["A", "B", 2, 0.5, 11], ["A", "E", 6, 0.3, 12],
+    ["B", "E", 3, 0.7, 12], ["B", "C", 2, 0.5, 11], ["F", "B", 3, 0.72, -12],
+    ["D", "E", 6, 0.5, 11], ["E", "F", 6, 0.5, 11], ["C", "F", 10, 0.5, 12],
+    ["D", "t", 4, 0.5, -12], ["E", "t", 4, 0.5, -11], ["F", "t", 4, 0.5, 13]
+  ];
+  global.FLOWKIT = FLOWKIT;
+})(typeof window !== "undefined" ? window : globalThis);
+
+// ===== anims/augment_backward.js =====
+// ============================================================
+// augment_backward — L17 p.30–35: backward 간선이 섞인 augmenting path 로 flow 를 늘리는 법
+//   G: s→a 4 (f1), s→b 3 (f1), b→a 6 (f1), a→t 2 (f2), b→t 3 (f0). 값 2.
+//   Gf: s→a 3, a→s 1, s→b 2, b→s 1, b→a 5, a→b 1(연두), t→a 2, b→t 3.
+//   경로 s→a ⇢ b→t (a⇢b 는 backward), x = min(3,1,3) = 1.
+//   틀린 방법(모두 +1): a 로 들어옴 2+2=4, 나감 2 → 보존 깨짐 (p.31)
+//   맞는 방법: s→a 1→2, b→a 1→0 (뺀다), b→t 0→1. 값 3 (p.34). 검산 src/sims/_check_L17_anims.py
+// ============================================================
+window.ANIMS = window.ANIMS || {};
+ANIMS["augment_backward"] = {
+  title: "augmenting path 에 연두(backward) 간선이 끼면 — 더하고, 뺀다 (16초)",
+  desc: "L17 p.30–35. Gf 의 경로 s→a⇢b→t 는 가운데를 연두 간선으로 지난다. 연두 간선은 원래 간선 b→a 를 거꾸로 탄 것이라, " +
+    "그 간선에는 flow 를 더하지 않고 '''뺀다'''. 그래야 a, b 에서 들어온 양 = 나간 양이 유지되고 값이 x 만큼 는다. → [[augmenting path]]",
+  duration: 16,
+  build: function () {
+    var D = 16, K = FLOWKIT(D, "ab"), C = K.C;
+    var L = { s: [52, 176], a: [176, 80], b: [176, 272], t: [300, 176] };
+    var R = { s: [452, 176], a: [576, 80], b: [576, 272], t: [700, 176] };
+    var s = '<svg viewBox="0 0 760 392" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="backward 간선을 지나는 augmenting path 애니메이션">' + K.defs();
+    s += K.captions([
+      [0, 2, "지금 flow 의 값은 2. 오른쪽 Gf 에 s 에서 t 로 가는 길이 있나?"],
+      [2, 4.6, "있다: s→a (파랑 3) → a⇢b (연두 1) → b→t (파랑 3)"],
+      [4.6, 6.2, "x = 경로 위 최솟값 = min(3, 1, 3) = 1"],
+      [6.2, 8.8, "모든 간선에 +1 하면? a 로 4 가 들어오고 2 만 나간다 → 보존이 깨진다 (p.31)"],
+      [8.8, 11.6, "파랑으로 간 곳은 +1, 연두로 거꾸로 간 b→a 는 −1"],
+      [11.6, 14.2, "a: 2 + 0 들어와 2 나감, b: 1 들어와 0 + 1 나감. 값은 3"],
+      [14.2, D, "\"Still a legit flow, but with a bigger value!\" (p.34)"]
+    ]);
+    s += K.txt(176, 330, "G 와 flow f", 13, C.pur, ' font-weight="700"') + K.txt(576, 330, "Gf (지금 flow 기준)", 13, C.pur, ' font-weight="700"');
+    s += '<line x1="376" y1="46" x2="376" y2="318" stroke="#d5dbe6" stroke-width="1.5" stroke-dasharray="4 4"/>';
+    // ---- G ----
+    var G = [["s", "a", 4, -13, [[0, "1"], [6.2, "2", C.red], [8.8, "1"], [9.4, "2", C.red]]],
+      ["s", "b", 3, 13, [[0, "1"]]],
+      ["b", "a", 6, -12, [[0, "1"], [6.2, "2", C.red], [8.8, "1"], [10.2, "0", C.red]]],
+      ["a", "t", 2, -13, [[0, "2"]]],
+      ["b", "t", 3, 13, [[0, "0"], [6.2, "1", C.red], [8.8, "0"], [11, "1", C.red]]]];
+    s += K.vis(6.2, 8.8, K.halo(L, "s", "a", C.red, 12) + K.halo(L, "b", "a", C.red, 12) + K.halo(L, "b", "t", C.red, 12));
+    s += K.vis(8.8, D, K.halo(L, "s", "a", C.green, 12) + K.halo(L, "b", "t", C.green, 12));
+    s += K.vis(10.2, D, K.halo(L, "b", "a", "#8a5cc0", 12));
+    G.forEach(function (e) {
+      s += K.edge(L, e[0], e[1], { color: "blue", w: 2.5 });
+      var lp = K.at(L, e[0], e[1], 0.4, e[3]);
+      s += K.txt(lp[0], lp[1] + 5, e[2], 15, C.blue, ' font-weight="700"');
+      var bp = K.at(L, e[0], e[1], 0.62, 0);
+      s += K.fboxSeq(bp[0], bp[1], e[4].map(function (p) { return [p[0], p[1], p[2]]; }));
+    });
+    s += K.vis(9.4, D, K.txt(110, 108, "+1", 14, C.green, ' font-weight="700"'));
+    s += K.vis(10.2, D, K.txt(206, 196, "−1", 14, "#8a5cc0", ' font-weight="700"'));
+    s += K.vis(11, D, K.txt(262, 258, "+1", 14, C.green, ' font-weight="700"'));
+    // 틀린 방법 경고
+    s += K.vis(6.6, 8.8, '<circle cx="176" cy="80" r="26" fill="none" stroke="' + C.red + '" stroke-width="3"/>' +
+      K.txt(176, 40, "들어옴 2 + 2 = 4, 나감 2 ✗", 13, C.red, ' font-weight="700"'));
+    // 보존 확인
+    s += K.vis(11.6, D, K.txt(176, 40, "a: 들어옴 2 + 0 = 2, 나감 2 ✓", 13, C.green, ' font-weight="700"') +
+      K.txt(176, 312, "b: 들어옴 1, 나감 0 + 1 = 1 ✓", 13, C.green, ' font-weight="700"'));
+    // ---- Gf ----
+    var F = [["s", "a", 3, "blue"], ["a", "s", 1, "lime"], ["s", "b", 2, "blue"], ["b", "s", 1, "lime"],
+      ["b", "a", 5, "blue"], ["a", "b", 1, "lime"], ["t", "a", 2, "lime"], ["b", "t", 3, "blue"]];
+    // 경로 강조
+    s += '<g opacity="0">' + K.halo(R, "s", "a", "#f3c623", 14, 5) + K.disc("opacity", [[0, 0], [2.0, 1], [14.2, 0.6]]) + '</g>';
+    s += '<g opacity="0">' + K.halo(R, "a", "b", "#f3c623", 14, 5) + K.disc("opacity", [[0, 0], [2.8, 1], [14.2, 0.6]]) + '</g>';
+    s += '<g opacity="0">' + K.halo(R, "b", "t", "#f3c623", 14, 5) + K.disc("opacity", [[0, 0], [3.6, 1], [14.2, 0.6]]) + '</g>';
+    F.forEach(function (e) {
+      s += K.edge(R, e[0], e[1], { color: e[3], w: 2.5, off: 5 });
+      var lp = K.at(R, e[0], e[1], 0.5, 17, 5);
+      s += K.txt(lp[0], lp[1] + 5, e[2], 15, e[3] === "lime" ? C.lime : C.blue, ' font-weight="700"');
+    });
+    s += K.vis(2.8, 8.8, K.txt(576, 308, "연두 a⇢b = 원래 간선 b→a 를 거꾸로 탄 것", 12, C.lime, ' font-weight="700"'));
+    s += K.vis(4.6, D, K.pill(452, 100, "x = 1", "#fff7d6", "#e0b400", 15, 70));
+    ["s", "a", "b", "t"].forEach(function (k) {
+      var st = k === "s" ? "src" : k === "t" ? "sink" : "t";
+      s += K.nodeSt(L, k, k, [[0, st]], 17) + K.nodeSt(R, k, k, [[0, st]], 17);
+    });
+    s += K.seq(380, 360, [[0, "flow 값 2"], [11.6, "flow 값 2 → 3"]], 15, C.ink, ' font-weight="700"');
+    s += K.txt(380, 384, "increaseFlow: 파랑(forward) 간선은 f + x, 연두(backward) 간선은 원래 간선에서 f − x", 13, C.pur, ' font-weight="700"');
+    return s + '</svg>';
+  }
+};
+
+// ===== anims/bad_path_zigzag.js =====
+// ============================================================
+// bad_path_zigzag — L17 p.55–63: 경로를 아무렇게나 고르면 가운데 1 짜리 간선을 왔다 갔다 2C 번, BFS 면 2 번
+//   그래프: s→a C, s→b C, b→a 1, a→t C, b→t C. max flow 2C.
+//   왼쪽(운 나쁜 선택): s→b→a→t, s→a⇢b→t 를 번갈아 → 한 번에 1 씩. 6 번 보여 주고 "…2C 번".
+//   오른쪽(BFS = Edmonds-Karp): 간선 2 개짜리 s→a→t, s→b→t → C 씩 두 번에 끝.
+// ============================================================
+window.ANIMS = window.ANIMS || {};
+ANIMS["bad_path_zigzag"] = {
+  title: "경로를 아무렇게나 고르면 — 가운데 간선을 2C 번 왔다 갔다 (16초)",
+  desc: "L17 p.55–63. 왼쪽은 운 나쁘게 가운데 1 짜리 간선을 지나는 경로만 고르는 경우다. 한 번에 1 씩밖에 못 보내서 경로를 2C 번 찾는다. " +
+    "오른쪽은 BFS 로 간선 수가 가장 적은 경로를 고르는 [[Edmonds-Karp]] 다. 두 번이면 끝난다. 수행 시간이 capacity C 에 매달리느냐 아니냐의 차이다.",
+  duration: 16,
+  build: function () {
+    var D = 16, K = FLOWKIT(D, "bpz"), C = K.C;
+    var L = { s: [52, 196], a: [176, 100], b: [176, 292], t: [300, 196] };
+    var R = { s: [452, 196], a: [576, 100], b: [576, 292], t: [700, 196] };
+    var s = '<svg viewBox="0 0 760 392" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="경로 선택이 나쁠 때와 BFS 비교 애니메이션">' + K.defs();
+    s += K.captions([
+      [0, 1, "C 는 아주 큰 수. max flow 는 2C 다"],
+      [1, 2.6, "왼쪽: s→b→a→t 를 고르면 가운데 1 때문에 1 만 보낸다"],
+      [2.6, 4.2, "왼쪽: 다음엔 s→a⇢b→t. 가운데를 거꾸로 타서 또 1. b→a 가 Gf 에 다시 생긴다"],
+      [4.2, 10.6, "이걸 되풀이하면 한 번에 1 씩... 오른쪽 BFS 는 벌써 끝났다"],
+      [10.6, D, "왼쪽은 경로 2C 번 (C = 10⁶ 이면 200만 번). 오른쪽은 2 번. 시간이 capacity 와 무관"]
+    ]);
+    s += K.txt(176, 50, "아무 경로나 (운 나쁜 경우)", 13.5, C.red, ' font-weight="700"') + K.txt(576, 50, "BFS 경로 = Edmonds-Karp", 13.5, C.green, ' font-weight="700"');
+    s += '<line x1="380" y1="40" x2="380" y2="330" stroke="#d5dbe6" stroke-width="1.5" stroke-dasharray="4 4"/>';
+    // 왼쪽: 6 라운드
+    var R0 = 1, RS = 1.6, NR = 6;
+    var fl = { sa: 0, sb: 0, ba: 0, at: 0, bt: 0 };
+    var seqs = { sa: [[0, "0/C"]], sb: [[0, "0/C"]], ba: [[0, "0/1"]], at: [[0, "0/C"]], bt: [[0, "0/C"]] };
+    for (var k = 1; k <= NR; k++) {
+      var t = R0 + RS * (k - 1), tu = t + 0.8, odd = k % 2 === 1;
+      if (odd) {
+        s += K.vis(t, t + RS, K.halo(L, "s", "b", "#f3c623", 14) + K.halo(L, "b", "a", "#f3c623", 14) + K.halo(L, "a", "t", "#f3c623", 14));
+        fl.sb++; fl.ba++; fl.at++;
+        seqs.sb.push([tu, fl.sb + "/C"]); seqs.ba.push([tu, fl.ba + "/1"]); seqs.at.push([tu, fl.at + "/C"]);
+      } else {
+        s += K.vis(t, t + RS, K.halo(L, "s", "a", "#f3c623", 14) + K.halo(L, "a", "b", "#f3c623", 14, 0) + K.halo(L, "b", "t", "#f3c623", 14));
+        fl.sa++; fl.ba--; fl.bt++;
+        seqs.sa.push([tu, fl.sa + "/C"]); seqs.ba.push([tu, fl.ba + "/1"]); seqs.bt.push([tu, fl.bt + "/C"]);
+      }
+    }
+    var LE = [["s", "a", "sa", 0.45, -16], ["s", "b", "sb", 0.45, 16], ["b", "a", "ba", 0.5, -26], ["a", "t", "at", 0.55, -16], ["b", "t", "bt", 0.55, 16]];
+    LE.forEach(function (e) {
+      s += K.edge(L, e[0], e[1], { color: "blue", w: e[2] === "ba" ? 2 : 3.5 });
+      var p = K.at(L, e[0], e[1], e[3], e[4]);
+      s += K.pillSeq(p[0], p[1], seqs[e[2]].map(function (q) { return [q[0], q[1], e[2] === "ba" ? "#fdeec2" : "#fff", e[2] === "ba" ? C.or : "#b9c4d8"]; }), 12.5, 40);
+    });
+    var cnt = [[0, "경로 0 번, 값 0"]];
+    for (var j = 1; j <= NR; j++) cnt.push([R0 + RS * (j - 1) + 0.8, "경로 " + j + " 번, 값 " + j]);
+    cnt.push([10.6, "… 경로 2C 번, 값 2C"]);
+    s += K.seq(176, 352, cnt.map(function (q, i) { return [q[0], q[1], i === cnt.length - 1 ? C.red : C.ink]; }), 15, C.ink, ' font-weight="700"');
+    s += K.vis(2.6, 10.6, K.seq(176, 376, [[2.6, "b→a 가 Gf 에서 사라졌다 다시 생겼다 반복"]], 12, C.muted));
+    // 오른쪽: BFS
+    s += K.vis(1, 2.6, K.halo(R, "s", "a", "#f3c623", 14) + K.halo(R, "a", "t", "#f3c623", 14));
+    s += K.vis(2.6, 4.2, K.halo(R, "s", "b", "#f3c623", 14) + K.halo(R, "b", "t", "#f3c623", 14));
+    var RE = [["s", "a", [[0, "0/C"], [1.8, "C/C"]], 0.45, -16], ["s", "b", [[0, "0/C"], [3.4, "C/C"]], 0.45, 16], ["b", "a", [[0, "0/1"]], 0.5, -26],
+      ["a", "t", [[0, "0/C"], [1.8, "C/C"]], 0.55, -16], ["b", "t", [[0, "0/C"], [3.4, "C/C"]], 0.55, 16]];
+    RE.forEach(function (e) {
+      s += K.edge(R, e[0], e[1], { color: "blue", w: e[0] === "b" && e[1] === "a" ? 2 : 3.5 });
+      var p = K.at(R, e[0], e[1], e[3], e[4]);
+      s += K.pillSeq(p[0], p[1], e[2].map(function (q) { var full = q[1] === "C/C"; return [q[0], q[1], full ? C.orL : "#fff", full ? C.or : "#b9c4d8"]; }), 12.5, 40);
+    });
+    s += K.seq(576, 352, [[0, "경로 0 번"], [1.8, "경로 1 번, 값 C"], [3.4, "경로 2 번, 값 2C  끝 ✓", C.green]], 15, C.ink, ' font-weight="700"');
+    s += K.vis(4.2, D, K.txt(576, 376, "BFS 는 간선 3 개짜리 s→b→a→t 를 고르지 않는다", 12, C.muted));
+    ["s", "a", "b", "t"].forEach(function (k) {
+      var st = k === "s" ? "src" : k === "t" ? "sink" : "t";
+      s += K.nodeSt(L, k, k, [[0, st]], 17) + K.nodeSt(R, k, k, [[0, st]], 17);
+    });
+    return s + '</svg>';
+  }
+};
 
 // ===== anims/bellman_ford_rounds.js =====
 // ============================================================
@@ -14127,6 +14530,180 @@ ANIMS["counting_sort_flow"] = {
   }
 };
 
+// ===== anims/cut_proof_reachable.js =====
+// ============================================================
+// cut_proof_reachable — L17 p.38–40 (⇒ 방향 증명) 을 그림 그대로: Gf 에서 s 가 닿는 정점을 칠하면 그게 S
+//   G: s→a 4 (f4), s→b 8 (f1), a→b 6 (f2), a→t 2 (f2), b→t 3 (f3). 값 5.
+//   Gf (맞는 값): s→b 7, b→s 1, a→s 4, a→b 4, b→a 2, t→a 2, t→b 3. (슬라이드 p.39 의 a–b 5·1 은 옛 flow 값)
+//   BFS: s → b (s→b 7) → a (b→a 2, 연두). t 에 들어가는 Gf 화살표 없음 → S = {s,a,b}, T = {t}
+//   S→T: a→t 2/2, b→t 3/3 꽉 참. T→S: 없음. 값 5 = cost 5. 검산 src/sims/_check_L17_anims.py
+// ============================================================
+window.ANIMS = window.ANIMS || {};
+ANIMS["cut_proof_reachable"] = {
+  title: "증명의 cut 선 긋기 — Gf 에서 s 가 닿는 곳을 연두로 칠한다 (20초)",
+  desc: "L17 p.38–40. 왼쪽 Gf 에서 s 부터 화살표를 따라 갈 수 있는 정점을 칠하면 S = {s, a, b} 이고 t 는 못 칠한다. 그 경계가 cut 이다. " +
+    "오른쪽 G 에서 보면 경계를 S→T 로 넘는 간선은 전부 꽉 차 있다(안 찼으면 Gf 에 파랑 화살표가 있어서 BFS 가 넘어갔다). 그래서 flow 값 = cut 의 cost. → [[max-flow min-cut 증명 (cut 선 긋기)]]",
+  duration: 20,
+  build: function () {
+    var D = 20, K = FLOWKIT(D, "cpr"), C = K.C;
+    var L = { s: [62, 186], a: [200, 84], b: [200, 288], t: [338, 186] };
+    var R = { s: [430, 186], a: [568, 84], b: [568, 288], t: [706, 186] };
+    var Ts = 2, Tb = 3.2, Ta = 4.8, Tt = 6.4, Tc = 8.2, Tf = 9.8, Th = 12.6, Tn = 14.8, Tv = 16.6;
+    var s = '<svg viewBox="0 0 760 404" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="max-flow min-cut 증명의 cut 선 긋기 애니메이션">' + K.defs();
+    s += K.captions([
+      [0, Ts, "가정: Gf 에 s→t 경로가 없다. 왼쪽 Gf, 오른쪽 원래 G 와 flow (값 5)"],
+      [Ts, Tb, "Gf 에서 s 부터 시작. s 를 칠한다"],
+      [Tb, Ta, "s 에서 나가는 Gf 화살표는 파랑 s→b 7 하나 → b 를 칠한다"],
+      [Ta, Tt, "b 에서 연두 b→a 2 → a 를 칠한다 (a→b 로 보낸 2 를 되돌릴 수 있다)"],
+      [Tt, Tc, "a 에서는 s, b 로만 간다. t 로 들어가는 Gf 화살표가 없다 → t 는 못 칠한다"],
+      [Tc, Tf, "칠한 정점 S = {s, a, b}, 못 칠한 정점 T = {t}. 그 경계에 선을 긋는다"],
+      [Tf, Th, "G 에서 선을 S→T 로 넘는 간선: a→t 2/2, b→t 3/3. 둘 다 꽉 찼다"],
+      [Th, Tn, "만약 b→t 가 2/3 이었다면? Gf 에 파랑 b→t 1 → BFS 가 t 로 넘어간다. 모순"],
+      [Tn, Tv, "T→S 로 되돌아오는 간선은 여기엔 없다 (있었다면 flow 가 0 이어야 한다)"],
+      [Tv, D, "flow 값 = 2 + 3 − 0 = 5 = 이 cut 의 cost. 그래서 f 는 max flow"]
+    ]);
+    s += K.txt(200, 334, "residual graph Gf", 13, C.pur, ' font-weight="700"') + K.txt(568, 334, "원래 G 와 flow f", 13, C.pur, ' font-weight="700"');
+    s += '<line x1="384" y1="44" x2="384" y2="322" stroke="#d5dbe6" stroke-width="1.5" stroke-dasharray="4 4"/>';
+    // 연두 S 영역 (양쪽)
+    function lime(P, k, t) { return K.vis(t, D, '<circle cx="' + P[k][0] + '" cy="' + P[k][1] + '" r="31" fill="' + C.limeL + '" stroke="' + C.lime + '" stroke-width="1.2" stroke-dasharray="3 3"/>'); }
+    s += lime(L, "s", Ts) + lime(L, "b", Tb + 0.6) + lime(L, "a", Ta + 0.6);
+    s += lime(R, "s", Tc) + lime(R, "b", Tc) + lime(R, "a", Tc);
+    // BFS 로 탄 화살표 강조
+    s += K.blinkG(Tb, Tb + 0.6, true, K.halo(L, "s", "b", "#f3c623", 13, 5));
+    s += K.blinkG(Ta, Ta + 0.6, true, K.halo(L, "b", "a", "#f3c623", 13, 5));
+    // ---- Gf ----
+    var F = [["s", "b", 7, "blue", 5], ["b", "s", 1, "lime", 5], ["a", "s", 4, "lime", 0], ["a", "b", 4, "blue", 5],
+      ["b", "a", 2, "lime", 5], ["t", "a", 2, "lime", 0], ["t", "b", 3, "lime", 0]];
+    F.forEach(function (e) {
+      s += K.edge(L, e[0], e[1], { color: e[3], w: 2.6, off: e[4] });
+      var lp = K.at(L, e[0], e[1], 0.5, e[4] ? 17 : 13, e[4]);
+      s += K.txt(lp[0], lp[1] + 5, e[2], 15, e[3] === "lime" ? C.lime : C.blue, ' font-weight="700"');
+    });
+    // t 쪽: 들어가는 화살표 없음 표시
+    s += K.vis(Tt, Tc, '<circle cx="338" cy="186" r="25" fill="none" stroke="' + C.red + '" stroke-width="3"/>' + K.txt(338, 236, "들어가는 화살표 0 개", 12, C.red, ' font-weight="700"'));
+    // 가정 위반 장면: 파랑 b→t 1 (점선)
+    s += K.vis(Th, Tn, K.edge(L, "b", "t", { color: "blue", w: 3, dash: "6 4", off: 7 }) + K.txt(300, 268, "b→t 1 ?", 13, C.blue, ' font-weight="700"') +
+      K.txt(330, 302, "→ t 도 칠해짐 ✗", 12.5, C.red, ' font-weight="700"'));
+    // ---- G ----
+    var G = [["s", "a", 4, 4, -13], ["s", "b", 8, 1, 13], ["a", "b", 6, 2, 12], ["a", "t", 2, 2, -13], ["b", "t", 3, 3, 13]];
+    s += K.blinkG(Tf, Tf + 0.8, true, K.halo(R, "a", "t", C.or, 14));
+    s += K.blinkG(Tf + 0.9, Tf + 1.7, true, K.halo(R, "b", "t", C.or, 14));
+    G.forEach(function (e) {
+      s += K.edge(R, e[0], e[1], { color: "blue", w: 2.5 });
+      var lp = K.at(R, e[0], e[1], 0.4, e[4]);
+      s += K.txt(lp[0], lp[1] + 5, e[2], 15, C.blue, ' font-weight="700"');
+      var bp = K.at(R, e[0], e[1], 0.62, 0);
+      var full = e[2] === e[3];
+      if (e[0] === "b" && e[1] === "t") s += K.fboxSeq(bp[0], bp[1], [[0, "3", C.or], [Th, "2", C.red], [Tn, "3", C.or]]);
+      else s += K.fbox(bp[0], bp[1], e[3], full ? C.or : C.blue);
+    });
+    s += K.vis(Tf, Th, K.txt(690, 110, "꽉 참", 13, C.or, ' font-weight="700"') + K.txt(690, 270, "꽉 참", 13, C.or, ' font-weight="700"'));
+    s += K.vis(Th, Tn, K.txt(690, 270, "남은 1 ?", 13, C.red, ' font-weight="700"'));
+    // cut 선
+    var cutL = '<path d="M 292,52 C 270,120 262,160 282,200 C 300,240 268,290 292,326" fill="none" stroke="' + C.red + '" stroke-width="2.5" stroke-dasharray="8 6"/>';
+    var cutR = '<path d="M 660,52 C 638,120 630,160 650,200 C 668,240 636,290 660,326" fill="none" stroke="' + C.red + '" stroke-width="2.5" stroke-dasharray="8 6"/>';
+    s += K.vis(Tc + 0.3, D, cutL + cutR);
+    // 정점
+    ["s", "a", "b", "t"].forEach(function (k) {
+      var base = k === "s" ? "src" : k === "t" ? "sink" : "t";
+      var tl = { s: Ts, b: Tb + 0.6, a: Ta + 0.6 }[k];
+      s += K.nodeSt(L, k, k, tl !== undefined ? [[0, base], [tl, k === "s" ? "srcS" : "s"]] : [[0, base]], 17);
+      s += K.nodeSt(R, k, k, k !== "t" ? [[0, base], [Tc, k === "s" ? "srcS" : "s"]] : [[0, base]], 17);
+    });
+    s += K.vis(Tc + 0.3, D, K.txt(250, 62, "S", 16, C.sNode, ' font-weight="700"') + K.txt(318, 62, "T", 16, C.sink, ' font-weight="700"') +
+      K.txt(618, 62, "S", 16, C.sNode, ' font-weight="700"') + K.txt(686, 62, "T", 16, C.sink, ' font-weight="700"'));
+    // 아래 계산
+    s += K.vis(Tv, D, K.txt(380, 360, "flow 값 = (S→T 넘은 flow 2 + 3) − (T→S 0) = 5,   cut cost = 2 + 3 = 5", 13.5, C.ink, ' font-weight="700"') +
+      K.txt(380, 384, "5 = cost(이 cut) ≥ min cut ≥ max flow ≥ 5  →  전부 5", 14.5, C.red, ' font-weight="700"'));
+    s += K.vis(Tc, Tv, K.txt(380, 362, "S 는 원래 그래프 G 가 아니라 Gf 의 화살표로 정한다 (a 는 연두 b→a 로 들어왔다)", 13, C.pur, ' font-weight="700"'));
+    s += K.vis(0, Tc, K.txt(380, 362, "Gf: 파랑 = 더 보낼 수 있는 양, 연두 = 되돌릴 수 있는 양. 화살표 방향으로만 간다", 13, C.pur, ' font-weight="700"'));
+    return s + '</svg>';
+  }
+};
+
+// ===== anims/cut_proof_two_facts.js =====
+// ============================================================
+// cut_proof_two_facts — 증명 4단계의 두 사실을 p.14 그래프의 max flow 로: S = {s,B,C,F} (Gf BFS: s→C 1, C→F 5, F→B 2)
+//   사실 A: S→T 간선은 꽉 참 — s→A 4/4, B→E 3/3, F→t 4/4
+//   사실 B: T→S 간선은 flow 0 — A→B 0/2, E→F 0/6
+//   값 = (4+3+4) − (0+0) = 11 = cost 11. 검산 src/sims/_check_L17_anims.py
+// ============================================================
+window.ANIMS = window.ANIMS || {};
+ANIMS["cut_proof_two_facts"] = {
+  title: "선을 넘는 간선의 두 사실 — S→T 는 꽉, T→S 는 0 (20초)",
+  desc: "p.14 의 max flow(값 11)에서 Gf 로 칠한 S = {s, B, C, F}. 선을 S→T 로 넘는 간선은 전부 꽉 차 있고, T→S 로 넘는 간선은 전부 flow 가 0 이다. " +
+    "둘 중 하나라도 어기면 Gf 에 S 에서 T 로 가는 화살표(파랑 c−f 또는 연두 f)가 생겨서 BFS 가 T 로 넘어갔을 것이다. → [[max-flow min-cut 증명 (cut 선 긋기)]]",
+  duration: 20,
+  build: function () {
+    var D = 20, K = FLOWKIT(D, "c2f"), C = K.C;
+    var P = K.grid(48, 92, 140, 100, FLOWKIT.BIG);
+    var f = { "s-A": 4, "s-B": 2, "s-C": 5, "A-D": 3, "A-E": 1, "B-E": 3, "F-B": 1, "C-F": 5, "D-t": 3, "E-t": 4, "F-t": 4 };
+    var T1 = 1, T2 = 3.4, TA = 4.4, TAh = 7.6, TB = 10, TBh = 13, TV = 15.6;
+    var s = '<svg viewBox="0 0 760 392" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="cut 을 넘는 간선의 두 사실 애니메이션">' + K.defs();
+    s += K.captions([
+      [0, T2, "p.14 의 max flow (값 11). Gf 에서 s 부터 BFS: s → C → F → B"],
+      [T2, TA, "S = {s, B, C, F} 를 연두로 칠하고 경계에 선을 긋는다"],
+      [TA, TAh, "사실 A: 선을 S→T 로 넘는 s→A, B→E, F→t 는 전부 꽉 찼다"],
+      [TAh, TB, "B→E 가 2/3 이었다면 Gf 에 파랑 B→E 1 이 생겨 E 까지 칠해진다. 모순"],
+      [TB, TBh, "사실 B: 선을 T→S 로 넘는 A→B, E→F 는 flow 가 0 이다"],
+      [TBh, TV, "E→F 에 1 이 흘렀다면 Gf 에 연두 F→E 1 이 생겨 E 가 칠해진다. 모순"],
+      [TV, D, "그래서 flow 값 = (4 + 3 + 4) − (0 + 0) = 11 = 이 cut 의 cost"]
+    ]);
+    var Sset = { s: T1, C: T1 + 0.5, F: T1 + 1.0, B: T1 + 1.5 };
+    Object.keys(Sset).forEach(function (k) {
+      s += K.vis(Sset[k], D, '<circle cx="' + P[k][0] + '" cy="' + P[k][1] + '" r="31" fill="' + C.limeL + '" stroke="' + C.lime + '" stroke-width="1.2" stroke-dasharray="3 3"/>');
+    });
+    ["s-A", "B-E", "F-t"].forEach(function (k, i) {
+      var uv = k.split("-"), t = TA + 0.2 + i * 0.9;
+      s += K.blinkG(t, t + 0.7, true, K.halo(P, uv[0], uv[1], C.or, 14), 2);
+    });
+    ["A-B", "E-F"].forEach(function (k, i) {
+      var uv = k.split("-"), t = TB + 0.2 + i * 1.0;
+      s += K.blinkG(t, t + 0.8, true, K.halo(P, uv[0], uv[1], C.blue, 14), 2);
+    });
+    FLOWKIT.E14.forEach(function (e) {
+      var u = e[0], v = e[1], key = u + "-" + v;
+      s += K.edge(P, u, v, { color: "blue", w: 2.3 });
+      var lp = K.at(P, u, v, e[3], e[4]);
+      s += K.txt(lp[0], lp[1] + 5, e[2], 13, C.blue, ' font-weight="700"');
+      var bp = K.at(P, u, v, e[3] > 0.6 ? 0.42 : 0.66, 0);
+      var v0 = f[key] || 0, full = v0 === e[2];
+      if (key === "B-E") s += K.fboxSeq(bp[0], bp[1], [[0, "3", C.or], [TAh, "2", C.red], [TB, "3", C.or]]);
+      else if (key === "E-F") s += K.fboxSeq(bp[0], bp[1], [[0, "0", "#8a94a6"], [TBh, "1", C.red], [TV, "0", "#8a94a6"]]);
+      else s += K.fbox(bp[0], bp[1], v0, full ? C.or : v0 ? C.blue : "#8a94a6");
+    });
+    // 가정 위반 화살표
+    s += K.vis(TAh + 0.4, TB, K.edge(P, "B", "E", { color: "blue", w: 3.2, off: -12, dash: "6 4" }) + K.pill(262, 160, "Gf 파랑 B→E 1", "#fff", C.blue, 12));
+    s += K.vis(TBh + 0.4, TV, K.edge(P, "F", "E", { color: "lime", w: 3.2, off: 12, dash: "6 4" }) + K.pill(398, 262, "Gf 연두 F→E 1", "#fff", C.lime, 12));
+    s += K.vis(TAh + 0.9, TB, '<circle cx="' + P.E[0] + '" cy="' + P.E[1] + '" r="24" fill="none" stroke="' + C.red + '" stroke-width="3"/>');
+    s += K.vis(TBh + 0.9, TV, '<circle cx="' + P.E[0] + '" cy="' + P.E[1] + '" r="24" fill="none" stroke="' + C.red + '" stroke-width="3"/>');
+    Object.keys(P).forEach(function (k) {
+      var base = k === "s" ? "src" : k === "t" ? "sink" : "t";
+      var pairs = [[0, base]];
+      if (Sset[k] !== undefined) pairs.push([Sset[k], k === "s" ? "srcS" : "s"]);
+      if (k === "E") { pairs.push([TAh + 0.9, "s"]); pairs.push([TB, "t"]); pairs.push([TBh + 0.9, "s"]); pairs.push([TV, "t"]); }
+      s += K.nodeSt(P, k, k, pairs, 17);
+    });
+    s += K.vis(T2, D, '<path d="M 92,58 C 108,124 140,140 210,142 C 262,144 268,180 276,205 C 286,238 310,244 360,246 C 410,250 420,283 432,350" fill="none" stroke="' + C.red + '" stroke-width="2.5" stroke-dasharray="8 6"/>');
+    // 오른쪽 판
+    var X = 522;
+    s += '<rect x="' + (X - 8) + '" y="44" width="244" height="300" rx="10" fill="#fafbfd" stroke="#c9d2e3"/>';
+    s += K.vis(TA, D, K.txt(X + 4, 68, "사실 A  S→T 간선", 13, C.or, ' text-anchor="start" font-weight="700"') +
+      K.txt(X + 4, 92, "s→A 4/4, B→E 3/3, F→t 4/4", 12.5, C.ink, ' text-anchor="start"') +
+      K.txt(X + 4, 112, "안 찼으면 Gf 에 파랑(c−f)이 생긴다", 11.5, C.muted, ' text-anchor="start"'));
+    s += K.vis(TB, D, K.txt(X + 4, 148, "사실 B  T→S 간선", 13, C.blue, ' text-anchor="start" font-weight="700"') +
+      K.txt(X + 4, 172, "A→B 0/2, E→F 0/6", 12.5, C.ink, ' text-anchor="start"') +
+      K.txt(X + 4, 192, "0 이 아니면 Gf 에 연두(f)가 생긴다", 11.5, C.muted, ' text-anchor="start"'));
+    s += K.vis(TAh, TB, K.txt(X + 114, 236, "E 가 S 에 들어온다", 13, C.red, ' font-weight="700"') + K.txt(X + 114, 256, "= \"t 에 못 간다\"던 BFS 와 모순", 12, C.red));
+    s += K.vis(TBh, TV, K.txt(X + 114, 236, "역시 E 가 S 에 들어온다", 13, C.red, ' font-weight="700"') + K.txt(X + 114, 256, "BFS 결과와 모순", 12, C.red));
+    s += K.vis(TV, D, K.txt(X + 114, 232, "값 = (4 + 3 + 4) − (0 + 0)", 13.5, C.ink, ' font-weight="700"') +
+      K.txt(X + 114, 260, "= 11 = cost", 18, C.red, ' font-weight="700"') +
+      K.txt(X + 114, 290, "(cost 는 S→T capacity 4 + 3 + 4)", 11.5, C.muted));
+    s += K.txt(380, 380, "Gf 에서 S 의 정점이 T 의 정점으로 가는 화살표는 하나도 없다. 이걸 G 의 말로 바꾸면 두 사실이 된다", 12.5, C.pur, ' font-weight="700"');
+    return s + '</svg>';
+  }
+};
+
 // ===== anims/decision_tree_leaves.js =====
 // ============================================================
 // decision_tree_leaves — L5 p.10–15 (PNG 8–13) decision tree 와 Ω(n log n) 하한
@@ -14759,6 +15336,121 @@ ANIMS["expected_vs_worst"] = {
   }
 };
 
+// ===== anims/ff_full_run.js =====
+// ============================================================
+// ff_full_run — L17 p.43–53: Ford-Fulkerson 을 끝까지. augmenting path 4 번 → 11, 마지막 Gf 의 BFS 로 min cut
+//   그래프 p.43 (p.4 에서 A→B, B→C, D→E, E→F 를 뺀 11 간선, 이름 A–F 는 위키가 붙임)
+//   경로 (검산 src/sims/_check_L17_anims.py):
+//     1) s→A→E→t            residual 4,6,4          x=4  값 4
+//     2) s→C→F→t            6,10,4                  x=4  값 8
+//     3) s→B→E⇢A→D→t        2,3,4,3,4   (E⇢A 연두)  x=2  값 10, A→E 4→2
+//     4) s→C→F→B→E⇢A→D→t    2,6,3,1,2,1,2           x=1  값 11, A→E 2→1
+//   끝: Gf 에서 s 가 닿는 정점 {s,C,F,B} → cut s→A 4 + B→E 3 + F→t 4 = 11
+// ============================================================
+window.ANIMS = window.ANIMS || {};
+ANIMS["ff_full_run"] = {
+  title: "Ford-Fulkerson 한 바퀴씩 — 경로 4 번, 그리고 min cut (24초)",
+  desc: "L17 p.43–53. 노란 띠가 이번에 찾은 augmenting path, 오른쪽이 그 경로 위 residual 값과 병목 x 다. 연두 점선은 backward 간선(A→E 의 flow 를 되돌림)이다. " +
+    "더 갈 길이 없으면 마지막 Gf 에서 s 가 닿는 정점을 칠한다. 그게 min cut 이다. → [[Ford-Fulkerson]]",
+  duration: 24,
+  build: function () {
+    var D = 24, K = FLOWKIT(D, "ffr"), C = K.C;
+    var P = K.grid(48, 92, 140, 100, FLOWKIT.BIG);
+    var EDGES = FLOWKIT.E14.filter(function (e) { return ["A-B", "B-C", "D-E", "E-F"].indexOf(e[0] + "-" + e[1]) < 0; });
+    var its = [
+      { t: 0.8, path: "sAEt", back: [], res: [4, 6, 4], x: 4, val: 4 },
+      { t: 5.3, path: "sCFt", back: [], res: [6, 10, 4], x: 4, val: 8 },
+      { t: 9.8, path: "sBEADt", back: [2], res: [2, 3, 4, 3, 4], x: 2, val: 10 },
+      { t: 14.3, path: "sCFBEADt", back: [4], res: [2, 6, 3, 1, 2, 1, 2], x: 1, val: 11 }
+    ];
+    var TB = 18.8;  // BFS·cut 시작
+    var f = {};
+    EDGES.forEach(function (e) { f[e[0] + "-" + e[1]] = [[0, 0]]; });
+    var cur = {};
+    EDGES.forEach(function (e) { cur[e[0] + "-" + e[1]] = 0; });
+    its.forEach(function (it) {
+      var tu = it.t + 2.6;
+      for (var i = 0; i + 1 < it.path.length; i++) {
+        var u = it.path[i], v = it.path[i + 1];
+        if (it.back.indexOf(i) >= 0) { cur[v + "-" + u] -= it.x; f[v + "-" + u].push([tu, cur[v + "-" + u], "chg"]); }
+        else { cur[u + "-" + v] += it.x; f[u + "-" + v].push([tu, cur[u + "-" + v], "chg"]); }
+      }
+    });
+    var s = '<svg viewBox="0 0 760 392" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ford-Fulkerson 예제 전체 애니메이션">' + K.defs();
+    s += K.captions([
+      [0, 0.8, "f = 0 에서 시작. Gf = G. s 에서 t 로 가는 길을 찾는다"],
+      [0.8, 5.3, "경로 1: s→A→E→t, 병목 4 → 값 4"],
+      [5.3, 9.8, "경로 2: s→C→F→t, 병목 4 → 값 8"],
+      [9.8, 14.3, "경로 3: s→B→E ⇢ A→D→t. E⇢A 는 연두(backward): A→E 를 4 → 2 로 되돌린다"],
+      [14.3, TB, "경로 4: s→C→F→B→E ⇢ A→D→t, 병목 1 → 값 11 (A→E 를 또 되돌림)"],
+      [TB, 21.2, "더 갈 길이 없다. 마지막 Gf 에서 s 가 닿는 정점: C, F, B"],
+      [21.2, D, "그 정점들로 자른 cut = 4 + 3 + 4 = 11 = flow 값. 끝"]
+    ]);
+    // 경로 강조
+    its.forEach(function (it, n) {
+      var end = n + 1 < its.length ? its[n + 1].t : TB;
+      for (var i = 0; i + 1 < it.path.length; i++) {
+        var u = it.path[i], v = it.path[i + 1], tt = it.t + 0.15 * i;
+        if (it.back.indexOf(i) >= 0) {
+          s += K.vis(tt, end, K.halo(P, u, v, "#f3c623", 14, 9) + K.edge(P, u, v, { color: "lime", w: 3, off: 9, dash: "6 4" }));
+        } else s += K.vis(tt, end, K.halo(P, u, v, "#f3c623", 14));
+      }
+    });
+    // 마지막 cut: S 영역과 꽉 찬 간선
+    s += K.vis(TB + 0.3, D, ["s", "C", "F", "B"].map(function (k) { return '<circle cx="' + P[k][0] + '" cy="' + P[k][1] + '" r="31" fill="' + C.limeL + '" stroke="' + C.lime + '" stroke-width="1.2" stroke-dasharray="3 3"/>'; }).join(""));
+    s += K.vis(21.2, D, K.halo(P, "s", "A", C.or, 13) + K.halo(P, "B", "E", C.or, 13) + K.halo(P, "F", "t", C.or, 13));
+    // 간선
+    EDGES.forEach(function (e) {
+      var u = e[0], v = e[1], key = u + "-" + v;
+      s += K.edge(P, u, v, { color: "blue", w: 2.3 });
+      var lp = K.at(P, u, v, e[3], e[4]);
+      s += K.txt(lp[0], lp[1] + 5, e[2], 13, C.blue, ' font-weight="700"');
+      var bp = K.at(P, u, v, e[3] > 0.6 ? 0.42 : 0.66, 0);
+      var pairs = [];
+      f[key].forEach(function (p) {
+        var full = p[1] === e[2];
+        if (p[2] === "chg") { pairs.push([p[0], p[1], C.red]); pairs.push([p[0] + 0.9, p[1], full ? C.or : C.blue]); }
+        else pairs.push([p[0], p[1], full ? C.or : C.blue]);
+      });
+      s += K.fboxSeq(bp[0], bp[1], pairs);
+    });
+    // 정점
+    var bfs = { s: TB + 0.1, C: TB + 0.6, F: TB + 1.1, B: TB + 1.6 };
+    Object.keys(P).forEach(function (k) {
+      var base = k === "s" ? "src" : k === "t" ? "sink" : "t";
+      var pairs = [[0, base]];
+      if (bfs[k] !== undefined) pairs.push([bfs[k], k === "s" ? "srcS" : "s"]);
+      s += K.nodeSt(P, k, k, pairs, 17);
+    });
+    s += K.vis(21.2, D, '<path d="M 92,58 C 108,124 140,140 210,142 C 262,144 268,180 276,205 C 286,238 310,244 360,246 C 410,250 420,283 432,350" fill="none" stroke="' + C.red + '" stroke-width="2.5" stroke-dasharray="8 6"/>');
+    // 오른쪽 판
+    var X = 522;
+    s += '<rect x="' + (X - 8) + '" y="44" width="244" height="300" rx="10" fill="#fafbfd" stroke="#c9d2e3"/>';
+    its.forEach(function (it, n) {
+      var end = n + 1 < its.length ? its[n + 1].t : TB;
+      var names = it.path.split("").map(function (c, i) { return (i > 0 ? (it.back.indexOf(i - 1) >= 0 ? "⇢" : "→") : "") + c; }).join("");
+      s += K.vis(it.t, end, K.txt(X + 114, 68, "경로 " + (n + 1) + " (Gf 에서 BFS)", 13, C.pur, ' font-weight="700"') +
+        K.txt(X + 114, 94, names, it.path.length > 6 ? 14 : 16, C.ink, ' font-weight="700"') +
+        K.txt(X + 4, 124, "경로 위 residual:", 12, C.muted, ' text-anchor="start"') +
+        K.txt(X + 114, 148, it.res.join(", "), 15, C.blue, ' font-weight="700"'));
+      s += K.vis(it.t + 1.4, end, K.txt(X + 114, 184, "병목 x = " + it.x, 18, "#b38600", ' font-weight="700"'));
+      s += K.vis(it.t + 2.6, end, K.txt(X + 114, 216, "flow 값 " + (it.val - it.x) + " → " + it.val, 15, C.ink, ' font-weight="700"') +
+        (it.back.length ? K.txt(X + 114, 244, "연두 구간은 원래 간선 A→E 에서 −" + it.x, 12, C.lime, ' font-weight="700"') : "") +
+        K.txt(X + 114, 270, "빨간 네모 = 방금 바뀐 flow", 11.5, C.red));
+    });
+    s += K.vis(TB, D, K.txt(X + 114, 68, "Gf 에 s→t 길 없음", 14, C.red, ' font-weight="700"') +
+      K.txt(X + 4, 96, "s 에서 BFS 로 닿는 정점:", 12, C.ink, ' text-anchor="start"') +
+      K.txt(X + 114, 120, "s → C → F → B", 15, C.sNode, ' font-weight="700"') +
+      K.txt(X + 4, 146, "(s→C 1 남음, C→F 5 남음, F→B 2 남음)", 11, C.muted, ' text-anchor="start"'));
+    s += K.vis(21.2, D, K.txt(X + 114, 184, "cut: s→A 4 + B→E 3 + F→t 4", 13, C.or, ' font-weight="700"') +
+      K.txt(X + 114, 214, "= 11 = flow 값", 18, C.red, ' font-weight="700"') +
+      K.txt(X + 114, 244, "세 간선 모두 꽉 참 (주황 네모)", 12, C.or, ' font-weight="700"') +
+      K.txt(X + 114, 270, "\"Max flow and min cut are both 11.\"", 11.5, C.muted));
+    s += K.txt(380, 380, "Gf 에 길이 있으면 병목만큼 더 보내고, 없으면 멈춘다. 멈춘 자리에서 s 가 닿는 곳이 min cut 의 S 다", 12.5, C.pur, ' font-weight="700"');
+    return s + '</svg>';
+  }
+};
+
 // ===== anims/fib_tree_repeat.js =====
 // ============================================================
 // fib_tree_repeat — L12 p.24 "Consider Fib(8)" 재귀 트리 → p.36–37 memo-ization visualization (사슬로 접힘)
@@ -14881,6 +15573,171 @@ ANIMS["fib_tree_repeat"] = {
     s += txt(380, 356, "overlapping subproblems + 표(F[])에 적어 두기 = dynamic programming", 12.5, C.muted, ' font-weight="700"');
     s += '</svg>';
     return s;
+  }
+};
+
+// ===== anims/flow_across_any_cut.js =====
+// ============================================================
+// flow_across_any_cut — L17 p.17 Lemma 1 (proof by picture) 를 숫자로: 어떤 cut 에서 재도
+//   (S→T 로 넘어간 flow) − (T→S 로 되돌아온 flow) = flow 의 값, 그리고 그 값 ≤ cut 의 cost.
+//   p.11 flow (값 4). 검산 src/sims/_check_L17_anims.py:
+//     S={s,A}      넘어감 A→D 2 + A→B 1 + A→E 1 = 4, 되돌아옴 0   → 4, cost 19
+//     S={s,B,C}    넘어감 s→A 4 + B→E 1 = 5, 되돌아옴 A→B 1      → 4, cost 17
+//     S={s,B,C,F}  넘어감 s→A 4 + B→E 1 = 5, 되돌아옴 A→B 1      → 4, cost 11
+// ============================================================
+window.ANIMS = window.ANIMS || {};
+ANIMS["flow_across_any_cut"] = {
+  title: "Lemma 1 — 어떤 cut 에서 재도 flow 값은 같고, cut 의 cost 를 못 넘는다 (18초)",
+  desc: "L17 p.17. s 에서 나온 물건은 t 에 가려면 점선을 넘어야 한다. 점선을 S→T 로 넘은 양에서 T→S 로 되돌아온 양을 빼면 언제나 flow 의 값(4)이다. " +
+    "그런데 S→T 로 넘는 양은 그 간선들의 capacity 합(= cut 의 cost)을 넘을 수 없다. 그래서 '''모든 flow ≤ 모든 cut''', 즉 max flow ≤ min cut. → [[max-flow min-cut theorem]]",
+  duration: 18,
+  build: function () {
+    var D = 18, K = FLOWKIT(D, "fac"), C = K.C;
+    var P = K.grid(48, 92, 140, 100, FLOWKIT.BIG);
+    var f = { "s-A": 4, "A-D": 2, "A-B": 1, "A-E": 1, "B-E": 1, "D-t": 2, "E-t": 2 };
+    var cuts = [
+      { S: "sA", t0: 0.8, t1: 5.6, fw: ["A-D", "A-B", "A-E"], bk: [], net: "2 + 1 + 1 − 0 = 4", cost: "2+6+3+2+6 = 19", le: "4 ≤ 19",
+        name: "{s, A}", path: "M 250,52 C 256,112 240,142 162,154 C 100,164 122,252 96,350" },
+      { S: "sBC", t0: 5.6, t1: 10.4, fw: ["s-A", "B-E"], bk: ["A-B"], net: "4 + 1 − 1 = 4", cost: "4 + 3 + 10 = 17", le: "4 ≤ 17",
+        name: "{s, B, C}", path: "M 92,58 C 108,128 150,146 222,152 C 276,156 270,232 262,350" },
+      { S: "sBCF", t0: 10.4, t1: 15.2, fw: ["s-A", "B-E"], bk: ["A-B"], net: "4 + 1 − 1 = 4", cost: "4 + 3 + 4 = 11", le: "4 ≤ 11",
+        name: "{s, B, C, F}", path: "M 92,58 C 108,124 140,140 210,142 C 262,144 268,180 276,205 C 286,238 310,244 360,246 C 410,250 420,283 432,350" }
+    ];
+    var s = '<svg viewBox="0 0 760 390" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lemma 1 그림 증명 애니메이션">' + K.defs();
+    s += K.captions([
+      [0, 0.8, "p.11 의 flow (값 4). 이 flow 를 그대로 두고 cut 만 바꿔 본다"],
+      [0.8, 5.6, "S = {s, A}: 점선을 S→T 로 넘는 flow 를 모두 더한다"],
+      [5.6, 10.4, "S = {s, B, C}: A→B 의 1 은 T→S 로 되돌아온 것 → 뺀다"],
+      [10.4, 15.2, "S = {s, B, C, F} (min cut): 역시 5 − 1 = 4"],
+      [15.2, D, "어디를 잘라도 순수하게 넘는 양 = 4 ≤ 그 cut 의 cost"]
+    ]);
+    cuts.forEach(function (c) {
+      var g = "";
+      c.S.split("").forEach(function (k) { g += '<circle cx="' + P[k][0] + '" cy="' + P[k][1] + '" r="31" fill="' + C.limeL + '" stroke="' + C.lime + '" stroke-width="1.2" stroke-dasharray="3 3"/>'; });
+      s += K.vis(c.t0, c.t1, g);
+      c.fw.forEach(function (k, i) {
+        var uv = k.split("-"), t = c.t0 + 0.6 + i * 0.6;
+        s += K.vis(c.t0, c.t1, K.blinkG(t, t + 0.5, true, K.halo(P, uv[0], uv[1], C.or, 13), 2));
+      });
+      c.bk.forEach(function (k, i) {
+        var uv = k.split("-"), t = c.t0 + 0.6 + c.fw.length * 0.6 + i * 0.6;
+        s += K.vis(c.t0, c.t1, K.blinkG(t, t + 0.5, true, K.halo(P, uv[0], uv[1], C.blue, 13), 2));
+      });
+    });
+    FLOWKIT.E14.forEach(function (e) {
+      var u = e[0], v = e[1], key = u + "-" + v;
+      s += K.edge(P, u, v, { color: "blue", w: 2.2 });
+      var lp = K.at(P, u, v, e[3], e[4]);
+      s += K.txt(lp[0], lp[1] + 5, e[2], 13, C.blue, ' font-weight="700"');
+      if (f[key]) {
+        var bp = K.at(P, u, v, e[3] > 0.6 ? 0.42 : 0.66, 0);
+        s += K.fbox(bp[0], bp[1], f[key]);
+        s += K.dots(P, u, v, 0, D, f[key], C.or, 0, 1.6);
+      }
+    });
+    Object.keys(P).forEach(function (k) {
+      var base = k === "s" ? "src" : k === "t" ? "sink" : "t";
+      var pairs = [[0, base]];
+      cuts.forEach(function (c) { pairs.push([c.t0, c.S.indexOf(k) >= 0 ? (k === "s" ? "srcS" : "s") : base]); });
+      pairs.push([15.2, base]);
+      s += K.nodeSt(P, k, k, pairs, 17);
+    });
+    cuts.forEach(function (c) {
+      s += K.vis(c.t0 + 0.2, c.t1, '<path d="' + c.path + '" fill="none" stroke="' + C.red + '" stroke-width="2.5" stroke-dasharray="8 6"/>');
+    });
+    // 오른쪽 판
+    var X = 522;
+    s += '<rect x="' + (X - 8) + '" y="44" width="244" height="300" rx="10" fill="#fafbfd" stroke="#c9d2e3"/>';
+    cuts.forEach(function (c) {
+      var tn = c.t0 + 0.6 + (c.fw.length + c.bk.length) * 0.6;
+      s += K.vis(c.t0, c.t1, K.txt(X + 114, 68, "S = " + c.name, 13, C.sNode, ' font-weight="700"') +
+        K.txt(X + 4, 96, "넘어감(주황) − 되돌아옴(파랑)", 12, C.ink, ' text-anchor="start"'));
+      s += K.vis(tn, c.t1, K.txt(X + 114, 122, c.net, 16, C.or, ' font-weight="700"'));
+      s += K.vis(tn + 0.6, c.t1, K.txt(X + 4, 156, "cut 의 cost (S→T capacity 합)", 12, C.ink, ' text-anchor="start"') +
+        K.txt(X + 114, 180, c.cost, 15, C.blue, ' font-weight="700"'));
+      s += K.vis(tn + 1.2, c.t1, K.txt(X + 114, 214, c.le, 20, C.red, ' font-weight="700"'));
+    });
+    s += K.vis(15.2, D, K.txt(X + 114, 72, "세 cut 모두", 13, C.ink, ' font-weight="700"') +
+      K.txt(X + 114, 100, "flow 값 4 ≤ 19, 17, 11", 15, C.red, ' font-weight="700"') +
+      K.txt(X + 4, 140, "물건은 언젠가 S→T 로 넘어야 하고,", 12, C.ink, ' text-anchor="start"') +
+      K.txt(X + 4, 160, "넘는 파이프 굵기 합이 cost 다", 12, C.ink, ' text-anchor="start"') +
+      K.txt(X + 114, 200, "아무 flow ≤ 아무 cut", 15, C.pur, ' font-weight="700"') +
+      K.txt(X + 114, 228, "⇒ max flow ≤ min cut", 15, C.pur, ' font-weight="700"') +
+      K.txt(X + 114, 256, "(Lemma 1, p.17)", 12, C.muted));
+    s += K.txt(380, 378, "flow 값 = (S→T 로 넘은 flow) − (T→S 로 되돌아온 flow). 넘은 flow 는 capacity 합을 못 넘는다", 12.5, C.pur, ' font-weight="700"');
+    return s + '</svg>';
+  }
+};
+
+// ===== anims/flow_fill_conservation.js =====
+// ============================================================
+// flow_fill_conservation — L17 p.11–14: capacity 위에 flow 가 채워지고, 정점마다 들어온 만큼 나간다
+//   그래프 p.4 (정점 이름 A–F 는 위키가 붙임). p.11 flow (값 4): sA4 AD2 AB1 AE1 BE1 Dt2 Et2.
+//   p.14 max flow (값 11): sA4 sB2 sC5 AD3 AE1 BE3 FB1 CF5 Dt3 Et4 Ft4. 검산 src/sims/_check_L17_anims.py
+// 시간축(초): 0–2 capacity 만 → 2–5 p.11 flow 가 흐름 → 5–8 정점 A 보존 → 8–10.5 정점 E 보존
+//   → 10.5–12.5 값 = s 에서 나감 = t 로 들어감 = 4 → 12.5–17 p.14 max flow, 값 11
+// ============================================================
+window.ANIMS = window.ANIMS || {};
+ANIMS["flow_fill_conservation"] = {
+  title: "flow — 파이프에 물을 흘리고, 정점마다 들어온 만큼 나간다 (17초)",
+  desc: "L17 p.11–14. 간선 옆 파란 숫자는 capacity(파이프 굵기), 네모 안 숫자는 flow(지금 흘리는 양)다. " +
+    "s, t 가 아닌 정점은 들어온 양과 나간 양이 같아야 한다. 그래서 s 에서 나간 양과 t 로 들어간 양이 같고, 그게 flow 의 값이다. → [[flow]]",
+  duration: 17,
+  build: function () {
+    var D = 17, K = FLOWKIT(D, "ffc"), C = K.C;
+    var P = K.grid(48, 88, 140, 100, FLOWKIT.BIG);
+    var f11 = { "s-A": 4, "A-D": 2, "A-B": 1, "A-E": 1, "B-E": 1, "D-t": 2, "E-t": 2 };
+    var f14 = { "s-A": 4, "s-B": 2, "s-C": 5, "A-D": 3, "A-E": 1, "B-E": 3, "F-B": 1, "C-F": 5, "D-t": 3, "E-t": 4, "F-t": 4 };
+    var T1 = 2, T2 = 12.5;
+    var s = '<svg viewBox="0 0 760 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="flow 와 보존 법칙 애니메이션">' + K.defs();
+    s += K.captions([
+      [0, T1, "간선 = 파이프, 파란 숫자 = capacity (최대로 흘릴 수 있는 양)"],
+      [T1, 5, "네모 = flow: 이 간선으로 지금 보내는 양 (capacity 이하)"],
+      [5, 8, "정점 A: 들어온 4 = 나간 2 + 1 + 1"],
+      [8, 10.5, "정점 E: 들어온 1 + 1 = 나간 2"],
+      [10.5, T2, "flow 의 값 = s 에서 나간 양 = t 로 들어간 양 = 4"],
+      [T2, D, "p.14 의 flow: 값 11. 이게 max flow 다"]
+    ]);
+    // 강조 띠 (보존 확인)
+    s += K.vis(5, 8, K.halo(P, "s", "A", C.green, 12) + K.halo(P, "A", "D", C.or, 12) + K.halo(P, "A", "B", C.or, 12) + K.halo(P, "A", "E", C.or, 12));
+    s += K.vis(8, 10.5, K.halo(P, "A", "E", C.green, 12) + K.halo(P, "B", "E", C.green, 12) + K.halo(P, "E", "t", C.or, 12));
+    s += K.vis(10.5, T2, K.halo(P, "s", "A", C.or, 12) + K.halo(P, "D", "t", C.green, 12) + K.halo(P, "E", "t", C.green, 12));
+    // 간선 + capacity + flow
+    FLOWKIT.E14.forEach(function (e) {
+      var u = e[0], v = e[1], key = u + "-" + v;
+      s += K.edge(P, u, v, { color: "blue", w: 2.5 });
+      var lp = K.at(P, u, v, e[3], e[4]);
+      s += K.txt(lp[0], lp[1] + 5, e[2], 14, C.blue, ' font-weight="700"');
+      var bp = K.at(P, u, v, e[3] > 0.6 ? 0.42 : 0.66, 0);
+      var a = f11[key], b = f14[key];
+      s += K.fboxSeq(bp[0], bp[1], [[0, null], [T1, a ? a : null], [T2, b ? b : null, b && b === e[2] ? C.or : C.blue]]);
+      if (a) s += K.dots(P, u, v, T1, T2, a, C.or);
+      if (b) s += K.dots(P, u, v, T2 + 0.3, D, b, C.or);
+    });
+    // 정점
+    Object.keys(P).forEach(function (k) {
+      s += K.nodeSt(P, k, k, [[0, k === "s" ? "src" : k === "t" ? "sink" : "t"]], 17);
+    });
+    // 오른쪽 계산판
+    var X = 560;
+    s += '<rect x="' + (X - 8) + '" y="52" width="204" height="270" rx="10" fill="#fafbfd" stroke="#c9d2e3"/>';
+    s += K.txt(X + 97, 76, "규칙 두 개 (p.11)", 14, C.pur, ' font-weight="700"');
+    s += K.txt(X + 4, 100, "① flow ≤ capacity", 13, C.ink, ' text-anchor="start"');
+    s += K.txt(X + 4, 122, "② 들어온 양 = 나간 양", 13, C.ink, ' text-anchor="start"');
+    s += K.txt(X + 22, 140, "(s, t 는 빼고)", 11.5, C.muted, ' text-anchor="start"');
+    s += K.vis(5, 8, K.txt(X + 4, 178, "A 로 들어옴: 4", 13.5, C.green, ' text-anchor="start" font-weight="700"') +
+      K.txt(X + 4, 202, "A 에서 나감: 2 + 1 + 1 = 4", 13.5, C.or, ' text-anchor="start" font-weight="700"') + K.txt(X + 97, 232, "같다 ✓", 15, C.green, ' font-weight="700"'));
+    s += K.vis(8, 10.5, K.txt(X + 4, 178, "E 로 들어옴: 1 + 1 = 2", 13.5, C.green, ' text-anchor="start" font-weight="700"') +
+      K.txt(X + 4, 202, "E 에서 나감: 2", 13.5, C.or, ' text-anchor="start" font-weight="700"') + K.txt(X + 97, 232, "같다 ✓", 15, C.green, ' font-weight="700"'));
+    s += K.vis(10.5, T2, K.txt(X + 4, 178, "s 에서 나감: 4", 13.5, C.or, ' text-anchor="start" font-weight="700"') +
+      K.txt(X + 4, 202, "t 로 들어옴: 2 + 2 = 4", 13.5, C.green, ' text-anchor="start" font-weight="700"') +
+      K.txt(X + 97, 236, "flow 의 값 = 4", 15, C.ink, ' font-weight="700"') + K.txt(X + 97, 258, "\"pretty wasteful\" (p.13)", 11.5, C.muted));
+    s += K.vis(T2, D, K.txt(X + 4, 178, "s 에서 나감: 4 + 2 + 5 = 11", 13.5, C.or, ' text-anchor="start" font-weight="700"') +
+      K.txt(X + 4, 202, "t 로 들어옴: 3 + 4 + 4 = 11", 13.5, C.green, ' text-anchor="start" font-weight="700"') +
+      K.txt(X + 97, 236, "max flow = 11", 15, C.ink, ' font-weight="700"') + K.txt(X + 97, 258, "주황 네모 = 꽉 찬 간선", 11.5, C.or, ' font-weight="700"') +
+      K.txt(X + 97, 300, "min cut 도 11. 우연일까?", 12.5, C.red, ' font-weight="700"'));
+    s += K.txt(380, 368, "중간 정점에서 물이 생기거나 사라지지 않으니, s 에서 나간 만큼 t 로 들어간다", 13, C.pur, ' font-weight="700"');
+    return s + '</svg>';
   }
 };
 
@@ -15549,6 +16406,69 @@ ANIMS["huffman_merge"] = {
   }
 };
 
+// ===== anims/inequality_squeeze.js =====
+// ============================================================
+// inequality_squeeze — L17 p.39–40 마지막 줄: value(f) = cost(이 cut) ≥ min cut ≥ max flow ≥ value(f) 가 접혀서 전부 등호
+//   수직선 위에서: min cut 은 5 이하(모든 cut 중 최소), max flow 는 5 이상(모든 flow 중 최대),
+//   Lemma 1 (max flow ≤ min cut) 때문에 둘 다 5 로 몰린다. 숫자는 p.39 예제(값 5, cut 5).
+// ============================================================
+window.ANIMS = window.ANIMS || {};
+ANIMS["inequality_squeeze"] = {
+  title: "부등식 사슬이 접힌다 — 5 = cost ≥ min cut ≥ max flow ≥ 5 (14초)",
+  desc: "L17 p.39–40. 값이 같은 flow 와 cut 을 하나 찾으면 끝나는 이유. min cut 은 그 cut 보다 클 수 없고(≤ 5), max flow 는 그 flow 보다 작을 수 없다(≥ 5). " +
+    "그런데 Lemma 1 은 max flow ≤ min cut 이라고 한다. 셋을 같이 만족하는 자리는 5 하나뿐이다. → [[max-flow min-cut theorem]]",
+  duration: 14,
+  build: function () {
+    var D = 14, K = FLOWKIT(D, "iqs"), C = K.C;
+    var X0 = 90, U = 60, Y = 230;
+    function xv(v) { return X0 + v * U; }
+    var s = '<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="부등식 사슬이 등호로 접히는 애니메이션">' + K.defs();
+    s += K.captions([
+      [0, 2.2, "p.39: Gf 로 찾은 flow 의 값 = 5, 그 Gf 로 그은 cut 의 cost = 5"],
+      [2.2, 4.6, "min cut 은 모든 cut 중 가장 싼 것 → 이 cut(5) 보다 비쌀 수 없다: min cut ≤ 5"],
+      [4.6, 7, "max flow 는 모든 flow 중 가장 큰 것 → 이 flow(5) 보다 작을 수 없다: max flow ≥ 5"],
+      [7, 10, "Lemma 1: max flow ≤ min cut. 그런데 max flow ≥ 5 ≥ min cut 이니 둘 다 5 일 수밖에 없다"],
+      [10, D, "사슬의 양 끝이 같은 값(5)이라 가운데도 전부 같다. f 는 max flow, 이 cut 은 min cut"]
+    ]);
+    // 사슬
+    var items = [["value(f)", 110], ["cost(이 cut)", 245], ["min cut", 390], ["max flow", 520], ["value(f)", 650]];
+    items.forEach(function (it) { s += K.pill(it[1], 76, it[0], "#fff", "#b9c4d8", 14); });
+    var rel = [[177, "="], [318, "≥"], [455, "≥"], [585, "≥"]];
+    var why = ["Gf 로 고른 cut", "min 의 정의", "Lemma 1", "max 의 정의"];
+    rel.forEach(function (r, i) {
+      s += K.seq(r[0], 82, [[0, r[1], i === 0 ? C.green : C.ink], [10.2, "=", C.red]], 20, C.ink, ' font-weight="700"');
+      s += K.vis(i === 0 ? 0.5 : i === 1 ? 2.4 : i === 2 ? 7.2 : 4.8, D, K.txt(r[0], 104, why[i], 10.5, C.muted));
+    });
+    s += K.vis(10.6, D, K.txt(380, 132, "모두 5", 16, C.red, ' font-weight="700"'));
+    // 수직선
+    s += '<line x1="' + xv(0) + '" y1="' + Y + '" x2="' + xv(10) + '" y2="' + Y + '" stroke="#555" stroke-width="2"' + K.mk("ink") + '/>';
+    for (var v = 0; v <= 9; v++) {
+      s += '<line x1="' + xv(v) + '" y1="' + (Y - 5) + '" x2="' + xv(v) + '" y2="' + (Y + 5) + '" stroke="#555" stroke-width="1.5"/>' + K.txt(xv(v), Y + 22, v, 12, C.muted);
+    }
+    // 영역
+    s += K.vis(2.4, D, '<rect x="' + xv(0) + '" y="' + (Y - 46) + '" width="' + (5 * U) + '" height="20" rx="4" fill="#efe9f6" stroke="#8a74b0"/>' +
+      K.txt(xv(2.5), Y - 32, "min cut 은 여기 어딘가 (≤ 5)", 12, C.pur, ' font-weight="700"'));
+    s += K.vis(4.8, D, '<rect x="' + xv(5) + '" y="' + (Y + 34) + '" width="' + (4.6 * U) + '" height="20" rx="4" fill="' + C.blueL + '" stroke="' + C.blue + '"/>' +
+      K.txt(xv(7.3), Y + 48, "max flow 는 여기 어딘가 (≥ 5)", 12, C.blue, ' font-weight="700"'));
+    // 고정 표시: 5
+    s += '<line x1="' + xv(5) + '" y1="' + (Y - 70) + '" x2="' + xv(5) + '" y2="' + (Y + 70) + '" stroke="' + C.green + '" stroke-width="2" stroke-dasharray="4 3"/>';
+    s += K.txt(xv(5), Y - 76, "value(f) = cost(이 cut) = 5", 13, C.green, ' font-weight="700"');
+    // 움직이는 표시
+    var mc = '<g opacity="0"><g><polygon points="' + xv(3) + ',' + (Y - 8) + ' ' + (xv(3) - 7) + ',' + (Y - 22) + ' ' + (xv(3) + 7) + ',' + (Y - 22) + '" fill="' + C.pur + '"/>' +
+      K.txt(xv(3), Y - 56, "min cut ?", 12.5, C.pur, ' font-weight="700"') +
+      '<animateTransform attributeName="transform" type="translate" from="0 0" to="' + (2 * U) + ' 0" begin="7.6s" dur="2s" fill="freeze"/></g>' + K.show(3.2, D) + '</g>';
+    var mf = '<g opacity="0"><g><polygon points="' + xv(7.5) + ',' + (Y + 8) + ' ' + (xv(7.5) - 7) + ',' + (Y + 22) + ' ' + (xv(7.5) + 7) + ',' + (Y + 22) + '" fill="' + C.blue + '"/>' +
+      K.txt(xv(7.5), Y + 74, "max flow ?", 12.5, C.blue, ' font-weight="700"') +
+      '<animateTransform attributeName="transform" type="translate" from="0 0" to="' + (-2.5 * U) + ' 0" begin="7.6s" dur="2s" fill="freeze"/></g>' + K.show(5.6, D) + '</g>';
+    s += mc + mf;
+    s += K.vis(7.2, 9.6, K.txt(xv(5), Y + 100, "max flow ≤ min cut 이려면 →  ←", 13, C.red, ' font-weight="700"'));
+    s += K.vis(9.6, D, '<circle cx="' + xv(5) + '" cy="' + Y + '" r="13" fill="none" stroke="' + C.red + '" stroke-width="3"/>' +
+      K.txt(xv(5), Y + 100, "max flow = min cut = 5", 15, C.red, ' font-weight="700"'));
+    s += K.txt(380, 350, "\"But this flow value ≤ max flow value, so they must be equal!\" (p.40)", 12.5, C.muted);
+    return s + '</svg>';
+  }
+};
+
 // ===== anims/insertion_card.js =====
 // ============================================================
 // insertion_card — L1 p.10–21 삽입 정렬 예제 [4,3,1,5,2] 를 카드 놀이로
@@ -16130,6 +17050,94 @@ ANIMS["master_struggle"] = {
     s += txt(380, 352, "세 케이스 = top heavy / balanced / bottom heavy — a 와 bᵈ 를 비교해 일이 트리의 어디에 몰리는지 본다", 12.5, C.muted);
     s += '</svg>';
     return s;
+  }
+};
+
+// ===== anims/matching_as_flow.js =====
+// ============================================================
+// matching_as_flow — L17 p.66–70: bipartite matching 을 max flow 로. s, t 를 붙이고 capacity 는 모두 1
+//   학생 1–5, 동아리 가–마 (p.68 그림의 간선 그대로: 1→가·나, 2→가, 3→가·라, 4→다·라·마, 5→나)
+//   augmenting path (검산 src/sims/_check_L17_anims.py):
+//     s→1→가→t,  s→2→가⇢1→나→t (학생 1 이 가→나 로 옮김),  s→3→라→t,  s→4→다→t
+//   학생 5: s→5→나⇢1→가⇢2 에서 막힘 → 끝. matching 크기 4 = flow 값 4 (p.70 의 답과 크기 같음)
+// ============================================================
+window.ANIMS = window.ANIMS || {};
+ANIMS["matching_as_flow"] = {
+  title: "bipartite matching = capacity 1 짜리 max flow (18초)",
+  desc: "L17 p.66–70. 학생→동아리 그래프 앞뒤에 s, t 를 붙이고 모든 capacity 를 1 로 둔 뒤 Ford-Fulkerson 을 돌린다. 주황 간선이 flow 1 이다. " +
+    "두 번째 경로는 연두(backward) 간선을 타서 학생 1 을 '가' 에서 '나' 로 옮기고 학생 2 에게 '가' 를 준다. → [[maximum bipartite matching]]",
+  duration: 18,
+  build: function () {
+    var D = 18, K = FLOWKIT(D, "maf"), C = K.C;
+    var P = { s: [50, 206], t: [598, 206] };
+    var X = ["1", "2", "3", "4", "5"], Y = ["가", "나", "다", "라", "마"];
+    X.forEach(function (k, i) { P[k] = [205, 86 + i * 60]; });
+    Y.forEach(function (k, i) { P[k] = [440, 86 + i * 60]; });
+    var M = { "1": ["가", "나"], "2": ["가"], "3": ["가", "라"], "4": ["다", "라", "마"], "5": ["나"] };
+    var on = {   // flow 1 인 구간
+      "s-1": [[3, D]], "1-가": [[3, 6.6]], "가-t": [[3, D]],
+      "s-2": [[6.6, D]], "2-가": [[6.6, D]], "1-나": [[6.6, D]], "나-t": [[6.6, D]],
+      "s-3": [[9.4, D]], "3-라": [[9.4, D]], "라-t": [[9.4, D]],
+      "s-4": [[12, D]], "4-다": [[12, D]], "다-t": [[12, D]]
+    };
+    var paths = [
+      { t: 1.6, end: 4, segs: [["s", "1"], ["1", "가"], ["가", "t"]] },
+      { t: 4, end: 7.8, segs: [["s", "2"], ["2", "가"], ["가", "1", "back"], ["1", "나"], ["나", "t"]] },
+      { t: 7.8, end: 10.4, segs: [["s", "3"], ["3", "라"], ["라", "t"]] },
+      { t: 10.4, end: 13, segs: [["s", "4"], ["4", "다"], ["다", "t"]] }
+    ];
+    var s = '<svg viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="bipartite matching 을 max flow 로 푸는 애니메이션">' + K.defs();
+    s += K.captions([
+      [0, 1.6, "학생 → 원하는 동아리. 앞에 s, 뒤에 t 를 붙이고 capacity 를 모두 1 로"],
+      [1.6, 4, "경로 s→1→가→t: 학생 1 을 동아리 가 에"],
+      [4, 7.8, "경로 s→2→가 ⇢ 1→나→t: 연두를 타서 학생 1 을 나 로 옮기고, 2 가 가 를 받는다"],
+      [7.8, 10.4, "경로 s→3→라→t"],
+      [10.4, 13, "경로 s→4→다→t"],
+      [13, 15.6, "학생 5: s→5→나 ⇢ 1→가 ⇢ 2 … 2 는 가 말고 원하는 곳이 없다. 막힘"],
+      [15.6, D, "Gf 에 s→t 길 없음 → max flow 4 = maximum matching 4"]
+    ]);
+    s += K.txt(205, 52, "학생", 13, C.pur, ' font-weight="700"') + K.txt(440, 52, "동아리", 13, C.pur, ' font-weight="700"');
+    // 경로 강조
+    paths.forEach(function (p) {
+      p.segs.forEach(function (g, i) {
+        var tt = p.t + 0.12 * i;
+        if (g[2]) s += K.vis(tt, p.end, K.halo(P, g[0], g[1], "#f3c623", 14, 7) + K.edge(P, g[0], g[1], { color: "lime", w: 3, off: 7, dash: "6 4" }));
+        else s += K.vis(tt, p.end, K.halo(P, g[0], g[1], "#f3c623", 14));
+      });
+    });
+    // 실패한 시도 (학생 5)
+    s += K.vis(13, 15.6, K.halo(P, "s", "5", "#c9ced8", 14) + K.halo(P, "5", "나", "#c9ced8", 14) +
+      K.edge(P, "나", "1", { color: "lime", w: 3, off: 7, dash: "6 4" }) + K.halo(P, "1", "가", "#c9ced8", 14) +
+      K.edge(P, "가", "2", { color: "lime", w: 3, off: 7, dash: "6 4" }) +
+      '<circle cx="' + P["2"][0] + '" cy="' + P["2"][1] + '" r="22" fill="none" stroke="' + C.red + '" stroke-width="3"/>' +
+      K.txt(P["2"][0] - 44, P["2"][1] + 5, "막힘", 13, C.red, ' font-weight="700"'));
+    // 간선
+    var all = [];
+    X.forEach(function (x) { all.push(["s", x]); M[x].forEach(function (y) { all.push([x, y]); }); });
+    Y.forEach(function (y) { all.push([y, "t"]); });
+    all.forEach(function (e) {
+      s += K.edge(P, e[0], e[1], { color: "blue", w: 1.8, r: 16 });
+      (on[e[0] + "-" + e[1]] || []).forEach(function (w) {
+        s += K.vis(w[0], w[1], K.edge(P, e[0], e[1], { color: "or", w: 4.5, r: 16 }));
+      });
+    });
+    s += K.txt(110, 360, "모든 capacity = 1", 12.5, C.blue, ' font-weight="700"');
+    // 정점
+    Object.keys(P).forEach(function (k) {
+      var st = k === "s" ? "src" : k === "t" ? "sink" : "t";
+      s += K.nodeSt(P, k, k, [[0, st]], 15);
+    });
+    // 오른쪽: 지금 matching
+    var X0 = 640;
+    s += '<rect x="' + (X0 - 6) + '" y="64" width="122" height="250" rx="10" fill="#fafbfd" stroke="#c9d2e3"/>';
+    s += K.txt(X0 + 55, 88, "지금 matching", 13, C.pur, ' font-weight="700"');
+    var rows = [[3, 6.6, "학생 1 – 가", 0], [6.6, D, "학생 1 – 나", 0], [6.6, D, "학생 2 – 가", 1], [9.4, D, "학생 3 – 라", 2], [12, D, "학생 4 – 다", 3]];
+    rows.forEach(function (r) { s += K.vis(r[0], r[1], K.txt(X0 + 55, 120 + r[3] * 28, r[2], 13.5, C.or, ' font-weight="700"')); });
+    s += K.vis(6.6, 8.6, K.txt(X0 + 55, 120 - 14, "옮김!", 11, C.lime, ' font-weight="700"'));
+    s += K.seq(X0 + 55, 270, [[0, "크기 0"], [3, "크기 1"], [6.6, "크기 2"], [9.4, "크기 3"], [12, "크기 4"]], 15, C.ink, ' font-weight="700"');
+    s += K.vis(15.6, D, K.txt(X0 + 55, 296, "= flow 값 4", 13, C.red, ' font-weight="700"'));
+    s += K.txt(380, 392, "capacity 가 1 이라 flow 는 0 아니면 1, 학생·동아리마다 들어온 만큼만 나가니 한 명당 한 곳 (p.70)", 12.5, C.pur, ' font-weight="700"');
+    return s + '</svg>';
   }
 };
 
@@ -17513,6 +18521,72 @@ ANIMS["recursion_tree_levels"] = {
   }
 };
 
+// ===== anims/residual_build.js =====
+// ============================================================
+// residual_build — L17 p.21–22: flow f 가 있는 G 에서 residual graph Gf 를 간선 하나씩 만든다
+//   G: s→a 4 (f3), s→b 8 (f1), a→b 6 (f1), a→t 2 (f2), b→t 3 (f2), flow 값 4.
+//   Gf: forward(파랑) = c − f, backward(연두) = f. a→t 는 꽉 차서 forward 없음.
+//   결과 s→a 1, a→s 3, s→b 7, b→s 1, a→b 5, b→a 1, t→a 2, b→t 1, t→b 2 (검산 src/sims/_check_L17_anims.py)
+// ============================================================
+window.ANIMS = window.ANIMS || {};
+ANIMS["residual_build"] = {
+  title: "residual graph Gf 만들기 — 간선마다 파랑 c−f, 연두 f (15초)",
+  desc: "L17 p.21–22. 왼쪽 G 의 간선을 하나씩 집어서 오른쪽 Gf 에 두 화살표로 옮긴다. 같은 방향 파랑 = 아직 더 보낼 수 있는 양(c − f), " +
+    "반대 방향 연두 = 이미 보내서 되돌릴 수 있는 양(f). 0 이 되는 화살표는 그리지 않는다. → [[residual graph]]",
+  duration: 15,
+  build: function () {
+    var D = 15, K = FLOWKIT(D, "rb"), C = K.C;
+    var L = { s: [50, 172], a: [172, 78], b: [172, 266], t: [294, 172] };
+    var R = { s: [448, 172], a: [570, 78], b: [570, 266], t: [692, 172] };
+    var E = [["s", "a", 4, 3, -13], ["s", "b", 8, 1, 13], ["a", "b", 6, 1, 12], ["a", "t", 2, 2, -13], ["b", "t", 3, 2, 13]];
+    var T0 = 1.5, ST = 2.2, TE = T0 + ST * E.length;
+    var s = '<svg viewBox="0 0 760 392" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="residual graph 만들기 애니메이션">' + K.defs();
+    var caps = [[0, T0, "왼쪽: flow f 가 있는 G (값 4). 오른쪽에 Gf 를 그린다"]];
+    E.forEach(function (e, i) {
+      caps.push([T0 + ST * i, T0 + ST * (i + 1), e[0] + "→" + e[1] + ": capacity " + e[2] + ", flow " + e[3] + (e[2] === e[3] ? " → 꽉 찼다" : "")]);
+    });
+    caps.push([TE, D, "파랑 = 더 보낼 수 있는 양, 연두 = 되돌릴 수 있는 양"]);
+    s += K.captions(caps);
+    s += K.txt(172, 330, "G 와 flow f", 13, C.pur, ' font-weight="700"') + K.txt(570, 330, "residual graph Gf", 13, C.pur, ' font-weight="700"');
+    s += '<line x1="370" y1="50" x2="370" y2="318" stroke="#d5dbe6" stroke-width="1.5" stroke-dasharray="4 4"/>';
+    // G
+    E.forEach(function (e, i) {
+      var t = T0 + ST * i;
+      s += K.vis(t, t + ST, K.halo(L, e[0], e[1], C.or, 14));
+      s += K.edge(L, e[0], e[1], { color: "blue", w: 2.5 });
+      var lp = K.at(L, e[0], e[1], 0.42, e[4]);
+      s += K.txt(lp[0], lp[1] + 5, e[2], 15, C.blue, ' font-weight="700"');
+      var bp = K.at(L, e[0], e[1], 0.62, 0);
+      s += K.fbox(bp[0], bp[1], e[3], e[2] === e[3] ? C.or : C.blue);
+    });
+    // Gf: 간선마다 forward → backward
+    E.forEach(function (e, i) {
+      var t = T0 + ST * i, fw = e[2] - e[3], bw = e[3];
+      if (fw > 0) {
+        var lf = K.at(R, e[0], e[1], 0.5, 17, 5);
+        s += K.vis(t + 0.45, D, K.edge(R, e[0], e[1], { color: "blue", w: 2.5, off: 5 }) + K.txt(lf[0], lf[1] + 5, fw, 15, C.blue, ' font-weight="700"'));
+      } else {
+        var lx = K.at(R, e[0], e[1], 0.5, 0, 0);
+        s += K.vis(t + 0.45, t + ST, K.edge(R, e[0], e[1], { color: "grey", w: 2, off: 5, dash: "5 4" }) +
+          K.txt(lx[0] + 20, lx[1] - 12, "0 → 안 그림", 12, C.red, ' font-weight="700"'));
+      }
+      var lb = K.at(R, e[1], e[0], 0.5, 17, 5);
+      s += K.vis(t + 1.1, D, K.edge(R, e[1], e[0], { color: "lime", w: 2.5, off: 5 }) + K.txt(lb[0], lb[1] + 5, bw, 15, C.lime, ' font-weight="700"'));
+      // 아래 계산 줄
+      s += K.vis(t + 0.45, t + ST, K.txt(380, 358, "파랑 " + e[0] + "→" + e[1] + " = c − f = " + e[2] + " − " + e[3] + " = " + fw + (fw ? "" : " (꽉 참: 그리지 않는다)"), 13.5, C.blue, ' font-weight="700"'));
+      s += K.vis(t + 1.1, t + ST, K.txt(380, 382, "연두 " + e[1] + "→" + e[0] + " = f = " + e[3], 13.5, C.lime, ' font-weight="700"'));
+    });
+    s += K.vis(TE, D, K.txt(380, 358, "Gf 에 s→t 길이 있다: s→a→b→t (파랑 1, 5, 1) → 1 을 더 보낼 수 있다 (p.24)", 13, C.ink, ' font-weight="700"') +
+      K.txt(380, 382, "\"Forward edges are the amount that's left. Backwards edges are the amount that's been used.\"", 11.5, C.muted));
+    s += K.vis(TE, D, K.halo(R, "s", "a", C.or, 10, 5) + K.halo(R, "a", "b", C.or, 10, 5) + K.halo(R, "b", "t", C.or, 10, 5));
+    ["s", "a", "b", "t"].forEach(function (k) {
+      var st = k === "s" ? "src" : k === "t" ? "sink" : "t";
+      s += K.nodeSt(L, k, k, [[0, st]], 17) + K.nodeSt(R, k, k, [[0, st]], 17);
+    });
+    return s + '</svg>';
+  }
+};
+
 // ===== anims/rotation_yoink.js =====
 // ============================================================
 // rotation_yoink — L8 p.28–29: rotation(YOINK) = Y 를 잡아 올리면 B 가 X 쪽으로 떨어진다
@@ -17795,6 +18869,121 @@ ANIMS["scc_reverse_edges"] = {
     s += txt(380, 372, "finish 가 가장 큰 SCC = source → 뒤집으면 sink: 거기서 연 DFS 는 그 SCC 만 돈다", 12, C.muted, ' font-weight="700"');
     s += '</svg>';
     return s;
+  }
+};
+
+// ===== anims/st_cut_sweep.js =====
+// ============================================================
+// st_cut_sweep — L17 p.5–9: s-t cut 을 여러 번 그어 보고 cost 를 센다
+//   S 쪽 정점 = 짙은 초록 + 연두 배경, T 쪽 = 연한 민트 (슬라이드 색 그대로). 빨간 점선 = cut.
+//   cut 네 개 (검산 src/sims/_check_L17_anims.py, 64 개 cut 중 최소 11):
+//     {s}            s→A 4 + s→B 2 + s→C 6 = 12
+//     {s,C}          s→A 4 + s→B 2 + C→F 10 = 16, B→C 는 T→S 라 안 셈 (p.8)
+//     {s,A,…,F}      D→t 4 + E→t 4 + F→t 4 = 12
+//     {s,B,C,F}      s→A 4 + B→E 3 + F→t 4 = 11, A→B·E→F 는 T→S 라 안 셈 (p.9)
+// ============================================================
+window.ANIMS = window.ANIMS || {};
+ANIMS["st_cut_sweep"] = {
+  title: "s-t cut — 연두색으로 S 를 칠하고, S→T 간선만 더한다 (20초)",
+  desc: "L17 p.5–9. 정점을 s 편(S, 짙은 초록 + 연두 배경)과 t 편(T, 연한 민트)으로 나누는 방법마다 cost 를 센다. " +
+    "점선을 넘는 간선 중 '''S 에서 T 로 가는 것만''' capacity 를 더하고, T 에서 S 로 들어오는 간선(회색 ✗)은 세지 않는다. → [[s-t cut]]",
+  duration: 20,
+  build: function () {
+    var D = 20, K = FLOWKIT(D, "stc"), C = K.C;
+    var P = K.grid(48, 92, 140, 100, FLOWKIT.BIG);
+    var cap = {};
+    FLOWKIT.E14.forEach(function (e) { cap[e[0] + "-" + e[1]] = e[2]; });
+    var cuts = [
+      { S: "s", t0: 0.6, t1: 4.6, fw: ["s-A", "s-B", "s-C"], bk: [], name: "{s}",
+        path: "M 112,58 C 100,150 126,230 108,350" },
+      { S: "sC", t0: 4.6, t1: 9.2, fw: ["s-A", "s-B", "C-F"], bk: ["B-C"], name: "{s, C}",
+        path: "M 100,58 C 110,125 120,195 165,230 C 212,255 250,232 262,350" },
+      { S: "sABCDEF", t0: 9.2, t1: 12.8, fw: ["D-t", "E-t", "F-t"], bk: [], name: "{s, A, B, C, D, E, F}",
+        path: "M 420,58 C 398,150 432,232 410,350" },
+      { S: "sBCF", t0: 12.8, t1: 17.6, fw: ["s-A", "B-E", "F-t"], bk: ["A-B", "E-F"], name: "{s, B, C, F}",
+        path: "M 92,58 C 108,124 140,140 210,142 C 262,144 268,180 276,205 C 286,238 310,244 360,246 C 410,250 420,283 432,350" }
+    ];
+    var s = '<svg viewBox="0 0 760 390" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="s-t cut 여러 개와 cost 애니메이션">' + K.defs();
+    s += K.captions([
+      [0, 0.6, "s 와 t 를 다른 편에 두기만 하면 s-t cut 이다"],
+      [0.6, 4.6, "S = {s} 만 칠한다. 점선을 넘는 S→T 간선: 4 + 2 + 6"],
+      [4.6, 9.2, "S = {s, C}. B→C 는 점선을 넘지만 T→S 방향이라 안 센다 (p.8)"],
+      [9.2, 12.8, "S = t 빼고 전부. 이번엔 t 로 들어가는 세 간선"],
+      [12.8, 17.6, "S = {s, B, C, F}. A→B, E→F 는 거꾸로 → 안 센다. 4 + 3 + 4 (p.9)"],
+      [17.6, D, "64 가지 cut 을 다 세 보면 가장 싼 것이 11 = minimum s-t cut"]
+    ]);
+    // 연두 배경 (S 영역)
+    cuts.forEach(function (c) {
+      var g = "";
+      c.S.split("").forEach(function (k) { g += '<circle cx="' + P[k][0] + '" cy="' + P[k][1] + '" r="31" fill="' + C.limeL + '" stroke="' + C.lime + '" stroke-width="1.2" stroke-dasharray="3 3"/>'; });
+      s += K.vis(c.t0, c.t1, g);
+    });
+    s += K.vis(17.6, D, cuts[3].S.split("").map(function (k) { return '<circle cx="' + P[k][0] + '" cy="' + P[k][1] + '" r="31" fill="' + C.limeL + '" stroke="' + C.lime + '" stroke-width="1.2" stroke-dasharray="3 3"/>'; }).join(""));
+    // 강조: 센 간선(주황), 안 센 간선(회색)
+    var late = "";
+    cuts.forEach(function (c) {
+      c.fw.forEach(function (k, i) {
+        var uv = k.split("-"), t = c.t0 + 0.7 + i * 0.75;
+        s += K.vis(c.t0, c.t1, K.blinkG(t, t + 0.6, true, K.halo(P, uv[0], uv[1], C.or, 13), 2));
+      });
+      c.bk.forEach(function (k, i) {
+        var uv = k.split("-"), t = c.t0 + 0.7 + c.fw.length * 0.75 + i * 0.6;
+        var m = K.at(P, uv[0], uv[1], 0.3, 0);
+        s += K.vis(c.t0, c.t1, K.blinkG(t, t + 0.5, true, K.halo(P, uv[0], uv[1], C.grey, 13), 2));
+        late += K.vis(c.t0, c.t1, K.blinkG(t, t + 0.5, true, '<circle cx="' + m[0] + '" cy="' + m[1] + '" r="9" fill="#fff" stroke="' + C.red + '" stroke-width="1.5"/>' + K.txt(m[0], m[1] + 4.5, "✗", 13, C.red, ' font-weight="700"'), 2));
+      });
+    });
+    s += K.vis(17.6, D, K.halo(P, "s", "A", C.or, 13) + K.halo(P, "B", "E", C.or, 13) + K.halo(P, "F", "t", C.or, 13));
+    // 간선
+    FLOWKIT.E14.forEach(function (e) {
+      s += K.edge(P, e[0], e[1], { color: "blue", w: 2.5 });
+      var lp = K.at(P, e[0], e[1], e[3], e[4]);
+      s += K.txt(lp[0], lp[1] + 5, e[2], 14, C.blue, ' font-weight="700"');
+    });
+    // 정점 색: 각 cut 동안 S 면 짙은 초록
+    Object.keys(P).forEach(function (k) {
+      var base = k === "s" ? "src" : k === "t" ? "sink" : "t";
+      var pairs = [[0, base]];
+      cuts.forEach(function (c) {
+        var inS = c.S.indexOf(k) >= 0;
+        pairs.push([c.t0, inS ? (k === "s" ? "srcS" : "s") : base]);
+      });
+      s += K.nodeSt(P, k, k, pairs, 17);
+    });
+    s += late;
+    // cut 점선
+    cuts.forEach(function (c, i) {
+      s += K.vis(c.t0 + 0.2, i === 3 ? D : c.t1, '<path d="' + c.path + '" fill="none" stroke="' + C.red + '" stroke-width="2.5" stroke-dasharray="8 6"/>');
+    });
+    // 오른쪽: 지금 세는 식 + 점수판
+    var X = 522;
+    s += '<rect x="' + (X - 8) + '" y="44" width="244" height="300" rx="10" fill="#fafbfd" stroke="#c9d2e3"/>';
+    s += K.txt(X + 114, 66, "cost = S→T 간선 capacity 합", 13, C.pur, ' font-weight="700"');
+    cuts.forEach(function (c, ci) {
+      var pairs = [[0, null]], acc = [], sum = 0;
+      c.fw.forEach(function (k, i) {
+        sum += cap[k]; acc.push(cap[k]);
+        pairs.push([c.t0 + 0.7 + i * 0.75, acc.join(" + ") + (i === c.fw.length - 1 ? " = " + sum : "")]);
+      });
+      pairs.push([c.t1, null]);
+      s += K.vis(c.t0, c.t1, K.txt(X + 114, 98, "S = " + c.name, 12.5, C.sNode, ' font-weight="700"'));
+      s += K.seq(X + 114, 124, pairs, 17, C.or, ' font-weight="700"');
+      if (c.bk.length) {
+        var tb = c.t0 + 0.7 + c.fw.length * 0.75;
+        s += K.vis(tb, c.t1, K.txt(X + 114, 148, c.bk.map(function (k) { return k.replace("-", "→"); }).join(", ") + " : T→S 라 0", 12, C.muted, ' font-weight="700"'));
+      }
+      // 점수판 한 줄
+      var y = 186 + ci * 26, tEnd = c.t0 + 0.7 + c.fw.length * 0.75;
+      var best = ci === 3;
+      s += K.vis(tEnd, D, K.txt(X + 6, y, "S = " + c.name, 12, C.ink, ' text-anchor="start"') +
+        K.txt(X + 222, y, String(sum), 14, best ? C.red : C.ink, ' text-anchor="end" font-weight="700"'));
+    });
+    s += K.txt(X + 6, 170, "지금까지 센 cut", 11.5, C.muted, ' text-anchor="start"');
+    s += K.vis(17.6, D, '<rect x="' + (X - 2) + '" y="269" width="234" height="22" rx="5" fill="none" stroke="' + C.red + '" stroke-width="2"/>' +
+      K.txt(X + 114, 318, "minimum s-t cut = 11", 15, C.red, ' font-weight="700"') +
+      K.txt(X + 114, 336, "(S = {s,A,B,C,E,F} 도 11: A→D, E→t, F→t)", 10.5, C.muted));
+    s += K.txt(380, 378, "선을 넘어도 T→S 방향 간선은 세지 않는다. S 에서 T 로 나가는 파이프 굵기만 더한다", 13, C.pur, ' font-weight="700"');
+    return s + '</svg>';
   }
 };
 

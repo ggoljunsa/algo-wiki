@@ -13,6 +13,9 @@ for (u,v) in P:
 </pre>
 backward 간선에서 flow 를 '''빼는''' 것이 중요하다. 모든 간선에 x 를 더하면 경로가 거꾸로 지나는 정점에서 보존 법칙이 깨진다(p.31). 더하고 빼면 정점마다 들어옴 = 나감이 유지되고, flow 값은 정확히 x 만큼 는다(p.34 "Still a legit flow, but with a bigger value!").
 
+[[anim:augment_backward|p.30–34 의 예. Gf 의 경로 s→a⇢b→t 는 가운데를 연두로 지난다. 모든 간선에 +1 하면 a 에서 보존이 깨지고, 연두로 지난 원래 간선 b→a 에서 1 을 빼면 a·b 모두 들어옴 = 나감이 맞고 값이 2 → 3 이 된다]]
+교수(11/24)는 이 장면에서 학생들에게 물었다. "Can you increase the flow? … For the forward edge, add the flow. For the backward edge, subtract the flow."(녹음 55:57–56:13) 그리고 바뀐 flow 가 정상인지 정점마다 들어온 양과 나간 양을 짚어 확인했다(56:49–57:10).[* 위 그림 a 정점을 보면, 연두로 거꾸로 지난다는 것은 "b 에서 a 로 보내던 1 을 그만 보내고, 그 1 을 a 가 s 에서 새로 받는다" 는 뜻이다. b 쪽은 a 로 보내던 1 을 t 로 돌린다. 그래서 두 정점 모두 들어오고 나가는 양이 그대로다.]
+
 {mini}
 # 경로 s→a⇢b→t 의 residual 값이 s→a 5, a⇢b(backward) 2, b→t 4 다. x 와 원래 간선들의 변화는?
 {/mini}

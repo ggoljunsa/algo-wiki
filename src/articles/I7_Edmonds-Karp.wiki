@@ -10,6 +10,9 @@ L17 p.63. [[Ford-Fulkerson]] 에서 augmenting path 를 [[BFS]] 로, 즉 간선 
 * 간선이 사라질 때마다 BFS 를 한 번 돌리고, s 에서 닿는 부분만 보면 되니 $O(m)$ 이다.
 곱해서 $O(nm^2)$ 다. 슬라이드의 강조는 "Doesn't have anything to do with the edge weights!" 다. 경로를 아무렇게나 고르면(p.55–62) capacity C 에 비례하는 횟수가 들 수 있었다.[* Jack Edmonds 와 Richard Karp 가 1972년 논문으로 발표했다. p.42 는 "There's another way. (optional)" 이라며 다른 경로 선택법도 있다고만 언급한다.]
 
+[[anim:bad_path_zigzag|왼쪽은 운 나쁘게 s→b→a→t 와 s→a⇢b→t 를 번갈아 골라 가운데 간선이 0/1 ↔ 1/1 을 오간다. 오른쪽 BFS 는 간선 2 개짜리 경로 둘로 끝난다]]
+위 그림 왼쪽에서 가운데 간선 b→a 의 flow 가 1 이 됐다가(p.57, $G_f$ 에서 b→a 가 사라짐) 다시 0 이 되는(p.59, 다시 생김) 것을 보라. 한 번에 1 씩만 보내니 max flow 2C 를 채우려면 경로가 2C 번 필요하다.
+
 {mini}
 # p.55 의 C 예제(s→a C, s→b C, b→a 1, a→t C, b→t C)에서 BFS 가 처음 고르는 경로는? 몇 번 만에 끝나나?
 {/mini}

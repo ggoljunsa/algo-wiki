@@ -22,6 +22,9 @@ L17 p.5–8: "An s-t cut is a cut which separates s from t." 간선이 s 쪽에�
 [[img:L17-08.png|p.8 — 빨간 점선 cut 의 cost 는 4 + 2 + 10 = 16. 아래쪽 2 짜리 간선은 방향이 반대라 세지 않는다|large]]
 위 그림에서 s 쪽(짙은 색)은 s 와 C 다. s 쪽에서 t 쪽으로 나가는 주황 간선 세 개(s→A 4, s→B 2, C→F 10)만 센다. B→C 2 는 점선을 건너긴 하지만 t 쪽에서 s 쪽으로 들어오는 방향이라 빠진다. 슬라이드 표현으로는 "this edge does not cross the cut; it's going in the wrong direction." 이다. 그래서 cost 는 16 이다.
 
+[[anim:st_cut_sweep|cut 을 네 번 바꿔 그으며 cost 를 센다. 연두 배경이 s 쪽(S)이다. 주황으로 깜빡이는 S→T 간선만 더하고, 회색 ✗ 는 선을 넘어도 T→S 라 안 센다]]
+위 그림처럼 s 쪽을 어떻게 칠하느냐에 따라 cost 가 12, 16, 12, 11 로 바뀐다. 색 읽는 법과 "왜 반대 방향은 안 세나" 는 [[s-t cut]] 문서에 자세히 풀어 두었다.
+
 p.9 는 더 싼 cut 을 보여 준다. s 쪽이 {s, B, C, F} 일 때 건너는 간선은 s→A 4, B→E 3, F→t 4 이고 cost 는 '''4 + 3 + 4 = 11''' 이다. 이것이 이 그래프의 '''minimum s-t cut''' 이다. 슬라이드는 여기서 묻는다. "Question: how do we find a minimum s-t cut?"
 
 === 냉전 시대의 철도 지도 ===
@@ -41,6 +44,7 @@ p.10 은 이 문제가 실제로 어디서 나왔는지 보여 준다. 1955년, 
 p.11 은 간선에 capacity 말고 숫자를 하나 더 붙인다. '''flow''' 다. "send 2 units of stuff along this edge" 처럼, 그 간선으로 물건을 얼마나 보내는지다. 규칙은 두 개다.
 * 간선의 flow 는 capacity 를 넘을 수 없다.
 * s, t 가 아닌 정점마다 들어오는 flow 합 = 나가는 flow 합. 슬라이드 예로는 "4 units in, 1+1+2 = 4 units out." 이다.
+[[anim:flow_fill_conservation|파이프(간선)에 flow 를 흘린다. 정점 A 와 E 에서 들어온 양과 나간 양이 같은지 오른쪽 판으로 확인하고, 마지막에 p.14 의 max flow 11 로 바뀌는 것을 보라]]
 p.12 는 flow 의 '''값'''을 정한다. s 에서 나오는 양이고, t 로 들어가는 양이기도 하다. 중간 정점마다 들어온 만큼 나가니 둘은 같다.
 
 === 가장 많이: max flow ===
@@ -68,6 +72,9 @@ p.13 의 flow 는 값이 4 다. 슬라이드도 "This example flow is pretty was
 == 쉬운 쪽: flow 는 어떤 cut 보다도 작다 ==
 p.17 의 Lemma 1 은 '''아무''' flow 와 '''아무''' s-t cut 에 대해, flow 값 ≤ cut 의 cost 라는 것이다. 그림 한 장으로 끝난다. s 에서 x 만큼 나온 물건은 t 에 가려면 언젠가 cut 을 넘어야 한다. cut 을 넘는 간선들은 capacity 합만큼만 실어 나를 수 있다. 그러니 x ≤ cut 의 cost 다. 이것이 모든 flow, 모든 cut 에 대해 성립하니 max flow ≤ min cut 이다.[* p.18: "You are not responsible for proof-by-proof on the final." 엄밀한 증명(CLRS Lemma 26.4, Corollary 26.5)은 기말에 안 나온다고 슬라이드가 못 박았다. 그림 수준의 논리만 알면 된다.]
 
+[[anim:flow_across_any_cut|값 4 인 flow 하나를 세 cut 에서 잰다. S→T 로 넘은 flow 에서 T→S 로 되돌아온 flow 를 빼면 언제나 4 이고, 4 는 cut 의 cost 를 넘지 못한다]]
+위 그림의 두 번째 cut(S = {s, B, C})에서 A→B 의 1 은 T 쪽에서 S 쪽으로 되돌아온 flow 다. 그래서 넘어간 5 에서 1 을 빼야 flow 값 4 가 나온다. 이 "넘어간 양 − 되돌아온 양" 셈은 뒤의 ⇒ 방향 증명에서 다시 쓴다.
+
 p.19 가 남은 일을 적는다. 정리는 이보다 강한 "같다" 이므로, max flow ≥ min cut 을 보여야 한다. "Next: Proof by algorithm!"
 
 == 남은 여유를 그린 그래프: residual graph ==
@@ -76,6 +83,7 @@ p.20 은 순서를 뒤집는다. 보통은 알고리즘을 먼저 말하고 증�
 $$c_f(u,v) = \begin{cases} c(u,v) - f(u,v) & (u,v) \in E \\ f(v,u) & (v,u) \in E \\ 0 & \text{otherwise} \end{cases}$$
 [[img:L17-22.png|p.22 — 왼쪽은 flow f 가 있는 G, 오른쪽은 그 residual graph Gf. 파랑은 남은 양, 초록은 쓴 양|large]]
 위 그림 왼쪽의 G 에서 s→a 는 capacity 4 중 3 을 쓰고 있다. 오른쪽 $G_f$ 에는 이 간선이 두 개로 바뀐다. 파란 s→a 1 은 아직 더 보낼 수 있는 양이다("Forward edges are the amount that's left"). 초록 a→s 3 은 이미 보낸 양이다("Backwards edges are the amount that's been used"). 이미 보낸 3 은 되돌릴 수 있다는 뜻이다. a→t 는 2 를 다 써서 파란 간선이 없고 초록 t→a 2 만 남는다.
+[[anim:residual_build|왼쪽 G 의 간선을 하나씩 집어 오른쪽 Gf 에 파랑(c − f)과 연두(f) 두 화살표로 옮긴다. a→t 처럼 꽉 찬 간선은 파랑이 없어지는 것을 보라]]
 
 === Lemma: $G_f$ 에서 t 에 못 가면 max flow ===
 p.23–26 이 핵심 Lemma 를 예로 보여 준다.
@@ -101,6 +109,7 @@ $G_f$ 에 s 에서 t 로 가는 경로가 있다고 하자. 이 경로를 [[augm
 [[img:L17-32.png|p.32 — 경로가 가운데 간선을 거꾸로 지난다. 양 끝 간선에는 flow 를 더하고, 거꾸로 지나는 간선에서는 flow 를 뺀다|large]]
 위 그림의 노란 경로는 s→(위)→(아래)→t 인데, 가운데 세로 간선은 원래 아래에서 위로 가는 간선이다. 경로가 그 간선을 거꾸로 탄다. 이때 모든 간선의 flow 를 늘리면 가운데 정점에서 보존 법칙이 깨진다(p.31). 그래서 거꾸로 탄 간선에서는 flow 를 '''뺀다'''(p.32 "We will remove flow here"). 위 정점은 s 에서 1 을 더 받고, 아래에서 오던 1 을 덜 받으니 들어오는 양이 그대로다. 아래 정점은 위로 보내던 1 을 t 로 돌려 보내니 나가는 양이 그대로다. 결과는 값 2 → 3 인 정상적인 flow 다(p.34 "Still a legit flow, but with a bigger value!").
 
+[[anim:augment_backward|p.30–34 의 예를 그대로 움직인다. 모든 간선에 +1 하면 a 에서 보존이 깨지는 장면, 그리고 연두로 지난 b→a 에서는 1 을 빼서 값 2 → 3 이 되는 장면을 차례로 보라]]
 p.35 가 이걸 함수로 적는다.
 <pre class="c">
 increaseFlow(path P in Gf, flow f):
@@ -118,7 +127,8 @@ x 는 경로 위 residual 값의 최솟값, 즉 이 경로의 병목이다. forw
 * t 쪽에서 s 쪽으로 오는 원래 간선은 flow 가 0 이다. flow 가 있었다면 초록 간선이 있어서 역시 닿았을 것이다.
 그러니 flow 값 = 이 cut 의 cost 다. 그리고 이 cut 의 cost ≥ min cut ≥ max flow(Lemma 1) ≥ 이 flow 값. 양 끝이 같으니 전부 같다. f 는 max flow 이고, 덤으로 이 cut 은 min cut 이다.
 
-이 증명은 수업 끝에 몇 줄로 지나가서 놓치기 쉽다. 슬라이드 p.39 그림 그대로 $G_f$ 를 만들고, BFS 로 S 를 칠하고, 선을 긋고, 선을 넘는 간선을 하나씩 확인하는 과정을 '''[[max-flow min-cut 증명 (cut 선 긋기)]]''' 문서에 여섯 단계로 아주 천천히 풀어 두었다. 슬라이드가 적지 않은 둘째 사실(T 쪽에서 S 쪽으로 오는 간선의 flow 는 0)도 거기서 설명한다.
+[[anim:cut_proof_reachable|p.39 의 Gf 에서 s 부터 칠한다(s → b → a). t 에 들어가는 화살표가 없어 멈추면 그 경계가 cut 이고, 오른쪽 G 에서 경계를 넘는 a→t, b→t 가 꽉 차 있다]]
+이 증명은 수업 끝에 몇 줄로 지나가서 놓치기 쉽다. 그림의 초록 세 가지(짙은 초록 = S, 연한 민트 = T, 연두 화살표 = backward)를 읽는 법부터, $G_f$ 를 만들고, BFS 로 S 를 칠하고, 선을 긋고, 선을 넘는 간선을 하나씩 확인하고, 부등식 사슬이 접히는 데까지를 '''[[max-flow min-cut 증명 (cut 선 긋기)]]''' 문서에 움직이는 그림 넷과 함께 한 걸음씩 풀어 두었다. 슬라이드가 적지 않은 둘째 사실(T 쪽에서 S 쪽으로 오는 간선의 flow 는 0)도 거기서 설명한다.
 [[sim:cut_from_residual]]
 
 {exam}
@@ -159,6 +169,7 @@ p.50–51     s→C→F→B→E⇢A→D→t                    1        11    A�
 p.53        s 에서 닿는 정점 {s,B,C,F}, t 못 감    -        11    cut s→A 4 + B→E 3 + F→t 4 = 11
 </pre>
 세 번째 경로가 재미있다. 첫 경로에서 A→E 로 4 를 보냈는데, 지금 보니 A 의 물건 일부는 A→D→t 로 돌리는 게 낫다. 그래서 B 에서 온 물건을 E 로 보내 E→t 를 채우고, 그만큼 A→E 를 줄여 A 의 물건을 D 쪽으로 돌린다. backward 간선은 "예전 결정을 되무르는 길" 이다. 슬라이드 문장으로는 "Notice that we're going back along one of the backwards edges we added." 다.
+[[anim:ff_full_run|노란 띠가 이번 augmenting path, 오른쪽이 경로 위 residual 값과 병목 x 다. 세 번째·네 번째 경로의 연두 점선(E⇢A)에서 A→E 의 flow 가 줄어드는 것을 보고, 끝에서 칠해지는 S = {s, C, F, B} 를 확인하라]]
 [[sim:ford_fulkerson_trace]]
 [[img:L17-53.png|p.53 — 끝. 아래 Gf 에서 s 가 닿는 짙은 정점 {s, B, C, F} 와 나머지를 빨간 점선이 가른다. max flow 와 min cut 이 둘 다 11|large]]
 위 그림의 주황 간선 셋(s→A, B→E, F→t)이 점선을 건너는 간선이고 모두 꽉 차 있다. 고양이의 대사가 바뀌었다. "I KNEW IT! DEFINITELY NOT A COINCIDENCE."
@@ -181,6 +192,7 @@ p.54 가 정리한다. max s-t flow = min s-t cut. 슬라이드의 농담으로�
 p.42 는 경고한다. 위 분석은 경로를 어떻게 고르든 맞다. 즉 '''끝나기만 하면''' 정답이다. 하지만 경로를 잘못 고르면 아주 오래 걸릴 수 있다.
 [[img:L17-57.png|p.57 — s→b→a→t 로 1 을 보낸 뒤. 가운데 1 짜리 간선이 꽉 차서 Gf 에서는 b→a 가 사라지고 a→b 가 생겼다|large]]
 p.55–62 의 그래프는 s→a, s→b, a→t, b→t 가 모두 아주 큰 수 C 이고, 가운데 b→a 만 1 이다. max flow 는 2C 다. s→a→t 와 s→b→t 로 C 씩 보내면 경로 두 번에 끝난다. 그런데 운 나쁘게 위 그림처럼 s→b→a→t 를 고르면 1 만 보낸다. 다음에 s→a⇢b→t(가운데를 거꾸로)를 고르면 또 1 만 보내고, b→a 가 다시 살아난다(p.59 "re-appeared"). 이걸 되풀이하면 가운데 간선을 1 씩 더했다 뺐다 하면서 경로를 2C 번 찾아야 한다. 슬라이드 표현으로는 "This will go on for C steps, adding flow along (b,a) and then subtracting it again." 이다. 수행 시간이 그래프 크기가 아니라 capacity 값 C 에 매달린다.
+[[anim:bad_path_zigzag|왼쪽은 가운데 1 짜리 간선을 오가는 경로만 골라 한 번에 1 씩 보낸다. 오른쪽 BFS 는 간선 2 개짜리 경로 둘로 끝난다]]
 
 === BFS 로 고르면: Edmonds-Karp ===
 p.63 의 정리다. augmenting path 를 [[BFS]] 로 찾으면(간선 수가 가장 적은 경로) Ford-Fulkerson 은 $O(nm^2)$ 에 끝난다. 이 방식을 [[Edmonds-Karp]] 라고 부른다. 증명은 수업에서 건너뛰고 시험에도 안 나온다("It will not be on the exam"). 슬라이드가 주는 기본 아이디어는 이렇다.
@@ -214,6 +226,8 @@ p.65 는 min cut·max flow 가 "an important algorithmic primitive" 라고 한�
 # flow 의 값이 matching 의 크기다.
 # 따라서 max flow 가 maximum matching 이다.
 [[bipartite graph]] 는 L9 에서 BFS 로 판별했던 그 그래프다.
+[[anim:matching_as_flow|p.68 의 학생·동아리 그래프에서 Ford-Fulkerson 을 돌린다. 두 번째 경로가 연두(backward)를 타서 학생 1 을 다른 동아리로 옮기는 장면을 보라]]
+위 그림의 두 번째 경로처럼, matching 에서 backward 간선은 "이미 짝지은 사람을 다른 짝으로 옮기는" 길이 된다. 그래서 먼저 고른 짝이 나빠도 max flow 는 결국 최대 matching 에 닿는다.
 
 === 학생과 아이스크림: assignment problem ===
 p.71–75 는 capacity 를 1 보다 크게 풀어 준다([[assignment problem]]). 학생 x 는 최대 c(x) 스쿱만 먹는다. 아이스크림 통 y 에는 c(y) 스쿱만 있다. 학생 x 는 맛 y 를 c(x,y) 스쿱까지만 원한다. 가능한 한 많이 퍼 주려면? 같은 그래프에서 s→학생 capacity 를 c(x), 학생→통을 c(x,y), 통→t 를 c(y) 로 두고 max flow 를 구하면 된다.[* p.72 의 사연: 한 학생은 4 스쿱을 먹고 싶지만 초콜릿은 1 스쿱, 커피는 3 스쿱까지만. 다른 학생은 "vegan and not that hungry" 라서 셔벗 두 스쿱만 원한다. p.74 의 최종 flow 값은 s 에서 나가는 4 + 3 + 1 + 7 + 2 = 17 스쿱이다.] 학생 노드에서 들어오는 양이 c(x) 이하라 나가는 양도 c(x) 이하이고, 통 쪽도 같다(p.75). flow 가 배정이고 max flow 가 최대 배정이다.
