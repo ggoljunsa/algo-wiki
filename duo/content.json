@@ -1646,8 +1646,8 @@
       {
        "id": "u10a-03",
        "type": "match",
-       "q": "'서로 도달 가능' 관계 $u\\sim v$ 가 equivalence relation 인 이유를 연결하시오",
-       "explain": "equivalence class 하나하나가 SCC (maximal strongly connected 집합) 다.",
+       "q": "'서로 도달 가능' 관계 $u\\sim v$ ($u\rightsquigarrow v$ 이고 $v\rightsquigarrow u$) 에 대해, 왼쪽 주장과 그것이 성립하는(또는 안 하는) 이유를 연결하시오",
+       "explain": "세 성질이 다 성립하므로 $\\sim$ 는 equivalence relation 이고, 그 equivalence class 하나하나가 SCC 다(그래서 $V$ 가 SCC 들로 겹치지 않게 나뉜다). 한 방향 도달만 쓰면 $u\rightsquigarrow v$ 여도 $v\rightsquigarrow u$ 가 아닐 수 있어 symmetric 이 깨진다. SCC 정의에 '서로' 가 들어가는 이유다.",
        "src": "10강 p.6",
        "wiki": "strongly connected component",
        "tags": [
@@ -1655,23 +1655,22 @@
        ],
        "pairs": [
         [
-         "reflexive",
-         "길이 0 path 로 $u\\rightsquigarrow u$"
+         "$u\\sim u$ (reflexive)",
+         "길이 0 path 로 자기 자신에 도달"
         ],
         [
-         "symmetric",
-         "정의 자체가 양방향"
+         "$u\\sim v \\Rightarrow v\\sim u$ (symmetric)",
+         "정의가 두 방향 도달의 AND 라 순서만 바꾸면 된다"
         ],
         [
-         "transitive",
-         "path 를 이어 붙인다"
+         "$u\\sim v,\\ v\\sim w \\Rightarrow u\\sim w$ (transitive)",
+         "$u\rightsquigarrow v\rightsquigarrow w$ 와 거꾸로 $w\rightsquigarrow v\rightsquigarrow u$ 로 path 를 이어 붙인다"
         ],
         [
-         "그 결과",
-         "$V$ 가 SCC 들로 겹치지 않게 partition 된다"
+         "한 방향 도달 $u\rightsquigarrow v$ 만 쓰면",
+         "transitive 는 되지만 symmetric 이 깨져 equivalence 가 아니다"
         ]
-       ],
-       "introCard": 0
+       ]
       },
       {
        "id": "u10a-04",
