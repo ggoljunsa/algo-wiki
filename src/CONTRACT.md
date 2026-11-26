@@ -365,6 +365,7 @@ PNG 이름은 `L9-05.png`, `L10-05.png`, `L11-105` 없음(최대 88). 한 자리
 | dfs_trace | L9 슬라이드 DFS 예제 그래프(인접 리스트 순서 슬라이드 그대로): 정점 색(white/gray/black), 재귀 스택, start/finish 시각(0 부터). 옵션 = L9 예제 / topo sort 예제(L9 DAG; 끝에 finish 내림차순 리스트) | `DFS`, `start time과 finish time`, `topological sort`, `L9 Graph Algorithms I` |
 | bfs_layers | L9 BFS 예제: 큐 대신 layer $L_0, L_1, …$ 리스트, parent, 옵션 = 예제 / bipartite 판별(같은 layer 내 edge 발견 시 "odd cycle ⇒ not bipartite") | `BFS`, `layer`, `bipartite graph`, `L9 Graph Algorithms I` |
 | scc_two_pass | L10 p.12–47 예제 그래프: 1차 DFS finish 시각 → 간선 뒤집기 → finish 내림차순으로 2차 DFS, 찾은 SCC 를 색칠 | `SCC 알고리즘`, `L10 Graph Algorithms II` |
+| kosaraju_stack | SCC 알고리즘 문서의 파이썬 scc(G) 를 한 줄씩: order 스택 쌓기 → GT 만들기 → reversed(order) 로 pop 하며 dfs2. 그래프 = CLRS 22.9 / 작은 예, 실행 = 정상 / 버그①(2차를 G 에서) / 버그②(오름차순). 기대값: CLRS 정상 comps = [a,e,b],[c,d],[g,f],[h]; 버그①·② = 한 덩어리 | `Kosaraju 알고리즘`, `SCC 알고리즘` |
 | dijkstra_trace | L11 p.24–37 의 Gates/Dormitory/E3/… 그래프: d[v] 표, sure/not-sure, 매 단계 최소 not-sure 선택과 이웃 갱신 | `Dijkstra`, `L11 Graph Algorithms III` |
 | bellman_ford_table | L11 p.70–75 / L12 p.9–13 표: $d^{(0)}…d^{(n-1)}$ 행을 한 칸씩 채움. 옵션 = 음수 간선 없음 / 음수 간선 있음(p.80–82) / negative cycle(n 번째 라운드에서 변화) | `Bellman-Ford`, `d^(i) 배열`, `negative cycle`, `L11 Graph Algorithms III` |
 | fib_memo | Fibonacci(8): 옵션 = 순수 재귀(호출 수 카운트) / top-down memo(F 배열 채워지는 순서) / bottom-up | `Fibonacci 수 계산`, `top-down과 memoization`, `L12 Dynamic Programming I` |
@@ -377,6 +378,7 @@ PNG 이름은 `L9-05.png`, `L10-05.png`, `L11-105` 없음(최대 88). 한 자리
 | bfs_wave | 시작점에서 물결처럼 $L_1, L_2, L_3$ 가 퍼짐 → 같은 layer 안 edge 가 빨갛게 → "odd cycle" | `BFS`, `bipartite graph` |
 | topo_finish_order | DAG 위 DFS 가 끝나는 정점을 리스트 앞에 차례로 끼워 넣음 → 완성 리스트가 왼→오 모든 화살표 방향과 일치 | `topological sort`, `DAG` |
 | scc_reverse_edges | SCC DAG(덩어리 4개) → 간선이 뒤집히며 sink 가 source 로 → finish 가 가장 큰 덩어리에서 2차 DFS 가 시작해 그 덩어리에 갇힘 → 다음 덩어리 | `SCC 알고리즘`, `G^T`, `L10 Graph Algorithms II` |
+| kosaraju_stack_pop | CLRS 22.9: 1차 DFS 에서 finish 순으로 스택에 push → 간선 뒤집기 → 스택 맨 위부터 pop 하며 G^T DFS, SCC 4개 색칠 (20초) | `Kosaraju 알고리즘` |
 | dijkstra_yoink | 줄로 이어진 공(정점)을 Gates 에서 들어 올리면 가까운 것부터 땅에서 떨어짐(sure) — 팽팽한 줄 = 최단경로 트리 | `Dijkstra 줄과 중력 직관`, `Dijkstra` |
 | bellman_ford_rounds | 라운드 i 마다 "간선 i 개까지 쓰는 경로"가 퍼져 나가며 d 값이 줄어듦 → n−1 라운드 후 고정, negative cycle 은 계속 줄어듦 | `Bellman-Ford`, `negative cycle` |
 | fib_tree_repeat | Fib(8) 재귀 트리가 자라며 같은 부분문제(Fib(5), Fib(4)…)가 같은 색으로 여러 번 → memo 를 켜면 가지가 잘려 사슬이 됨 | `overlapping subproblems`, `top-down과 memoization` |
